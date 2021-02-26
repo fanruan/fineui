@@ -193,6 +193,7 @@ _.extend(BI, {
         s["%y"] = yWith4number.substr(2, 2); // year without the century (range 00 to 99)
         s["%Y"] = yWith4number;		// year with the century
         s["%%"] = "%";		// a literal '%' character
+        s["%q"] = "0" + qr;
         s["%Q"] = qr;
 
         var re = /%./g;

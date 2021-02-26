@@ -11,7 +11,7 @@ BI.InlineVerticalAdaptLayout = BI.inherit(BI.Layout, {
 
     props: function () {
         return BI.extend(BI.InlineVerticalAdaptLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-inline-vertical-adapt-layout",
+            baseCls: "bi-i-v-a",
             horizontalAlign: BI.HorizontalAlign.Left,
             verticalAlign: BI.VerticalAlign.Middle,
             columnSize: [],
@@ -38,29 +38,29 @@ BI.InlineVerticalAdaptLayout = BI.inherit(BI.Layout, {
         var o = this.options;
         var w = BI.InlineVerticalAdaptLayout.superclass._addElement.apply(this, arguments);
         w.element.css({
-            width: o.columnSize[i] <= 1 ? (o.columnSize[i] * 100 + "%") : o.columnSize[i],
+            width: o.columnSize[i] <= 1 ? ((o.columnSize[i] * 100).toFixed(1) + "%") : (o.columnSize[i] / BI.pixRatio + BI.pixUnit),
             position: "relative",
             "vertical-align": o.verticalAlign
         });
-        w.element.addClass("inline-vertical-adapt-item");
+        w.element.addClass("i-v-a-item");
         if (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
             w.element.css({
-                "margin-top": o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) + "px"
+                "margin-top": (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0)) / BI.pixRatio + BI.pixUnit
             });
         }
         if (o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0) !== 0) {
             w.element.css({
-                "margin-left": (i === 0 ? o.hgap : 0) + o.lgap + (item.lgap || 0) + (item.hgap || 0) + "px"
+                "margin-left": ((i === 0 ? o.hgap : 0) + o.lgap + (item.lgap || 0) + (item.hgap || 0)) / BI.pixRatio + BI.pixUnit
             });
         }
         if (o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0) !== 0) {
             w.element.css({
-                "margin-right": o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0) + "px"
+                "margin-right": (o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0)) / BI.pixRatio + BI.pixUnit
             });
         }
         if (o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0) !== 0) {
             w.element.css({
-                "margin-bottom": o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0) + "px"
+                "margin-bottom": (o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0)) / BI.pixRatio + BI.pixUnit
             });
         }
         return w;

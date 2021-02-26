@@ -6,7 +6,7 @@
 BI.HorizontalLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.HorizontalLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-horizontal-layout",
+            baseCls: "bi-h",
             verticalAlign: BI.VerticalAlign.Top,
             horizontalAlign: BI.HorizontalAlign.Left,
             columnSize: [],
@@ -39,7 +39,7 @@ BI.HorizontalLayout = BI.inherit(BI.Layout, {
     _addElement: function (i, item) {
         var o = this.options;
         var td;
-        var width = o.columnSize[i] <= 1 ? (o.columnSize[i] * 100 + "%") : o.columnSize[i];
+        var width = o.columnSize[i] <= 1 ? ((o.columnSize[i] * 100).toFixed(1) + "%") : o.columnSize[i];
         if (!this.hasWidget(this._getChildName(i))) {
             var w = BI._lazyCreateWidget(item);
             w.element.css({position: "relative", margin: "0px auto"});
@@ -60,7 +60,7 @@ BI.HorizontalLayout = BI.inherit(BI.Layout, {
         // 1、由于直接对td设置最大宽度是在规范中未定义的, 所以要使用类似td:firstChild来迂回实现
         // 2、不能给多个td设置最大宽度，这样只会平分宽度
         // 3、多百分比宽度就算了
-        td.element.css({"max-width": o.columnSize[i] <= 1 ? width : width + "px"});
+        td.element.css({"max-width": BI.isNumber(o.columnSize[i]) ? (o.columnSize[i] <= 1 ? width : width / BI.pixRatio + BI.pixUnit) : width});
         if (i === 0) {
             td.element.addClass("first-element");
         }
@@ -74,22 +74,22 @@ BI.HorizontalLayout = BI.inherit(BI.Layout, {
 
         if (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
             w.element.css({
-                "margin-top": o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) + "px"
+                "margin-top": (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0)) / BI.pixRatio + BI.pixUnit
             });
         }
         if (o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0) !== 0) {
             w.element.css({
-                "margin-left": (i === 0 ? o.hgap : 0) + o.lgap + (item.lgap || 0) + (item.hgap || 0) + "px"
+                "margin-left": ((i === 0 ? o.hgap : 0) + o.lgap + (item.lgap || 0) + (item.hgap || 0)) / BI.pixRatio + BI.pixUnit
             });
         }
         if (o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0) !== 0) {
             w.element.css({
-                "margin-right": o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0) + "px"
+                "margin-right": (o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0)) / BI.pixRatio + BI.pixUnit
             });
         }
         if (o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0) !== 0) {
             w.element.css({
-                "margin-bottom": o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0) + "px"
+                "margin-bottom": (o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0)) / BI.pixRatio + BI.pixUnit
             });
         }
         return td;
@@ -145,22 +145,22 @@ BI.HorizontalCellLayout = BI.inherit(BI.Layout, {
         w.element.css({position: "relative", display: "table-cell", "vertical-align": "middle"});
         if (o.hgap + o.lgap > 0) {
             w.element.css({
-                "margin-left": o.hgap + o.lgap + "px"
+                "margin-left": (o.hgap + o.lgap) / BI.pixRatio + BI.pixUnit
             });
         }
         if (o.hgap + o.rgap > 0) {
             w.element.css({
-                "margin-right": o.hgap + o.rgap + "px"
+                "margin-right": (o.hgap + o.rgap) / BI.pixRatio + BI.pixUnit
             });
         }
         if (o.vgap + o.tgap > 0) {
             w.element.css({
-                "margin-top": o.vgap + o.tgap + "px"
+                "margin-top": (o.vgap + o.tgap) / BI.pixRatio + BI.pixUnit
             });
         }
         if (o.vgap + o.bgap > 0) {
             w.element.css({
-                "margin-bottom": o.vgap + o.bgap + "px"
+                "margin-bottom": (o.vgap + o.bgap) / BI.pixRatio + BI.pixUnit
             });
         }
         return w;

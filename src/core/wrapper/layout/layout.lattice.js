@@ -10,7 +10,7 @@
 BI.LatticeLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.LatticeLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-lattice-layout clearfix"
+            baseCls: "bi-lattice clearfix"
             // columnSize: [0.2, 0.2, 0.6],
         });
     },

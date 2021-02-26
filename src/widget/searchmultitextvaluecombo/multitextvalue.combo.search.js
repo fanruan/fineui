@@ -14,8 +14,8 @@ BI.SearchMultiTextValueCombo = BI.inherit(BI.Single, {
     },
 
     _init: function () {
-        BI.SearchMultiTextValueCombo.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
+        BI.SearchMultiTextValueCombo.superclass._init.apply(this, arguments);
         var assertShowValue = function () {
             BI.isKey(self._startValue) && (self.storeValue.type === BI.Selection.All ? BI.remove(self.storeValue.value, self._startValue) : BI.pushDistinct(self.storeValue.value, self._startValue));
             self._updateAllValue();
@@ -127,6 +127,7 @@ BI.SearchMultiTextValueCombo = BI.inherit(BI.Single, {
 
         this.combo = BI.createWidget({
             type: "bi.combo",
+            cls: "bi-border bi-focus-shadow bi-border-radius",
             toggle: false,
             container: o.container,
             el: this.trigger,
@@ -177,7 +178,9 @@ BI.SearchMultiTextValueCombo = BI.inherit(BI.Single, {
         });
 
         this.combo.on(BI.Combo.EVENT_BEFORE_POPUPVIEW, function () {
-            self._dataChange = false;// 标记数据是否发生变化
+            if (!this.isViewVisible()) {
+                self._dataChange = false;// 标记数据是否发生变化
+            }
             this.setValue(self.storeValue);
             BI.nextTick(function () {
                 self._populate();

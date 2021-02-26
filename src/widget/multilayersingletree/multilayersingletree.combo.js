@@ -16,9 +16,6 @@ BI.MultiLayerSingleTreeCombo = BI.inherit(BI.Widget, {
             itemsCreator: BI.emptyFn,
             items: [],
             value: "",
-            attributes: {
-                tabIndex: 0
-            },
             allowEdit: false,
             allowSearchValue: false,
             allowInsertValue: false,
@@ -26,13 +23,23 @@ BI.MultiLayerSingleTreeCombo = BI.inherit(BI.Widget, {
         });
     },
 
+    _init: function () {
+        var o = this.options;
+        if (this._shouldWrapper()) {
+            o.height -= 2;
+            BI.isNumeric(o.width) && (o.width -= 2);
+        }
+        BI.MultiLayerSingleTreeCombo.superclass._init.apply(this, arguments);
+    },
+
     render: function () {
         var self = this, o = this.options;
 
         var combo = (o.itemsCreator === BI.emptyFn) ? this._getSyncConfig() : this._getAsyncConfig();
 
-        return (!o.allowEdit && o.itemsCreator === BI.emptyFn) ? combo : {
+        return this._shouldWrapper() ? combo : {
             type: "bi.absolute",
+            height: o.height - 2,
             items: [{
                 el: combo,
                 left: 0,
@@ -63,10 +70,16 @@ BI.MultiLayerSingleTreeCombo = BI.inherit(BI.Widget, {
         };
     },
 
+    _shouldWrapper: function () {
+        var o = this.options;
+        return !o.allowEdit && o.itemsCreator === BI.emptyFn;
+    },
+
     _getBaseConfig: function () {
         var self = this, o = this.options;
         return {
             type: "bi.combo",
+            cls: "bi-border bi-focus-shadow bi-border-radius",
             container: o.container,
             destroyWhenHide: o.destroyWhenHide,
             adjustLength: 2,

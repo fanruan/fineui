@@ -27,10 +27,8 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
     },
 
     _init: function () {
-        BI.MultiTreeCombo.superclass._init.apply(this, arguments);
-
         var self = this, o = this.options;
-
+        BI.MultiTreeCombo.superclass._init.apply(this, arguments);
         var isInit = false;
         var want2showCounter = false;
 
@@ -56,6 +54,7 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
 
         this.combo = BI.createWidget({
             type: "bi.combo",
+            cls: "bi-border bi-focus-shadow bi-border-radius",
             toggle: !o.allowEdit,
             container: o.container,
             el: this.trigger,
@@ -302,7 +301,7 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
                 },
                 right: o.height,
                 top: 0,
-                height: o.height,
+                bottom: 0
             }]
         });
     },

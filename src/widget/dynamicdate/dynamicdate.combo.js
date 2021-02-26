@@ -7,14 +7,20 @@ BI.DynamicDateCombo = BI.inherit(BI.Single, {
     },
 
     props: {
-        baseCls: "bi-dynamic-date-combo bi-border bi-focus-shadow bi-border-radius",
-        height: 22,
+        baseCls: "bi-dynamic-date-combo",
+        height: 24,
         minDate: "1900-01-01",
         maxDate: "2099-12-31",
         format: "",
-        allowEdit: true
+        allowEdit: true,
+        supportDynamic: true,
     },
 
+    _init: function () {
+        var o = this.options;
+        o.height -= 2;
+        BI.DynamicDateCombo.superclass._init.apply(this, arguments);
+    },
 
     render: function () {
         var self = this, opts = this.options;
@@ -39,6 +45,7 @@ BI.DynamicDateCombo = BI.inherit(BI.Single, {
                 items: [{
                     el: {
                         type: "bi.combo",
+                        cls: "bi-border bi-focus-shadow bi-border-radius",
                         container: opts.container,
                         ref: function () {
                             self.combo = this;
@@ -113,11 +120,11 @@ BI.DynamicDateCombo = BI.inherit(BI.Single, {
                             }, {
                                 eventName: BI.DynamicDateTrigger.EVENT_CONFIRM,
                                 action: function () {
-                                    if (self.combo.isViewVisible()) {
-                                        return;
-                                    }
                                     var dateStore = self.storeTriggerValue;
                                     var dateObj = self.trigger.getKey();
+                                    if (self.combo.isViewVisible() || BI.isEqual(dateObj, dateStore)) {
+                                        return;
+                                    }
                                     if (BI.isNotEmptyString(dateObj) && !BI.isEqual(dateObj, dateStore)) {
                                         self.storeValue = self.trigger.getValue();
                                         self.setValue(self.trigger.getValue());
@@ -134,6 +141,7 @@ BI.DynamicDateCombo = BI.inherit(BI.Single, {
                         popup: {
                             el: {
                                 type: "bi.dynamic_date_popup",
+                                supportDynamic: opts.supportDynamic,
                                 behaviors: opts.behaviors,
                                 min: opts.minDate,
                                 max: opts.maxDate,

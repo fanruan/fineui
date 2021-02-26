@@ -12,7 +12,7 @@ BI.DynamicYearCard = BI.inherit(BI.Widget, {
     },
 
     render: function () {
-        var self = this;
+        var self = this, o = this.options;
         return {
             type: "bi.vertical",
             items: [{
@@ -24,6 +24,14 @@ BI.DynamicYearCard = BI.inherit(BI.Widget, {
                 type: "bi.dynamic_date_param_item",
                 ref: function () {
                     self.item = this;
+                },
+                validationChecker: BI.bind(self._checkDate, self),
+                errorText: function () {
+                    var start = BI.parseDateTime(o.min, "%Y-%X-%d");
+                    var end = BI.parseDateTime(o.max, "%Y-%X-%d");
+                    return BI.i18nText("BI-Basic_Year_Range_Error",
+                        start.getFullYear(),
+                        end.getFullYear());
                 },
                 listeners: [{
                     eventName: "EVENT_CHANGE",
@@ -37,12 +45,33 @@ BI.DynamicYearCard = BI.inherit(BI.Widget, {
         };
     },
 
+    _checkDate: function (obj) {
+        var o = this.options;
+        var date = BI.DynamicDateHelper.getCalculation({
+            year: (obj.offset === 0 ? -obj.value : +obj.value)
+        });
+
+        return !BI.checkDateVoid(date.getFullYear(), date.getMonth() + 1, date.getDate(), o.min, o.max)[0];
+    },
+
     _createValue: function (type, v) {
         return {
             dateType: type,
             value: Math.abs(v),
             offset: v > 0 ? 1 : 0
         };
+    },
+
+    setMinDate: function(minDate) {
+        if (BI.isNotEmptyString(this.options.min)) {
+            this.options.min = minDate;
+        }
+    },
+
+    setMaxDate: function (maxDate) {
+        if (BI.isNotEmptyString(this.options.max)) {
+            this.options.max = maxDate;
+        }
     },
 
     setValue: function (v) {
@@ -53,7 +82,7 @@ BI.DynamicYearCard = BI.inherit(BI.Widget, {
     getValue: function () {
         var value = this.item.getValue();
         return {
-            year: (value.offset === 0 ? -value.value : value.value)
+            year: (value.offset === 0 ? -value.value : +value.value)
         };
     }
 });

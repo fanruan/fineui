@@ -10,7 +10,8 @@ BI.YearMonthInterval = BI.inherit(BI.Single, {
     props: {
         extraCls: "bi-year-month-interval",
         minDate: "1900-01-01",
-        maxDate: "2099-12-31"
+        maxDate: "2099-12-31",
+        supportDynamic: true,
     },
 
     _init: function () {
@@ -64,6 +65,9 @@ BI.YearMonthInterval = BI.inherit(BI.Single, {
         var self = this, o = this.options;
         var combo = BI.createWidget({
             type: "bi.dynamic_year_month_combo",
+            supportDynamic: o.supportDynamic,
+            minDate: o.minDate,
+            maxDate: o.maxDate,
             behaviors: o.behaviors,
             value: v,
             listeners: [{
@@ -88,15 +92,10 @@ BI.YearMonthInterval = BI.inherit(BI.Single, {
             self._checkValid();
         });
 
-        combo.on(BI.DynamicYearMonthCombo.EVENT_BEFORE_POPUPVIEW, function () {
-            self.left.hideView();
-            self.right.hideView();
-        });
-
         combo.on(BI.DynamicYearMonthCombo.EVENT_CONFIRM, function () {
             BI.Bubbles.hide("error");
             var smallDate = self.left.getKey(), bigDate = self.right.getKey();
-            if (self.left.isValid() && self.right.isValid() && self._check(smallDate, bigDate) && self._compare(smallDate, bigDate)) {
+            if (self.left.isStateValid() && self.right.isStateValid() && self._check(smallDate, bigDate) && self._compare(smallDate, bigDate)) {
                 self._setTitle(BI.i18nText("BI-Time_Interval_Error_Text"));
                 self.element.addClass(self.constants.timeErrorCls);
                 self.fireEvent(BI.YearMonthInterval.EVENT_ERROR);
@@ -174,6 +173,21 @@ BI.YearMonthInterval = BI.inherit(BI.Single, {
             self.element.removeClass(self.constants.timeErrorCls);
         }
     },
+
+    setMinDate: function (minDate) {
+        var o = this.options;
+        o.minDate = minDate;
+        this.left.setMinDate(minDate);
+        this.right.setMinDate(minDate);
+    },
+
+    setMaxDate: function (maxDate) {
+        var o = this.options;
+        o.maxDate = maxDate;
+        this.left.setMaxDate(maxDate);
+        this.right.setMaxDate(maxDate);
+    },
+
     setValue: function (date) {
         date = date || {};
         this.left.setValue(date.start);

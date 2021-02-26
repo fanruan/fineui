@@ -5,12 +5,15 @@ BI.DynamicYearMonthCombo = BI.inherit(BI.Single, {
         behaviors: {},
         minDate: "1900-01-01", // 最小日期
         maxDate: "2099-12-31", // 最大日期
-        height: 22
+        height: 24,
+        supportDynamic: true
     },
 
     _init: function () {
-        BI.DynamicYearMonthCombo.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
+        o.height -= 2;
+        BI.isNumeric(o.width) && (o.width -= 2);
+        BI.DynamicYearMonthCombo.superclass._init.apply(this, arguments);
         this.storeValue = o.value;
         this.storeTriggerValue = "";
         this.trigger = BI.createWidget({
@@ -37,12 +40,11 @@ BI.DynamicYearMonthCombo = BI.inherit(BI.Single, {
             self.fireEvent(BI.DynamicYearMonthCombo.EVENT_VALID);
         });
         this.trigger.on(BI.DynamicYearMonthTrigger.EVENT_CONFIRM, function () {
-            // 没看出来干啥的，先去掉
-            // if (self.combo.isViewVisible()) {
-            //     return;
-            // }
             var dateStore = self.storeTriggerValue;
             var dateObj = self.trigger.getKey();
+            if (BI.isEqual(dateObj, dateStore)) {
+                return;
+            }
             if (BI.isNotEmptyString(dateObj) && !BI.isEqual(dateObj, dateStore)) {
                 self.storeValue = self.trigger.getValue();
                 self.setValue(self.trigger.getValue());
@@ -61,11 +63,14 @@ BI.DynamicYearMonthCombo = BI.inherit(BI.Single, {
             isNeedAdjustHeight: false,
             isNeedAdjustWidth: false,
             el: this.trigger,
+            destroyWhenHide: true,
+            adjustLength: 1,
             popup: {
                 minWidth: 100,
                 stopPropagation: false,
                 el: {
                     type: "bi.dynamic_year_month_popup",
+                    supportDynamic: o.supportDynamic,
                     ref: function () {
                         self.popup = this;
                     },
@@ -107,6 +112,8 @@ BI.DynamicYearMonthCombo = BI.inherit(BI.Single, {
             }
         });
         this.combo.on(BI.Combo.EVENT_BEFORE_POPUPVIEW, function () {
+            self.popup.setMinDate(o.minDate);
+            self.popup.setMaxDate(o.maxDate);
             self.popup.setValue(self.storeValue);
             self.fireEvent(BI.DynamicYearMonthCombo.EVENT_BEFORE_POPUPVIEW);
         });
@@ -152,6 +159,20 @@ BI.DynamicYearMonthCombo = BI.inherit(BI.Single, {
         }
     },
 
+    setMinDate: function (minDate) {
+        var o = this.options;
+        o.minDate = minDate;
+        this.trigger.setMinDate(minDate);
+        this.popup && this.popup.setMinDate(minDate);
+    },
+
+    setMaxDate: function (maxDate) {
+        var o = this.options;
+        o.maxDate = maxDate;
+        this.trigger.setMaxDate(maxDate);
+        this.popup && this.popup.setMaxDate(maxDate);
+    },
+
     hideView: function () {
         this.combo.hideView();
     },
@@ -170,8 +191,8 @@ BI.DynamicYearMonthCombo = BI.inherit(BI.Single, {
         return this.trigger.getKey();
     },
 
-    isValid: function () {
-        return this.trigger.isValid();
+    isStateValid: function () {
+        return this.trigger.isStateValid();
     }
 
 });

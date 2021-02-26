@@ -5,20 +5,19 @@
 BI.IconTextValueCombo = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.IconTextValueCombo.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-icon-text-value-combo",
+            baseCls: "bi-icon-text-value-combo bi-border bi-border-radius",
             height: 24,
             iconHeight: null,
             iconWidth: null,
             value: "",
-            attributes: {
-                tabIndex: 0
-            }
         });
     },
 
     _init: function () {
-        BI.IconTextValueCombo.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
+        o.height -= 2;
+        BI.isNumeric(o.width) && (o.width -= 2);
+        BI.IconTextValueCombo.superclass._init.apply(this, arguments);
         this.trigger = BI.createWidget({
             type: "bi.select_icon_text_trigger",
             cls: "icon-text-value-trigger",

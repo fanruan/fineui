@@ -3,7 +3,7 @@ import { Widget } from "../../core/widget";
 export declare class Tab extends Widget {
     static xtype: string;
 
-    static EVENT_CHANGE: string; 
+    static EVENT_CHANGE: string;
 
     setSelect(v: string | number): void;
 
@@ -11,9 +11,9 @@ export declare class Tab extends Widget {
 
     getSelect(): string | number;
 
-    getSelectedTab(): any;
+    getSelectedTab<T>(): T;
 
-    getTab(v: string | number): any;
+    getTab<T>(v: string | number): T;
 
     populate(): void;
 }

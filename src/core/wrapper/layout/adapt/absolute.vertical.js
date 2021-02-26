@@ -6,7 +6,7 @@
 BI.AbsoluteVerticalLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.AbsoluteVerticalLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-absolute-vertical-layout",
+            baseCls: "bi-abs-v-a",
             hgap: 0,
             lgap: 0,
             rgap: 0,
@@ -26,17 +26,17 @@ BI.AbsoluteVerticalLayout = BI.inherit(BI.Layout, {
         var w = BI.AbsoluteVerticalLayout.superclass._addElement.apply(this, arguments);
         w.element.css({
             position: "absolute",
-            left: item.lgap,
-            right: item.rgap,
-            top: o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0),
-            bottom: o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0),
+            left: item.lgap / BI.pixRatio + BI.pixUnit,
+            right: item.rgap / BI.pixRatio + BI.pixUnit,
+            top: (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0)) / BI.pixRatio + BI.pixUnit,
+            bottom: (o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0)) / BI.pixRatio + BI.pixUnit,
             margin: "auto"
         });
         if (o.hgap + o.lgap + (item.hgap || 0) + (item.lgap || 0) !== 0) {
-            w.element.css("left", o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0));
+            w.element.css("left", (o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0)) / BI.pixRatio + BI.pixUnit);
         }
         if (o.hgap + o.rgap + (item.hgap || 0) + (item.rgap || 0) !== 0) {
-            w.element.css("right", o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0));
+            w.element.css("right", (o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0)) / BI.pixRatio + BI.pixUnit);
         }
         return w;
     },

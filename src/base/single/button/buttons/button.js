@@ -44,11 +44,11 @@ BI.Button = BI.inherit(BI.BasicButton, {
         BI.Button.superclass._init.apply(this, arguments);
         var o = this.options, self = this;
         if (BI.isNumber(o.height) && !o.clear && !o.block) {
-            this.element.css({height: o.height + "px", lineHeight: (o.height - 2) + "px"});
+            this.element.css({height: o.height / BI.pixRatio + BI.pixUnit, lineHeight: (o.height - 2) / BI.pixRatio + BI.pixUnit});
         } else if (o.clear || o.block) {
-            this.element.css({lineHeight: o.height + "px"});
+            this.element.css({lineHeight: o.height / BI.pixRatio + BI.pixUnit});
         } else {
-            this.element.css({lineHeight: (o.height - 2) + "px"});
+            this.element.css({lineHeight: (o.height - 2) / BI.pixRatio + BI.pixUnit});
         }
         if (BI.isKey(o.iconCls)) {
             this.icon = BI.createWidget({
@@ -106,7 +106,7 @@ BI.Button = BI.inherit(BI.BasicButton, {
             this.element.addClass("ghost");
         }
         if (o.minWidth > 0) {
-            this.element.css({"min-width": o.minWidth + "px"});
+            this.element.css({"min-width": o.minWidth / BI.pixRatio + BI.pixUnit});
         }
     },
 

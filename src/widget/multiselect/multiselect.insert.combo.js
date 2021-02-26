@@ -12,17 +12,13 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
             valueFormatter: BI.emptyFn,
             height: 24,
             itemHeight: 24,
-            attributes: {
-                tabIndex: 0
-            },
             allowEdit: true
         });
     },
 
     _init: function () {
-        BI.MultiSelectInsertCombo.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
-
+        BI.MultiSelectInsertCombo.superclass._init.apply(this, arguments);
         var assertShowValue = function () {
             if (BI.isKey(self._startValue)) {
                 if(self.storeValue.type === BI.Selection.All) {
@@ -136,6 +132,7 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
 
         this.combo = BI.createWidget({
             type: "bi.combo",
+            cls: "bi-border bi-focus-shadow bi-border-radius",
             toggle: !o.allowEdit,
             el: this.trigger,
             adjustLength: 1,
@@ -190,7 +187,9 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
         });
 
         this.combo.on(BI.Combo.EVENT_BEFORE_POPUPVIEW, function () {
-            self._dataChange = false;// 标记数据是否发生变化
+            if (!this.isViewVisible()) {
+                self._dataChange = false;// 标记数据是否发生变化
+            }
             this.setValue(self.storeValue);
             BI.nextTick(function () {
                 self._populate();

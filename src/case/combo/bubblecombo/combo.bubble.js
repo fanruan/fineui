@@ -6,7 +6,7 @@
  */
 BI.BubbleCombo = BI.inherit(BI.Widget, {
     _const: {
-        TRIANGLE_LENGTH: 6
+        TRIANGLE_LENGTH: 9
     },
     _defaultConfig: function () {
         return BI.extend(BI.BubbleCombo.superclass._defaultConfig.apply(this, arguments), {

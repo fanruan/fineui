@@ -175,6 +175,14 @@ Demo.WIDGET_CONFIG = [{
     text: "bi.year_month_interval",
     value: "demo.year_month_interval"
 }, {
+    pId: 412,
+    text: "bi.year_quarter_interval",
+    value: "demo.year_quarter_interval"
+}, {
+    pId: 412,
+    text: "bi.year_interval",
+    value: "demo.year_interval"
+}, {
     pId: 4,
     id: 413,
     text: "数值区间控件"

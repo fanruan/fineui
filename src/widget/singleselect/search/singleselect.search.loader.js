@@ -84,7 +84,7 @@ BI.SingleSelectSearchLoader = BI.inherit(BI.Widget, {
 
     _createItems: function (items) {
         return BI.createItems(items, {
-            type: this.options.allowNoSelect ? "bi.single_select_item" : "bi.single_select_combo_item",
+            type: this.options.allowNoSelect ? "bi.single_select_item" : "bi.single_select_radio_item",
             cls: "bi-list-item-active",
             logic: {
                 dynamic: false

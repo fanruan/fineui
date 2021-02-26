@@ -6,7 +6,7 @@
 BI.TdLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.TdLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-td-layout",
+            baseCls: "bi-td",
             columnSize: [200, 200, 200],
             hgap: 0,
             vgap: 0,
@@ -86,23 +86,21 @@ BI.TdLayout = BI.inherit(BI.Layout, {
             var w = BI._lazyCreateWidget(arr[i]);
             w.element.css({position: "relative", top: "0", left: "0", margin: "0px auto"});
             if (arr[i].lgap) {
-                w.element.css({"margin-left": arr[i].lgap + "px"});
+                w.element.css({"margin-left": arr[i].lgap / BI.pixRatio + BI.pixUnit});
             }
             if (arr[i].rgap) {
-                w.element.css({"margin-right": arr[i].rgap + "px"});
+                w.element.css({"margin-right": arr[i].rgap / BI.pixRatio + BI.pixUnit});
             }
             if (arr[i].tgap) {
-                w.element.css({"margin-top": arr[i].tgap + "px"});
+                w.element.css({"margin-top": arr[i].tgap / BI.pixRatio + BI.pixUnit});
             }
             if (arr[i].bgap) {
-                w.element.css({"margin-bottom": arr[i].bgap + "px"});
+                w.element.css({"margin-bottom": arr[i].bgap / BI.pixRatio + BI.pixUnit});
             }
             first(w, this.rows++, i);
             var td = BI._lazyCreateWidget({
                 type: "bi.default",
-                attributes: {
-                    width: o.columnSize[i] <= 1 ? (o.columnSize[i] * 100 + "%") : o.columnSize[i]
-                },
+                width: o.columnSize[i] <= 1 ? ((o.columnSize[i] * 100).toFixed(1) + "%") : o.columnSize[i],
                 tagName: "td",
                 items: [w]
             });

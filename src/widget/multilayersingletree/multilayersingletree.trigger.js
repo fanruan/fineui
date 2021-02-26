@@ -5,7 +5,7 @@ BI.MultiLayerSingleTreeTrigger = BI.inherit(BI.Trigger, {
 
     props: function() {
         return {
-            extraCls: "bi-multi-layer-single-tree-trigger bi-border bi-focus-shadow bi-border-radius",
+            extraCls: "bi-multi-layer-single-tree-trigger",
             height: 24,
             itemsCreator: BI.emptyFn,
             watermark: BI.i18nText("BI-Basic_Search"),

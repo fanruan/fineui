@@ -1,7 +1,10 @@
 BI.DynamicDatePane = BI.inherit(BI.Widget, {
 
     props: {
-        baseCls: "bi-dynamic-date-pane"
+        baseCls: "bi-dynamic-date-pane",
+        minDate: "1900-01-01",
+        maxDate: "2099-12-31",
+        supportDynamic: true
     },
 
     render: function () {
@@ -11,6 +14,7 @@ BI.DynamicDatePane = BI.inherit(BI.Widget, {
             items: [{
                 el: {
                     type: "bi.linear_segment",
+                    invisible: !o.supportDynamic,
                     cls: "bi-split-bottom",
                     height: 30,
                     items: BI.createItems([{
@@ -51,7 +55,7 @@ BI.DynamicDatePane = BI.inherit(BI.Widget, {
                         self.switcher = this;
                     }
                 },
-                height: 30
+                height: o.supportDynamic ? 30 : 0
             }, {
                 type: "bi.tab",
                 ref: function () {
@@ -63,6 +67,8 @@ BI.DynamicDatePane = BI.inherit(BI.Widget, {
                         case BI.DynamicDatePane.Static:
                             return {
                                 type: "bi.static_date_pane_card",
+                                min: o.minDate,
+                                max: o.maxDate,
                                 behaviors: o.behaviors,
                                 listeners: [{
                                     eventName: "EVENT_CHANGE",
@@ -83,10 +89,12 @@ BI.DynamicDatePane = BI.inherit(BI.Widget, {
                         default:
                             return {
                                 type: "bi.dynamic_date_card",
+                                min: o.minDate,
+                                max: o.maxDate,
                                 listeners: [{
                                     eventName: "EVENT_CHANGE",
                                     action: function () {
-                                        if(self._checkValue(self.getValue())) {
+                                        if (self._checkValue(self.getValue())) {
                                             self.fireEvent(BI.DynamicDatePane.EVENT_CHANGE);
                                         }
                                     }
@@ -118,6 +126,21 @@ BI.DynamicDatePane = BI.inherit(BI.Widget, {
                 return true;
         }
     },
+
+    setMinDate: function (minDate) {
+        if (this.options.minDate !== minDate) {
+            this.options.minDate = minDate;
+            this.ymd.setMinDate(minDate);
+        }
+    },
+
+    setMaxDate: function (maxDate) {
+        if (this.options.maxDate !== maxDate) {
+            this.options.maxDate = maxDate;
+            this.ymd.setMaxDate(maxDate);
+        }
+    },
+
 
     setValue: function (v) {
         v = v || {};

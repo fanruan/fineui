@@ -38,4 +38,8 @@ export declare class SearchEditor extends Widget {
     isEditing(): boolean;
 
     isValid(): boolean;
+
+    showClearIcon(): void;
+
+    hideClearIcon(): void;
 }

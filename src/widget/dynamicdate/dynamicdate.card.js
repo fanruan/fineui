@@ -134,11 +134,24 @@ BI.DynamicDateCard = BI.inherit(BI.Widget, {
     },
 
     _getParamJson: function (values, positionValue) {
-        var self = this;
+        var self = this, o = this.options;
         var items = BI.map(values, function (idx, value) {
             return {
                 el: {
                     type: "bi.dynamic_date_param_item",
+                    validationChecker: BI.bind(self._checkDate, self),
+                    errorText: function () {
+                        var start = BI.parseDateTime(o.min, "%Y-%X-%d");
+                        var end = BI.parseDateTime(o.max, "%Y-%X-%d");
+                        return BI.i18nText("BI-Basic_Date_Range_Error",
+                            start.getFullYear(),
+                            start.getMonth() + 1,
+                            start.getDate(),
+                            end.getFullYear(),
+                            end.getMonth() + 1,
+                            end.getDate()
+                        );
+                    },
                     dateType: value.dateType,
                     value: value.value,
                     offset: value.offset,
@@ -165,7 +178,7 @@ BI.DynamicDateCard = BI.inherit(BI.Widget, {
                 listeners: [{
                     eventName: "EVENT_CHANGE",
                     action: function () {
-                        self.position = this.getValue()[0];
+                        this.setValue(self._checkPositionValue(this.getValue()[0]));
                         self.fireEvent("EVENT_CHANGE");
                     }
                 }]
@@ -181,7 +194,7 @@ BI.DynamicDateCard = BI.inherit(BI.Widget, {
                     listeners: [{
                         eventName: "EVENT_CHANGE",
                         action: function () {
-                            self.position = this.getValue()[0];
+                            this.setValue(self._checkPositionValue(this.getValue()[0]));
                             self.fireEvent("EVENT_CHANGE");
                         }
                     }]
@@ -191,6 +204,22 @@ BI.DynamicDateCard = BI.inherit(BI.Widget, {
         }
 
         return items;
+    },
+
+    _checkPositionValue: function (v) {
+        var lastPosition = this.position;
+        this.position = v;
+        if (!this._checkDate({})) {
+            this.position = lastPosition;
+        }
+        return this.position;
+    },
+
+    _checkDate: function (obj) {
+        var o = this.options;
+        var date = BI.DynamicDateHelper.getCalculation(BI.extend(this.getValue(), this._digestDateTypeValue(obj)));
+
+        return !BI.checkDateVoid(date.getFullYear(), date.getMonth() + 1, date.getDate(), o.min, o.max)[0];
     },
 
     _getText: function (lastValue) {
@@ -251,6 +280,48 @@ BI.DynamicDateCard = BI.inherit(BI.Widget, {
         };
     },
 
+    _digestDateTypeValue: function (value) {
+        var valueMap = {};
+        switch (value.dateType) {
+            case BI.DynamicDateCard.TYPE.YEAR:
+                valueMap.year = (value.offset === 0 ? -value.value : +value.value);
+                break;
+            case BI.DynamicDateCard.TYPE.QUARTER:
+                valueMap.quarter = (value.offset === 0 ? -value.value : +value.value);
+                break;
+            case BI.DynamicDateCard.TYPE.MONTH:
+                valueMap.month = (value.offset === 0 ? -value.value : +value.value);
+                break;
+            case BI.DynamicDateCard.TYPE.WEEK:
+                valueMap.week = (value.offset === 0 ? -value.value : +value.value);
+                break;
+            case BI.DynamicDateCard.TYPE.DAY:
+                valueMap.day = (value.offset === 0 ? -value.value : +value.value);
+                break;
+            case BI.DynamicDateCard.TYPE.WORK_DAY:
+                valueMap.workDay = (value.offset === 0 ? -value.value : +value.value);
+                break;
+            default:
+                break;
+        }
+        if (BI.isNull(value.dateType)) {
+            valueMap.position = this.position || BI.DynamicDateCard.OFFSET.CURRENT;
+        }
+        return valueMap;
+    },
+
+    setMinDate: function(minDate) {
+        if (BI.isNotEmptyString(this.options.min)) {
+            this.options.min = minDate;
+        }
+    },
+
+    setMaxDate: function (maxDate) {
+        if (BI.isNotEmptyString(this.options.max)) {
+            this.options.max = maxDate;
+        }
+    },
+
     setValue: function (v) {
         v = v || {};
         this.position = v.position || BI.DynamicDateCard.OFFSET.CURRENT;
@@ -293,33 +364,12 @@ BI.DynamicDateCard = BI.inherit(BI.Widget, {
         if(selectValues.length !== 0) {
             BI.each(buttons, function (idx, button) {
                 var value = button.getValue();
-                switch (value.dateType) {
-                    case BI.DynamicDateCard.TYPE.YEAR:
-                        valueMap.year = (value.offset === 0 ? -value.value : value.value);
-                        break;
-                    case BI.DynamicDateCard.TYPE.QUARTER:
-                        valueMap.quarter = (value.offset === 0 ? -value.value : value.value);
-                        break;
-                    case BI.DynamicDateCard.TYPE.MONTH:
-                        valueMap.month = (value.offset === 0 ? -value.value : value.value);
-                        break;
-                    case BI.DynamicDateCard.TYPE.WEEK:
-                        valueMap.week = (value.offset === 0 ? -value.value : value.value);
-                        break;
-                    case BI.DynamicDateCard.TYPE.DAY:
-                        valueMap.day = (value.offset === 0 ? -value.value : value.value);
-                        break;
-                    default:
-                        break;
-                }
-                if(BI.isNull(value.dateType)) {
-                    valueMap.position = self.position || BI.DynamicDateCard.OFFSET.CURRENT;
-                }
+                BI.extend(valueMap, self._digestDateTypeValue(value));
             });
         }
         if(this.workDayBox.isSelected()) {
             var value = buttons[0].getValue();
-            valueMap.workDay = (value.offset === 0 ? -value.value : value.value);
+            valueMap.workDay = (value.offset === 0 ? -value.value : +value.value);
         }
         return valueMap;
     }

@@ -1,4 +1,4 @@
-/*! time: 2021-1-4 15:10:21 */
+/*! time: 2021-2-26 11:30:39 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -82,12 +82,12 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 1229);
+/******/ 	return __webpack_require__(__webpack_require__.s = 1238);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 1090:
+/***/ 1099:
 /***/ (function(module, exports) {
 
 BI.i18n = {
@@ -275,53 +275,19 @@ BI.i18n = {
     "BI-Basic_Hour_Sin": "时",
     "BI-Basic_Seconds": "秒",
     "BI-Basic_Minute": "分",
+    "BI-Basic_Thousand": "千",
     "BI-Basic_Wan": "万",
     "BI-Basic_Million": "百万",
     "BI-Basic_Billion": "亿",
     "BI-Basic_Quarter": "季度",
     "BI-Basic_No_Select": "不选",
     "BI-Basic_Now": "此刻",
-    "BI-Color_Picker_Error_Text_Hex": "请输入6位16进制颜色编号"
+    "BI-Color_Picker_Error_Text_Hex": "请输入6位16进制颜色编号",
+    "BI-Basic_Date_Range_Error": "请选择{R1}年{R2}月{R3}日-{R4}年{R5}月{R6}日的日期",
+    "BI-Basic_Year_Range_Error": "请选择{R1}年-{R2}年的日期",
+    "BI-Basic_Year_Month_Range_Error": "请选择{R1}年{R2}月-{R3}年{R4}月的日期",
+    "BI-Basic_Year_Quarter_Range_Error": "请选择{R1}年{R2}季度-{R3}年{R4}季度的日期",
 };
-
-/***/ }),
-
-/***/ 1229:
-/***/ (function(module, exports, __webpack_require__) {
-
-__webpack_require__(123);
-__webpack_require__(124);
-__webpack_require__(152);
-__webpack_require__(145);
-__webpack_require__(148);
-__webpack_require__(149);
-__webpack_require__(146);
-__webpack_require__(147);
-__webpack_require__(127);
-__webpack_require__(129);
-__webpack_require__(144);
-__webpack_require__(151);
-__webpack_require__(150);
-__webpack_require__(130);
-__webpack_require__(131);
-__webpack_require__(132);
-__webpack_require__(133);
-__webpack_require__(134);
-__webpack_require__(135);
-__webpack_require__(136);
-__webpack_require__(137);
-__webpack_require__(138);
-__webpack_require__(139);
-__webpack_require__(140);
-__webpack_require__(141);
-__webpack_require__(142);
-__webpack_require__(143);
-__webpack_require__(1090);
-__webpack_require__(1230);
-__webpack_require__(153);
-__webpack_require__(154);
-module.exports = __webpack_require__(155);
-
 
 /***/ }),
 
@@ -354,7 +320,46 @@ if(_global.BI.prepares == null) {
 
 /***/ }),
 
-/***/ 1230:
+/***/ 1238:
+/***/ (function(module, exports, __webpack_require__) {
+
+__webpack_require__(123);
+__webpack_require__(124);
+__webpack_require__(152);
+__webpack_require__(145);
+__webpack_require__(148);
+__webpack_require__(149);
+__webpack_require__(146);
+__webpack_require__(147);
+__webpack_require__(127);
+__webpack_require__(129);
+__webpack_require__(144);
+__webpack_require__(151);
+__webpack_require__(150);
+__webpack_require__(130);
+__webpack_require__(131);
+__webpack_require__(132);
+__webpack_require__(133);
+__webpack_require__(134);
+__webpack_require__(135);
+__webpack_require__(136);
+__webpack_require__(137);
+__webpack_require__(138);
+__webpack_require__(139);
+__webpack_require__(140);
+__webpack_require__(141);
+__webpack_require__(142);
+__webpack_require__(143);
+__webpack_require__(1099);
+__webpack_require__(1239);
+__webpack_require__(153);
+__webpack_require__(154);
+module.exports = __webpack_require__(155);
+
+
+/***/ }),
+
+/***/ 1239:
 /***/ (function(module, exports) {
 
 /**
@@ -985,7 +990,7 @@ if (!_global.BI) {
             if (typeof w === "number") {
                 return w >= 0;
             } else if (typeof w === "string") {
-                return /^\d{1,3}%$/.exec(w) || w == "auto" || /^\d+px$/.exec(w);
+                return /^\d{1,3}(\.\d)?%$/.exec(w) || w == "auto" || /^\d+px$/.exec(w);
             }
         },
 
@@ -1610,7 +1615,10 @@ if (!_global.BI) {
                             hr -= 12;
                         }
                         break;
-
+                    case "%Q":
+                    case "%q":
+                        m = (parseInt(a[i], 10) - 1) * 3;
+                        break;
                     case "%M":
                         min = parseInt(a[i], 10);
                         break;
@@ -1785,7 +1793,7 @@ if (!_global.BI) {
     });
 })();
 
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(17), __webpack_require__(62).setImmediate))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(17), __webpack_require__(63).setImmediate))
 
 /***/ }),
 
@@ -1996,7 +2004,7 @@ if (!_global.BI) {
   attachTo.setImmediate = setImmediate;
   attachTo.clearImmediate = clearImmediate;
 })(typeof self === "undefined" ? typeof global === "undefined" ? void 0 : global : self);
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(17), __webpack_require__(76)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(17), __webpack_require__(77)))
 
 /***/ }),
 
@@ -7992,6 +8000,7 @@ _.extend(BI, {
         s["%y"] = yWith4number.substr(2, 2); // year without the century (range 00 to 99)
         s["%Y"] = yWith4number;		// year with the century
         s["%%"] = "%";		// a literal '%' character
+        s["%q"] = "0" + qr;
         s["%Q"] = qr;
 
         var re = /%./g;
@@ -8860,6 +8869,8 @@ _.extend(BI, {
     zIndex_masker: 1e8,
     zIndex_tip: 1e9,
     emptyStr: "",
+    pixUnit: "px",
+    pixRatio: 1,
     emptyFn: function () {
     },
     empty: null,
@@ -8984,6 +8995,7 @@ _.extend(BI, {
     StartOfWeek: 1
 });
 
+
 /***/ }),
 
 /***/ 153:
@@ -9090,7 +9102,7 @@ module.exports = g;
 
 /***/ }),
 
-/***/ 62:
+/***/ 63:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9158,7 +9170,7 @@ exports.clearImmediate = typeof self !== "undefined" && self.clearImmediate || t
 
 /***/ }),
 
-/***/ 76:
+/***/ 77:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

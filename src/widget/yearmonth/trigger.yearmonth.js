@@ -8,7 +8,7 @@ BI.DynamicYearMonthTrigger = BI.inherit(BI.Trigger, {
         extraCls: "bi-year-month-trigger",
         min: "1900-01-01", // 最小日期
         max: "2099-12-31", // 最大日期
-        height: 22
+        height: 24
     },
 
     beforeInit: function (callback) {
@@ -62,16 +62,16 @@ BI.DynamicYearMonthTrigger = BI.inherit(BI.Trigger, {
 
     _createEditor: function (isYear) {
         var self = this, o = this.options, c = this._const;
-        var minDate = BI.parseDateTime(o.min, "%Y-%X-%d");
         var editor = BI.createWidget({
             type: "bi.sign_editor",
             height: o.height,
             validationChecker: function (v) {
                 if (isYear) {
-                    return v === "" || (BI.isPositiveInteger(v) && !BI.checkDateVoid(v, parseInt(v, 10) === minDate.getFullYear() ? minDate.getMonth() + 1 : 1, 1, o.min, o.max)[0]);
+                    return v === "" || (BI.isPositiveInteger(v) && !BI.checkDateVoid(v, parseInt(v, 10) === BI.parseDateTime(o.min, "%Y-%X-%d").getFullYear() ? BI.parseDateTime(o.min, "%Y-%X-%d").getMonth() + 1 : 1, 1, o.min, o.max)[0]);
                 }
+                var year = self.yearEditor.getValue();
 
-                return v === "" || ((BI.isPositiveInteger(v) && v >= 1 && v <= 12) && !BI.checkDateVoid(BI.getDate().getFullYear(), v, 1, o.min, o.max)[0]);
+                return v === "" || ((BI.isPositiveInteger(v) && v >= 1 && v <= 12) && (BI.isEmptyString(year) ? true : !BI.checkDateVoid(self.yearEditor.getValue(), v, 1, o.min, o.max)[0]));
             },
             quitChecker: function () {
                 return false;
@@ -215,6 +215,18 @@ BI.DynamicYearMonthTrigger = BI.inherit(BI.Trigger, {
         }
     },
 
+    setMinDate: function (minDate) {
+        if (BI.isNotEmptyString(this.options.min)) {
+            this.options.min = minDate;
+        }
+    },
+
+    setMaxDate: function (maxDate) {
+        if (BI.isNotEmptyString(this.options.max)) {
+            this.options.max = maxDate;
+        }
+    },
+
     setValue: function (v) {
         var type, value;
         var date = BI.getDate();
@@ -247,7 +259,7 @@ BI.DynamicYearMonthTrigger = BI.inherit(BI.Trigger, {
         return this.yearEditor.getValue() + "-" + this.monthEditor.getValue();
     },
 
-    isValid: function () {
+    isStateValid: function () {
         return this.yearEditor.isValid() && this.monthEditor.isValid();
     }
 });

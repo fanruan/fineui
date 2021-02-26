@@ -103,8 +103,8 @@ BI.PopoverController = BI.inherit(BI.Controller, {
                 top = 0;
             }
             popover.element.css({
-                left: left + "px",
-                top: top + "px"
+                left: left / BI.pixRatio + BI.pixUnit,
+                top: top / BI.pixRatio + BI.pixUnit
             });
         }
         return this;

@@ -12,17 +12,13 @@ BI.SingleSelectInsertCombo = BI.inherit(BI.Single, {
             itemsCreator: BI.emptyFn,
             valueFormatter: BI.emptyFn,
             height: 24,
-            attributes: {
-                tabIndex: 0
-            },
             allowEdit: true
         });
     },
 
     _init: function () {
-        BI.SingleSelectInsertCombo.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
-
+        BI.SingleSelectInsertCombo.superclass._init.apply(this, arguments);
         var assertShowValue = function () {
             BI.isKey(self._startValue) && (self.storeValue = self._startValue);
             self.trigger.getSearcher().setState(self.storeValue);
@@ -124,6 +120,7 @@ BI.SingleSelectInsertCombo = BI.inherit(BI.Single, {
 
         this.combo = BI.createWidget({
             type: "bi.combo",
+            cls: "bi-border bi-border-radius",
             container: o.container,
             toggle: false,
             el: this.trigger,

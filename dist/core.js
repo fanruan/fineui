@@ -1,4 +1,4 @@
-/*! time: 2021-1-4 15:10:21 */
+/*! time: 2021-2-26 11:30:39 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -82,7 +82,7 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 1406);
+/******/ 	return __webpack_require__(__webpack_require__.s = 1417);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -93,7 +93,7 @@ var global = __webpack_require__(4);
 var core = __webpack_require__(11);
 var hide = __webpack_require__(19);
 var redefine = __webpack_require__(15);
-var ctx = __webpack_require__(22);
+var ctx = __webpack_require__(23);
 var PROTOTYPE = 'prototype';
 
 var $export = function (type, name, source) {
@@ -219,7 +219,7 @@ var _single = __webpack_require__(2);
 /* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var store = __webpack_require__(63)('wks');
+var store = __webpack_require__(64)('wks');
 var uid = __webpack_require__(36);
 var Symbol = __webpack_require__(4).Symbol;
 var USE_SYMBOL = typeof Symbol == 'function';
@@ -237,7 +237,7 @@ $exports.store = store;
 /***/ (function(module, exports, __webpack_require__) {
 
 // 7.1.15 ToLength
-var toInteger = __webpack_require__(24);
+var toInteger = __webpack_require__(25);
 var min = Math.min;
 module.exports = function (it) {
   return it > 0 ? min(toInteger(it), 0x1fffffffffffff) : 0; // pow(2, 53) - 1 == 9007199254740991
@@ -267,7 +267,7 @@ module.exports = !__webpack_require__(5)(function () {
 /***/ (function(module, exports, __webpack_require__) {
 
 var anObject = __webpack_require__(6);
-var IE8_DOM_DEFINE = __webpack_require__(290);
+var IE8_DOM_DEFINE = __webpack_require__(293);
 var toPrimitive = __webpack_require__(32);
 var dP = Object.defineProperty;
 
@@ -303,7 +303,7 @@ var global = __webpack_require__(4);
 var hide = __webpack_require__(19);
 var has = __webpack_require__(18);
 var SRC = __webpack_require__(36)('src');
-var $toString = __webpack_require__(900);
+var $toString = __webpack_require__(909);
 var TO_STRING = 'toString';
 var TPL = ('' + $toString).split(TO_STRING);
 
@@ -441,8 +441,17 @@ module.exports = function (method, arg) {
 /* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
+"use strict";
+
+
+var _widget = __webpack_require__(1);
+
+/***/ }),
+/* 23 */
+/***/ (function(module, exports, __webpack_require__) {
+
 // optional / simple context binding
-var aFunction = __webpack_require__(23);
+var aFunction = __webpack_require__(24);
 module.exports = function (fn, that, length) {
   aFunction(fn);
   if (that === undefined) return fn;
@@ -464,7 +473,7 @@ module.exports = function (fn, that, length) {
 
 
 /***/ }),
-/* 23 */
+/* 24 */
 /***/ (function(module, exports) {
 
 module.exports = function (it) {
@@ -474,7 +483,7 @@ module.exports = function (it) {
 
 
 /***/ }),
-/* 24 */
+/* 25 */
 /***/ (function(module, exports) {
 
 // 7.1.4 ToInteger
@@ -486,7 +495,7 @@ module.exports = function (it) {
 
 
 /***/ }),
-/* 25 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var pIE = __webpack_require__(54);
@@ -494,7 +503,7 @@ var createDesc = __webpack_require__(35);
 var toIObject = __webpack_require__(20);
 var toPrimitive = __webpack_require__(32);
 var has = __webpack_require__(18);
-var IE8_DOM_DEFINE = __webpack_require__(290);
+var IE8_DOM_DEFINE = __webpack_require__(293);
 var gOPD = Object.getOwnPropertyDescriptor;
 
 exports.f = __webpack_require__(12) ? gOPD : function getOwnPropertyDescriptor(O, P) {
@@ -508,7 +517,7 @@ exports.f = __webpack_require__(12) ? gOPD : function getOwnPropertyDescriptor(O
 
 
 /***/ }),
-/* 26 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // most Object methods by ES6 should accept primitives
@@ -524,7 +533,7 @@ module.exports = function (KEY, exec) {
 
 
 /***/ }),
-/* 27 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 0 -> Array#forEach
@@ -534,11 +543,11 @@ module.exports = function (KEY, exec) {
 // 4 -> Array#every
 // 5 -> Array#find
 // 6 -> Array#findIndex
-var ctx = __webpack_require__(22);
+var ctx = __webpack_require__(23);
 var IObject = __webpack_require__(53);
 var toObject = __webpack_require__(14);
 var toLength = __webpack_require__(10);
-var asc = __webpack_require__(306);
+var asc = __webpack_require__(309);
 module.exports = function (TYPE, $create) {
   var IS_MAP = TYPE == 1;
   var IS_FILTER = TYPE == 2;
@@ -574,15 +583,6 @@ module.exports = function (TYPE, $create) {
 
 
 /***/ }),
-/* 28 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _widget = __webpack_require__(1);
-
-/***/ }),
 /* 29 */
 /***/ (function(module, exports) {
 
@@ -615,16 +615,16 @@ if (__webpack_require__(12)) {
   var global = __webpack_require__(4);
   var fails = __webpack_require__(5);
   var $export = __webpack_require__(0);
-  var $typed = __webpack_require__(74);
+  var $typed = __webpack_require__(75);
   var $buffer = __webpack_require__(116);
-  var ctx = __webpack_require__(22);
+  var ctx = __webpack_require__(23);
   var anInstance = __webpack_require__(50);
   var propertyDesc = __webpack_require__(35);
   var hide = __webpack_require__(19);
   var redefineAll = __webpack_require__(51);
-  var toInteger = __webpack_require__(24);
+  var toInteger = __webpack_require__(25);
   var toLength = __webpack_require__(10);
-  var toIndex = __webpack_require__(317);
+  var toIndex = __webpack_require__(320);
   var toAbsoluteIndex = __webpack_require__(39);
   var toPrimitive = __webpack_require__(32);
   var has = __webpack_require__(18);
@@ -638,17 +638,17 @@ if (__webpack_require__(12)) {
   var getIterFn = __webpack_require__(110);
   var uid = __webpack_require__(36);
   var wks = __webpack_require__(9);
-  var createArrayMethod = __webpack_require__(27);
-  var createArrayIncludes = __webpack_require__(64);
+  var createArrayMethod = __webpack_require__(28);
+  var createArrayIncludes = __webpack_require__(65);
   var speciesConstructor = __webpack_require__(56);
   var ArrayIterators = __webpack_require__(112);
   var Iterators = __webpack_require__(48);
-  var $iterDetect = __webpack_require__(67);
+  var $iterDetect = __webpack_require__(68);
   var setSpecies = __webpack_require__(49);
   var arrayFill = __webpack_require__(111);
-  var arrayCopyWithin = __webpack_require__(308);
+  var arrayCopyWithin = __webpack_require__(311);
   var $DP = __webpack_require__(13);
-  var $GOPD = __webpack_require__(25);
+  var $GOPD = __webpack_require__(26);
   var dP = $DP.f;
   var gOPD = $GOPD.f;
   var RangeError = global.RangeError;
@@ -1212,7 +1212,7 @@ module.exports = false;
 /***/ (function(module, exports, __webpack_require__) {
 
 // 19.1.2.14 / 15.2.3.14 Object.keys(O)
-var $keys = __webpack_require__(292);
+var $keys = __webpack_require__(295);
 var enumBugKeys = __webpack_require__(95);
 
 module.exports = Object.keys || function keys(O) {
@@ -1224,7 +1224,7 @@ module.exports = Object.keys || function keys(O) {
 /* 39 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var toInteger = __webpack_require__(24);
+var toInteger = __webpack_require__(25);
 var max = Math.max;
 var min = Math.min;
 module.exports = function (index, length) {
@@ -1239,7 +1239,7 @@ module.exports = function (index, length) {
 
 // 19.1.2.2 / 15.2.3.5 Object.create(O [, Properties])
 var anObject = __webpack_require__(6);
-var dPs = __webpack_require__(293);
+var dPs = __webpack_require__(296);
 var enumBugKeys = __webpack_require__(95);
 var IE_PROTO = __webpack_require__(94)('IE_PROTO');
 var Empty = function () { /* empty */ };
@@ -1285,7 +1285,7 @@ module.exports = Object.create || function create(O, Properties) {
 /***/ (function(module, exports, __webpack_require__) {
 
 // 19.1.2.7 / 15.2.3.4 Object.getOwnPropertyNames(O)
-var $keys = __webpack_require__(292);
+var $keys = __webpack_require__(295);
 var hiddenKeys = __webpack_require__(95).concat('length', 'prototype');
 
 exports.f = Object.getOwnPropertyNames || function getOwnPropertyNames(O) {
@@ -1498,7 +1498,7 @@ module.exports = function (it) {
 
 // 7.3.20 SpeciesConstructor(O, defaultConstructor)
 var anObject = __webpack_require__(6);
-var aFunction = __webpack_require__(23);
+var aFunction = __webpack_require__(24);
 var SPECIES = __webpack_require__(9)('species');
 module.exports = function (O, D) {
   var C = anObject(O).constructor;
@@ -1514,7 +1514,7 @@ module.exports = function (O, D) {
 "use strict";
 
 
-var _ob = __webpack_require__(34);
+var _button = __webpack_require__(8);
 
 /***/ }),
 /* 58 */
@@ -1523,7 +1523,7 @@ var _ob = __webpack_require__(34);
 "use strict";
 
 
-var _button = __webpack_require__(8);
+var _ob = __webpack_require__(34);
 
 /***/ }),
 /* 59 */
@@ -1532,12 +1532,21 @@ var _button = __webpack_require__(8);
 "use strict";
 
 
-var _pane = __webpack_require__(28);
+var _button = __webpack_require__(8);
 
 /***/ }),
-/* 60 */,
+/* 60 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _pane = __webpack_require__(22);
+
+/***/ }),
 /* 61 */,
-/* 62 */
+/* 62 */,
+/* 63 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1604,7 +1613,7 @@ exports.clearImmediate = typeof self !== "undefined" && self.clearImmediate || t
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(17)))
 
 /***/ }),
-/* 63 */
+/* 64 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var core = __webpack_require__(11);
@@ -1622,7 +1631,7 @@ var store = global[SHARED] || (global[SHARED] = {});
 
 
 /***/ }),
-/* 64 */
+/* 65 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // false -> Array#indexOf
@@ -1651,14 +1660,14 @@ module.exports = function (IS_INCLUDES) {
 
 
 /***/ }),
-/* 65 */
+/* 66 */
 /***/ (function(module, exports) {
 
 exports.f = Object.getOwnPropertySymbols;
 
 
 /***/ }),
-/* 66 */
+/* 67 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 7.2.2 IsArray(argument)
@@ -1669,7 +1678,7 @@ module.exports = Array.isArray || function isArray(arg) {
 
 
 /***/ }),
-/* 67 */
+/* 68 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var ITERATOR = __webpack_require__(9)('iterator');
@@ -1697,7 +1706,7 @@ module.exports = function (exec, skipClosing) {
 
 
 /***/ }),
-/* 68 */
+/* 69 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1717,7 +1726,7 @@ module.exports = function () {
 
 
 /***/ }),
-/* 69 */
+/* 70 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1745,12 +1754,12 @@ module.exports = function (R, S) {
 
 
 /***/ }),
-/* 70 */
+/* 71 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
-__webpack_require__(310);
+__webpack_require__(313);
 var redefine = __webpack_require__(15);
 var hide = __webpack_require__(19);
 var fails = __webpack_require__(5);
@@ -1848,11 +1857,11 @@ module.exports = function (KEY, length, exec) {
 
 
 /***/ }),
-/* 71 */
+/* 72 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var ctx = __webpack_require__(22);
-var call = __webpack_require__(305);
+var ctx = __webpack_require__(23);
+var call = __webpack_require__(308);
 var isArrayIter = __webpack_require__(108);
 var anObject = __webpack_require__(6);
 var toLength = __webpack_require__(10);
@@ -1879,7 +1888,7 @@ exports.RETURN = RETURN;
 
 
 /***/ }),
-/* 72 */
+/* 73 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var global = __webpack_require__(4);
@@ -1889,7 +1898,7 @@ module.exports = navigator && navigator.userAgent || '';
 
 
 /***/ }),
-/* 73 */
+/* 74 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1899,11 +1908,11 @@ var $export = __webpack_require__(0);
 var redefine = __webpack_require__(15);
 var redefineAll = __webpack_require__(51);
 var meta = __webpack_require__(33);
-var forOf = __webpack_require__(71);
+var forOf = __webpack_require__(72);
 var anInstance = __webpack_require__(50);
 var isObject = __webpack_require__(7);
 var fails = __webpack_require__(5);
-var $iterDetect = __webpack_require__(67);
+var $iterDetect = __webpack_require__(68);
 var setToStringTag = __webpack_require__(46);
 var inheritIfRequired = __webpack_require__(99);
 
@@ -1981,7 +1990,7 @@ module.exports = function (NAME, wrapper, methods, common, IS_MAP, IS_WEAK) {
 
 
 /***/ }),
-/* 74 */
+/* 75 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var global = __webpack_require__(4);
@@ -2015,8 +2024,8 @@ module.exports = {
 
 
 /***/ }),
-/* 75 */,
-/* 76 */
+/* 76 */,
+/* 77 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2232,24 +2241,15 @@ process.umask = function () {
 };
 
 /***/ }),
-/* 77 */,
 /* 78 */,
-/* 79 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _widget = __webpack_require__(1);
-
-/***/ }),
+/* 79 */,
 /* 80 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var _button = __webpack_require__(8);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 81 */
@@ -2321,7 +2321,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _treeview = __webpack_require__(59);
+var _treeview = __webpack_require__(60);
 
 /***/ }),
 /* 89 */
@@ -2366,7 +2366,7 @@ exports.f = __webpack_require__(9);
 /* 94 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var shared = __webpack_require__(63)('keys');
+var shared = __webpack_require__(64)('keys');
 var uid = __webpack_require__(36);
 module.exports = function (key) {
   return shared[key] || (shared[key] = uid(key));
@@ -2407,7 +2407,7 @@ module.exports = {
   set: Object.setPrototypeOf || ('__proto__' in {} ? // eslint-disable-line
     function (test, buggy, set) {
       try {
-        set = __webpack_require__(22)(Function.call, __webpack_require__(25).f(Object.prototype, '__proto__').set, 2);
+        set = __webpack_require__(23)(Function.call, __webpack_require__(26).f(Object.prototype, '__proto__').set, 2);
         set(test, []);
         buggy = !(test instanceof Array);
       } catch (e) { buggy = true; }
@@ -2451,7 +2451,7 @@ module.exports = function (that, target, C) {
 
 "use strict";
 
-var toInteger = __webpack_require__(24);
+var toInteger = __webpack_require__(25);
 var defined = __webpack_require__(30);
 
 module.exports = function repeat(count) {
@@ -2495,7 +2495,7 @@ module.exports = (!$expm1
 /* 103 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var toInteger = __webpack_require__(24);
+var toInteger = __webpack_require__(25);
 var defined = __webpack_require__(30);
 // true  -> String#at
 // false -> String#codePointAt
@@ -2525,7 +2525,7 @@ var $export = __webpack_require__(0);
 var redefine = __webpack_require__(15);
 var hide = __webpack_require__(19);
 var Iterators = __webpack_require__(48);
-var $iterCreate = __webpack_require__(304);
+var $iterCreate = __webpack_require__(307);
 var setToStringTag = __webpack_require__(46);
 var getPrototypeOf = __webpack_require__(42);
 var ITERATOR = __webpack_require__(9)('iterator');
@@ -2708,7 +2708,7 @@ module.exports = function fill(value /* , start = 0, end = @length */) {
 "use strict";
 
 var addToUnscopables = __webpack_require__(43);
-var step = __webpack_require__(309);
+var step = __webpack_require__(312);
 var Iterators = __webpack_require__(48);
 var toIObject = __webpack_require__(20);
 
@@ -2749,7 +2749,7 @@ addToUnscopables('entries');
 "use strict";
 
 
-var regexpFlags = __webpack_require__(68);
+var regexpFlags = __webpack_require__(69);
 
 var nativeExec = RegExp.prototype.exec;
 // This always refers to the native implementation, because the
@@ -2826,8 +2826,8 @@ module.exports = function (S, index, unicode) {
 /* 115 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var ctx = __webpack_require__(22);
-var invoke = __webpack_require__(298);
+var ctx = __webpack_require__(23);
+var invoke = __webpack_require__(301);
 var html = __webpack_require__(96);
 var cel = __webpack_require__(92);
 var global = __webpack_require__(4);
@@ -2921,14 +2921,14 @@ module.exports = {
 var global = __webpack_require__(4);
 var DESCRIPTORS = __webpack_require__(12);
 var LIBRARY = __webpack_require__(37);
-var $typed = __webpack_require__(74);
+var $typed = __webpack_require__(75);
 var hide = __webpack_require__(19);
 var redefineAll = __webpack_require__(51);
 var fails = __webpack_require__(5);
 var anInstance = __webpack_require__(50);
-var toInteger = __webpack_require__(24);
+var toInteger = __webpack_require__(25);
 var toLength = __webpack_require__(10);
-var toIndex = __webpack_require__(317);
+var toIndex = __webpack_require__(320);
 var gOPN = __webpack_require__(41).f;
 var dP = __webpack_require__(13).f;
 var arrayFill = __webpack_require__(111);
@@ -3221,7 +3221,7 @@ module.exports = function (it) {
 /***/ (function(module, exports, __webpack_require__) {
 
 // Thank's IE8 for his funny defineProperty
-module.exports = !__webpack_require__(322)(function () {
+module.exports = !__webpack_require__(325)(function () {
   return Object.defineProperty({}, 'a', { get: function () { return 7; } }).a != 7;
 });
 
@@ -3812,7 +3812,7 @@ if (!_global.BI) {
             if (typeof w === "number") {
                 return w >= 0;
             } else if (typeof w === "string") {
-                return /^\d{1,3}%$/.exec(w) || w == "auto" || /^\d+px$/.exec(w);
+                return /^\d{1,3}(\.\d)?%$/.exec(w) || w == "auto" || /^\d+px$/.exec(w);
             }
         },
 
@@ -4437,7 +4437,10 @@ if (!_global.BI) {
                             hr -= 12;
                         }
                         break;
-
+                    case "%Q":
+                    case "%q":
+                        m = (parseInt(a[i], 10) - 1) * 3;
+                        break;
                     case "%M":
                         min = parseInt(a[i], 10);
                         break;
@@ -4612,7 +4615,7 @@ if (!_global.BI) {
     });
 })();
 
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(17), __webpack_require__(62).setImmediate))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(17), __webpack_require__(63).setImmediate))
 
 /***/ }),
 /* 128 */
@@ -4822,7 +4825,7 @@ if (!_global.BI) {
   attachTo.setImmediate = setImmediate;
   attachTo.clearImmediate = clearImmediate;
 })(typeof self === "undefined" ? typeof global === "undefined" ? void 0 : global : self);
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(17), __webpack_require__(76)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(17), __webpack_require__(77)))
 
 /***/ }),
 /* 129 */
@@ -10800,6 +10803,7 @@ _.extend(BI, {
         s["%y"] = yWith4number.substr(2, 2); // year without the century (range 00 to 99)
         s["%Y"] = yWith4number;		// year with the century
         s["%%"] = "%";		// a literal '%' character
+        s["%q"] = "0" + qr;
         s["%Q"] = qr;
 
         var re = /%./g;
@@ -11662,6 +11666,8 @@ _.extend(BI, {
     zIndex_masker: 1e8,
     zIndex_tip: 1e9,
     emptyStr: "",
+    pixUnit: "px",
+    pixRatio: 1,
     emptyFn: function () {
     },
     empty: null,
@@ -11785,6 +11791,7 @@ _.extend(BI, {
     },
     StartOfWeek: 1
 });
+
 
 /***/ }),
 /* 153 */
@@ -12207,19 +12214,19 @@ BI.Req = {
 // extracted by mini-css-extract-plugin
 
 /***/ }),
-/* 214 */,
+/* 214 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
 /* 215 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // extracted by mini-css-extract-plugin
 
 /***/ }),
-/* 216 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
-
-/***/ }),
+/* 216 */,
 /* 217 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -12652,8 +12659,26 @@ BI.Req = {
 // extracted by mini-css-extract-plugin
 
 /***/ }),
-/* 289 */,
+/* 289 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
 /* 290 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
+/* 291 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
+/* 292 */,
+/* 293 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = !__webpack_require__(12) && !__webpack_require__(5)(function () {
@@ -12662,7 +12687,7 @@ module.exports = !__webpack_require__(12) && !__webpack_require__(5)(function ()
 
 
 /***/ }),
-/* 291 */
+/* 294 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var global = __webpack_require__(4);
@@ -12677,12 +12702,12 @@ module.exports = function (name) {
 
 
 /***/ }),
-/* 292 */
+/* 295 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var has = __webpack_require__(18);
 var toIObject = __webpack_require__(20);
-var arrayIndexOf = __webpack_require__(64)(false);
+var arrayIndexOf = __webpack_require__(65)(false);
 var IE_PROTO = __webpack_require__(94)('IE_PROTO');
 
 module.exports = function (object, names) {
@@ -12700,7 +12725,7 @@ module.exports = function (object, names) {
 
 
 /***/ }),
-/* 293 */
+/* 296 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var dP = __webpack_require__(13);
@@ -12719,7 +12744,7 @@ module.exports = __webpack_require__(12) ? Object.defineProperties : function de
 
 
 /***/ }),
-/* 294 */
+/* 297 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // fallback for IE11 buggy Object.getOwnPropertyNames with iframe and window
@@ -12744,7 +12769,7 @@ module.exports.f = function getOwnPropertyNames(it) {
 
 
 /***/ }),
-/* 295 */
+/* 298 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12752,7 +12777,7 @@ module.exports.f = function getOwnPropertyNames(it) {
 // 19.1.2.1 Object.assign(target, source, ...)
 var DESCRIPTORS = __webpack_require__(12);
 var getKeys = __webpack_require__(38);
-var gOPS = __webpack_require__(65);
+var gOPS = __webpack_require__(66);
 var pIE = __webpack_require__(54);
 var toObject = __webpack_require__(14);
 var IObject = __webpack_require__(53);
@@ -12789,7 +12814,7 @@ module.exports = !$assign || __webpack_require__(5)(function () {
 
 
 /***/ }),
-/* 296 */
+/* 299 */
 /***/ (function(module, exports) {
 
 // 7.2.9 SameValue(x, y)
@@ -12800,14 +12825,14 @@ module.exports = Object.is || function is(x, y) {
 
 
 /***/ }),
-/* 297 */
+/* 300 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
-var aFunction = __webpack_require__(23);
+var aFunction = __webpack_require__(24);
 var isObject = __webpack_require__(7);
-var invoke = __webpack_require__(298);
+var invoke = __webpack_require__(301);
 var arraySlice = [].slice;
 var factories = {};
 
@@ -12832,7 +12857,7 @@ module.exports = Function.bind || function bind(that /* , ...args */) {
 
 
 /***/ }),
-/* 298 */
+/* 301 */
 /***/ (function(module, exports) {
 
 // fast apply, http://jsperf.lnkit.com/fast-apply/5
@@ -12854,7 +12879,7 @@ module.exports = function (fn, args, that) {
 
 
 /***/ }),
-/* 299 */
+/* 302 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var $parseInt = __webpack_require__(4).parseInt;
@@ -12869,7 +12894,7 @@ module.exports = $parseInt(ws + '08') !== 8 || $parseInt(ws + '0x16') !== 22 ? f
 
 
 /***/ }),
-/* 300 */
+/* 303 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var $parseFloat = __webpack_require__(4).parseFloat;
@@ -12883,7 +12908,7 @@ module.exports = 1 / $parseFloat(__webpack_require__(98) + '-0') !== -Infinity ?
 
 
 /***/ }),
-/* 301 */
+/* 304 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var cof = __webpack_require__(29);
@@ -12894,7 +12919,7 @@ module.exports = function (it, msg) {
 
 
 /***/ }),
-/* 302 */
+/* 305 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 20.1.2.3 Number.isInteger(number)
@@ -12906,7 +12931,7 @@ module.exports = function isInteger(it) {
 
 
 /***/ }),
-/* 303 */
+/* 306 */
 /***/ (function(module, exports) {
 
 // 20.2.2.20 Math.log1p(x)
@@ -12916,7 +12941,7 @@ module.exports = Math.log1p || function log1p(x) {
 
 
 /***/ }),
-/* 304 */
+/* 307 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12936,7 +12961,7 @@ module.exports = function (Constructor, NAME, next) {
 
 
 /***/ }),
-/* 305 */
+/* 308 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // call something on iterator step with safe closing on error
@@ -12954,11 +12979,11 @@ module.exports = function (iterator, fn, value, entries) {
 
 
 /***/ }),
-/* 306 */
+/* 309 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 9.4.2.3 ArraySpeciesCreate(originalArray, length)
-var speciesConstructor = __webpack_require__(990);
+var speciesConstructor = __webpack_require__(999);
 
 module.exports = function (original, length) {
   return new (speciesConstructor(original))(length);
@@ -12966,10 +12991,10 @@ module.exports = function (original, length) {
 
 
 /***/ }),
-/* 307 */
+/* 310 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var aFunction = __webpack_require__(23);
+var aFunction = __webpack_require__(24);
 var toObject = __webpack_require__(14);
 var IObject = __webpack_require__(53);
 var toLength = __webpack_require__(10);
@@ -13000,7 +13025,7 @@ module.exports = function (that, callbackfn, aLen, memo, isRight) {
 
 
 /***/ }),
-/* 308 */
+/* 311 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -13033,7 +13058,7 @@ module.exports = [].copyWithin || function copyWithin(target /* = 0 */, start /*
 
 
 /***/ }),
-/* 309 */
+/* 312 */
 /***/ (function(module, exports) {
 
 module.exports = function (done, value) {
@@ -13042,7 +13067,7 @@ module.exports = function (done, value) {
 
 
 /***/ }),
-/* 310 */
+/* 313 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -13058,38 +13083,38 @@ __webpack_require__(0)({
 
 
 /***/ }),
-/* 311 */
+/* 314 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 21.2.5.3 get RegExp.prototype.flags()
 if (__webpack_require__(12) && /./g.flags != 'g') __webpack_require__(13).f(RegExp.prototype, 'flags', {
   configurable: true,
-  get: __webpack_require__(68)
+  get: __webpack_require__(69)
 });
 
 
 /***/ }),
-/* 312 */
+/* 315 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 var LIBRARY = __webpack_require__(37);
 var global = __webpack_require__(4);
-var ctx = __webpack_require__(22);
+var ctx = __webpack_require__(23);
 var classof = __webpack_require__(55);
 var $export = __webpack_require__(0);
 var isObject = __webpack_require__(7);
-var aFunction = __webpack_require__(23);
+var aFunction = __webpack_require__(24);
 var anInstance = __webpack_require__(50);
-var forOf = __webpack_require__(71);
+var forOf = __webpack_require__(72);
 var speciesConstructor = __webpack_require__(56);
 var task = __webpack_require__(115).set;
-var microtask = __webpack_require__(1010)();
-var newPromiseCapabilityModule = __webpack_require__(313);
-var perform = __webpack_require__(1011);
-var userAgent = __webpack_require__(72);
-var promiseResolve = __webpack_require__(314);
+var microtask = __webpack_require__(1019)();
+var newPromiseCapabilityModule = __webpack_require__(316);
+var perform = __webpack_require__(1020);
+var userAgent = __webpack_require__(73);
+var promiseResolve = __webpack_require__(317);
 var PROMISE = 'Promise';
 var TypeError = global.TypeError;
 var process = global.process;
@@ -13315,7 +13340,7 @@ $export($export.S + $export.F * (LIBRARY || !USE_NATIVE), PROMISE, {
     return promiseResolve(LIBRARY && this === Wrapper ? $Promise : this, x);
   }
 });
-$export($export.S + $export.F * !(USE_NATIVE && __webpack_require__(67)(function (iter) {
+$export($export.S + $export.F * !(USE_NATIVE && __webpack_require__(68)(function (iter) {
   $Promise.all(iter)['catch'](empty);
 })), PROMISE, {
   // 25.4.4.1 Promise.all(iterable)
@@ -13362,13 +13387,13 @@ $export($export.S + $export.F * !(USE_NATIVE && __webpack_require__(67)(function
 
 
 /***/ }),
-/* 313 */
+/* 316 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 // 25.4.1.5 NewPromiseCapability(C)
-var aFunction = __webpack_require__(23);
+var aFunction = __webpack_require__(24);
 
 function PromiseCapability(C) {
   var resolve, reject;
@@ -13387,12 +13412,12 @@ module.exports.f = function (C) {
 
 
 /***/ }),
-/* 314 */
+/* 317 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var anObject = __webpack_require__(6);
 var isObject = __webpack_require__(7);
-var newPromiseCapability = __webpack_require__(313);
+var newPromiseCapability = __webpack_require__(316);
 
 module.exports = function (C, x) {
   anObject(C);
@@ -13405,7 +13430,7 @@ module.exports = function (C, x) {
 
 
 /***/ }),
-/* 315 */
+/* 318 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -13413,11 +13438,11 @@ module.exports = function (C, x) {
 var dP = __webpack_require__(13).f;
 var create = __webpack_require__(40);
 var redefineAll = __webpack_require__(51);
-var ctx = __webpack_require__(22);
+var ctx = __webpack_require__(23);
 var anInstance = __webpack_require__(50);
-var forOf = __webpack_require__(71);
+var forOf = __webpack_require__(72);
 var $iterDefine = __webpack_require__(104);
-var step = __webpack_require__(309);
+var step = __webpack_require__(312);
 var setSpecies = __webpack_require__(49);
 var DESCRIPTORS = __webpack_require__(12);
 var fastKey = __webpack_require__(33).fastKey;
@@ -13556,7 +13581,7 @@ module.exports = {
 
 
 /***/ }),
-/* 316 */
+/* 319 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -13566,8 +13591,8 @@ var getWeak = __webpack_require__(33).getWeak;
 var anObject = __webpack_require__(6);
 var isObject = __webpack_require__(7);
 var anInstance = __webpack_require__(50);
-var forOf = __webpack_require__(71);
-var createArrayMethod = __webpack_require__(27);
+var forOf = __webpack_require__(72);
+var createArrayMethod = __webpack_require__(28);
 var $has = __webpack_require__(18);
 var validate = __webpack_require__(44);
 var arrayFind = createArrayMethod(5);
@@ -13648,11 +13673,11 @@ module.exports = {
 
 
 /***/ }),
-/* 317 */
+/* 320 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // https://tc39.github.io/ecma262/#sec-toindex
-var toInteger = __webpack_require__(24);
+var toInteger = __webpack_require__(25);
 var toLength = __webpack_require__(10);
 module.exports = function (it) {
   if (it === undefined) return 0;
@@ -13664,12 +13689,12 @@ module.exports = function (it) {
 
 
 /***/ }),
-/* 318 */
+/* 321 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // all object keys, includes non-enumerable and symbols
 var gOPN = __webpack_require__(41);
-var gOPS = __webpack_require__(65);
+var gOPS = __webpack_require__(66);
 var anObject = __webpack_require__(6);
 var Reflect = __webpack_require__(4).Reflect;
 module.exports = Reflect && Reflect.ownKeys || function ownKeys(it) {
@@ -13680,7 +13705,7 @@ module.exports = Reflect && Reflect.ownKeys || function ownKeys(it) {
 
 
 /***/ }),
-/* 319 */
+/* 322 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // https://github.com/tc39/proposal-string-pad-start-end
@@ -13702,7 +13727,7 @@ module.exports = function (that, maxLength, fillString, left) {
 
 
 /***/ }),
-/* 320 */
+/* 323 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var DESCRIPTORS = __webpack_require__(12);
@@ -13729,7 +13754,7 @@ module.exports = function (isEntries) {
 
 
 /***/ }),
-/* 321 */
+/* 324 */
 /***/ (function(module, exports) {
 
 var core = module.exports = { version: '2.6.11' };
@@ -13737,7 +13762,7 @@ if (typeof __e == 'number') __e = core; // eslint-disable-line no-undef
 
 
 /***/ }),
-/* 322 */
+/* 325 */
 /***/ (function(module, exports) {
 
 module.exports = function (exec) {
@@ -13750,7 +13775,7 @@ module.exports = function (exec) {
 
 
 /***/ }),
-/* 323 */
+/* 326 */
 /***/ (function(module, exports) {
 
 /**
@@ -13762,7 +13787,7 @@ module.exports = function (exec) {
  */
 
 !(function () {
-    function callLifeHook (self, life) {
+    function callLifeHook(self, life) {
         var hook = self.options[life] || self[life];
         if (hook) {
             var hooks = BI.isArray(hook) ? hook : [hook];
@@ -13791,18 +13816,23 @@ module.exports = function (exec) {
             });
         },
 
-        // 覆盖父类的_constructor方法，widget不走ob的生命周期
         _constructor: function () {
+
+        },
+
+        // 覆盖父类的_constructor方法，widget不走ob的生命周期
+        _constructed: function () {
             if (this.setup) {
                 pushTarget(this);
-                this.render = this.setup();
+                this.service = this.setup(this.options);
+                this.render = BI.isPlainObject(this.service) ? this.service.render : this.service;
                 popTarget();
             }
         },
 
         _lazyConstructor: function () {
-            if (!this._constructed) {
-                this._constructed = true;
+            if (!this.__constructed) {
+                this.__constructed = true;
                 this._init();
                 this._initRef();
             }
@@ -13903,14 +13933,14 @@ module.exports = function (exec) {
         _initElementWidth: function () {
             var o = this.options;
             if (BI.isWidthOrHeight(o.width)) {
-                this.element.css("width", o.width);
+                this.element.css("width", BI.isNumber(o.width) ? o.width / BI.pixRatio + BI.pixUnit : o.width);
             }
         },
 
         _initElementHeight: function () {
             var o = this.options;
             if (BI.isWidthOrHeight(o.height)) {
-                this.element.css("height", o.height);
+                this.element.css("height", BI.isNumber(o.height) ? o.height / BI.pixRatio + BI.pixUnit : o.height);
             }
         },
 
@@ -13947,9 +13977,11 @@ module.exports = function (exec) {
             }
             if (BI.isArray(els)) {
                 BI.each(els, function (i, el) {
-                    BI._lazyCreateWidget(el, {
-                        element: self
-                    });
+                    if (el) {
+                        BI._lazyCreateWidget(el, {
+                            element: self
+                        });
+                    }
                 });
             }
             // if (this._isRoot === true || !(this instanceof BI.Layout)) {
@@ -14282,12 +14314,12 @@ module.exports = function (exec) {
         BI.Widget.context = context = contextStack.pop();
     };
 
-    function pushTarget (_current) {
+    function pushTarget(_current) {
         if (current) currentStack.push(current);
         BI.Widget.current = current = _current;
     }
 
-    function popTarget () {
+    function popTarget() {
         BI.Widget.current = current = currentStack.pop();
     }
 
@@ -14433,7 +14465,7 @@ module.exports = function (exec) {
 
 
 /***/ }),
-/* 324 */
+/* 327 */
 /***/ (function(module, exports) {
 
 (function () {
@@ -14462,6 +14494,7 @@ module.exports = function (exec) {
         }
         var widget = new cls();
         widget._initProps(config);
+        widget._constructed();
         widget._initRoot();
         // if (!lazy || config.element || config.root) {
         widget._lazyConstructor();
@@ -14498,7 +14531,7 @@ module.exports = function (exec) {
                     BI.Plugin.getObject(el.type, this);
                 }
             }]);
-            return w.type === el.type ? createWidget(w, context, lazy) : BI.createWidget(BI.extend({}, item, {type: w.type}), options, context, lazy);
+            return w.type === el.type ? createWidget(w, context, lazy) : BI.createWidget(BI.extend({/**important**/}, el, {type: w.type}), options, context, lazy);
         }
         if (item.el && (item.el.type || options.type)) {
             el = BI.extend({}, options, item.el);
@@ -14509,7 +14542,7 @@ module.exports = function (exec) {
                     BI.Plugin.getObject(el.type, this);
                 }
             }]);
-            return w.type === el.type ? createWidget(w, context, lazy) : BI.createWidget(BI.extend({}, item, {type: w.type}), options, context, lazy);
+            return w.type === el.type ? createWidget(w, context, lazy) : BI.createWidget(BI.extend({/**important**/}, el, {type: w.type}), options, context, lazy);
         }
         if (BI.isWidget(item.el)) {
             return item.el;
@@ -14530,7 +14563,7 @@ module.exports = function (exec) {
 
 
 /***/ }),
-/* 325 */
+/* 328 */
 /***/ (function(module, exports) {
 
 !(function () {
@@ -14642,7 +14675,7 @@ module.exports = function (exec) {
 })();
 
 /***/ }),
-/* 326 */
+/* 329 */
 /***/ (function(module, exports) {
 
 !(function () {
@@ -14796,7 +14829,7 @@ module.exports = function (exec) {
 })();
 
 /***/ }),
-/* 327 */
+/* 330 */
 /***/ (function(module, exports) {
 
 BI.BehaviorFactory = {
@@ -14838,7 +14871,7 @@ BI.Behavior = BI.inherit(BI.OB, {
 });
 
 /***/ }),
-/* 328 */
+/* 331 */
 /***/ (function(module, exports) {
 
 /**
@@ -14868,16 +14901,16 @@ BI.Layout = BI.inherit(BI.Widget, {
 
     _init4Margin: function () {
         if (this.options.top) {
-            this.element.css("top", this.options.top);
+            this.element.css("top", BI.isNumber(this.options.top) ? this.options.top / BI.pixRatio + BI.pixUnit : this.options.top);
         }
         if (this.options.left) {
-            this.element.css("left", this.options.left);
+            this.element.css("left", BI.isNumber(this.options.left) ? this.options.left / BI.pixRatio + BI.pixUnit : this.options.left);
         }
         if (this.options.bottom) {
-            this.element.css("bottom", this.options.bottom);
+            this.element.css("bottom", BI.isNumber(this.options.bottom) ? this.options.bottom / BI.pixRatio + BI.pixUnit : this.options.bottom);
         }
         if (this.options.right) {
-            this.element.css("right", this.options.right);
+            this.element.css("right", BI.isNumber(this.options.right) ? this.options.right / BI.pixRatio + BI.pixUnit : this.options.right);
         }
     },
 
@@ -15451,7 +15484,7 @@ BI.shortcut("bi.layout", BI.Layout);
 
 
 /***/ }),
-/* 329 */
+/* 332 */
 /***/ (function(module, exports) {
 
 BI.Plugin = BI.Plugin || {};
@@ -15555,7 +15588,7 @@ BI.Plugin = BI.Plugin || {};
 
 
 /***/ }),
-/* 330 */
+/* 333 */
 /***/ (function(module, exports) {
 
 /**
@@ -15599,7 +15632,7 @@ BI.ActionFactory = {
 };
 
 /***/ }),
-/* 331 */
+/* 334 */
 /***/ (function(module, exports) {
 
 /**
@@ -15628,7 +15661,7 @@ BI.ShowAction = BI.inherit(BI.Action, {
 
 
 /***/ }),
-/* 332 */
+/* 335 */
 /***/ (function(module, exports) {
 
 /**
@@ -15675,7 +15708,7 @@ BI.HighlightBehavior = BI.inherit(BI.Behavior, {
 });
 
 /***/ }),
-/* 333 */
+/* 336 */
 /***/ (function(module, exports) {
 
 /**
@@ -15714,7 +15747,7 @@ BI.RedMarkBehavior = BI.inherit(BI.Behavior, {
 });
 
 /***/ }),
-/* 334 */
+/* 337 */
 /***/ (function(module, exports) {
 
 /**
@@ -15736,7 +15769,7 @@ BI.Controller.EVENT_CHANGE = "__EVENT_CHANGE__";
 
 
 /***/ }),
-/* 335 */
+/* 338 */
 /***/ (function(module, exports) {
 
 /**
@@ -15791,7 +15824,7 @@ BI.BroadcastController = BI.inherit(BI.Controller, {
 });
 
 /***/ }),
-/* 336 */
+/* 339 */
 /***/ (function(module, exports) {
 
 /**
@@ -16101,7 +16134,7 @@ BI.BubblesController = BI.inherit(BI.Controller, {
 
 
 /***/ }),
-/* 337 */
+/* 340 */
 /***/ (function(module, exports) {
 
 /**
@@ -16276,7 +16309,7 @@ BI.LayerController = BI.inherit(BI.Controller, {
 });
 
 /***/ }),
-/* 338 */
+/* 341 */
 /***/ (function(module, exports) {
 
 /**
@@ -16297,7 +16330,7 @@ BI.MaskersController = BI.inherit(BI.LayerController, {
 });
 
 /***/ }),
-/* 339 */
+/* 342 */
 /***/ (function(module, exports) {
 
 /**
@@ -16405,8 +16438,8 @@ BI.PopoverController = BI.inherit(BI.Controller, {
                 top = 0;
             }
             popover.element.css({
-                left: left + "px",
-                top: top + "px"
+                left: left / BI.pixRatio + BI.pixUnit,
+                top: top / BI.pixRatio + BI.pixUnit
             });
         }
         return this;
@@ -16457,8 +16490,9 @@ BI.PopoverController = BI.inherit(BI.Controller, {
     }
 });
 
+
 /***/ }),
-/* 340 */
+/* 343 */
 /***/ (function(module, exports) {
 
 /**
@@ -16481,7 +16515,11 @@ BI.ResizeController = BI.inherit(BI.Controller, {
             self._resize(ev);
             // }
         }, 30);
-        BI.Widget._renderEngine.createElement(_global).resize(fn);
+        if ("onorientationchange" in _global) {
+            _global.onorientationchange = fn;
+        } else {
+            BI.Widget._renderEngine.createElement(_global).resize(fn);
+        }
     },
 
     _resize: function (ev) {
@@ -16532,7 +16570,7 @@ BI.ResizeController = BI.inherit(BI.Controller, {
 });
 
 /***/ }),
-/* 341 */
+/* 344 */
 /***/ (function(module, exports) {
 
 /**
@@ -16636,8 +16674,8 @@ BI.TooltipsController = BI.inherit(BI.Controller, {
             !opt.belowMouse && (y = Math.max(y, top));
         }
         tooltip.element.css({
-            left: x < 0 ? 0 : x + "px",
-            top: y < 0 ? 0 : y + "px"
+            left: x < 0 ? 0 : x / BI.pixRatio + BI.pixUnit,
+            top: y < 0 ? 0 : y / BI.pixRatio + BI.pixUnit
         });
         tooltip.element.hover(function () {
             self.remove(name);
@@ -16676,8 +16714,9 @@ BI.TooltipsController = BI.inherit(BI.Controller, {
     }
 });
 
+
 /***/ }),
-/* 342 */
+/* 345 */
 /***/ (function(module, exports) {
 
 /**
@@ -17120,7 +17159,7 @@ _.extend(BI, {
 });
 
 /***/ }),
-/* 343 */
+/* 346 */
 /***/ (function(module, exports) {
 
 BI.prepares.push(function () {
@@ -17191,7 +17230,7 @@ BI.prepares.push(function () {
 });
 
 /***/ }),
-/* 344 */
+/* 347 */
 /***/ (function(module, exports) {
 
 /**
@@ -17245,7 +17284,7 @@ BI.ShowListener = BI.inherit(BI.OB, {
 BI.ShowListener.EVENT_CHANGE = "EVENT_CHANGE";
 
 /***/ }),
-/* 345 */
+/* 348 */
 /***/ (function(module, exports) {
 
 /**
@@ -17300,7 +17339,7 @@ BI.StyleLoaderManager = BI.inherit(BI.OB, {
 });
 
 /***/ }),
-/* 346 */
+/* 349 */
 /***/ (function(module, exports) {
 
 /**
@@ -17386,7 +17425,7 @@ BI.LogicFactory = {
 };
 
 /***/ }),
-/* 347 */
+/* 350 */
 /***/ (function(module, exports) {
 
 /**
@@ -17588,7 +17627,7 @@ BI.HorizontalFillLayoutLogic = BI.inherit(BI.Logic, {
 
 
 /***/ }),
-/* 348 */
+/* 351 */
 /***/ (function(module, exports) {
 
 if (!Number.prototype.toFixed || (0.00008).toFixed(3) !== "0.000" ||
@@ -17735,13 +17774,13 @@ if (!Number.prototype.toFixed || (0.00008).toFixed(3) !== "0.000" ||
 }
 
 /***/ }),
-/* 349 */
+/* 352 */
 /***/ (function(module, exports) {
 
 BI.version = "2.0";
 
 /***/ }),
-/* 350 */
+/* 353 */
 /***/ (function(module, exports) {
 
 !(function () {
@@ -17794,7 +17833,7 @@ BI.version = "2.0";
 
 
 /***/ }),
-/* 351 */
+/* 354 */
 /***/ (function(module, exports) {
 
 /**
@@ -17805,7 +17844,7 @@ BI.version = "2.0";
 BI.AbsoluteCenterLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.AbsoluteCenterLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-absolute-center-layout",
+            baseCls: "bi-abs-c-a",
             hgap: 0,
             lgap: 0,
             rgap: 0,
@@ -17825,10 +17864,10 @@ BI.AbsoluteCenterLayout = BI.inherit(BI.Layout, {
         var w = BI.AbsoluteCenterLayout.superclass._addElement.apply(this, arguments);
         w.element.css({
             position: "absolute",
-            left: o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0),
-            right: o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0),
-            top: o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0),
-            bottom: o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0),
+            left: (o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0)) / BI.pixRatio + BI.pixUnit,
+            right: (o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0)) / BI.pixRatio + BI.pixUnit,
+            top: (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0)) / BI.pixRatio + BI.pixUnit,
+            bottom: (o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0)) / BI.pixRatio + BI.pixUnit,
             margin: "auto"
         });
         return w;
@@ -17845,8 +17884,9 @@ BI.AbsoluteCenterLayout = BI.inherit(BI.Layout, {
 });
 BI.shortcut("bi.absolute_center_adapt", BI.AbsoluteCenterLayout);
 
+
 /***/ }),
-/* 352 */
+/* 355 */
 /***/ (function(module, exports) {
 
 /**
@@ -17857,7 +17897,7 @@ BI.shortcut("bi.absolute_center_adapt", BI.AbsoluteCenterLayout);
 BI.AbsoluteHorizontalLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.AbsoluteHorizontalLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-absolute-horizontal-layout",
+            baseCls: "bi-abs-h-a",
             hgap: 0,
             lgap: 0,
             rgap: 0,
@@ -17877,15 +17917,15 @@ BI.AbsoluteHorizontalLayout = BI.inherit(BI.Layout, {
         var w = BI.AbsoluteHorizontalLayout.superclass._addElement.apply(this, arguments);
         w.element.css({
             position: "absolute",
-            left: o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0),
-            right: o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0),
+            left: (o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0)) / BI.pixRatio + BI.pixUnit,
+            right: (o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0)) / BI.pixRatio + BI.pixUnit,
             margin: "auto"
         });
         if (o.vgap + o.tgap + (item.vgap || 0) + (item.tgap || 0) !== 0) {
-            w.element.css("top", o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0));
+            w.element.css("top", (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0)) / BI.pixRatio + BI.pixUnit);
         }
         if (o.vgap + o.bgap + (item.vgap || 0) + (item.bgap || 0) !== 0) {
-            w.element.css("bottom", o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0));
+            w.element.css("bottom", (o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0)) / BI.pixRatio + BI.pixUnit);
         }
         return w;
     },
@@ -17901,8 +17941,9 @@ BI.AbsoluteHorizontalLayout = BI.inherit(BI.Layout, {
 });
 BI.shortcut("bi.absolute_horizontal_adapt", BI.AbsoluteHorizontalLayout);
 
+
 /***/ }),
-/* 353 */
+/* 356 */
 /***/ (function(module, exports) {
 
 /**
@@ -17913,7 +17954,7 @@ BI.shortcut("bi.absolute_horizontal_adapt", BI.AbsoluteHorizontalLayout);
 BI.AbsoluteVerticalLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.AbsoluteVerticalLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-absolute-vertical-layout",
+            baseCls: "bi-abs-v-a",
             hgap: 0,
             lgap: 0,
             rgap: 0,
@@ -17933,17 +17974,17 @@ BI.AbsoluteVerticalLayout = BI.inherit(BI.Layout, {
         var w = BI.AbsoluteVerticalLayout.superclass._addElement.apply(this, arguments);
         w.element.css({
             position: "absolute",
-            left: item.lgap,
-            right: item.rgap,
-            top: o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0),
-            bottom: o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0),
+            left: item.lgap / BI.pixRatio + BI.pixUnit,
+            right: item.rgap / BI.pixRatio + BI.pixUnit,
+            top: (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0)) / BI.pixRatio + BI.pixUnit,
+            bottom: (o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0)) / BI.pixRatio + BI.pixUnit,
             margin: "auto"
         });
         if (o.hgap + o.lgap + (item.hgap || 0) + (item.lgap || 0) !== 0) {
-            w.element.css("left", o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0));
+            w.element.css("left", (o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0)) / BI.pixRatio + BI.pixUnit);
         }
         if (o.hgap + o.rgap + (item.hgap || 0) + (item.rgap || 0) !== 0) {
-            w.element.css("right", o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0));
+            w.element.css("right", (o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0)) / BI.pixRatio + BI.pixUnit);
         }
         return w;
     },
@@ -17959,8 +18000,9 @@ BI.AbsoluteVerticalLayout = BI.inherit(BI.Layout, {
 });
 BI.shortcut("bi.absolute_vertical_adapt", BI.AbsoluteVerticalLayout);
 
+
 /***/ }),
-/* 354 */
+/* 357 */
 /***/ (function(module, exports) {
 
 /**
@@ -17971,7 +18013,7 @@ BI.shortcut("bi.absolute_vertical_adapt", BI.AbsoluteVerticalLayout);
 BI.CenterAdaptLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.CenterAdaptLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-center-adapt-layout",
+            baseCls: "bi-c-a",
             horizontalAlign: BI.HorizontalAlign.Center,
             columnSize: [],
             scrollx: false,
@@ -18019,7 +18061,7 @@ BI.shortcut("bi.center_adapt", BI.CenterAdaptLayout);
 
 
 /***/ }),
-/* 355 */
+/* 358 */
 /***/ (function(module, exports) {
 
 /**
@@ -18030,7 +18072,7 @@ BI.shortcut("bi.center_adapt", BI.CenterAdaptLayout);
 BI.HorizontalAdaptLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.HorizontalAdaptLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-horizontal-adapt-layout",
+            baseCls: "bi-h-a",
             verticalAlign: BI.VerticalAlign.Top,
             columnSize: [],
             scrollx: false,
@@ -18078,7 +18120,7 @@ BI.shortcut("bi.horizontal_adapt", BI.HorizontalAdaptLayout);
 
 
 /***/ }),
-/* 356 */
+/* 359 */
 /***/ (function(module, exports) {
 
 /**
@@ -18093,14 +18135,20 @@ BI.shortcut("bi.horizontal_adapt", BI.HorizontalAdaptLayout);
 BI.LeftRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.LeftRightVerticalAdaptLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-left-right-vertical-adapt-layout",
+            baseCls: "bi-lr-v-a",
             items: {},
             llgap: 0,
             lrgap: 0,
             lhgap: 0,
+            ltgap: 0,
+            lbgap: 0,
+            lvgap: 0,
             rlgap: 0,
             rrgap: 0,
-            rhgap: 0
+            rhgap: 0,
+            rtgap: 0,
+            rbgap: 0,
+            rvgap: 0
         });
     },
     render: function () {
@@ -18113,11 +18161,17 @@ BI.LeftRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
                 items: [{
                     el: {
                         type: "bi.vertical_adapt",
+                        ref: function (_ref) {
+                            self.left = _ref;
+                        },
                         height: "100%",
                         items: o.items.left,
                         hgap: o.lhgap,
                         lgap: o.llgap,
-                        rgap: o.lrgap
+                        rgap: o.lrgap,
+                        tgap: o.ltgap,
+                        bgap: o.lbgap,
+                        vgap: o.lvgap
                     }
                 }]
             });
@@ -18128,12 +18182,17 @@ BI.LeftRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
                 items: [{
                     el: {
                         type: "bi.vertical_adapt",
+                        ref: function (_ref) {
+                            self.right = _ref;
+                        },
                         height: "100%",
                         items: o.items.right,
-                        textAlign: "right",
                         hgap: o.rhgap,
                         lgap: o.rlgap,
-                        rgap: o.rrgap
+                        rgap: o.rrgap,
+                        tgap: o.rtgap,
+                        bgap: o.rbgap,
+                        vgap: o.rvgap
                     }
                 }]
             });
@@ -18151,8 +18210,8 @@ BI.LeftRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
     },
 
     populate: function (items) {
-        BI.LeftRightVerticalAdaptLayout.superclass.populate.apply(this, arguments);
-        this._mount();
+        this.left.populate(items.left);
+        this.right.populate(items.right);
     }
 });
 BI.shortcut("bi.left_right_vertical_adapt", BI.LeftRightVerticalAdaptLayout);
@@ -18161,31 +18220,34 @@ BI.shortcut("bi.left_right_vertical_adapt", BI.LeftRightVerticalAdaptLayout);
 BI.LeftVerticalAdaptLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.LeftRightVerticalAdaptLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-left-vertical-adapt-layout",
+            baseCls: "bi-l-v-a",
             items: [],
             lgap: 0,
             rgap: 0,
-            hgap: 0
+            hgap: 0,
+            tgap: 0,
+            bgap: 0,
+            vgap: 0
         });
     },
     render: function () {
         var o = this.options, self = this;
         BI.LeftVerticalAdaptLayout.superclass.render.apply(this, arguments);
         return {
-            type: "bi.left",
+            type: "bi.vertical_adapt",
             ref: function (_ref) {
                 self.layout = _ref;
             },
-            items: [{
-                el: {
-                    type: "bi.vertical_adapt",
-                    height: "100%",
-                    items: o.items,
-                    lgap: o.lgap,
-                    hgap: o.hgap,
-                    rgap: o.rgap
-                }
-            }]
+            items: o.items,
+            hgap: o.hgap,
+            lgap: o.lgap,
+            rgap: o.rgap,
+            tgap: o.tgap,
+            bgap: o.bgap,
+            vgap: o.vgap,
+            scrollx: o.scrollx,
+            scrolly: o.scrolly,
+            scrollable: o.scrollable
         };
     },
 
@@ -18207,32 +18269,35 @@ BI.shortcut("bi.left_vertical_adapt", BI.LeftVerticalAdaptLayout);
 BI.RightVerticalAdaptLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.RightVerticalAdaptLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-right-vertical-adapt-layout",
+            baseCls: "bi-r-v-a",
             items: [],
             lgap: 0,
             rgap: 0,
-            hgap: 0
+            hgap: 0,
+            tgap: 0,
+            bgap: 0,
+            vgap: 0
         });
     },
     render: function () {
         var o = this.options, self = this;
         BI.RightVerticalAdaptLayout.superclass.render.apply(this, arguments);
         return {
-            type: "bi.right",
+            type: "bi.vertical_adapt",
             ref: function (_ref) {
                 self.layout = _ref;
             },
-            items: [{
-                el: {
-                    type: "bi.vertical_adapt",
-                    height: "100%",
-                    textAlign: "right",
-                    items: o.items,
-                    lgap: o.lgap,
-                    hgap: o.hgap,
-                    rgap: o.rgap
-                }
-            }]
+            horizontalAlign: BI.HorizontalAlign.Right,
+            items: o.items,
+            hgap: o.hgap,
+            lgap: o.lgap,
+            rgap: o.rgap,
+            tgap: o.tgap,
+            bgap: o.bgap,
+            vgap: o.vgap,
+            scrollx: o.scrollx,
+            scrolly: o.scrolly,
+            scrollable: o.scrollable
         };
     },
 
@@ -18246,13 +18311,14 @@ BI.RightVerticalAdaptLayout = BI.inherit(BI.Layout, {
     },
 
     populate: function (items) {
-        this.layout.populate.apply(this, arguments);
+        this.layout.populate(items);
     }
 });
 BI.shortcut("bi.right_vertical_adapt", BI.RightVerticalAdaptLayout);
 
+
 /***/ }),
-/* 357 */
+/* 360 */
 /***/ (function(module, exports) {
 
 /**
@@ -18263,7 +18329,7 @@ BI.shortcut("bi.right_vertical_adapt", BI.RightVerticalAdaptLayout);
 BI.TableAdaptLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.TableAdaptLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-table-adapt-layout",
+            baseCls: "bi-t-a",
             columnSize: [],
             verticalAlign: BI.VerticalAlign.Top,
             horizontalAlign: BI.HorizontalAlign.Left,
@@ -18292,7 +18358,7 @@ BI.TableAdaptLayout = BI.inherit(BI.Layout, {
     _addElement: function (i, item) {
         var o = this.options;
         var td;
-        var width = o.columnSize[i] <= 1 ? (o.columnSize[i] * 100 + "%") : o.columnSize[i];
+        var width = o.columnSize[i] <= 1 ? ((o.columnSize[i] * 100).toFixed(1) + "%") : o.columnSize[i];
         if (!this.hasWidget(this._getChildName(i))) {
             var w = BI._lazyCreateWidget(item);
             w.element.css({position: "relative", top: "0", left: "0", margin: "0px auto"});
@@ -18310,7 +18376,7 @@ BI.TableAdaptLayout = BI.inherit(BI.Layout, {
         // 1、由于直接对td设置最大宽度是在规范中未定义的, 所以要使用类似td:firstChild来迂回实现
         // 2、不能给多个td设置最大宽度，这样只会平分宽度
         // 3、多百分比宽度就算了
-        td.element.css({"max-width": o.columnSize[i] <= 1 ? width : width + "px"});
+        td.element.css({"max-width": BI.isNumber(o.columnSize[i]) ? (o.columnSize[i] <= 1 ? width : width / BI.pixRatio + BI.pixUnit) : width});
         if (i === 0) {
             td.element.addClass("first-element");
         }
@@ -18324,22 +18390,22 @@ BI.TableAdaptLayout = BI.inherit(BI.Layout, {
         });
         if (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
             w.element.css({
-                "margin-top": o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) + "px"
+                "margin-top": (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0)) / BI.pixRatio + BI.pixUnit
             });
         }
         if (o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0) !== 0) {
             w.element.css({
-                "margin-left": (i === 0 ? o.hgap : 0) + o.lgap + (item.lgap || 0) + (item.hgap || 0) + "px"
+                "margin-left": ((i === 0 ? o.hgap : 0) + o.lgap + (item.lgap || 0) + (item.hgap || 0)) / BI.pixRatio + BI.pixUnit
             });
         }
         if (o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0) !== 0) {
             w.element.css({
-                "margin-right": o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0) + "px"
+                "margin-right": (o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0)) / BI.pixRatio + BI.pixUnit
             });
         }
         if (o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0) !== 0) {
             w.element.css({
-                "margin-bottom": o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0) + "px"
+                "margin-bottom": (o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0)) / BI.pixRatio + BI.pixUnit
             });
         }
         return td;
@@ -18363,7 +18429,7 @@ BI.shortcut("bi.table_adapt", BI.TableAdaptLayout);
 
 
 /***/ }),
-/* 358 */
+/* 361 */
 /***/ (function(module, exports) {
 
 /**
@@ -18373,7 +18439,7 @@ BI.shortcut("bi.table_adapt", BI.TableAdaptLayout);
  */
 BI.VerticalAdaptLayout = BI.inherit(BI.Layout, {
     props: {
-        baseCls: "bi-vertical-adapt-layout",
+        baseCls: "bi-v-a",
         horizontalAlign: BI.HorizontalAlign.Left,
         columnSize: [],
         scrollx: false,
@@ -18421,7 +18487,7 @@ BI.shortcut("bi.vertical_adapt", BI.VerticalAdaptLayout);
 
 
 /***/ }),
-/* 359 */
+/* 362 */
 /***/ (function(module, exports) {
 
 /**
@@ -18432,7 +18498,7 @@ BI.shortcut("bi.vertical_adapt", BI.VerticalAdaptLayout);
 BI.HorizontalAutoLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.HorizontalAutoLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-horizon-auto-layout",
+            baseCls: "bi-h-o",
             hgap: 0,
             lgap: 0,
             rgap: 0,
@@ -18456,22 +18522,22 @@ BI.HorizontalAutoLayout = BI.inherit(BI.Layout, {
         });
         if (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
             w.element.css({
-                "margin-top": (i === 0 ? o.vgap : 0) + o.tgap + (item.tgap || 0) + (item.vgap || 0) + "px"
+                "margin-top": ((i === 0 ? o.vgap : 0) + o.tgap + (item.tgap || 0) + (item.vgap || 0)) / BI.pixRatio + BI.pixUnit
             });
         }
         if (o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0) !== 0) {
             w.element.css({
-                "margin-left": o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0) +"px"
+                "margin-left": (o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0)) / BI.pixRatio + BI.pixUnit
             });
         }
         if (o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0) !== 0) {
             w.element.css({
-                "margin-right": o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0) + "px"
+                "margin-right": (o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0)) / BI.pixRatio + BI.pixUnit
             });
         }
         if (o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0) !== 0) {
             w.element.css({
-                "margin-bottom": o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0) + "px"
+                "margin-bottom": (o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0)) / BI.pixRatio + BI.pixUnit
             });
         }
         return w;
@@ -18488,84 +18554,20 @@ BI.HorizontalAutoLayout = BI.inherit(BI.Layout, {
 });
 BI.shortcut("bi.horizontal_auto", BI.HorizontalAutoLayout);
 
+
 /***/ }),
-/* 360 */
+/* 363 */
 /***/ (function(module, exports) {
 
 /**
  * 浮动的水平居中布局
  */
-BI.FloatHorizontalLayout = BI.inherit(BI.Layout, {
-    props: function () {
-        return BI.extend(BI.FloatHorizontalLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-float-horizontal-adapt-layout",
-            items: [],
-            hgap: 0,
-            vgap: 0,
-            tgap: 0,
-            bgap: 0,
-            lgap: 0,
-            rgap: 0
-        });
-    },
-    render: function () {
-        BI.FloatHorizontalLayout.superclass.render.apply(this, arguments);
-        this.populate(this.options.items);
-    },
-
-    resize: function () {
-        // console.log("float_horizontal_adapt布局不需要resize");
-    },
-
-    mounted: function () {
-        var self = this;
-        var width = this.left.element.width(),
-            height = this.left.element.height();
-        this.left.element.width(width).height(height).css("float", "none");
-        BI.remove(this._children, function (i, wi) {
-            if (wi === self.container) {
-                delete self._children[i];
-            }
-        });
-        BI._lazyCreateWidget({
-            type: "bi.horizontal_auto",
-            element: this,
-            items: [this.left]
-        });
-    },
-
-    _addElement: function (i, item) {
-        var self = this, o = this.options;
-        this.left = BI._lazyCreateWidget({
-            type: "bi.vertical",
-            items: [item],
-            hgap: o.hgap,
-            vgap: o.vgap,
-            tgap: o.tgap,
-            bgap: o.bgap,
-            lgap: o.lgap,
-            rgap: o.rgap
-        });
-
-        this.container = BI._lazyCreateWidget({
-            type: "bi.left",
-            element: this,
-            items: [this.left]
-        });
-
-        return this.left;
-    },
-
-    populate: function (items) {
-        BI.HorizontalAutoLayout.superclass.populate.apply(this, arguments);
-        this._mount();
-    }
-});
+BI.FloatHorizontalLayout = BI.Layout;
 BI.shortcut("bi.horizontal_float", BI.FloatHorizontalLayout);
 
 
 /***/ }),
-/* 361 */
+/* 364 */
 /***/ (function(module, exports) {
 
 /**
@@ -18581,7 +18583,7 @@ BI.InlineCenterAdaptLayout = BI.inherit(BI.Layout, {
 
     props: function () {
         return BI.extend(BI.InlineCenterAdaptLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-inline-center-adapt-layout",
+            baseCls: "bi-i-c-a",
             horizontalAlign: BI.HorizontalAlign.Center,
             verticalAlign: BI.VerticalAlign.Middle,
             columnSize: [],
@@ -18608,29 +18610,29 @@ BI.InlineCenterAdaptLayout = BI.inherit(BI.Layout, {
         var o = this.options;
         var w = BI.InlineCenterAdaptLayout.superclass._addElement.apply(this, arguments);
         w.element.css({
-            width: o.columnSize[i] <= 1 ? (o.columnSize[i] * 100 + "%") : o.columnSize[i],
+            width: o.columnSize[i] <= 1 ? ((o.columnSize[i] * 100).toFixed(1) + "%") : (o.columnSize[i] / BI.pixRatio + BI.pixUnit),
             position: "relative",
             "vertical-align": o.verticalAlign
         });
-        w.element.addClass("inline-center-adapt-item");
+        w.element.addClass("i-c-a-item");
         if (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
             w.element.css({
-                "margin-top": o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) + "px"
+                "margin-top": (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0)) / BI.pixRatio + BI.pixUnit
             });
         }
         if (o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0) !== 0) {
             w.element.css({
-                "margin-left": (i === 0 ? o.hgap : 0) + o.lgap + (item.lgap || 0) + (item.hgap || 0) + "px"
+                "margin-left": ((i === 0 ? o.hgap : 0) + o.lgap + (item.lgap || 0) + (item.hgap || 0)) / BI.pixRatio + BI.pixUnit
             });
         }
         if (o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0) !== 0) {
             w.element.css({
-                "margin-right": o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0) + "px"
+                "margin-right": (o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0)) / BI.pixRatio + BI.pixUnit
             });
         }
         if (o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0) !== 0) {
             w.element.css({
-                "margin-bottom": o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0) + "px"
+                "margin-bottom": (o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0))
             });
         }
         return w;
@@ -18662,7 +18664,7 @@ BI.shortcut("bi.inline_center_adapt", BI.InlineCenterAdaptLayout);
 
 
 /***/ }),
-/* 362 */
+/* 365 */
 /***/ (function(module, exports) {
 
 /**
@@ -18678,7 +18680,7 @@ BI.InlineHorizontalAdaptLayout = BI.inherit(BI.Layout, {
 
     props: function () {
         return BI.extend(BI.InlineHorizontalAdaptLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-inline-horizontal-adapt-layout",
+            baseCls: "bi-i-h-a",
             horizontalAlign: BI.HorizontalAlign.Center,
             verticalAlign: BI.VerticalAlign.Top,
             columnSize: [],
@@ -18705,29 +18707,29 @@ BI.InlineHorizontalAdaptLayout = BI.inherit(BI.Layout, {
         var o = this.options;
         var w = BI.InlineHorizontalAdaptLayout.superclass._addElement.apply(this, arguments);
         w.element.css({
-            width: o.columnSize[i] <= 1 ? (o.columnSize[i] * 100 + "%") : o.columnSize[i],
+            width: o.columnSize[i] <= 1 ? ((o.columnSize[i] * 100).toFixed(1) + "%") : (o.columnSize[i] / BI.pixRatio + BI.pixUnit),
             position: "relative",
             "vertical-align": o.verticalAlign
         });
-        w.element.addClass("inline-horizontal-adapt-item");
+        w.element.addClass("i-h-a-item");
         if (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
             w.element.css({
-                "margin-top": o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) + "px"
+                "margin-top": (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0)) / BI.pixRatio + BI.pixUnit
             });
         }
         if (o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0) !== 0) {
             w.element.css({
-                "margin-left": (i === 0 ? o.hgap : 0) + o.lgap + (item.lgap || 0) + (item.hgap || 0) + "px"
+                "margin-left": ((i === 0 ? o.hgap : 0) + o.lgap + (item.lgap || 0) + (item.hgap || 0)) / BI.pixRatio + BI.pixUnit
             });
         }
         if (o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0) !== 0) {
             w.element.css({
-                "margin-right": o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0) + "px"
+                "margin-right": (o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0)) / BI.pixRatio + BI.pixUnit
             });
         }
         if (o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0) !== 0) {
             w.element.css({
-                "margin-bottom": o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0) + "px"
+                "margin-bottom": (o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0)) / BI.pixRatio + BI.pixUnit
             });
         }
         return w;
@@ -18759,7 +18761,7 @@ BI.shortcut("bi.inline_horizontal_adapt", BI.InlineHorizontalAdaptLayout);
 
 
 /***/ }),
-/* 363 */
+/* 366 */
 /***/ (function(module, exports) {
 
 /**
@@ -18775,7 +18777,7 @@ BI.InlineVerticalAdaptLayout = BI.inherit(BI.Layout, {
 
     props: function () {
         return BI.extend(BI.InlineVerticalAdaptLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-inline-vertical-adapt-layout",
+            baseCls: "bi-i-v-a",
             horizontalAlign: BI.HorizontalAlign.Left,
             verticalAlign: BI.VerticalAlign.Middle,
             columnSize: [],
@@ -18802,29 +18804,29 @@ BI.InlineVerticalAdaptLayout = BI.inherit(BI.Layout, {
         var o = this.options;
         var w = BI.InlineVerticalAdaptLayout.superclass._addElement.apply(this, arguments);
         w.element.css({
-            width: o.columnSize[i] <= 1 ? (o.columnSize[i] * 100 + "%") : o.columnSize[i],
+            width: o.columnSize[i] <= 1 ? ((o.columnSize[i] * 100).toFixed(1) + "%") : (o.columnSize[i] / BI.pixRatio + BI.pixUnit),
             position: "relative",
             "vertical-align": o.verticalAlign
         });
-        w.element.addClass("inline-vertical-adapt-item");
+        w.element.addClass("i-v-a-item");
         if (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
             w.element.css({
-                "margin-top": o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) + "px"
+                "margin-top": (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0)) / BI.pixRatio + BI.pixUnit
             });
         }
         if (o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0) !== 0) {
             w.element.css({
-                "margin-left": (i === 0 ? o.hgap : 0) + o.lgap + (item.lgap || 0) + (item.hgap || 0) + "px"
+                "margin-left": ((i === 0 ? o.hgap : 0) + o.lgap + (item.lgap || 0) + (item.hgap || 0)) / BI.pixRatio + BI.pixUnit
             });
         }
         if (o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0) !== 0) {
             w.element.css({
-                "margin-right": o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0) + "px"
+                "margin-right": (o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0)) / BI.pixRatio + BI.pixUnit
             });
         }
         if (o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0) !== 0) {
             w.element.css({
-                "margin-bottom": o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0) + "px"
+                "margin-bottom": (o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0)) / BI.pixRatio + BI.pixUnit
             });
         }
         return w;
@@ -18843,7 +18845,7 @@ BI.shortcut("bi.inline_vertical_adapt", BI.InlineVerticalAdaptLayout);
 
 
 /***/ }),
-/* 364 */
+/* 367 */
 /***/ (function(module, exports) {
 
 /**
@@ -18856,7 +18858,7 @@ BI.shortcut("bi.inline_vertical_adapt", BI.InlineVerticalAdaptLayout);
 BI.FlexCenterLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.FlexCenterLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-flex-center-adapt-layout",
+            baseCls: "bi-f-c",
             verticalAlign: BI.VerticalAlign.Middle,
             horizontalAlign: BI.HorizontalAlign.Center,
             hgap: 0,
@@ -18876,6 +18878,8 @@ BI.FlexCenterLayout = BI.inherit(BI.Layout, {
             },
             horizontalAlign: o.horizontalAlign,
             verticalAlign: o.verticalAlign,
+            columnSize: o.columnSize,
+            rowSize: o.rowSize,
             scrollx: o.scrollx,
             scrolly: o.scrolly,
             scrollable: o.scrollable,
@@ -18903,7 +18907,7 @@ BI.shortcut("bi.flex_center_adapt", BI.FlexCenterLayout);
 
 
 /***/ }),
-/* 365 */
+/* 368 */
 /***/ (function(module, exports) {
 
 /**
@@ -18915,7 +18919,7 @@ BI.shortcut("bi.flex_center_adapt", BI.FlexCenterLayout);
 BI.FlexHorizontalCenter = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.FlexHorizontalCenter.superclass.props.apply(this, arguments), {
-            baseCls: "bi-flex-horizontal-center-adapt-layout",
+            baseCls: "bi-f-h-c",
             verticalAlign: BI.VerticalAlign.Top,
             rowSize: [],
             scrolly: false,
@@ -18936,6 +18940,7 @@ BI.FlexHorizontalCenter = BI.inherit(BI.Layout, {
             },
             horizontalAlign: BI.HorizontalAlign.Center,
             verticalAlign: o.verticalAlign,
+            columnSize: o.columnSize,
             rowSize: o.rowSize,
             scrollx: o.scrollx,
             scrolly: o.scrolly,
@@ -18963,8 +18968,9 @@ BI.FlexHorizontalCenter = BI.inherit(BI.Layout, {
 BI.shortcut("bi.flex_horizontal_adapt", BI.FlexHorizontalCenter);
 BI.shortcut("bi.flex_horizontal_center_adapt", BI.FlexHorizontalCenter);
 
+
 /***/ }),
-/* 366 */
+/* 369 */
 /***/ (function(module, exports) {
 
 /**
@@ -18977,7 +18983,7 @@ BI.shortcut("bi.flex_horizontal_center_adapt", BI.FlexHorizontalCenter);
 BI.FlexHorizontalLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.FlexHorizontalLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-flex-horizontal-layout",
+            baseCls: "bi-f-h",
             verticalAlign: BI.VerticalAlign.Top,
             horizontalAlign: BI.HorizontalAlign.Left,// 如果只有一个子元素且想让该子元素横向撑满，设置成Stretch
             columnSize: [],
@@ -19003,35 +19009,37 @@ BI.FlexHorizontalLayout = BI.inherit(BI.Layout, {
         w.element.css({
             position: "relative"
         });
-        if (BI.contains([BI.HorizontalAlign.Left, BI.HorizontalAlign.Right, BI.HorizontalAlign.Center], o.horizontalAlign)) {
-            w.element.css({
-                "flex-shrink": "0"
-            });
+        if (o.columnSize[i] !== "auto") {
+            if (o.horizontalAlign === BI.HorizontalAlign.Stretch && o.columnSize[i] !== "") {
+                w.element.addClass("fill");
+            } else {
+                w.element.addClass("shrink-none");
+            }
         }
         if (o.columnSize[i] > 0) {
-            w.element.width(o.columnSize[i] <= 1 ? (o.columnSize[i] * 100 + "%") : o.columnSize[i]);
+            w.element.width(o.columnSize[i] <= 1 ? ((o.columnSize[i] * 100).toFixed(1) + "%") : (o.columnSize[i] / BI.pixRatio + BI.pixUnit));
         }
         if (o.columnSize[i] === "fill") {
-            w.element.css("flex", "1");
+            w.element.addClass("fill");
         }
         if (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
             w.element.css({
-                "margin-top": o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) + "px"
+                "margin-top": (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0)) / BI.pixRatio + BI.pixUnit
             });
         }
         if (o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0) !== 0) {
             w.element.css({
-                "margin-left": (i === 0 ? o.hgap : 0) + o.lgap + (item.lgap || 0) + (item.hgap || 0) + "px"
+                "margin-left": ((i === 0 ? o.hgap : 0) + o.lgap + (item.lgap || 0) + (item.hgap || 0)) / BI.pixRatio + BI.pixUnit
             });
         }
         if (o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0) !== 0) {
             w.element.css({
-                "margin-right": o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0) + "px"
+                "margin-right": (o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0)) / BI.pixRatio + BI.pixUnit
             });
         }
         if (o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0) !== 0) {
             w.element.css({
-                "margin-bottom": o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0) + "px"
+                "margin-bottom": (o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0)) / BI.pixRatio + BI.pixUnit
             });
         }
         return w;
@@ -19050,7 +19058,7 @@ BI.shortcut("bi.flex_horizontal", BI.FlexHorizontalLayout);
 
 
 /***/ }),
-/* 367 */
+/* 370 */
 /***/ (function(module, exports) {
 
 /**
@@ -19063,7 +19071,7 @@ BI.shortcut("bi.flex_horizontal", BI.FlexHorizontalLayout);
 BI.FlexVerticalCenter = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.FlexVerticalCenter.superclass.props.apply(this, arguments), {
-            baseCls: "bi-flex-vertical-center-adapt-layout",
+            baseCls: "bi-f-v-c",
             horizontalAlign: BI.HorizontalAlign.Left,
             columnSize: [],
             scrollx: false,
@@ -19085,6 +19093,7 @@ BI.FlexVerticalCenter = BI.inherit(BI.Layout, {
             verticalAlign: BI.VerticalAlign.Middle,
             horizontalAlign: o.horizontalAlign,
             columnSize: o.columnSize,
+            rowSize: o.rowSize,
             scrollx: o.scrollx,
             scrolly: o.scrolly,
             scrollable: o.scrollable,
@@ -19111,8 +19120,9 @@ BI.FlexVerticalCenter = BI.inherit(BI.Layout, {
 BI.shortcut("bi.flex_vertical_adapt", BI.FlexVerticalCenter);
 BI.shortcut("bi.flex_vertical_center_adapt", BI.FlexVerticalCenter);
 
+
 /***/ }),
-/* 368 */
+/* 371 */
 /***/ (function(module, exports) {
 
 /**
@@ -19124,7 +19134,7 @@ BI.shortcut("bi.flex_vertical_center_adapt", BI.FlexVerticalCenter);
 BI.FlexVerticalLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.FlexVerticalLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-flex-vertical-layout",
+            baseCls: "bi-f-v",
             horizontalAlign: BI.HorizontalAlign.Left,
             verticalAlign: BI.VerticalAlign.Top,
             rowSize: [],
@@ -19150,35 +19160,37 @@ BI.FlexVerticalLayout = BI.inherit(BI.Layout, {
         w.element.css({
             position: "relative"
         });
-        if (o.verticalAlign === BI.VerticalAlign.Top || o.verticalAlign === BI.VerticalAlign.Bottom) {
-            w.element.css({
-                "flex-shrink": "0"
-            });
+        if (o.rowSize[i] !== "auto") {
+            if (o.verticalAlign === BI.VerticalAlign.Stretch && o.rowSize[i] !== "") {
+                w.element.addClass("fill");
+            } else {
+                w.element.addClass("shrink-none");
+            }
         }
         if (o.rowSize[i] > 0) {
-            w.element.height(o.rowSize[i] <= 1 ? (o.rowSize[i] * 100 + "%") : o.rowSize[i]);
+            w.element.height(o.rowSize[i] <= 1 ? ((o.rowSize[i] * 100).toFixed(1) + "%") : (o.rowSize[i] / BI.pixRatio + BI.pixUnit));
         }
         if (o.rowSize[i] === "fill") {
-            w.element.css("flex", "1");
+            w.element.addClass("fill");
         }
         if (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
             w.element.css({
-                "margin-top": (i === 0 ? o.vgap : 0) + o.tgap + (item.tgap || 0) + (item.vgap || 0) + "px"
+                "margin-top": ((i === 0 ? o.vgap : 0) + o.tgap + (item.tgap || 0) + (item.vgap || 0)) / BI.pixRatio + BI.pixUnit
             });
         }
         if (o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0) !== 0) {
             w.element.css({
-                "margin-left": o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0) + "px"
+                "margin-left": (o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0)) / BI.pixRatio + BI.pixUnit
             });
         }
         if (o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0) !== 0) {
             w.element.css({
-                "margin-right": o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0) + "px"
+                "margin-right": (o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0)) / BI.pixRatio + BI.pixUnit
             });
         }
         if (o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0) !== 0) {
             w.element.css({
-                "margin-bottom": o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0) + "px"
+                "margin-bottom": (o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0)) / BI.pixRatio + BI.pixUnit
             });
         }
         return w;
@@ -19197,7 +19209,7 @@ BI.shortcut("bi.flex_vertical", BI.FlexVerticalLayout);
 
 
 /***/ }),
-/* 369 */
+/* 372 */
 /***/ (function(module, exports) {
 
 /**
@@ -19210,7 +19222,7 @@ BI.shortcut("bi.flex_vertical", BI.FlexVerticalLayout);
 BI.FlexWrapperCenterLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.FlexWrapperCenterLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-flex-scrollable-center-adapt-layout clearfix",
+            baseCls: "bi-f-s-c clearfix",
             horizontalAlign: BI.HorizontalAlign.Center,
             verticalAlign: BI.VerticalAlign.Middle,
             columnSize: [],
@@ -19233,6 +19245,8 @@ BI.FlexWrapperCenterLayout = BI.inherit(BI.Layout, {
             },
             horizontalAlign: o.horizontalAlign,
             verticalAlign: o.verticalAlign,
+            columnSize: o.columnSize,
+            rowSize: o.rowSize,
             scrollx: o.scrollx,
             scrolly: o.scrolly,
             scrollable: o.scrollable,
@@ -19256,7 +19270,7 @@ BI.shortcut("bi.flex_scrollable_center_adapt", BI.FlexWrapperCenterLayout);
 
 
 /***/ }),
-/* 370 */
+/* 373 */
 /***/ (function(module, exports) {
 
 /**
@@ -19269,7 +19283,7 @@ BI.shortcut("bi.flex_scrollable_center_adapt", BI.FlexWrapperCenterLayout);
 BI.FlexWrapperHorizontalCenter = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.FlexWrapperHorizontalCenter.superclass.props.apply(this, arguments), {
-            baseCls: "bi-flex-scrollable-vertical-center-adapt-layout clearfix",
+            baseCls: "bi-f-s-v-c clearfix",
             verticalAlign: BI.VerticalAlign.Top,
             rowSize: [],
             scrollable: true,
@@ -19291,6 +19305,7 @@ BI.FlexWrapperHorizontalCenter = BI.inherit(BI.Layout, {
             },
             horizontalAlign: BI.HorizontalAlign.Center,
             verticalAlign: o.verticalAlign,
+            columnSize: o.columnSize,
             rowSize: o.rowSize,
             scrollx: o.scrollx,
             scrolly: o.scrolly,
@@ -19314,8 +19329,9 @@ BI.FlexWrapperHorizontalCenter = BI.inherit(BI.Layout, {
 BI.shortcut("bi.flex_scrollable_horizontal_adapt", BI.FlexWrapperHorizontalCenter);
 BI.shortcut("bi.flex_scrollable_horizontal_center_adapt", BI.FlexWrapperHorizontalCenter);
 
+
 /***/ }),
-/* 371 */
+/* 374 */
 /***/ (function(module, exports) {
 
 /**
@@ -19328,7 +19344,7 @@ BI.shortcut("bi.flex_scrollable_horizontal_center_adapt", BI.FlexWrapperHorizont
 BI.FlexWrapperHorizontalLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.FlexWrapperHorizontalLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-flex-scrollable-horizontal-layout clearfix",
+            baseCls: "bi-f-s-h clearfix",
             verticalAlign: BI.VerticalAlign.Top,
             horizontalAlign: BI.HorizontalAlign.Left,
             columnSize: [],
@@ -19345,7 +19361,7 @@ BI.FlexWrapperHorizontalLayout = BI.inherit(BI.Layout, {
     render: function () {
         BI.FlexWrapperHorizontalLayout.superclass.render.apply(this, arguments);
         var o = this.options;
-        this.$wrapper = BI.Widget._renderEngine.createElement("<div>").addClass("flex-scrollable-horizontal-layout-wrapper v-" + o.verticalAlign).addClass("h-" + o.horizontalAlign);
+        this.$wrapper = BI.Widget._renderEngine.createElement("<div>").addClass("f-s-h-w v-" + o.verticalAlign).addClass("h-" + o.horizontalAlign);
         this.populate(this.options.items);
     },
 
@@ -19355,35 +19371,37 @@ BI.FlexWrapperHorizontalLayout = BI.inherit(BI.Layout, {
         w.element.css({
             position: "relative"
         });
-        if (o.horizontalAlign === BI.HorizontalAlign.Left || o.horizontalAlign === BI.HorizontalAlign.Right) {
-            w.element.css({
-                "flex-shrink": "0"
-            });
+        if (o.columnSize[i] !== "auto") {
+            if (o.horizontalAlign === BI.HorizontalAlign.Stretch && o.columnSize[i] !== "") {
+                w.element.addClass("fill");
+            } else {
+                w.element.addClass("shrink-none");
+            }
         }
         if (o.columnSize[i] > 0) {
-            w.element.width(o.columnSize[i] <= 1 ? (o.columnSize[i] * 100 + "%") : o.columnSize[i]);
+            w.element.width(o.columnSize[i] <= 1 ? ((o.columnSize[i] * 100).toFixed(1) + "%") : (o.columnSize[i] / BI.pixRatio + BI.pixUnit));
         }
         if (o.columnSize[i] === "fill") {
-            w.element.css("flex", "1");
+            w.element.addClass("fill");
         }
         if (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
             w.element.css({
-                "margin-top": o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) + "px"
+                "margin-top": (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0)) / BI.pixRatio + BI.pixUnit
             });
         }
         if (o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0) !== 0) {
             w.element.css({
-                "margin-left": (i === 0 ? o.hgap : 0) + o.lgap + (item.lgap || 0) + (item.hgap || 0) + "px"
+                "margin-left": ((i === 0 ? o.hgap : 0) + o.lgap + (item.lgap || 0) + (item.hgap || 0)) / BI.pixRatio + BI.pixUnit
             });
         }
         if (o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0) !== 0) {
             w.element.css({
-                "margin-right": o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0) + "px"
+                "margin-right": (o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0)) / BI.pixRatio + BI.pixUnit
             });
         }
         if (o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0) !== 0) {
             w.element.css({
-                "margin-bottom": o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0) + "px"
+                "margin-bottom": (o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0)) / BI.pixRatio + BI.pixUnit
             });
         }
         return w;
@@ -19411,7 +19429,7 @@ BI.shortcut("bi.flex_scrollable_horizontal", BI.FlexWrapperHorizontalLayout);
 
 
 /***/ }),
-/* 372 */
+/* 375 */
 /***/ (function(module, exports) {
 
 /**
@@ -19424,7 +19442,7 @@ BI.shortcut("bi.flex_scrollable_horizontal", BI.FlexWrapperHorizontalLayout);
 BI.FlexWrapperVerticalCenter = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.FlexWrapperVerticalCenter.superclass.props.apply(this, arguments), {
-            baseCls: "bi-flex-scrollable-vertical-center-adapt-layout clearfix",
+            baseCls: "bi-f-s-v-c clearfix",
             horizontalAlign: BI.HorizontalAlign.Left,
             columnSize: [],
             scrollx: false,
@@ -19447,6 +19465,7 @@ BI.FlexWrapperVerticalCenter = BI.inherit(BI.Layout, {
             verticalAlign: BI.VerticalAlign.Middle,
             horizontalAlign: o.horizontalAlign,
             columnSize: o.columnSize,
+            rowSize: o.rowSize,
             scrollx: o.scrollx,
             scrolly: o.scrolly,
             scrollable: o.scrollable,
@@ -19469,8 +19488,9 @@ BI.FlexWrapperVerticalCenter = BI.inherit(BI.Layout, {
 BI.shortcut("bi.flex_scrollable_vertical_adapt", BI.FlexWrapperVerticalCenter);
 BI.shortcut("bi.flex_scrollable_vertical_center_adapt", BI.FlexWrapperVerticalCenter);
 
+
 /***/ }),
-/* 373 */
+/* 376 */
 /***/ (function(module, exports) {
 
 /**
@@ -19483,7 +19503,7 @@ BI.shortcut("bi.flex_scrollable_vertical_center_adapt", BI.FlexWrapperVerticalCe
 BI.FlexWrapperVerticalLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.FlexWrapperVerticalLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-flex-scrollable-vertical-layout clearfix",
+            baseCls: "bi-f-s-v clearfix",
             horizontalAlign: BI.HorizontalAlign.Left,
             verticalAlign: BI.VerticalAlign.Top,
             rowSize: [],
@@ -19500,7 +19520,7 @@ BI.FlexWrapperVerticalLayout = BI.inherit(BI.Layout, {
     render: function () {
         BI.FlexWrapperVerticalLayout.superclass.render.apply(this, arguments);
         var o = this.options;
-        this.$wrapper = BI.Widget._renderEngine.createElement("<div>").addClass("flex-scrollable-vertical-layout-wrapper h-" + o.horizontalAlign).addClass("v-" + o.verticalAlign);
+        this.$wrapper = BI.Widget._renderEngine.createElement("<div>").addClass("f-s-v-w h-" + o.horizontalAlign).addClass("v-" + o.verticalAlign);
         this.populate(this.options.items);
     },
 
@@ -19510,35 +19530,37 @@ BI.FlexWrapperVerticalLayout = BI.inherit(BI.Layout, {
         w.element.css({
             position: "relative"
         });
-        if (o.verticalAlign === BI.VerticalAlign.Top || o.verticalAlign === BI.VerticalAlign.Bottom) {
-            w.element.css({
-                "flex-shrink": "0"
-            });
+        if (o.rowSize[i] !== "auto") {
+            if (o.verticalAlign === BI.VerticalAlign.Stretch && o.rowSize[i] !== "") {
+                w.element.addClass("fill");
+            } else {
+                w.element.addClass("shrink-none");
+            }
         }
         if (o.rowSize[i] > 0) {
-            w.element.height(o.rowSize[i] <= 1 ? (o.rowSize[i] * 100 + "%") : o.rowSize[i]);
+            w.element.height(o.rowSize[i] <= 1 ? ((o.rowSize[i] * 100).toFixed(1) + "%") : (o.rowSize[i] / BI.pixRatio + BI.pixUnit));
         }
         if (o.rowSize[i] === "fill") {
-            w.element.css("flex", "1");
+            w.element.addClass("fill");
         }
         if (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
             w.element.css({
-                "margin-top": (i === 0 ? o.vgap : 0) + o.tgap + (item.tgap || 0) + (item.vgap || 0) + "px"
+                "margin-top": ((i === 0 ? o.vgap : 0) + o.tgap + (item.tgap || 0) + (item.vgap || 0)) / BI.pixRatio + BI.pixUnit
             });
         }
         if (o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0) !== 0) {
             w.element.css({
-                "margin-left": o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0) + "px"
+                "margin-left": (o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0)) / BI.pixRatio + BI.pixUnit
             });
         }
         if (o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0) !== 0) {
             w.element.css({
-                "margin-right": o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0) + "px"
+                "margin-right": (o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0)) / BI.pixRatio + BI.pixUnit
             });
         }
         if (o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0) !== 0) {
             w.element.css({
-                "margin-bottom": o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0) + "px"
+                "margin-bottom": (o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0)) / BI.pixRatio + BI.pixUnit
             });
         }
         return w;
@@ -19566,7 +19588,7 @@ BI.shortcut("bi.flex_scrollable_vertical", BI.FlexWrapperVerticalLayout);
 
 
 /***/ }),
-/* 374 */
+/* 377 */
 /***/ (function(module, exports) {
 
 /**
@@ -19577,7 +19599,7 @@ BI.shortcut("bi.flex_scrollable_vertical", BI.FlexWrapperVerticalLayout);
 BI.AbsoluteLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.AbsoluteLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-absolute-layout",
+            baseCls: "bi-abs",
             hgap: null,
             vgap: null,
             lgap: null,
@@ -19596,58 +19618,57 @@ BI.AbsoluteLayout = BI.inherit(BI.Layout, {
         var w = BI.AbsoluteLayout.superclass._addElement.apply(this, arguments);
         var left = 0, right = 0, top = 0, bottom = 0;
         if (BI.isNotNull(item.left)) {
-            w.element.css({left: item.left});
+            w.element.css({left: BI.isNumber(item.left) ? item.left / BI.pixRatio + BI.pixUnit : item.left});
             left += item.left;
         }
         if (BI.isNotNull(item.right)) {
-            w.element.css({right: item.right});
+            w.element.css({right: BI.isNumber(item.right) ? item.right / BI.pixRatio + BI.pixUnit : item.right});
             right += item.right;
         }
         if (BI.isNotNull(item.top)) {
-            w.element.css({top: item.top});
+            w.element.css({top: BI.isNumber(item.top) ? item.top / BI.pixRatio + BI.pixUnit : item.top});
             top += item.top;
         }
         if (BI.isNotNull(item.bottom)) {
-            w.element.css({bottom: item.bottom});
+            w.element.css({bottom: BI.isNumber(item.bottom) ? item.bottom / BI.pixRatio + BI.pixUnit : item.bottom});
             bottom += item.bottom;
         }
 
         if (BI.isNotNull(o.hgap)) {
             left += o.hgap;
-            w.element.css({left: left});
+            w.element.css({left: left / BI.pixRatio + BI.pixUnit});
             right += o.hgap;
-            w.element.css({right: right});
+            w.element.css({right: right / BI.pixRatio + BI.pixUnit});
         }
         if (BI.isNotNull(o.vgap)) {
             top += o.vgap;
-            w.element.css({top: top});
+            w.element.css({top: top / BI.pixRatio + BI.pixUnit});
             bottom += o.vgap;
-            w.element.css({bottom: bottom});
+            w.element.css({bottom: bottom / BI.pixRatio + BI.pixUnit});
         }
 
         if (BI.isNotNull(o.lgap)) {
             left += o.lgap;
-            w.element.css({left: left});
+            w.element.css({left: left / BI.pixRatio + BI.pixUnit});
         }
         if (BI.isNotNull(o.rgap)) {
             right += o.rgap;
-            w.element.css({right: right});
+            w.element.css({right: right / BI.pixRatio + BI.pixUnit});
         }
         if (BI.isNotNull(o.tgap)) {
             top += o.tgap;
-            w.element.css({top: top});
+            w.element.css({top: top / BI.pixRatio + BI.pixUnit});
         }
         if (BI.isNotNull(o.bgap)) {
             bottom += o.bgap;
-            w.element.css({bottom: bottom});
+            w.element.css({bottom: bottom / BI.pixRatio + BI.pixUnit});
         }
-
 
         if (BI.isNotNull(item.width)) {
-            w.element.css({width: item.width});
+            w.element.css({width: BI.isNumber(item.width) ? item.width / BI.pixRatio + BI.pixUnit : item.width});
         }
         if (BI.isNotNull(item.height)) {
-            w.element.css({height: item.height});
+            w.element.css({height: BI.isNumber(item.height) ? item.height / BI.pixRatio + BI.pixUnit : item.height});
         }
         w.element.css({position: "absolute"});
         return w;
@@ -19677,14 +19698,15 @@ BI.AbsoluteLayout = BI.inherit(BI.Layout, {
 });
 BI.shortcut("bi.absolute", BI.AbsoluteLayout);
 
+
 /***/ }),
-/* 375 */
+/* 378 */
 /***/ (function(module, exports) {
 
 BI.AdaptiveLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.AdaptiveLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-adaptive-layout",
+            baseCls: "bi-adaptive",
             hgap: null,
             vgap: null,
             lgap: null,
@@ -19705,60 +19727,60 @@ BI.AdaptiveLayout = BI.inherit(BI.Layout, {
         var left = 0, right = 0, top = 0, bottom = 0;
         if (BI.isNotNull(item.left)) {
             w.element.css({
-                left: item.left
+                left: BI.isNumber(item.left) ? item.left / BI.pixRatio + BI.pixUnit : item.left
             });
         }
         if (BI.isNotNull(item.right)) {
             w.element.css({
-                right: item.right
+                right: BI.isNumber(item.right) ? item.right / BI.pixRatio + BI.pixUnit : item.right
             });
         }
         if (BI.isNotNull(item.top)) {
             w.element.css({
-                top: item.top
+                top: BI.isNumber(item.top) ? item.top / BI.pixRatio + BI.pixUnit : item.top
             });
         }
         if (BI.isNotNull(item.bottom)) {
             w.element.css({
-                bottom: item.bottom
+                bottom: BI.isNumber(item.bottom) ? item.bottom / BI.pixRatio + BI.pixUnit : item.bottom
             });
         }
 
         if (BI.isNotNull(o.hgap)) {
             left += o.hgap;
-            w.element.css({"margin-left": left});
+            w.element.css({"margin-left": left / BI.pixRatio + BI.pixUnit});
             right += o.hgap;
-            w.element.css({"margin-right": right});
+            w.element.css({"margin-right": right / BI.pixRatio + BI.pixUnit});
         }
         if (BI.isNotNull(o.vgap)) {
             top += o.vgap;
-            w.element.css({"margin-top": top});
+            w.element.css({"margin-top": top / BI.pixRatio + BI.pixUnit});
             bottom += o.vgap;
-            w.element.css({"margin-bottom": bottom});
+            w.element.css({"margin-bottom": bottom / BI.pixRatio + BI.pixUnit});
         }
 
         if (BI.isNotNull(o.lgap)) {
             left += o.lgap;
-            w.element.css({"margin-left": left});
+            w.element.css({"margin-left": left / BI.pixRatio + BI.pixUnit});
         }
         if (BI.isNotNull(o.rgap)) {
             right += o.rgap;
-            w.element.css({"margin-right": right});
+            w.element.css({"margin-right": right / BI.pixRatio + BI.pixUnit});
         }
         if (BI.isNotNull(o.tgap)) {
             top += o.tgap;
-            w.element.css({"margin-top": top});
+            w.element.css({"margin-top": top / BI.pixRatio + BI.pixUnit});
         }
         if (BI.isNotNull(o.bgap)) {
             bottom += o.bgap;
-            w.element.css({"margin-bottom": bottom});
+            w.element.css({"margin-bottom": bottom / BI.pixRatio + BI.pixUnit});
         }
 
         if (BI.isNotNull(item.width)) {
-            w.element.css({width: item.width});
+            w.element.css({width: BI.isNumber(item.width) ? item.width / BI.pixRatio + BI.pixUnit : item.width});
         }
         if (BI.isNotNull(item.height)) {
-            w.element.css({height: item.height});
+            w.element.css({height: BI.isNumber(item.height) ? item.height / BI.pixRatio + BI.pixUnit : item.height});
         }
         return w;
     },
@@ -19774,8 +19796,9 @@ BI.AdaptiveLayout = BI.inherit(BI.Layout, {
 });
 BI.shortcut("bi.adaptive", BI.AdaptiveLayout);
 
+
 /***/ }),
-/* 376 */
+/* 379 */
 /***/ (function(module, exports) {
 
 /**
@@ -19787,7 +19810,7 @@ BI.shortcut("bi.adaptive", BI.AdaptiveLayout);
 BI.BorderLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.BorderLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-border-layout",
+            baseCls: "bi-border",
             items: {}
         });
     },
@@ -19819,12 +19842,12 @@ BI.BorderLayout = BI.inherit(BI.Layout, {
                         var w = BI._lazyCreateWidget(item);
                         this.addWidget(this._getChildName("north"), w);
                     }
-                    this.getWidgetByName(this._getChildName("north")).element.height(item.height)
+                    this.getWidgetByName(this._getChildName("north")).element.height(item.height / BI.pixRatio + BI.pixUnit)
                         .css({
                             position: "absolute",
-                            top: (item.top || 0),
-                            left: (item.left || 0),
-                            right: (item.right || 0),
+                            top: (item.top || 0) / BI.pixRatio + BI.pixUnit,
+                            left: (item.left || 0) / BI.pixRatio + BI.pixUnit,
+                            right: (item.right || 0) / BI.pixRatio + BI.pixUnit,
                             bottom: "initial"
                         });
                 }
@@ -19839,12 +19862,12 @@ BI.BorderLayout = BI.inherit(BI.Layout, {
                         var w = BI._lazyCreateWidget(item);
                         this.addWidget(this._getChildName("south"), w);
                     }
-                    this.getWidgetByName(this._getChildName("south")).element.height(item.height)
+                    this.getWidgetByName(this._getChildName("south")).element.height(item.height / BI.pixRatio + BI.pixUnit)
                         .css({
                             position: "absolute",
-                            bottom: (item.bottom || 0),
-                            left: (item.left || 0),
-                            right: (item.right || 0),
+                            bottom: (item.bottom || 0) / BI.pixRatio + BI.pixUnit,
+                            left: (item.left || 0) / BI.pixRatio + BI.pixUnit,
+                            right: (item.right || 0) / BI.pixRatio + BI.pixUnit,
                             top: "initial"
                         });
                 }
@@ -19859,12 +19882,12 @@ BI.BorderLayout = BI.inherit(BI.Layout, {
                         var w = BI._lazyCreateWidget(item);
                         this.addWidget(this._getChildName("west"), w);
                     }
-                    this.getWidgetByName(this._getChildName("west")).element.width(item.width)
+                    this.getWidgetByName(this._getChildName("west")).element.width(item.width / BI.pixRatio + BI.pixUnit)
                         .css({
                             position: "absolute",
-                            left: (item.left || 0),
-                            top: top,
-                            bottom: bottom,
+                            left: (item.left || 0) / BI.pixRatio + BI.pixUnit,
+                            top: top / BI.pixRatio + BI.pixUnit,
+                            bottom: bottom / BI.pixRatio + BI.pixUnit,
                             right: "initial"
                         });
                 }
@@ -19879,12 +19902,12 @@ BI.BorderLayout = BI.inherit(BI.Layout, {
                         var w = BI._lazyCreateWidget(item);
                         this.addWidget(this._getChildName("east"), w);
                     }
-                    this.getWidgetByName(this._getChildName("east")).element.width(item.width)
+                    this.getWidgetByName(this._getChildName("east")).element.width(item.width / BI.pixRatio + BI.pixUnit)
                         .css({
                             position: "absolute",
-                            right: (item.right || 0),
-                            top: top,
-                            bottom: bottom,
+                            right: (item.right || 0) / BI.pixRatio + BI.pixUnit,
+                            top: top / BI.pixRatio + BI.pixUnit,
+                            bottom: bottom / BI.pixRatio + BI.pixUnit,
                             left: "initial"
                         });
                 }
@@ -19899,7 +19922,13 @@ BI.BorderLayout = BI.inherit(BI.Layout, {
                     this.addWidget(this._getChildName("center"), w);
                 }
                 this.getWidgetByName(this._getChildName("center")).element
-                    .css({position: "absolute", top: top, bottom: bottom, left: left, right: right});
+                    .css({
+                        position: "absolute",
+                        top: top / BI.pixRatio + BI.pixUnit,
+                        bottom: bottom / BI.pixRatio + BI.pixUnit,
+                        left: left / BI.pixRatio + BI.pixUnit,
+                        right: right / BI.pixRatio + BI.pixUnit
+                    });
             }
         }
     },
@@ -19916,7 +19945,7 @@ BI.shortcut("bi.border", BI.BorderLayout);
 
 
 /***/ }),
-/* 377 */
+/* 380 */
 /***/ (function(module, exports) {
 
 /**
@@ -20132,7 +20161,7 @@ BI.shortcut("bi.card", BI.CardLayout);
 
 
 /***/ }),
-/* 378 */
+/* 381 */
 /***/ (function(module, exports) {
 
 /**
@@ -20163,22 +20192,22 @@ BI.DefaultLayout = BI.inherit(BI.Layout, {
         var w = BI.DefaultLayout.superclass._addElement.apply(this, arguments);
         if (o.vgap + o.tgap + (item.tgap || 0) !== 0) {
             w.element.css({
-                "margin-top": o.vgap + o.tgap + (item.tgap || 0) + "px"
+                "margin-top": (o.vgap + o.tgap + (item.tgap || 0)) / BI.pixRatio + BI.pixUnit
             });
         }
         if (o.hgap + o.lgap + (item.lgap || 0) !== 0) {
             w.element.css({
-                "margin-left": o.hgap + o.lgap + (item.lgap || 0) + "px"
+                "margin-left": (o.hgap + o.lgap + (item.lgap || 0)) / BI.pixRatio + BI.pixUnit
             });
         }
         if (o.hgap + o.rgap + (item.rgap || 0) !== 0) {
             w.element.css({
-                "margin-right": o.hgap + o.rgap + (item.rgap || 0) + "px"
+                "margin-right": (o.hgap + o.rgap + (item.rgap || 0)) / BI.pixRatio + BI.pixUnit
             });
         }
         if (o.vgap + o.bgap + (item.bgap || 0) !== 0) {
             w.element.css({
-                "margin-bottom": o.vgap + o.bgap + (item.bgap || 0) + "px"
+                "margin-bottom": (o.vgap + o.bgap + (item.bgap || 0)) / BI.pixRatio + BI.pixUnit
             });
         }
         return w;
@@ -20195,8 +20224,9 @@ BI.DefaultLayout = BI.inherit(BI.Layout, {
 });
 BI.shortcut("bi.default", BI.DefaultLayout);
 
+
 /***/ }),
-/* 379 */
+/* 382 */
 /***/ (function(module, exports) {
 
 /**
@@ -20208,7 +20238,7 @@ BI.shortcut("bi.default", BI.DefaultLayout);
 BI.DivisionLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.DivisionLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-division-layout",
+            baseCls: "bi-division",
             columns: null,
             rows: null,
             items: []
@@ -20364,7 +20394,7 @@ BI.shortcut("bi.division", BI.DivisionLayout);
 
 
 /***/ }),
-/* 380 */
+/* 383 */
 /***/ (function(module, exports) {
 
 /**
@@ -20379,7 +20409,7 @@ BI.shortcut("bi.division", BI.DivisionLayout);
 BI.FloatLeftLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.FloatLeftLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-float-left-layout clearfix",
+            baseCls: "bi-left clearfix",
             hgap: 0,
             vgap: 0,
             lgap: 0,
@@ -20398,35 +20428,35 @@ BI.FloatLeftLayout = BI.inherit(BI.Layout, {
         var w = BI.FloatLeftLayout.superclass._addElement.apply(this, arguments);
         w.element.css({position: "relative", float: "left"});
         if (BI.isNotNull(item.left)) {
-            w.element.css({left: item.left});
+            w.element.css({left: BI.isNumber(item.left) ? item.left / BI.pixRatio + BI.pixUnit : item.left});
         }
         if (BI.isNotNull(item.right)) {
-            w.element.css({right: item.right});
+            w.element.css({right: BI.isNumber(item.right) ? item.right / BI.pixRatio + BI.pixUnit : item.right});
         }
         if (BI.isNotNull(item.top)) {
-            w.element.css({top: item.top});
+            w.element.css({top: BI.isNumber(item.top) ? item.top / BI.pixRatio + BI.pixUnit : item.top});
         }
         if (BI.isNotNull(item.bottom)) {
-            w.element.css({bottom: item.bottom});
+            w.element.css({bottom: BI.isNumber(item.bottom) ? item.bottom / BI.pixRatio + BI.pixUnit : item.bottom});
         }
         if (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
             w.element.css({
-                "margin-top": o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) + "px"
+                "margin-top": (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0)) / BI.pixRatio + BI.pixUnit
             });
         }
         if (o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0) !== 0) {
             w.element.css({
-                "margin-left": (i === 0 ? o.hgap : 0) + o.lgap + (item.lgap || 0) + (item.hgap || 0) +"px"
+                "margin-left": ((i === 0 ? o.hgap : 0) + o.lgap + (item.lgap || 0) + (item.hgap || 0)) / BI.pixRatio + BI.pixUnit
             });
         }
         if (o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0) !== 0) {
             w.element.css({
-                "margin-right": o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0) + "px"
+                "margin-right": (o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0)) / BI.pixRatio + BI.pixUnit
             });
         }
         if (o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0) !== 0) {
             w.element.css({
-                "margin-bottom": o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0) + "px"
+                "margin-bottom": (o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0)) / BI.pixRatio + BI.pixUnit
             });
         }
         return w;
@@ -20455,7 +20485,7 @@ BI.shortcut("bi.left", BI.FloatLeftLayout);
 BI.FloatRightLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.FloatRightLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-float-right-layout clearfix",
+            baseCls: "bi-right clearfix",
             hgap: 0,
             vgap: 0,
             lgap: 0,
@@ -20474,35 +20504,35 @@ BI.FloatRightLayout = BI.inherit(BI.Layout, {
         var w = BI.FloatRightLayout.superclass._addElement.apply(this, arguments);
         w.element.css({position: "relative", float: "right"});
         if (BI.isNotNull(item.left)) {
-            w.element.css({left: item.left});
+            w.element.css({left: BI.isNumber(item.left) ? item.left / BI.pixRatio + BI.pixUnit : item.left});
         }
         if (BI.isNotNull(item.right)) {
-            w.element.css({right: item.right});
+            w.element.css({right: BI.isNumber(item.right) ? item.right / BI.pixRatio + BI.pixUnit : item.right});
         }
         if (BI.isNotNull(item.top)) {
-            w.element.css({top: item.top});
+            w.element.css({top: BI.isNumber(item.top) ? item.top / BI.pixRatio + BI.pixUnit : item.top});
         }
         if (BI.isNotNull(item.bottom)) {
-            w.element.css({bottom: item.bottom});
+            w.element.css({bottom: BI.isNumber(item.bottom) ? item.bottom / BI.pixRatio + BI.pixUnit : item.bottom});
         }
         if (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
             w.element.css({
-                "margin-top": o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) + "px"
+                "margin-top": (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0)) / BI.pixRatio + BI.pixUnit
             });
         }
         if (o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0) !== 0) {
             w.element.css({
-                "margin-left": o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0) +"px"
+                "margin-left": (o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0)) / BI.pixRatio + BI.pixUnit
             });
         }
         if (o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0) !== 0) {
             w.element.css({
-                "margin-right": (i === 0 ? o.hgap : 0) + o.rgap + (item.rgap || 0) + (item.hgap || 0) + "px"
+                "margin-right": ((i === 0 ? o.hgap : 0) + o.rgap + (item.rgap || 0) + (item.hgap || 0)) / BI.pixRatio + BI.pixUnit
             });
         }
         if (o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0) !== 0) {
             w.element.css({
-                "margin-bottom": o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0) + "px"
+                "margin-bottom": (o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0)) / BI.pixRatio + BI.pixUnit
             });
         }
         return w;
@@ -20519,8 +20549,9 @@ BI.FloatRightLayout = BI.inherit(BI.Layout, {
 });
 BI.shortcut("bi.right", BI.FloatRightLayout);
 
+
 /***/ }),
-/* 381 */
+/* 384 */
 /***/ (function(module, exports) {
 
 /**
@@ -20532,7 +20563,7 @@ BI.shortcut("bi.right", BI.FloatRightLayout);
 BI.GridLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.GridLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-grid-layout",
+            baseCls: "bi-grid",
             columns: null,
             rows: null,
             items: []
@@ -20656,7 +20687,7 @@ BI.shortcut("bi.grid", BI.GridLayout);
 
 
 /***/ }),
-/* 382 */
+/* 385 */
 /***/ (function(module, exports) {
 
 /**
@@ -20667,7 +20698,7 @@ BI.shortcut("bi.grid", BI.GridLayout);
 BI.HorizontalLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.HorizontalLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-horizontal-layout",
+            baseCls: "bi-h",
             verticalAlign: BI.VerticalAlign.Top,
             horizontalAlign: BI.HorizontalAlign.Left,
             columnSize: [],
@@ -20700,7 +20731,7 @@ BI.HorizontalLayout = BI.inherit(BI.Layout, {
     _addElement: function (i, item) {
         var o = this.options;
         var td;
-        var width = o.columnSize[i] <= 1 ? (o.columnSize[i] * 100 + "%") : o.columnSize[i];
+        var width = o.columnSize[i] <= 1 ? ((o.columnSize[i] * 100).toFixed(1) + "%") : o.columnSize[i];
         if (!this.hasWidget(this._getChildName(i))) {
             var w = BI._lazyCreateWidget(item);
             w.element.css({position: "relative", margin: "0px auto"});
@@ -20721,7 +20752,7 @@ BI.HorizontalLayout = BI.inherit(BI.Layout, {
         // 1、由于直接对td设置最大宽度是在规范中未定义的, 所以要使用类似td:firstChild来迂回实现
         // 2、不能给多个td设置最大宽度，这样只会平分宽度
         // 3、多百分比宽度就算了
-        td.element.css({"max-width": o.columnSize[i] <= 1 ? width : width + "px"});
+        td.element.css({"max-width": BI.isNumber(o.columnSize[i]) ? (o.columnSize[i] <= 1 ? width : width / BI.pixRatio + BI.pixUnit) : width});
         if (i === 0) {
             td.element.addClass("first-element");
         }
@@ -20735,22 +20766,22 @@ BI.HorizontalLayout = BI.inherit(BI.Layout, {
 
         if (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
             w.element.css({
-                "margin-top": o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) + "px"
+                "margin-top": (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0)) / BI.pixRatio + BI.pixUnit
             });
         }
         if (o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0) !== 0) {
             w.element.css({
-                "margin-left": (i === 0 ? o.hgap : 0) + o.lgap + (item.lgap || 0) + (item.hgap || 0) + "px"
+                "margin-left": ((i === 0 ? o.hgap : 0) + o.lgap + (item.lgap || 0) + (item.hgap || 0)) / BI.pixRatio + BI.pixUnit
             });
         }
         if (o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0) !== 0) {
             w.element.css({
-                "margin-right": o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0) + "px"
+                "margin-right": (o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0)) / BI.pixRatio + BI.pixUnit
             });
         }
         if (o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0) !== 0) {
             w.element.css({
-                "margin-bottom": o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0) + "px"
+                "margin-bottom": (o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0)) / BI.pixRatio + BI.pixUnit
             });
         }
         return td;
@@ -20806,22 +20837,22 @@ BI.HorizontalCellLayout = BI.inherit(BI.Layout, {
         w.element.css({position: "relative", display: "table-cell", "vertical-align": "middle"});
         if (o.hgap + o.lgap > 0) {
             w.element.css({
-                "margin-left": o.hgap + o.lgap + "px"
+                "margin-left": (o.hgap + o.lgap) / BI.pixRatio + BI.pixUnit
             });
         }
         if (o.hgap + o.rgap > 0) {
             w.element.css({
-                "margin-right": o.hgap + o.rgap + "px"
+                "margin-right": (o.hgap + o.rgap) / BI.pixRatio + BI.pixUnit
             });
         }
         if (o.vgap + o.tgap > 0) {
             w.element.css({
-                "margin-top": o.vgap + o.tgap + "px"
+                "margin-top": (o.vgap + o.tgap) / BI.pixRatio + BI.pixUnit
             });
         }
         if (o.vgap + o.bgap > 0) {
             w.element.css({
-                "margin-bottom": o.vgap + o.bgap + "px"
+                "margin-bottom": (o.vgap + o.bgap) / BI.pixRatio + BI.pixUnit
             });
         }
         return w;
@@ -20840,7 +20871,7 @@ BI.shortcut("bi.horizontal_cell", BI.HorizontalCellLayout);
 
 
 /***/ }),
-/* 383 */
+/* 386 */
 /***/ (function(module, exports) {
 
 /**
@@ -20856,7 +20887,7 @@ BI.InlineLayout = BI.inherit(BI.Layout, {
 
     props: function () {
         return BI.extend(BI.InlineLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-inline-layout",
+            baseCls: "bi-i",
             hgap: 0,
             vgap: 0,
             lgap: 0,
@@ -20877,22 +20908,22 @@ BI.InlineLayout = BI.inherit(BI.Layout, {
         w.element.css({"position": "relative", display: "inline-block", "*display": "inline", "*zoom": 1});
         if (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
             w.element.css({
-                "margin-top": o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) + "px"
+                "margin-top": (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0)) / BI.pixRatio + BI.pixUnit
             });
         }
         if (o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0) !== 0) {
             w.element.css({
-                "margin-left": (i === 0 ? o.hgap : 0) + o.lgap + (item.lgap || 0) + (item.hgap || 0) +"px"
+                "margin-left": ((i === 0 ? o.hgap : 0) + o.lgap + (item.lgap || 0) + (item.hgap || 0)) / BI.pixRatio + BI.pixUnit
             });
         }
         if (o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0) !== 0) {
             w.element.css({
-                "margin-right": o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0) + "px"
+                "margin-right": (o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0)) / BI.pixRatio + BI.pixUnit
             });
         }
         if (o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0) !== 0) {
             w.element.css({
-                "margin-bottom": o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0) + "px"
+                "margin-bottom": (o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0)) / BI.pixRatio + BI.pixUnit
             });
         }
         return w;
@@ -20909,8 +20940,9 @@ BI.InlineLayout = BI.inherit(BI.Layout, {
 });
 BI.shortcut("bi.inline", BI.InlineLayout);
 
+
 /***/ }),
-/* 384 */
+/* 387 */
 /***/ (function(module, exports) {
 
 /**
@@ -20925,7 +20957,7 @@ BI.shortcut("bi.inline", BI.InlineLayout);
 BI.LatticeLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.LatticeLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-lattice-layout clearfix"
+            baseCls: "bi-lattice clearfix"
             // columnSize: [0.2, 0.2, 0.6],
         });
     },
@@ -20969,8 +21001,9 @@ BI.LatticeLayout = BI.inherit(BI.Layout, {
 });
 BI.shortcut("bi.lattice", BI.LatticeLayout);
 
+
 /***/ }),
-/* 385 */
+/* 388 */
 /***/ (function(module, exports) {
 
 /**
@@ -20982,7 +21015,7 @@ BI.shortcut("bi.lattice", BI.LatticeLayout);
 BI.TableLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.TableLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-table-layout",
+            baseCls: "bi-t",
             scrolly: true,
             columnSize: [200, 200, "fill"],
             rowSize: 30,  // or [30,30,30]
@@ -21054,8 +21087,8 @@ BI.TableLayout = BI.inherit(BI.Layout, {
                 abs.push(BI.extend({
                     top: 0,
                     bottom: 0,
-                    left: o.columnSize[i] <= 1 ? left * 100 + "%" : left,
-                    width: o.columnSize[i] <= 1 ? o.columnSize[i] * 100 + "%" : o.columnSize[i]
+                    left: o.columnSize[i] <= 1 ? (left * 100).toFixed(1) + "%" : left,
+                    width: o.columnSize[i] <= 1 ? (o.columnSize[i] * 100).toFixed(1) + "%" : o.columnSize[i]
                 }, arr[i]));
                 left += o.columnSize[i] + (o.columnSize[i] < 1 ? 0 : o.hgap);
             } else {
@@ -21068,8 +21101,8 @@ BI.TableLayout = BI.inherit(BI.Layout, {
                 abs.push(BI.extend({
                     top: 0,
                     bottom: 0,
-                    right: o.columnSize[j] <= 1 ? right * 100 + "%" : right,
-                    width: o.columnSize[j] <= 1 ? o.columnSize[j] * 100 + "%" : o.columnSize[j]
+                    right: o.columnSize[j] <= 1 ? (right * 100).toFixed(1) + "%" : right,
+                    width: o.columnSize[j] <= 1 ? (o.columnSize[j] * 100).toFixed(1) + "%" : o.columnSize[j]
                 }, arr[j]));
                 right += o.columnSize[j] + (o.columnSize[j] < 1 ? 0 : o.hgap);
             } else {
@@ -21081,8 +21114,8 @@ BI.TableLayout = BI.inherit(BI.Layout, {
             abs.push(BI.extend({
                 top: 0,
                 bottom: 0,
-                left: left <= 1 ? left * 100 + "%" : left,
-                right: right <= 1 ? right * 100 + "%" : right
+                left: left <= 1 ? (left * 100).toFixed(1) + "%" : left,
+                right: right <= 1 ? (right * 100).toFixed(1) + "%" : right
             }, arr[i]));
         }
         var w = BI._lazyCreateWidget({
@@ -21092,7 +21125,7 @@ BI.TableLayout = BI.inherit(BI.Layout, {
         });
         if (this.rows > 0) {
             this.getWidgetByName(this._getChildName(this.rows - 1)).element.css({
-                "margin-bottom": o.vgap
+                "margin-bottom": o.vgap / BI.pixRatio + BI.pixUnit
             });
         }
         w.element.css({
@@ -21125,7 +21158,7 @@ BI.shortcut("bi.table", BI.TableLayout);
 
 
 /***/ }),
-/* 386 */
+/* 389 */
 /***/ (function(module, exports) {
 
 /**
@@ -21136,7 +21169,7 @@ BI.shortcut("bi.table", BI.TableLayout);
 BI.HTapeLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.HTapeLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-h-tape-layout",
+            baseCls: "bi-h-tape",
             hgap: 0,
             vgap: 0,
             lgap: 0,
@@ -21182,7 +21215,11 @@ BI.HTapeLayout = BI.inherit(BI.Layout, {
             } else {
                 w = self.getWidgetByName(self._getChildName(i));
             }
-            w.element.css({position: "absolute", top: (item.vgap || 0) + (item.tgap || 0) + o.vgap + o.tgap + "px", bottom: (item.bgap || 0) + (item.vgap || 0) + o.vgap + o.bgap + "px"});
+            w.element.css({
+                position: "absolute",
+                top: ((item.vgap || 0) + (item.tgap || 0) + o.vgap + o.tgap) / BI.pixRatio + BI.pixUnit,
+                bottom: ((item.bgap || 0) + (item.vgap || 0) + o.vgap + o.bgap) / BI.pixRatio + BI.pixUnit
+            });
         });
 
         var left = {}, right = {};
@@ -21195,11 +21232,11 @@ BI.HTapeLayout = BI.inherit(BI.Layout, {
                 left[i] = left[i - 1] + items[i - 1].width + (items[i - 1].lgap || 0) + 2 * (items[i - 1].hgap || 0) + o.hgap + o.lgap + o.rgap;
             }
             if (item.width < 1 && item.width >= 0) {
-                w.element.css({left: left[i] * 100 + "%", width: item.width * 100 + "%"});
+                w.element.css({left: (left[i] * 100).toFixed(1) + "%", width: (item.width * 100).toFixed(1) + "%"});
             } else {
                 w.element.css({
-                    left: left[i] + (item.lgap || 0) + (item.hgap || 0) + o.hgap + o.lgap + "px",
-                    width: BI.isNumber(item.width) ? item.width : ""
+                    left: (left[i] + (item.lgap || 0) + (item.hgap || 0) + o.hgap + o.lgap) / BI.pixRatio + BI.pixUnit,
+                    width: BI.isNumber(item.width) ? item.width / BI.pixRatio + BI.pixUnit : ""
                 });
             }
             if (!BI.isNumber(item.width)) {
@@ -21212,11 +21249,11 @@ BI.HTapeLayout = BI.inherit(BI.Layout, {
                 right[i] = right[i + 1] + items[i + 1].width + (items[i + 1].rgap || 0) + 2 * (items[i + 1].hgap || 0) + o.hgap + o.lgap + o.rgap;
             }
             if (item.width < 1 && item.width >= 0) {
-                w.element.css({right: right[i] * 100 + "%", width: item.width * 100 + "%"});
+                w.element.css({right: (right[i] * 100).toFixed(1) + "%", width: (item.width * 100).toFixed(1) + "%"});
             } else {
                 w.element.css({
-                    right: right[i] + (item.rgap || 0) + (item.hgap || 0) + o.hgap + o.rgap + "px",
-                    width: BI.isNumber(item.width) ? item.width : ""
+                    right: (right[i] + (item.rgap || 0) + (item.hgap || 0) + o.hgap + o.rgap) / BI.pixRatio + BI.pixUnit,
+                    width: BI.isNumber(item.width) ? item.width / BI.pixRatio + BI.pixUnit : ""
                 });
             }
             if (!BI.isNumber(item.width)) {
@@ -21295,7 +21332,11 @@ BI.VTapeLayout = BI.inherit(BI.Layout, {
             } else {
                 w = self.getWidgetByName(self._getChildName(i));
             }
-            w.element.css({position: "absolute", left: (item.lgap || 0) + (item.hgap || 0) + o.hgap + o.lgap + "px", right: + (item.hgap || 0) + (item.rgap || 0) + o.hgap + o.rgap + "px"});
+            w.element.css({
+                position: "absolute",
+                left: ((item.lgap || 0) + (item.hgap || 0) + o.hgap + o.lgap) / BI.pixRatio + BI.pixUnit,
+                right: +((item.hgap || 0) + (item.rgap || 0) + o.hgap + o.rgap) / BI.pixRatio + BI.pixUnit
+            });
         });
 
         var top = {}, bottom = {};
@@ -21308,11 +21349,11 @@ BI.VTapeLayout = BI.inherit(BI.Layout, {
                 top[i] = top[i - 1] + items[i - 1].height + (items[i - 1].tgap || 0) + 2 * (items[i - 1].vgap || 0) + o.vgap + o.tgap + o.bgap;
             }
             if (item.height < 1 && item.height >= 0) {
-                w.element.css({top: top[i] * 100 + "%", height: item.height * 100 + "%"});
+                w.element.css({top: (top[i] * 100).toFixed(1) + "%", height: (item.height * 100).toFixed(1) + "%"});
             } else {
                 w.element.css({
-                    top: top[i] + (item.vgap || 0) + (item.tgap || 0) + o.vgap + o.tgap + "px",
-                    height: BI.isNumber(item.height) ? item.height : ""
+                    top: (top[i] + (item.vgap || 0) + (item.tgap || 0) + o.vgap + o.tgap) / BI.pixRatio + BI.pixUnit,
+                    height: BI.isNumber(item.height) ? item.height / BI.pixRatio + BI.pixUnit : ""
                 });
             }
             if (!BI.isNumber(item.height)) {
@@ -21325,11 +21366,11 @@ BI.VTapeLayout = BI.inherit(BI.Layout, {
                 bottom[i] = bottom[i + 1] + items[i + 1].height + (items[i + 1].bgap || 0) + 2 * (items[i + 1].vgap || 0) + o.vgap + o.tgap + o.bgap;
             }
             if (item.height < 1 && item.height >= 0) {
-                w.element.css({bottom: bottom[i] * 100 + "%", height: item.height * 100 + "%"});
+                w.element.css({bottom: (bottom[i] * 100).toFixed(1) + "%", height: (item.height * 100).toFixed(1) + "%"});
             } else {
                 w.element.css({
-                    bottom: bottom[i] + (item.vgap || 0) + (item.bgap || 0) + o.vgap + o.bgap + "px",
-                    height: BI.isNumber(item.height) ? item.height : ""
+                    bottom: (bottom[i] + (item.vgap || 0) + (item.bgap || 0) + o.vgap + o.bgap) / BI.pixRatio + BI.pixUnit,
+                    height: BI.isNumber(item.height) ? item.height / BI.pixRatio + BI.pixUnit : ""
                 });
             }
             if (!BI.isNumber(item.height)) {
@@ -21350,7 +21391,7 @@ BI.shortcut("bi.vtape", BI.VTapeLayout);
 
 
 /***/ }),
-/* 387 */
+/* 390 */
 /***/ (function(module, exports) {
 
 /**
@@ -21361,7 +21402,7 @@ BI.shortcut("bi.vtape", BI.VTapeLayout);
 BI.TdLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.TdLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-td-layout",
+            baseCls: "bi-td",
             columnSize: [200, 200, 200],
             hgap: 0,
             vgap: 0,
@@ -21441,23 +21482,21 @@ BI.TdLayout = BI.inherit(BI.Layout, {
             var w = BI._lazyCreateWidget(arr[i]);
             w.element.css({position: "relative", top: "0", left: "0", margin: "0px auto"});
             if (arr[i].lgap) {
-                w.element.css({"margin-left": arr[i].lgap + "px"});
+                w.element.css({"margin-left": arr[i].lgap / BI.pixRatio + BI.pixUnit});
             }
             if (arr[i].rgap) {
-                w.element.css({"margin-right": arr[i].rgap + "px"});
+                w.element.css({"margin-right": arr[i].rgap / BI.pixRatio + BI.pixUnit});
             }
             if (arr[i].tgap) {
-                w.element.css({"margin-top": arr[i].tgap + "px"});
+                w.element.css({"margin-top": arr[i].tgap / BI.pixRatio + BI.pixUnit});
             }
             if (arr[i].bgap) {
-                w.element.css({"margin-bottom": arr[i].bgap + "px"});
+                w.element.css({"margin-bottom": arr[i].bgap / BI.pixRatio + BI.pixUnit});
             }
             first(w, this.rows++, i);
             var td = BI._lazyCreateWidget({
                 type: "bi.default",
-                attributes: {
-                    width: o.columnSize[i] <= 1 ? (o.columnSize[i] * 100 + "%") : o.columnSize[i]
-                },
+                width: o.columnSize[i] <= 1 ? ((o.columnSize[i] * 100).toFixed(1) + "%") : o.columnSize[i],
                 tagName: "td",
                 items: [w]
             });
@@ -21502,7 +21541,7 @@ BI.shortcut("bi.td", BI.TdLayout);
 
 
 /***/ }),
-/* 388 */
+/* 391 */
 /***/ (function(module, exports) {
 
 /**
@@ -21513,7 +21552,7 @@ BI.shortcut("bi.td", BI.TdLayout);
 BI.VerticalLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.VerticalLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-vertical-layout",
+            baseCls: "bi-v",
             hgap: 0,
             vgap: 0,
             lgap: 0,
@@ -21536,22 +21575,22 @@ BI.VerticalLayout = BI.inherit(BI.Layout, {
         });
         if (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
             w.element.css({
-                "margin-top": (i === 0 ? o.vgap : 0) + o.tgap + (item.tgap || 0) + (item.vgap || 0) + "px"
+                "margin-top": ((i === 0 ? o.vgap : 0) + o.tgap + (item.tgap || 0) + (item.vgap || 0)) / BI.pixRatio + BI.pixUnit
             });
         }
         if (o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0) !== 0) {
             w.element.css({
-                "margin-left": o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0) +"px"
+                "margin-left": (o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0)) / BI.pixRatio + BI.pixUnit
             });
         }
         if (o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0) !== 0) {
             w.element.css({
-                "margin-right": o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0) + "px"
+                "margin-right": (o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0)) / BI.pixRatio + BI.pixUnit
             });
         }
         if (o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0) !== 0) {
             w.element.css({
-                "margin-bottom": o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0) + "px"
+                "margin-bottom": (o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0)) / BI.pixRatio + BI.pixUnit
             });
         }
         return w;
@@ -21568,8 +21607,9 @@ BI.VerticalLayout = BI.inherit(BI.Layout, {
 });
 BI.shortcut("bi.vertical", BI.VerticalLayout);
 
+
 /***/ }),
-/* 389 */
+/* 392 */
 /***/ (function(module, exports) {
 
 /**
@@ -21580,7 +21620,7 @@ BI.shortcut("bi.vertical", BI.VerticalLayout);
 BI.WindowLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.WindowLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-window-layout",
+            baseCls: "bi-window",
             columns: 3,
             rows: 2,
             hgap: 0,
@@ -21688,9 +21728,9 @@ BI.WindowLayout = BI.inherit(BI.Layout, {
                 if (BI.isNull(top[i])) {
                     top[i] = top[i - 1] + (o.rowSize[i - 1] < 1 ? o.rowSize[i - 1] : o.rowSize[i - 1] + o.vgap + o.bgap);
                 }
-                var t = top[i] <= 1 ? top[i] * 100 + "%" : top[i] + o.vgap + o.tgap + "px", h = "";
+                var t = top[i] <= 1 ? (top[i] * 100).toFixed(1) + "%" : (top[i] + o.vgap + o.tgap) / BI.pixRatio + BI.pixUnit, h = "";
                 if (BI.isNumber(o.rowSize[i])) {
-                    h = o.rowSize[i] <= 1 ? o.rowSize[i] * 100 + "%" : o.rowSize[i] + "px";
+                    h = o.rowSize[i] <= 1 ? (o.rowSize[i] * 100).toFixed(1) + "%" : o.rowSize[i] / BI.pixRatio + BI.pixUnit;
                 }
                 wi.element.css({top: t, height: h});
                 first(wi, i, j);
@@ -21706,9 +21746,9 @@ BI.WindowLayout = BI.inherit(BI.Layout, {
                 if (BI.isNull(bottom[i])) {
                     bottom[i] = bottom[i + 1] + (o.rowSize[i + 1] < 1 ? o.rowSize[i + 1] : o.rowSize[i + 1] + o.vgap + o.tgap);
                 }
-                var b = bottom[i] <= 1 ? bottom[i] * 100 + "%" : bottom[i] + o.vgap + o.bgap + "px", h = "";
+                var b = bottom[i] <= 1 ? (bottom[i] * 100).toFixed(1) + "%" : (bottom[i] + o.vgap + o.bgap) / BI.pixRatio + BI.pixUnit, h = "";
                 if (BI.isNumber(o.rowSize[i])) {
-                    h = o.rowSize[i] <= 1 ? o.rowSize[i] * 100 + "%" : o.rowSize[i] + "px";
+                    h = o.rowSize[i] <= 1 ? (o.rowSize[i] * 100).toFixed(1) + "%" : o.rowSize[i] / BI.pixRatio + BI.pixUnit;
                 }
                 wi.element.css({bottom: b, height: h});
                 first(wi, i, j);
@@ -21724,9 +21764,9 @@ BI.WindowLayout = BI.inherit(BI.Layout, {
                 if (BI.isNull(left[j])) {
                     left[j] = left[j - 1] + (o.columnSize[j - 1] < 1 ? o.columnSize[j - 1] : o.columnSize[j - 1] + o.hgap + o.rgap);
                 }
-                var l = left[j] <= 1 ? left[j] * 100 + "%" : left[j] + o.hgap + o.lgap + "px", w = "";
+                var l = left[j] <= 1 ? (left[j] * 100).toFixed(1) + "%" : (left[j] + o.hgap + o.lgap) / BI.pixRatio + BI.pixUnit, w = "";
                 if (BI.isNumber(o.columnSize[j])) {
-                    w = o.columnSize[j] <= 1 ? o.columnSize[j] * 100 + "%" : o.columnSize[j] + "px";
+                    w = o.columnSize[j] <= 1 ? (o.columnSize[j] * 100).toFixed(1) + "%" : o.columnSize[j] / BI.pixRatio + BI.pixUnit;
                 }
                 wi.element.css({left: l, width: w});
                 first(wi, i, j);
@@ -21742,9 +21782,9 @@ BI.WindowLayout = BI.inherit(BI.Layout, {
                 if (BI.isNull(right[j])) {
                     right[j] = right[j + 1] + (o.columnSize[j + 1] < 1 ? o.columnSize[j + 1] : o.columnSize[j + 1] + o.hgap + o.lgap);
                 }
-                var r = right[j] <= 1 ? right[j] * 100 + "%" : right[j] + o.hgap + o.rgap + "px", w = "";
+                var r = right[j] <= 1 ? (right[j] * 100).toFixed(1) + "%" : (right[j] + o.hgap + o.rgap) / BI.pixRatio + BI.pixUnit, w = "";
                 if (BI.isNumber(o.columnSize[j])) {
-                    w = o.columnSize[j] <= 1 ? o.columnSize[j] * 100 + "%" : o.columnSize[j] + "px";
+                    w = o.columnSize[j] <= 1 ? (o.columnSize[j] * 100).toFixed(1) + "%" : o.columnSize[j] / BI.pixRatio + BI.pixUnit;
                 }
                 wi.element.css({right: r, width: w});
                 first(wi, i, j);
@@ -21767,7 +21807,7 @@ BI.shortcut("bi.window", BI.WindowLayout);
 
 
 /***/ }),
-/* 390 */
+/* 393 */
 /***/ (function(module, exports) {
 
 /**
@@ -21778,7 +21818,7 @@ BI.shortcut("bi.window", BI.WindowLayout);
 BI.CenterLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.CenterLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-center-layout",
+            baseCls: "bi-center",
             hgap: 0,
             vgap: 0,
             lgap: 0,
@@ -21807,10 +21847,10 @@ BI.CenterLayout = BI.inherit(BI.Layout, {
                 var w = BI._lazyCreateWidget(item);
                 w.element.css({
                     position: "absolute",
-                    left: o.hgap + o.lgap,
-                    right: o.hgap + o.rgap,
-                    top: o.vgap + o.tgap,
-                    bottom: o.vgap + o.bgap,
+                    left: (o.hgap + o.lgap) / BI.pixRatio + BI.pixUnit,
+                    right: (o.hgap + o.rgap) / BI.pixRatio + BI.pixUnit,
+                    top: (o.vgap + o.tgap) / BI.pixRatio + BI.pixUnit,
+                    bottom: (o.vgap + o.bgap) / BI.pixRatio + BI.pixUnit,
                     width: "auto",
                     height: "auto"
                 });
@@ -21849,7 +21889,7 @@ BI.shortcut("bi.center", BI.CenterLayout);
 
 
 /***/ }),
-/* 391 */
+/* 394 */
 /***/ (function(module, exports) {
 
 /**
@@ -21860,7 +21900,7 @@ BI.shortcut("bi.center", BI.CenterLayout);
 BI.FloatCenterLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.FloatCenterLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-float-center-layout",
+            baseCls: "bi-float-center",
             hgap: 0,
             vgap: 0,
             lgap: 0,
@@ -21890,10 +21930,10 @@ BI.FloatCenterLayout = BI.inherit(BI.Layout, {
                 var w = BI._lazyCreateWidget(item);
                 w.element.css({
                     position: "absolute",
-                    left: o.hgap + o.lgap,
-                    right: o.hgap + o.rgap,
-                    top: o.vgap + o.tgap,
-                    bottom: o.vgap + o.bgap,
+                    left: (o.hgap + o.lgap) / BI.pixRatio + BI.pixUnit,
+                    right: (o.hgap + o.rgap) / BI.pixRatio + BI.pixUnit,
+                    top: (o.vgap + o.tgap) / BI.pixRatio + BI.pixUnit,
+                    bottom: (o.vgap + o.bgap) / BI.pixRatio + BI.pixUnit,
                     width: "auto",
                     height: "auto"
                 });
@@ -21930,7 +21970,7 @@ BI.shortcut("bi.float_center", BI.FloatCenterLayout);
 
 
 /***/ }),
-/* 392 */
+/* 395 */
 /***/ (function(module, exports) {
 
 /**
@@ -21941,7 +21981,7 @@ BI.shortcut("bi.float_center", BI.FloatCenterLayout);
 BI.HorizontalCenterLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.HorizontalCenterLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-horizontal-center-layout",
+            baseCls: "bi-h-center",
             hgap: 0,
             vgap: 0,
             lgap: 0,
@@ -21969,10 +22009,10 @@ BI.HorizontalCenterLayout = BI.inherit(BI.Layout, {
                 var w = BI._lazyCreateWidget(item);
                 w.element.css({
                     position: "absolute",
-                    left: o.hgap + o.lgap,
-                    right: o.hgap + o.rgap,
-                    top: o.vgap + o.tgap,
-                    bottom: o.vgap + o.bgap,
+                    left: (o.hgap + o.lgap) / BI.pixRatio + BI.pixUnit,
+                    right: (o.hgap + o.rgap) / BI.pixRatio + BI.pixUnit,
+                    top: (o.vgap + o.tgap) / BI.pixRatio + BI.pixUnit,
+                    bottom: (o.vgap + o.bgap) / BI.pixRatio + BI.pixUnit,
                     width: "auto"
                 });
                 list[i].el.addItem(w);
@@ -22010,7 +22050,7 @@ BI.shortcut("bi.horizontal_center", BI.HorizontalCenterLayout);
 
 
 /***/ }),
-/* 393 */
+/* 396 */
 /***/ (function(module, exports) {
 
 /**
@@ -22021,7 +22061,7 @@ BI.shortcut("bi.horizontal_center", BI.HorizontalCenterLayout);
 BI.VerticalCenterLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.VerticalCenterLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-vertical-center-layout",
+            baseCls: "bi-v-center",
             hgap: 0,
             vgap: 0,
             lgap: 0,
@@ -22050,10 +22090,10 @@ BI.VerticalCenterLayout = BI.inherit(BI.Layout, {
                 var w = BI._lazyCreateWidget(item);
                 w.element.css({
                     position: "absolute",
-                    left: o.hgap + o.lgap,
-                    right: o.hgap + o.rgap,
-                    top: o.vgap + o.tgap,
-                    bottom: o.vgap + o.bgap,
+                    left: (o.hgap + o.lgap) / BI.pixRatio + BI.pixUnit,
+                    right: (o.hgap + o.rgap) / BI.pixRatio + BI.pixUnit,
+                    top: (o.vgap + o.tgap) / BI.pixRatio + BI.pixUnit,
+                    bottom: (o.vgap + o.bgap) / BI.pixRatio + BI.pixUnit,
                     height: "auto"
                 });
                 list[i].el.addItem(w);
@@ -22091,7 +22131,7 @@ BI.shortcut("bi.vertical_center", BI.VerticalCenterLayout);
 
 
 /***/ }),
-/* 394 */
+/* 397 */
 /***/ (function(module, exports) {
 
 /**
@@ -22182,6 +22222,7 @@ BI.Pane = BI.inherit(BI.Widget, {
                 items: this._getLoadingTipItems(this._loading)
             });
         }
+        self.fireEvent(BI.Pane.EVENT_LOADING);
         this.element.addClass("loading-status");
     },
 
@@ -22240,9 +22281,10 @@ BI.Pane = BI.inherit(BI.Widget, {
     }
 });
 BI.Pane.EVENT_LOADED = "EVENT_LOADED";
+BI.Pane.EVENT_LOADING = "EVENT_LOADING";
 
 /***/ }),
-/* 395 */
+/* 398 */
 /***/ (function(module, exports) {
 
 /**
@@ -22260,7 +22302,6 @@ BI.Single = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         var conf = BI.Single.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
-            _baseCls: (conf._baseCls || "") + " bi-single",
             readonly: false,
             title: null,
             warningTitle: null,
@@ -22456,8 +22497,9 @@ BI.Single = BI.inherit(BI.Widget, {
     },
 });
 
+
 /***/ }),
-/* 396 */
+/* 399 */
 /***/ (function(module, exports) {
 
 /**
@@ -22488,32 +22530,32 @@ BI.Single = BI.inherit(BI.Widget, {
             var self = this, o = this.options;
             if (o.hgap + o.lgap > 0) {
                 this.element.css({
-                    "padding-left": o.hgap + o.lgap + "px"
+                    "padding-left": (o.hgap + o.lgap) / BI.pixRatio + BI.pixUnit
                 });
             }
             if (o.hgap + o.rgap > 0) {
                 this.element.css({
-                    "padding-right": o.hgap + o.rgap + "px"
+                    "padding-right": (o.hgap + o.rgap) / BI.pixRatio + BI.pixUnit
                 });
             }
             if (o.vgap + o.tgap > 0) {
                 this.element.css({
-                    "padding-top": o.vgap + o.tgap + "px"
+                    "padding-top": (o.vgap + o.tgap) / BI.pixRatio + BI.pixUnit
                 });
             }
             if (o.vgap + o.bgap > 0) {
                 this.element.css({
-                    "padding-bottom": o.vgap + o.bgap + "px"
+                    "padding-bottom": (o.vgap + o.bgap) / BI.pixRatio + BI.pixUnit
                 });
             }
             if (BI.isNumber(o.height)) {
-                this.element.css({lineHeight: o.height + "px"});
+                this.element.css({lineHeight: o.height / BI.pixRatio + BI.pixUnit});
             }
             if (BI.isNumber(o.lineHeight)) {
-                this.element.css({lineHeight: o.lineHeight + "px"});
+                this.element.css({lineHeight: o.lineHeight / BI.pixRatio + BI.pixUnit});
             }
             if (BI.isWidthOrHeight(o.maxWidth)) {
-                this.element.css({maxWidth: o.maxWidth});
+                this.element.css({maxWidth: o.maxWidth / BI.pixRatio + BI.pixUnit});
             }
             this.element.css({
                 textAlign: o.textAlign,
@@ -22558,8 +22600,9 @@ BI.Single = BI.inherit(BI.Widget, {
                 case "nowrap":
                     return "pre";
                 case "normal":
-                default:
                     return "pre-wrap";
+                default:
+                    return o.whiteSpace;
             }
         },
 
@@ -22633,7 +22676,7 @@ BI.Single = BI.inherit(BI.Widget, {
 
 
 /***/ }),
-/* 397 */
+/* 400 */
 /***/ (function(module, exports) {
 
 /**
@@ -23052,7 +23095,7 @@ BI.BasicButton.EVENT_CHANGE = "BasicButton.EVENT_CHANGE";
 
 
 /***/ }),
-/* 398 */
+/* 401 */
 /***/ (function(module, exports) {
 
 /**
@@ -23113,7 +23156,7 @@ BI.NodeButton = BI.inherit(BI.BasicButton, {
 });
 
 /***/ }),
-/* 399 */
+/* 402 */
 /***/ (function(module, exports) {
 
 /**
@@ -23140,7 +23183,7 @@ BI.Tip = BI.inherit(BI.Single, {
 });
 
 /***/ }),
-/* 400 */
+/* 403 */
 /***/ (function(module, exports) {
 
 /**
@@ -23475,7 +23518,7 @@ BI.ButtonGroup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.button_group", BI.ButtonGroup);
 
 /***/ }),
-/* 401 */
+/* 404 */
 /***/ (function(module, exports) {
 
 /**
@@ -23662,7 +23705,7 @@ BI.ButtonTree.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.button_tree", BI.ButtonTree);
 
 /***/ }),
-/* 402 */
+/* 405 */
 /***/ (function(module, exports) {
 
 BI.prepares.push(function () {
@@ -23678,7 +23721,7 @@ BI.prepares.push(function () {
 
 
 /***/ }),
-/* 403 */
+/* 406 */
 /***/ (function(module, exports) {
 
 /**
@@ -23852,10 +23895,10 @@ BI.CollectionView = BI.inherit(BI.Widget, {
                         this.renderedCells[index].el.setHeight(datum.height);
                     }
                     if (this.renderedCells[index]._left !== datum.x) {
-                        this.renderedCells[index].el.element.css("left", datum.x + "px");
+                        this.renderedCells[index].el.element.css("left", datum.x / BI.pixRatio + BI.pixUnit);
                     }
                     if (this.renderedCells[index]._top !== datum.y) {
-                        this.renderedCells[index].el.element.css("top", datum.y + "px");
+                        this.renderedCells[index].el.element.css("top", datum.y  / BI.pixRatio + BI.pixUnit);
                     }
                     renderedCells.push(child = this.renderedCells[index]);
                 } else {
@@ -24064,7 +24107,7 @@ BI.shortcut("bi.collection_view", BI.CollectionView);
 
 
 /***/ }),
-/* 404 */
+/* 407 */
 /***/ (function(module, exports) {
 
 !(function () {
@@ -24673,7 +24716,7 @@ BI.shortcut("bi.collection_view", BI.CollectionView);
 
 
 /***/ }),
-/* 405 */
+/* 408 */
 /***/ (function(module, exports) {
 
 /**
@@ -24960,7 +25003,7 @@ BI.Expander.EVENT_AFTER_HIDEVIEW = "EVENT_AFTER_HIDEVIEW";
 BI.shortcut("bi.expander", BI.Expander);
 
 /***/ }),
-/* 406 */
+/* 409 */
 /***/ (function(module, exports) {
 
 /**
@@ -25062,7 +25105,7 @@ BI.ComboGroup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.combo_group", BI.ComboGroup);
 
 /***/ }),
-/* 407 */
+/* 410 */
 /***/ (function(module, exports) {
 
 BI.VirtualGroup = BI.inherit(BI.Widget, {
@@ -25183,7 +25226,7 @@ BI.VirtualGroup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.virtual_group", BI.VirtualGroup);
 
 /***/ }),
-/* 408 */
+/* 411 */
 /***/ (function(module, exports) {
 
 /**
@@ -25448,7 +25491,7 @@ BI.Loader.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.loader", BI.Loader);
 
 /***/ }),
-/* 409 */
+/* 412 */
 /***/ (function(module, exports) {
 
 /**
@@ -25615,7 +25658,7 @@ BI.Navigation.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.navigation", BI.Navigation);
 
 /***/ }),
-/* 410 */
+/* 413 */
 /***/ (function(module, exports) {
 
 /**
@@ -25939,7 +25982,7 @@ BI.Searcher.EVENT_AFTER_INIT = "EVENT_AFTER_INIT";
 BI.shortcut("bi.searcher", BI.Searcher);
 
 /***/ }),
-/* 411 */
+/* 414 */
 /***/ (function(module, exports) {
 
 /**
@@ -26232,7 +26275,7 @@ BI.Switcher.EVENT_AFTER_HIDEVIEW = "EVENT_AFTER_HIDEVIEW";
 BI.shortcut("bi.switcher", BI.Switcher);
 
 /***/ }),
-/* 412 */
+/* 415 */
 /***/ (function(module, exports) {
 
 /**
@@ -26390,7 +26433,7 @@ BI.Tab.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.tab", BI.Tab);
 
 /***/ }),
-/* 413 */
+/* 416 */
 /***/ (function(module, exports) {
 
 /**
@@ -26437,7 +26480,7 @@ BI.EL = BI.inherit(BI.Widget, {
 BI.shortcut("bi.el", BI.EL);
 
 /***/ }),
-/* 414 */
+/* 417 */
 /***/ (function(module, exports) {
 
 /**
@@ -26646,7 +26689,7 @@ BI.Msg = function () {
 
 
 /***/ }),
-/* 415 */
+/* 418 */
 /***/ (function(module, exports) {
 
 /**
@@ -26796,10 +26839,10 @@ BI.GridView = BI.inherit(BI.Widget, {
                             this.renderedCells[index].el.setHeight(rowDatum.size);
                         }
                         if (this.renderedCells[index]._left !== columnDatum.offset + horizontalOffsetAdjustment) {
-                            this.renderedCells[index].el.element.css("left", (columnDatum.offset + horizontalOffsetAdjustment) + "px");
+                            this.renderedCells[index].el.element.css("left", (columnDatum.offset + horizontalOffsetAdjustment) / BI.pixRatio + BI.pixUnit);
                         }
                         if (this.renderedCells[index]._top !== rowDatum.offset + verticalOffsetAdjustment) {
-                            this.renderedCells[index].el.element.css("top", (rowDatum.offset + verticalOffsetAdjustment) + "px");
+                            this.renderedCells[index].el.element.css("top", (rowDatum.offset + verticalOffsetAdjustment) / BI.pixRatio + BI.pixUnit);
                         }
                         child = this.renderedCells[index].el;
                         renderedCells.push(this.renderedCells[index]);
@@ -27033,7 +27076,7 @@ BI.shortcut("bi.grid_view", BI.GridView);
 
 
 /***/ }),
-/* 416 */
+/* 419 */
 /***/ (function(module, exports) {
 
 /**
@@ -27310,7 +27353,7 @@ BI.Popover.EVENT_CONFIRM = "EVENT_CONFIRM";
 
 
 /***/ }),
-/* 417 */
+/* 420 */
 /***/ (function(module, exports) {
 
 /**
@@ -27360,21 +27403,21 @@ BI.PopupView = BI.inherit(BI.Widget, {
         BI.PopupView.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
         var fn = function (e) {
-                e.stopPropagation();
-            }, stop = function (e) {
-                e.stopEvent();
-                return false;
-            };
+            e.stopPropagation();
+        }, stop = function (e) {
+            e.stopEvent();
+            return false;
+        };
         this.element.css({
             "z-index": BI.zIndex_popup,
-            "min-width": o.minWidth + "px",
-            "max-width": o.maxWidth + "px"
-        }).bind({click: fn});
+            "min-width": BI.isNumeric(o.minWidth) ? (o.minWidth / BI.pixRatio + BI.pixUnit) : o.minWidth,
+            "max-width": BI.isNumeric(o.maxWidth) ? (o.maxWidth / BI.pixRatio + BI.pixUnit) : o.maxWidth
+        }).bind({ click: fn });
 
         this.element.bind("mousewheel", fn);
 
-        o.stopPropagation && this.element.bind({mousedown: fn, mouseup: fn, mouseover: fn});
-        o.stopEvent && this.element.bind({mousedown: stop, mouseup: stop, mouseover: stop});
+        o.stopPropagation && this.element.bind({ mousedown: fn, mouseup: fn, mouseover: fn });
+        o.stopEvent && this.element.bind({ mousedown: stop, mouseup: stop, mouseover: stop });
         this.tool = this._createTool();
         this.tab = this._createTab();
         this.view = this._createView();
@@ -27409,8 +27452,12 @@ BI.PopupView = BI.inherit(BI.Widget, {
 
     _createView: function () {
         var o = this.options;
-        this.button_group = BI.createWidget(o.el, {type: "bi.button_group", value: o.value});
-        this.button_group.element.css({"min-height": o.minHeight + "px", "padding-top": o.innerVGap + "px", "padding-bottom": o.innerVGap + "px"});
+        this.button_group = BI.createWidget(o.el, { type: "bi.button_group", value: o.value });
+        this.button_group.element.css({
+            "min-height": BI.isNumeric(o.minHeight) ? (o.minHeight / BI.pixRatio + BI.pixUnit) : o.minHeight,
+            "padding-top": o.innerVGap / BI.pixRatio + BI.pixUnit,
+            "padding-bottom": o.innerVGap / BI.pixRatio + BI.pixUnit
+        });
         return this.button_group;
     },
 
@@ -27473,7 +27520,7 @@ BI.PopupView = BI.inherit(BI.Widget, {
             toolHeight = ((this.tool && this.tool.attr("height")) || 24) * ((this.tool && this.tool.isVisible()) ? 1 : 0);
         var resetHeight = h - tbHeight - tabHeight - toolHeight - 2 * this.options.innerVGap;
         this.view.resetHeight ? this.view.resetHeight(resetHeight) :
-            this.view.element.css({"max-height": resetHeight + "px"});
+            this.view.element.css({ "max-height": resetHeight / BI.pixRatio + BI.pixUnit });
     },
 
     setValue: function (selectedValues) {
@@ -27488,8 +27535,9 @@ BI.PopupView = BI.inherit(BI.Widget, {
 BI.PopupView.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.popup_view", BI.PopupView);
 
+
 /***/ }),
-/* 418 */
+/* 421 */
 /***/ (function(module, exports) {
 
 /**
@@ -27635,7 +27683,7 @@ BI.SearcherView.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.searcher_view", BI.SearcherView);
 
 /***/ }),
-/* 419 */
+/* 422 */
 /***/ (function(module, exports) {
 
 /**
@@ -27759,7 +27807,7 @@ BI.shortcut("bi.list_view", BI.ListView);
 
 
 /***/ }),
-/* 420 */
+/* 423 */
 /***/ (function(module, exports) {
 
 /**
@@ -27950,7 +27998,7 @@ BI.shortcut("bi.virtual_list", BI.VirtualList);
 
 
 /***/ }),
-/* 421 */
+/* 424 */
 /***/ (function(module, exports) {
 
 /**
@@ -28244,7 +28292,7 @@ BI.Pager.EVENT_AFTER_POPULATE = "EVENT_AFTER_POPULATE";
 BI.shortcut("bi.pager", BI.Pager);
 
 /***/ }),
-/* 422 */
+/* 425 */
 /***/ (function(module, exports) {
 
 /**
@@ -28281,7 +28329,7 @@ BI.A = BI.inherit(BI.Text, {
 BI.shortcut("bi.a", BI.A);
 
 /***/ }),
-/* 423 */
+/* 426 */
 /***/ (function(module, exports) {
 
 /**
@@ -28366,7 +28414,7 @@ BI.LoadingBar = BI.inherit(BI.Single, {
 BI.shortcut("bi.loading_bar", BI.LoadingBar);
 
 /***/ }),
-/* 424 */
+/* 427 */
 /***/ (function(module, exports) {
 
 /**
@@ -28396,7 +28444,7 @@ BI.IconButton = BI.inherit(BI.BasicButton, {
             height: o.iconHeight
         });
         if (BI.isNumber(o.height) && o.height > 0 && BI.isNull(o.iconWidth) && BI.isNull(o.iconHeight)) {
-            this.element.css("lineHeight", o.height + "px");
+            this.element.css("lineHeight", o.height / BI.pixRatio + BI.pixUnit);
             BI.createWidget({
                 type: "bi.default",
                 element: this,
@@ -28422,8 +28470,9 @@ BI.IconButton = BI.inherit(BI.BasicButton, {
 BI.IconButton.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.icon_button", BI.IconButton);
 
+
 /***/ }),
-/* 425 */
+/* 428 */
 /***/ (function(module, exports) {
 
 /**
@@ -28515,7 +28564,7 @@ BI.ImageButton.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.image_button", BI.ImageButton);
 
 /***/ }),
-/* 426 */
+/* 429 */
 /***/ (function(module, exports) {
 
 
@@ -28564,11 +28613,11 @@ BI.Button = BI.inherit(BI.BasicButton, {
         BI.Button.superclass._init.apply(this, arguments);
         var o = this.options, self = this;
         if (BI.isNumber(o.height) && !o.clear && !o.block) {
-            this.element.css({height: o.height + "px", lineHeight: (o.height - 2) + "px"});
+            this.element.css({height: o.height / BI.pixRatio + BI.pixUnit, lineHeight: (o.height - 2) / BI.pixRatio + BI.pixUnit});
         } else if (o.clear || o.block) {
-            this.element.css({lineHeight: o.height + "px"});
+            this.element.css({lineHeight: o.height / BI.pixRatio + BI.pixUnit});
         } else {
-            this.element.css({lineHeight: (o.height - 2) + "px"});
+            this.element.css({lineHeight: (o.height - 2) / BI.pixRatio + BI.pixUnit});
         }
         if (BI.isKey(o.iconCls)) {
             this.icon = BI.createWidget({
@@ -28626,7 +28675,7 @@ BI.Button = BI.inherit(BI.BasicButton, {
             this.element.addClass("ghost");
         }
         if (o.minWidth > 0) {
-            this.element.css({"min-width": o.minWidth + "px"});
+            this.element.css({"min-width": o.minWidth / BI.pixRatio + BI.pixUnit});
         }
     },
 
@@ -28674,7 +28723,7 @@ BI.Button.EVENT_CHANGE = "EVENT_CHANGE";
 
 
 /***/ }),
-/* 427 */
+/* 430 */
 /***/ (function(module, exports) {
 
 /**
@@ -28769,7 +28818,7 @@ BI.TextButton.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.text_button", BI.TextButton);
 
 /***/ }),
-/* 428 */
+/* 431 */
 /***/ (function(module, exports) {
 
 /**
@@ -28893,7 +28942,7 @@ BI.BlankIconIconTextItem.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.blank_icon_icon_text_item", BI.BlankIconIconTextItem);
 
 /***/ }),
-/* 429 */
+/* 432 */
 /***/ (function(module, exports) {
 
 /**
@@ -29024,7 +29073,7 @@ BI.BlankIconTextIconItem.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.blank_icon_text_icon_item", BI.BlankIconTextIconItem);
 
 /***/ }),
-/* 430 */
+/* 433 */
 /***/ (function(module, exports) {
 
 /**
@@ -29133,7 +29182,7 @@ BI.BlankIconTextItem.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.blank_icon_text_item", BI.BlankIconTextItem);
 
 /***/ }),
-/* 431 */
+/* 434 */
 /***/ (function(module, exports) {
 
 /**
@@ -29261,7 +29310,7 @@ BI.IconTextIconItem.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.icon_text_icon_item", BI.IconTextIconItem);
 
 /***/ }),
-/* 432 */
+/* 435 */
 /***/ (function(module, exports) {
 
 /**
@@ -29366,7 +29415,7 @@ BI.IconTextItem.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.icon_text_item", BI.IconTextItem);
 
 /***/ }),
-/* 433 */
+/* 436 */
 /***/ (function(module, exports) {
 
 /**
@@ -29471,7 +29520,7 @@ BI.TextIconItem.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.text_icon_item", BI.TextIconItem);
 
 /***/ }),
-/* 434 */
+/* 437 */
 /***/ (function(module, exports) {
 
 /**
@@ -29562,7 +29611,7 @@ BI.TextItem.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.text_item", BI.TextItem);
 
 /***/ }),
-/* 435 */
+/* 438 */
 /***/ (function(module, exports) {
 
 /**
@@ -29680,7 +29729,7 @@ BI.IconTextIconNode.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.icon_text_icon_node", BI.IconTextIconNode);
 
 /***/ }),
-/* 436 */
+/* 439 */
 /***/ (function(module, exports) {
 
 /**
@@ -29775,7 +29824,7 @@ BI.IconTextNode.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.icon_text_node", BI.IconTextNode);
 
 /***/ }),
-/* 437 */
+/* 440 */
 /***/ (function(module, exports) {
 
 /**
@@ -29869,7 +29918,7 @@ BI.TextIconNode.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.text_icon_node", BI.TextIconNode);
 
 /***/ }),
-/* 438 */
+/* 441 */
 /***/ (function(module, exports) {
 
 /**
@@ -29951,7 +30000,7 @@ BI.TextNode.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.text_node", BI.TextNode);
 
 /***/ }),
-/* 439 */
+/* 442 */
 /***/ (function(module, exports) {
 
 /**
@@ -30329,7 +30378,7 @@ BI.shortcut("bi.editor", BI.Editor);
 
 
 /***/ }),
-/* 440 */
+/* 443 */
 /***/ (function(module, exports) {
 
 /**
@@ -30435,7 +30484,7 @@ BI.shortcut("bi.multifile_editor", BI.MultifileEditor);
 
 
 /***/ }),
-/* 441 */
+/* 444 */
 /***/ (function(module, exports) {
 
 /**
@@ -30450,6 +30499,9 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
             baseCls: "bi-textarea-editor",
             value: "",
             errorText: "",
+            adjustYOffset: 2,
+            adjustXOffset: 0,
+            offsetStyle: "left",
             validationChecker: function () {
                 return true;
             },
@@ -30577,7 +30629,9 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
         }
         if (!this.disabledError && BI.isKey(errorText)) {
             BI.Bubbles[b ? "show" : "hide"](this.getName(), errorText, this, {
-                adjustYOffset: 2
+                adjustYOffset: o.adjustYOffset,
+                adjustXOffset: o.adjustXOffset,
+                offsetStyle: o.offsetStyle,
             });
             return BI.Bubbles.get(this.getName());
         }
@@ -30638,7 +30692,7 @@ BI.shortcut("bi.textarea_editor", BI.TextAreaEditor);
 
 
 /***/ }),
-/* 442 */
+/* 445 */
 /***/ (function(module, exports) {
 
 /**
@@ -30668,29 +30722,29 @@ BI.Html = BI.inherit(BI.Single, {
         var self = this, o = this.options;
         if (o.hgap + o.lgap > 0) {
             this.element.css({
-                "padding-left": o.hgap + o.lgap + "px"
+                "padding-left": (o.hgap + o.lgap) / BI.pixRatio + BI.pixUnit
             });
         }
         if (o.hgap + o.rgap > 0) {
             this.element.css({
-                "padding-right": o.hgap + o.rgap + "px"
+                "padding-right": (o.hgap + o.rgap) / BI.pixRatio + BI.pixUnit
             });
         }
         if (o.vgap + o.tgap > 0) {
             this.element.css({
-                "padding-top": o.vgap + o.tgap + "px"
+                "padding-top": (o.vgap + o.tgap) / BI.pixRatio + BI.pixUnit
             });
         }
         if (o.vgap + o.bgap > 0) {
             this.element.css({
-                "padding-bottom": o.vgap + o.bgap + "px"
+                "padding-bottom": (o.vgap + o.bgap) / BI.pixRatio + BI.pixUnit
             });
         }
         if (BI.isNumber(o.height)) {
-            this.element.css({lineHeight: o.height + "px"});
+            this.element.css({lineHeight: o.height / BI.pixRatio + BI.pixUnit});
         }
         if (BI.isNumber(o.lineHeight)) {
-            this.element.css({lineHeight: o.lineHeight + "px"});
+            this.element.css({lineHeight: o.lineHeight / BI.pixRatio + BI.pixUnit});
         }
         if (BI.isWidthOrHeight(o.maxWidth)) {
             this.element.css({maxWidth: o.maxWidth});
@@ -30756,8 +30810,9 @@ BI.Html = BI.inherit(BI.Single, {
 
 BI.shortcut("bi.html", BI.Html);
 
+
 /***/ }),
-/* 443 */
+/* 446 */
 /***/ (function(module, exports) {
 
 /**
@@ -30783,7 +30838,7 @@ BI.Icon = BI.inherit(BI.Single, {
 BI.shortcut("bi.icon", BI.Icon);
 
 /***/ }),
-/* 444 */
+/* 447 */
 /***/ (function(module, exports) {
 
 /**
@@ -30847,7 +30902,7 @@ BI.shortcut("bi.iframe", BI.Iframe);
 
 
 /***/ }),
-/* 445 */
+/* 448 */
 /***/ (function(module, exports) {
 
 /**
@@ -30893,7 +30948,7 @@ BI.shortcut("bi.img", BI.Img);
 
 
 /***/ }),
-/* 446 */
+/* 449 */
 /***/ (function(module, exports) {
 
 /**
@@ -30920,7 +30975,7 @@ BI.ImageCheckbox.EVENT_CHANGE = BI.IconButton.EVENT_CHANGE;
 BI.shortcut("bi.image_checkbox", BI.ImageCheckbox);
 
 /***/ }),
-/* 447 */
+/* 450 */
 /***/ (function(module, exports) {
 
 /**
@@ -30986,7 +31041,7 @@ BI.Checkbox.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.checkbox", BI.Checkbox);
 
 /***/ }),
-/* 448 */
+/* 451 */
 /***/ (function(module, exports) {
 
 /**
@@ -31308,7 +31363,7 @@ BI.shortcut("bi.input", BI.Input);
 
 
 /***/ }),
-/* 449 */
+/* 452 */
 /***/ (function(module, exports) {
 
 /**
@@ -31346,7 +31401,7 @@ BI.ImageRadio.EVENT_CHANGE = BI.IconButton.EVENT_CHANGE;
 BI.shortcut("bi.image_radio", BI.ImageRadio);
 
 /***/ }),
-/* 450 */
+/* 453 */
 /***/ (function(module, exports) {
 
 /**
@@ -31413,7 +31468,7 @@ BI.Radio.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.radio", BI.Radio);
 
 /***/ }),
-/* 451 */
+/* 454 */
 /***/ (function(module, exports) {
 
 /**
@@ -31477,6 +31532,7 @@ BI.shortcut("bi.radio", BI.Radio);
                         BI.createWidget({
                             type: "bi.center_adapt",
                             height: o.height,
+                            columnSize: ["auto"], // important！ 让文字在flex布局下shrink为1
                             scrollable: o.whiteSpace === "normal",
                             element: this,
                             items: [
@@ -31489,6 +31545,7 @@ BI.shortcut("bi.radio", BI.Radio);
                     }
                     BI.createWidget({ // 1.2
                         type: "bi.center_adapt",
+                        columnSize: ["auto"], // important！ 让文字在flex布局下shrink为1
                         scrollable: o.whiteSpace === "normal",
                         element: this,
                         items: [
@@ -31511,6 +31568,7 @@ BI.shortcut("bi.radio", BI.Radio);
                     this.text = BI.createWidget(json);
                     BI.createWidget({
                         type: "bi.center_adapt",
+                        columnSize: ["auto"], // important！ 让文字在flex布局下shrink为1
                         scrollable: o.whiteSpace === "normal",
                         element: this,
                         items: [this.text]
@@ -31519,7 +31577,7 @@ BI.shortcut("bi.radio", BI.Radio);
                 }
                 if (BI.isNumber(o.height) && o.height > 0) { // 1.4
                     this.element.css({
-                        "line-height": o.height + "px"
+                        "line-height": o.height / BI.pixRatio + BI.pixUnit
                     });
                     json.textAlign = o.textAlign;
                     this.text = BI.createWidget(BI.extend(json, {
@@ -31545,6 +31603,7 @@ BI.shortcut("bi.radio", BI.Radio);
                 this.text = BI.createWidget(json);
                 BI.createWidget({
                     type: "bi.center_adapt",
+                    columnSize: ["auto"], // important！ 让文字在flex布局下shrink为1
                     scrollable: o.whiteSpace === "normal",
                     element: this,
                     items: [this.text]
@@ -31555,6 +31614,7 @@ BI.shortcut("bi.radio", BI.Radio);
                 json.maxWidth = o.textWidth;
                 BI.createWidget({
                     type: "bi.center_adapt",
+                    columnSize: ["auto"], // important！ 让文字在flex布局下shrink为1
                     scrollable: o.whiteSpace === "normal",
                     element: this,
                     items: [
@@ -31577,6 +31637,7 @@ BI.shortcut("bi.radio", BI.Radio);
                 this.text = BI.createWidget(json);
                 BI.createWidget({
                     type: "bi.center_adapt",
+                    columnSize: ["auto"], // important！ 让文字在flex布局下shrink为1
                     scrollable: true,
                     element: this,
                     items: [this.text]
@@ -31585,7 +31646,7 @@ BI.shortcut("bi.radio", BI.Radio);
             }
             if (BI.isNumber(o.height) && o.height > 0) { // 1.8
                 this.element.css({
-                    "line-height": o.height + "px"
+                    "line-height": o.height / BI.pixRatio + BI.pixUnit
                 });
                 json.textAlign = o.textAlign;
                 this.text = BI.createWidget(BI.extend(json, {
@@ -31613,6 +31674,7 @@ BI.shortcut("bi.radio", BI.Radio);
             }));
             BI.createWidget({
                 type: "bi.center_adapt",
+                columnSize: ["auto"], // important！ 让文字在flex布局下shrink为1
                 element: this,
                 items: [this.text]
             });
@@ -31629,6 +31691,7 @@ BI.shortcut("bi.radio", BI.Radio);
                         BI.createWidget({
                             type: adaptLayout,
                             horizontalAlign: o.textAlign,
+                            columnSize: ["auto"], // important！ 让文字在flex布局下shrink为1
                             height: o.height,
                             scrollable: o.whiteSpace === "normal",
                             element: this,
@@ -31643,6 +31706,7 @@ BI.shortcut("bi.radio", BI.Radio);
                     BI.createWidget({ // 2.2
                         type: adaptLayout,
                         horizontalAlign: o.textAlign,
+                        columnSize: ["auto"], // important！ 让文字在flex布局下shrink为1
                         scrollable: o.whiteSpace === "normal",
                         hgap: o.hgap,
                         vgap: o.vgap,
@@ -31671,7 +31735,7 @@ BI.shortcut("bi.radio", BI.Radio);
                     }));
                     if (o.whiteSpace !== "normal") {
                         this.element.css({
-                            "line-height": o.height - (o.vgap * 2) + "px"
+                            "line-height": (o.height - (o.vgap * 2)) / BI.pixRatio + BI.pixUnit
                         });
                     }
                     return;
@@ -31680,6 +31744,7 @@ BI.shortcut("bi.radio", BI.Radio);
                 BI.createWidget({ // 2.4
                     type: adaptLayout,
                     horizontalAlign: o.textAlign,
+                    columnSize: ["auto"], // important！ 让文字在flex布局下shrink为1
                     scrollable: o.whiteSpace === "normal",
                     hgap: o.hgap,
                     vgap: o.vgap,
@@ -31699,6 +31764,7 @@ BI.shortcut("bi.radio", BI.Radio);
                 BI.createWidget({  // 2.5
                     type: adaptLayout,
                     horizontalAlign: o.textAlign,
+                    columnSize: ["auto"], // important！ 让文字在flex布局下shrink为1
                     scrollable: o.whiteSpace === "normal",
                     hgap: o.hgap,
                     vgap: o.vgap,
@@ -31718,7 +31784,7 @@ BI.shortcut("bi.radio", BI.Radio);
             if (BI.isNumber(o.height) && o.height > 0) {
                 if (o.whiteSpace !== "normal") {
                     this.element.css({
-                        "line-height": o.height - (o.vgap * 2) + "px"
+                        "line-height": (o.height - (o.vgap * 2)) / BI.pixRatio + BI.pixUnit
                     });
                 }
                 this.text = BI.createWidget(BI.extend(json, { // 2.6
@@ -31747,6 +31813,7 @@ BI.shortcut("bi.radio", BI.Radio);
             BI.createWidget({
                 type: adaptLayout,
                 horizontalAlign: o.textAlign,
+                columnSize: ["auto"], // important！ 让文字在flex布局下shrink为1
                 element: this,
                 scrollable: o.whiteSpace === "normal",
                 items: [this.text]
@@ -31797,7 +31864,7 @@ BI.shortcut("bi.radio", BI.Radio);
 
 
 /***/ }),
-/* 452 */
+/* 455 */
 /***/ (function(module, exports) {
 
 /**
@@ -31827,7 +31894,7 @@ BI.HtmlLabel = BI.inherit(BI.AbstractLabel, {
 BI.shortcut("bi.html_label", BI.HtmlLabel);
 
 /***/ }),
-/* 453 */
+/* 456 */
 /***/ (function(module, exports) {
 
 /**
@@ -31855,7 +31922,7 @@ BI.IconLabel = BI.inherit(BI.Single, {
             height: o.iconHeight
         });
         if (BI.isNumber(o.height) && o.height > 0 && BI.isNull(o.iconWidth) && BI.isNull(o.iconHeight)) {
-            this.element.css("lineHeight", o.height + "px");
+            this.element.css("lineHeight", o.height / BI.pixRatio + BI.pixUnit);
             BI.createWidget({
                 type: "bi.default",
                 element: this,
@@ -31873,8 +31940,9 @@ BI.IconLabel = BI.inherit(BI.Single, {
 });
 BI.shortcut("bi.icon_label", BI.IconLabel);
 
+
 /***/ }),
-/* 454 */
+/* 457 */
 /***/ (function(module, exports) {
 
 /**
@@ -31902,7 +31970,7 @@ BI.shortcut("bi.label", BI.Label);
 
 
 /***/ }),
-/* 455 */
+/* 458 */
 /***/ (function(module, exports) {
 
 /**
@@ -31942,7 +32010,7 @@ BI.shortcut("bi.link", BI.Link);
 
 
 /***/ }),
-/* 456 */
+/* 459 */
 /***/ (function(module, exports) {
 
 /**
@@ -31991,7 +32059,7 @@ BI.shortcut("bi.link", BI.Link);
 
 
 /***/ }),
-/* 457 */
+/* 460 */
 /***/ (function(module, exports) {
 
 /**
@@ -32209,7 +32277,7 @@ BI.shortcut("bi.bubble_view", BI.BubbleView);
 
 
 /***/ }),
-/* 458 */
+/* 461 */
 /***/ (function(module, exports) {
 
 /**
@@ -32236,7 +32304,7 @@ BI.Toast = BI.inherit(BI.Tip, {
         BI.Toast.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
         this.element.css({
-            minWidth: this._const.minWidth + "px"
+            minWidth: this._const.minWidth / BI.pixRatio + BI.pixUnit
         });
         this.element.addClass("toast-" + o.level);
         var fn = function (e) {
@@ -32311,8 +32379,9 @@ BI.Toast = BI.inherit(BI.Tip, {
 BI.Toast.EVENT_DESTORY = "EVENT_DESTORY";
 BI.shortcut("bi.toast", BI.Toast);
 
+
 /***/ }),
-/* 459 */
+/* 462 */
 /***/ (function(module, exports) {
 
 /**
@@ -32401,7 +32470,7 @@ BI.Tooltip = BI.inherit(BI.Tip, {
 BI.shortcut("bi.tooltip", BI.Tooltip);
 
 /***/ }),
-/* 460 */
+/* 463 */
 /***/ (function(module, exports) {
 
 /**
@@ -32433,7 +32502,7 @@ BI.Trigger = BI.inherit(BI.Single, {
 });
 
 /***/ }),
-/* 461 */
+/* 464 */
 /***/ (function(module, exports) {
 
 /**
@@ -32586,7 +32655,7 @@ BI.CustomTree.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.custom_tree", BI.CustomTree);
 
 /***/ }),
-/* 462 */
+/* 465 */
 /***/ (function(module, exports) {
 
 /**
@@ -32674,7 +32743,7 @@ BI.IconChangeButton.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.icon_change_button", BI.IconChangeButton);
 
 /***/ }),
-/* 463 */
+/* 466 */
 /***/ (function(module, exports) {
 
 /**
@@ -32699,7 +32768,7 @@ BI.shortcut("bi.trigger_icon_button", BI.TriggerIconButton);
 
 
 /***/ }),
-/* 464 */
+/* 467 */
 /***/ (function(module, exports) {
 
 /**
@@ -32725,7 +32794,7 @@ BI.HalfIconButton.EVENT_CHANGE = BI.IconButton.EVENT_CHANGE;
 BI.shortcut("bi.half_icon_button", BI.HalfIconButton);
 
 /***/ }),
-/* 465 */
+/* 468 */
 /***/ (function(module, exports) {
 
 /**
@@ -32770,7 +32839,7 @@ BI.HalfButton.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.half_button", BI.HalfButton);
 
 /***/ }),
-/* 466 */
+/* 469 */
 /***/ (function(module, exports) {
 
 /**
@@ -32851,7 +32920,7 @@ BI.MultiSelectItem.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multi_select_item", BI.MultiSelectItem);
 
 /***/ }),
-/* 467 */
+/* 470 */
 /***/ (function(module, exports) {
 
 /**
@@ -32915,7 +32984,7 @@ BI.SingleSelectIconTextItem = BI.inherit(BI.Single, {
 BI.shortcut("bi.single_select_icon_text_item", BI.SingleSelectIconTextItem);
 
 /***/ }),
-/* 468 */
+/* 471 */
 /***/ (function(module, exports) {
 
 BI.SingleSelectItem = BI.inherit(BI.BasicButton, {
@@ -32971,7 +33040,7 @@ BI.SingleSelectItem.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.single_select_item", BI.SingleSelectItem);
 
 /***/ }),
-/* 469 */
+/* 472 */
 /***/ (function(module, exports) {
 
 /**
@@ -32986,7 +33055,6 @@ BI.SingleSelectRadioItem = BI.inherit(BI.BasicButton, {
             logic: {
                 dynamic: false
             },
-            hgap: 10,
             height: 24
         });
     },
@@ -32994,8 +33062,7 @@ BI.SingleSelectRadioItem = BI.inherit(BI.BasicButton, {
         BI.SingleSelectRadioItem.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
         this.radio = BI.createWidget({
-            type: "bi.radio",
-            once: o.once
+            type: "bi.radio"
         });
         this.text = BI.createWidget({
             type: "bi.label",
@@ -33017,7 +33084,7 @@ BI.SingleSelectRadioItem = BI.inherit(BI.BasicButton, {
             items: BI.LogicFactory.createLogicItemsByDirection("left", {
                 type: "bi.center_adapt",
                 items: [this.radio],
-                width: 16
+                width: 26
             }, this.text)
         }))));
     },
@@ -33048,8 +33115,9 @@ BI.SingleSelectRadioItem = BI.inherit(BI.BasicButton, {
 BI.SingleSelectRadioItem.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.single_select_radio_item", BI.SingleSelectRadioItem);
 
+
 /***/ }),
-/* 470 */
+/* 473 */
 /***/ (function(module, exports) {
 
 /**
@@ -33137,7 +33205,7 @@ BI.shortcut("bi.arrow_group_node", BI.ArrowNode);
 
 
 /***/ }),
-/* 471 */
+/* 474 */
 /***/ (function(module, exports) {
 
 /**
@@ -33225,7 +33293,7 @@ BI.shortcut("bi.first_plus_group_node", BI.FirstPlusGroupNode);
 
 
 /***/ }),
-/* 472 */
+/* 475 */
 /***/ (function(module, exports) {
 
 /**
@@ -33333,7 +33401,7 @@ BI.shortcut("bi.icon_arrow_node", BI.IconArrowNode);
 
 
 /***/ }),
-/* 473 */
+/* 476 */
 /***/ (function(module, exports) {
 
 /**
@@ -33420,7 +33488,7 @@ BI.LastPlusGroupNode = BI.inherit(BI.NodeButton, {
 BI.shortcut("bi.last_plus_group_node", BI.LastPlusGroupNode);
 
 /***/ }),
-/* 474 */
+/* 477 */
 /***/ (function(module, exports) {
 
 /**
@@ -33507,7 +33575,7 @@ BI.MidPlusGroupNode = BI.inherit(BI.NodeButton, {
 BI.shortcut("bi.mid_plus_group_node", BI.MidPlusGroupNode);
 
 /***/ }),
-/* 475 */
+/* 478 */
 /***/ (function(module, exports) {
 
 BI.MultiLayerIconArrowNode = BI.inherit(BI.NodeButton, {
@@ -33602,7 +33670,7 @@ BI.shortcut("bi.multilayer_icon_arrow_node", BI.MultiLayerIconArrowNode);
 
 
 /***/ }),
-/* 476 */
+/* 479 */
 /***/ (function(module, exports) {
 
 /**
@@ -33685,7 +33753,7 @@ BI.PlusGroupNode = BI.inherit(BI.NodeButton, {
 BI.shortcut("bi.plus_group_node", BI.PlusGroupNode);
 
 /***/ }),
-/* 477 */
+/* 480 */
 /***/ (function(module, exports) {
 
 /**
@@ -33737,7 +33805,7 @@ BI.Switch.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.switch", BI.Switch);
 
 /***/ }),
-/* 478 */
+/* 481 */
 /***/ (function(module, exports) {
 
 BI.FirstTreeLeafItem = BI.inherit(BI.BasicButton, {
@@ -33823,7 +33891,7 @@ BI.FirstTreeLeafItem = BI.inherit(BI.BasicButton, {
 BI.shortcut("bi.first_tree_leaf_item", BI.FirstTreeLeafItem);
 
 /***/ }),
-/* 479 */
+/* 482 */
 /***/ (function(module, exports) {
 
 BI.IconTreeLeafItem = BI.inherit(BI.BasicButton, {
@@ -33909,7 +33977,7 @@ BI.IconTreeLeafItem = BI.inherit(BI.BasicButton, {
 BI.shortcut("bi.icon_tree_leaf_item", BI.IconTreeLeafItem);
 
 /***/ }),
-/* 480 */
+/* 483 */
 /***/ (function(module, exports) {
 
 BI.LastTreeLeafItem = BI.inherit(BI.BasicButton, {
@@ -33995,7 +34063,7 @@ BI.LastTreeLeafItem = BI.inherit(BI.BasicButton, {
 BI.shortcut("bi.last_tree_leaf_item", BI.LastTreeLeafItem);
 
 /***/ }),
-/* 481 */
+/* 484 */
 /***/ (function(module, exports) {
 
 BI.MidTreeLeafItem = BI.inherit(BI.BasicButton, {
@@ -34081,7 +34149,7 @@ BI.MidTreeLeafItem = BI.inherit(BI.BasicButton, {
 BI.shortcut("bi.mid_tree_leaf_item", BI.MidTreeLeafItem);
 
 /***/ }),
-/* 482 */
+/* 485 */
 /***/ (function(module, exports) {
 
 /**
@@ -34185,7 +34253,7 @@ BI.shortcut("bi.multilayer_icon_tree_leaf_item", BI.MultiLayerIconTreeLeafItem);
 
 
 /***/ }),
-/* 483 */
+/* 486 */
 /***/ (function(module, exports) {
 
 BI.RootTreeLeafItem = BI.inherit(BI.BasicButton, {
@@ -34265,7 +34333,7 @@ BI.shortcut("bi.root_tree_leaf_item", BI.RootTreeLeafItem);
 
 
 /***/ }),
-/* 484 */
+/* 487 */
 /***/ (function(module, exports) {
 
 /**
@@ -34341,7 +34409,7 @@ BI.shortcut("bi.tree_text_leaf_item", BI.TreeTextLeafItem);
 
 
 /***/ }),
-/* 485 */
+/* 488 */
 /***/ (function(module, exports) {
 
 /**
@@ -34399,7 +34467,7 @@ BI.CalendarDateItem = BI.inherit(BI.BasicButton, {
 BI.shortcut("bi.calendar_date_item", BI.CalendarDateItem);
 
 /***/ }),
-/* 486 */
+/* 489 */
 /***/ (function(module, exports) {
 
 /**
@@ -34638,7 +34706,7 @@ BI.extend(BI.Calendar, {
 BI.shortcut("bi.calendar", BI.Calendar);
 
 /***/ }),
-/* 487 */
+/* 490 */
 /***/ (function(module, exports) {
 
 /**
@@ -34814,7 +34882,7 @@ BI.extend(BI.YearCalendar, {
 BI.shortcut("bi.year_calendar", BI.YearCalendar);
 
 /***/ }),
-/* 488 */
+/* 491 */
 /***/ (function(module, exports) {
 
 /**
@@ -34840,7 +34908,7 @@ BI.ArrowTreeGroupNodeCheckbox = BI.inherit(BI.IconButton, {
 BI.shortcut("bi.arrow_group_node_checkbox", BI.ArrowTreeGroupNodeCheckbox);
 
 /***/ }),
-/* 489 */
+/* 492 */
 /***/ (function(module, exports) {
 
 /**
@@ -34871,7 +34939,7 @@ BI.CheckingMarkNode = BI.inherit(BI.IconButton, {
 BI.shortcut("bi.checking_mark_node", BI.CheckingMarkNode);
 
 /***/ }),
-/* 490 */
+/* 493 */
 /***/ (function(module, exports) {
 
 /**
@@ -34900,7 +34968,7 @@ BI.FirstTreeNodeCheckbox = BI.inherit(BI.IconButton, {
 BI.shortcut("bi.first_tree_node_checkbox", BI.FirstTreeNodeCheckbox);
 
 /***/ }),
-/* 491 */
+/* 494 */
 /***/ (function(module, exports) {
 
 /**
@@ -34929,7 +34997,7 @@ BI.LastTreeNodeCheckbox = BI.inherit(BI.IconButton, {
 BI.shortcut("bi.last_tree_node_checkbox", BI.LastTreeNodeCheckbox);
 
 /***/ }),
-/* 492 */
+/* 495 */
 /***/ (function(module, exports) {
 
 /**
@@ -34958,7 +35026,7 @@ BI.MidTreeNodeCheckbox = BI.inherit(BI.IconButton, {
 BI.shortcut("bi.mid_tree_node_checkbox", BI.MidTreeNodeCheckbox);
 
 /***/ }),
-/* 493 */
+/* 496 */
 /***/ (function(module, exports) {
 
 /**
@@ -34987,7 +35055,7 @@ BI.TreeNodeCheckbox = BI.inherit(BI.IconButton, {
 BI.shortcut("bi.tree_node_checkbox", BI.TreeNodeCheckbox);
 
 /***/ }),
-/* 494 */
+/* 497 */
 /***/ (function(module, exports) {
 
 /**
@@ -34998,7 +35066,7 @@ BI.shortcut("bi.tree_node_checkbox", BI.TreeNodeCheckbox);
  */
 BI.BubbleCombo = BI.inherit(BI.Widget, {
     _const: {
-        TRIANGLE_LENGTH: 6
+        TRIANGLE_LENGTH: 9
     },
     _defaultConfig: function () {
         return BI.extend(BI.BubbleCombo.superclass._defaultConfig.apply(this, arguments), {
@@ -35210,7 +35278,7 @@ BI.BubbleCombo.EVENT_AFTER_HIDEVIEW = "EVENT_AFTER_HIDEVIEW";
 BI.shortcut("bi.bubble_combo", BI.BubbleCombo);
 
 /***/ }),
-/* 495 */
+/* 498 */
 /***/ (function(module, exports) {
 
 /**
@@ -35380,7 +35448,7 @@ BI.shortcut("bi.text_bubble_bar_popup_view", BI.TextBubblePopupBarView);
 
 
 /***/ }),
-/* 496 */
+/* 499 */
 /***/ (function(module, exports) {
 
 /**
@@ -35481,7 +35549,7 @@ BI.shortcut("bi.editor_icon_check_combo", BI.EditorIconCheckCombo);
 
 
 /***/ }),
-/* 497 */
+/* 500 */
 /***/ (function(module, exports) {
 
 /**
@@ -35585,7 +35653,7 @@ BI.IconCombo.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.icon_combo", BI.IconCombo);
 
 /***/ }),
-/* 498 */
+/* 501 */
 /***/ (function(module, exports) {
 
 /**
@@ -35655,7 +35723,7 @@ BI.IconComboPopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.icon_combo_popup", BI.IconComboPopup);
 
 /***/ }),
-/* 499 */
+/* 502 */
 /***/ (function(module, exports) {
 
 /**
@@ -35762,7 +35830,7 @@ BI.IconComboTrigger.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.icon_combo_trigger", BI.IconComboTrigger);
 
 /***/ }),
-/* 500 */
+/* 503 */
 /***/ (function(module, exports) {
 
 /**
@@ -35772,20 +35840,19 @@ BI.shortcut("bi.icon_combo_trigger", BI.IconComboTrigger);
 BI.IconTextValueCombo = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.IconTextValueCombo.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-icon-text-value-combo",
+            baseCls: "bi-icon-text-value-combo bi-border bi-border-radius",
             height: 24,
             iconHeight: null,
             iconWidth: null,
             value: "",
-            attributes: {
-                tabIndex: 0
-            }
         });
     },
 
     _init: function () {
-        BI.IconTextValueCombo.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
+        o.height -= 2;
+        BI.isNumeric(o.width) && (o.width -= 2);
+        BI.IconTextValueCombo.superclass._init.apply(this, arguments);
         this.trigger = BI.createWidget({
             type: "bi.select_icon_text_trigger",
             cls: "icon-text-value-trigger",
@@ -35873,7 +35940,7 @@ BI.shortcut("bi.icon_text_value_combo", BI.IconTextValueCombo);
 
 
 /***/ }),
-/* 501 */
+/* 504 */
 /***/ (function(module, exports) {
 
 /**
@@ -35955,7 +36022,7 @@ BI.shortcut("bi.icon_text_value_combo_popup", BI.IconTextValueComboPopup);
 
 
 /***/ }),
-/* 502 */
+/* 505 */
 /***/ (function(module, exports) {
 
 /**
@@ -35970,9 +36037,6 @@ BI.SearchTextValueCombo = BI.inherit(BI.Widget, {
         items: [],
         tipType: "",
         warningTitle: "",
-        attributes: {
-            tabIndex: 0
-        }
     },
 
     render: function () {
@@ -35982,6 +36046,7 @@ BI.SearchTextValueCombo = BI.inherit(BI.Widget, {
             items: [{
                 el: {
                     type: "bi.combo",
+                    cls: "bi-border bi-focus-shadow",
                     container: o.container,
                     adjustLength: 2,
                     toggle: false,
@@ -36124,7 +36189,7 @@ BI.shortcut("bi.search_text_value_combo", BI.SearchTextValueCombo);
 
 
 /***/ }),
-/* 503 */
+/* 506 */
 /***/ (function(module, exports) {
 
 /**
@@ -36201,7 +36266,7 @@ BI.SearchTextValueComboPopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.search_text_value_combo_popup", BI.SearchTextValueComboPopup);
 
 /***/ }),
-/* 504 */
+/* 507 */
 /***/ (function(module, exports) {
 
 /**
@@ -36211,7 +36276,7 @@ BI.SearchTextValueTrigger = BI.inherit(BI.Trigger, {
 
     props: function () {
         return {
-            extraCls: "bi-search-text-value-trigger bi-border",
+            extraCls: "bi-search-text-value-trigger",
             height: 24,
             watermark: BI.i18nText("BI-Basic_Search")
         };
@@ -36320,7 +36385,7 @@ BI.SearchTextValueTrigger.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.search_text_value_trigger", BI.SearchTextValueTrigger);
 
 /***/ }),
-/* 505 */
+/* 508 */
 /***/ (function(module, exports) {
 
 /**
@@ -36331,20 +36396,19 @@ BI.shortcut("bi.search_text_value_trigger", BI.SearchTextValueTrigger);
 BI.TextValueCheckCombo = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.TextValueCheckCombo.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-text-value-check-combo",
+            baseCls: "bi-text-value-check-combo bi-border",
             width: 100,
             height: 24,
             chooseType: BI.ButtonGroup.CHOOSE_TYPE_SINGLE,
             value: "",
-            attributes: {
-                tabIndex: 0
-            }
         });
     },
 
     _init: function () {
-        BI.TextValueCheckCombo.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
+        o.height -= 2;
+        BI.isNumeric(o.width) && (o.width -= 2);
+        BI.TextValueCheckCombo.superclass._init.apply(this, arguments);
         this.trigger = BI.createWidget({
             type: "bi.select_text_trigger",
             cls: "text-value-trigger",
@@ -36411,7 +36475,7 @@ BI.TextValueCheckCombo.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.text_value_check_combo", BI.TextValueCheckCombo);
 
 /***/ }),
-/* 506 */
+/* 509 */
 /***/ (function(module, exports) {
 
 BI.TextValueCheckComboPopup = BI.inherit(BI.Pane, {
@@ -36479,7 +36543,7 @@ BI.shortcut("bi.text_value_check_combo_popup", BI.TextValueCheckComboPopup);
 
 
 /***/ }),
-/* 507 */
+/* 510 */
 /***/ (function(module, exports) {
 
 /**
@@ -36491,20 +36555,19 @@ BI.shortcut("bi.text_value_check_combo_popup", BI.TextValueCheckComboPopup);
 BI.TextValueCombo = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.TextValueCombo.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-text-value-combo",
+            baseCls: "bi-text-value-combo bi-border",
             height: 24,
             chooseType: BI.ButtonGroup.CHOOSE_TYPE_SINGLE,
             text: "",
             value: "",
-            attributes: {
-                tabIndex: 0
-            }
         });
     },
 
     _init: function () {
-        BI.TextValueCombo.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
+        o.height -= 2;
+        BI.isNumeric(o.width) && (o.width -= 2);
+        BI.TextValueCombo.superclass._init.apply(this, arguments);
         this.trigger = BI.createWidget({
             type: "bi.select_text_trigger",
             cls: "text-value-trigger",
@@ -36585,7 +36648,7 @@ BI.shortcut("bi.text_value_combo", BI.TextValueCombo);
 
 
 /***/ }),
-/* 508 */
+/* 511 */
 /***/ (function(module, exports) {
 
 /**
@@ -36659,7 +36722,7 @@ BI.SmallTextValueCombo.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.small_text_value_combo", BI.SmallTextValueCombo);
 
 /***/ }),
-/* 509 */
+/* 512 */
 /***/ (function(module, exports) {
 
 BI.TextValueComboPopup = BI.inherit(BI.Pane, {
@@ -36725,7 +36788,7 @@ BI.TextValueComboPopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.text_value_combo_popup", BI.TextValueComboPopup);
 
 /***/ }),
-/* 510 */
+/* 513 */
 /***/ (function(module, exports) {
 
 /**
@@ -36912,7 +36975,7 @@ BI.ClearEditor.EVENT_EMPTY = "EVENT_EMPTY";
 BI.shortcut("bi.clear_editor", BI.ClearEditor);
 
 /***/ }),
-/* 511 */
+/* 514 */
 /***/ (function(module, exports) {
 
 /**
@@ -37194,7 +37257,7 @@ BI.shortcut("bi.shelter_editor", BI.ShelterEditor);
 
 
 /***/ }),
-/* 512 */
+/* 515 */
 /***/ (function(module, exports) {
 
 /**
@@ -37475,7 +37538,7 @@ BI.SignEditor.EVENT_EMPTY = "EVENT_EMPTY";
 BI.shortcut("bi.sign_editor", BI.SignEditor);
 
 /***/ }),
-/* 513 */
+/* 516 */
 /***/ (function(module, exports) {
 
 /**
@@ -37791,7 +37854,7 @@ BI.shortcut("bi.state_editor", BI.StateEditor);
 
 
 /***/ }),
-/* 514 */
+/* 517 */
 /***/ (function(module, exports) {
 
 /**
@@ -38078,7 +38141,7 @@ BI.SimpleStateEditor.EVENT_EMPTY = "EVENT_EMPTY";
 BI.shortcut("bi.simple_state_editor", BI.SimpleStateEditor);
 
 /***/ }),
-/* 515 */
+/* 518 */
 /***/ (function(module, exports) {
 
 /**
@@ -38144,7 +38207,7 @@ BI.shortcut("bi.multi_popup_view", BI.MultiPopupView);
 
 
 /***/ }),
-/* 516 */
+/* 519 */
 /***/ (function(module, exports) {
 
 /**
@@ -38203,7 +38266,7 @@ BI.shortcut("bi.popup_panel", BI.PopupPanel);
 
 
 /***/ }),
-/* 517 */
+/* 520 */
 /***/ (function(module, exports) {
 
 /**
@@ -38385,7 +38448,7 @@ BI.ListPane.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.list_pane", BI.ListPane);
 
 /***/ }),
-/* 518 */
+/* 521 */
 /***/ (function(module, exports) {
 
 /**
@@ -38470,7 +38533,7 @@ BI.shortcut("bi.panel", BI.Panel);
 
 
 /***/ }),
-/* 519 */
+/* 522 */
 /***/ (function(module, exports) {
 
 BI.LinearSegmentButton = BI.inherit(BI.BasicButton, {
@@ -38529,13 +38592,13 @@ BI.LinearSegmentButton = BI.inherit(BI.BasicButton, {
 BI.shortcut("bi.linear_segment_button", BI.LinearSegmentButton);
 
 /***/ }),
-/* 520 */
+/* 523 */
 /***/ (function(module, exports) {
 
 BI.LinearSegment = BI.inherit(BI.Widget, {
 
     props: {
-        baseCls: "bi-linear-segment bi-split-bottom",
+        baseCls: "bi-linear-segment",
         items: [],
         layouts: [{
             type: "bi.center"
@@ -38585,7 +38648,7 @@ BI.LinearSegment = BI.inherit(BI.Widget, {
 BI.shortcut("bi.linear_segment", BI.LinearSegment);
 
 /***/ }),
-/* 521 */
+/* 524 */
 /***/ (function(module, exports) {
 
 /**
@@ -38763,7 +38826,7 @@ BI.SelectList = BI.inherit(BI.Widget, {
     resetHeight: function (h) {
         var toolHeight = ( this.toolbar.element.outerHeight() || 25) * ( this.toolbar.isVisible() ? 1 : 0);
         this.list.resetHeight ? this.list.resetHeight(h - toolHeight) :
-            this.list.element.css({"max-height": h - toolHeight + "px"});
+            this.list.element.css({"max-height": (h - toolHeight) / BI.pixRatio + BI.pixUnit});
     },
 
     setNotSelectedValue: function () {
@@ -38806,8 +38869,9 @@ BI.SelectList = BI.inherit(BI.Widget, {
 BI.SelectList.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.select_list", BI.SelectList);
 
+
 /***/ }),
-/* 522 */
+/* 525 */
 /***/ (function(module, exports) {
 
 /**
@@ -38915,7 +38979,7 @@ BI.LazyLoader.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.lazy_loader", BI.LazyLoader);
 
 /***/ }),
-/* 523 */
+/* 526 */
 /***/ (function(module, exports) {
 
 /**
@@ -39116,7 +39180,7 @@ BI.ListLoader.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.list_loader", BI.ListLoader);
 
 /***/ }),
-/* 524 */
+/* 527 */
 /***/ (function(module, exports) {
 
 /**
@@ -39298,7 +39362,7 @@ BI.shortcut("bi.sort_list", BI.SortList);
 
 
 /***/ }),
-/* 525 */
+/* 528 */
 /***/ (function(module, exports) {
 
 /**
@@ -39334,7 +39398,7 @@ BI.LoadingPane = BI.inherit(BI.Pane, {
 });
 
 /***/ }),
-/* 526 */
+/* 529 */
 /***/ (function(module, exports) {
 
 /**
@@ -39548,7 +39612,7 @@ BI.AllCountPager.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.all_count_pager", BI.AllCountPager);
 
 /***/ }),
-/* 527 */
+/* 530 */
 /***/ (function(module, exports) {
 
 /**
@@ -39829,7 +39893,7 @@ BI.DirectionPager.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.direction_pager", BI.DirectionPager);
 
 /***/ }),
-/* 528 */
+/* 531 */
 /***/ (function(module, exports) {
 
 /**
@@ -40122,7 +40186,7 @@ BI.DetailPager.EVENT_AFTER_POPULATE = "EVENT_AFTER_POPULATE";
 BI.shortcut("bi.detail_pager", BI.DetailPager);
 
 /***/ }),
-/* 529 */
+/* 532 */
 /***/ (function(module, exports) {
 
 /**
@@ -40177,7 +40241,7 @@ BI.SegmentButton = BI.inherit(BI.BasicButton, {
 BI.shortcut("bi.segment_button", BI.SegmentButton);
 
 /***/ }),
-/* 530 */
+/* 533 */
 /***/ (function(module, exports) {
 
 /**
@@ -40246,7 +40310,7 @@ BI.Segment.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.segment", BI.Segment);
 
 /***/ }),
-/* 531 */
+/* 534 */
 /***/ (function(module, exports) {
 
 /**
@@ -40391,7 +40455,7 @@ BI.shortcut("bi.multi_select_bar", BI.MultiSelectBar);
 
 
 /***/ }),
-/* 532 */
+/* 535 */
 /***/ (function(module, exports) {
 
 /**
@@ -40533,7 +40597,7 @@ BI.shortcut("bi.level_tree", BI.LevelTree);
 
 
 /***/ }),
-/* 533 */
+/* 536 */
 /***/ (function(module, exports) {
 
 !(function () {
@@ -40616,7 +40680,7 @@ BI.shortcut("bi.level_tree", BI.LevelTree);
 
 
 /***/ }),
-/* 534 */
+/* 537 */
 /***/ (function(module, exports) {
 
 !(function () {
@@ -40675,7 +40739,7 @@ BI.shortcut("bi.level_tree", BI.LevelTree);
 
 
 /***/ }),
-/* 535 */
+/* 538 */
 /***/ (function(module, exports) {
 
 /**
@@ -40777,7 +40841,7 @@ BI.shortcut("bi.editor_trigger", BI.EditorTrigger);
 
 
 /***/ }),
-/* 536 */
+/* 539 */
 /***/ (function(module, exports) {
 
 /**
@@ -40812,7 +40876,7 @@ BI.IconTrigger = BI.inherit(BI.Trigger, {
 BI.shortcut("bi.icon_trigger", BI.IconTrigger);
 
 /***/ }),
-/* 537 */
+/* 540 */
 /***/ (function(module, exports) {
 
 /**
@@ -40922,7 +40986,7 @@ BI.IconTextTrigger = BI.inherit(BI.Trigger, {
 BI.shortcut("bi.icon_text_trigger", BI.IconTextTrigger);
 
 /***/ }),
-/* 538 */
+/* 541 */
 /***/ (function(module, exports) {
 
 /**
@@ -40932,7 +40996,7 @@ BI.SelectIconTextTrigger = BI.inherit(BI.Trigger, {
 
     _defaultConfig: function () {
         return BI.extend(BI.SelectIconTextTrigger.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-select-text-trigger bi-border",
+            baseCls: "bi-select-text-trigger",
             height: 24,
             iconHeight: null,
             iconWidth: null,
@@ -40941,7 +41005,6 @@ BI.SelectIconTextTrigger = BI.inherit(BI.Trigger, {
     },
 
     _init: function () {
-        this.options.height -= 2;
         BI.SelectIconTextTrigger.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
         var obj = this._digist(o.value, o.items);
@@ -41002,7 +41065,7 @@ BI.SelectIconTextTrigger = BI.inherit(BI.Trigger, {
 BI.shortcut("bi.select_icon_text_trigger", BI.SelectIconTextTrigger);
 
 /***/ }),
-/* 539 */
+/* 542 */
 /***/ (function(module, exports) {
 
 /**
@@ -41081,7 +41144,7 @@ BI.shortcut("bi.text_trigger", BI.TextTrigger);
 
 
 /***/ }),
-/* 540 */
+/* 543 */
 /***/ (function(module, exports) {
 
 /**
@@ -41095,13 +41158,12 @@ BI.SelectTextTrigger = BI.inherit(BI.Trigger, {
 
     _defaultConfig: function () {
         return BI.extend(BI.SelectTextTrigger.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-select-text-trigger bi-border bi-focus-shadow",
+            baseCls: "bi-select-text-trigger",
             height: 24
         });
     },
 
     _init: function () {
-        this.options.height -= 2;
         BI.SelectTextTrigger.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
         var obj = this._digest(o.value, o.items);
@@ -41159,7 +41221,7 @@ BI.shortcut("bi.select_text_trigger", BI.SelectTextTrigger);
 
 
 /***/ }),
-/* 541 */
+/* 544 */
 /***/ (function(module, exports) {
 
 /**
@@ -41228,7 +41290,7 @@ BI.SmallSelectTextTrigger = BI.inherit(BI.Trigger, {
 BI.shortcut("bi.small_select_text_trigger", BI.SmallSelectTextTrigger);
 
 /***/ }),
-/* 542 */
+/* 545 */
 /***/ (function(module, exports) {
 
 /**
@@ -41290,7 +41352,7 @@ BI.SmallTextTrigger = BI.inherit(BI.Trigger, {
 BI.shortcut("bi.small_text_trigger", BI.SmallTextTrigger);
 
 /***/ }),
-/* 543 */
+/* 546 */
 /***/ (function(module, exports) {
 
 /**
@@ -41368,7 +41430,7 @@ BI.MonthDateCombo.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.month_date_combo", BI.MonthDateCombo);
 
 /***/ }),
-/* 544 */
+/* 547 */
 /***/ (function(module, exports) {
 
 /**
@@ -41458,7 +41520,7 @@ BI.shortcut("bi.year_date_combo", BI.YearDateCombo);
 
 
 /***/ }),
-/* 545 */
+/* 548 */
 /***/ (function(module, exports) {
 
 /**
@@ -41692,7 +41754,7 @@ BI.shortcut("bi.date_picker", BI.DatePicker);
 
 
 /***/ }),
-/* 546 */
+/* 549 */
 /***/ (function(module, exports) {
 
 /**
@@ -41831,7 +41893,7 @@ BI.shortcut("bi.year_picker", BI.YearPicker);
 
 
 /***/ }),
-/* 547 */
+/* 550 */
 /***/ (function(module, exports) {
 
 /**
@@ -41840,14 +41902,12 @@ BI.shortcut("bi.year_picker", BI.YearPicker);
  * @extends BI.Widget
  */
 BI.DateCalendarPopup = BI.inherit(BI.Widget, {
-    _defaultConfig: function () {
-        var conf = BI.DateCalendarPopup.superclass._defaultConfig.apply(this, arguments);
-        return BI.extend(conf, {
-            baseCls: "bi-date-calendar-popup",
-            min: "1900-01-01", // 最小日期
-            max: "2099-12-31", // 最大日期
-            selectedTime: null
-        });
+
+    props: {
+        baseCls: "bi-date-calendar-popup",
+        min: "1900-01-01", // 最小日期
+        max: "2099-12-31", // 最大日期
+        selectedTime: null
     },
 
     _createNav: function (v) {
@@ -41867,8 +41927,7 @@ BI.DateCalendarPopup = BI.inherit(BI.Widget, {
         return calendar;
     },
 
-    _init: function () {
-        BI.DateCalendarPopup.superclass._init.apply(this, arguments);
+    render: function () {
         var self = this,
             o = this.options;
         this.today = BI.getDate();
@@ -41922,14 +41981,16 @@ BI.DateCalendarPopup = BI.inherit(BI.Widget, {
             self.fireEvent(BI.DateCalendarPopup.EVENT_CHANGE);
         });
 
-        BI.createWidget({
-            type: "bi.absolute",
-            element: this,
+        return [{
+            type: "bi.vertical",
             items: [{
                 el: this.calendar,
-                left: 5,
-                right: 5
-            }, {
+                hgap: 5,
+                bgap: 12
+            }]
+        }, {
+            type: "bi.absolute",
+            items: [{
                 el: {
                     type: "bi.layout",
                     cls: "bi-split-top"
@@ -41939,7 +42000,7 @@ BI.DateCalendarPopup = BI.inherit(BI.Widget, {
                 left: 0,
                 right: 0
             }]
-        });
+        }]
     },
 
     _checkMin: function () {
@@ -41988,7 +42049,7 @@ BI.DateCalendarPopup.EVENT_BEFORE_YEAR_MONTH_POPUPVIEW = "EVENT_BEFORE_YEAR_MONT
 BI.shortcut("bi.date_calendar_popup", BI.DateCalendarPopup);
 
 /***/ }),
-/* 548 */
+/* 551 */
 /***/ (function(module, exports) {
 
 /**
@@ -42087,7 +42148,7 @@ BI.MonthPopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.month_popup", BI.MonthPopup);
 
 /***/ }),
-/* 549 */
+/* 552 */
 /***/ (function(module, exports) {
 
 /**
@@ -42162,9 +42223,6 @@ BI.YearPopup = BI.inherit(BI.Widget, {
             cardCreator: BI.bind(this._createYearCalendar, this),
             afterCardCreated: function () {
                 this.setValue(self.selectedYear);
-                var calendar = this.getSelectedCard();
-                calendar && self.backBtn.setEnable(!calendar.isFrontYear());
-                calendar && self.preBtn.setEnable(!calendar.isFinalYear());
             }
         });
 
@@ -42183,8 +42241,6 @@ BI.YearPopup = BI.inherit(BI.Widget, {
         var calendar = this.navigation.getSelectedCard();
         if (BI.isNotNull(calendar)) {
             calendar.setMinDate(this.options.min);
-            this.backBtn.setEnable(!calendar.isFrontYear());
-            this.preBtn.setEnable(!calendar.isFinalYear());
         }
     },
 
@@ -42192,8 +42248,6 @@ BI.YearPopup = BI.inherit(BI.Widget, {
         var calendar = this.navigation.getSelectedCard();
         if (BI.isNotNull(calendar)) {
             calendar.setMaxDate(this.options.max);
-            this.backBtn.setEnable(!calendar.isFrontYear());
-            this.preBtn.setEnable(!calendar.isFinalYear());
         }
     },
 
@@ -42234,7 +42288,7 @@ BI.YearPopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.year_popup", BI.YearPopup);
 
 /***/ }),
-/* 550 */
+/* 553 */
 /***/ (function(module, exports) {
 
 /**
@@ -42305,7 +42359,7 @@ BI.DateTriangleTrigger = BI.inherit(BI.Trigger, {
 BI.shortcut("bi.date_triangle_trigger", BI.DateTriangleTrigger);
 
 /***/ }),
-/* 551 */
+/* 554 */
 /***/ (function(module, exports) {
 
 /**
@@ -42451,6 +42505,36 @@ BI.StaticDatePaneCard = BI.inherit(BI.Widget, {
         }
     },
 
+    _checkMin: function () {
+        var o = this.options;
+        BI.each(this.calendar.getAllCard(), function (idx, calendar) {
+            calendar.setMinDate(o.min);
+        });
+    },
+
+    _checkMax: function () {
+        var o = this.options;
+        BI.each(this.calendar.getAllCard(), function (idx, calendar) {
+            calendar.setMaxDate(o.max);
+        });
+    },
+
+    setMinDate: function (minDate) {
+        if (BI.isNotEmptyString(this.options.min)) {
+            this.options.min = minDate;
+            this.datePicker.setMinDate(minDate);
+            this._checkMin();
+        }
+    },
+
+    setMaxDate: function (maxDate) {
+        if (BI.isNotEmptyString(this.options.max)) {
+            this.options.max = maxDate;
+            this.datePicker.setMaxDate(maxDate);
+            this._checkMax();
+        }
+    },
+
     setValue: function (timeOb) {
         this._setDatePicker(timeOb);
         this._setCalendar(timeOb);
@@ -42465,13 +42549,16 @@ BI.StaticDatePaneCard.EVENT_BEFORE_YEAR_MONTH_POPUPVIEW = "EVENT_BEFORE_YEAR_MON
 BI.shortcut("bi.static_date_pane_card", BI.StaticDatePaneCard);
 
 /***/ }),
-/* 552 */
+/* 555 */
 /***/ (function(module, exports) {
 
 BI.DynamicDatePane = BI.inherit(BI.Widget, {
 
     props: {
-        baseCls: "bi-dynamic-date-pane"
+        baseCls: "bi-dynamic-date-pane",
+        minDate: "1900-01-01",
+        maxDate: "2099-12-31",
+        supportDynamic: true
     },
 
     render: function () {
@@ -42481,6 +42568,7 @@ BI.DynamicDatePane = BI.inherit(BI.Widget, {
             items: [{
                 el: {
                     type: "bi.linear_segment",
+                    invisible: !o.supportDynamic,
                     cls: "bi-split-bottom",
                     height: 30,
                     items: BI.createItems([{
@@ -42521,7 +42609,7 @@ BI.DynamicDatePane = BI.inherit(BI.Widget, {
                         self.switcher = this;
                     }
                 },
-                height: 30
+                height: o.supportDynamic ? 30 : 0
             }, {
                 type: "bi.tab",
                 ref: function () {
@@ -42533,6 +42621,8 @@ BI.DynamicDatePane = BI.inherit(BI.Widget, {
                         case BI.DynamicDatePane.Static:
                             return {
                                 type: "bi.static_date_pane_card",
+                                min: o.minDate,
+                                max: o.maxDate,
                                 behaviors: o.behaviors,
                                 listeners: [{
                                     eventName: "EVENT_CHANGE",
@@ -42553,10 +42643,12 @@ BI.DynamicDatePane = BI.inherit(BI.Widget, {
                         default:
                             return {
                                 type: "bi.dynamic_date_card",
+                                min: o.minDate,
+                                max: o.maxDate,
                                 listeners: [{
                                     eventName: "EVENT_CHANGE",
                                     action: function () {
-                                        if(self._checkValue(self.getValue())) {
+                                        if (self._checkValue(self.getValue())) {
                                             self.fireEvent(BI.DynamicDatePane.EVENT_CHANGE);
                                         }
                                     }
@@ -42588,6 +42680,21 @@ BI.DynamicDatePane = BI.inherit(BI.Widget, {
                 return true;
         }
     },
+
+    setMinDate: function (minDate) {
+        if (this.options.minDate !== minDate) {
+            this.options.minDate = minDate;
+            this.ymd.setMinDate(minDate);
+        }
+    },
+
+    setMaxDate: function (maxDate) {
+        if (this.options.maxDate !== maxDate) {
+            this.options.maxDate = maxDate;
+            this.ymd.setMaxDate(maxDate);
+        }
+    },
+
 
     setValue: function (v) {
         v = v || {};
@@ -42632,8 +42739,9 @@ BI.extend(BI.DynamicDatePane, {
     Dynamic: 2
 });
 
+
 /***/ }),
-/* 553 */
+/* 556 */
 /***/ (function(module, exports) {
 
 /**
@@ -42773,7 +42881,7 @@ BI.shortcut("bi.date_time_combo", BI.DateTimeCombo);
 
 
 /***/ }),
-/* 554 */
+/* 557 */
 /***/ (function(module, exports) {
 
 /**
@@ -42892,7 +43000,7 @@ BI.shortcut("bi.date_time_popup", BI.DateTimePopup);
 
 
 /***/ }),
-/* 555 */
+/* 558 */
 /***/ (function(module, exports) {
 
 /**
@@ -42960,7 +43068,7 @@ BI.shortcut("bi.date_time_trigger", BI.DateTimeTrigger);
 
 
 /***/ }),
-/* 556 */
+/* 559 */
 /***/ (function(module, exports) {
 
 BI.StaticDateTimePaneCard = BI.inherit(BI.Widget, {
@@ -43120,6 +43228,36 @@ BI.StaticDateTimePaneCard = BI.inherit(BI.Widget, {
         }
     },
 
+    _checkMin: function () {
+        var o = this.options;
+        BI.each(this.calendar.getAllCard(), function (idx, calendar) {
+            calendar.setMinDate(o.min);
+        });
+    },
+
+    _checkMax: function () {
+        var o = this.options;
+        BI.each(this.calendar.getAllCard(), function (idx, calendar) {
+            calendar.setMaxDate(o.max);
+        });
+    },
+
+    setMinDate: function (minDate) {
+        if (BI.isNotEmptyString(this.options.min)) {
+            this.options.min = minDate;
+            this.datePicker.setMinDate(minDate);
+            this._checkMin();
+        }
+    },
+
+    setMaxDate: function (maxDate) {
+        if (BI.isNotEmptyString(this.options.max)) {
+            this.options.max = maxDate;
+            this.datePicker.setMaxDate(maxDate);
+            this._checkMax();
+        }
+    },
+
     setValue: function (timeOb) {
         timeOb = timeOb || {};
         this._setDatePicker(timeOb);
@@ -43140,13 +43278,16 @@ BI.StaticDateTimePaneCard.EVENT_BEFORE_YEAR_MONTH_POPUPVIEW = "EVENT_BEFORE_YEAR
 BI.shortcut("bi.static_date_time_pane_card", BI.StaticDateTimePaneCard);
 
 /***/ }),
-/* 557 */
+/* 560 */
 /***/ (function(module, exports) {
 
 BI.DynamicDateTimePane = BI.inherit(BI.Widget, {
 
     props: {
-        baseCls: "bi-dynamic-date-pane"
+        baseCls: "bi-dynamic-date-pane",
+        minDate: "1900-01-01",
+        maxDate: "2099-12-31",
+        supportDynamic: true,
     },
 
     render: function () {
@@ -43156,6 +43297,7 @@ BI.DynamicDateTimePane = BI.inherit(BI.Widget, {
             items: [{
                 el: {
                     type: "bi.linear_segment",
+                    invisible: !o.supportDynamic,
                     cls: "bi-split-bottom",
                     height: 30,
                     items: BI.createItems([{
@@ -43189,13 +43331,14 @@ BI.DynamicDateTimePane = BI.inherit(BI.Widget, {
                                 default:
                                     break;
                             }
+                            self.fireEvent(BI.DynamicDateTimePane.EVENT_CHANGE);
                         }
                     }],
                     ref: function () {
                         self.switcher = this;
                     }
                 },
-                height: 30
+                height: o.supportDynamic ? 30 : 0
             }, {
                 type: "bi.tab",
                 ref: function () {
@@ -43207,6 +43350,8 @@ BI.DynamicDateTimePane = BI.inherit(BI.Widget, {
                         case BI.DynamicDateTimePane.Static:
                             return {
                                 type: "bi.static_date_time_pane_card",
+                                min: o.minDate,
+                                max: o.maxDate,
                                 behaviors: o.behaviors,
                                 listeners: [{
                                     eventName: "EVENT_CHANGE",
@@ -43227,6 +43372,8 @@ BI.DynamicDateTimePane = BI.inherit(BI.Widget, {
                         default:
                             return {
                                 type: "bi.dynamic_date_card",
+                                min: o.minDate,
+                                max: o.maxDate,
                                 listeners: [{
                                     eventName: "EVENT_CHANGE",
                                     action: function () {
@@ -43263,6 +43410,20 @@ BI.DynamicDateTimePane = BI.inherit(BI.Widget, {
         }
     },
 
+    setMinDate: function (minDate) {
+        if (this.options.minDate !== minDate) {
+            this.options.minDate = minDate;
+            this.ymd.setMinDate(minDate);
+        }
+    },
+
+    setMaxDate: function (maxDate) {
+        if (this.options.maxDate !== maxDate) {
+            this.options.maxDate = maxDate;
+            this.ymd.setMaxDate(maxDate);
+        }
+    },
+
     setValue: function (v) {
         v = v || {};
         var type = v.type || BI.DynamicDateTimePane.Static;
@@ -43295,6 +43456,7 @@ BI.DynamicDateTimePane = BI.inherit(BI.Widget, {
         };
     }
 });
+BI.DynamicDateTimePane.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.dynamic_date_time_pane", BI.DynamicDateTimePane);
 
 BI.extend(BI.DynamicDateTimePane, {
@@ -43302,8 +43464,9 @@ BI.extend(BI.DynamicDateTimePane, {
     Dynamic: 2
 });
 
+
 /***/ }),
-/* 558 */
+/* 561 */
 /***/ (function(module, exports) {
 
 /**
@@ -43400,7 +43563,7 @@ BI.DownListCombo.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
 BI.shortcut("bi.down_list_combo", BI.DownListCombo);
 
 /***/ }),
-/* 559 */
+/* 562 */
 /***/ (function(module, exports) {
 
 /**
@@ -43456,7 +43619,7 @@ BI.DownListGroup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.down_list_group", BI.DownListGroup);
 
 /***/ }),
-/* 560 */
+/* 563 */
 /***/ (function(module, exports) {
 
 BI.DownListItem = BI.inherit(BI.BasicButton, {
@@ -43559,7 +43722,7 @@ BI.DownListItem.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.down_list_item", BI.DownListItem);
 
 /***/ }),
-/* 561 */
+/* 564 */
 /***/ (function(module, exports) {
 
 BI.DownListGroupItem = BI.inherit(BI.BasicButton, {
@@ -43635,11 +43798,17 @@ BI.DownListGroupItem = BI.inherit(BI.BasicButton, {
         });
     },
 
+    _getLevel: function () {
+        var child = BI.first(this.options.childValues);
+        return BI.isNotNull(child) ? (child + "").split("_").length : 0;
+    },
+
     _digest: function (v) {
         var self = this, o = this.options;
         v = BI.isArray(v) ? v : [v];
+        var level = this._getLevel();
         return BI.any(v, function (idx, value) {
-            return BI.contains(o.childValues, value);
+            return BI.contains(o.childValues, (value + "").split("_").slice(0, level).join("_"));
         });
     },
 
@@ -43679,7 +43848,7 @@ BI.DownListGroupItem.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.down_list_group_item", BI.DownListGroupItem);
 
 /***/ }),
-/* 562 */
+/* 565 */
 /***/ (function(module, exports) {
 
 /**
@@ -43971,7 +44140,7 @@ BI.DownListPopup.EVENT_SON_VALUE_CHANGE = "EVENT_SON_VALUE_CHANGE";
 BI.shortcut("bi.down_list_popup", BI.DownListPopup);
 
 /***/ }),
-/* 563 */
+/* 566 */
 /***/ (function(module, exports) {
 
 !(function () {
@@ -44043,7 +44212,7 @@ BI.shortcut("bi.down_list_popup", BI.DownListPopup);
 
 
 /***/ }),
-/* 564 */
+/* 567 */
 /***/ (function(module, exports) {
 
 BI.DynamicDateCard = BI.inherit(BI.Widget, {
@@ -44182,11 +44351,24 @@ BI.DynamicDateCard = BI.inherit(BI.Widget, {
     },
 
     _getParamJson: function (values, positionValue) {
-        var self = this;
+        var self = this, o = this.options;
         var items = BI.map(values, function (idx, value) {
             return {
                 el: {
                     type: "bi.dynamic_date_param_item",
+                    validationChecker: BI.bind(self._checkDate, self),
+                    errorText: function () {
+                        var start = BI.parseDateTime(o.min, "%Y-%X-%d");
+                        var end = BI.parseDateTime(o.max, "%Y-%X-%d");
+                        return BI.i18nText("BI-Basic_Date_Range_Error",
+                            start.getFullYear(),
+                            start.getMonth() + 1,
+                            start.getDate(),
+                            end.getFullYear(),
+                            end.getMonth() + 1,
+                            end.getDate()
+                        );
+                    },
                     dateType: value.dateType,
                     value: value.value,
                     offset: value.offset,
@@ -44213,7 +44395,7 @@ BI.DynamicDateCard = BI.inherit(BI.Widget, {
                 listeners: [{
                     eventName: "EVENT_CHANGE",
                     action: function () {
-                        self.position = this.getValue()[0];
+                        this.setValue(self._checkPositionValue(this.getValue()[0]));
                         self.fireEvent("EVENT_CHANGE");
                     }
                 }]
@@ -44229,7 +44411,7 @@ BI.DynamicDateCard = BI.inherit(BI.Widget, {
                     listeners: [{
                         eventName: "EVENT_CHANGE",
                         action: function () {
-                            self.position = this.getValue()[0];
+                            this.setValue(self._checkPositionValue(this.getValue()[0]));
                             self.fireEvent("EVENT_CHANGE");
                         }
                     }]
@@ -44239,6 +44421,22 @@ BI.DynamicDateCard = BI.inherit(BI.Widget, {
         }
 
         return items;
+    },
+
+    _checkPositionValue: function (v) {
+        var lastPosition = this.position;
+        this.position = v;
+        if (!this._checkDate({})) {
+            this.position = lastPosition;
+        }
+        return this.position;
+    },
+
+    _checkDate: function (obj) {
+        var o = this.options;
+        var date = BI.DynamicDateHelper.getCalculation(BI.extend(this.getValue(), this._digestDateTypeValue(obj)));
+
+        return !BI.checkDateVoid(date.getFullYear(), date.getMonth() + 1, date.getDate(), o.min, o.max)[0];
     },
 
     _getText: function (lastValue) {
@@ -44299,6 +44497,48 @@ BI.DynamicDateCard = BI.inherit(BI.Widget, {
         };
     },
 
+    _digestDateTypeValue: function (value) {
+        var valueMap = {};
+        switch (value.dateType) {
+            case BI.DynamicDateCard.TYPE.YEAR:
+                valueMap.year = (value.offset === 0 ? -value.value : +value.value);
+                break;
+            case BI.DynamicDateCard.TYPE.QUARTER:
+                valueMap.quarter = (value.offset === 0 ? -value.value : +value.value);
+                break;
+            case BI.DynamicDateCard.TYPE.MONTH:
+                valueMap.month = (value.offset === 0 ? -value.value : +value.value);
+                break;
+            case BI.DynamicDateCard.TYPE.WEEK:
+                valueMap.week = (value.offset === 0 ? -value.value : +value.value);
+                break;
+            case BI.DynamicDateCard.TYPE.DAY:
+                valueMap.day = (value.offset === 0 ? -value.value : +value.value);
+                break;
+            case BI.DynamicDateCard.TYPE.WORK_DAY:
+                valueMap.workDay = (value.offset === 0 ? -value.value : +value.value);
+                break;
+            default:
+                break;
+        }
+        if (BI.isNull(value.dateType)) {
+            valueMap.position = this.position || BI.DynamicDateCard.OFFSET.CURRENT;
+        }
+        return valueMap;
+    },
+
+    setMinDate: function(minDate) {
+        if (BI.isNotEmptyString(this.options.min)) {
+            this.options.min = minDate;
+        }
+    },
+
+    setMaxDate: function (maxDate) {
+        if (BI.isNotEmptyString(this.options.max)) {
+            this.options.max = maxDate;
+        }
+    },
+
     setValue: function (v) {
         v = v || {};
         this.position = v.position || BI.DynamicDateCard.OFFSET.CURRENT;
@@ -44341,33 +44581,12 @@ BI.DynamicDateCard = BI.inherit(BI.Widget, {
         if(selectValues.length !== 0) {
             BI.each(buttons, function (idx, button) {
                 var value = button.getValue();
-                switch (value.dateType) {
-                    case BI.DynamicDateCard.TYPE.YEAR:
-                        valueMap.year = (value.offset === 0 ? -value.value : value.value);
-                        break;
-                    case BI.DynamicDateCard.TYPE.QUARTER:
-                        valueMap.quarter = (value.offset === 0 ? -value.value : value.value);
-                        break;
-                    case BI.DynamicDateCard.TYPE.MONTH:
-                        valueMap.month = (value.offset === 0 ? -value.value : value.value);
-                        break;
-                    case BI.DynamicDateCard.TYPE.WEEK:
-                        valueMap.week = (value.offset === 0 ? -value.value : value.value);
-                        break;
-                    case BI.DynamicDateCard.TYPE.DAY:
-                        valueMap.day = (value.offset === 0 ? -value.value : value.value);
-                        break;
-                    default:
-                        break;
-                }
-                if(BI.isNull(value.dateType)) {
-                    valueMap.position = self.position || BI.DynamicDateCard.OFFSET.CURRENT;
-                }
+                BI.extend(valueMap, self._digestDateTypeValue(value));
             });
         }
         if(this.workDayBox.isSelected()) {
             var value = buttons[0].getValue();
-            valueMap.workDay = (value.offset === 0 ? -value.value : value.value);
+            valueMap.workDay = (value.offset === 0 ? -value.value : +value.value);
         }
         return valueMap;
     }
@@ -44393,7 +44612,7 @@ BI.extend(BI.DynamicDateCard, {
 });
 
 /***/ }),
-/* 565 */
+/* 568 */
 /***/ (function(module, exports) {
 
 BI.DynamicDateCombo = BI.inherit(BI.Single, {
@@ -44405,14 +44624,20 @@ BI.DynamicDateCombo = BI.inherit(BI.Single, {
     },
 
     props: {
-        baseCls: "bi-dynamic-date-combo bi-border bi-focus-shadow bi-border-radius",
-        height: 22,
+        baseCls: "bi-dynamic-date-combo",
+        height: 24,
         minDate: "1900-01-01",
         maxDate: "2099-12-31",
         format: "",
-        allowEdit: true
+        allowEdit: true,
+        supportDynamic: true,
     },
 
+    _init: function () {
+        var o = this.options;
+        o.height -= 2;
+        BI.DynamicDateCombo.superclass._init.apply(this, arguments);
+    },
 
     render: function () {
         var self = this, opts = this.options;
@@ -44437,6 +44662,7 @@ BI.DynamicDateCombo = BI.inherit(BI.Single, {
                 items: [{
                     el: {
                         type: "bi.combo",
+                        cls: "bi-border bi-focus-shadow bi-border-radius",
                         container: opts.container,
                         ref: function () {
                             self.combo = this;
@@ -44511,11 +44737,11 @@ BI.DynamicDateCombo = BI.inherit(BI.Single, {
                             }, {
                                 eventName: BI.DynamicDateTrigger.EVENT_CONFIRM,
                                 action: function () {
-                                    if (self.combo.isViewVisible()) {
-                                        return;
-                                    }
                                     var dateStore = self.storeTriggerValue;
                                     var dateObj = self.trigger.getKey();
+                                    if (self.combo.isViewVisible() || BI.isEqual(dateObj, dateStore)) {
+                                        return;
+                                    }
                                     if (BI.isNotEmptyString(dateObj) && !BI.isEqual(dateObj, dateStore)) {
                                         self.storeValue = self.trigger.getValue();
                                         self.setValue(self.trigger.getValue());
@@ -44532,6 +44758,7 @@ BI.DynamicDateCombo = BI.inherit(BI.Single, {
                         popup: {
                             el: {
                                 type: "bi.dynamic_date_popup",
+                                supportDynamic: opts.supportDynamic,
                                 behaviors: opts.behaviors,
                                 min: opts.minDate,
                                 max: opts.maxDate,
@@ -44720,7 +44947,7 @@ BI.extend(BI.DynamicDateCombo, {
 });
 
 /***/ }),
-/* 566 */
+/* 569 */
 /***/ (function(module, exports) {
 
 BI.DynamicDateParamItem = BI.inherit(BI.Widget, {
@@ -44728,6 +44955,12 @@ BI.DynamicDateParamItem = BI.inherit(BI.Widget, {
     props: {
         baseCls: "bi-dynamic-date-param-item",
         dateType: BI.DynamicDateCard.TYPE.YEAR,
+        validationChecker: function() {
+            return true;
+        },
+        errorText: function () {
+            return BI.i18nText("BI-Please_Input_Natural_Number");
+        },
         value: 0,
         offset: 0,
         height: 24
@@ -44743,17 +44976,23 @@ BI.DynamicDateParamItem = BI.inherit(BI.Widget, {
                     cls: "bi-border",
                     height: 22,
                     validationChecker: function (v) {
-                        return BI.isNaturalNumber(v);
+                        return BI.isNaturalNumber(v) && o.validationChecker(BI.extend({}, self.getValue(), {
+                            value: v
+                        }));
                     },
                     value: o.value,
                     ref: function () {
                         self.editor = this;
                     },
                     errorText: function (v) {
-                        if(BI.isEmptyString(v)) {
+                        if (BI.isEmptyString(v)) {
                             return BI.i18nText("BI-Basic_Please_Input_Content");
                         }
-                        return BI.i18nText("BI-Please_Input_Natural_Number");
+                        if (!BI.isNumeric(v)) {
+                            return BI.i18nText("BI-Please_Input_Natural_Number");
+                        }
+
+                        return o.errorText(v);
                     },
                     allowBlank: false,
                     listeners: [{
@@ -44789,6 +45028,9 @@ BI.DynamicDateParamItem = BI.inherit(BI.Widget, {
                 listeners: [{
                     eventName: BI.TextValueCombo.EVENT_CHANGE,
                     action: function () {
+                        if (!o.validationChecker(self.getValue())) {
+                            self.editor.setValue(0);
+                        }
                         self.fireEvent(BI.DynamicDateParamItem.EVENT_CHANGE);
                     }
                 }]
@@ -44844,7 +45086,7 @@ BI.shortcut("bi.dynamic_date_param_item", BI.DynamicDateParamItem);
 
 
 /***/ }),
-/* 567 */
+/* 570 */
 /***/ (function(module, exports) {
 
 BI.DynamicDatePopup = BI.inherit(BI.Widget, {
@@ -44856,7 +45098,7 @@ BI.DynamicDatePopup = BI.inherit(BI.Widget, {
     props: {
         baseCls: "bi-dynamic-date-popup",
         width: 248,
-        height: 344
+        supportDynamic: true,
     },
 
     _init: function () {
@@ -44865,7 +45107,7 @@ BI.DynamicDatePopup = BI.inherit(BI.Widget, {
         this.storeValue = {type: BI.DynamicDateCombo.Static};
         BI.createWidget({
             element: this,
-            type: "bi.vtape",
+            type: "bi.vertical",
             items: [{
                 el: this._getTabJson()
             }, {
@@ -44889,8 +45131,9 @@ BI.DynamicDatePopup = BI.inherit(BI.Widget, {
                         shadow: true,
                         textHeight: c.buttonHeight - 1,
                         text: BI.i18nText("BI-Multi_Date_Today"),
+                        disabled: this._checkTodayValid(),
                         ref: function () {
-                            self.textButton = this;
+                            self.todayButton = this;
                         },
                         listeners: [{
                             eventName: BI.TextButton.EVENT_CHANGE,
@@ -44910,9 +45153,9 @@ BI.DynamicDatePopup = BI.inherit(BI.Widget, {
                                 self.fireEvent(BI.DynamicDatePopup.BUTTON_OK_EVENT_CHANGE);
                             }
                         }]
-                    }]]
+                    }]],
+                    height: 24
                 },
-                height: 24
             }]
         });
         this.setValue(opts.value);
@@ -44922,11 +45165,15 @@ BI.DynamicDatePopup = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
         return {
             type: "bi.tab",
+            logic: {
+                dynamic: true
+            },
             ref: function () {
                 self.dateTab = this;
             },
             tab: {
                 type: "bi.linear_segment",
+                invisible: !o.supportDynamic,
                 cls: "bi-split-bottom",
                 height: this.constants.tabHeight,
                 items: BI.createItems([{
@@ -44944,12 +45191,15 @@ BI.DynamicDatePopup = BI.inherit(BI.Widget, {
                     case BI.DynamicDateCombo.Dynamic:
                         return {
                             type: "bi.dynamic_date_card",
+                            cls: "dynamic-date-pane",
                             listeners: [{
                                 eventName: "EVENT_CHANGE",
                                 action: function () {
                                     self._setInnerValue(self.year, v);
                                 }
                             }],
+                            min: self.options.min,
+                            max: self.options.max,
                             ref: function () {
                                 self.dynamicPane = this;
                             }
@@ -45011,13 +45261,13 @@ BI.DynamicDatePopup = BI.inherit(BI.Widget, {
 
     _setInnerValue: function () {
         if (this.dateTab.getSelect() === BI.DynamicDateCombo.Static) {
-            this.textButton.setValue(BI.i18nText("BI-Multi_Date_Today"));
-            this.textButton.setEnable(true);
+            this.todayButton.setValue(BI.i18nText("BI-Multi_Date_Today"));
+            this.textButton.setEnable(!this._checkTodayValid());
         } else {
             var date = BI.DynamicDateHelper.getCalculation(this.dynamicPane.getValue());
             date = BI.print(date, "%Y-%X-%d");
-            this.textButton.setValue(date);
-            this.textButton.setEnable(false);
+            this.todayButton.setValue(date);
+            this.todayButton.setEnable(false);
         }
     },
 
@@ -45025,17 +45275,25 @@ BI.DynamicDatePopup = BI.inherit(BI.Widget, {
         return BI.isNull(value) || BI.isEmptyObject(value) || BI.isEmptyString(value);
     },
 
+    _checkTodayValid: function () {
+        var o = this.options;
+        var today = BI.getDate();
+        return !!BI.checkDateVoid(today.getFullYear(), today.getMonth() + 1, today.getDate(), o.min, o.max)[0];
+    },
+
     setMinDate: function (minDate) {
         if (this.options.min !== minDate) {
             this.options.min = minDate;
-            this.ymd.setMinDate(minDate);
+            this.ymd && this.ymd.setMinDate(minDate);
+            this.dynamicPane && this.ymd.setMinDate(minDate);
         }
     },
 
     setMaxDate: function (maxDate) {
         if (this.options.max !== maxDate) {
             this.options.max = maxDate;
-            this.ymd.setMaxDate(maxDate);
+            this.ymd && this.ymd.setMaxDate(maxDate);
+            this.dynamicPane && this.ymd.setMaxDate(maxDate);
         }
     },
 
@@ -45061,12 +45319,12 @@ BI.DynamicDatePopup = BI.inherit(BI.Widget, {
                         month: date.getMonth() + 1,
                         day: date.getDate()
                     });
-                    this.textButton.setValue(BI.i18nText("BI-Multi_Date_Today"));
+                    this.todayButton.setValue(BI.i18nText("BI-Multi_Date_Today"));
                 } else {
                     this.ymd.setValue(value);
-                    this.textButton.setValue(BI.i18nText("BI-Multi_Date_Today"));
+                    this.todayButton.setValue(BI.i18nText("BI-Multi_Date_Today"));
                 }
-                this.textButton.setEnable(true);
+                this.todayButton.setEnable(!this._checkTodayValid());
                 break;
         }
     },
@@ -45086,7 +45344,7 @@ BI.DynamicDatePopup.EVENT_BEFORE_YEAR_MONTH_POPUPVIEW = "EVENT_BEFORE_YEAR_MONTH
 BI.shortcut("bi.dynamic_date_popup", BI.DynamicDatePopup);
 
 /***/ }),
-/* 568 */
+/* 571 */
 /***/ (function(module, exports) {
 
 BI.DynamicDateTrigger = BI.inherit(BI.Trigger, {
@@ -45444,7 +45702,7 @@ BI.shortcut("bi.dynamic_date_trigger", BI.DynamicDateTrigger);
 
 
 /***/ }),
-/* 569 */
+/* 572 */
 /***/ (function(module, exports) {
 
 BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
@@ -45456,14 +45714,20 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
     },
 
     props: {
-        baseCls: "bi-dynamic-date-combo bi-border bi-focus-shadow bi-border-radius",
-        height: 22,
+        baseCls: "bi-dynamic-date-combo",
+        height: 24,
         minDate: "1900-01-01",
         maxDate: "2099-12-31",
         format: "",
-        allowEdit: true
+        allowEdit: true,
+        supportDynamic: true
     },
 
+    _init: function () {
+        var o = this.options;
+        o.height -= 2;
+        BI.DynamicDateTimeCombo.superclass._init.apply(this, arguments);
+    },
 
     render: function () {
         var self = this, opts = this.options;
@@ -45488,6 +45752,7 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
                 items: [{
                     el: {
                         type: "bi.combo",
+                        cls: "bi-border bi-focus-shadow bi-border-radius",
                         destroyWhenHide: true,
                         container: opts.container,
                         ref: function () {
@@ -45567,11 +45832,11 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
                             }, {
                                 eventName: BI.DynamicDateTimeTrigger.EVENT_CONFIRM,
                                 action: function () {
-                                    if (self.combo.isViewVisible()) {
-                                        return;
-                                    }
                                     var dateStore = self.storeTriggerValue;
                                     var dateObj = self.trigger.getKey();
+                                    if (self.combo.isViewVisible() || BI.isEqual(dateObj, dateStore)) {
+                                        return;
+                                    }
                                     if (BI.isNotEmptyString(dateObj) && !BI.isEqual(dateObj, dateStore)) {
                                         self.storeValue = self.trigger.getValue();
                                         self.setValue(self.trigger.getValue());
@@ -45588,6 +45853,7 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
                         popup: {
                             el: {
                                 type: "bi.dynamic_date_time_popup",
+                                supportDynamic: opts.supportDynamic,
                                 behaviors: opts.behaviors,
                                 min: opts.minDate,
                                 max: opts.maxDate,
@@ -45648,9 +45914,9 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
                         listeners: [{
                             eventName: BI.Combo.EVENT_BEFORE_POPUPVIEW,
                             action: function () {
-                                self.popup.setValue(self.storeValue);
                                 self.popup.setMinDate(opts.minDate);
                                 self.popup.setMaxDate(opts.maxDate);
+                                self.popup.setValue(self.storeValue);
                                 self.fireEvent(BI.DynamicDateTimeCombo.EVENT_BEFORE_POPUPVIEW);
                             }
                         }],
@@ -45779,7 +46045,7 @@ BI.extend(BI.DynamicDateTimeCombo, {
 });
 
 /***/ }),
-/* 570 */
+/* 573 */
 /***/ (function(module, exports) {
 
 BI.DynamicDateTimePopup = BI.inherit(BI.Widget, {
@@ -45791,7 +46057,7 @@ BI.DynamicDateTimePopup = BI.inherit(BI.Widget, {
     props: {
         baseCls: "bi-dynamic-date-time-popup",
         width: 248,
-        height: 385
+        supportDynamic: true,
     },
 
     _init: function () {
@@ -45800,7 +46066,7 @@ BI.DynamicDateTimePopup = BI.inherit(BI.Widget, {
         this.storeValue = {type: BI.DynamicDateCombo.Static};
         BI.createWidget({
             element: this,
-            type: "bi.vtape",
+            type: "bi.vertical",
             items: [{
                 el: this._getTabJson()
             }, {
@@ -45824,8 +46090,9 @@ BI.DynamicDateTimePopup = BI.inherit(BI.Widget, {
                         textHeight: c.buttonHeight - 1,
                         shadow: true,
                         text: BI.i18nText("BI-Multi_Date_Today"),
+                        disabled: this._checkTodayValid(),
                         ref: function () {
-                            self.textButton = this;
+                            self.todayButton = this;
                         },
                         listeners: [{
                             eventName: BI.TextButton.EVENT_CHANGE,
@@ -45845,9 +46112,9 @@ BI.DynamicDateTimePopup = BI.inherit(BI.Widget, {
                                 self.fireEvent(BI.DynamicDateTimePopup.BUTTON_OK_EVENT_CHANGE);
                             }
                         }]
-                    }]]
-                },
-                height: 24
+                    }]],
+                    height: 24
+                }
             }]
         });
         this.setValue(opts.value);
@@ -45857,11 +46124,15 @@ BI.DynamicDateTimePopup = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
         return {
             type: "bi.tab",
+            logic: {
+                dynamic: true
+            },
             ref: function () {
                 self.dateTab = this;
             },
             tab: {
                 type: "bi.linear_segment",
+                invisible: !o.supportDynamic,
                 cls: "bi-split-bottom",
                 height: this.constants.tabHeight,
                 items: BI.createItems([{
@@ -45879,6 +46150,7 @@ BI.DynamicDateTimePopup = BI.inherit(BI.Widget, {
                     case BI.DynamicDateCombo.Dynamic:
                         return {
                             type: "bi.dynamic_date_card",
+                            cls: "dynamic-date-pane",
                             listeners: [{
                                 eventName: "EVENT_CHANGE",
                                 action: function () {
@@ -45887,12 +46159,14 @@ BI.DynamicDateTimePopup = BI.inherit(BI.Widget, {
                             }],
                             ref: function () {
                                 self.dynamicPane = this;
-                            }
+                            },
+                            min: self.options.min,
+                            max: self.options.max,
                         };
                     case BI.DynamicDateCombo.Static:
                     default:
                         return {
-                            type: "bi.vtape",
+                            type: "bi.vertical",
                             items: [{
                                 type: "bi.date_calendar_popup",
                                 behaviors: o.behaviors,
@@ -45913,9 +46187,9 @@ BI.DynamicDateTimePopup = BI.inherit(BI.Widget, {
                                     cls: "bi-split-top",
                                     ref: function () {
                                         self.timeSelect = this;
-                                    }
-                                },
-                                height: 40
+                                    },
+                                    height: 40
+                                }
                             }]
                         };
                 }
@@ -45954,18 +46228,24 @@ BI.DynamicDateTimePopup = BI.inherit(BI.Widget, {
 
     _setInnerValue: function () {
         if (this.dateTab.getSelect() === BI.DynamicDateCombo.Static) {
-            this.textButton.setValue(BI.i18nText("BI-Multi_Date_Today"));
-            this.textButton.setEnable(true);
+            this.todayButton.setValue(BI.i18nText("BI-Multi_Date_Today"));
+            this.todayButton.setEnable(!this._checkTodayValid());
         } else {
             var date = BI.DynamicDateHelper.getCalculation(this.dynamicPane.getValue());
             date = BI.print(date, "%Y-%X-%d");
-            this.textButton.setValue(date);
-            this.textButton.setEnable(false);
+            this.todayButton.setValue(date);
+            this.todayButton.setEnable(false);
         }
     },
 
     _checkValueValid: function (value) {
         return BI.isNull(value) || BI.isEmptyObject(value) || BI.isEmptyString(value);
+    },
+
+    _checkTodayValid: function () {
+        var o = this.options;
+        var today = BI.getDate();
+        return !!BI.checkDateVoid(today.getFullYear(), today.getMonth() + 1, today.getDate(), o.min, o.max)[0];
     },
 
     setMinDate: function (minDate) {
@@ -46005,7 +46285,7 @@ BI.DynamicDateTimePopup = BI.inherit(BI.Widget, {
                         day: date.getDate()
                     });
                     this.timeSelect.setValue();
-                    this.textButton.setValue(BI.i18nText("BI-Multi_Date_Today"));
+                    this.todayButton.setValue(BI.i18nText("BI-Multi_Date_Today"));
                 } else {
                     this.ymd.setValue(value);
                     this.timeSelect.setValue({
@@ -46013,9 +46293,9 @@ BI.DynamicDateTimePopup = BI.inherit(BI.Widget, {
                         minute: value.minute,
                         second: value.second
                     });
-                    this.textButton.setValue(BI.i18nText("BI-Multi_Date_Today"));
+                    this.todayButton.setValue(BI.i18nText("BI-Multi_Date_Today"));
                 }
-                this.textButton.setEnable(true);
+                this.todayButton.setEnable(!this._checkTodayValid());
                 break;
         }
     },
@@ -46036,7 +46316,7 @@ BI.DynamicDateTimePopup.EVENT_BEFORE_YEAR_MONTH_POPUPVIEW = "EVENT_BEFORE_YEAR_M
 BI.shortcut("bi.dynamic_date_time_popup", BI.DynamicDateTimePopup);
 
 /***/ }),
-/* 571 */
+/* 574 */
 /***/ (function(module, exports) {
 
 BI.DynamicDateTimeSelect = BI.inherit(BI.Widget, {
@@ -46253,7 +46533,7 @@ BI.extend(BI.DynamicDateTimeSelect, {
 });
 
 /***/ }),
-/* 572 */
+/* 575 */
 /***/ (function(module, exports) {
 
 BI.DynamicDateTimeTrigger = BI.inherit(BI.Trigger, {
@@ -46635,7 +46915,7 @@ BI.DynamicDateTimeTrigger.EVENT_KEY_DOWN = "EVENT_KEY_DOWN";
 BI.shortcut("bi.dynamic_date_time_trigger", BI.DynamicDateTimeTrigger);
 
 /***/ }),
-/* 573 */
+/* 576 */
 /***/ (function(module, exports) {
 
 /**
@@ -46823,6 +47103,14 @@ BI.SearchEditor = BI.inherit(BI.Widget, {
 
     isValid: function () {
         return this.editor.isValid();
+    },
+
+    showClearIcon: function () {
+        this.clear.visible();
+    },
+
+    hideClearIcon: function () {
+        this.clear.invisible();
     }
 });
 BI.SearchEditor.EVENT_CHANGE = "EVENT_CHANGE";
@@ -46848,7 +47136,7 @@ BI.SearchEditor.EVENT_EMPTY = "EVENT_EMPTY";
 BI.shortcut("bi.search_editor", BI.SearchEditor);
 
 /***/ }),
-/* 574 */
+/* 577 */
 /***/ (function(module, exports) {
 
 /**
@@ -46873,7 +47161,7 @@ BI.SmallSearchEditor = BI.inherit(BI.SearchEditor, {
 BI.shortcut("bi.small_search_editor", BI.SmallSearchEditor);
 
 /***/ }),
-/* 575 */
+/* 578 */
 /***/ (function(module, exports) {
 
 /**
@@ -47052,7 +47340,7 @@ BI.TextEditor.EVENT_EMPTY = "EVENT_EMPTY";
 BI.shortcut("bi.text_editor", BI.TextEditor);
 
 /***/ }),
-/* 576 */
+/* 579 */
 /***/ (function(module, exports) {
 
 /**
@@ -47077,7 +47365,7 @@ BI.SmallTextEditor = BI.inherit(BI.TextEditor, {
 BI.shortcut("bi.small_text_editor", BI.SmallTextEditor);
 
 /***/ }),
-/* 577 */
+/* 580 */
 /***/ (function(module, exports) {
 
 /**
@@ -47622,7 +47910,7 @@ BI.IntervalSlider.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.interval_slider", BI.IntervalSlider);
 
 /***/ }),
-/* 578 */
+/* 581 */
 /***/ (function(module, exports) {
 
 /**
@@ -47849,7 +48137,7 @@ BI.AccurateCalculationModel = BI.inherit(BI.Widget, {
 });
 
 /***/ }),
-/* 579 */
+/* 582 */
 /***/ (function(module, exports) {
 
 /**
@@ -47944,7 +48232,7 @@ BI.MultiLayerDownListCombo.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
 BI.shortcut("bi.multi_layer_down_list_combo", BI.MultiLayerDownListCombo);
 
 /***/ }),
-/* 580 */
+/* 583 */
 /***/ (function(module, exports) {
 
 /**
@@ -48060,7 +48348,7 @@ BI.MultiLayerDownListPopup = BI.inherit(BI.Pane, {
                     };
                     self._createChildren(item);
                 } else {
-                    item.type = "bi.down_list_item";
+                    item.type = item.type || "bi.down_list_item";
                     item.title = item.title || item.text;
                     item.textRgap = 10;
                     item.isNeedAdjustWidth = false;
@@ -48108,7 +48396,7 @@ BI.MultiLayerDownListPopup = BI.inherit(BI.Pane, {
             var fatherValue = BI.deepClone(self._formatEL(item).el.value);
             var childValue = BI.deepClone(child.value);
             self.singleValues.push(child.value);
-            child.type = "bi.down_list_item";
+            child.type = child.type || "bi.down_list_item";
             child.extraCls = " child-down-list-item";
             child.title = child.title || child.text;
             child.textRgap = 10;
@@ -48271,7 +48559,7 @@ BI.MultiLayerDownListPopup.EVENT_SON_VALUE_CHANGE = "EVENT_SON_VALUE_CHANGE";
 BI.shortcut("bi.multi_layer_down_list_popup", BI.MultiLayerDownListPopup);
 
 /***/ }),
-/* 581 */
+/* 584 */
 /***/ (function(module, exports) {
 
 /**
@@ -48289,9 +48577,6 @@ BI.MultiLayerSelectTreeCombo = BI.inherit(BI.Widget, {
             itemsCreator: BI.emptyFn,
             items: [],
             value: "",
-            attributes: {
-                tabIndex: 0
-            },
             allowEdit: false,
             allowSearchValue: false,
             allowInsertValue: false,
@@ -48299,12 +48584,21 @@ BI.MultiLayerSelectTreeCombo = BI.inherit(BI.Widget, {
         });
     },
 
+    _init: function () {
+        var o = this.options;
+        if (this._shouldWrapper()) {
+            o.height -= 2;
+            BI.isNumeric(o.width) && (o.width -= 2);
+        }
+        BI.MultiLayerSelectTreeCombo.superclass._init.apply(this, arguments);
+    },
+
     render: function () {
         var self = this, o = this.options;
 
         var combo = (o.itemsCreator === BI.emptyFn) ? this._getSyncConfig() : this._getAsyncConfig();
 
-        return (!o.allowEdit && o.itemsCreator === BI.emptyFn) ? combo : {
+        return this._shouldWrapper() ? combo : {
             type: "bi.absolute",
             items: [{
                 el: combo,
@@ -48336,10 +48630,16 @@ BI.MultiLayerSelectTreeCombo = BI.inherit(BI.Widget, {
         };
     },
 
+    _shouldWrapper: function () {
+        var o = this.options;
+        return !o.allowEdit && o.itemsCreator === BI.emptyFn;
+    },
+
     _getBaseConfig: function () {
         var self = this, o = this.options;
         return {
             type: "bi.combo",
+            cls: "bi-border bi-focus-shadow bi-border-radius",
             container: o.container,
             destroyWhenHide: o.destroyWhenHide,
             adjustLength: 2,
@@ -48503,7 +48803,7 @@ BI.MultiLayerSelectTreeCombo.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
 BI.shortcut("bi.multilayer_select_tree_combo", BI.MultiLayerSelectTreeCombo);
 
 /***/ }),
-/* 582 */
+/* 585 */
 /***/ (function(module, exports) {
 
 /**
@@ -48600,7 +48900,7 @@ BI.MultiLayerSelectTreeInsertSearchPane.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multilayer_select_tree_insert_search_pane", BI.MultiLayerSelectTreeInsertSearchPane);
 
 /***/ }),
-/* 583 */
+/* 586 */
 /***/ (function(module, exports) {
 
 /**
@@ -48795,7 +49095,7 @@ BI.shortcut("bi.multilayer_select_level_tree", BI.MultiLayerSelectLevelTree);
 
 
 /***/ }),
-/* 584 */
+/* 587 */
 /***/ (function(module, exports) {
 
 /**
@@ -48877,7 +49177,7 @@ BI.MultiLayerSelectTreePopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multilayer_select_tree_popup", BI.MultiLayerSelectTreePopup);
 
 /***/ }),
-/* 585 */
+/* 588 */
 /***/ (function(module, exports) {
 
 /**
@@ -48887,7 +49187,7 @@ BI.MultiLayerSelectTreeTrigger = BI.inherit(BI.Trigger, {
 
     props: function() {
         return {
-            extraCls: "bi-multi-layer-select-tree-trigger bi-border bi-focus-shadow bi-border-radius",
+            extraCls: "bi-multi-layer-select-tree-trigger",
             height: 24,
             itemsCreator: BI.emptyFn,
             watermark: BI.i18nText("BI-Basic_Search"),
@@ -49132,7 +49432,7 @@ BI.MultiLayerSelectTreeTrigger.EVENT_ADD_ITEM = "EVENT_ADD_ITEM";
 BI.shortcut("bi.multilayer_select_tree_trigger", BI.MultiLayerSelectTreeTrigger);
 
 /***/ }),
-/* 586 */
+/* 589 */
 /***/ (function(module, exports) {
 
 /**
@@ -49237,7 +49537,7 @@ BI.shortcut("bi.multilayer_select_tree_first_plus_group_node", BI.MultiLayerSele
 
 
 /***/ }),
-/* 587 */
+/* 590 */
 /***/ (function(module, exports) {
 
 /**
@@ -49331,7 +49631,7 @@ BI.shortcut("bi.multilayer_select_tree_last_plus_group_node", BI.MultiLayerSelec
 
 
 /***/ }),
-/* 588 */
+/* 591 */
 /***/ (function(module, exports) {
 
 /**
@@ -49425,7 +49725,7 @@ BI.shortcut("bi.multilayer_select_tree_mid_plus_group_node", BI.MultiLayerSelect
 
 
 /***/ }),
-/* 589 */
+/* 592 */
 /***/ (function(module, exports) {
 
 /**
@@ -49523,7 +49823,7 @@ BI.shortcut("bi.multilayer_select_tree_plus_group_node", BI.MultiLayerSelectTree
 
 
 /***/ }),
-/* 590 */
+/* 593 */
 /***/ (function(module, exports) {
 
 /**
@@ -49544,9 +49844,6 @@ BI.MultiLayerSingleTreeCombo = BI.inherit(BI.Widget, {
             itemsCreator: BI.emptyFn,
             items: [],
             value: "",
-            attributes: {
-                tabIndex: 0
-            },
             allowEdit: false,
             allowSearchValue: false,
             allowInsertValue: false,
@@ -49554,13 +49851,23 @@ BI.MultiLayerSingleTreeCombo = BI.inherit(BI.Widget, {
         });
     },
 
+    _init: function () {
+        var o = this.options;
+        if (this._shouldWrapper()) {
+            o.height -= 2;
+            BI.isNumeric(o.width) && (o.width -= 2);
+        }
+        BI.MultiLayerSingleTreeCombo.superclass._init.apply(this, arguments);
+    },
+
     render: function () {
         var self = this, o = this.options;
 
         var combo = (o.itemsCreator === BI.emptyFn) ? this._getSyncConfig() : this._getAsyncConfig();
 
-        return (!o.allowEdit && o.itemsCreator === BI.emptyFn) ? combo : {
+        return this._shouldWrapper() ? combo : {
             type: "bi.absolute",
+            height: o.height - 2,
             items: [{
                 el: combo,
                 left: 0,
@@ -49591,10 +49898,16 @@ BI.MultiLayerSingleTreeCombo = BI.inherit(BI.Widget, {
         };
     },
 
+    _shouldWrapper: function () {
+        var o = this.options;
+        return !o.allowEdit && o.itemsCreator === BI.emptyFn;
+    },
+
     _getBaseConfig: function () {
         var self = this, o = this.options;
         return {
             type: "bi.combo",
+            cls: "bi-border bi-focus-shadow bi-border-radius",
             container: o.container,
             destroyWhenHide: o.destroyWhenHide,
             adjustLength: 2,
@@ -49757,7 +50070,7 @@ BI.MultiLayerSingleTreeCombo.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
 BI.shortcut("bi.multilayer_single_tree_combo", BI.MultiLayerSingleTreeCombo);
 
 /***/ }),
-/* 591 */
+/* 594 */
 /***/ (function(module, exports) {
 
 /**
@@ -49854,7 +50167,7 @@ BI.MultiLayerSingleTreeInsertSearchPane.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multilayer_single_tree_insert_search_pane", BI.MultiLayerSingleTreeInsertSearchPane);
 
 /***/ }),
-/* 592 */
+/* 595 */
 /***/ (function(module, exports) {
 
 /**
@@ -50048,7 +50361,7 @@ BI.shortcut("bi.multilayer_single_level_tree", BI.MultiLayerSingleLevelTree);
 
 
 /***/ }),
-/* 593 */
+/* 596 */
 /***/ (function(module, exports) {
 
 /**
@@ -50129,7 +50442,7 @@ BI.MultiLayerSingleTreePopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multilayer_single_tree_popup", BI.MultiLayerSingleTreePopup);
 
 /***/ }),
-/* 594 */
+/* 597 */
 /***/ (function(module, exports) {
 
 /**
@@ -50139,7 +50452,7 @@ BI.MultiLayerSingleTreeTrigger = BI.inherit(BI.Trigger, {
 
     props: function() {
         return {
-            extraCls: "bi-multi-layer-single-tree-trigger bi-border bi-focus-shadow bi-border-radius",
+            extraCls: "bi-multi-layer-single-tree-trigger",
             height: 24,
             itemsCreator: BI.emptyFn,
             watermark: BI.i18nText("BI-Basic_Search"),
@@ -50385,7 +50698,7 @@ BI.MultiLayerSingleTreeTrigger.EVENT_ADD_ITEM = "EVENT_ADD_ITEM";
 BI.shortcut("bi.multilayer_single_tree_trigger", BI.MultiLayerSingleTreeTrigger);
 
 /***/ }),
-/* 595 */
+/* 598 */
 /***/ (function(module, exports) {
 
 /**
@@ -50482,7 +50795,7 @@ BI.shortcut("bi.multilayer_single_tree_first_plus_group_node", BI.MultiLayerSing
 
 
 /***/ }),
-/* 596 */
+/* 599 */
 /***/ (function(module, exports) {
 
 /**
@@ -50578,7 +50891,7 @@ BI.shortcut("bi.multilayer_single_tree_last_plus_group_node", BI.MultiLayerSingl
 
 
 /***/ }),
-/* 597 */
+/* 600 */
 /***/ (function(module, exports) {
 
 /**
@@ -50674,7 +50987,7 @@ BI.shortcut("bi.multilayer_single_tree_mid_plus_group_node", BI.MultiLayerSingle
 
 
 /***/ }),
-/* 598 */
+/* 601 */
 /***/ (function(module, exports) {
 
 /**
@@ -50781,7 +51094,7 @@ BI.MultiLayerSingleTreePlusGroupNode = BI.inherit(BI.NodeButton, {
 BI.shortcut("bi.multilayer_single_tree_plus_group_node", BI.MultiLayerSingleTreePlusGroupNode);
 
 /***/ }),
-/* 599 */
+/* 602 */
 /***/ (function(module, exports) {
 
 /**
@@ -50873,7 +51186,7 @@ BI.shortcut("bi.multilayer_single_tree_first_tree_leaf_item", BI.MultiLayerSingl
 
 
 /***/ }),
-/* 600 */
+/* 603 */
 /***/ (function(module, exports) {
 
 /**
@@ -50965,7 +51278,7 @@ BI.shortcut("bi.multilayer_single_tree_last_tree_leaf_item", BI.MultiLayerSingle
 
 
 /***/ }),
-/* 601 */
+/* 604 */
 /***/ (function(module, exports) {
 
 /**
@@ -51057,7 +51370,7 @@ BI.shortcut("bi.multilayer_single_tree_mid_tree_leaf_item", BI.MultiLayerSingleT
 
 
 /***/ }),
-/* 602 */
+/* 605 */
 /***/ (function(module, exports) {
 
 /**
@@ -51170,7 +51483,7 @@ BI.MultiSelectCheckPane = BI.inherit(BI.Widget, {
 BI.shortcut("bi.multi_select_check_pane", BI.MultiSelectCheckPane);
 
 /***/ }),
-/* 603 */
+/* 606 */
 /***/ (function(module, exports) {
 
 /**
@@ -51262,7 +51575,7 @@ BI.DisplaySelectedList = BI.inherit(BI.Pane, {
 BI.shortcut("bi.display_selected_list", BI.DisplaySelectedList);
 
 /***/ }),
-/* 604 */
+/* 607 */
 /***/ (function(module, exports) {
 
 /**
@@ -51279,17 +51592,13 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
             valueFormatter: BI.emptyFn,
             itemHeight: 24,
             height: 24,
-            attributes: {
-                tabIndex: 0
-            },
             allowEdit: true
         });
     },
 
     _init: function () {
-        BI.MultiSelectCombo.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
-
+        BI.MultiSelectCombo.superclass._init.apply(this, arguments);
         var assertShowValue = function () {
             if (BI.isKey(self._startValue)) {
                 if (self.storeValue.type === BI.Selection.All) {
@@ -51409,6 +51718,7 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
 
         this.combo = BI.createWidget({
             type: "bi.combo",
+            cls: "bi-border bi-focus-shadow bi-border-radius",
             toggle: !o.allowEdit,
             container: o.container,
             el: this.trigger,
@@ -51462,7 +51772,9 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
         });
 
         this.combo.on(BI.Combo.EVENT_BEFORE_POPUPVIEW, function () {
-            self._dataChange = false;// 标记数据是否发生变化
+            if (!this.isViewVisible()) {
+                self._dataChange = false;// 标记数据是否发生变化
+            }
             this.setValue(self.storeValue);
             BI.nextTick(function () {
                 self._populate();
@@ -51557,12 +51869,12 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
                 },
                 right: o.height,
                 top: 0,
-                height: o.height,
+                height: o.height
             }]
         });
     },
 
-    _itemsCreator4Trigger: function(op, callback) {
+    _itemsCreator4Trigger: function (op, callback) {
         var self = this, o = this.options;
         o.itemsCreator(op, function (res) {
             if (op.times === 1 && BI.isNotNull(op.keywords)) {
@@ -51573,7 +51885,7 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
         });
     },
 
-    _stopEditing: function() {
+    _stopEditing: function () {
         this.trigger.stopEditing();
         this.numberCounter.hideView();
     },
@@ -51661,6 +51973,7 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
         var self = this, o = this.options;
         adjust();
         callback();
+
         function adjust () {
             if (self.wants2Quit === true) {
                 self._dataChange && self.fireEvent(BI.MultiSelectCombo.EVENT_CONFIRM);
@@ -51707,11 +52020,11 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
         this.combo.populate.apply(this.combo, arguments);
     },
 
-    showView:function (){
+    showView: function () {
         this.combo.showView();
     },
 
-    hideView:function (){
+    hideView: function () {
         this.combo.hideView();
     },
 
@@ -51748,7 +52061,7 @@ BI.shortcut("bi.multi_select_combo", BI.MultiSelectCombo);
 
 
 /***/ }),
-/* 605 */
+/* 608 */
 /***/ (function(module, exports) {
 
 /**
@@ -51765,16 +52078,12 @@ BI.MultiSelectNoBarCombo = BI.inherit(BI.Single, {
             valueFormatter: BI.emptyFn,
             itemHeight: 24,
             height: 24,
-            attributes: {
-                tabIndex: 0
-            }
         });
     },
 
     _init: function () {
-        BI.MultiSelectNoBarCombo.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
-
+        BI.MultiSelectNoBarCombo.superclass._init.apply(this, arguments);
         var assertShowValue = function () {
             if (BI.isKey(self._startValue)) {
                 if (self.storeValue.type === BI.Selection.All) {
@@ -51884,6 +52193,7 @@ BI.MultiSelectNoBarCombo = BI.inherit(BI.Single, {
 
         this.combo = BI.createWidget({
             type: "bi.combo",
+            cls: "bi-border bi-focus-shadow bi-border-radius",
             toggle: false,
             container: o.container,
             el: this.trigger,
@@ -51941,7 +52251,9 @@ BI.MultiSelectNoBarCombo = BI.inherit(BI.Single, {
         });
 
         this.combo.on(BI.Combo.EVENT_BEFORE_POPUPVIEW, function () {
-            self._dataChange = false;// 标记数据是否发生变化
+            if (!this.isViewVisible()) {
+                self._dataChange = false;// 标记数据是否发生变化
+            }
             this.setValue(self.storeValue);
             BI.nextTick(function () {
                 self._populate();
@@ -52253,7 +52565,7 @@ BI.shortcut("bi.multi_select_no_bar_combo", BI.MultiSelectNoBarCombo);
 
 
 /***/ }),
-/* 606 */
+/* 609 */
 /***/ (function(module, exports) {
 
 /**
@@ -52270,17 +52582,13 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
             valueFormatter: BI.emptyFn,
             height: 24,
             itemHeight: 24,
-            attributes: {
-                tabIndex: 0
-            },
             allowEdit: true
         });
     },
 
     _init: function () {
-        BI.MultiSelectInsertCombo.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
-
+        BI.MultiSelectInsertCombo.superclass._init.apply(this, arguments);
         var assertShowValue = function () {
             if (BI.isKey(self._startValue)) {
                 if(self.storeValue.type === BI.Selection.All) {
@@ -52394,6 +52702,7 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
 
         this.combo = BI.createWidget({
             type: "bi.combo",
+            cls: "bi-border bi-focus-shadow bi-border-radius",
             toggle: !o.allowEdit,
             el: this.trigger,
             adjustLength: 1,
@@ -52448,7 +52757,9 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
         });
 
         this.combo.on(BI.Combo.EVENT_BEFORE_POPUPVIEW, function () {
-            self._dataChange = false;// 标记数据是否发生变化
+            if (!this.isViewVisible()) {
+                self._dataChange = false;// 标记数据是否发生变化
+            }
             this.setValue(self.storeValue);
             BI.nextTick(function () {
                 self._populate();
@@ -52756,7 +53067,7 @@ BI.shortcut("bi.multi_select_insert_combo", BI.MultiSelectInsertCombo);
 
 
 /***/ }),
-/* 607 */
+/* 610 */
 /***/ (function(module, exports) {
 
 /**
@@ -52773,16 +53084,12 @@ BI.MultiSelectInsertNoBarCombo = BI.inherit(BI.Single, {
             valueFormatter: BI.emptyFn,
             itemsHeight: 24,
             height: 24,
-            attributes: {
-                tabIndex: 0
-            }
         });
     },
 
     _init: function () {
-        BI.MultiSelectInsertNoBarCombo.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
-
+        BI.MultiSelectInsertNoBarCombo.superclass._init.apply(this, arguments);
         var assertShowValue = function () {
             if (BI.isKey(self._startValue)) {
                 if (self.storeValue.type === BI.Selection.All) {
@@ -52890,6 +53197,7 @@ BI.MultiSelectInsertNoBarCombo = BI.inherit(BI.Single, {
 
         this.combo = BI.createWidget({
             type: "bi.combo",
+            cls: "bi-border bi-focus-shadow bi-border-radius",
             toggle: false,
             container: o.container,
             el: this.trigger,
@@ -52946,7 +53254,9 @@ BI.MultiSelectInsertNoBarCombo = BI.inherit(BI.Single, {
         });
 
         this.combo.on(BI.Combo.EVENT_BEFORE_POPUPVIEW, function () {
-            self._dataChange = false;// 标记数据是否发生变化
+            if (!this.isViewVisible()) {
+                self._dataChange = false;// 标记数据是否发生变化
+            }
             this.setValue(self.storeValue);
             BI.nextTick(function () {
                 self._populate();
@@ -53253,7 +53563,7 @@ BI.shortcut("bi.multi_select_insert_no_bar_combo", BI.MultiSelectInsertNoBarComb
 
 
 /***/ }),
-/* 608 */
+/* 611 */
 /***/ (function(module, exports) {
 
 /**
@@ -53273,7 +53583,7 @@ BI.MultiSelectInsertTrigger = BI.inherit(BI.Trigger, {
 
     _defaultConfig: function () {
         return BI.extend(BI.MultiSelectInsertTrigger.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-multi-select-trigger bi-border bi-border-radius",
+            baseCls: "bi-multi-select-trigger",
             itemsCreator: BI.emptyFn,
             valueFormatter: BI.emptyFn,
             itemHeight: 24,
@@ -53290,9 +53600,6 @@ BI.MultiSelectInsertTrigger = BI.inherit(BI.Trigger, {
         BI.MultiSelectInsertTrigger.superclass._init.apply(this, arguments);
 
         var self = this, o = this.options;
-        if (o.height) {
-            this.setHeight(o.height - 2);
-        }
 
         this.searcher = BI.createWidget(o.searcher, {
             type: "bi.multi_select_insert_searcher",
@@ -53418,7 +53725,7 @@ BI.MultiSelectInsertTrigger.EVENT_BLUR = "EVENT_BLUR";
 BI.shortcut("bi.multi_select_insert_trigger", BI.MultiSelectInsertTrigger);
 
 /***/ }),
-/* 609 */
+/* 612 */
 /***/ (function(module, exports) {
 
 /**
@@ -53612,7 +53919,7 @@ BI.MultiSelectLoader.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multi_select_loader", BI.MultiSelectLoader);
 
 /***/ }),
-/* 610 */
+/* 613 */
 /***/ (function(module, exports) {
 
 /**
@@ -53783,7 +54090,7 @@ BI.MultiSelectNoBarLoader = BI.inherit(BI.Widget, {
     },
 
     resetHeight: function (h) {
-        this.button_group.element.css({"max-height": h + "px"});
+        this.button_group.element.css({"max-height": h / BI.pixRatio + BI.pixUnit});
     },
 
     resetWidth: function () {
@@ -53794,8 +54101,9 @@ BI.MultiSelectNoBarLoader = BI.inherit(BI.Widget, {
 BI.MultiSelectNoBarLoader.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multi_select_no_bar_loader", BI.MultiSelectNoBarLoader);
 
+
 /***/ }),
-/* 611 */
+/* 614 */
 /***/ (function(module, exports) {
 
 /**
@@ -53895,7 +54203,7 @@ BI.MultiSelectPopupView.EVENT_CLICK_CLEAR = "EVENT_CLICK_CLEAR";
 BI.shortcut("bi.multi_select_popup_view", BI.MultiSelectPopupView);
 
 /***/ }),
-/* 612 */
+/* 615 */
 /***/ (function(module, exports) {
 
 /**
@@ -53991,7 +54299,7 @@ BI.MultiSelectNoBarPopupView.EVENT_CLICK_CLEAR = "EVENT_CLICK_CLEAR";
 BI.shortcut("bi.multi_select_no_bar_popup_view", BI.MultiSelectNoBarPopupView);
 
 /***/ }),
-/* 613 */
+/* 616 */
 /***/ (function(module, exports) {
 
 /**
@@ -54011,7 +54319,7 @@ BI.MultiSelectTrigger = BI.inherit(BI.Trigger, {
 
     _defaultConfig: function () {
         return BI.extend(BI.MultiSelectTrigger.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-multi-select-trigger bi-border bi-border-radius",
+            baseCls: "bi-multi-select-trigger",
             itemsCreator: BI.emptyFn,
             valueFormatter: BI.emptyFn,
             searcher: {},
@@ -54028,9 +54336,6 @@ BI.MultiSelectTrigger = BI.inherit(BI.Trigger, {
         BI.MultiSelectTrigger.superclass._init.apply(this, arguments);
 
         var self = this, o = this.options;
-        if (o.height) {
-            this.setHeight(o.height - 2);
-        }
 
         this.searcher = BI.createWidget(o.searcher, {
             type: "bi.multi_select_searcher",
@@ -54152,7 +54457,7 @@ BI.MultiSelectTrigger.EVENT_FOCUS = "EVENT_FOCUS";
 BI.shortcut("bi.multi_select_trigger", BI.MultiSelectTrigger);
 
 /***/ }),
-/* 614 */
+/* 617 */
 /***/ (function(module, exports) {
 
 /**
@@ -54290,7 +54595,7 @@ BI.MultiSelectSearchInsertPane.EVENT_ADD_ITEM = "EVENT_ADD_ITEM";
 BI.shortcut("bi.multi_select_search_insert_pane", BI.MultiSelectSearchInsertPane);
 
 /***/ }),
-/* 615 */
+/* 618 */
 /***/ (function(module, exports) {
 
 /**
@@ -54457,7 +54762,7 @@ BI.MultiSelectSearchLoader.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multi_select_search_loader", BI.MultiSelectSearchLoader);
 
 /***/ }),
-/* 616 */
+/* 619 */
 /***/ (function(module, exports) {
 
 /**
@@ -54581,7 +54886,7 @@ BI.MultiSelectSearchPane.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multi_select_search_pane", BI.MultiSelectSearchPane);
 
 /***/ }),
-/* 617 */
+/* 620 */
 /***/ (function(module, exports) {
 
 /**
@@ -54686,7 +54991,7 @@ BI.shortcut("bi.multi_select_check_selected_button", BI.MultiSelectCheckSelected
 
 
 /***/ }),
-/* 618 */
+/* 621 */
 /***/ (function(module, exports) {
 
 /**
@@ -54790,7 +55095,7 @@ BI.shortcut("bi.multi_select_editor", BI.MultiSelectEditor);
 
 
 /***/ }),
-/* 619 */
+/* 622 */
 /***/ (function(module, exports) {
 
 /**
@@ -55002,7 +55307,7 @@ BI.MultiSelectInsertSearcher.EVENT_BLUR = "EVENT_BLUR";
 BI.shortcut("bi.multi_select_insert_searcher", BI.MultiSelectInsertSearcher);
 
 /***/ }),
-/* 620 */
+/* 623 */
 /***/ (function(module, exports) {
 
 /**
@@ -55207,7 +55512,7 @@ BI.MultiSelectSearcher.EVENT_BLUR = "EVENT_BLUR";
 BI.shortcut("bi.multi_select_searcher", BI.MultiSelectSearcher);
 
 /***/ }),
-/* 621 */
+/* 624 */
 /***/ (function(module, exports) {
 
 /**
@@ -55324,7 +55629,7 @@ BI.MultiSelectCheckSelectedSwitcher.EVENT_AFTER_HIDEVIEW = "EVENT_AFTER_HIDEVIEW
 BI.shortcut("bi.multi_select_check_selected_switcher", BI.MultiSelectCheckSelectedSwitcher);
 
 /***/ }),
-/* 622 */
+/* 625 */
 /***/ (function(module, exports) {
 
 /**
@@ -55675,7 +55980,7 @@ BI.shortcut("bi.multi_select_insert_list", BI.MultiSelectInsertList);
 
 
 /***/ }),
-/* 623 */
+/* 626 */
 /***/ (function(module, exports) {
 
 /**
@@ -56032,7 +56337,7 @@ BI.MultiSelectInsertNoBarList.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multi_select_insert_no_bar_list", BI.MultiSelectInsertNoBarList);
 
 /***/ }),
-/* 624 */
+/* 627 */
 /***/ (function(module, exports) {
 
 /**
@@ -56390,7 +56695,7 @@ BI.MultiSelectList.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multi_select_list", BI.MultiSelectList);
 
 /***/ }),
-/* 625 */
+/* 628 */
 /***/ (function(module, exports) {
 
 /**
@@ -56568,7 +56873,7 @@ BI.shortcut("bi.multi_select_tree", BI.MultiSelectTree);
 
 
 /***/ }),
-/* 626 */
+/* 629 */
 /***/ (function(module, exports) {
 
 /**
@@ -56631,7 +56936,7 @@ BI.MultiSelectTreePopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multi_select_tree_popup", BI.MultiSelectTreePopup);
 
 /***/ }),
-/* 627 */
+/* 630 */
 /***/ (function(module, exports) {
 
 /**
@@ -56755,7 +57060,7 @@ BI.MultiTreeCheckPane.EVENT_CONTINUE_CLICK = "EVENT_CONTINUE_CLICK";
 BI.shortcut("bi.multi_tree_check_pane", BI.MultiTreeCheckPane);
 
 /***/ }),
-/* 628 */
+/* 631 */
 /***/ (function(module, exports) {
 
 /**
@@ -56787,10 +57092,8 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
     },
 
     _init: function () {
-        BI.MultiTreeCombo.superclass._init.apply(this, arguments);
-
         var self = this, o = this.options;
-
+        BI.MultiTreeCombo.superclass._init.apply(this, arguments);
         var isInit = false;
         var want2showCounter = false;
 
@@ -56816,6 +57119,7 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
 
         this.combo = BI.createWidget({
             type: "bi.combo",
+            cls: "bi-border bi-focus-shadow bi-border-radius",
             toggle: !o.allowEdit,
             container: o.container,
             el: this.trigger,
@@ -57062,7 +57366,7 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
                 },
                 right: o.height,
                 top: 0,
-                height: o.height,
+                bottom: 0
             }]
         });
     },
@@ -57116,7 +57420,7 @@ BI.shortcut("bi.multi_tree_combo", BI.MultiTreeCombo);
 
 
 /***/ }),
-/* 629 */
+/* 632 */
 /***/ (function(module, exports) {
 
 /**
@@ -57143,15 +57447,13 @@ BI.MultiTreeInsertCombo = BI.inherit(BI.Single, {
             valueFormatter: BI.emptyFn,
             height: 24,
             allowEdit: true,
-            isNeedAdjustWidth: true
+            isNeedAdjustWidth: true,
         });
     },
 
     _init: function () {
-        BI.MultiTreeInsertCombo.superclass._init.apply(this, arguments);
-
         var self = this, o = this.options;
-
+        BI.MultiTreeInsertCombo.superclass._init.apply(this, arguments);
         var isInit = false;
         var want2showCounter = false;
 
@@ -57192,6 +57494,7 @@ BI.MultiTreeInsertCombo = BI.inherit(BI.Single, {
 
         this.combo = BI.createWidget({
             type: "bi.combo",
+            cls: "bi-border bi-focus-shadow bi-border-radius",
             toggle: !o.allowEdit,
             container: o.container,
             el: this.trigger,
@@ -57492,7 +57795,7 @@ BI.shortcut("bi.multi_tree_insert_combo", BI.MultiTreeInsertCombo);
 
 
 /***/ }),
-/* 630 */
+/* 633 */
 /***/ (function(module, exports) {
 
 /**
@@ -57520,15 +57823,13 @@ BI.MultiTreeListCombo = BI.inherit(BI.Single, {
             height: 24,
             allowEdit: true,
             allowInsertValue: true,
-            isNeedAdjustWidth: true
+            isNeedAdjustWidth: true,
         });
     },
 
     _init: function () {
-        BI.MultiTreeListCombo.superclass._init.apply(this, arguments);
-
         var self = this, o = this.options;
-
+        BI.MultiTreeListCombo.superclass._init.apply(this, arguments);
         var isInit = false;
         var want2showCounter = false;
 
@@ -57584,6 +57885,7 @@ BI.MultiTreeListCombo = BI.inherit(BI.Single, {
 
         this.combo = BI.createWidget({
             type: "bi.combo",
+            cls: "bi-border bi-focus-shadow bi-border-radius",
             toggle: !o.allowEdit,
             container: o.container,
             el: this.trigger,
@@ -57892,7 +58194,7 @@ BI.shortcut("bi.multi_tree_list_combo", BI.MultiTreeListCombo);
 
 
 /***/ }),
-/* 631 */
+/* 634 */
 /***/ (function(module, exports) {
 
 /**
@@ -57999,7 +58301,7 @@ BI.MultiTreePopup.EVENT_AFTERINIT = "EVENT_AFTERINIT";
 BI.shortcut("bi.multi_tree_popup_view", BI.MultiTreePopup);
 
 /***/ }),
-/* 632 */
+/* 635 */
 /***/ (function(module, exports) {
 
 /**
@@ -58072,7 +58374,7 @@ BI.MultiTreeCheckSelectedButton.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multi_tree_check_selected_button", BI.MultiTreeCheckSelectedButton);
 
 /***/ }),
-/* 633 */
+/* 636 */
 /***/ (function(module, exports) {
 
 /**
@@ -58196,7 +58498,7 @@ BI.MultiTreeSearchInsertPane.EVENT_ADD_ITEM = "EVENT_ADD_ITEM";
 BI.shortcut("bi.multi_tree_search_insert_pane", BI.MultiTreeSearchInsertPane);
 
 /***/ }),
-/* 634 */
+/* 637 */
 /***/ (function(module, exports) {
 
 /**
@@ -58277,7 +58579,7 @@ BI.MultiTreeSearchPane.EVENT_CLICK_CLEAR = "EVENT_CLICK_CLEAR";
 BI.shortcut("bi.multi_tree_search_pane", BI.MultiTreeSearchPane);
 
 /***/ }),
-/* 635 */
+/* 638 */
 /***/ (function(module, exports) {
 
 /**
@@ -58446,7 +58748,7 @@ BI.MultiListTreeSearcher.EVENT_PAUSE = "EVENT_PAUSE";
 BI.shortcut("bi.multi_list_tree_searcher", BI.MultiListTreeSearcher);
 
 /***/ }),
-/* 636 */
+/* 639 */
 /***/ (function(module, exports) {
 
 /**
@@ -58647,7 +58949,7 @@ BI.MultiTreeSearcher.EVENT_PAUSE = "EVENT_PAUSE";
 BI.shortcut("bi.multi_tree_searcher", BI.MultiTreeSearcher);
 
 /***/ }),
-/* 637 */
+/* 640 */
 /***/ (function(module, exports) {
 
 /**
@@ -58806,7 +59108,7 @@ BI.NumberEditor.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.number_editor", BI.NumberEditor);
 
 /***/ }),
-/* 638 */
+/* 641 */
 /***/ (function(module, exports) {
 
 // 小于号的值为：0，小于等于号的值为:1
@@ -59354,7 +59656,7 @@ BI.NumberInterval.EVENT_ERROR = "EVENT_ERROR";
 BI.shortcut("bi.number_interval", BI.NumberInterval);
 
 /***/ }),
-/* 639 */
+/* 642 */
 /***/ (function(module, exports) {
 
 BI.NumberIntervalSingleEidtor = BI.inherit(BI.Single, {
@@ -59443,7 +59745,7 @@ BI.NumberIntervalSingleEidtor.EVENT_CONFIRM = "EVENT_CONFIRM";
 BI.shortcut("bi.number_interval_single_editor", BI.NumberIntervalSingleEidtor);
 
 /***/ }),
-/* 640 */
+/* 643 */
 /***/ (function(module, exports) {
 
 /**
@@ -59462,8 +59764,8 @@ BI.SearchMultiTextValueCombo = BI.inherit(BI.Single, {
     },
 
     _init: function () {
-        BI.SearchMultiTextValueCombo.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
+        BI.SearchMultiTextValueCombo.superclass._init.apply(this, arguments);
         var assertShowValue = function () {
             BI.isKey(self._startValue) && (self.storeValue.type === BI.Selection.All ? BI.remove(self.storeValue.value, self._startValue) : BI.pushDistinct(self.storeValue.value, self._startValue));
             self._updateAllValue();
@@ -59575,6 +59877,7 @@ BI.SearchMultiTextValueCombo = BI.inherit(BI.Single, {
 
         this.combo = BI.createWidget({
             type: "bi.combo",
+            cls: "bi-border bi-focus-shadow bi-border-radius",
             toggle: false,
             container: o.container,
             el: this.trigger,
@@ -59625,7 +59928,9 @@ BI.SearchMultiTextValueCombo = BI.inherit(BI.Single, {
         });
 
         this.combo.on(BI.Combo.EVENT_BEFORE_POPUPVIEW, function () {
-            self._dataChange = false;// 标记数据是否发生变化
+            if (!this.isViewVisible()) {
+                self._dataChange = false;// 标记数据是否发生变化
+            }
             this.setValue(self.storeValue);
             BI.nextTick(function () {
                 self._populate();
@@ -59943,7 +60248,7 @@ BI.shortcut("bi.search_multi_text_value_combo", BI.SearchMultiTextValueCombo);
 
 
 /***/ }),
-/* 641 */
+/* 644 */
 /***/ (function(module, exports) {
 
 BI.SearchMultiSelectTrigger = BI.inherit(BI.Trigger, {
@@ -59956,7 +60261,7 @@ BI.SearchMultiSelectTrigger = BI.inherit(BI.Trigger, {
 
     _defaultConfig: function () {
         return BI.extend(BI.SearchMultiSelectTrigger.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-multi-select-trigger bi-border",
+            baseCls: "bi-multi-select-trigger",
             itemsCreator: BI.emptyFn,
             valueFormatter: BI.emptyFn,
             searcher: {},
@@ -59971,9 +60276,6 @@ BI.SearchMultiSelectTrigger = BI.inherit(BI.Trigger, {
         BI.SearchMultiSelectTrigger.superclass._init.apply(this, arguments);
 
         var self = this, o = this.options;
-        if (o.height) {
-            this.setHeight(o.height - 2);
-        }
 
         this.searcher = BI.createWidget(o.searcher, {
             type: "bi.search_multi_select_searcher",
@@ -60106,7 +60408,7 @@ BI.shortcut("bi.search_multi_select_trigger", BI.SearchMultiSelectTrigger);
 
 
 /***/ }),
-/* 642 */
+/* 645 */
 /***/ (function(module, exports) {
 
 /**
@@ -60286,7 +60588,7 @@ BI.SearchMultiSelectLoader.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.search_multi_select_loader", BI.SearchMultiSelectLoader);
 
 /***/ }),
-/* 643 */
+/* 646 */
 /***/ (function(module, exports) {
 
 BI.SearchMultiSelectPopupView = BI.inherit(BI.Widget, {
@@ -60379,7 +60681,7 @@ BI.SearchMultiSelectPopupView.EVENT_CLICK_CLEAR = "EVENT_CLICK_CLEAR";
 BI.shortcut("bi.search_multi_select_popup_view", BI.SearchMultiSelectPopupView);
 
 /***/ }),
-/* 644 */
+/* 647 */
 /***/ (function(module, exports) {
 
 BI.SearchMultiSelectSearcher = BI.inherit(BI.Widget, {
@@ -60562,7 +60864,7 @@ BI.shortcut("bi.search_multi_select_searcher", BI.SearchMultiSelectSearcher);
 
 
 /***/ }),
-/* 645 */
+/* 648 */
 /***/ (function(module, exports) {
 
 /**
@@ -60653,7 +60955,7 @@ BI.SelectTreeFirstPlusGroupNode = BI.inherit(BI.NodeButton, {
 BI.shortcut("bi.select_tree_first_plus_group_node", BI.SelectTreeFirstPlusGroupNode);
 
 /***/ }),
-/* 646 */
+/* 649 */
 /***/ (function(module, exports) {
 
 /**
@@ -60744,7 +61046,7 @@ BI.SelectTreeLastPlusGroupNode = BI.inherit(BI.NodeButton, {
 BI.shortcut("bi.select_tree_last_plus_group_node", BI.SelectTreeLastPlusGroupNode);
 
 /***/ }),
-/* 647 */
+/* 650 */
 /***/ (function(module, exports) {
 
 /**
@@ -60835,7 +61137,7 @@ BI.SelectTreeMidPlusGroupNode = BI.inherit(BI.NodeButton, {
 BI.shortcut("bi.select_tree_mid_plus_group_node", BI.SelectTreeMidPlusGroupNode);
 
 /***/ }),
-/* 648 */
+/* 651 */
 /***/ (function(module, exports) {
 
 /**
@@ -60926,7 +61228,7 @@ BI.SelectTreePlusGroupNode = BI.inherit(BI.NodeButton, {
 BI.shortcut("bi.select_tree_plus_group_node", BI.SelectTreePlusGroupNode);
 
 /***/ }),
-/* 649 */
+/* 652 */
 /***/ (function(module, exports) {
 
 /**
@@ -60937,20 +61239,19 @@ BI.SelectTreeCombo = BI.inherit(BI.Widget, {
 
     _defaultConfig: function () {
         return BI.extend(BI.SelectTreeCombo.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-select-tree-combo",
+            baseCls: "bi-select-tree-combo bi-border bi-border-radius",
             height: 24,
             text: "",
             items: [],
             value: "",
-            attributes: {
-                tabIndex: 0
-            }
         });
     },
 
     _init: function () {
-        BI.SelectTreeCombo.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
+        o.height -= 2;
+        BI.isNumeric(o.width) && (o.width -= 2);
+        BI.SelectTreeCombo.superclass._init.apply(this, arguments);
 
         this.trigger = BI.createWidget({
             type: "bi.single_tree_trigger",
@@ -61006,7 +61307,7 @@ BI.SelectTreeCombo = BI.inherit(BI.Widget, {
 BI.shortcut("bi.select_tree_combo", BI.SelectTreeCombo);
 
 /***/ }),
-/* 650 */
+/* 653 */
 /***/ (function(module, exports) {
 
 /**
@@ -61088,7 +61389,7 @@ BI.SelectTreeExpander = BI.inherit(BI.Widget, {
 BI.shortcut("bi.select_tree_expander", BI.SelectTreeExpander);
 
 /***/ }),
-/* 651 */
+/* 654 */
 /***/ (function(module, exports) {
 
 /**
@@ -61194,7 +61495,7 @@ BI.SelectTreePopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.select_level_tree", BI.SelectTreePopup);
 
 /***/ }),
-/* 652 */
+/* 655 */
 /***/ (function(module, exports) {
 
 /**
@@ -61283,7 +61584,7 @@ BI.SingleSelectSearchLoader = BI.inherit(BI.Widget, {
 
     _createItems: function (items) {
         return BI.createItems(items, {
-            type: this.options.allowNoSelect ? "bi.single_select_item" : "bi.single_select_combo_item",
+            type: this.options.allowNoSelect ? "bi.single_select_item" : "bi.single_select_radio_item",
             cls: "bi-list-item-active",
             logic: {
                 dynamic: false
@@ -61351,8 +61652,9 @@ BI.SingleSelectSearchLoader = BI.inherit(BI.Widget, {
 BI.SingleSelectSearchLoader.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.single_select_search_loader", BI.SingleSelectSearchLoader);
 
+
 /***/ }),
-/* 653 */
+/* 656 */
 /***/ (function(module, exports) {
 
 /**
@@ -61486,7 +61788,7 @@ BI.SingleSelectSearchInsertPane.EVENT_ADD_ITEM = "EVENT_ADD_ITEM";
 BI.shortcut("bi.single_select_search_insert_pane", BI.SingleSelectSearchInsertPane);
 
 /***/ }),
-/* 654 */
+/* 657 */
 /***/ (function(module, exports) {
 
 /**
@@ -61606,7 +61908,7 @@ BI.SingleSelectSearchPane.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.single_select_search_pane", BI.SingleSelectSearchPane);
 
 /***/ }),
-/* 655 */
+/* 658 */
 /***/ (function(module, exports) {
 
 /**
@@ -61623,16 +61925,13 @@ BI.SingleSelectCombo = BI.inherit(BI.Single, {
             itemsCreator: BI.emptyFn,
             valueFormatter: BI.emptyFn,
             height: 24,
-            attributes: {
-                tabIndex: 0
-            },
             allowEdit: true
         });
     },
 
     _init: function () {
-        BI.SingleSelectCombo.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
+        BI.SingleSelectCombo.superclass._init.apply(this, arguments);
 
         var assertShowValue = function () {
             BI.isKey(self._startValue) && (self.storeValue = self._startValue);
@@ -61719,6 +62018,7 @@ BI.SingleSelectCombo = BI.inherit(BI.Single, {
 
         this.combo = BI.createWidget({
             type: "bi.combo",
+            cls: "bi-border bi-border-radius",
             container: o.container,
             toggle: false,
             el: this.trigger,
@@ -61902,7 +62202,7 @@ BI.shortcut("bi.single_select_combo", BI.SingleSelectCombo);
 
 
 /***/ }),
-/* 656 */
+/* 659 */
 /***/ (function(module, exports) {
 
 /**
@@ -61919,17 +62219,13 @@ BI.SingleSelectInsertCombo = BI.inherit(BI.Single, {
             itemsCreator: BI.emptyFn,
             valueFormatter: BI.emptyFn,
             height: 24,
-            attributes: {
-                tabIndex: 0
-            },
             allowEdit: true
         });
     },
 
     _init: function () {
-        BI.SingleSelectInsertCombo.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
-
+        BI.SingleSelectInsertCombo.superclass._init.apply(this, arguments);
         var assertShowValue = function () {
             BI.isKey(self._startValue) && (self.storeValue = self._startValue);
             self.trigger.getSearcher().setState(self.storeValue);
@@ -62031,6 +62327,7 @@ BI.SingleSelectInsertCombo = BI.inherit(BI.Single, {
 
         this.combo = BI.createWidget({
             type: "bi.combo",
+            cls: "bi-border bi-border-radius",
             container: o.container,
             toggle: false,
             el: this.trigger,
@@ -62202,77 +62499,7 @@ BI.SingleSelectInsertCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
 BI.shortcut("bi.single_select_insert_combo", BI.SingleSelectInsertCombo);
 
 /***/ }),
-/* 657 */
-/***/ (function(module, exports) {
-
-BI.SingleSelectComboItem = BI.inherit(BI.BasicButton, {
-    _defaultConfig: function () {
-        return BI.extend(BI.SingleSelectComboItem.superclass._defaultConfig.apply(this, arguments), {
-            extraCls: "bi-single-select-radio-item",
-            logic: {
-                dynamic: false
-            },
-            height: 24
-        });
-    },
-    _init: function () {
-        BI.SingleSelectComboItem.superclass._init.apply(this, arguments);
-        var self = this, o = this.options;
-        this.radio = BI.createWidget({
-            type: "bi.radio"
-        });
-        this.text = BI.createWidget({
-            type: "bi.label",
-            cls: "list-item-text",
-            textAlign: "left",
-            whiteSpace: "nowrap",
-            textHeight: o.height,
-            height: o.height,
-            hgap: o.hgap,
-            text: o.text,
-            keyword: o.keyword,
-            value: o.value,
-            py: o.py
-        });
-
-        BI.createWidget(BI.extend({
-            element: this
-        }, BI.LogicFactory.createLogic("horizontal", BI.extend(o.logic, {
-            items: BI.LogicFactory.createLogicItemsByDirection("left", {
-                type: "bi.center_adapt",
-                items: [this.radio],
-                width: 26
-            }, this.text)
-        }))));
-    },
-
-    doRedMark: function () {
-        this.text.doRedMark.apply(this.text, arguments);
-    },
-
-    unRedMark: function () {
-        this.text.unRedMark.apply(this.text, arguments);
-    },
-
-    doClick: function () {
-        BI.SingleSelectComboItem.superclass.doClick.apply(this, arguments);
-        this.radio.setSelected(this.isSelected());
-        if (this.isValid()) {
-            this.fireEvent(BI.SingleSelectComboItem.EVENT_CHANGE, this.isSelected(), this);
-        }
-    },
-
-    setSelected: function (v) {
-        BI.SingleSelectComboItem.superclass.setSelected.apply(this, arguments);
-        this.radio.setSelected(v);
-
-    }
-});
-BI.SingleSelectComboItem.EVENT_CHANGE = "EVENT_CHANGE";
-BI.shortcut("bi.single_select_combo_item", BI.SingleSelectComboItem);
-
-/***/ }),
-/* 658 */
+/* 660 */
 /***/ (function(module, exports) {
 
 /**
@@ -62393,7 +62620,7 @@ BI.SingleSelectList = BI.inherit(BI.Widget, {
 
     resetHeight: function (h) {
         this.list.resetHeight ? this.list.resetHeight(h) :
-            this.list.element.css({"max-height": h + "px"});
+            this.list.element.css({"max-height": h / BI.pixRatio + BI.pixUnit});
     },
 
     setNotSelectedValue: function () {
@@ -62435,8 +62662,9 @@ BI.SingleSelectList = BI.inherit(BI.Widget, {
 BI.SingleSelectList.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.single_select_list", BI.SingleSelectList);
 
+
 /***/ }),
-/* 659 */
+/* 661 */
 /***/ (function(module, exports) {
 
 /**
@@ -62546,7 +62774,7 @@ BI.SingleSelectLoader = BI.inherit(BI.Widget, {
 
     _createItems: function (items) {
         return BI.createItems(items, {
-            type: this.options.allowNoSelect ? "bi.single_select_item" : "bi.single_select_combo_item",
+            type: this.options.allowNoSelect ? "bi.single_select_item" : "bi.single_select_radio_item",
             logic: this.options.logic,
             cls: "bi-list-item-active",
             height: 24,
@@ -62603,7 +62831,7 @@ BI.shortcut("bi.single_select_loader", BI.SingleSelectLoader);
 
 
 /***/ }),
-/* 660 */
+/* 662 */
 /***/ (function(module, exports) {
 
 /**
@@ -62686,7 +62914,7 @@ BI.SingleSelectPopupView.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.single_select_popup_view", BI.SingleSelectPopupView);
 
 /***/ }),
-/* 661 */
+/* 663 */
 /***/ (function(module, exports) {
 
 /**
@@ -62706,7 +62934,7 @@ BI.SingleSelectTrigger = BI.inherit(BI.Trigger, {
 
     _defaultConfig: function () {
         return BI.extend(BI.SingleSelectTrigger.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-single-select-trigger bi-border bi-border-radius",
+            baseCls: "bi-single-select-trigger",
             allowNoSelect: false,
             itemsCreator: BI.emptyFn,
             valueFormatter: BI.emptyFn,
@@ -62723,9 +62951,6 @@ BI.SingleSelectTrigger = BI.inherit(BI.Trigger, {
         BI.SingleSelectTrigger.superclass._init.apply(this, arguments);
 
         var self = this, o = this.options;
-        if (o.height) {
-            this.setHeight(o.height - 2);
-        }
 
         this.searcher = BI.createWidget(o.searcher, {
             type: "bi.single_select_searcher",
@@ -62831,7 +63056,7 @@ BI.SingleSelectTrigger.EVENT_BLUR = "EVENT_BLUR";
 BI.shortcut("bi.single_select_trigger", BI.SingleSelectTrigger);
 
 /***/ }),
-/* 662 */
+/* 664 */
 /***/ (function(module, exports) {
 
 /**
@@ -63093,7 +63318,7 @@ BI.shortcut("bi.single_select_insert_list", BI.SingleSelectInsertList);
 
 
 /***/ }),
-/* 663 */
+/* 665 */
 /***/ (function(module, exports) {
 
 /**
@@ -63186,7 +63411,7 @@ BI.SingleSelectEditor.EVENT_PAUSE = "EVENT_PAUSE";
 BI.shortcut("bi.single_select_editor", BI.SingleSelectEditor);
 
 /***/ }),
-/* 664 */
+/* 666 */
 /***/ (function(module, exports) {
 
 /**
@@ -63357,7 +63582,7 @@ BI.shortcut("bi.single_select_searcher", BI.SingleSelectSearcher);
 
 
 /***/ }),
-/* 665 */
+/* 667 */
 /***/ (function(module, exports) {
 
 BI.SignTextEditor = BI.inherit(BI.Widget, {
@@ -63557,7 +63782,7 @@ BI.SignTextEditor.EVENT_CLICK_LABEL = "EVENT_CLICK_LABEL";
 BI.shortcut("bi.sign_text_editor", BI.SignTextEditor);
 
 /***/ }),
-/* 666 */
+/* 668 */
 /***/ (function(module, exports) {
 
 /**
@@ -63598,7 +63823,7 @@ BI.SliderIconButton = BI.inherit(BI.Widget, {
 BI.shortcut("bi.single_slider_button", BI.SliderIconButton);
 
 /***/ }),
-/* 667 */
+/* 669 */
 /***/ (function(module, exports) {
 
 /**
@@ -63945,7 +64170,7 @@ BI.SingleSlider.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.single_slider", BI.SingleSlider);
 
 /***/ }),
-/* 668 */
+/* 670 */
 /***/ (function(module, exports) {
 
 /**
@@ -64261,7 +64486,7 @@ BI.SingleSliderLabel.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.single_slider_label", BI.SingleSliderLabel);
 
 /***/ }),
-/* 669 */
+/* 671 */
 /***/ (function(module, exports) {
 
 /**
@@ -64551,7 +64776,7 @@ BI.SingleSliderNormal.EVENT_DRAG = "EVENT_DRAG";
 BI.shortcut("bi.single_slider_normal", BI.SingleSliderNormal);
 
 /***/ }),
-/* 670 */
+/* 672 */
 /***/ (function(module, exports) {
 
 /**
@@ -64562,21 +64787,20 @@ BI.SingleTreeCombo = BI.inherit(BI.Widget, {
 
     _defaultConfig: function () {
         return BI.extend(BI.SingleTreeCombo.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-single-tree-combo",
+            baseCls: "bi-single-tree-combo bi-border bi-border-radius",
             trigger: {},
             height: 24,
             text: "",
             items: [],
             value: "",
-            attributes: {
-                tabIndex: 0
-            }
         });
     },
 
     _init: function () {
-        BI.SingleTreeCombo.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
+        o.height -= 2;
+        BI.isNumeric(o.width) && (o.width -= 2);
+        BI.SingleTreeCombo.superclass._init.apply(this, arguments);
 
         this.trigger = BI.createWidget(BI.extend({
             type: "bi.single_tree_trigger",
@@ -64637,7 +64861,7 @@ BI.SingleTreeCombo.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
 BI.shortcut("bi.single_tree_combo", BI.SingleTreeCombo);
 
 /***/ }),
-/* 671 */
+/* 673 */
 /***/ (function(module, exports) {
 
 /**
@@ -64708,7 +64932,7 @@ BI.SingleTreePopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.single_level_tree", BI.SingleTreePopup);
 
 /***/ }),
-/* 672 */
+/* 674 */
 /***/ (function(module, exports) {
 
 /**
@@ -64774,7 +64998,7 @@ BI.SingleTreeTrigger = BI.inherit(BI.Trigger, {
 BI.shortcut("bi.single_tree_trigger", BI.SingleTreeTrigger);
 
 /***/ }),
-/* 673 */
+/* 675 */
 /***/ (function(module, exports) {
 
 /**
@@ -64784,18 +65008,16 @@ BI.shortcut("bi.single_tree_trigger", BI.SingleTreeTrigger);
 BI.TextValueDownListCombo = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.TextValueDownListCombo.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-text-value-down-list-combo",
+            baseCls: "bi-text-value-down-list-combo bi-border",
             height: 24,
-            attributes: {
-                tabIndex: 0
-            }
         });
     },
 
     _init: function () {
-        BI.TextValueDownListCombo.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
-
+        o.height -= 2;
+        BI.isNumeric(o.width) && (o.width -= 2);
+        BI.TextValueDownListCombo.superclass._init.apply(this, arguments);
         this._createValueMap();
 
         var value;
@@ -64879,7 +65101,7 @@ BI.TextValueDownListCombo.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.text_value_down_list_combo", BI.TextValueDownListCombo);
 
 /***/ }),
-/* 674 */
+/* 676 */
 /***/ (function(module, exports) {
 
 /**
@@ -64939,7 +65161,7 @@ BI.DownListSelectTextTrigger = BI.inherit(BI.Trigger, {
 BI.shortcut("bi.down_list_select_text_trigger", BI.DownListSelectTextTrigger);
 
 /***/ }),
-/* 675 */
+/* 677 */
 /***/ (function(module, exports) {
 
 !(function () {
@@ -65038,7 +65260,7 @@ BI.shortcut("bi.down_list_select_text_trigger", BI.DownListSelectTextTrigger);
 })();
 
 /***/ }),
-/* 676 */
+/* 678 */
 /***/ (function(module, exports) {
 
 /**
@@ -65056,11 +65278,15 @@ BI.shortcut("bi.down_list_select_text_trigger", BI.DownListSelectTextTrigger);
             border: 1
         },
         props: {
-            baseCls: "bi-time-combo bi-border bi-border-radius bi-focus-shadow",
-            // width: 78,
-            // height: 22,
+            baseCls: "bi-time-combo",
+            height: 24,
             format: "",
-            allowEdit: false
+            allowEdit: false,
+        },
+
+        _init: function () {
+            var o = this.options;
+            BI.TimeCombo.superclass._init.apply(this, arguments);
         },
 
         render: function () {
@@ -65102,6 +65328,7 @@ BI.shortcut("bi.down_list_select_text_trigger", BI.DownListSelectTextTrigger);
                     items: [{
                         el: {
                             type: "bi.combo",
+                            cls: "bi-border bi-border-radius bi-focus-shadow",
                             container: opts.container,
                             toggle: false,
                             isNeedAdjustHeight: false,
@@ -65207,14 +65434,14 @@ BI.shortcut("bi.down_list_select_text_trigger", BI.DownListSelectTextTrigger);
                         },
                         top: 0,
                         left: 0,
-                        right: 22,
+                        right: 0,
                         bottom: 0
                     }, {
                         el: {
                             type: "bi.icon_button",
                             cls: "bi-trigger-icon-button time-font icon-size-16",
-                            width: 22,
-                            height: 22,
+                            width: opts.height,
+                            height: opts.height,
                             listeners: [{
                                 eventName: BI.IconButton.EVENT_CHANGE,
                                 action: function () {
@@ -65271,7 +65498,7 @@ BI.shortcut("bi.down_list_select_text_trigger", BI.DownListSelectTextTrigger);
 })();
 
 /***/ }),
-/* 677 */
+/* 679 */
 /***/ (function(module, exports) {
 
 !(function () {
@@ -65463,7 +65690,7 @@ BI.shortcut("bi.down_list_select_text_trigger", BI.DownListSelectTextTrigger);
 })();
 
 /***/ }),
-/* 678 */
+/* 680 */
 /***/ (function(module, exports) {
 
 /**
@@ -65483,7 +65710,8 @@ BI.DateInterval = BI.inherit(BI.Single, {
             extraCls: "bi-date-interval",
             minDate: "1900-01-01",
             maxDate: "2099-12-31",
-            height: 24
+            height: 24,
+            supportDynamic: true,
         });
     },
     _init: function () {
@@ -65536,6 +65764,9 @@ BI.DateInterval = BI.inherit(BI.Single, {
         var self = this, o = this.options;
         var combo = BI.createWidget({
             type: "bi.dynamic_date_combo",
+            supportDynamic: o.supportDynamic,
+            minDate: o.minDate,
+            maxDate: o.maxDate,
             behaviors: o.behaviors,
             value: v,
             height: o.height,
@@ -65642,6 +65873,21 @@ BI.DateInterval = BI.inherit(BI.Single, {
         this.right.setTitle("");
         this.label.setTitle("");
     },
+
+    setMinDate: function (minDate) {
+        var o = this.options;
+        o.minDate = minDate;
+        this.left.setMinDate(minDate);
+        this.right.setMinDate(minDate);
+    },
+
+    setMaxDate: function (maxDate) {
+        var o = this.options;
+        o.maxDate = maxDate;
+        this.left.setMaxDate(maxDate);
+        this.right.setMaxDate(maxDate);
+    },
+
     setValue: function (date) {
         date = date || {};
         this.left.setValue(date.start);
@@ -65659,7 +65905,7 @@ BI.shortcut("bi.date_interval", BI.DateInterval);
 
 
 /***/ }),
-/* 679 */
+/* 681 */
 /***/ (function(module, exports) {
 
 /**
@@ -65679,7 +65925,8 @@ BI.TimeInterval = BI.inherit(BI.Single, {
             extraCls: "bi-time-interval",
             minDate: "1900-01-01",
             maxDate: "2099-12-31",
-            height: 24
+            height: 24,
+            supportDynamic: true
         });
     },
     _init: function () {
@@ -65732,6 +65979,9 @@ BI.TimeInterval = BI.inherit(BI.Single, {
         var self = this, o = this.options;
         var combo = BI.createWidget({
             type: "bi.dynamic_date_time_combo",
+            supportDynamic: o.supportDynamic,
+            minDate: o.minDate,
+            maxDate: o.maxDate,
             behaviors: o.behaviors,
             value: v,
             height: o.height,
@@ -65833,6 +66083,21 @@ BI.TimeInterval = BI.inherit(BI.Single, {
         this.right.setTitle("");
         this.label.setTitle("");
     },
+
+    setMinDate: function (minDate) {
+        var o = this.options;
+        o.minDate = minDate;
+        this.left.setMinDate(minDate);
+        this.right.setMinDate(minDate);
+    },
+
+    setMaxDate: function (maxDate) {
+        var o = this.options;
+        o.maxDate = maxDate;
+        this.left.setMaxDate(maxDate);
+        this.right.setMaxDate(maxDate);
+    },
+
     setValue: function (date) {
         date = date || {};
         this.left.setValue(date.start);
@@ -65848,7 +66113,7 @@ BI.TimeInterval.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.time_interval", BI.TimeInterval);
 
 /***/ }),
-/* 680 */
+/* 682 */
 /***/ (function(module, exports) {
 
 /**
@@ -65973,7 +66238,7 @@ BI.shortcut("bi.time_interval", BI.TimeInterval);
 })();
 
 /***/ }),
-/* 681 */
+/* 683 */
 /***/ (function(module, exports) {
 
 /**
@@ -65990,7 +66255,7 @@ BI.DynamicYearCard = BI.inherit(BI.Widget, {
     },
 
     render: function () {
-        var self = this;
+        var self = this, o = this.options;
         return {
             type: "bi.vertical",
             items: [{
@@ -66002,6 +66267,14 @@ BI.DynamicYearCard = BI.inherit(BI.Widget, {
                 type: "bi.dynamic_date_param_item",
                 ref: function () {
                     self.item = this;
+                },
+                validationChecker: BI.bind(self._checkDate, self),
+                errorText: function () {
+                    var start = BI.parseDateTime(o.min, "%Y-%X-%d");
+                    var end = BI.parseDateTime(o.max, "%Y-%X-%d");
+                    return BI.i18nText("BI-Basic_Year_Range_Error",
+                        start.getFullYear(),
+                        end.getFullYear());
                 },
                 listeners: [{
                     eventName: "EVENT_CHANGE",
@@ -66015,12 +66288,33 @@ BI.DynamicYearCard = BI.inherit(BI.Widget, {
         };
     },
 
+    _checkDate: function (obj) {
+        var o = this.options;
+        var date = BI.DynamicDateHelper.getCalculation({
+            year: (obj.offset === 0 ? -obj.value : +obj.value)
+        });
+
+        return !BI.checkDateVoid(date.getFullYear(), date.getMonth() + 1, date.getDate(), o.min, o.max)[0];
+    },
+
     _createValue: function (type, v) {
         return {
             dateType: type,
             value: Math.abs(v),
             offset: v > 0 ? 1 : 0
         };
+    },
+
+    setMinDate: function(minDate) {
+        if (BI.isNotEmptyString(this.options.min)) {
+            this.options.min = minDate;
+        }
+    },
+
+    setMaxDate: function (maxDate) {
+        if (BI.isNotEmptyString(this.options.max)) {
+            this.options.max = maxDate;
+        }
     },
 
     setValue: function (v) {
@@ -66031,7 +66325,7 @@ BI.DynamicYearCard = BI.inherit(BI.Widget, {
     getValue: function () {
         var value = this.item.getValue();
         return {
-            year: (value.offset === 0 ? -value.value : value.value)
+            year: (value.offset === 0 ? -value.value : +value.value)
         };
     }
 });
@@ -66039,7 +66333,7 @@ BI.DynamicYearCard.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.dynamic_year_card", BI.DynamicYearCard);
 
 /***/ }),
-/* 682 */
+/* 684 */
 /***/ (function(module, exports) {
 
 /**
@@ -66147,9 +66441,9 @@ BI.StaticYearCard = BI.inherit(BI.Widget, {
 
             afterCardShow: function () {
                 this.setValue(self.selectedYear);
-                var calendar = this.getSelectedCard();
-                self.backBtn.setEnable(!calendar.isFrontYear());
-                self.preBtn.setEnable(!calendar.isFinalYear());
+                // var calendar = this.getSelectedCard();
+                // self.backBtn.setEnable(!calendar.isFrontYear());
+                // self.preBtn.setEnable(!calendar.isFinalYear());
             }
         });
 
@@ -66176,6 +66470,38 @@ BI.StaticYearCard = BI.inherit(BI.Widget, {
         var valid = true;
         this.preBtn.setEnable(valid);
         return valid;
+    },
+
+    _checkMin: function () {
+        var o = this.options;
+        BI.each(this.navigation.getAllCard(), function (idx, calendar) {
+            calendar.setMinDate(o.min);
+        });
+    },
+
+    _checkMax: function () {
+        var o = this.options;
+        BI.each(this.navigation.getAllCard(), function (idx, calendar) {
+            calendar.setMaxDate(o.max);
+        });
+    },
+
+    setMinDate: function (minDate) {
+        if (BI.isNotEmptyString(this.options.min)) {
+            this.options.min = minDate;
+            this._checkLeftValid();
+            this._checkRightValid();
+            this._checkMin();
+        }
+    },
+
+    setMaxDate: function (maxDate) {
+        if (BI.isNotEmptyString(this.options.max)) {
+            this.options.max = maxDate;
+            this._checkLeftValid();
+            this._checkRightValid();
+            this._checkMax();
+        }
     },
 
     getValue: function () {
@@ -66206,7 +66532,7 @@ BI.StaticYearCard.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.static_year_card", BI.StaticYearCard);
 
 /***/ }),
-/* 683 */
+/* 685 */
 /***/ (function(module, exports) {
 
 BI.DynamicYearCombo = BI.inherit(BI.Widget, {
@@ -66214,19 +66540,22 @@ BI.DynamicYearCombo = BI.inherit(BI.Widget, {
     props: {
         baseCls: "bi-year-combo bi-border bi-border-radius bi-focus-shadow",
         behaviors: {},
-        min: "1900-01-01", // 最小日期
-        max: "2099-12-31", // 最大日期
-        height: 22
+        minDate: "1900-01-01", // 最小日期
+        maxDate: "2099-12-31", // 最大日期
+        height: 24,
+        supportDynamic: true,
     },
 
     _init: function () {
-        BI.DynamicYearCombo.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
+        o.height -= 2;
+        BI.isNumeric(o.width) && (o.width -= 2);
+        BI.DynamicYearCombo.superclass._init.apply(this, arguments);
         this.storeValue = o.value;
         this.trigger = BI.createWidget({
             type: "bi.dynamic_year_trigger",
-            min: o.min,
-            max: o.max,
+            min: o.minDate,
+            max: o.maxDate,
             height: o.height,
             value: o.value || ""
         });
@@ -66237,6 +66566,7 @@ BI.DynamicYearCombo = BI.inherit(BI.Widget, {
         });
         this.trigger.on(BI.DynamicYearTrigger.EVENT_FOCUS, function () {
             self.storeTriggerValue = this.getKey();
+            self.fireEvent(BI.DynamicYearCombo.EVENT_FOCUS);
         });
         this.trigger.on(BI.DynamicYearTrigger.EVENT_START, function () {
             self.combo.isViewVisible() && self.combo.hideView();
@@ -66246,6 +66576,10 @@ BI.DynamicYearCombo = BI.inherit(BI.Widget, {
         });
         this.trigger.on(BI.DynamicYearTrigger.EVENT_ERROR, function () {
             self.combo.isViewVisible() && self.combo.hideView();
+            self.fireEvent(BI.DynamicYearCombo.EVENT_ERROR);
+        });
+        this.trigger.on(BI.DynamicYearTrigger.EVENT_VALID, function () {
+            self.fireEvent(BI.DynamicYearCombo.EVENT_VALID);
         });
         this.trigger.on(BI.DynamicYearTrigger.EVENT_CONFIRM, function () {
             if (self.combo.isViewVisible()) {
@@ -66268,11 +66602,14 @@ BI.DynamicYearCombo = BI.inherit(BI.Widget, {
             isNeedAdjustHeight: false,
             isNeedAdjustWidth: false,
             el: this.trigger,
+            destroyWhenHide: true,
+            adjustLength: 1,
             popup: {
                 minWidth: 85,
                 stopPropagation: false,
                 el: {
                     type: "bi.dynamic_year_popup",
+                    supportDynamic: o.supportDynamic,
                     ref: function () {
                         self.popup = this;
                     },
@@ -66307,13 +66644,15 @@ BI.DynamicYearCombo = BI.inherit(BI.Widget, {
                         }
                     }],
                     behaviors: o.behaviors,
-                    min: o.min,
-                    max: o.max
+                    min: o.minDate,
+                    max: o.maxDate
                 },
                 value: o.value || ""
             }
         });
         this.combo.on(BI.Combo.EVENT_BEFORE_POPUPVIEW, function () {
+            self.popup.setMinDate(o.minDate);
+            self.popup.setMaxDate(o.maxDate);
             self.popup.setValue(self.storeValue);
             self.fireEvent(BI.DynamicYearCombo.EVENT_BEFORE_POPUPVIEW);
         });
@@ -66359,6 +66698,28 @@ BI.DynamicYearCombo = BI.inherit(BI.Widget, {
         }
     },
 
+    setMinDate: function (minDate) {
+        var o = this.options;
+        o.minDate = minDate;
+        this.trigger.setMinDate(minDate);
+        this.popup && this.popup.setMinDate(minDate);
+    },
+
+    setMaxDate: function (maxDate) {
+        var o = this.options;
+        o.maxDate = maxDate;
+        this.trigger.setMaxDate(maxDate);
+        this.popup && this.popup.setMaxDate(maxDate);
+    },
+
+    hideView: function () {
+        this.combo.hideView();
+    },
+
+    getKey: function () {
+        return this.trigger.getKey() + "";
+    },
+
     setValue: function (v) {
         this.storeValue = v;
         this.trigger.setValue(v);
@@ -66367,11 +66728,18 @@ BI.DynamicYearCombo = BI.inherit(BI.Widget, {
 
     getValue: function () {
         return this.storeValue;
+    },
+
+    isStateValid: function () {
+        return this.trigger.isValid();
     }
 
 });
 BI.DynamicYearCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
 BI.DynamicYearCombo.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
+BI.DynamicYearCombo.EVENT_ERROR = "EVENT_ERROR";
+BI.DynamicYearCombo.EVENT_VALID = "EVENT_VALID";
+BI.DynamicYearCombo.EVENT_FOCUS = "EVENT_FOCUS";
 BI.shortcut("bi.dynamic_year_combo", BI.DynamicYearCombo);
 
 BI.extend(BI.DynamicYearCombo, {
@@ -66379,8 +66747,9 @@ BI.extend(BI.DynamicYearCombo, {
     Dynamic: 2
 });
 
+
 /***/ }),
-/* 684 */
+/* 686 */
 /***/ (function(module, exports) {
 
 /**
@@ -66402,14 +66771,14 @@ BI.DynamicYearPopup = BI.inherit(BI.Widget, {
         min: "1900-01-01", // 最小日期
         max: "2099-12-31", // 最大日期,
         width: 180,
-        height: 240
+        supportDynamic: true,
     },
 
     render: function () {
         var self = this, opts = this.options, c = this.constants;
         this.storeValue = {type: BI.DynamicYearCombo.Static};
         return {
-            type: "bi.vtape",
+            type: "bi.vertical",
             items: [{
                 el: this._getTabJson()
             }, {
@@ -66433,8 +66802,9 @@ BI.DynamicYearPopup = BI.inherit(BI.Widget, {
                         cls: "bi-split-left bi-split-right bi-high-light bi-split-top",
                         shadow: true,
                         text: BI.i18nText("BI-Basic_Current_Year"),
+                        disabled: this._checkTodayValid(),
                         ref: function () {
-                            self.textButton = this;
+                            self.yearButton = this;
                         },
                         listeners: [{
                             eventName: BI.TextButton.EVENT_CHANGE,
@@ -66454,35 +66824,44 @@ BI.DynamicYearPopup = BI.inherit(BI.Widget, {
                                 self.fireEvent(BI.DynamicYearPopup.BUTTON_OK_EVENT_CHANGE);
                             }
                         }]
-                    }]]
+                    }]],
+                    height: 24
                 },
-                height: 24
             }]
         };
     },
 
     _setInnerValue: function () {
         if (this.dateTab.getSelect() === BI.DynamicDateCombo.Static) {
-            this.textButton.setValue(BI.i18nText("BI-Basic_Current_Year"));
-            this.textButton.setEnable(true);
+            this.yearButton.setValue(BI.i18nText("BI-Basic_Current_Year"));
+            this.yearButton.setEnable(!this._checkYearValid());
         } else {
             var date = BI.DynamicDateHelper.getCalculation(this.dynamicPane.getValue());
             date = BI.print(date, "%Y");
-            this.textButton.setValue(date);
-            this.textButton.setEnable(false);
+            this.yearButton.setValue(date);
+            this.yearButton.setEnable(false);
         }
+    },
+
+    _checkYearValid: function () {
+        var o = this.options;
+        var today = BI.getDate();
+        return !!BI.checkDateVoid(today.getFullYear(), today.getMonth() + 1, today.getDate(), o.min, o.max)[0];
     },
 
     _getTabJson: function () {
         var self = this, o = this.options;
         return {
             type: "bi.tab",
+            logic: {
+                dynamic: true
+            },
             ref: function () {
                 self.dateTab = this;
             },
             tab: {
                 type: "bi.linear_segment",
-                cls: "bi-split-bottom",
+                invisible: !o.supportDynamic,
                 height: this.constants.tabHeight,
                 items: BI.createItems([{
                     text: BI.i18nText("BI-Basic_Year_Fen"),
@@ -66499,6 +66878,9 @@ BI.DynamicYearPopup = BI.inherit(BI.Widget, {
                     case BI.DynamicYearCombo.Dynamic:
                         return {
                             type: "bi.dynamic_year_card",
+                            cls: "dynamic-year-pane",
+                            min: self.options.min,
+                            max: self.options.max,
                             listeners: [{
                                 eventName: "EVENT_CHANGE",
                                 action: function () {
@@ -66555,6 +66937,28 @@ BI.DynamicYearPopup = BI.inherit(BI.Widget, {
         };
     },
 
+    _checkTodayValid: function () {
+        var o = this.options;
+        var today = BI.getDate();
+        return !!BI.checkDateVoid(today.getFullYear(), today.getMonth() + 1, today.getDate(), o.min, o.max)[0];
+    },
+
+    setMinDate: function (minDate) {
+        if (this.options.min !== minDate) {
+            this.options.min = minDate;
+            this.year && this.year.setMinDate(minDate);
+            this.dynamicPane && this.dynamicPane.setMinDate(minDate);
+        }
+    },
+
+    setMaxDate: function (maxDate) {
+        if (this.options.max !== maxDate) {
+            this.options.max = maxDate;
+            this.year && this.year.setMaxDate(maxDate);
+            this.dynamicPane && this.dynamicPane.setMaxDate(maxDate);
+        }
+    },
+
     setValue: function (v) {
         this.storeValue = v;
         var self = this;
@@ -66571,8 +66975,8 @@ BI.DynamicYearPopup = BI.inherit(BI.Widget, {
             case BI.DynamicDateCombo.Static:
             default:
                 this.year.setValue(value);
-                this.textButton.setValue(BI.i18nText("BI-Basic_Current_Year"));
-                this.textButton.setEnable(true);
+                this.yearButton.setValue(BI.i18nText("BI-Basic_Current_Year"));
+                this.yearButton.setEnable(!this._checkTodayValid());
                 break;
         }
     },
@@ -66592,7 +66996,7 @@ BI.DynamicYearPopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.dynamic_year_popup", BI.DynamicYearPopup);
 
 /***/ }),
-/* 685 */
+/* 687 */
 /***/ (function(module, exports) {
 
 BI.DynamicYearTrigger = BI.inherit(BI.Trigger, {
@@ -66671,6 +67075,9 @@ BI.DynamicYearTrigger = BI.inherit(BI.Trigger, {
         });
         this.editor.on(BI.SignEditor.EVENT_ERROR, function () {
             self.fireEvent(BI.DynamicYearTrigger.EVENT_ERROR);
+        });
+        this.editor.on(BI.SignEditor.EVENT_VALID, function () {
+            self.fireEvent(BI.DynamicYearTrigger.EVENT_VALID);
         });
         BI.createWidget({
             element: this,
@@ -66754,6 +67161,18 @@ BI.DynamicYearTrigger = BI.inherit(BI.Trigger, {
         }
     },
 
+    setMinDate: function (minDate) {
+        if (BI.isNotEmptyString(this.options.min)) {
+            this.options.min = minDate;
+        }
+    },
+
+    setMaxDate: function (maxDate) {
+        if (BI.isNotEmptyString(this.options.max)) {
+            this.options.max = maxDate;
+        }
+    },
+
     getValue: function () {
         return this.storeValue;
     },
@@ -66768,10 +67187,224 @@ BI.DynamicYearTrigger.EVENT_ERROR = "EVENT_ERROR";
 BI.DynamicYearTrigger.EVENT_START = "EVENT_START";
 BI.DynamicYearTrigger.EVENT_CONFIRM = "EVENT_CONFIRM";
 BI.DynamicYearTrigger.EVENT_STOP = "EVENT_STOP";
+BI.DynamicYearTrigger.EVENT_VALID = "EVENT_VALID";
 BI.shortcut("bi.dynamic_year_trigger", BI.DynamicYearTrigger);
 
 /***/ }),
-/* 686 */
+/* 688 */
+/***/ (function(module, exports) {
+
+/**
+ * @author windy
+ * @version 2.0
+ * Created by windy on 2021/1/25
+ */
+BI.YearInterval = BI.inherit(BI.Single, {
+    constants: {
+        height: 24,
+        width: 25,
+        lgap: 15,
+        offset: -15,
+        timeErrorCls: "time-error"
+    },
+
+    props: {
+        extraCls: "bi-year-interval",
+        minDate: "1900-01-01",
+        maxDate: "2099-12-31",
+        supportDynamic: true,
+    },
+
+    render: function () {
+        var self = this, o = this.options;
+
+        o.value = o.value || {};
+        this.left = this._createCombo(o.value.start);
+        this.right = this._createCombo(o.value.end);
+
+        return [{
+            type: "bi.center",
+            hgap: 15,
+            height: this.constants.height,
+            items: [{
+                type: "bi.absolute",
+                items: [{
+                    el: self.left,
+                    left: this.constants.offset,
+                    right: 0,
+                    top: 0,
+                    bottom: 0
+                }]
+            }, {
+                type: "bi.absolute",
+                items: [{
+                    el: self.right,
+                    left: 0,
+                    right: this.constants.offset,
+                    top: 0,
+                    bottom: 0
+                }]
+            }]
+        }, {
+            type: "bi.horizontal_auto",
+            items: [{
+                type: "bi.label",
+                height: this.constants.height,
+                width: this.constants.width,
+                text: "-",
+                ref: function (_ref) {
+                    self.label = _ref;
+                }
+            }]
+        }]
+    },
+
+    _createCombo: function (v) {
+        var self = this, o = this.options;
+        var combo = BI.createWidget({
+            type: "bi.dynamic_year_combo",
+            supportDynamic: o.supportDynamic,
+            minDate: o.minDate,
+            maxDate: o.maxDate,
+            behaviors: o.behaviors,
+            value: v,
+            listeners: [{
+                eventName: BI.DynamicYearCombo.EVENT_BEFORE_POPUPVIEW,
+                action: function () {
+                    self.fireEvent(BI.YearInterval.EVENT_BEFORE_POPUPVIEW);
+                }
+            }]
+        });
+        combo.on(BI.DynamicYearCombo.EVENT_ERROR, function () {
+            self._clearTitle();
+            BI.Bubbles.hide("error");
+            self.element.removeClass(self.constants.timeErrorCls);
+            self.fireEvent(BI.YearInterval.EVENT_ERROR);
+        });
+
+        combo.on(BI.DynamicYearCombo.EVENT_VALID, function () {
+            self._checkValid();
+        });
+
+        combo.on(BI.DynamicYearCombo.EVENT_FOCUS, function () {
+            self._checkValid();
+        });
+
+        combo.on(BI.DynamicYearCombo.EVENT_CONFIRM, function () {
+            BI.Bubbles.hide("error");
+            var smallDate = self.left.getKey(), bigDate = self.right.getKey();
+            if (self.left.isStateValid() && self.right.isStateValid() && self._check(smallDate, bigDate) && self._compare(smallDate, bigDate)) {
+                self._setTitle(BI.i18nText("BI-Time_Interval_Error_Text"));
+                self.element.addClass(self.constants.timeErrorCls);
+                self.fireEvent(BI.YearInterval.EVENT_ERROR);
+            }else{
+                self._clearTitle();
+                self.element.removeClass(self.constants.timeErrorCls);
+                self.fireEvent(BI.YearInterval.EVENT_CHANGE);
+            }
+        });
+        return combo;
+    },
+
+
+    _dateCheck: function (date) {
+        return BI.print(BI.parseDateTime(date, "%Y"), "%Y") === date || BI.print(BI.parseDateTime(date, "%Y"), "%Y") === date;
+    },
+
+
+    // 判是否在最大最小之间
+    _checkVoid: function (obj) {
+        var o = this.options;
+        return !BI.checkDateVoid(obj.year, 1, 1, o.minDate, o.maxDate)[0];
+    },
+
+    // 判格式合法
+    _check: function (smallDate, bigDate) {
+        var smallObj = smallDate.match(/\d+/g), bigObj = bigDate.match(/\d+/g);
+
+        var smallDate4Check = "";
+        if (BI.isNotNull(smallObj)) {
+            smallDate4Check = smallObj[0] || "";
+        }
+
+        var bigDate4Check = "";
+        if (BI.isNotNull(bigObj)) {
+            bigDate4Check = bigObj[0] || "";
+        }
+
+        return this._dateCheck(smallDate4Check) && BI.checkDateLegal(smallDate4Check) && this._checkVoid({
+            year: smallObj[0],
+            month: 1,
+            day: 1
+        }) && this._dateCheck(bigDate4Check) && BI.checkDateLegal(bigDate4Check) && this._checkVoid({
+            year: bigObj[0],
+            month: 12,
+            day: 1
+        });
+    },
+
+    _compare: function (smallDate, bigDate) {
+        smallDate = BI.print(BI.parseDateTime(smallDate, "%Y"), "%Y");
+        bigDate = BI.print(BI.parseDateTime(bigDate, "%Y"), "%Y");
+        return BI.isNotNull(smallDate) && BI.isNotNull(bigDate) && smallDate > bigDate;
+    },
+    _setTitle: function (v) {
+        this.setTitle(v);
+    },
+    _clearTitle: function () {
+        this.setTitle("");
+    },
+    _checkValid: function () {
+        var self = this;
+
+        BI.Bubbles.hide("error");
+        var smallDate = self.left.getKey(), bigDate = self.right.getKey();
+        if (self.left.isValid() && self.right.isValid() && self._check(smallDate, bigDate) && self._compare(smallDate, bigDate)) {
+            self._setTitle(BI.i18nText("BI-Time_Interval_Error_Text"));
+            self.element.addClass(self.constants.timeErrorCls);
+            BI.Bubbles.show("error", BI.i18nText("BI-Time_Interval_Error_Text"), self, {
+                offsetStyle: "center"
+            });
+            self.fireEvent(BI.YearInterval.EVENT_ERROR);
+        } else {
+            self._clearTitle();
+            self.element.removeClass(self.constants.timeErrorCls);
+        }
+    },
+
+    setMinDate: function (minDate) {
+        var o = this.options;
+        o.minDate = minDate;
+        this.left.setMinDate(minDate);
+        this.right.setMinDate(minDate);
+    },
+
+    setMaxDate: function (maxDate) {
+        var o = this.options;
+        o.maxDate = maxDate;
+        this.left.setMaxDate(maxDate);
+        this.right.setMaxDate(maxDate);
+    },
+
+    setValue: function (date) {
+        date = date || {};
+        this.left.setValue(date.start);
+        this.right.setValue(date.end);
+
+        this._checkValid();
+    },
+    getValue: function () {
+        return {start: this.left.getValue(), end: this.right.getValue()};
+    }
+});
+BI.YearInterval.EVENT_VALID = "EVENT_VALID";
+BI.YearInterval.EVENT_ERROR = "EVENT_ERROR";
+BI.YearInterval.EVENT_CHANGE = "EVENT_CHANGE";
+BI.YearInterval.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
+BI.shortcut("bi.year_interval", BI.YearInterval);
+
+/***/ }),
+/* 689 */
 /***/ (function(module, exports) {
 
 /**
@@ -66798,6 +67431,8 @@ BI.DynamicYearMonthCard = BI.inherit(BI.Widget, {
                 height: 24
             }, {
                 type: "bi.dynamic_date_param_item",
+                validationChecker: BI.bind(self._checkDate, self),
+                errorText: BI.bind(this._errorTextGetter, this),
                 ref: function () {
                     self.year = this;
                 },
@@ -66809,6 +67444,8 @@ BI.DynamicYearMonthCard = BI.inherit(BI.Widget, {
                 }]
             }, {
                 type: "bi.dynamic_date_param_item",
+                validationChecker: BI.bind(self._checkDate, self),
+                errorText: BI.bind(this._errorTextGetter, this),
                 dateType: BI.DynamicDateCard.TYPE.MONTH,
                 ref: function () {
                     self.month = this;
@@ -66825,12 +67462,58 @@ BI.DynamicYearMonthCard = BI.inherit(BI.Widget, {
         };
     },
 
+    _errorTextGetter: function () {
+        var o = this.options;
+        var start = BI.parseDateTime(o.min, "%Y-%X-%d");
+        var end = BI.parseDateTime(o.max, "%Y-%X-%d");
+        return BI.i18nText("BI-Basic_Year_Month_Range_Error",
+            start.getFullYear(),
+            start.getMonth() + 1,
+            end.getFullYear(),
+            end.getMonth() + 1
+        );
+    },
+
+    _checkDate: function (obj) {
+        var o = this.options;
+        var date = BI.DynamicDateHelper.getCalculation(BI.extend(this.getValue(), this._digestDateTypeValue(obj)));
+
+        return !BI.checkDateVoid(date.getFullYear(), date.getMonth() + 1, date.getDate(), o.min, o.max)[0];
+    },
+
+    _digestDateTypeValue: function (value) {
+        var valueMap = {};
+        switch (value.dateType) {
+            case BI.DynamicDateCard.TYPE.YEAR:
+                valueMap.year = (value.offset === 0 ? -value.value : +value.value);
+                break;
+            case BI.DynamicDateCard.TYPE.MONTH:
+                valueMap.month = (value.offset === 0 ? -value.value : +value.value);
+                break;
+            default:
+                break;
+        }
+        return valueMap;
+    },
+
     _createValue: function (type, v) {
         return {
             dateType: type,
             value: Math.abs(v),
             offset: v > 0 ? 1 : 0
         };
+    },
+
+    setMinDate: function(minDate) {
+        if (BI.isNotEmptyString(this.options.min)) {
+            this.options.min = minDate;
+        }
+    },
+
+    setMaxDate: function (maxDate) {
+        if (BI.isNotEmptyString(this.options.max)) {
+            this.options.max = maxDate;
+        }
     },
 
     setValue: function (v) {
@@ -66852,7 +67535,7 @@ BI.DynamicYearMonthCard.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.dynamic_year_month_card", BI.DynamicYearMonthCard);
 
 /***/ }),
-/* 687 */
+/* 690 */
 /***/ (function(module, exports) {
 
 BI.StaticYearMonthCard = BI.inherit(BI.Widget, {
@@ -66901,6 +67584,7 @@ BI.StaticYearMonthCard = BI.inherit(BI.Widget, {
             type: "bi.vertical",
             items: [{
                 type: "bi.year_picker",
+                cls: "bi-split-bottom",
                 min: o.min,
                 max: o.max,
                 ref: function () {
@@ -66920,34 +67604,36 @@ BI.StaticYearMonthCard = BI.inherit(BI.Widget, {
                     }
                 }]
             }, {
-                type: "bi.button_group",
-                cls: "bi-split-top",
-                behaviors: o.behaviors,
-                ref: function () {
-                    self.month = this;
+                el: {
+                    type: "bi.button_group",
+                    behaviors: o.behaviors,
+                    ref: function () {
+                        self.month = this;
+                    },
+                    items: this._createMonths(),
+                    layouts: [BI.LogicFactory.createLogic("table", BI.extend({
+                        dynamic: true
+                    }, {
+                        columns: 2,
+                        rows: 6,
+                        columnSize: [1 / 2, 1 / 2],
+                        rowSize: 25
+                    })), {
+                        type: "bi.center_adapt",
+                        vgap: 1,
+                        hgap: 2
+                    }],
+                    value: o.value,
+                    listeners: [{
+                        eventName: BI.ButtonGroup.EVENT_CHANGE,
+                        action: function () {
+                            self.selectedYear = self.yearPicker.getValue();
+                            self.selectedMonth = this.getValue()[0];
+                            self.fireEvent(BI.StaticYearMonthCard.EVENT_CHANGE);
+                        }
+                    }]
                 },
-                items: this._createMonths(),
-                layouts: [BI.LogicFactory.createLogic("table", BI.extend({
-                    dynamic: true
-                }, {
-                    columns: 2,
-                    rows: 6,
-                    columnSize: [1 / 2, 1 / 2],
-                    rowSize: 25
-                })), {
-                    type: "bi.center_adapt",
-                    vgap: 1,
-                    hgap: 2
-                }],
-                value: o.value,
-                listeners: [{
-                    eventName: BI.ButtonGroup.EVENT_CHANGE,
-                    action: function () {
-                        self.selectedYear = self.yearPicker.getValue();
-                        self.selectedMonth = this.getValue()[0];
-                        self.fireEvent(BI.StaticYearMonthCard.EVENT_CHANGE);
-                    }
-                }]
+                vgap: 5
             }]
         };
     },
@@ -67010,6 +67696,7 @@ BI.StaticYearMonthCard = BI.inherit(BI.Widget, {
             this.yearPicker.setValue(this.selectedYear);
             this.month.setValue(this.selectedMonth);
         }
+        this._checkMonthStatus(this.selectedYear);
     }
 });
 BI.StaticYearMonthCard.EVENT_CHANGE = "EVENT_CHANGE";
@@ -67017,7 +67704,7 @@ BI.shortcut("bi.static_year_month_card", BI.StaticYearMonthCard);
 
 
 /***/ }),
-/* 688 */
+/* 691 */
 /***/ (function(module, exports) {
 
 BI.DynamicYearMonthCombo = BI.inherit(BI.Single, {
@@ -67027,12 +67714,15 @@ BI.DynamicYearMonthCombo = BI.inherit(BI.Single, {
         behaviors: {},
         minDate: "1900-01-01", // 最小日期
         maxDate: "2099-12-31", // 最大日期
-        height: 22
+        height: 24,
+        supportDynamic: true
     },
 
     _init: function () {
-        BI.DynamicYearMonthCombo.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
+        o.height -= 2;
+        BI.isNumeric(o.width) && (o.width -= 2);
+        BI.DynamicYearMonthCombo.superclass._init.apply(this, arguments);
         this.storeValue = o.value;
         this.storeTriggerValue = "";
         this.trigger = BI.createWidget({
@@ -67059,12 +67749,11 @@ BI.DynamicYearMonthCombo = BI.inherit(BI.Single, {
             self.fireEvent(BI.DynamicYearMonthCombo.EVENT_VALID);
         });
         this.trigger.on(BI.DynamicYearMonthTrigger.EVENT_CONFIRM, function () {
-            // 没看出来干啥的，先去掉
-            // if (self.combo.isViewVisible()) {
-            //     return;
-            // }
             var dateStore = self.storeTriggerValue;
             var dateObj = self.trigger.getKey();
+            if (BI.isEqual(dateObj, dateStore)) {
+                return;
+            }
             if (BI.isNotEmptyString(dateObj) && !BI.isEqual(dateObj, dateStore)) {
                 self.storeValue = self.trigger.getValue();
                 self.setValue(self.trigger.getValue());
@@ -67083,11 +67772,14 @@ BI.DynamicYearMonthCombo = BI.inherit(BI.Single, {
             isNeedAdjustHeight: false,
             isNeedAdjustWidth: false,
             el: this.trigger,
+            destroyWhenHide: true,
+            adjustLength: 1,
             popup: {
                 minWidth: 100,
                 stopPropagation: false,
                 el: {
                     type: "bi.dynamic_year_month_popup",
+                    supportDynamic: o.supportDynamic,
                     ref: function () {
                         self.popup = this;
                     },
@@ -67129,6 +67821,8 @@ BI.DynamicYearMonthCombo = BI.inherit(BI.Single, {
             }
         });
         this.combo.on(BI.Combo.EVENT_BEFORE_POPUPVIEW, function () {
+            self.popup.setMinDate(o.minDate);
+            self.popup.setMaxDate(o.maxDate);
             self.popup.setValue(self.storeValue);
             self.fireEvent(BI.DynamicYearMonthCombo.EVENT_BEFORE_POPUPVIEW);
         });
@@ -67174,6 +67868,20 @@ BI.DynamicYearMonthCombo = BI.inherit(BI.Single, {
         }
     },
 
+    setMinDate: function (minDate) {
+        var o = this.options;
+        o.minDate = minDate;
+        this.trigger.setMinDate(minDate);
+        this.popup && this.popup.setMinDate(minDate);
+    },
+
+    setMaxDate: function (maxDate) {
+        var o = this.options;
+        o.maxDate = maxDate;
+        this.trigger.setMaxDate(maxDate);
+        this.popup && this.popup.setMaxDate(maxDate);
+    },
+
     hideView: function () {
         this.combo.hideView();
     },
@@ -67192,8 +67900,8 @@ BI.DynamicYearMonthCombo = BI.inherit(BI.Single, {
         return this.trigger.getKey();
     },
 
-    isValid: function () {
-        return this.trigger.isValid();
+    isStateValid: function () {
+        return this.trigger.isStateValid();
     }
 
 });
@@ -67209,8 +67917,9 @@ BI.extend(BI.DynamicYearMonthCombo, {
     Dynamic: 2
 });
 
+
 /***/ }),
-/* 689 */
+/* 692 */
 /***/ (function(module, exports) {
 
 /**
@@ -67232,14 +67941,14 @@ BI.DynamicYearMonthPopup = BI.inherit(BI.Widget, {
         min: "1900-01-01", // 最小日期
         max: "2099-12-31", // 最大日期,
         width: 180,
-        height: 240
+        supportDynamic: true,
     },
 
     render: function () {
         var self = this, opts = this.options, c = this.constants;
         this.storeValue = {type: BI.DynamicYearMonthCombo.Static};
         return {
-            type: "bi.vtape",
+            type: "bi.vertical",
             items: [{
                 el: this._getTabJson()
             }, {
@@ -67263,6 +67972,7 @@ BI.DynamicYearMonthPopup = BI.inherit(BI.Widget, {
                         textHeight: c.buttonHeight - 1,
                         shadow: true,
                         text: BI.i18nText("BI-Basic_Current_Month"),
+                        disabled: this._checkTodayValid(),
                         ref: function () {
                             self.textButton = this;
                         },
@@ -67284,9 +67994,9 @@ BI.DynamicYearMonthPopup = BI.inherit(BI.Widget, {
                                 self.fireEvent(BI.DynamicYearMonthPopup.BUTTON_OK_EVENT_CHANGE);
                             }
                         }]
-                    }]]
+                    }]],
+                    height: 24
                 },
-                height: 24
             }]
         };
     },
@@ -67294,7 +68004,7 @@ BI.DynamicYearMonthPopup = BI.inherit(BI.Widget, {
     _setInnerValue: function () {
         if (this.dateTab.getSelect() === BI.DynamicDateCombo.Static) {
             this.textButton.setValue(BI.i18nText("BI-Basic_Current_Month"));
-            this.textButton.setEnable(true);
+            this.textButton.setEnable(!this._checkTodayValid());
         } else {
             var date = BI.DynamicDateHelper.getCalculation(this.dynamicPane.getValue());
             date = BI.print(date, "%Y-%x");
@@ -67303,16 +68013,26 @@ BI.DynamicYearMonthPopup = BI.inherit(BI.Widget, {
         }
     },
 
+    _checkTodayValid: function () {
+        var o = this.options;
+        var today = BI.getDate();
+        return !!BI.checkDateVoid(today.getFullYear(), today.getMonth() + 1, today.getDate(), o.min, o.max)[0];
+    },
+
     _getTabJson: function () {
         var self = this, o = this.options;
         return {
             type: "bi.tab",
+            logic: {
+                dynamic: true
+            },
             ref: function () {
                 self.dateTab = this;
             },
             tab: {
                 type: "bi.linear_segment",
                 cls: "bi-split-bottom",
+                invisible: !o.supportDynamic,
                 height: this.constants.tabHeight,
                 items: BI.createItems([{
                     text: BI.i18nText("BI-Basic_Year_Month"),
@@ -67329,6 +68049,9 @@ BI.DynamicYearMonthPopup = BI.inherit(BI.Widget, {
                     case BI.DynamicYearCombo.Dynamic:
                         return {
                             type: "bi.dynamic_year_month_card",
+                            cls: "dynamic-year-month-pane",
+                            min: self.options.min,
+                            max: self.options.max,
                             listeners: [{
                                 eventName: "EVENT_CHANGE",
                                 action: function () {
@@ -67388,14 +68111,16 @@ BI.DynamicYearMonthPopup = BI.inherit(BI.Widget, {
     setMinDate: function (minDate) {
         if (this.options.min !== minDate) {
             this.options.min = minDate;
-            this.year.setMinDate(minDate);
+            this.year && this.year.setMinDate(minDate);
+            this.dynamicPane && this.dynamicPane.setMinDate(minDate);
         }
     },
 
     setMaxDate: function (maxDate) {
         if (this.options.max !== maxDate) {
             this.options.max = maxDate;
-            this.year.setMaxDate(maxDate);
+            this.year && this.year.setMaxDate(maxDate);
+            this.dynamicPane && this.dynamicPane.setMaxDate(maxDate);
         }
     },
 
@@ -67416,7 +68141,7 @@ BI.DynamicYearMonthPopup = BI.inherit(BI.Widget, {
             default:
                 this.year.setValue(value);
                 this.textButton.setValue(BI.i18nText("BI-Basic_Current_Month"));
-                this.textButton.setEnable(true);
+                this.textButton.setEnable(!this._checkTodayValid());
                 break;
         }
     },
@@ -67436,7 +68161,7 @@ BI.DynamicYearMonthPopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.dynamic_year_month_popup", BI.DynamicYearMonthPopup);
 
 /***/ }),
-/* 690 */
+/* 693 */
 /***/ (function(module, exports) {
 
 BI.DynamicYearMonthTrigger = BI.inherit(BI.Trigger, {
@@ -67449,7 +68174,7 @@ BI.DynamicYearMonthTrigger = BI.inherit(BI.Trigger, {
         extraCls: "bi-year-month-trigger",
         min: "1900-01-01", // 最小日期
         max: "2099-12-31", // 最大日期
-        height: 22
+        height: 24
     },
 
     beforeInit: function (callback) {
@@ -67503,16 +68228,16 @@ BI.DynamicYearMonthTrigger = BI.inherit(BI.Trigger, {
 
     _createEditor: function (isYear) {
         var self = this, o = this.options, c = this._const;
-        var minDate = BI.parseDateTime(o.min, "%Y-%X-%d");
         var editor = BI.createWidget({
             type: "bi.sign_editor",
             height: o.height,
             validationChecker: function (v) {
                 if (isYear) {
-                    return v === "" || (BI.isPositiveInteger(v) && !BI.checkDateVoid(v, parseInt(v, 10) === minDate.getFullYear() ? minDate.getMonth() + 1 : 1, 1, o.min, o.max)[0]);
+                    return v === "" || (BI.isPositiveInteger(v) && !BI.checkDateVoid(v, parseInt(v, 10) === BI.parseDateTime(o.min, "%Y-%X-%d").getFullYear() ? BI.parseDateTime(o.min, "%Y-%X-%d").getMonth() + 1 : 1, 1, o.min, o.max)[0]);
                 }
+                var year = self.yearEditor.getValue();
 
-                return v === "" || ((BI.isPositiveInteger(v) && v >= 1 && v <= 12) && !BI.checkDateVoid(BI.getDate().getFullYear(), v, 1, o.min, o.max)[0]);
+                return v === "" || ((BI.isPositiveInteger(v) && v >= 1 && v <= 12) && (BI.isEmptyString(year) ? true : !BI.checkDateVoid(self.yearEditor.getValue(), v, 1, o.min, o.max)[0]));
             },
             quitChecker: function () {
                 return false;
@@ -67656,6 +68381,18 @@ BI.DynamicYearMonthTrigger = BI.inherit(BI.Trigger, {
         }
     },
 
+    setMinDate: function (minDate) {
+        if (BI.isNotEmptyString(this.options.min)) {
+            this.options.min = minDate;
+        }
+    },
+
+    setMaxDate: function (maxDate) {
+        if (BI.isNotEmptyString(this.options.max)) {
+            this.options.max = maxDate;
+        }
+    },
+
     setValue: function (v) {
         var type, value;
         var date = BI.getDate();
@@ -67688,7 +68425,7 @@ BI.DynamicYearMonthTrigger = BI.inherit(BI.Trigger, {
         return this.yearEditor.getValue() + "-" + this.monthEditor.getValue();
     },
 
-    isValid: function () {
+    isStateValid: function () {
         return this.yearEditor.isValid() && this.monthEditor.isValid();
     }
 });
@@ -67702,7 +68439,7 @@ BI.DynamicYearMonthTrigger.EVENT_KEY_DOWN = "EVENT_KEY_DOWN";
 BI.shortcut("bi.dynamic_year_month_trigger", BI.DynamicYearMonthTrigger);
 
 /***/ }),
-/* 691 */
+/* 694 */
 /***/ (function(module, exports) {
 
 BI.YearMonthInterval = BI.inherit(BI.Single, {
@@ -67717,7 +68454,8 @@ BI.YearMonthInterval = BI.inherit(BI.Single, {
     props: {
         extraCls: "bi-year-month-interval",
         minDate: "1900-01-01",
-        maxDate: "2099-12-31"
+        maxDate: "2099-12-31",
+        supportDynamic: true,
     },
 
     _init: function () {
@@ -67771,6 +68509,9 @@ BI.YearMonthInterval = BI.inherit(BI.Single, {
         var self = this, o = this.options;
         var combo = BI.createWidget({
             type: "bi.dynamic_year_month_combo",
+            supportDynamic: o.supportDynamic,
+            minDate: o.minDate,
+            maxDate: o.maxDate,
             behaviors: o.behaviors,
             value: v,
             listeners: [{
@@ -67795,15 +68536,10 @@ BI.YearMonthInterval = BI.inherit(BI.Single, {
             self._checkValid();
         });
 
-        combo.on(BI.DynamicYearMonthCombo.EVENT_BEFORE_POPUPVIEW, function () {
-            self.left.hideView();
-            self.right.hideView();
-        });
-
         combo.on(BI.DynamicYearMonthCombo.EVENT_CONFIRM, function () {
             BI.Bubbles.hide("error");
             var smallDate = self.left.getKey(), bigDate = self.right.getKey();
-            if (self.left.isValid() && self.right.isValid() && self._check(smallDate, bigDate) && self._compare(smallDate, bigDate)) {
+            if (self.left.isStateValid() && self.right.isStateValid() && self._check(smallDate, bigDate) && self._compare(smallDate, bigDate)) {
                 self._setTitle(BI.i18nText("BI-Time_Interval_Error_Text"));
                 self.element.addClass(self.constants.timeErrorCls);
                 self.fireEvent(BI.YearMonthInterval.EVENT_ERROR);
@@ -67881,6 +68617,21 @@ BI.YearMonthInterval = BI.inherit(BI.Single, {
             self.element.removeClass(self.constants.timeErrorCls);
         }
     },
+
+    setMinDate: function (minDate) {
+        var o = this.options;
+        o.minDate = minDate;
+        this.left.setMinDate(minDate);
+        this.right.setMinDate(minDate);
+    },
+
+    setMaxDate: function (maxDate) {
+        var o = this.options;
+        o.maxDate = maxDate;
+        this.left.setMaxDate(maxDate);
+        this.right.setMaxDate(maxDate);
+    },
+
     setValue: function (date) {
         date = date || {};
         this.left.setValue(date.start);
@@ -67900,7 +68651,7 @@ BI.shortcut("bi.year_month_interval", BI.YearMonthInterval);
 
 
 /***/ }),
-/* 692 */
+/* 695 */
 /***/ (function(module, exports) {
 
 /**
@@ -67913,7 +68664,7 @@ BI.shortcut("bi.year_month_interval", BI.YearMonthInterval);
 BI.DynamicYearQuarterCard = BI.inherit(BI.Widget, {
 
     props: {
-        baseCls: "bi-year-month-card"
+        baseCls: "bi-year-quarter-card"
     },
 
     render: function () {
@@ -67927,6 +68678,8 @@ BI.DynamicYearQuarterCard = BI.inherit(BI.Widget, {
                 height: 24
             }, {
                 type: "bi.dynamic_date_param_item",
+                validationChecker: BI.bind(self._checkDate, self),
+                errorText: BI.bind(this._errorTextGetter, this),
                 ref: function () {
                     self.year = this;
                 },
@@ -67938,6 +68691,8 @@ BI.DynamicYearQuarterCard = BI.inherit(BI.Widget, {
                 }]
             }, {
                 type: "bi.dynamic_date_param_item",
+                validationChecker: BI.bind(self._checkDate, self),
+                errorText: BI.bind(this._errorTextGetter, this),
                 dateType: BI.DynamicDateCard.TYPE.QUARTER,
                 ref: function () {
                     self.quarter = this;
@@ -67954,6 +68709,40 @@ BI.DynamicYearQuarterCard = BI.inherit(BI.Widget, {
         };
     },
 
+    _errorTextGetter: function () {
+        var o = this.options;
+        var start = BI.parseDateTime(o.min, "%Y-%X-%d");
+        var end = BI.parseDateTime(o.max, "%Y-%X-%d");
+        return BI.i18nText("BI-Basic_Year_Quarter_Range_Error",
+            start.getFullYear(),
+            BI.getQuarter(start),
+            end.getFullYear(),
+            BI.getQuarter(end)
+        );
+    },
+
+    _checkDate: function (obj) {
+        var o = this.options;
+        var date = BI.DynamicDateHelper.getCalculation(BI.extend(this.getValue(), this._digestDateTypeValue(obj)));
+
+        return !BI.checkDateVoid(date.getFullYear(), date.getMonth() + 1, date.getDate(), o.min, o.max)[0];
+    },
+
+    _digestDateTypeValue: function (value) {
+        var valueMap = {};
+        switch (value.dateType) {
+            case BI.DynamicDateCard.TYPE.YEAR:
+                valueMap.year = (value.offset === 0 ? -value.value : +value.value);
+                break;
+            case BI.DynamicDateCard.TYPE.QUARTER:
+                valueMap.quarter = (value.offset === 0 ? -value.value : +value.value);
+                break;
+            default:
+                break;
+        }
+        return valueMap;
+    },
+
     _createValue: function (type, v) {
         return {
             dateType: type,
@@ -67962,8 +68751,20 @@ BI.DynamicYearQuarterCard = BI.inherit(BI.Widget, {
         };
     },
 
+    setMinDate: function(minDate) {
+        if (BI.isNotEmptyString(this.options.min)) {
+            this.options.min = minDate;
+        }
+    },
+
+    setMaxDate: function (maxDate) {
+        if (BI.isNotEmptyString(this.options.max)) {
+            this.options.max = maxDate;
+        }
+    },
+
     setValue: function (v) {
-        v = v || {year: 0, month: 0};
+        v = v || {year: 0, quarter: 0};
         this.year.setValue(this._createValue(BI.DynamicDateCard.TYPE.YEAR, v.year));
         this.quarter.setValue(this._createValue(BI.DynamicDateCard.TYPE.QUARTER, v.quarter));
     },
@@ -67981,7 +68782,7 @@ BI.DynamicYearQuarterCard.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.dynamic_year_quarter_card", BI.DynamicYearQuarterCard);
 
 /***/ }),
-/* 693 */
+/* 696 */
 /***/ (function(module, exports) {
 
 BI.StaticYearQuarterCard = BI.inherit(BI.Widget, {
@@ -67992,7 +68793,7 @@ BI.StaticYearQuarterCard = BI.inherit(BI.Widget, {
     },
 
     _createQuarter: function () {
-
+        var self = this;
         var items = [{
             text: BI.Date._QN[1],
             value: 1
@@ -68014,26 +68815,34 @@ BI.StaticYearQuarterCard = BI.inherit(BI.Widget, {
                 whiteSpace: "nowrap",
                 once: false,
                 forceSelected: true,
-                height: 24
+                height: 24,
+                ref: function (_ref) {
+                    self.quarterMap[j + 1] = _ref;
+                }
             });
         });
     },
 
     render: function () {
         var self = this, o = this.options;
+        this.quarterMap = {};
         return {
             type: "bi.vertical",
             items: [{
                 type: "bi.year_picker",
+                cls: "bi-split-bottom",
                 ref: function () {
                     self.yearPicker = this;
                 },
+                min: o.min,
+                max: o.max,
                 behaviors: o.behaviors,
                 height: 30,
                 listeners: [{
                     eventName: BI.YearPicker.EVENT_CHANGE,
                     action: function () {
                         var value = this.getValue();
+                        self._checkQuarterStatus(value);
                         self.setValue({
                             year: value,
                             quarter: self.selectedQuarter
@@ -68041,27 +68850,60 @@ BI.StaticYearQuarterCard = BI.inherit(BI.Widget, {
                     }
                 }]
             }, {
-                type: "bi.button_group",
-                behaviors: o.behaviors,
-                ref: function () {
-                    self.quarter = this;
+                el: {
+                    type: "bi.button_group",
+                    behaviors: o.behaviors,
+                    ref: function () {
+                        self.quarter = this;
+                    },
+                    items: this._createQuarter(),
+                    layouts: [{
+                        type: "bi.vertical",
+                        vgap: 10
+                    }],
+                    value: o.value,
+                    listeners: [{
+                        eventName: BI.ButtonGroup.EVENT_CHANGE,
+                        action: function () {
+                            self.selectedYear = self.yearPicker.getValue();
+                            self.selectedQuarter = this.getValue()[0];
+                            self.fireEvent(BI.StaticYearQuarterCard.EVENT_CHANGE);
+                        }
+                    }]
                 },
-                items: this._createQuarter(),
-                layouts: [{
-                    type: "bi.vertical",
-                    vgap: 10
-                }],
-                value: o.value,
-                listeners: [{
-                    eventName: BI.ButtonGroup.EVENT_CHANGE,
-                    action: function () {
-                        self.selectedYear = self.yearPicker.getValue();
-                        self.selectedQuarter = this.getValue()[0];
-                        self.fireEvent(BI.StaticYearQuarterCard.EVENT_CHANGE);
-                    }
-                }]
+                vgap: 5
             }]
         };
+    },
+
+    _checkQuarterStatus: function (year) {
+        var o = this.options;
+        var minDate = BI.parseDateTime(o.min, "%Y-%X-%d"), maxDate = BI.parseDateTime(o.max, "%Y-%X-%d");
+        var minYear = minDate.getFullYear(), maxYear = maxDate.getFullYear();
+        var minQuarter = 1; var maxQuarter = 4;
+        minYear === year && (minQuarter = BI.parseInt(BI.getQuarter(minDate)));
+        maxYear === year && (maxQuarter = BI.parseInt(BI.getQuarter(maxDate)));
+        var yearInvalid = year < minYear || year > maxYear;
+        BI.each(this.quarterMap, function (quarter, obj) {
+            var quarterInvalid = quarter < minQuarter || quarter > maxQuarter;
+            obj.setEnable(!yearInvalid && !quarterInvalid);
+        });
+    },
+
+    setMinDate: function (minDate) {
+        if (this.options.min !== minDate) {
+            this.options.min = minDate;
+            this.yearPicker.setMinDate(minDate);
+            this._checkQuarterStatus(this.selectedYear);
+        }
+    },
+
+    setMaxDate: function (maxDate) {
+        if (this.options.max !== maxDate) {
+            this.options.max = maxDate;
+            this.yearPicker.setMaxDate(maxDate);
+            this._checkQuarterStatus(this.selectedYear);
+        }
     },
 
 
@@ -68089,6 +68931,7 @@ BI.StaticYearQuarterCard = BI.inherit(BI.Widget, {
             this.yearPicker.setValue(this.selectedYear);
             this.quarter.setValue(this.selectedQuarter);
         }
+        this._checkQuarterStatus(this.selectedYear);
     }
 });
 BI.StaticYearQuarterCard.EVENT_CHANGE = "EVENT_CHANGE";
@@ -68096,7 +68939,7 @@ BI.shortcut("bi.static_year_quarter_card", BI.StaticYearQuarterCard);
 
 
 /***/ }),
-/* 694 */
+/* 697 */
 /***/ (function(module, exports) {
 
 BI.DynamicYearQuarterCombo = BI.inherit(BI.Widget, {
@@ -68104,20 +68947,23 @@ BI.DynamicYearQuarterCombo = BI.inherit(BI.Widget, {
     props: {
         baseCls: "bi-year-quarter-combo bi-border bi-border-radius bi-focus-shadow",
         behaviors: {},
-        min: "1900-01-01", // 最小日期
-        max: "2099-12-31", // 最大日期
-        height: 22
+        minDate: "1900-01-01", // 最小日期
+        maxDate: "2099-12-31", // 最大日期
+        height: 24,
+        supportDynamic: true,
     },
 
     _init: function () {
-        BI.DynamicYearQuarterCombo.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
+        o.height -= 2;
+        BI.isNumeric(o.width) && (o.width -= 2);
+        BI.DynamicYearQuarterCombo.superclass._init.apply(this, arguments);
         this.storeValue = o.value;
         self.storeTriggerValue = "";
         this.trigger = BI.createWidget({
             type: "bi.dynamic_year_quarter_trigger",
-            min: o.min,
-            max: o.max,
+            min: o.minDate,
+            max: o.maxDate,
             height: o.height,
             value: o.value || ""
         });
@@ -68132,14 +68978,17 @@ BI.DynamicYearQuarterCombo = BI.inherit(BI.Widget, {
         });
         this.trigger.on(BI.DynamicYearQuarterTrigger.EVENT_ERROR, function () {
             self.combo.isViewVisible() && self.combo.hideView();
+            self.fireEvent(BI.DynamicYearQuarterCombo.EVENT_ERROR);
+        });
+        this.trigger.on(BI.DynamicYearQuarterTrigger.EVENT_VALID, function () {
+            self.fireEvent(BI.DynamicYearMonthCombo.EVENT_VALID);
         });
         this.trigger.on(BI.DynamicYearQuarterTrigger.EVENT_CONFIRM, function () {
-            // 没看出来干啥的，先去掉
-            // if (self.combo.isViewVisible()) {
-            //     return;
-            // }
             var dateStore = self.storeTriggerValue;
             var dateObj = self.trigger.getKey();
+            if (BI.isEqual(dateObj, dateStore)) {
+                return;
+            }
             if (BI.isNotEmptyString(dateObj) && !BI.isEqual(dateObj, dateStore)) {
                 self.storeValue = self.trigger.getValue();
                 self.setValue(self.trigger.getValue());
@@ -68149,6 +68998,7 @@ BI.DynamicYearQuarterCombo = BI.inherit(BI.Widget, {
         });
         this.trigger.on(BI.DynamicYearQuarterTrigger.EVENT_FOCUS, function () {
             self.storeTriggerValue = self.trigger.getKey();
+            self.fireEvent(BI.DynamicYearQuarterCombo.EVENT_FOCUS);
         });
 
         this.combo = BI.createWidget({
@@ -68157,11 +69007,14 @@ BI.DynamicYearQuarterCombo = BI.inherit(BI.Widget, {
             isNeedAdjustHeight: false,
             isNeedAdjustWidth: false,
             el: this.trigger,
+            destroyWhenHide: true,
+            adjustLength: 1,
             popup: {
                 minWidth: 85,
                 stopPropagation: false,
                 el: {
                     type: "bi.dynamic_year_quarter_popup",
+                    supportDynamic: o.supportDynamic,
                     ref: function () {
                         self.popup = this;
                     },
@@ -68196,13 +69049,15 @@ BI.DynamicYearQuarterCombo = BI.inherit(BI.Widget, {
                         }
                     }],
                     behaviors: o.behaviors,
-                    min: o.min,
-                    max: o.max
+                    min: o.minDate,
+                    max: o.maxDate
                 },
                 value: o.value || ""
             }
         });
         this.combo.on(BI.Combo.EVENT_BEFORE_POPUPVIEW, function () {
+            self.popup.setMinDate(o.minDate);
+            self.popup.setMaxDate(o.maxDate);
             self.popup.setValue(self.storeValue);
             self.fireEvent(BI.DynamicYearQuarterCombo.EVENT_BEFORE_POPUPVIEW);
         });
@@ -68248,6 +69103,28 @@ BI.DynamicYearQuarterCombo = BI.inherit(BI.Widget, {
         }
     },
 
+    setMinDate: function (minDate) {
+        var o = this.options;
+        o.minDate = minDate;
+        this.trigger.setMinDate(minDate);
+        this.popup && this.popup.setMinDate(minDate);
+    },
+
+    setMaxDate: function (maxDate) {
+        var o = this.options;
+        o.maxDate = maxDate;
+        this.trigger.setMaxDate(maxDate);
+        this.popup && this.popup.setMaxDate(maxDate);
+    },
+
+    hideView: function () {
+        this.combo.hideView();
+    },
+
+    getKey: function () {
+        return this.trigger.getKey();
+    },
+
     setValue: function (v) {
         this.storeValue = v;
         this.trigger.setValue(v);
@@ -68256,11 +69133,18 @@ BI.DynamicYearQuarterCombo = BI.inherit(BI.Widget, {
 
     getValue: function () {
         return this.storeValue;
+    },
+
+    isStateValid: function () {
+        return this.trigger.isStateValid();
     }
 
 });
 BI.DynamicYearQuarterCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
 BI.DynamicYearQuarterCombo.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
+BI.DynamicYearQuarterCombo.EVENT_ERROR = "EVENT_ERROR";
+BI.DynamicYearQuarterCombo.EVENT_VALID = "EVENT_VALID";
+BI.DynamicYearQuarterCombo.EVENT_FOCUS = "EVENT_FOCUS";
 BI.shortcut("bi.dynamic_year_quarter_combo", BI.DynamicYearQuarterCombo);
 
 BI.extend(BI.DynamicYearQuarterCombo, {
@@ -68268,8 +69152,9 @@ BI.extend(BI.DynamicYearQuarterCombo, {
     Dynamic: 2
 });
 
+
 /***/ }),
-/* 695 */
+/* 698 */
 /***/ (function(module, exports) {
 
 BI.DynamicYearQuarterPopup = BI.inherit(BI.Widget, {
@@ -68284,14 +69169,14 @@ BI.DynamicYearQuarterPopup = BI.inherit(BI.Widget, {
         min: "1900-01-01", // 最小日期
         max: "2099-12-31", // 最大日期,
         width: 180,
-        height: 240
+        supportDynamic: true,
     },
 
     render: function () {
         var self = this, opts = this.options, c = this.constants;
         this.storeValue = {type: BI.DynamicYearQuarterCombo.Static};
         return {
-            type: "bi.vtape",
+            type: "bi.vertical",
             items: [{
                 el: this._getTabJson()
             }, {
@@ -68315,6 +69200,7 @@ BI.DynamicYearQuarterPopup = BI.inherit(BI.Widget, {
                         textHeight: c.buttonHeight - 1,
                         shadow: true,
                         text: BI.i18nText("BI-Basic_Current_Quarter"),
+                        disabled: this._checkTodayValid(),
                         ref: function () {
                             self.textButton = this;
                         },
@@ -68336,9 +69222,9 @@ BI.DynamicYearQuarterPopup = BI.inherit(BI.Widget, {
                                 self.fireEvent(BI.DynamicYearQuarterPopup.BUTTON_OK_EVENT_CHANGE);
                             }
                         }]
-                    }]]
+                    }]],
+                    height: 24
                 },
-                height: 24
             }]
         };
     },
@@ -68346,7 +69232,7 @@ BI.DynamicYearQuarterPopup = BI.inherit(BI.Widget, {
     _setInnerValue: function () {
         if (this.dateTab.getSelect() === BI.DynamicYearQuarterCombo.Static) {
             this.textButton.setValue(BI.i18nText("BI-Basic_Current_Quarter"));
-            this.textButton.setEnable(true);
+            this.textButton.setEnable(!this._checkTodayValid());
         } else {
             var date = BI.DynamicDateHelper.getCalculation(this.dynamicPane.getValue());
             date = BI.print(date, "%Y-%Q");
@@ -68355,16 +69241,26 @@ BI.DynamicYearQuarterPopup = BI.inherit(BI.Widget, {
         }
     },
 
+    _checkTodayValid: function () {
+        var o = this.options;
+        var today = BI.getDate();
+        return !!BI.checkDateVoid(today.getFullYear(), today.getMonth() + 1, today.getDate(), o.min, o.max)[0];
+    },
+
     _getTabJson: function () {
         var self = this, o = this.options;
         return {
             type: "bi.tab",
+            logic: {
+                dynamic: true
+            },
             ref: function () {
                 self.dateTab = this;
             },
             tab: {
                 type: "bi.linear_segment",
                 cls: "bi-split-bottom",
+                invisible: !o.supportDynamic,
                 height: this.constants.tabHeight,
                 items: BI.createItems([{
                     text: BI.i18nText("BI-Basic_Year_Quarter"),
@@ -68381,6 +69277,9 @@ BI.DynamicYearQuarterPopup = BI.inherit(BI.Widget, {
                     case BI.DynamicYearQuarterCombo.Dynamic:
                         return {
                             type: "bi.dynamic_year_quarter_card",
+                            cls: "dynamic-year-quarter-pane",
+                            min: self.options.min,
+                            max: self.options.max,
                             listeners: [{
                                 eventName: "EVENT_CHANGE",
                                 action: function () {
@@ -68437,6 +69336,22 @@ BI.DynamicYearQuarterPopup = BI.inherit(BI.Widget, {
         };
     },
 
+    setMinDate: function (minDate) {
+        if (this.options.min !== minDate) {
+            this.options.min = minDate;
+            this.year && this.year.setMinDate(minDate);
+            this.dynamicPane && this.dynamicPane.setMinDate(minDate);
+        }
+    },
+
+    setMaxDate: function (maxDate) {
+        if (this.options.max !== maxDate) {
+            this.options.max = maxDate;
+            this.year && this.year.setMaxDate(maxDate);
+            this.dynamicPane && this.dynamicPane.setMaxDate(maxDate);
+        }
+    },
+
     setValue: function (v) {
         this.storeValue = v;
         var self = this;
@@ -68454,7 +69369,7 @@ BI.DynamicYearQuarterPopup = BI.inherit(BI.Widget, {
             default:
                 this.year.setValue(value);
                 this.textButton.setValue(BI.i18nText("BI-Basic_Current_Quarter"));
-                this.textButton.setEnable(true);
+                this.textButton.setEnable(!this._checkTodayValid());
                 break;
         }
     },
@@ -68474,7 +69389,7 @@ BI.DynamicYearQuarterPopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.dynamic_year_quarter_popup", BI.DynamicYearQuarterPopup);
 
 /***/ }),
-/* 696 */
+/* 699 */
 /***/ (function(module, exports) {
 
 BI.DynamicYearQuarterTrigger = BI.inherit(BI.Trigger, {
@@ -68487,7 +69402,7 @@ BI.DynamicYearQuarterTrigger = BI.inherit(BI.Trigger, {
         extraCls: "bi-year-quarter-trigger",
         min: "1900-01-01", // 最小日期
         max: "2099-12-31", // 最大日期
-        height: 22
+        height: 24
     },
 
     _init: function () {
@@ -68544,9 +69459,11 @@ BI.DynamicYearQuarterTrigger = BI.inherit(BI.Trigger, {
             height: o.height,
             validationChecker: function (v) {
                 if(isYear) {
-                    return v === "" || (BI.isPositiveInteger(v) && !BI.checkDateVoid(v, 1, 1, o.min, o.max)[0]);
+                    return v === "" || (BI.isPositiveInteger(v) && !BI.checkDateVoid(v, parseInt(v, 10) === BI.parseDateTime(o.min, "%Y-%X-%d").getFullYear() ? BI.parseDateTime(o.min, "%Y-%X-%d").getMonth() + 1 : 1, 1, o.min, o.max)[0]);
                 }
-                return v === "" || ((BI.isPositiveInteger(v) && v >= 1 && v <= 4) && !BI.checkDateVoid(BI.getDate().getFullYear(), v, 1, o.min, o.max)[0]);
+                var year = self.yearEditor.getValue();
+
+                return v === "" || ((BI.isPositiveInteger(v) && v >= 1 && v <= 4) && (BI.isEmptyString(year) ? true : !BI.checkDateVoid(self.yearEditor.getValue(), (v - 1) * 3 + 1, 1, o.min, o.max)[0]));
             },
             quitChecker: function () {
                 return false;
@@ -68583,6 +69500,15 @@ BI.DynamicYearQuarterTrigger = BI.inherit(BI.Trigger, {
         });
         editor.on(BI.SignEditor.EVENT_ERROR, function () {
             self.fireEvent(BI.DynamicYearQuarterTrigger.EVENT_ERROR);
+        });
+        editor.on(BI.SignEditor.EVENT_VALID, function () {
+            var year = self.yearEditor.getValue();
+            var quarter = self.quarterEditor.getValue();
+            if(BI.isNotEmptyString(year) && BI.isNotEmptyString(quarter)) {
+                if(BI.isPositiveInteger(year) && quarter >= 1 && quarter <= 4 && !BI.checkDateVoid(year, (quarter - 1) * 3 + 1, 1, o.min, o.max)[0]) {
+                    self.fireEvent(BI.DynamicYearMonthTrigger.EVENT_VALID);
+                }
+            }
         });
         editor.on(BI.SignEditor.EVENT_CHANGE, function () {
             if(isYear) {
@@ -68664,6 +69590,18 @@ BI.DynamicYearQuarterTrigger = BI.inherit(BI.Trigger, {
         this.setTitle(BI.isEmptyString(text) ? dateStr : (text + ":" + dateStr));
     },
 
+    setMinDate: function (minDate) {
+        if (BI.isNotEmptyString(this.options.min)) {
+            this.options.min = minDate;
+        }
+    },
+
+    setMaxDate: function (maxDate) {
+        if (BI.isNotEmptyString(this.options.max)) {
+            this.options.max = maxDate;
+        }
+    },
+
     setValue: function (v) {
         var type, value;
         var date = BI.getDate();
@@ -68697,6 +69635,10 @@ BI.DynamicYearQuarterTrigger = BI.inherit(BI.Trigger, {
 
     getKey: function () {
         return this.yearEditor.getValue() + "-" + this.quarterEditor.getValue();
+    },
+
+    isStateValid: function () {
+        return this.yearEditor.isValid() && this.quarterEditor.isValid();
     }
 });
 BI.DynamicYearQuarterTrigger.EVENT_FOCUS = "EVENT_FOCUS";
@@ -68705,10 +69647,222 @@ BI.DynamicYearQuarterTrigger.EVENT_START = "EVENT_START";
 BI.DynamicYearQuarterTrigger.EVENT_CONFIRM = "EVENT_CONFIRM";
 BI.DynamicYearQuarterTrigger.EVENT_STOP = "EVENT_STOP";
 BI.DynamicYearQuarterTrigger.EVENT_KEY_DOWN = "EVENT_KEY_DOWN";
+BI.DynamicYearQuarterTrigger.EVENT_VALID = "EVENT_VALID";
 BI.shortcut("bi.dynamic_year_quarter_trigger", BI.DynamicYearQuarterTrigger);
 
 /***/ }),
-/* 697 */
+/* 700 */
+/***/ (function(module, exports) {
+
+/**
+ * @author windy
+ * @version 2.0
+ * Created by windy on 2021/1/25
+ */
+BI.YearQuarterInterval = BI.inherit(BI.Single, {
+    constants: {
+        height: 24,
+        width: 25,
+        lgap: 15,
+        offset: -15,
+        timeErrorCls: "time-error"
+    },
+
+    props: {
+        extraCls: "bi-year-quarter-interval",
+        minDate: "1900-01-01",
+        maxDate: "2099-12-31",
+        supportDynamic: true,
+    },
+
+    render: function () {
+        var self = this, o = this.options;
+
+        o.value = o.value || {};
+        this.left = this._createCombo(o.value.start);
+        this.right = this._createCombo(o.value.end);
+
+        return [{
+            type: "bi.center",
+            hgap: 15,
+            height: this.constants.height,
+            items: [{
+                type: "bi.absolute",
+                items: [{
+                    el: self.left,
+                    left: this.constants.offset,
+                    right: 0,
+                    top: 0,
+                    bottom: 0
+                }]
+            }, {
+                type: "bi.absolute",
+                items: [{
+                    el: self.right,
+                    left: 0,
+                    right: this.constants.offset,
+                    top: 0,
+                    bottom: 0
+                }]
+            }]
+        }, {
+            type: "bi.horizontal_auto",
+            items: [{
+                type: "bi.label",
+                height: this.constants.height,
+                width: this.constants.width,
+                text: "-",
+                ref: function (_ref) {
+                    self.label = _ref;
+                }
+            }]
+        }]
+    },
+
+    _createCombo: function (v) {
+        var self = this, o = this.options;
+        var combo = BI.createWidget({
+            type: "bi.dynamic_year_quarter_combo",
+            supportDynamic: o.supportDynamic,
+            minDate: o.minDate,
+            maxDate: o.maxDate,
+            behaviors: o.behaviors,
+            value: v,
+            listeners: [{
+                eventName: BI.DynamicYearQuarterCombo.EVENT_BEFORE_POPUPVIEW,
+                action: function () {
+                    self.fireEvent(BI.YearQuarterInterval.EVENT_BEFORE_POPUPVIEW);
+                }
+            }]
+        });
+        combo.on(BI.DynamicYearQuarterCombo.EVENT_ERROR, function () {
+            self._clearTitle();
+            BI.Bubbles.hide("error");
+            self.element.removeClass(self.constants.timeErrorCls);
+            self.fireEvent(BI.YearQuarterInterval.EVENT_ERROR);
+        });
+
+        combo.on(BI.DynamicYearQuarterCombo.EVENT_VALID, function () {
+            self._checkValid();
+        });
+
+        combo.on(BI.DynamicYearQuarterCombo.EVENT_FOCUS, function () {
+            self._checkValid();
+        });
+
+        combo.on(BI.DynamicYearQuarterCombo.EVENT_CONFIRM, function () {
+            BI.Bubbles.hide("error");
+            var smallDate = self.left.getKey(), bigDate = self.right.getKey();
+            if (self.left.isStateValid() && self.right.isStateValid() && self._check(smallDate, bigDate) && self._compare(smallDate, bigDate)) {
+                self._setTitle(BI.i18nText("BI-Time_Interval_Error_Text"));
+                self.element.addClass(self.constants.timeErrorCls);
+                self.fireEvent(BI.YearQuarterInterval.EVENT_ERROR);
+            }else{
+                self._clearTitle();
+                self.element.removeClass(self.constants.timeErrorCls);
+                self.fireEvent(BI.YearQuarterInterval.EVENT_CHANGE);
+            }
+        });
+        return combo;
+    },
+
+
+    _dateCheck: function (date) {
+        return BI.print(BI.parseDateTime(date, "%Y-%Q"), "%Y-%Q") === date || BI.print(BI.parseDateTime(date, "%Y-%q"), "%Y-%q") === date;
+    },
+
+
+    // 判是否在最大最小之间
+    _checkVoid: function (obj) {
+        var o = this.options;
+        return !BI.checkDateVoid(obj.year, (obj.quarter - 1) * 3 + 1, 1, o.minDate, o.maxDate)[0];
+    },
+
+    // 判格式合法
+    _check: function (smallDate, bigDate) {
+        var smallObj = smallDate.match(/\d+/g), bigObj = bigDate.match(/\d+/g);
+
+        var smallDate4Check = "";
+        if (BI.isNotNull(smallObj)) {
+            smallDate4Check = (smallObj[0] || "") + "-" + (smallObj[1] || 1);
+        }
+
+        var bigDate4Check = "";
+        if (BI.isNotNull(bigObj)) {
+            bigDate4Check = (bigObj[0] || "") + "-" + (bigObj[1] || 1);
+        }
+
+        return this._dateCheck(smallDate4Check) && BI.checkDateLegal(smallDate4Check) && this._checkVoid({
+            year: smallObj[0],
+            quarter: smallObj[1] || 1
+        }) && this._dateCheck(bigDate4Check) && BI.checkDateLegal(bigDate4Check) && this._checkVoid({
+            year: bigObj[0],
+            quarter: bigObj[1] || 1
+        });
+    },
+
+    _compare: function (smallDate, bigDate) {
+        smallDate = BI.print(BI.parseDateTime(smallDate, "%Y-%Q"), "%Y-%Q");
+        bigDate = BI.print(BI.parseDateTime(bigDate, "%Y-%Q"), "%Y-%Q");
+        return BI.isNotNull(smallDate) && BI.isNotNull(bigDate) && smallDate > bigDate;
+    },
+    _setTitle: function (v) {
+        this.setTitle(v);
+    },
+    _clearTitle: function () {
+        this.setTitle("");
+    },
+    _checkValid: function () {
+        var self = this;
+
+        BI.Bubbles.hide("error");
+        var smallDate = self.left.getKey(), bigDate = self.right.getKey();
+        if (self.left.isValid() && self.right.isValid() && self._check(smallDate, bigDate) && self._compare(smallDate, bigDate)) {
+            self._setTitle(BI.i18nText("BI-Time_Interval_Error_Text"));
+            self.element.addClass(self.constants.timeErrorCls);
+            BI.Bubbles.show("error", BI.i18nText("BI-Time_Interval_Error_Text"), self, {
+                offsetStyle: "center"
+            });
+            self.fireEvent(BI.YearQuarterInterval.EVENT_ERROR);
+        } else {
+            self._clearTitle();
+            self.element.removeClass(self.constants.timeErrorCls);
+        }
+    },
+
+    setMinDate: function (minDate) {
+        var o = this.options;
+        o.minDate = minDate;
+        this.left.setMinDate(minDate);
+        this.right.setMinDate(minDate);
+    },
+
+    setMaxDate: function (maxDate) {
+        var o = this.options;
+        o.maxDate = maxDate;
+        this.left.setMaxDate(maxDate);
+        this.right.setMaxDate(maxDate);
+    },
+
+    setValue: function (date) {
+        date = date || {};
+        this.left.setValue(date.start);
+        this.right.setValue(date.end);
+
+        this._checkValid();
+    },
+    getValue: function () {
+        return {start: this.left.getValue(), end: this.right.getValue()};
+    }
+});
+BI.YearQuarterInterval.EVENT_VALID = "EVENT_VALID";
+BI.YearQuarterInterval.EVENT_ERROR = "EVENT_ERROR";
+BI.YearQuarterInterval.EVENT_CHANGE = "EVENT_CHANGE";
+BI.YearQuarterInterval.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
+BI.shortcut("bi.year_quarter_interval", BI.YearQuarterInterval);
+
+/***/ }),
+/* 701 */
 /***/ (function(module, exports) {
 
 /**
@@ -68814,7 +69968,7 @@ BI.AbstractAllValueChooser = BI.inherit(BI.Widget, {
 });
 
 /***/ }),
-/* 698 */
+/* 702 */
 /***/ (function(module, exports) {
 
 /**
@@ -68896,7 +70050,7 @@ BI.shortcut("bi.all_value_chooser_combo", BI.AllValueChooserCombo);
 
 
 /***/ }),
-/* 699 */
+/* 703 */
 /***/ (function(module, exports) {
 
 /**
@@ -68970,7 +70124,7 @@ BI.shortcut("bi.all_value_chooser_pane", BI.AllValueChooserPane);
 
 
 /***/ }),
-/* 700 */
+/* 704 */
 /***/ (function(module, exports) {
 
 BI.AllValueMultiTextValueCombo = BI.inherit(BI.Widget, {
@@ -69041,7 +70195,7 @@ BI.shortcut("bi.all_value_multi_text_value_combo", BI.AllValueMultiTextValueComb
 
 
 /***/ }),
-/* 701 */
+/* 705 */
 /***/ (function(module, exports) {
 
 BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
@@ -69901,7 +71055,7 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
 
 
 /***/ }),
-/* 702 */
+/* 706 */
 /***/ (function(module, exports) {
 
 BI.AbstractListTreeValueChooser = BI.inherit(BI.AbstractTreeValueChooser, {
@@ -70193,7 +71347,7 @@ BI.AbstractListTreeValueChooser = BI.inherit(BI.AbstractTreeValueChooser, {
 });
 
 /***/ }),
-/* 703 */
+/* 707 */
 /***/ (function(module, exports) {
 
 /**
@@ -70309,7 +71463,7 @@ BI.shortcut("bi.list_tree_value_chooser_insert_combo", BI.ListTreeValueChooserIn
 
 
 /***/ }),
-/* 704 */
+/* 708 */
 /***/ (function(module, exports) {
 
 /**
@@ -70424,7 +71578,7 @@ BI.shortcut("bi.tree_value_chooser_insert_combo", BI.TreeValueChooserInsertCombo
 
 
 /***/ }),
-/* 705 */
+/* 709 */
 /***/ (function(module, exports) {
 
 /**
@@ -70543,7 +71697,7 @@ BI.shortcut("bi.tree_value_chooser_combo", BI.TreeValueChooserCombo);
 
 
 /***/ }),
-/* 706 */
+/* 710 */
 /***/ (function(module, exports) {
 
 /**
@@ -70611,7 +71765,7 @@ BI.shortcut("bi.tree_value_chooser_pane", BI.TreeValueChooserPane);
 
 
 /***/ }),
-/* 707 */
+/* 711 */
 /***/ (function(module, exports) {
 
 /**
@@ -70723,7 +71877,7 @@ BI.AbstractValueChooser = BI.inherit(BI.Widget, {
 });
 
 /***/ }),
-/* 708 */
+/* 712 */
 /***/ (function(module, exports) {
 
 /**
@@ -70833,7 +71987,7 @@ BI.shortcut("bi.value_chooser_insert_combo", BI.ValueChooserInsertCombo);
 
 
 /***/ }),
-/* 709 */
+/* 713 */
 /***/ (function(module, exports) {
 
 /**
@@ -70947,7 +72101,7 @@ BI.shortcut("bi.value_chooser_combo", BI.ValueChooserCombo);
 
 
 /***/ }),
-/* 710 */
+/* 714 */
 /***/ (function(module, exports) {
 
 /**
@@ -71049,7 +72203,7 @@ BI.shortcut("bi.value_chooser_no_bar_combo", BI.ValueChooserNoBarCombo);
 
 
 /***/ }),
-/* 711 */
+/* 715 */
 /***/ (function(module, exports) {
 
 /**
@@ -71125,20 +72279,20 @@ BI.shortcut("bi.value_chooser_pane", BI.ValueChooserPane);
 
 
 /***/ }),
-/* 712 */
+/* 716 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var _index = _interopRequireDefault(__webpack_require__(713));
+var _index = _interopRequireDefault(__webpack_require__(717));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 BI.extend(BI, _index["default"]);
 
 /***/ }),
-/* 713 */
+/* 717 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -72031,37 +73185,73 @@ Object.defineProperty(exports, "LayerController", {
     return _controller2.LayerController;
   }
 });
+Object.defineProperty(exports, "DateCalendarPopup", {
+  enumerable: true,
+  get: function get() {
+    return _popupCalendar.DateCalendarPopup;
+  }
+});
+Object.defineProperty(exports, "Tree", {
+  enumerable: true,
+  get: function get() {
+    return _tree2.Tree;
+  }
+});
+Object.defineProperty(exports, "Node", {
+  enumerable: true,
+  get: function get() {
+    return _tree2.Node;
+  }
+});
+Object.defineProperty(exports, "TextNode", {
+  enumerable: true,
+  get: function get() {
+    return _textnode.TextNode;
+  }
+});
+Object.defineProperty(exports, "TextValueCheckComboPopup", {
+  enumerable: true,
+  get: function get() {
+    return _popup3.TextValueCheckComboPopup;
+  }
+});
+Object.defineProperty(exports, "ImageButton", {
+  enumerable: true,
+  get: function get() {
+    return _button6.ImageButton;
+  }
+});
 exports["default"] = void 0;
 
-var _combo = __webpack_require__(714);
+var _combo = __webpack_require__(718);
 
-var _group = __webpack_require__(79);
+var _group = __webpack_require__(80);
 
-var _tab = __webpack_require__(715);
+var _tab = __webpack_require__(719);
 
-var _pane = __webpack_require__(28);
+var _pane = __webpack_require__(22);
 
 var _button = __webpack_require__(8);
 
-var _button2 = __webpack_require__(80);
+var _button2 = __webpack_require__(57);
 
-var _button3 = __webpack_require__(716);
+var _button3 = __webpack_require__(720);
 
-var _button4 = __webpack_require__(717);
+var _button4 = __webpack_require__(721);
 
-var _icontextitem = __webpack_require__(718);
+var _icontextitem = __webpack_require__(722);
 
-var _editor = __webpack_require__(719);
+var _editor = __webpack_require__(723);
 
-var _iframe = __webpack_require__(720);
+var _iframe = __webpack_require__(724);
 
-var _checkbox = __webpack_require__(721);
+var _checkbox = __webpack_require__(725);
 
-var _input = __webpack_require__(722);
+var _input = __webpack_require__(726);
 
 var _abstract = __webpack_require__(81);
 
-var _label = __webpack_require__(723);
+var _label = __webpack_require__(727);
 
 var _single = __webpack_require__(2);
 
@@ -72069,21 +73259,21 @@ var _text = __webpack_require__(82);
 
 var _trigger = __webpack_require__(83);
 
-var _icon = __webpack_require__(724);
+var _icon = __webpack_require__(728);
 
-var _item = __webpack_require__(725);
+var _item = __webpack_require__(729);
 
-var _combo2 = __webpack_require__(726);
+var _combo2 = __webpack_require__(730);
 
-var _combo3 = __webpack_require__(727);
+var _combo3 = __webpack_require__(731);
 
-var _combo4 = __webpack_require__(728);
+var _combo4 = __webpack_require__(732);
 
-var _editor2 = __webpack_require__(729);
+var _editor2 = __webpack_require__(733);
 
-var _loading_pane = __webpack_require__(730);
+var _loading_pane = __webpack_require__(734);
 
-var _allvalueMultitextvalue = __webpack_require__(731);
+var _allvalueMultitextvalue = __webpack_require__(735);
 
 var _abstract2 = __webpack_require__(45);
 
@@ -72091,15 +73281,15 @@ var _abstractTreevaluechooser = __webpack_require__(84);
 
 var _action = __webpack_require__(85);
 
-var _action2 = __webpack_require__(732);
+var _action2 = __webpack_require__(736);
 
-var _behavior = __webpack_require__(57);
+var _behavior = __webpack_require__(58);
 
-var _behavior2 = __webpack_require__(733);
+var _behavior2 = __webpack_require__(737);
 
-var _behavior3 = __webpack_require__(734);
+var _behavior3 = __webpack_require__(738);
 
-var decorator = _interopRequireWildcard(__webpack_require__(735));
+var decorator = _interopRequireWildcard(__webpack_require__(739));
 
 var _ob = __webpack_require__(34);
 
@@ -72107,211 +73297,221 @@ var _widget = __webpack_require__(1);
 
 var _layout = __webpack_require__(3);
 
-var _layout2 = __webpack_require__(736);
+var _layout2 = __webpack_require__(740);
 
-var _layout3 = __webpack_require__(737);
+var _layout3 = __webpack_require__(741);
 
-var _layout4 = __webpack_require__(738);
+var _layout4 = __webpack_require__(742);
 
-var _layout5 = __webpack_require__(739);
+var _layout5 = __webpack_require__(743);
 
-var _combo5 = __webpack_require__(740);
+var _combo5 = __webpack_require__(744);
 
-var _icon2 = __webpack_require__(741);
+var _icon2 = __webpack_require__(745);
 
-var _adapt = __webpack_require__(742);
+var _adapt = __webpack_require__(746);
 
-var _adapt2 = __webpack_require__(743);
+var _adapt2 = __webpack_require__(747);
 
-var _icontexticonitem = __webpack_require__(744);
+var _icontexticonitem = __webpack_require__(748);
 
-var _auto = __webpack_require__(745);
+var _auto = __webpack_require__(749);
 
-var _inline = __webpack_require__(746);
+var _inline = __webpack_require__(750);
 
-var _adapt3 = __webpack_require__(747);
+var _adapt3 = __webpack_require__(751);
 
-var _button5 = __webpack_require__(58);
+var _button5 = __webpack_require__(59);
 
 var _editor3 = __webpack_require__(86);
 
-var _icon3 = __webpack_require__(748);
+var _icon3 = __webpack_require__(752);
 
-var _layer = __webpack_require__(749);
+var _layer = __webpack_require__(753);
 
-var _combo6 = __webpack_require__(750);
+var _combo6 = __webpack_require__(754);
 
-var _dynamicdate = __webpack_require__(751);
+var _dynamicdate = __webpack_require__(755);
 
-var _customtree = __webpack_require__(752);
+var _customtree = __webpack_require__(756);
 
-var _tree = __webpack_require__(753);
+var _tree = __webpack_require__(757);
 
-var _nodeIcon = __webpack_require__(754);
+var _nodeIcon = __webpack_require__(758);
 
-var _itemMid = __webpack_require__(755);
+var _itemMid = __webpack_require__(759);
 
-var _itemFirst = __webpack_require__(756);
+var _itemFirst = __webpack_require__(760);
 
-var _itemLast = __webpack_require__(757);
+var _itemLast = __webpack_require__(761);
 
-var _editorText = __webpack_require__(758);
+var _editorText = __webpack_require__(762);
 
-var _editor4 = __webpack_require__(759);
+var _editor4 = __webpack_require__(763);
 
-var _absolute = __webpack_require__(760);
+var _absolute = __webpack_require__(764);
 
-var _adapt4 = __webpack_require__(761);
+var _adapt4 = __webpack_require__(765);
 
-var _layout6 = __webpack_require__(762);
+var _layout6 = __webpack_require__(766);
 
-var _adapt5 = __webpack_require__(763);
+var _adapt5 = __webpack_require__(767);
 
-var _adapt6 = __webpack_require__(764);
+var _adapt6 = __webpack_require__(768);
 
-var _multiselectInsert = __webpack_require__(765);
+var _multiselectInsert = __webpack_require__(769);
 
-var _multiselect = __webpack_require__(766);
+var _multiselect = __webpack_require__(770);
 
-var _editor5 = __webpack_require__(767);
+var _editor5 = __webpack_require__(771);
 
-var _multilayersingletree = __webpack_require__(768);
+var _multilayersingletree = __webpack_require__(772);
 
-var _colorchooser = __webpack_require__(769);
+var _colorchooser = __webpack_require__(773);
 
-var _a = __webpack_require__(770);
+var _a = __webpack_require__(774);
 
-var _html = __webpack_require__(771);
+var _html = __webpack_require__(775);
 
-var _switcher = __webpack_require__(772);
+var _switcher = __webpack_require__(776);
 
-var _loader = __webpack_require__(773);
+var _loader = __webpack_require__(777);
 
-var _pane2 = __webpack_require__(774);
+var _pane2 = __webpack_require__(778);
 
-var _toolbar = __webpack_require__(775);
+var _toolbar = __webpack_require__(779);
 
-var _list = __webpack_require__(776);
+var _list = __webpack_require__(780);
 
 var _abstract3 = __webpack_require__(87);
 
-var _combo7 = __webpack_require__(777);
+var _combo7 = __webpack_require__(781);
 
-var _editor6 = __webpack_require__(778);
+var _editor6 = __webpack_require__(782);
 
-var _item2 = __webpack_require__(779);
+var _item2 = __webpack_require__(783);
 
-var _dynamicdatetime = __webpack_require__(780);
+var _dynamicdatetime = __webpack_require__(784);
 
-var _multiTree = __webpack_require__(781);
+var _multiTree = __webpack_require__(785);
 
-var _middle = __webpack_require__(782);
+var _middle = __webpack_require__(786);
 
-var _group2 = __webpack_require__(783);
+var _group2 = __webpack_require__(787);
 
-var _layout7 = __webpack_require__(784);
+var _layout7 = __webpack_require__(788);
 
-var _icon4 = __webpack_require__(785);
+var _icon4 = __webpack_require__(789);
 
-var _searcher = __webpack_require__(786);
+var _searcher = __webpack_require__(790);
 
-var _combo8 = __webpack_require__(787);
+var _combo8 = __webpack_require__(791);
 
-var _combo9 = __webpack_require__(788);
+var _combo9 = __webpack_require__(792);
 
-var _comboTreevaluechooser = __webpack_require__(789);
+var _comboTreevaluechooser = __webpack_require__(793);
 
-var _radio = __webpack_require__(790);
+var _radio = __webpack_require__(794);
 
-var _multilayerselecttree = __webpack_require__(791);
+var _multilayerselecttree = __webpack_require__(795);
 
-var _multilayersingletree2 = __webpack_require__(792);
+var _multilayersingletree2 = __webpack_require__(796);
 
-var _treeview = __webpack_require__(59);
+var _treeview = __webpack_require__(60);
 
-var _multiTree2 = __webpack_require__(793);
+var _multiTree2 = __webpack_require__(797);
 
-var _itemSingleselect = __webpack_require__(794);
+var _itemSingleselect = __webpack_require__(798);
 
-var _singleselectInsert = __webpack_require__(795);
+var _singleselectInsert = __webpack_require__(799);
 
-var _singleselect = __webpack_require__(796);
+var _singleselect = __webpack_require__(800);
 
-var _layout8 = __webpack_require__(797);
+var _layout8 = __webpack_require__(801);
 
-var _combo10 = __webpack_require__(798);
+var _combo10 = __webpack_require__(802);
 
-var _time = __webpack_require__(799);
+var _time = __webpack_require__(803);
 
 var _listtreeview = __webpack_require__(88);
 
-var _listasynctree = __webpack_require__(800);
+var _listasynctree = __webpack_require__(804);
 
-var _asynctree = __webpack_require__(801);
+var _asynctree = __webpack_require__(805);
 
-var _multilayersingletree3 = __webpack_require__(802);
+var _multilayersingletree3 = __webpack_require__(806);
 
-var _multilayerselecttree2 = __webpack_require__(803);
+var _multilayerselecttree2 = __webpack_require__(807);
 
-var _multiTreeList = __webpack_require__(804);
+var _multiTreeList = __webpack_require__(808);
 
-var _multiTreeInsert = __webpack_require__(805);
+var _multiTreeInsert = __webpack_require__(809);
 
-var _combo11 = __webpack_require__(806);
+var _combo11 = __webpack_require__(810);
 
-var _switch = __webpack_require__(807);
+var _switch = __webpack_require__(811);
 
-var _layout9 = __webpack_require__(808);
+var _layout9 = __webpack_require__(812);
 
-var _editor7 = __webpack_require__(809);
+var _editor7 = __webpack_require__(813);
 
-var _triggerText = __webpack_require__(810);
+var _triggerText = __webpack_require__(814);
 
-var _dateinterval = __webpack_require__(811);
+var _dateinterval = __webpack_require__(815);
 
-var _datepane = __webpack_require__(812);
+var _datepane = __webpack_require__(816);
 
-var _pagerAll = __webpack_require__(813);
+var _pagerAll = __webpack_require__(817);
 
 var _layer2 = __webpack_require__(89);
 
-var _popup = __webpack_require__(814);
+var _popup = __webpack_require__(818);
 
-var _check = __webpack_require__(815);
+var _check = __webpack_require__(819);
 
-var _numberinterval = __webpack_require__(816);
+var _numberinterval = __webpack_require__(820);
 
-var _combo12 = __webpack_require__(817);
+var _combo12 = __webpack_require__(821);
 
-var _combo13 = __webpack_require__(818);
+var _combo13 = __webpack_require__(822);
 
-var _intervalslider = __webpack_require__(819);
+var _intervalslider = __webpack_require__(823);
 
-var _multiselectlist = __webpack_require__(820);
+var _multiselectlist = __webpack_require__(824);
 
-var _yearmonthinterval = __webpack_require__(821);
+var _yearmonthinterval = __webpack_require__(825);
 
-var _numbereditor = __webpack_require__(822);
+var _numbereditor = __webpack_require__(826);
 
-var _combo14 = __webpack_require__(823);
+var _combo14 = __webpack_require__(827);
 
-var _linear = __webpack_require__(824);
+var _linear = __webpack_require__(828);
 
-var _img = __webpack_require__(825);
+var _img = __webpack_require__(829);
 
-var _combo15 = __webpack_require__(826);
+var _combo15 = __webpack_require__(830);
 
-var _combo16 = __webpack_require__(827);
+var _combo16 = __webpack_require__(831);
 
-var _listview = __webpack_require__(828);
+var _listview = __webpack_require__(832);
 
-var _middleFloat = __webpack_require__(829);
+var _middleFloat = __webpack_require__(833);
 
-var _popup2 = __webpack_require__(830);
+var _popup2 = __webpack_require__(834);
 
 var _controller = __webpack_require__(90);
 
-var _controller2 = __webpack_require__(831);
+var _controller2 = __webpack_require__(835);
+
+var _popupCalendar = __webpack_require__(836);
+
+var _tree2 = __webpack_require__(837);
+
+var _textnode = __webpack_require__(838);
+
+var _popup3 = __webpack_require__(839);
+
+var _button6 = __webpack_require__(840);
 
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
@@ -72323,49 +73523,13 @@ var _default = {
 exports["default"] = _default;
 
 /***/ }),
-/* 714 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _widget = __webpack_require__(1);
-
-/***/ }),
-/* 715 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _widget = __webpack_require__(1);
-
-/***/ }),
-/* 716 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _button = __webpack_require__(8);
-
-/***/ }),
-/* 717 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _button = __webpack_require__(8);
-
-/***/ }),
 /* 718 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var _button = __webpack_require__(8);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 719 */
@@ -72374,7 +73538,7 @@ var _button = __webpack_require__(8);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 720 */
@@ -72383,7 +73547,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _button = __webpack_require__(8);
 
 /***/ }),
 /* 721 */
@@ -72401,7 +73565,7 @@ var _button = __webpack_require__(8);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _button = __webpack_require__(8);
 
 /***/ }),
 /* 723 */
@@ -72410,7 +73574,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _abstract = __webpack_require__(81);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 724 */
@@ -72437,7 +73601,7 @@ var _button = __webpack_require__(8);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 727 */
@@ -72446,7 +73610,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _abstract = __webpack_require__(81);
 
 /***/ }),
 /* 728 */
@@ -72455,7 +73619,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 729 */
@@ -72464,7 +73628,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _button = __webpack_require__(8);
 
 /***/ }),
 /* 730 */
@@ -72473,7 +73637,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _pane = __webpack_require__(28);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 731 */
@@ -72491,7 +73655,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _action = __webpack_require__(85);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 733 */
@@ -72500,7 +73664,7 @@ var _action = __webpack_require__(85);
 "use strict";
 
 
-var _behavior = __webpack_require__(57);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 734 */
@@ -72509,10 +73673,46 @@ var _behavior = __webpack_require__(57);
 "use strict";
 
 
-var _behavior = __webpack_require__(57);
+var _pane = __webpack_require__(22);
 
 /***/ }),
 /* 735 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _widget = __webpack_require__(1);
+
+/***/ }),
+/* 736 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _action = __webpack_require__(85);
+
+/***/ }),
+/* 737 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _behavior = __webpack_require__(58);
+
+/***/ }),
+/* 738 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _behavior = __webpack_require__(58);
+
+/***/ }),
+/* 739 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -72723,49 +73923,13 @@ type UnionToTuple<U> = UnionToTupleRecursively<U, []>;
 exports.Model = Model;
 
 /***/ }),
-/* 736 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _layout = __webpack_require__(3);
-
-/***/ }),
-/* 737 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _layout = __webpack_require__(3);
-
-/***/ }),
-/* 738 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _layout = __webpack_require__(3);
-
-/***/ }),
-/* 739 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _layout = __webpack_require__(3);
-
-/***/ }),
 /* 740 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _layout = __webpack_require__(3);
 
 /***/ }),
 /* 741 */
@@ -72774,7 +73938,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _layout = __webpack_require__(3);
 
 /***/ }),
 /* 742 */
@@ -72801,7 +73965,7 @@ var _layout = __webpack_require__(3);
 "use strict";
 
 
-var _button = __webpack_require__(8);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 745 */
@@ -72810,7 +73974,7 @@ var _button = __webpack_require__(8);
 "use strict";
 
 
-var _layout = __webpack_require__(3);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 746 */
@@ -72837,7 +74001,7 @@ var _layout = __webpack_require__(3);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _button = __webpack_require__(8);
 
 /***/ }),
 /* 749 */
@@ -72846,7 +74010,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _layout = __webpack_require__(3);
 
 /***/ }),
 /* 750 */
@@ -72855,7 +74019,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _layout = __webpack_require__(3);
 
 /***/ }),
 /* 751 */
@@ -72864,7 +74028,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _layout = __webpack_require__(3);
 
 /***/ }),
 /* 752 */
@@ -72873,7 +74037,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 753 */
@@ -72882,7 +74046,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _group = __webpack_require__(79);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 754 */
@@ -72891,7 +74055,7 @@ var _group = __webpack_require__(79);
 "use strict";
 
 
-var _button = __webpack_require__(80);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 755 */
@@ -72900,7 +74064,7 @@ var _button = __webpack_require__(80);
 "use strict";
 
 
-var _button = __webpack_require__(8);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 756 */
@@ -72909,7 +74073,7 @@ var _button = __webpack_require__(8);
 "use strict";
 
 
-var _button = __webpack_require__(8);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 757 */
@@ -72918,7 +74082,7 @@ var _button = __webpack_require__(8);
 "use strict";
 
 
-var _button = __webpack_require__(8);
+var _group = __webpack_require__(80);
 
 /***/ }),
 /* 758 */
@@ -72927,7 +74091,7 @@ var _button = __webpack_require__(8);
 "use strict";
 
 
-var _editor = __webpack_require__(86);
+var _button = __webpack_require__(57);
 
 /***/ }),
 /* 759 */
@@ -72936,7 +74100,7 @@ var _editor = __webpack_require__(86);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _button = __webpack_require__(8);
 
 /***/ }),
 /* 760 */
@@ -72945,7 +74109,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _layout = __webpack_require__(3);
+var _button = __webpack_require__(8);
 
 /***/ }),
 /* 761 */
@@ -72954,7 +74118,7 @@ var _layout = __webpack_require__(3);
 "use strict";
 
 
-var _layout = __webpack_require__(3);
+var _button = __webpack_require__(8);
 
 /***/ }),
 /* 762 */
@@ -72963,7 +74127,7 @@ var _layout = __webpack_require__(3);
 "use strict";
 
 
-var _layout = __webpack_require__(3);
+var _editor = __webpack_require__(86);
 
 /***/ }),
 /* 763 */
@@ -72972,7 +74136,7 @@ var _layout = __webpack_require__(3);
 "use strict";
 
 
-var _layout = __webpack_require__(3);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 764 */
@@ -72990,7 +74154,7 @@ var _layout = __webpack_require__(3);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _layout = __webpack_require__(3);
 
 /***/ }),
 /* 766 */
@@ -72999,7 +74163,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _layout = __webpack_require__(3);
 
 /***/ }),
 /* 767 */
@@ -73008,7 +74172,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _layout = __webpack_require__(3);
 
 /***/ }),
 /* 768 */
@@ -73017,7 +74181,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _pane = __webpack_require__(28);
+var _layout = __webpack_require__(3);
 
 /***/ }),
 /* 769 */
@@ -73026,7 +74190,7 @@ var _pane = __webpack_require__(28);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 770 */
@@ -73035,7 +74199,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _text = __webpack_require__(82);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 771 */
@@ -73044,7 +74208,7 @@ var _text = __webpack_require__(82);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 772 */
@@ -73053,7 +74217,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _pane = __webpack_require__(22);
 
 /***/ }),
 /* 773 */
@@ -73071,7 +74235,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _pane = __webpack_require__(28);
+var _text = __webpack_require__(82);
 
 /***/ }),
 /* 775 */
@@ -73080,7 +74244,7 @@ var _pane = __webpack_require__(28);
 "use strict";
 
 
-var _button = __webpack_require__(8);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 776 */
@@ -73098,7 +74262,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _abstract = __webpack_require__(87);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 778 */
@@ -73107,7 +74271,7 @@ var _abstract = __webpack_require__(87);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _pane = __webpack_require__(22);
 
 /***/ }),
 /* 779 */
@@ -73125,7 +74289,7 @@ var _button = __webpack_require__(8);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 781 */
@@ -73134,7 +74298,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _abstract = __webpack_require__(87);
 
 /***/ }),
 /* 782 */
@@ -73143,7 +74307,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _layout = __webpack_require__(3);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 783 */
@@ -73152,7 +74316,7 @@ var _layout = __webpack_require__(3);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _button = __webpack_require__(8);
 
 /***/ }),
 /* 784 */
@@ -73161,7 +74325,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _layout = __webpack_require__(3);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 785 */
@@ -73170,7 +74334,7 @@ var _layout = __webpack_require__(3);
 "use strict";
 
 
-var _button = __webpack_require__(58);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 786 */
@@ -73179,7 +74343,7 @@ var _button = __webpack_require__(58);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _layout = __webpack_require__(3);
 
 /***/ }),
 /* 787 */
@@ -73188,7 +74352,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _abstractTreevaluechooser = __webpack_require__(84);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 788 */
@@ -73197,7 +74361,7 @@ var _abstractTreevaluechooser = __webpack_require__(84);
 "use strict";
 
 
-var _abstract = __webpack_require__(45);
+var _layout = __webpack_require__(3);
 
 /***/ }),
 /* 789 */
@@ -73206,7 +74370,7 @@ var _abstract = __webpack_require__(45);
 "use strict";
 
 
-var _abstract = __webpack_require__(45);
+var _button = __webpack_require__(59);
 
 /***/ }),
 /* 790 */
@@ -73215,7 +74379,7 @@ var _abstract = __webpack_require__(45);
 "use strict";
 
 
-var _button = __webpack_require__(8);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 791 */
@@ -73224,7 +74388,7 @@ var _button = __webpack_require__(8);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _abstractTreevaluechooser = __webpack_require__(84);
 
 /***/ }),
 /* 792 */
@@ -73233,7 +74397,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _abstract = __webpack_require__(45);
 
 /***/ }),
 /* 793 */
@@ -73242,7 +74406,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _pane = __webpack_require__(28);
+var _abstract = __webpack_require__(45);
 
 /***/ }),
 /* 794 */
@@ -73260,7 +74424,7 @@ var _button = __webpack_require__(8);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 796 */
@@ -73269,7 +74433,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 797 */
@@ -73278,7 +74442,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _layout = __webpack_require__(3);
+var _pane = __webpack_require__(22);
 
 /***/ }),
 /* 798 */
@@ -73287,7 +74451,7 @@ var _layout = __webpack_require__(3);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _button = __webpack_require__(8);
 
 /***/ }),
 /* 799 */
@@ -73305,7 +74469,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _listtreeview = __webpack_require__(88);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 801 */
@@ -73314,7 +74478,7 @@ var _listtreeview = __webpack_require__(88);
 "use strict";
 
 
-var _treeview = __webpack_require__(59);
+var _layout = __webpack_require__(3);
 
 /***/ }),
 /* 802 */
@@ -73323,7 +74487,7 @@ var _treeview = __webpack_require__(59);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 803 */
@@ -73332,7 +74496,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 804 */
@@ -73341,7 +74505,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _listtreeview = __webpack_require__(88);
 
 /***/ }),
 /* 805 */
@@ -73350,7 +74514,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _treeview = __webpack_require__(60);
 
 /***/ }),
 /* 806 */
@@ -73368,7 +74532,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _button = __webpack_require__(8);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 808 */
@@ -73377,7 +74541,7 @@ var _button = __webpack_require__(8);
 "use strict";
 
 
-var _layout = __webpack_require__(3);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 809 */
@@ -73386,7 +74550,7 @@ var _layout = __webpack_require__(3);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 810 */
@@ -73395,7 +74559,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _trigger = __webpack_require__(83);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 811 */
@@ -73404,7 +74568,7 @@ var _trigger = __webpack_require__(83);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _button = __webpack_require__(8);
 
 /***/ }),
 /* 812 */
@@ -73413,7 +74577,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _layout = __webpack_require__(3);
 
 /***/ }),
 /* 813 */
@@ -73431,9 +74595,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _layer = __webpack_require__(89);
-
-var _widget = __webpack_require__(1);
+var _trigger = __webpack_require__(83);
 
 /***/ }),
 /* 815 */
@@ -73442,7 +74604,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _button = __webpack_require__(58);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 816 */
@@ -73451,7 +74613,7 @@ var _button = __webpack_require__(58);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 817 */
@@ -73469,6 +74631,8 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
+var _layer = __webpack_require__(89);
+
 var _widget = __webpack_require__(1);
 
 /***/ }),
@@ -73478,7 +74642,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _button = __webpack_require__(59);
 
 /***/ }),
 /* 820 */
@@ -73496,7 +74660,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 822 */
@@ -73514,7 +74678,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 824 */
@@ -73523,7 +74687,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 825 */
@@ -73568,7 +74732,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _layout = __webpack_require__(3);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 830 */
@@ -73586,10 +74750,89 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _controller = __webpack_require__(90);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 832 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _widget = __webpack_require__(1);
+
+/***/ }),
+/* 833 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _layout = __webpack_require__(3);
+
+/***/ }),
+/* 834 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _widget = __webpack_require__(1);
+
+/***/ }),
+/* 835 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _controller = __webpack_require__(90);
+
+/***/ }),
+/* 836 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _widget = __webpack_require__(1);
+
+/***/ }),
+/* 837 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+/***/ }),
+/* 838 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _button = __webpack_require__(57);
+
+/***/ }),
+/* 839 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _pane = __webpack_require__(22);
+
+/***/ }),
+/* 840 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _button = __webpack_require__(8);
+
+/***/ }),
+/* 841 */
 /***/ (function(module, exports) {
 
 // Production steps of ECMA-262, Edition 5, 15.4.4.14
@@ -73691,7 +74934,7 @@ if (!Array.prototype.lastIndexOf) {
 
 
 /***/ }),
-/* 833 */
+/* 842 */
 /***/ (function(module, exports) {
 
 /**
@@ -73709,7 +74952,7 @@ _global.console = _global.console || (function () {
 
 
 /***/ }),
-/* 834 */
+/* 843 */
 /***/ (function(module, exports) {
 
 /*
@@ -73735,7 +74978,7 @@ _global.localStorage || (_global.localStorage = {
 });
 
 /***/ }),
-/* 835 */
+/* 844 */
 /***/ (function(module, exports) {
 
 
@@ -73791,7 +75034,7 @@ if(!Date.now) {
 }
 
 /***/ }),
-/* 836 */
+/* 845 */
 /***/ (function(module, exports) {
 
 if (typeof Set !== "undefined" && Set.toString().match(/native code/)) {
@@ -73812,7 +75055,7 @@ if (typeof Set !== "undefined" && Set.toString().match(/native code/)) {
 }
 
 /***/ }),
-/* 837 */
+/* 846 */
 /***/ (function(module, exports) {
 
 // 修复ie9下sort方法的bug
@@ -73851,19 +75094,19 @@ if (typeof Set !== "undefined" && Set.toString().match(/native code/)) {
 }(window);
 
 /***/ }),
-/* 838 */
+/* 847 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // extracted by mini-css-extract-plugin
 
 /***/ }),
-/* 839 */
+/* 848 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // extracted by mini-css-extract-plugin
 
 /***/ }),
-/* 840 */
+/* 849 */
 /***/ (function(module, exports) {
 
 // 工程配置
@@ -73889,32 +75132,29 @@ BI.prepares.push(function () {
         // 在横向自适应场景下我们需要使用table的自适应撑出滚动条的特性（flex处理不了这种情况）
         // 主要出现在center_adapt或者horizontal_adapt的场景，或者主动设置horizontalAlign的场景
         if (ob.horizontalAlign === BI.HorizontalAlign.Center || ob.horizontalAlign === BI.HorizontalAlign.Stretch) {
-            return BI.extend(ob, {type: "bi.table_adapt"});
+            return BI.extend({}, ob, {type: "bi.table_adapt"});
         }
         if (!isIE && supportFlex) {
-            return BI.extend(ob, {type: "bi.flex_horizontal"});
+            return BI.extend({}, ob, {type: "bi.flex_horizontal"});
         }
-        // 解决使用inline_vertical_adapt的顺序问题
-        // 从右往左放置时，为了兼容，我们统一采用从右到左的放置方式
-        if (ob.horizontalAlign === BI.HorizontalAlign.Right) {
-            return BI.extend({verticalAlign: BI.VerticalAlign.Top}, ob, {
-                type: "bi.inline_vertical_adapt",
-                items: ob.items && ob.items.reverse()
-            });
-        }
-        return BI.extend(ob, {type: "bi.table_adapt"});
+        // // 解决使用inline_vertical_adapt的顺序问题
+        // // 从右往左放置时，为了兼容，我们统一采用从右到左的放置方式
+        // if (ob.horizontalAlign === BI.HorizontalAlign.Right) {
+        //     return BI.extend({verticalAlign: BI.VerticalAlign.Top}, ob, {
+        //         type: "bi.inline_vertical_adapt",
+        //         items: ob.items && ob.items.reverse()
+        //     });
+        // }
+        return BI.extend({}, ob, {type: "bi.table_adapt"});
     });
     BI.Plugin.configWidget("bi.center_adapt", function (ob) {
         var isIE = BI.isIE(), supportFlex = isSupportFlex(), justOneItem = (ob.items && ob.items.length <= 1);
         var isAdapt = !ob.horizontalAlign || ob.horizontalAlign === BI.HorizontalAlign.Center || ob.horizontalAlign === BI.HorizontalAlign.Stretch;
         if (!isAdapt || justOneItem) {
             if (!isIE && supportFlex) {
-                return BI.extend(ob, {type: "bi.flex_center_adapt"});
+                return BI.extend({}, ob, {type: "bi.flex_center_adapt"});
             }
-            if (ob.horizontalAlign === BI.HorizontalAlign.Right) {
-                return BI.extend(ob, {type: "bi.inline_center_adapt", items: ob.items && ob.items.reverse()});
-            }
-            return BI.extend(ob, {type: "bi.inline_center_adapt"});
+            return BI.extend({}, ob, {type: "bi.inline_center_adapt"});
         }
         return ob;
     });
@@ -73923,12 +75163,9 @@ BI.prepares.push(function () {
         var isAdapt = ob.horizontalAlign === BI.HorizontalAlign.Center || ob.horizontalAlign === BI.HorizontalAlign.Stretch;
         if (!isAdapt || justOneItem) {
             if (!isIE && supportFlex) {
-                return BI.extend(ob, {type: "bi.flex_vertical_center_adapt"});
+                return BI.extend({}, ob, {type: "bi.flex_vertical_center_adapt"});
             }
-            if (ob.horizontalAlign === BI.HorizontalAlign.Right) {
-                return BI.extend(ob, {type: "bi.inline_vertical_adapt", items: ob.items && ob.items.reverse()});
-            }
-            return BI.extend(ob, {type: "bi.inline_vertical_adapt"});
+            return BI.extend({}, ob, {type: "bi.inline_vertical_adapt"});
         }
         return ob;
     });
@@ -73936,64 +75173,64 @@ BI.prepares.push(function () {
         var justOneItem = (ob.items && ob.items.length <= 1);
         if (!ob.verticalAlign || ob.verticalAlign === BI.VerticalAlign.TOP) {
             if (justOneItem) {
-                return BI.extend(ob, {type: "bi.horizontal_auto"});
+                return BI.extend({}, ob, {type: "bi.horizontal_auto"});
             }
         }
         return ob;
     });
     BI.Plugin.configWidget("bi.horizontal_float", function (ob) {
         if (!BI.isIE() && isSupportFlex()) {
-            return BI.extend(ob, {type: "bi.flex_horizontal_adapt"});
+            return BI.extend({}, ob, {type: "bi.flex_horizontal_adapt"});
         }
-        return BI.extend(ob, {type: "bi.inline_horizontal_adapt"});
+        return BI.extend({}, ob, {type: "bi.inline_horizontal_adapt"});
     });
 
     BI.Plugin.configWidget("bi.flex_horizontal", function (ob) {
         if (ob.scrollable === true || ob.scrolly === true) {
-            return BI.extend(ob, {type: "bi.flex_scrollable_horizontal"});
+            return BI.extend({}, ob, {type: "bi.flex_scrollable_horizontal"});
         }
     });
     BI.Plugin.configWidget("bi.flex_vertical", function (ob) {
         if (ob.scrollable === true || ob.scrollx === true) {
-            return BI.extend(ob, {type: "bi.flex_scrollable_vertical"});
+            return BI.extend({}, ob, {type: "bi.flex_scrollable_vertical"});
         }
     });
     BI.Plugin.configWidget("bi.flex_horizontal_adapt", function (ob) {
         if (ob.scrollable === true || ob.scrollx === true) {
-            return BI.extend(ob, {type: "bi.flex_scrollable_horizontal_adapt"});
+            return BI.extend({}, ob, {type: "bi.flex_scrollable_horizontal_adapt"});
         }
     });
     BI.Plugin.configWidget("bi.flex_vertical_adapt", function (ob) {
         if (ob.scrollable === true || ob.scrolly === true) {
-            return BI.extend(ob, {type: "bi.flex_scrollable_vertical_adapt"});
+            return BI.extend({}, ob, {type: "bi.flex_scrollable_vertical_adapt"});
         }
     });
     BI.Plugin.configWidget("bi.flex_horizontal_center_adapt", function (ob) {
         if (ob.scrollable === true || ob.scrollx === true) {
-            return BI.extend(ob, {type: "bi.flex_scrollable_horizontal_adapt"});
+            return BI.extend({}, ob, {type: "bi.flex_scrollable_horizontal_adapt"});
         }
     });
     BI.Plugin.configWidget("bi.flex_vertical_center_adapt", function (ob) {
         if (ob.scrollable === true || ob.scrolly === true) {
-            return BI.extend(ob, {type: "bi.flex_scrollable_vertical_adapt"});
+            return BI.extend({}, ob, {type: "bi.flex_scrollable_vertical_adapt"});
         }
     });
     BI.Plugin.configWidget("bi.flex_center_adapt", function (ob) {
         if (ob.scrollable === true || ob.scrolly === true || ob.scrollx === true) {
-            return BI.extend(ob, {type: "bi.flex_scrollable_center_adapt"});
+            return BI.extend({}, ob, {type: "bi.flex_scrollable_center_adapt"});
         }
     });
 
     BI.Plugin.configWidget("bi.radio", function (ob) {
-        if (BI.isIE() && BI.getIEVersion() < 9) {
-            return BI.extend(ob, {type: "bi.image_radio"});
+        if (BI.isIE() && BI.getIEVersion() <= 9) {
+            return BI.extend({}, ob, {type: "bi.image_radio"});
         }
         return ob;
     });
 
     BI.Plugin.configWidget("bi.checkbox", function (ob) {
-        if (BI.isIE() && BI.getIEVersion() < 9) {
-            return BI.extend(ob, {type: "bi.image_checkbox"});
+        if (BI.isIE() && BI.getIEVersion() <= 9) {
+            return BI.extend({}, ob, {type: "bi.image_checkbox"});
         }
         return ob;
     });
@@ -74002,13 +75239,13 @@ BI.prepares.push(function () {
         if (BI.isIE() && BI.getIEVersion() < 9) {
             return ob;
         }
-        return BI.extend(ob, {type: "bi.half_button"});
+        return BI.extend({}, ob, {type: "bi.half_button"});
     });
 });
 
 
 /***/ }),
-/* 841 */
+/* 850 */
 /***/ (function(module, exports) {
 
 /**
@@ -74175,7 +75412,7 @@ BI.prepares.push(function () {
 
 
 /***/ }),
-/* 842 */
+/* 851 */
 /***/ (function(module, exports) {
 
 /**
@@ -74560,18 +75797,30 @@ BI.prepares.push(function () {
             return windowBounds.height - combo.element.offset().top - combo.element.bounds().height >= combo.element.offset().top;
         },
 
-        getLeftAlignPosition: function (combo, popup, extraWidth) {
+        _getLeftAlignPosition: function (combo, popup, extraWidth) {
             var viewBounds = popup.element.bounds(),
                 windowBounds = BI.Widget._renderEngine.createElement("body").bounds();
             var left = combo.element.offset().left + extraWidth;
             if (left + viewBounds.width > windowBounds.width) {
                 left = windowBounds.width - viewBounds.width;
             }
+            return left;
+        },
+
+        getLeftAlignPosition: function (combo, popup, extraWidth) {
+            var left = this._getLeftAlignPosition(combo, popup, extraWidth);
+            var dir = "";
+            // 如果放不下，优先使用RightAlign, 如果RightAlign也放不下, 再使用left=0
+            if (left < 0) {
+                left = this._getRightAlignPosition(combo, popup, extraWidth);
+                dir = "left";
+            }
             if (left < 0) {
                 left = 0;
             }
             return {
-                left: left
+                left: left,
+                dir: dir || "right"
             };
         },
 
@@ -74584,14 +75833,25 @@ BI.prepares.push(function () {
             };
         },
 
-        getRightAlignPosition: function (combo, popup, extraWidth) {
+        _getRightAlignPosition: function (combo, popup, extraWidth) {
             var comboBounds = combo.element.bounds(), viewBounds = popup.element.bounds();
-            var left = combo.element.offset().left + comboBounds.width - viewBounds.width - extraWidth;
+            return combo.element.offset().left + comboBounds.width - viewBounds.width - extraWidth;
+        },
+
+        getRightAlignPosition: function (combo, popup, extraWidth) {
+            var left = this._getRightAlignPosition(combo, popup, extraWidth);
+            var dir = "";
+            // 如果放不下，优先使用LeftAlign, 如果LeftAlign也放不下, 再使用left=0
+            if (left < 0) {
+                left = this._getLeftAlignPosition(combo, popup, extraWidth);
+                dir = "right";
+            }
             if (left < 0) {
                 left = 0;
             }
             return {
-                left: left
+                left: left,
+                dir: dir || "left"
             };
         },
 
@@ -74608,12 +75868,16 @@ BI.prepares.push(function () {
             var comboOffset = combo.element.offset();
             var comboBounds = combo.element.bounds(), popupBounds = popup.element.bounds(),
                 windowBounds = BI.Widget._renderEngine.createElement("body").bounds();
-            var top, adaptHeight;
+            var top, adaptHeight, dir;
             if (BI.DOM.isBottomSpaceEnough(combo, popup, -1 * comboBounds.height + extraHeight)) {
                 top = comboOffset.top + extraHeight;
             } else if (needAdaptHeight) {
                 top = comboOffset.top + extraHeight;
                 adaptHeight = windowBounds.height - top;
+            } else if (BI.DOM.isTopSpaceEnough(combo, popup, -1 * comboBounds.height + extraHeight)) {
+                // 下方空间不足且不允许调整高度的情况下，优先使用上对齐
+                top = comboOffset.top + comboBounds.height - popupBounds.height - extraHeight;
+                dir = "top";
             } else {
                 top = windowBounds.height - popupBounds.height;
                 if (top < extraHeight) {
@@ -74625,9 +75889,11 @@ BI.prepares.push(function () {
             }
             return adaptHeight ? {
                 top: top,
-                adaptHeight: adaptHeight
+                adaptHeight: adaptHeight,
+                dir: dir || "bottom"
             } : {
-                top: top
+                top: top,
+                dir: dir || "bottom"
             };
         },
 
@@ -74658,12 +75924,16 @@ BI.prepares.push(function () {
             var comboOffset = combo.element.offset();
             var comboBounds = combo.element.bounds(), popupBounds = popup.element.bounds(),
                 windowBounds = BI.Widget._renderEngine.createElement("body").bounds();
-            var top, adaptHeight;
+            var top, adaptHeight, dir;
             if (BI.DOM.isTopSpaceEnough(combo, popup, -1 * comboBounds.height + extraHeight)) {
                 top = comboOffset.top + comboBounds.height - popupBounds.height - extraHeight;
             } else if (needAdaptHeight) {
                 top = 0;
                 adaptHeight = comboOffset.top + comboBounds.height - extraHeight;
+            } else if (BI.DOM.isBottomSpaceEnough(combo, popup, -1 * comboBounds.height + extraHeight)) {
+                // 上方空间不足且不允许调整高度的情况下，优先使用下对齐
+                top = comboOffset.top + extraHeight;
+                dir = "bottom";
             } else {
                 top = 0;
                 if (popupBounds.height + extraHeight > windowBounds.height) {
@@ -74675,9 +75945,11 @@ BI.prepares.push(function () {
             }
             return adaptHeight ? {
                 top: top,
-                adaptHeight: adaptHeight
+                adaptHeight: adaptHeight,
+                dir: dir || "top"
             } : {
-                top: top
+                top: top,
+                dir: dir || "top"
             };
         },
 
@@ -74781,11 +76053,10 @@ BI.prepares.push(function () {
                                 left = BI.DOM.getLeftPosition(combo, popup, tW).left;
                                 if (topBottom[0] === "bottom") {
                                     pos = BI.DOM.getTopAlignPosition(combo, popup, tH, needAdaptHeight);
-                                    pos.dir = "left,bottom";
                                 } else {
                                     pos = BI.DOM.getBottomAlignPosition(combo, popup, tH, needAdaptHeight);
-                                    pos.dir = "left,top";
                                 }
+                                pos.dir = "left," + pos.dir;
                                 if (tbFirst) {
                                     pos.change = "left";
                                 }
@@ -74802,11 +76073,10 @@ BI.prepares.push(function () {
                                 left = BI.DOM.getRightPosition(combo, popup, tW).left;
                                 if (topBottom[0] === "bottom") {
                                     pos = BI.DOM.getTopAlignPosition(combo, popup, tH, needAdaptHeight);
-                                    pos.dir = "right,bottom";
                                 } else {
                                     pos = BI.DOM.getBottomAlignPosition(combo, popup, tH, needAdaptHeight);
-                                    pos.dir = "right,top";
                                 }
+                                pos.dir = "right," + pos.dir;
                                 if (tbFirst) {
                                     pos.change = "right";
                                 }
@@ -74822,11 +76092,10 @@ BI.prepares.push(function () {
                             top = BI.DOM.getTopPosition(combo, popup, tH).top;
                             if (leftRight[0] === "right") {
                                 pos = BI.DOM.getLeftAlignPosition(combo, popup, tW, needAdaptHeight);
-                                pos.dir = "top,right";
                             } else {
                                 pos = BI.DOM.getRightAlignPosition(combo, popup, tW);
-                                pos.dir = "top,left";
                             }
+                            pos.dir = "top," + pos.dir;
                             if (lrFirst) {
                                 pos.change = "top";
                             }
@@ -74844,11 +76113,10 @@ BI.prepares.push(function () {
                             top = BI.DOM.getBottomPosition(combo, popup, tH).top;
                             if (leftRight[0] === "right") {
                                 pos = BI.DOM.getLeftAlignPosition(combo, popup, tW, needAdaptHeight);
-                                pos.dir = "bottom,right";
                             } else {
                                 pos = BI.DOM.getRightAlignPosition(combo, popup, tW);
-                                pos.dir = "bottom,left";
                             }
+                            pos.dir = "bottom," + pos.dir;
                             if (lrFirst) {
                                 pos.change = "bottom";
                             }
@@ -74867,11 +76135,10 @@ BI.prepares.push(function () {
                                 left = BI.DOM.getInnerLeftPosition(combo, popup, tW).left;
                                 if (topBottom[0] === "bottom") {
                                     pos = BI.DOM.getTopAlignPosition(combo, popup, tH, needAdaptHeight);
-                                    pos.dir = "innerLeft,bottom";
                                 } else {
                                     pos = BI.DOM.getBottomAlignPosition(combo, popup, tH, needAdaptHeight);
-                                    pos.dir = "innerLeft,top";
                                 }
+                                pos.dir = "innerLeft," + pos.dir;
                                 if (tbFirst) {
                                     pos.change = "innerLeft";
                                 }
@@ -74888,11 +76155,10 @@ BI.prepares.push(function () {
                                 left = BI.DOM.getInnerRightPosition(combo, popup, tW).left;
                                 if (topBottom[0] === "bottom") {
                                     pos = BI.DOM.getTopAlignPosition(combo, popup, tH, needAdaptHeight);
-                                    pos.dir = "innerRight,bottom";
                                 } else {
                                     pos = BI.DOM.getBottomAlignPosition(combo, popup, tH, needAdaptHeight);
-                                    pos.dir = "innerRight,top";
                                 }
+                                pos.dir = "innerLeft," + pos.dir;
                                 if (tbFirst) {
                                     pos.change = "innerRight";
                                 }
@@ -74920,12 +76186,12 @@ BI.prepares.push(function () {
                     if (topBottom[0] === "bottom") {
                         pos = BI.DOM.getTopAlignPosition(combo, popup, extraHeight, needAdaptHeight);
                         pos.left = left;
-                        pos.dir = firstDir + ",bottom";
+                        pos.dir = firstDir + "," + pos.dir;
                         return pos;
                     }
                     pos = BI.DOM.getBottomAlignPosition(combo, popup, extraHeight, needAdaptHeight);
                     pos.left = left;
-                    pos.dir = firstDir + ",top";
+                    pos.dir = firstDir + "," + pos.dir;
                     return pos;
                 default :
                     if (BI.DOM.isBottomSpaceLarger(combo)) {
@@ -74938,12 +76204,12 @@ BI.prepares.push(function () {
                     if (leftRight[0] === "right") {
                         left = BI.DOM.getLeftAlignPosition(combo, popup, extraWidth, needAdaptHeight).left;
                         pos.left = left;
-                        pos.dir = firstDir + ",right";
+                        pos.dir = firstDir + "," + pos.dir;
                         return pos;
                     }
                     left = BI.DOM.getRightAlignPosition(combo, popup, extraWidth).left;
                     pos.left = left;
-                    pos.dir = firstDir + ",left";
+                    pos.dir = firstDir + "," + pos.dir;
                     return pos;
             }
         },
@@ -74986,7 +76252,7 @@ BI.prepares.push(function () {
 
 
 /***/ }),
-/* 843 */
+/* 852 */
 /***/ (function(module, exports) {
 
 BI.EventListener = {
@@ -75028,7 +76294,7 @@ BI.EventListener = {
 };
 
 /***/ }),
-/* 844 */
+/* 853 */
 /***/ (function(module, exports) {
 
 // 浏览器相关方法
@@ -75162,7 +76428,7 @@ _.extend(BI, {
 });
 
 /***/ }),
-/* 845 */
+/* 854 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -86191,7 +87457,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
 
 
 /***/ }),
-/* 846 */
+/* 855 */
 /***/ (function(module, exports) {
 
 /*
@@ -86206,7 +87472,7 @@ BI.$.extend(BI.$.Event.prototype, {
 });
 
 /***/ }),
-/* 847 */
+/* 856 */
 /***/ (function(module, exports) {
 
 if (BI.jQuery) {
@@ -86456,7 +87722,7 @@ if (BI.jQuery) {
 
 
 /***/ }),
-/* 848 */
+/* 857 */
 /***/ (function(module, exports) {
 
 _.extend(BI, {
@@ -86516,7 +87782,7 @@ _.extend(BI, {
 });
 
 /***/ }),
-/* 849 */
+/* 858 */
 /***/ (function(module, exports) {
 
 (function () {
@@ -87137,7 +88403,7 @@ _.extend(BI, {
 }());
 
 /***/ }),
-/* 850 */
+/* 859 */
 /***/ (function(module, exports) {
 
 /* !
@@ -87346,7 +88612,7 @@ _.extend(BI, {
 }));
 
 /***/ }),
-/* 851 */
+/* 860 */
 /***/ (function(module, exports) {
 
 !(function () {
@@ -87358,7 +88624,7 @@ _.extend(BI, {
 })();
 
 /***/ }),
-/* 852 */
+/* 861 */
 /***/ (function(module, exports) {
 
 /**
@@ -87906,7 +89172,7 @@ BI.shortcut("bi.tree_view", BI.TreeView);
 
 
 /***/ }),
-/* 853 */
+/* 862 */
 /***/ (function(module, exports) {
 
 /**
@@ -88159,7 +89425,7 @@ BI.AsyncTree = BI.inherit(BI.TreeView, {
 BI.shortcut("bi.async_tree", BI.AsyncTree);
 
 /***/ }),
-/* 854 */
+/* 863 */
 /***/ (function(module, exports) {
 
 /**
@@ -88365,7 +89631,7 @@ BI.shortcut("bi.part_tree", BI.PartTree);
 
 
 /***/ }),
-/* 855 */
+/* 864 */
 /***/ (function(module, exports) {
 
 /**
@@ -88488,7 +89754,7 @@ BI.ListTreeView = BI.inherit(BI.TreeView, {
 BI.shortcut("bi.list_tree_view", BI.ListTreeView);
 
 /***/ }),
-/* 856 */
+/* 865 */
 /***/ (function(module, exports) {
 
 /**
@@ -88616,7 +89882,7 @@ BI.ListAsyncTree = BI.inherit(BI.ListTreeView, {
 BI.shortcut("bi.list_async_tree", BI.ListAsyncTree);
 
 /***/ }),
-/* 857 */
+/* 866 */
 /***/ (function(module, exports) {
 
 /**
@@ -88713,7 +89979,7 @@ BI.ListPartTree = BI.inherit(BI.ListAsyncTree, {
 BI.shortcut("bi.list_part_tree", BI.ListPartTree);
 
 /***/ }),
-/* 858 */
+/* 867 */
 /***/ (function(module, exports) {
 
 /**
@@ -89418,7 +90684,7 @@ BI.shortcut("bi.list_part_tree", BI.ListPartTree);
 
 
 /***/ }),
-/* 859 */
+/* 868 */
 /***/ (function(module, exports) {
 
 /*
@@ -91138,7 +92404,7 @@ BI.shortcut("bi.list_part_tree", BI.ListPartTree);
 })(BI.jQuery);
 
 /***/ }),
-/* 860 */
+/* 869 */
 /***/ (function(module, exports) {
 
 /*
@@ -91773,7 +93039,7 @@ BI.shortcut("bi.list_part_tree", BI.ListPartTree);
 })(BI.jQuery);
 
 /***/ }),
-/* 861 */
+/* 870 */
 /***/ (function(module, exports) {
 
 /**
@@ -91902,7 +93168,7 @@ BI.shortcut("bi.list_part_tree", BI.ListPartTree);
 })();
 
 /***/ }),
-/* 862 */
+/* 871 */
 /***/ (function(module, exports) {
 
 /**
@@ -91983,7 +93249,7 @@ BI.shortcut("bi.list_part_tree", BI.ListPartTree);
 })();
 
 /***/ }),
-/* 863 */
+/* 872 */
 /***/ (function(module, exports) {
 
 /**
@@ -92057,7 +93323,7 @@ BI.CustomColorChooser.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.custom_color_chooser", BI.CustomColorChooser);
 
 /***/ }),
-/* 864 */
+/* 873 */
 /***/ (function(module, exports) {
 
 /**
@@ -92071,17 +93337,18 @@ BI.ColorChooser = BI.inherit(BI.Widget, {
 
     _defaultConfig: function () {
         return BI.extend(BI.ColorChooser.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-color-chooser",
+            baseCls: "bi-color-chooser bi-border",
             value: "",
             height: 24,
-            el: {}
+            el: {},
         });
     },
 
     _init: function () {
-        BI.ColorChooser.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
-
+        o.height -= 2;
+        BI.isNumeric(o.width) && (o.width -= 2);
+        BI.ColorChooser.superclass._init.apply(this, arguments);
         o.value = o.value || "";
         this.combo = BI.createWidget({
             type: "bi.combo",
@@ -92095,8 +93362,8 @@ BI.ColorChooser = BI.inherit(BI.Widget, {
                 ref: function (_ref) {
                     self.trigger = _ref;
                 },
-                width: o.el.type ? o.width : o.width - 2,
-                height: o.el.type ? o.height : o.height - 2
+                width: o.width,
+                height: o.height
             }, o.el),
             popup: {
                 el: BI.extend({
@@ -92165,7 +93432,7 @@ BI.shortcut("bi.color_chooser", BI.ColorChooser);
 
 
 /***/ }),
-/* 865 */
+/* 874 */
 /***/ (function(module, exports) {
 
 /**
@@ -92422,7 +93689,7 @@ BI.HexColorChooserPopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.hex_color_chooser_popup", BI.HexColorChooserPopup);
 
 /***/ }),
-/* 866 */
+/* 875 */
 /***/ (function(module, exports) {
 
 /**
@@ -92476,7 +93743,7 @@ BI.SimpleHexColorChooserPopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.simple_hex_color_chooser_popup", BI.SimpleHexColorChooserPopup);
 
 /***/ }),
-/* 867 */
+/* 876 */
 /***/ (function(module, exports) {
 
 /**
@@ -92717,7 +93984,7 @@ BI.ColorChooserPopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.color_chooser_popup", BI.ColorChooserPopup);
 
 /***/ }),
-/* 868 */
+/* 877 */
 /***/ (function(module, exports) {
 
 /**
@@ -92769,7 +94036,7 @@ BI.SimpleColorChooserPopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.simple_color_chooser_popup", BI.SimpleColorChooserPopup);
 
 /***/ }),
-/* 869 */
+/* 878 */
 /***/ (function(module, exports) {
 
 /**
@@ -92832,7 +94099,7 @@ BI.SimpleColorChooser.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.simple_color_chooser", BI.SimpleColorChooser);
 
 /***/ }),
-/* 870 */
+/* 879 */
 /***/ (function(module, exports) {
 
 /**
@@ -92847,8 +94114,8 @@ BI.ColorChooserTrigger = BI.inherit(BI.Trigger, {
     _defaultConfig: function () {
         var conf = BI.ColorChooserTrigger.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
-            baseCls: (conf.baseCls || "") + " bi-color-chooser-trigger bi-border",
-            height: 22
+            baseCls: (conf.baseCls || "") + " bi-color-chooser-trigger",
+            height: 24
         });
     },
 
@@ -92903,7 +94170,7 @@ BI.shortcut("bi.color_chooser_trigger", BI.ColorChooserTrigger);
 
 
 /***/ }),
-/* 871 */
+/* 880 */
 /***/ (function(module, exports) {
 
 /**
@@ -92918,8 +94185,8 @@ BI.LongColorChooserTrigger = BI.inherit(BI.Trigger, {
     _defaultConfig: function () {
         var conf = BI.LongColorChooserTrigger.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
-            baseCls: (conf.baseCls || "") + " bi-color-chooser-trigger bi-border",
-            height: 22
+            baseCls: (conf.baseCls || "") + " bi-color-chooser-trigger",
+            height: 24
         });
     },
 
@@ -93007,7 +94274,7 @@ BI.shortcut("bi.long_color_chooser_trigger", BI.LongColorChooserTrigger);
 
 
 /***/ }),
-/* 872 */
+/* 881 */
 /***/ (function(module, exports) {
 
 /**
@@ -93072,7 +94339,7 @@ BI.ColorPickerButton.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.color_picker_button", BI.ColorPickerButton);
 
 /***/ }),
-/* 873 */
+/* 882 */
 /***/ (function(module, exports) {
 
 /**
@@ -93267,7 +94534,7 @@ BI.ColorPicker.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.color_picker", BI.ColorPicker);
 
 /***/ }),
-/* 874 */
+/* 883 */
 /***/ (function(module, exports) {
 
 /**
@@ -93599,7 +94866,7 @@ BI.HexColorPickerEditor.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.hex_color_picker_editor", BI.HexColorPickerEditor);
 
 /***/ }),
-/* 875 */
+/* 884 */
 /***/ (function(module, exports) {
 
 /**
@@ -93800,7 +95067,7 @@ BI.SimpleHexColorPickerEditor.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.simple_hex_color_picker_editor", BI.SimpleHexColorPickerEditor);
 
 /***/ }),
-/* 876 */
+/* 885 */
 /***/ (function(module, exports) {
 
 /**
@@ -94049,7 +95316,7 @@ BI.ColorPickerEditor.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.color_picker_editor", BI.ColorPickerEditor);
 
 /***/ }),
-/* 877 */
+/* 886 */
 /***/ (function(module, exports) {
 
 /**
@@ -94177,7 +95444,7 @@ BI.SimpleColorPickerEditor.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.simple_color_picker_editor", BI.SimpleColorPickerEditor);
 
 /***/ }),
-/* 878 */
+/* 887 */
 /***/ (function(module, exports) {
 
 BI.Farbtastic = BI.inherit(BI.BasicButton, {
@@ -94462,7 +95729,7 @@ BI.Farbtastic.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.farbtastic", BI.Farbtastic);
 
 /***/ }),
-/* 879 */
+/* 888 */
 /***/ (function(module, exports) {
 
 /**
@@ -94534,7 +95801,7 @@ BI.shortcut("bi.display_tree", BI.DisplayTree);
 
 
 /***/ }),
-/* 880 */
+/* 889 */
 /***/ (function(module, exports) {
 
 /**
@@ -94617,7 +95884,7 @@ BI.ListDisplayTree.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.list_display_tree", BI.ListDisplayTree);
 
 /***/ }),
-/* 881 */
+/* 890 */
 /***/ (function(module, exports) {
 
 /**
@@ -94750,18 +96017,18 @@ BI.shortcut("bi.simple_tree", BI.SimpleTreeView);
 
 
 /***/ }),
-/* 882 */,
-/* 883 */,
-/* 884 */,
-/* 885 */,
-/* 886 */
+/* 891 */,
+/* 892 */,
+/* 893 */,
+/* 894 */,
+/* 895 */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(global) {module.exports = global["Fix"] = __webpack_require__(887);
+/* WEBPACK VAR INJECTION */(function(global) {module.exports = global["Fix"] = __webpack_require__(896);
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(17)))
 
 /***/ }),
-/* 887 */
+/* 896 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(setImmediate) {function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -94900,8 +96167,8 @@ BI.shortcut("bi.simple_tree", BI.SimpleTreeView);
                 setImmediate(nextTickHandler);
             };
         } else if (typeof MessageChannel !== 'undefined' && (isNative(MessageChannel) ||
-        // PhantomJS
-        MessageChannel.toString() === '[object MessageChannelConstructor]')) {
+            // PhantomJS
+            MessageChannel.toString() === '[object MessageChannelConstructor]')) {
             var channel = new MessageChannel();
             var port = channel.port2;
             channel.port1.onmessage = nextTickHandler;
@@ -94910,18 +96177,18 @@ BI.shortcut("bi.simple_tree", BI.SimpleTreeView);
             };
         } else
             /* istanbul ignore next */
-            if (typeof Promise !== 'undefined' && isNative(Promise)) {
-                // use microtask in non-DOM environments, e.g. Weex
-                var p = Promise.resolve();
-                timerFunc = function timerFunc() {
-                    p.then(nextTickHandler);
-                };
-            } else {
-                // fallback to setTimeout
-                timerFunc = function timerFunc() {
-                    setTimeout(nextTickHandler, 0);
-                };
-            }
+        if (typeof Promise !== 'undefined' && isNative(Promise)) {
+            // use microtask in non-DOM environments, e.g. Weex
+            var p = Promise.resolve();
+            timerFunc = function timerFunc() {
+                p.then(nextTickHandler);
+            };
+        } else {
+            // fallback to setTimeout
+            timerFunc = function timerFunc() {
+                setTimeout(nextTickHandler, 0);
+            };
+        }
 
         return function queueNextTick(cb, ctx) {
             var _resolve = void 0;
@@ -95060,7 +96327,7 @@ BI.shortcut("bi.simple_tree", BI.SimpleTreeView);
         if (isIE9Below) {
             var VBClassPool = {};
             window.execScript([// jshint ignore:line
-            'Function parseVB(code)', '\tExecuteGlobal(code)', 'End Function' //转换一段文本为VB代码
+                'Function parseVB(code)', '\tExecuteGlobal(code)', 'End Function' //转换一段文本为VB代码
             ].join('\n'), 'VBScript');
 
             var VBMediator = function VBMediator(instance, accessors, name, value) {
@@ -95076,7 +96343,7 @@ BI.shortcut("bi.simple_tree", BI.SimpleTreeView);
                 // jshint ignore:line
                 var buffer = [];
                 buffer.push('\tPrivate [$vbsetter]', '\tPublic  [$accessors]', '\tPublic Default Function [$vbthis](ac' + timeBucket + ', s' + timeBucket + ')', '\t\tSet  [$accessors] = ac' + timeBucket + ': set [$vbsetter] = s' + timeBucket, '\t\tSet  [$vbthis]    = Me', //链式调用
-                '\tEnd Function');
+                    '\tEnd Function');
                 //添加普通属性,因为VBScript对象不能像JS那样随意增删属性，必须在这里预先定义好
                 var uniq = {
                     $vbthis: true,
@@ -95089,19 +96356,19 @@ BI.shortcut("bi.simple_tree", BI.SimpleTreeView);
                         uniq[name] = true;
                     }
                 }
-                //添加访问器属性 
+                //添加访问器属性
                 for (name in accessors) {
                     if (uniq[name]) {
                         continue;
                     }
                     uniq[name] = true;
                     buffer.push(
-                    //由于不知对方会传入什么,因此set, let都用上
-                    '\tPublic Property Let [' + name + '](val' + timeBucket + ')', //setter
-                    '\t\tCall [$vbsetter](Me, [$accessors], "' + name + '", val' + timeBucket + ')', '\tEnd Property', '\tPublic Property Set [' + name + '](val' + timeBucket + ')', //setter
-                    '\t\tCall [$vbsetter](Me, [$accessors], "' + name + '", val' + timeBucket + ')', '\tEnd Property', '\tPublic Property Get [' + name + ']', //getter
-                    '\tOn Error Resume Next', //必须优先使用set语句,否则它会误将数组当字符串返回
-                    '\t\tSet[' + name + '] = [$vbsetter](Me, [$accessors],"' + name + '")', '\tIf Err.Number <> 0 Then', '\t\t[' + name + '] = [$vbsetter](Me, [$accessors],"' + name + '")', '\tEnd If', '\tOn Error Goto 0', '\tEnd Property');
+                        //由于不知对方会传入什么,因此set, let都用上
+                        '\tPublic Property Let [' + name + '](val' + timeBucket + ')', //setter
+                        '\t\tCall [$vbsetter](Me, [$accessors], "' + name + '", val' + timeBucket + ')', '\tEnd Property', '\tPublic Property Set [' + name + '](val' + timeBucket + ')', //setter
+                        '\t\tCall [$vbsetter](Me, [$accessors], "' + name + '", val' + timeBucket + ')', '\tEnd Property', '\tPublic Property Get [' + name + ']', //getter
+                        '\tOn Error Resume Next', //必须优先使用set语句,否则它会误将数组当字符串返回
+                        '\t\tSet[' + name + '] = [$vbsetter](Me, [$accessors],"' + name + '")', '\tIf Err.Number <> 0 Then', '\t\t[' + name + '] = [$vbsetter](Me, [$accessors],"' + name + '")', '\tEnd If', '\tOn Error Goto 0', '\tEnd Property');
                 }
 
                 for (name in properties) {
@@ -95119,7 +96386,7 @@ BI.shortcut("bi.simple_tree", BI.SimpleTreeView);
                     className = makeHashCode('VBClass');
                     window.parseVB('Class ' + className + body);
                     window.parseVB(['Function ' + className + 'Factory(acc, vbm)', //创建实例并传入两个关键的参数
-                    '\tDim o', '\tSet o = (New ' + className + ')(acc, vbm)', '\tSet ' + className + 'Factory = o', 'End Function'].join('\r\n'));
+                        '\tDim o', '\tSet o = (New ' + className + ')(acc, vbm)', '\tSet ' + className + 'Factory = o', 'End Function'].join('\r\n'));
                     VBClassPool[body] = className;
                 }
                 var ret = window[className + 'Factory'](accessors, VBMediator); //得到其产品
@@ -95303,10 +96570,10 @@ BI.shortcut("bi.simple_tree", BI.SimpleTreeView);
             if (this.active) {
                 var value = this.get();
                 if (value !== this.value ||
-                // Deep watchers and watchers on Object/Arrays should fire even
-                // when the value is the same, because the value may
-                // have mutated.
-                _.isObject(value) && options && options.refresh || this.deep) {
+                    // Deep watchers and watchers on Object/Arrays should fire even
+                    // when the value is the same, because the value may
+                    // have mutated.
+                    _.isObject(value) && options && options.refresh || this.deep) {
                     // set new value
                     var oldValue = this.value;
                     this.value = value;
@@ -95396,8 +96663,8 @@ BI.shortcut("bi.simple_tree", BI.SimpleTreeView);
     _.each(['push', 'pop', 'shift', 'unshift', 'splice', 'sort', 'reverse'], function (method) {
         var original = arrayProto[method];
         arrayMethods[method] = function mutator() {
-            for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-                args[_key] = arguments[_key];
+            for (var _len = arguments.length, args = Array(_len), _key2 = 0; _key2 < _len; _key2++) {
+                args[_key2] = arguments[_key2];
             }
 
             var ob = this.__ob__;
@@ -95539,10 +96806,12 @@ BI.shortcut("bi.simple_tree", BI.SimpleTreeView);
                 root = parent;
                 parent = parent.parent;
             }
-            for (var _key2 in root._globalDeps) {
-                var reg = new RegExp(_key2);
+            for (var _key in root._globalDeps) {
+                var reg = new RegExp(_key);
                 if (reg.test(route)) {
-                    root._globalDeps[_key2].notify({ observer: observer, key: _key2 });
+                    for (var i = 0; i < root._globalDeps[_key].length; i++) {
+                        root._globalDeps[_key][i].notify({ observer: observer, key: _key });
+                    }
                 }
             }
         }
@@ -95724,7 +96993,7 @@ BI.shortcut("bi.simple_tree", BI.SimpleTreeView);
     }
 
     function routeToRegExp(route) {
-        route = route.replace(/\*./g, '[a-zA-Z0-9_]+.');
+        route = route.replace(/\*\*/g, '[a-zA-Z0-9_]+').replace(/\*./g, '[a-zA-Z0-9_]+.');
         return '^' + route + '$';
     }
 
@@ -95813,21 +97082,12 @@ BI.shortcut("bi.simple_tree", BI.SimpleTreeView);
                 });
                 return;
             }
-            if (/\*\*$|\*$/.test(exp)) {
-                throw new Error('not support');
-            }
-            //其他含有*的情况，如*.a,*.*.a,a.*.a
-            if (/\*/.test(exp)) {
-                var currentModel = model;
+            // **.a.**的情况，场景：a.b.c, 如果用b.**监听, a被重新赋值b上的_scopeDes就不存在了
+            if (/^(\*\*\.)+[1-9a-zA-Z]+(\.\*\*$)/.test(exp)) {
                 //先获取到能获取到的对象
                 var paths = exp.split(".");
-                for (var _i = 0, len = paths.length; _i < len; _i++) {
-                    if (paths[_i] === "*") {
-                        break;
-                    }
-                    currentModel = model[paths[_i]];
-                }
-                exp = exp.substr(exp.indexOf("*"));
+                var currentModel = model[paths[1]];
+                exp = paths[1] + ".**";
                 //补全路径
                 var parent = currentModel.__ob__.parent,
                     root = currentModel.__ob__;
@@ -95839,7 +97099,11 @@ BI.shortcut("bi.simple_tree", BI.SimpleTreeView);
                 var regStr = routeToRegExp(exp);
                 var _dep = new Dep();
                 root._globalDeps || (root._globalDeps = {});
-                root._globalDeps[regStr] = _dep;
+                if (_.isArray(root._globalDeps[regStr])) {
+                    root._globalDeps[regStr].push(_dep);
+                } else {
+                    root._globalDeps[regStr] = [_dep];
+                }
 
                 var _w = new Watcher(currentModel, function () {
                     _dep.depend();
@@ -95848,8 +97112,64 @@ BI.shortcut("bi.simple_tree", BI.SimpleTreeView);
                     callback(i, newValue, oldValue, _.extend({ index: i }, attrs));
                 }, options);
                 watchers.push(function unwatchFn() {
-                    _w.teardown();
-                    root._globalDeps && delete root._globalDeps[regStr];
+                    if (root._globalDeps) {
+                        remove(root._globalDeps[regStr], _dep);
+
+                        if (root._globalDeps[regStr].length === 0) {
+                            delete root._globalDeps[regStr];
+                            _w.teardown();
+                        }
+                    }
+                });
+                return;
+            }
+            if (/\*\*$|\*$/.test(exp)) {
+                throw new Error('not support');
+            }
+            //其他含有*的情况，如*.a,*.*.a,a.*.a
+            if (/\*/.test(exp)) {
+                var _currentModel = model;
+                //先获取到能获取到的对象
+                var _paths = exp.split(".");
+                for (var _i = 0, len = _paths.length; _i < len; _i++) {
+                    if (_paths[_i] === "*") {
+                        break;
+                    }
+                    _currentModel = model[_paths[_i]];
+                }
+                exp = exp.substr(exp.indexOf("*"));
+                //补全路径
+                var _parent = _currentModel.__ob__.parent,
+                    _root = _currentModel.__ob__;
+                while (_parent) {
+                    exp = '*.' + exp;
+                    _root = _parent;
+                    _parent = _parent.parent;
+                }
+                var _regStr = routeToRegExp(exp);
+                var _dep2 = new Dep();
+                _root._globalDeps || (_root._globalDeps = {});
+                if (_.isArray(_root._globalDeps[_regStr])) {
+                    _root._globalDeps[_regStr].push(_dep2);
+                } else {
+                    _root._globalDeps[_regStr] = [_dep2];
+                }
+
+                var _w2 = new Watcher(_currentModel, function () {
+                    _dep2.depend();
+                    return NaN;
+                }, function (newValue, oldValue, attrs) {
+                    callback(i, newValue, oldValue, _.extend({ index: i }, attrs));
+                }, options);
+                watchers.push(function unwatchFn() {
+                    if (_root._globalDeps) {
+                        remove(_root._globalDeps[_regStr], _dep2);
+
+                        if (_root._globalDeps[_regStr].length === 0) {
+                            delete _root._globalDeps[_regStr];
+                            _w2.teardown();
+                        }
+                    }
                 });
                 return;
             }
@@ -96237,11 +97557,12 @@ BI.shortcut("bi.simple_tree", BI.SimpleTreeView);
 
     exports.__esModule = true;
 });
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(62).setImmediate))
+
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(63).setImmediate))
 
 /***/ }),
-/* 888 */,
-/* 889 */
+/* 897 */,
+/* 898 */
 /***/ (function(module, exports) {
 
 ;(function () {
@@ -96537,21 +97858,21 @@ BI.shortcut("bi.simple_tree", BI.SimpleTreeView);
 
 
 /***/ }),
-/* 890 */,
-/* 891 */,
-/* 892 */,
-/* 893 */,
-/* 894 */,
-/* 895 */,
-/* 896 */
+/* 899 */,
+/* 900 */,
+/* 901 */,
+/* 902 */,
+/* 903 */,
+/* 904 */,
+/* 905 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-__webpack_require__(897);
+__webpack_require__(906);
 
-var _global = _interopRequireDefault(__webpack_require__(1070));
+var _global = _interopRequireDefault(__webpack_require__(1079));
 
 function _interopRequireDefault(obj) {
   return obj && obj.__esModule ? obj : {
@@ -96566,54 +97887,45 @@ if (_global["default"]._babelPolyfill && typeof console !== "undefined" && conso
 _global["default"]._babelPolyfill = true;
 
 /***/ }),
-/* 897 */
+/* 906 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-__webpack_require__(898);
-
-__webpack_require__(1041);
-
-__webpack_require__(1043);
-
-__webpack_require__(1046);
-
-__webpack_require__(1048);
+__webpack_require__(907);
 
 __webpack_require__(1050);
 
 __webpack_require__(1052);
 
-__webpack_require__(1054);
+__webpack_require__(1055);
 
-__webpack_require__(1056);
+__webpack_require__(1057);
 
-__webpack_require__(1058);
+__webpack_require__(1059);
 
-__webpack_require__(1060);
+__webpack_require__(1061);
 
-__webpack_require__(1062);
+__webpack_require__(1063);
 
-__webpack_require__(1064);
+__webpack_require__(1065);
 
-__webpack_require__(1068);
+__webpack_require__(1067);
+
+__webpack_require__(1069);
+
+__webpack_require__(1071);
+
+__webpack_require__(1073);
+
+__webpack_require__(1077);
 
 /***/ }),
-/* 898 */
+/* 907 */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(899);
-__webpack_require__(902);
-__webpack_require__(903);
-__webpack_require__(904);
-__webpack_require__(905);
-__webpack_require__(906);
-__webpack_require__(907);
 __webpack_require__(908);
-__webpack_require__(909);
-__webpack_require__(910);
 __webpack_require__(911);
 __webpack_require__(912);
 __webpack_require__(913);
@@ -96647,6 +97959,7 @@ __webpack_require__(940);
 __webpack_require__(941);
 __webpack_require__(942);
 __webpack_require__(943);
+__webpack_require__(944);
 __webpack_require__(945);
 __webpack_require__(946);
 __webpack_require__(947);
@@ -96655,7 +97968,6 @@ __webpack_require__(949);
 __webpack_require__(950);
 __webpack_require__(951);
 __webpack_require__(952);
-__webpack_require__(953);
 __webpack_require__(954);
 __webpack_require__(955);
 __webpack_require__(956);
@@ -96681,16 +97993,17 @@ __webpack_require__(975);
 __webpack_require__(976);
 __webpack_require__(977);
 __webpack_require__(978);
+__webpack_require__(979);
 __webpack_require__(980);
 __webpack_require__(981);
+__webpack_require__(982);
 __webpack_require__(983);
 __webpack_require__(984);
 __webpack_require__(985);
 __webpack_require__(986);
 __webpack_require__(987);
-__webpack_require__(988);
 __webpack_require__(989);
-__webpack_require__(991);
+__webpack_require__(990);
 __webpack_require__(992);
 __webpack_require__(993);
 __webpack_require__(994);
@@ -96698,30 +98011,29 @@ __webpack_require__(995);
 __webpack_require__(996);
 __webpack_require__(997);
 __webpack_require__(998);
-__webpack_require__(999);
 __webpack_require__(1000);
 __webpack_require__(1001);
 __webpack_require__(1002);
 __webpack_require__(1003);
-__webpack_require__(112);
 __webpack_require__(1004);
-__webpack_require__(310);
 __webpack_require__(1005);
-__webpack_require__(311);
 __webpack_require__(1006);
 __webpack_require__(1007);
 __webpack_require__(1008);
 __webpack_require__(1009);
-__webpack_require__(312);
+__webpack_require__(1010);
+__webpack_require__(1011);
 __webpack_require__(1012);
+__webpack_require__(112);
 __webpack_require__(1013);
+__webpack_require__(313);
 __webpack_require__(1014);
+__webpack_require__(314);
 __webpack_require__(1015);
 __webpack_require__(1016);
 __webpack_require__(1017);
 __webpack_require__(1018);
-__webpack_require__(1019);
-__webpack_require__(1020);
+__webpack_require__(315);
 __webpack_require__(1021);
 __webpack_require__(1022);
 __webpack_require__(1023);
@@ -96742,11 +98054,20 @@ __webpack_require__(1037);
 __webpack_require__(1038);
 __webpack_require__(1039);
 __webpack_require__(1040);
+__webpack_require__(1041);
+__webpack_require__(1042);
+__webpack_require__(1043);
+__webpack_require__(1044);
+__webpack_require__(1045);
+__webpack_require__(1046);
+__webpack_require__(1047);
+__webpack_require__(1048);
+__webpack_require__(1049);
 module.exports = __webpack_require__(11);
 
 
 /***/ }),
-/* 899 */
+/* 908 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -96759,14 +98080,14 @@ var $export = __webpack_require__(0);
 var redefine = __webpack_require__(15);
 var META = __webpack_require__(33).KEY;
 var $fails = __webpack_require__(5);
-var shared = __webpack_require__(63);
+var shared = __webpack_require__(64);
 var setToStringTag = __webpack_require__(46);
 var uid = __webpack_require__(36);
 var wks = __webpack_require__(9);
 var wksExt = __webpack_require__(93);
-var wksDefine = __webpack_require__(291);
-var enumKeys = __webpack_require__(901);
-var isArray = __webpack_require__(66);
+var wksDefine = __webpack_require__(294);
+var enumKeys = __webpack_require__(910);
+var isArray = __webpack_require__(67);
 var anObject = __webpack_require__(6);
 var isObject = __webpack_require__(7);
 var toObject = __webpack_require__(14);
@@ -96774,9 +98095,9 @@ var toIObject = __webpack_require__(20);
 var toPrimitive = __webpack_require__(32);
 var createDesc = __webpack_require__(35);
 var _create = __webpack_require__(40);
-var gOPNExt = __webpack_require__(294);
-var $GOPD = __webpack_require__(25);
-var $GOPS = __webpack_require__(65);
+var gOPNExt = __webpack_require__(297);
+var $GOPD = __webpack_require__(26);
+var $GOPS = __webpack_require__(66);
 var $DP = __webpack_require__(13);
 var $keys = __webpack_require__(38);
 var gOPD = $GOPD.f;
@@ -96999,19 +98320,19 @@ setToStringTag(global.JSON, 'JSON', true);
 
 
 /***/ }),
-/* 900 */
+/* 909 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(63)('native-function-to-string', Function.toString);
+module.exports = __webpack_require__(64)('native-function-to-string', Function.toString);
 
 
 /***/ }),
-/* 901 */
+/* 910 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // all enumerable object keys, includes symbols
 var getKeys = __webpack_require__(38);
-var gOPS = __webpack_require__(65);
+var gOPS = __webpack_require__(66);
 var pIE = __webpack_require__(54);
 module.exports = function (it) {
   var result = getKeys(it);
@@ -97027,7 +98348,7 @@ module.exports = function (it) {
 
 
 /***/ }),
-/* 902 */
+/* 911 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var $export = __webpack_require__(0);
@@ -97036,7 +98357,7 @@ $export($export.S, 'Object', { create: __webpack_require__(40) });
 
 
 /***/ }),
-/* 903 */
+/* 912 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var $export = __webpack_require__(0);
@@ -97045,152 +98366,25 @@ $export($export.S + $export.F * !__webpack_require__(12), 'Object', { defineProp
 
 
 /***/ }),
-/* 904 */
+/* 913 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var $export = __webpack_require__(0);
 // 19.1.2.3 / 15.2.3.7 Object.defineProperties(O, Properties)
-$export($export.S + $export.F * !__webpack_require__(12), 'Object', { defineProperties: __webpack_require__(293) });
-
-
-/***/ }),
-/* 905 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// 19.1.2.6 Object.getOwnPropertyDescriptor(O, P)
-var toIObject = __webpack_require__(20);
-var $getOwnPropertyDescriptor = __webpack_require__(25).f;
-
-__webpack_require__(26)('getOwnPropertyDescriptor', function () {
-  return function getOwnPropertyDescriptor(it, key) {
-    return $getOwnPropertyDescriptor(toIObject(it), key);
-  };
-});
-
-
-/***/ }),
-/* 906 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// 19.1.2.9 Object.getPrototypeOf(O)
-var toObject = __webpack_require__(14);
-var $getPrototypeOf = __webpack_require__(42);
-
-__webpack_require__(26)('getPrototypeOf', function () {
-  return function getPrototypeOf(it) {
-    return $getPrototypeOf(toObject(it));
-  };
-});
-
-
-/***/ }),
-/* 907 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// 19.1.2.14 Object.keys(O)
-var toObject = __webpack_require__(14);
-var $keys = __webpack_require__(38);
-
-__webpack_require__(26)('keys', function () {
-  return function keys(it) {
-    return $keys(toObject(it));
-  };
-});
-
-
-/***/ }),
-/* 908 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// 19.1.2.7 Object.getOwnPropertyNames(O)
-__webpack_require__(26)('getOwnPropertyNames', function () {
-  return __webpack_require__(294).f;
-});
-
-
-/***/ }),
-/* 909 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// 19.1.2.5 Object.freeze(O)
-var isObject = __webpack_require__(7);
-var meta = __webpack_require__(33).onFreeze;
-
-__webpack_require__(26)('freeze', function ($freeze) {
-  return function freeze(it) {
-    return $freeze && isObject(it) ? $freeze(meta(it)) : it;
-  };
-});
-
-
-/***/ }),
-/* 910 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// 19.1.2.17 Object.seal(O)
-var isObject = __webpack_require__(7);
-var meta = __webpack_require__(33).onFreeze;
-
-__webpack_require__(26)('seal', function ($seal) {
-  return function seal(it) {
-    return $seal && isObject(it) ? $seal(meta(it)) : it;
-  };
-});
-
-
-/***/ }),
-/* 911 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// 19.1.2.15 Object.preventExtensions(O)
-var isObject = __webpack_require__(7);
-var meta = __webpack_require__(33).onFreeze;
-
-__webpack_require__(26)('preventExtensions', function ($preventExtensions) {
-  return function preventExtensions(it) {
-    return $preventExtensions && isObject(it) ? $preventExtensions(meta(it)) : it;
-  };
-});
-
-
-/***/ }),
-/* 912 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// 19.1.2.12 Object.isFrozen(O)
-var isObject = __webpack_require__(7);
-
-__webpack_require__(26)('isFrozen', function ($isFrozen) {
-  return function isFrozen(it) {
-    return isObject(it) ? $isFrozen ? $isFrozen(it) : false : true;
-  };
-});
-
-
-/***/ }),
-/* 913 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// 19.1.2.13 Object.isSealed(O)
-var isObject = __webpack_require__(7);
-
-__webpack_require__(26)('isSealed', function ($isSealed) {
-  return function isSealed(it) {
-    return isObject(it) ? $isSealed ? $isSealed(it) : false : true;
-  };
-});
+$export($export.S + $export.F * !__webpack_require__(12), 'Object', { defineProperties: __webpack_require__(296) });
 
 
 /***/ }),
 /* 914 */
 /***/ (function(module, exports, __webpack_require__) {
 
-// 19.1.2.11 Object.isExtensible(O)
-var isObject = __webpack_require__(7);
+// 19.1.2.6 Object.getOwnPropertyDescriptor(O, P)
+var toIObject = __webpack_require__(20);
+var $getOwnPropertyDescriptor = __webpack_require__(26).f;
 
-__webpack_require__(26)('isExtensible', function ($isExtensible) {
-  return function isExtensible(it) {
-    return isObject(it) ? $isExtensible ? $isExtensible(it) : true : false;
+__webpack_require__(27)('getOwnPropertyDescriptor', function () {
+  return function getOwnPropertyDescriptor(it, key) {
+    return $getOwnPropertyDescriptor(toIObject(it), key);
   };
 });
 
@@ -97199,23 +98393,150 @@ __webpack_require__(26)('isExtensible', function ($isExtensible) {
 /* 915 */
 /***/ (function(module, exports, __webpack_require__) {
 
-// 19.1.3.1 Object.assign(target, source)
-var $export = __webpack_require__(0);
+// 19.1.2.9 Object.getPrototypeOf(O)
+var toObject = __webpack_require__(14);
+var $getPrototypeOf = __webpack_require__(42);
 
-$export($export.S + $export.F, 'Object', { assign: __webpack_require__(295) });
+__webpack_require__(27)('getPrototypeOf', function () {
+  return function getPrototypeOf(it) {
+    return $getPrototypeOf(toObject(it));
+  };
+});
 
 
 /***/ }),
 /* 916 */
 /***/ (function(module, exports, __webpack_require__) {
 
-// 19.1.3.10 Object.is(value1, value2)
-var $export = __webpack_require__(0);
-$export($export.S, 'Object', { is: __webpack_require__(296) });
+// 19.1.2.14 Object.keys(O)
+var toObject = __webpack_require__(14);
+var $keys = __webpack_require__(38);
+
+__webpack_require__(27)('keys', function () {
+  return function keys(it) {
+    return $keys(toObject(it));
+  };
+});
 
 
 /***/ }),
 /* 917 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// 19.1.2.7 Object.getOwnPropertyNames(O)
+__webpack_require__(27)('getOwnPropertyNames', function () {
+  return __webpack_require__(297).f;
+});
+
+
+/***/ }),
+/* 918 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// 19.1.2.5 Object.freeze(O)
+var isObject = __webpack_require__(7);
+var meta = __webpack_require__(33).onFreeze;
+
+__webpack_require__(27)('freeze', function ($freeze) {
+  return function freeze(it) {
+    return $freeze && isObject(it) ? $freeze(meta(it)) : it;
+  };
+});
+
+
+/***/ }),
+/* 919 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// 19.1.2.17 Object.seal(O)
+var isObject = __webpack_require__(7);
+var meta = __webpack_require__(33).onFreeze;
+
+__webpack_require__(27)('seal', function ($seal) {
+  return function seal(it) {
+    return $seal && isObject(it) ? $seal(meta(it)) : it;
+  };
+});
+
+
+/***/ }),
+/* 920 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// 19.1.2.15 Object.preventExtensions(O)
+var isObject = __webpack_require__(7);
+var meta = __webpack_require__(33).onFreeze;
+
+__webpack_require__(27)('preventExtensions', function ($preventExtensions) {
+  return function preventExtensions(it) {
+    return $preventExtensions && isObject(it) ? $preventExtensions(meta(it)) : it;
+  };
+});
+
+
+/***/ }),
+/* 921 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// 19.1.2.12 Object.isFrozen(O)
+var isObject = __webpack_require__(7);
+
+__webpack_require__(27)('isFrozen', function ($isFrozen) {
+  return function isFrozen(it) {
+    return isObject(it) ? $isFrozen ? $isFrozen(it) : false : true;
+  };
+});
+
+
+/***/ }),
+/* 922 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// 19.1.2.13 Object.isSealed(O)
+var isObject = __webpack_require__(7);
+
+__webpack_require__(27)('isSealed', function ($isSealed) {
+  return function isSealed(it) {
+    return isObject(it) ? $isSealed ? $isSealed(it) : false : true;
+  };
+});
+
+
+/***/ }),
+/* 923 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// 19.1.2.11 Object.isExtensible(O)
+var isObject = __webpack_require__(7);
+
+__webpack_require__(27)('isExtensible', function ($isExtensible) {
+  return function isExtensible(it) {
+    return isObject(it) ? $isExtensible ? $isExtensible(it) : true : false;
+  };
+});
+
+
+/***/ }),
+/* 924 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// 19.1.3.1 Object.assign(target, source)
+var $export = __webpack_require__(0);
+
+$export($export.S + $export.F, 'Object', { assign: __webpack_require__(298) });
+
+
+/***/ }),
+/* 925 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// 19.1.3.10 Object.is(value1, value2)
+var $export = __webpack_require__(0);
+$export($export.S, 'Object', { is: __webpack_require__(299) });
+
+
+/***/ }),
+/* 926 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 19.1.3.19 Object.setPrototypeOf(O, proto)
@@ -97224,7 +98545,7 @@ $export($export.S, 'Object', { setPrototypeOf: __webpack_require__(97).set });
 
 
 /***/ }),
-/* 918 */
+/* 927 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -97241,17 +98562,17 @@ if (test + '' != '[object z]') {
 
 
 /***/ }),
-/* 919 */
+/* 928 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 19.2.3.2 / 15.3.4.5 Function.prototype.bind(thisArg, args...)
 var $export = __webpack_require__(0);
 
-$export($export.P, 'Function', { bind: __webpack_require__(297) });
+$export($export.P, 'Function', { bind: __webpack_require__(300) });
 
 
 /***/ }),
-/* 920 */
+/* 929 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var dP = __webpack_require__(13).f;
@@ -97273,7 +98594,7 @@ NAME in FProto || __webpack_require__(12) && dP(FProto, NAME, {
 
 
 /***/ }),
-/* 921 */
+/* 930 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -97293,27 +98614,27 @@ if (!(HAS_INSTANCE in FunctionProto)) __webpack_require__(13).f(FunctionProto, H
 
 
 /***/ }),
-/* 922 */
+/* 931 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var $export = __webpack_require__(0);
-var $parseInt = __webpack_require__(299);
+var $parseInt = __webpack_require__(302);
 // 18.2.5 parseInt(string, radix)
 $export($export.G + $export.F * (parseInt != $parseInt), { parseInt: $parseInt });
 
 
 /***/ }),
-/* 923 */
+/* 932 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var $export = __webpack_require__(0);
-var $parseFloat = __webpack_require__(300);
+var $parseFloat = __webpack_require__(303);
 // 18.2.4 parseFloat(string)
 $export($export.G + $export.F * (parseFloat != $parseFloat), { parseFloat: $parseFloat });
 
 
 /***/ }),
-/* 924 */
+/* 933 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -97325,7 +98646,7 @@ var inheritIfRequired = __webpack_require__(99);
 var toPrimitive = __webpack_require__(32);
 var fails = __webpack_require__(5);
 var gOPN = __webpack_require__(41).f;
-var gOPD = __webpack_require__(25).f;
+var gOPD = __webpack_require__(26).f;
 var dP = __webpack_require__(13).f;
 var $trim = __webpack_require__(47).trim;
 var NUMBER = 'Number';
@@ -97389,14 +98710,14 @@ if (!$Number(' 0o1') || !$Number('0b1') || $Number('+0x1')) {
 
 
 /***/ }),
-/* 925 */
+/* 934 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 var $export = __webpack_require__(0);
-var toInteger = __webpack_require__(24);
-var aNumberValue = __webpack_require__(301);
+var toInteger = __webpack_require__(25);
+var aNumberValue = __webpack_require__(304);
 var repeat = __webpack_require__(100);
 var $toFixed = 1.0.toFixed;
 var floor = Math.floor;
@@ -97510,14 +98831,14 @@ $export($export.P + $export.F * (!!$toFixed && (
 
 
 /***/ }),
-/* 926 */
+/* 935 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 var $export = __webpack_require__(0);
 var $fails = __webpack_require__(5);
-var aNumberValue = __webpack_require__(301);
+var aNumberValue = __webpack_require__(304);
 var $toPrecision = 1.0.toPrecision;
 
 $export($export.P + $export.F * ($fails(function () {
@@ -97535,7 +98856,7 @@ $export($export.P + $export.F * ($fails(function () {
 
 
 /***/ }),
-/* 927 */
+/* 936 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 20.1.2.1 Number.EPSILON
@@ -97545,7 +98866,7 @@ $export($export.S, 'Number', { EPSILON: Math.pow(2, -52) });
 
 
 /***/ }),
-/* 928 */
+/* 937 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 20.1.2.2 Number.isFinite(number)
@@ -97560,17 +98881,17 @@ $export($export.S, 'Number', {
 
 
 /***/ }),
-/* 929 */
+/* 938 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 20.1.2.3 Number.isInteger(number)
 var $export = __webpack_require__(0);
 
-$export($export.S, 'Number', { isInteger: __webpack_require__(302) });
+$export($export.S, 'Number', { isInteger: __webpack_require__(305) });
 
 
 /***/ }),
-/* 930 */
+/* 939 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 20.1.2.4 Number.isNaN(number)
@@ -97585,12 +98906,12 @@ $export($export.S, 'Number', {
 
 
 /***/ }),
-/* 931 */
+/* 940 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 20.1.2.5 Number.isSafeInteger(number)
 var $export = __webpack_require__(0);
-var isInteger = __webpack_require__(302);
+var isInteger = __webpack_require__(305);
 var abs = Math.abs;
 
 $export($export.S, 'Number', {
@@ -97601,7 +98922,7 @@ $export($export.S, 'Number', {
 
 
 /***/ }),
-/* 932 */
+/* 941 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 20.1.2.6 Number.MAX_SAFE_INTEGER
@@ -97611,7 +98932,7 @@ $export($export.S, 'Number', { MAX_SAFE_INTEGER: 0x1fffffffffffff });
 
 
 /***/ }),
-/* 933 */
+/* 942 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 20.1.2.10 Number.MIN_SAFE_INTEGER
@@ -97621,32 +98942,32 @@ $export($export.S, 'Number', { MIN_SAFE_INTEGER: -0x1fffffffffffff });
 
 
 /***/ }),
-/* 934 */
+/* 943 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var $export = __webpack_require__(0);
-var $parseFloat = __webpack_require__(300);
+var $parseFloat = __webpack_require__(303);
 // 20.1.2.12 Number.parseFloat(string)
 $export($export.S + $export.F * (Number.parseFloat != $parseFloat), 'Number', { parseFloat: $parseFloat });
 
 
 /***/ }),
-/* 935 */
+/* 944 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var $export = __webpack_require__(0);
-var $parseInt = __webpack_require__(299);
+var $parseInt = __webpack_require__(302);
 // 20.1.2.13 Number.parseInt(string, radix)
 $export($export.S + $export.F * (Number.parseInt != $parseInt), 'Number', { parseInt: $parseInt });
 
 
 /***/ }),
-/* 936 */
+/* 945 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 20.2.2.3 Math.acosh(x)
 var $export = __webpack_require__(0);
-var log1p = __webpack_require__(303);
+var log1p = __webpack_require__(306);
 var sqrt = Math.sqrt;
 var $acosh = Math.acosh;
 
@@ -97665,7 +98986,7 @@ $export($export.S + $export.F * !($acosh
 
 
 /***/ }),
-/* 937 */
+/* 946 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 20.2.2.5 Math.asinh(x)
@@ -97681,7 +99002,7 @@ $export($export.S + $export.F * !($asinh && 1 / $asinh(0) > 0), 'Math', { asinh:
 
 
 /***/ }),
-/* 938 */
+/* 947 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 20.2.2.7 Math.atanh(x)
@@ -97697,7 +99018,7 @@ $export($export.S + $export.F * !($atanh && 1 / $atanh(-0) < 0), 'Math', {
 
 
 /***/ }),
-/* 939 */
+/* 948 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 20.2.2.9 Math.cbrt(x)
@@ -97712,7 +99033,7 @@ $export($export.S, 'Math', {
 
 
 /***/ }),
-/* 940 */
+/* 949 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 20.2.2.11 Math.clz32(x)
@@ -97726,7 +99047,7 @@ $export($export.S, 'Math', {
 
 
 /***/ }),
-/* 941 */
+/* 950 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 20.2.2.12 Math.cosh(x)
@@ -97741,7 +99062,7 @@ $export($export.S, 'Math', {
 
 
 /***/ }),
-/* 942 */
+/* 951 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 20.2.2.14 Math.expm1(x)
@@ -97752,17 +99073,17 @@ $export($export.S + $export.F * ($expm1 != Math.expm1), 'Math', { expm1: $expm1 
 
 
 /***/ }),
-/* 943 */
+/* 952 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 20.2.2.16 Math.fround(x)
 var $export = __webpack_require__(0);
 
-$export($export.S, 'Math', { fround: __webpack_require__(944) });
+$export($export.S, 'Math', { fround: __webpack_require__(953) });
 
 
 /***/ }),
-/* 944 */
+/* 953 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 20.2.2.16 Math.fround(x)
@@ -97791,7 +99112,7 @@ module.exports = Math.fround || function fround(x) {
 
 
 /***/ }),
-/* 945 */
+/* 954 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 20.2.2.17 Math.hypot([value1[, value2[, … ]]])
@@ -97822,7 +99143,7 @@ $export($export.S, 'Math', {
 
 
 /***/ }),
-/* 946 */
+/* 955 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 20.2.2.18 Math.imul(x, y)
@@ -97845,7 +99166,7 @@ $export($export.S + $export.F * __webpack_require__(5)(function () {
 
 
 /***/ }),
-/* 947 */
+/* 956 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 20.2.2.21 Math.log10(x)
@@ -97859,17 +99180,17 @@ $export($export.S, 'Math', {
 
 
 /***/ }),
-/* 948 */
+/* 957 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 20.2.2.20 Math.log1p(x)
 var $export = __webpack_require__(0);
 
-$export($export.S, 'Math', { log1p: __webpack_require__(303) });
+$export($export.S, 'Math', { log1p: __webpack_require__(306) });
 
 
 /***/ }),
-/* 949 */
+/* 958 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 20.2.2.22 Math.log2(x)
@@ -97883,7 +99204,7 @@ $export($export.S, 'Math', {
 
 
 /***/ }),
-/* 950 */
+/* 959 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 20.2.2.28 Math.sign(x)
@@ -97893,7 +99214,7 @@ $export($export.S, 'Math', { sign: __webpack_require__(101) });
 
 
 /***/ }),
-/* 951 */
+/* 960 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 20.2.2.30 Math.sinh(x)
@@ -97914,7 +99235,7 @@ $export($export.S + $export.F * __webpack_require__(5)(function () {
 
 
 /***/ }),
-/* 952 */
+/* 961 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 20.2.2.33 Math.tanh(x)
@@ -97932,7 +99253,7 @@ $export($export.S, 'Math', {
 
 
 /***/ }),
-/* 953 */
+/* 962 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 20.2.2.34 Math.trunc(x)
@@ -97946,7 +99267,7 @@ $export($export.S, 'Math', {
 
 
 /***/ }),
-/* 954 */
+/* 963 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var $export = __webpack_require__(0);
@@ -97975,7 +99296,7 @@ $export($export.S + $export.F * (!!$fromCodePoint && $fromCodePoint.length != 1)
 
 
 /***/ }),
-/* 955 */
+/* 964 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var $export = __webpack_require__(0);
@@ -97999,7 +99320,7 @@ $export($export.S, 'String', {
 
 
 /***/ }),
-/* 956 */
+/* 965 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -98013,7 +99334,7 @@ __webpack_require__(47)('trim', function ($trim) {
 
 
 /***/ }),
-/* 957 */
+/* 966 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -98037,7 +99358,7 @@ __webpack_require__(104)(String, 'String', function (iterated) {
 
 
 /***/ }),
-/* 958 */
+/* 967 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -98053,7 +99374,7 @@ $export($export.P, 'String', {
 
 
 /***/ }),
-/* 959 */
+/* 968 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -98080,7 +99401,7 @@ $export($export.P + $export.F * __webpack_require__(107)(ENDS_WITH), 'String', {
 
 
 /***/ }),
-/* 960 */
+/* 969 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -98099,7 +99420,7 @@ $export($export.P + $export.F * __webpack_require__(107)(INCLUDES), 'String', {
 
 
 /***/ }),
-/* 961 */
+/* 970 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var $export = __webpack_require__(0);
@@ -98111,7 +99432,7 @@ $export($export.P, 'String', {
 
 
 /***/ }),
-/* 962 */
+/* 971 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -98136,7 +99457,7 @@ $export($export.P + $export.F * __webpack_require__(107)(STARTS_WITH), 'String',
 
 
 /***/ }),
-/* 963 */
+/* 972 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -98150,7 +99471,7 @@ __webpack_require__(16)('anchor', function (createHTML) {
 
 
 /***/ }),
-/* 964 */
+/* 973 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -98164,7 +99485,7 @@ __webpack_require__(16)('big', function (createHTML) {
 
 
 /***/ }),
-/* 965 */
+/* 974 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -98178,7 +99499,7 @@ __webpack_require__(16)('blink', function (createHTML) {
 
 
 /***/ }),
-/* 966 */
+/* 975 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -98192,7 +99513,7 @@ __webpack_require__(16)('bold', function (createHTML) {
 
 
 /***/ }),
-/* 967 */
+/* 976 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -98206,7 +99527,7 @@ __webpack_require__(16)('fixed', function (createHTML) {
 
 
 /***/ }),
-/* 968 */
+/* 977 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -98220,7 +99541,7 @@ __webpack_require__(16)('fontcolor', function (createHTML) {
 
 
 /***/ }),
-/* 969 */
+/* 978 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -98234,7 +99555,7 @@ __webpack_require__(16)('fontsize', function (createHTML) {
 
 
 /***/ }),
-/* 970 */
+/* 979 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -98248,7 +99569,7 @@ __webpack_require__(16)('italics', function (createHTML) {
 
 
 /***/ }),
-/* 971 */
+/* 980 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -98262,7 +99583,7 @@ __webpack_require__(16)('link', function (createHTML) {
 
 
 /***/ }),
-/* 972 */
+/* 981 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -98276,7 +99597,7 @@ __webpack_require__(16)('small', function (createHTML) {
 
 
 /***/ }),
-/* 973 */
+/* 982 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -98290,7 +99611,7 @@ __webpack_require__(16)('strike', function (createHTML) {
 
 
 /***/ }),
-/* 974 */
+/* 983 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -98304,7 +99625,7 @@ __webpack_require__(16)('sub', function (createHTML) {
 
 
 /***/ }),
-/* 975 */
+/* 984 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -98318,7 +99639,7 @@ __webpack_require__(16)('sup', function (createHTML) {
 
 
 /***/ }),
-/* 976 */
+/* 985 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 20.3.3.1 / 15.9.4.4 Date.now()
@@ -98328,7 +99649,7 @@ $export($export.S, 'Date', { now: function () { return new Date().getTime(); } }
 
 
 /***/ }),
-/* 977 */
+/* 986 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -98351,12 +99672,12 @@ $export($export.P + $export.F * __webpack_require__(5)(function () {
 
 
 /***/ }),
-/* 978 */
+/* 987 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 20.3.4.36 / 15.9.5.43 Date.prototype.toISOString()
 var $export = __webpack_require__(0);
-var toISOString = __webpack_require__(979);
+var toISOString = __webpack_require__(988);
 
 // PhantomJS / old WebKit has a broken implementations
 $export($export.P + $export.F * (Date.prototype.toISOString !== toISOString), 'Date', {
@@ -98365,7 +99686,7 @@ $export($export.P + $export.F * (Date.prototype.toISOString !== toISOString), 'D
 
 
 /***/ }),
-/* 979 */
+/* 988 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -98398,7 +99719,7 @@ module.exports = (fails(function () {
 
 
 /***/ }),
-/* 980 */
+/* 989 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var DateProto = Date.prototype;
@@ -98416,17 +99737,17 @@ if (new Date(NaN) + '' != INVALID_DATE) {
 
 
 /***/ }),
-/* 981 */
+/* 990 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var TO_PRIMITIVE = __webpack_require__(9)('toPrimitive');
 var proto = Date.prototype;
 
-if (!(TO_PRIMITIVE in proto)) __webpack_require__(19)(proto, TO_PRIMITIVE, __webpack_require__(982));
+if (!(TO_PRIMITIVE in proto)) __webpack_require__(19)(proto, TO_PRIMITIVE, __webpack_require__(991));
 
 
 /***/ }),
-/* 982 */
+/* 991 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -98442,31 +99763,31 @@ module.exports = function (hint) {
 
 
 /***/ }),
-/* 983 */
+/* 992 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 22.1.2.2 / 15.4.3.2 Array.isArray(arg)
 var $export = __webpack_require__(0);
 
-$export($export.S, 'Array', { isArray: __webpack_require__(66) });
+$export($export.S, 'Array', { isArray: __webpack_require__(67) });
 
 
 /***/ }),
-/* 984 */
+/* 993 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
-var ctx = __webpack_require__(22);
+var ctx = __webpack_require__(23);
 var $export = __webpack_require__(0);
 var toObject = __webpack_require__(14);
-var call = __webpack_require__(305);
+var call = __webpack_require__(308);
 var isArrayIter = __webpack_require__(108);
 var toLength = __webpack_require__(10);
 var createProperty = __webpack_require__(109);
 var getIterFn = __webpack_require__(110);
 
-$export($export.S + $export.F * !__webpack_require__(67)(function (iter) { Array.from(iter); }), 'Array', {
+$export($export.S + $export.F * !__webpack_require__(68)(function (iter) { Array.from(iter); }), 'Array', {
   // 22.1.2.1 Array.from(arrayLike, mapfn = undefined, thisArg = undefined)
   from: function from(arrayLike /* , mapfn = undefined, thisArg = undefined */) {
     var O = toObject(arrayLike);
@@ -98496,7 +99817,7 @@ $export($export.S + $export.F * !__webpack_require__(67)(function (iter) { Array
 
 
 /***/ }),
-/* 985 */
+/* 994 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -98522,7 +99843,7 @@ $export($export.S + $export.F * __webpack_require__(5)(function () {
 
 
 /***/ }),
-/* 986 */
+/* 995 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -98541,7 +99862,7 @@ $export($export.P + $export.F * (__webpack_require__(53) != Object || !__webpack
 
 
 /***/ }),
-/* 987 */
+/* 996 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -98576,13 +99897,13 @@ $export($export.P + $export.F * __webpack_require__(5)(function () {
 
 
 /***/ }),
-/* 988 */
+/* 997 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 var $export = __webpack_require__(0);
-var aFunction = __webpack_require__(23);
+var aFunction = __webpack_require__(24);
 var toObject = __webpack_require__(14);
 var fails = __webpack_require__(5);
 var $sort = [].sort;
@@ -98606,13 +99927,13 @@ $export($export.P + $export.F * (fails(function () {
 
 
 /***/ }),
-/* 989 */
+/* 998 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 var $export = __webpack_require__(0);
-var $forEach = __webpack_require__(27)(0);
+var $forEach = __webpack_require__(28)(0);
 var STRICT = __webpack_require__(21)([].forEach, true);
 
 $export($export.P + $export.F * !STRICT, 'Array', {
@@ -98624,11 +99945,11 @@ $export($export.P + $export.F * !STRICT, 'Array', {
 
 
 /***/ }),
-/* 990 */
+/* 999 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var isObject = __webpack_require__(7);
-var isArray = __webpack_require__(66);
+var isArray = __webpack_require__(67);
 var SPECIES = __webpack_require__(9)('species');
 
 module.exports = function (original) {
@@ -98646,13 +99967,13 @@ module.exports = function (original) {
 
 
 /***/ }),
-/* 991 */
+/* 1000 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 var $export = __webpack_require__(0);
-var $map = __webpack_require__(27)(1);
+var $map = __webpack_require__(28)(1);
 
 $export($export.P + $export.F * !__webpack_require__(21)([].map, true), 'Array', {
   // 22.1.3.15 / 15.4.4.19 Array.prototype.map(callbackfn [, thisArg])
@@ -98663,13 +99984,13 @@ $export($export.P + $export.F * !__webpack_require__(21)([].map, true), 'Array',
 
 
 /***/ }),
-/* 992 */
+/* 1001 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 var $export = __webpack_require__(0);
-var $filter = __webpack_require__(27)(2);
+var $filter = __webpack_require__(28)(2);
 
 $export($export.P + $export.F * !__webpack_require__(21)([].filter, true), 'Array', {
   // 22.1.3.7 / 15.4.4.20 Array.prototype.filter(callbackfn [, thisArg])
@@ -98680,13 +100001,13 @@ $export($export.P + $export.F * !__webpack_require__(21)([].filter, true), 'Arra
 
 
 /***/ }),
-/* 993 */
+/* 1002 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 var $export = __webpack_require__(0);
-var $some = __webpack_require__(27)(3);
+var $some = __webpack_require__(28)(3);
 
 $export($export.P + $export.F * !__webpack_require__(21)([].some, true), 'Array', {
   // 22.1.3.23 / 15.4.4.17 Array.prototype.some(callbackfn [, thisArg])
@@ -98697,13 +100018,13 @@ $export($export.P + $export.F * !__webpack_require__(21)([].some, true), 'Array'
 
 
 /***/ }),
-/* 994 */
+/* 1003 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 var $export = __webpack_require__(0);
-var $every = __webpack_require__(27)(4);
+var $every = __webpack_require__(28)(4);
 
 $export($export.P + $export.F * !__webpack_require__(21)([].every, true), 'Array', {
   // 22.1.3.5 / 15.4.4.16 Array.prototype.every(callbackfn [, thisArg])
@@ -98714,13 +100035,13 @@ $export($export.P + $export.F * !__webpack_require__(21)([].every, true), 'Array
 
 
 /***/ }),
-/* 995 */
+/* 1004 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 var $export = __webpack_require__(0);
-var $reduce = __webpack_require__(307);
+var $reduce = __webpack_require__(310);
 
 $export($export.P + $export.F * !__webpack_require__(21)([].reduce, true), 'Array', {
   // 22.1.3.18 / 15.4.4.21 Array.prototype.reduce(callbackfn [, initialValue])
@@ -98731,13 +100052,13 @@ $export($export.P + $export.F * !__webpack_require__(21)([].reduce, true), 'Arra
 
 
 /***/ }),
-/* 996 */
+/* 1005 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 var $export = __webpack_require__(0);
-var $reduce = __webpack_require__(307);
+var $reduce = __webpack_require__(310);
 
 $export($export.P + $export.F * !__webpack_require__(21)([].reduceRight, true), 'Array', {
   // 22.1.3.19 / 15.4.4.22 Array.prototype.reduceRight(callbackfn [, initialValue])
@@ -98748,13 +100069,13 @@ $export($export.P + $export.F * !__webpack_require__(21)([].reduceRight, true), 
 
 
 /***/ }),
-/* 997 */
+/* 1006 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 var $export = __webpack_require__(0);
-var $indexOf = __webpack_require__(64)(false);
+var $indexOf = __webpack_require__(65)(false);
 var $native = [].indexOf;
 var NEGATIVE_ZERO = !!$native && 1 / [1].indexOf(1, -0) < 0;
 
@@ -98770,14 +100091,14 @@ $export($export.P + $export.F * (NEGATIVE_ZERO || !__webpack_require__(21)($nati
 
 
 /***/ }),
-/* 998 */
+/* 1007 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 var $export = __webpack_require__(0);
 var toIObject = __webpack_require__(20);
-var toInteger = __webpack_require__(24);
+var toInteger = __webpack_require__(25);
 var toLength = __webpack_require__(10);
 var $native = [].lastIndexOf;
 var NEGATIVE_ZERO = !!$native && 1 / [1].lastIndexOf(1, -0) < 0;
@@ -98799,19 +100120,19 @@ $export($export.P + $export.F * (NEGATIVE_ZERO || !__webpack_require__(21)($nati
 
 
 /***/ }),
-/* 999 */
+/* 1008 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 22.1.3.3 Array.prototype.copyWithin(target, start, end = this.length)
 var $export = __webpack_require__(0);
 
-$export($export.P, 'Array', { copyWithin: __webpack_require__(308) });
+$export($export.P, 'Array', { copyWithin: __webpack_require__(311) });
 
 __webpack_require__(43)('copyWithin');
 
 
 /***/ }),
-/* 1000 */
+/* 1009 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 22.1.3.6 Array.prototype.fill(value, start = 0, end = this.length)
@@ -98823,14 +100144,14 @@ __webpack_require__(43)('fill');
 
 
 /***/ }),
-/* 1001 */
+/* 1010 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 // 22.1.3.8 Array.prototype.find(predicate, thisArg = undefined)
 var $export = __webpack_require__(0);
-var $find = __webpack_require__(27)(5);
+var $find = __webpack_require__(28)(5);
 var KEY = 'find';
 var forced = true;
 // Shouldn't skip holes
@@ -98844,14 +100165,14 @@ __webpack_require__(43)(KEY);
 
 
 /***/ }),
-/* 1002 */
+/* 1011 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 // 22.1.3.9 Array.prototype.findIndex(predicate, thisArg = undefined)
 var $export = __webpack_require__(0);
-var $find = __webpack_require__(27)(6);
+var $find = __webpack_require__(28)(6);
 var KEY = 'findIndex';
 var forced = true;
 // Shouldn't skip holes
@@ -98865,14 +100186,14 @@ __webpack_require__(43)(KEY);
 
 
 /***/ }),
-/* 1003 */
+/* 1012 */
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(49)('Array');
 
 
 /***/ }),
-/* 1004 */
+/* 1013 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var global = __webpack_require__(4);
@@ -98880,7 +100201,7 @@ var inheritIfRequired = __webpack_require__(99);
 var dP = __webpack_require__(13).f;
 var gOPN = __webpack_require__(41).f;
 var isRegExp = __webpack_require__(106);
-var $flags = __webpack_require__(68);
+var $flags = __webpack_require__(69);
 var $RegExp = global.RegExp;
 var Base = $RegExp;
 var proto = $RegExp.prototype;
@@ -98921,14 +100242,14 @@ __webpack_require__(49)('RegExp');
 
 
 /***/ }),
-/* 1005 */
+/* 1014 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
-__webpack_require__(311);
+__webpack_require__(314);
 var anObject = __webpack_require__(6);
-var $flags = __webpack_require__(68);
+var $flags = __webpack_require__(69);
 var DESCRIPTORS = __webpack_require__(12);
 var TO_STRING = 'toString';
 var $toString = /./[TO_STRING];
@@ -98953,7 +100274,7 @@ if (__webpack_require__(5)(function () { return $toString.call({ source: 'a', fl
 
 
 /***/ }),
-/* 1006 */
+/* 1015 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -98962,10 +100283,10 @@ if (__webpack_require__(5)(function () { return $toString.call({ source: 'a', fl
 var anObject = __webpack_require__(6);
 var toLength = __webpack_require__(10);
 var advanceStringIndex = __webpack_require__(114);
-var regExpExec = __webpack_require__(69);
+var regExpExec = __webpack_require__(70);
 
 // @@match logic
-__webpack_require__(70)('match', 1, function (defined, MATCH, $match, maybeCallNative) {
+__webpack_require__(71)('match', 1, function (defined, MATCH, $match, maybeCallNative) {
   return [
     // `String.prototype.match` method
     // https://tc39.github.io/ecma262/#sec-string.prototype.match
@@ -99000,7 +100321,7 @@ __webpack_require__(70)('match', 1, function (defined, MATCH, $match, maybeCallN
 
 
 /***/ }),
-/* 1007 */
+/* 1016 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -99009,9 +100330,9 @@ __webpack_require__(70)('match', 1, function (defined, MATCH, $match, maybeCallN
 var anObject = __webpack_require__(6);
 var toObject = __webpack_require__(14);
 var toLength = __webpack_require__(10);
-var toInteger = __webpack_require__(24);
+var toInteger = __webpack_require__(25);
 var advanceStringIndex = __webpack_require__(114);
-var regExpExec = __webpack_require__(69);
+var regExpExec = __webpack_require__(70);
 var max = Math.max;
 var min = Math.min;
 var floor = Math.floor;
@@ -99023,7 +100344,7 @@ var maybeToString = function (it) {
 };
 
 // @@replace logic
-__webpack_require__(70)('replace', 2, function (defined, REPLACE, $replace, maybeCallNative) {
+__webpack_require__(71)('replace', 2, function (defined, REPLACE, $replace, maybeCallNative) {
   return [
     // `String.prototype.replace` method
     // https://tc39.github.io/ecma262/#sec-string.prototype.replace
@@ -99125,18 +100446,18 @@ __webpack_require__(70)('replace', 2, function (defined, REPLACE, $replace, mayb
 
 
 /***/ }),
-/* 1008 */
+/* 1017 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
 var anObject = __webpack_require__(6);
-var sameValue = __webpack_require__(296);
-var regExpExec = __webpack_require__(69);
+var sameValue = __webpack_require__(299);
+var regExpExec = __webpack_require__(70);
 
 // @@search logic
-__webpack_require__(70)('search', 1, function (defined, SEARCH, $search, maybeCallNative) {
+__webpack_require__(71)('search', 1, function (defined, SEARCH, $search, maybeCallNative) {
   return [
     // `String.prototype.search` method
     // https://tc39.github.io/ecma262/#sec-string.prototype.search
@@ -99163,7 +100484,7 @@ __webpack_require__(70)('search', 1, function (defined, SEARCH, $search, maybeCa
 
 
 /***/ }),
-/* 1009 */
+/* 1018 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -99174,7 +100495,7 @@ var anObject = __webpack_require__(6);
 var speciesConstructor = __webpack_require__(56);
 var advanceStringIndex = __webpack_require__(114);
 var toLength = __webpack_require__(10);
-var callRegExpExec = __webpack_require__(69);
+var callRegExpExec = __webpack_require__(70);
 var regexpExec = __webpack_require__(113);
 var fails = __webpack_require__(5);
 var $min = Math.min;
@@ -99188,7 +100509,7 @@ var MAX_UINT32 = 0xffffffff;
 var SUPPORTS_Y = !fails(function () { RegExp(MAX_UINT32, 'y'); });
 
 // @@split logic
-__webpack_require__(70)('split', 2, function (defined, SPLIT, $split, maybeCallNative) {
+__webpack_require__(71)('split', 2, function (defined, SPLIT, $split, maybeCallNative) {
   var internalSplit;
   if (
     'abbc'[$SPLIT](/(b)*/)[1] == 'c' ||
@@ -99304,7 +100625,7 @@ __webpack_require__(70)('split', 2, function (defined, SPLIT, $split, maybeCallN
 
 
 /***/ }),
-/* 1010 */
+/* 1019 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var global = __webpack_require__(4);
@@ -99379,7 +100700,7 @@ module.exports = function () {
 
 
 /***/ }),
-/* 1011 */
+/* 1020 */
 /***/ (function(module, exports) {
 
 module.exports = function (exec) {
@@ -99392,17 +100713,17 @@ module.exports = function (exec) {
 
 
 /***/ }),
-/* 1012 */
+/* 1021 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
-var strong = __webpack_require__(315);
+var strong = __webpack_require__(318);
 var validate = __webpack_require__(44);
 var MAP = 'Map';
 
 // 23.1 Map Objects
-module.exports = __webpack_require__(73)(MAP, function (get) {
+module.exports = __webpack_require__(74)(MAP, function (get) {
   return function Map() { return get(this, arguments.length > 0 ? arguments[0] : undefined); };
 }, {
   // 23.1.3.6 Map.prototype.get(key)
@@ -99418,17 +100739,17 @@ module.exports = __webpack_require__(73)(MAP, function (get) {
 
 
 /***/ }),
-/* 1013 */
+/* 1022 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
-var strong = __webpack_require__(315);
+var strong = __webpack_require__(318);
 var validate = __webpack_require__(44);
 var SET = 'Set';
 
 // 23.2 Set Objects
-module.exports = __webpack_require__(73)(SET, function (get) {
+module.exports = __webpack_require__(74)(SET, function (get) {
   return function Set() { return get(this, arguments.length > 0 ? arguments[0] : undefined); };
 }, {
   // 23.2.3.1 Set.prototype.add(value)
@@ -99439,17 +100760,17 @@ module.exports = __webpack_require__(73)(SET, function (get) {
 
 
 /***/ }),
-/* 1014 */
+/* 1023 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 var global = __webpack_require__(4);
-var each = __webpack_require__(27)(0);
+var each = __webpack_require__(28)(0);
 var redefine = __webpack_require__(15);
 var meta = __webpack_require__(33);
-var assign = __webpack_require__(295);
-var weak = __webpack_require__(316);
+var assign = __webpack_require__(298);
+var weak = __webpack_require__(319);
 var isObject = __webpack_require__(7);
 var validate = __webpack_require__(44);
 var NATIVE_WEAK_MAP = __webpack_require__(44);
@@ -99482,7 +100803,7 @@ var methods = {
 };
 
 // 23.3 WeakMap Objects
-var $WeakMap = module.exports = __webpack_require__(73)(WEAK_MAP, wrapper, methods, weak, true, true);
+var $WeakMap = module.exports = __webpack_require__(74)(WEAK_MAP, wrapper, methods, weak, true, true);
 
 // IE11 WeakMap frozen keys fix
 if (NATIVE_WEAK_MAP && IS_IE11) {
@@ -99506,17 +100827,17 @@ if (NATIVE_WEAK_MAP && IS_IE11) {
 
 
 /***/ }),
-/* 1015 */
+/* 1024 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
-var weak = __webpack_require__(316);
+var weak = __webpack_require__(319);
 var validate = __webpack_require__(44);
 var WEAK_SET = 'WeakSet';
 
 // 23.4 WeakSet Objects
-__webpack_require__(73)(WEAK_SET, function (get) {
+__webpack_require__(74)(WEAK_SET, function (get) {
   return function WeakSet() { return get(this, arguments.length > 0 ? arguments[0] : undefined); };
 }, {
   // 23.4.3.1 WeakSet.prototype.add(value)
@@ -99527,13 +100848,13 @@ __webpack_require__(73)(WEAK_SET, function (get) {
 
 
 /***/ }),
-/* 1016 */
+/* 1025 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 var $export = __webpack_require__(0);
-var $typed = __webpack_require__(74);
+var $typed = __webpack_require__(75);
 var buffer = __webpack_require__(116);
 var anObject = __webpack_require__(6);
 var toAbsoluteIndex = __webpack_require__(39);
@@ -99580,17 +100901,17 @@ __webpack_require__(49)(ARRAY_BUFFER);
 
 
 /***/ }),
-/* 1017 */
+/* 1026 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var $export = __webpack_require__(0);
-$export($export.G + $export.W + $export.F * !__webpack_require__(74).ABV, {
+$export($export.G + $export.W + $export.F * !__webpack_require__(75).ABV, {
   DataView: __webpack_require__(116).DataView
 });
 
 
 /***/ }),
-/* 1018 */
+/* 1027 */
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(31)('Int8', 1, function (init) {
@@ -99601,7 +100922,7 @@ __webpack_require__(31)('Int8', 1, function (init) {
 
 
 /***/ }),
-/* 1019 */
+/* 1028 */
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(31)('Uint8', 1, function (init) {
@@ -99612,7 +100933,7 @@ __webpack_require__(31)('Uint8', 1, function (init) {
 
 
 /***/ }),
-/* 1020 */
+/* 1029 */
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(31)('Uint8', 1, function (init) {
@@ -99623,7 +100944,7 @@ __webpack_require__(31)('Uint8', 1, function (init) {
 
 
 /***/ }),
-/* 1021 */
+/* 1030 */
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(31)('Int16', 2, function (init) {
@@ -99634,7 +100955,7 @@ __webpack_require__(31)('Int16', 2, function (init) {
 
 
 /***/ }),
-/* 1022 */
+/* 1031 */
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(31)('Uint16', 2, function (init) {
@@ -99645,7 +100966,7 @@ __webpack_require__(31)('Uint16', 2, function (init) {
 
 
 /***/ }),
-/* 1023 */
+/* 1032 */
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(31)('Int32', 4, function (init) {
@@ -99656,7 +100977,7 @@ __webpack_require__(31)('Int32', 4, function (init) {
 
 
 /***/ }),
-/* 1024 */
+/* 1033 */
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(31)('Uint32', 4, function (init) {
@@ -99667,7 +100988,7 @@ __webpack_require__(31)('Uint32', 4, function (init) {
 
 
 /***/ }),
-/* 1025 */
+/* 1034 */
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(31)('Float32', 4, function (init) {
@@ -99678,7 +100999,7 @@ __webpack_require__(31)('Float32', 4, function (init) {
 
 
 /***/ }),
-/* 1026 */
+/* 1035 */
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(31)('Float64', 8, function (init) {
@@ -99689,12 +101010,12 @@ __webpack_require__(31)('Float64', 8, function (init) {
 
 
 /***/ }),
-/* 1027 */
+/* 1036 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 26.1.1 Reflect.apply(target, thisArgument, argumentsList)
 var $export = __webpack_require__(0);
-var aFunction = __webpack_require__(23);
+var aFunction = __webpack_require__(24);
 var anObject = __webpack_require__(6);
 var rApply = (__webpack_require__(4).Reflect || {}).apply;
 var fApply = Function.apply;
@@ -99711,17 +101032,17 @@ $export($export.S + $export.F * !__webpack_require__(5)(function () {
 
 
 /***/ }),
-/* 1028 */
+/* 1037 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 26.1.2 Reflect.construct(target, argumentsList [, newTarget])
 var $export = __webpack_require__(0);
 var create = __webpack_require__(40);
-var aFunction = __webpack_require__(23);
+var aFunction = __webpack_require__(24);
 var anObject = __webpack_require__(6);
 var isObject = __webpack_require__(7);
 var fails = __webpack_require__(5);
-var bind = __webpack_require__(297);
+var bind = __webpack_require__(300);
 var rConstruct = (__webpack_require__(4).Reflect || {}).construct;
 
 // MS Edge supports only 2 arguments and argumentsList argument is optional
@@ -99764,7 +101085,7 @@ $export($export.S + $export.F * (NEW_TARGET_BUG || ARGS_BUG), 'Reflect', {
 
 
 /***/ }),
-/* 1029 */
+/* 1038 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 26.1.3 Reflect.defineProperty(target, propertyKey, attributes)
@@ -99793,12 +101114,12 @@ $export($export.S + $export.F * __webpack_require__(5)(function () {
 
 
 /***/ }),
-/* 1030 */
+/* 1039 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 26.1.4 Reflect.deleteProperty(target, propertyKey)
 var $export = __webpack_require__(0);
-var gOPD = __webpack_require__(25).f;
+var gOPD = __webpack_require__(26).f;
 var anObject = __webpack_require__(6);
 
 $export($export.S, 'Reflect', {
@@ -99810,7 +101131,7 @@ $export($export.S, 'Reflect', {
 
 
 /***/ }),
-/* 1031 */
+/* 1040 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -99825,7 +101146,7 @@ var Enumerate = function (iterated) {
   var key;
   for (key in iterated) keys.push(key);
 };
-__webpack_require__(304)(Enumerate, 'Object', function () {
+__webpack_require__(307)(Enumerate, 'Object', function () {
   var that = this;
   var keys = that._k;
   var key;
@@ -99843,11 +101164,11 @@ $export($export.S, 'Reflect', {
 
 
 /***/ }),
-/* 1032 */
+/* 1041 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 26.1.6 Reflect.get(target, propertyKey [, receiver])
-var gOPD = __webpack_require__(25);
+var gOPD = __webpack_require__(26);
 var getPrototypeOf = __webpack_require__(42);
 var has = __webpack_require__(18);
 var $export = __webpack_require__(0);
@@ -99870,11 +101191,11 @@ $export($export.S, 'Reflect', { get: get });
 
 
 /***/ }),
-/* 1033 */
+/* 1042 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 26.1.7 Reflect.getOwnPropertyDescriptor(target, propertyKey)
-var gOPD = __webpack_require__(25);
+var gOPD = __webpack_require__(26);
 var $export = __webpack_require__(0);
 var anObject = __webpack_require__(6);
 
@@ -99886,7 +101207,7 @@ $export($export.S, 'Reflect', {
 
 
 /***/ }),
-/* 1034 */
+/* 1043 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 26.1.8 Reflect.getPrototypeOf(target)
@@ -99902,7 +101223,7 @@ $export($export.S, 'Reflect', {
 
 
 /***/ }),
-/* 1035 */
+/* 1044 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 26.1.9 Reflect.has(target, propertyKey)
@@ -99916,7 +101237,7 @@ $export($export.S, 'Reflect', {
 
 
 /***/ }),
-/* 1036 */
+/* 1045 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 26.1.10 Reflect.isExtensible(target)
@@ -99933,17 +101254,17 @@ $export($export.S, 'Reflect', {
 
 
 /***/ }),
-/* 1037 */
+/* 1046 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 26.1.11 Reflect.ownKeys(target)
 var $export = __webpack_require__(0);
 
-$export($export.S, 'Reflect', { ownKeys: __webpack_require__(318) });
+$export($export.S, 'Reflect', { ownKeys: __webpack_require__(321) });
 
 
 /***/ }),
-/* 1038 */
+/* 1047 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 26.1.12 Reflect.preventExtensions(target)
@@ -99965,12 +101286,12 @@ $export($export.S, 'Reflect', {
 
 
 /***/ }),
-/* 1039 */
+/* 1048 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 26.1.13 Reflect.set(target, propertyKey, V [, receiver])
 var dP = __webpack_require__(13);
-var gOPD = __webpack_require__(25);
+var gOPD = __webpack_require__(26);
 var getPrototypeOf = __webpack_require__(42);
 var has = __webpack_require__(18);
 var $export = __webpack_require__(0);
@@ -100004,7 +101325,7 @@ $export($export.S, 'Reflect', { set: set });
 
 
 /***/ }),
-/* 1040 */
+/* 1049 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 26.1.14 Reflect.setPrototypeOf(target, proto)
@@ -100025,22 +101346,22 @@ if (setProto) $export($export.S, 'Reflect', {
 
 
 /***/ }),
-/* 1041 */
+/* 1050 */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(1042);
+__webpack_require__(1051);
 module.exports = __webpack_require__(11).Array.includes;
 
 
 /***/ }),
-/* 1042 */
+/* 1051 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 // https://github.com/tc39/Array.prototype.includes
 var $export = __webpack_require__(0);
-var $includes = __webpack_require__(64)(true);
+var $includes = __webpack_require__(65)(true);
 
 $export($export.P, 'Array', {
   includes: function includes(el /* , fromIndex = 0 */) {
@@ -100052,26 +101373,26 @@ __webpack_require__(43)('includes');
 
 
 /***/ }),
-/* 1043 */
+/* 1052 */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(1044);
+__webpack_require__(1053);
 module.exports = __webpack_require__(11).Array.flatMap;
 
 
 /***/ }),
-/* 1044 */
+/* 1053 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 // https://tc39.github.io/proposal-flatMap/#sec-Array.prototype.flatMap
 var $export = __webpack_require__(0);
-var flattenIntoArray = __webpack_require__(1045);
+var flattenIntoArray = __webpack_require__(1054);
 var toObject = __webpack_require__(14);
 var toLength = __webpack_require__(10);
-var aFunction = __webpack_require__(23);
-var arraySpeciesCreate = __webpack_require__(306);
+var aFunction = __webpack_require__(24);
+var arraySpeciesCreate = __webpack_require__(309);
 
 $export($export.P, 'Array', {
   flatMap: function flatMap(callbackfn /* , thisArg */) {
@@ -100089,16 +101410,16 @@ __webpack_require__(43)('flatMap');
 
 
 /***/ }),
-/* 1045 */
+/* 1054 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 // https://tc39.github.io/proposal-flatMap/#sec-FlattenIntoArray
-var isArray = __webpack_require__(66);
+var isArray = __webpack_require__(67);
 var isObject = __webpack_require__(7);
 var toLength = __webpack_require__(10);
-var ctx = __webpack_require__(22);
+var ctx = __webpack_require__(23);
 var IS_CONCAT_SPREADABLE = __webpack_require__(9)('isConcatSpreadable');
 
 function flattenIntoArray(target, original, source, sourceLen, start, depth, mapper, thisArg) {
@@ -100135,23 +101456,23 @@ module.exports = flattenIntoArray;
 
 
 /***/ }),
-/* 1046 */
+/* 1055 */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(1047);
+__webpack_require__(1056);
 module.exports = __webpack_require__(11).String.padStart;
 
 
 /***/ }),
-/* 1047 */
+/* 1056 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 // https://github.com/tc39/proposal-string-pad-start-end
 var $export = __webpack_require__(0);
-var $pad = __webpack_require__(319);
-var userAgent = __webpack_require__(72);
+var $pad = __webpack_require__(322);
+var userAgent = __webpack_require__(73);
 
 // https://github.com/zloirock/core-js/issues/280
 var WEBKIT_BUG = /Version\/10\.\d+(\.\d+)?( Mobile\/\w+)? Safari\//.test(userAgent);
@@ -100164,23 +101485,23 @@ $export($export.P + $export.F * WEBKIT_BUG, 'String', {
 
 
 /***/ }),
-/* 1048 */
+/* 1057 */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(1049);
+__webpack_require__(1058);
 module.exports = __webpack_require__(11).String.padEnd;
 
 
 /***/ }),
-/* 1049 */
+/* 1058 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 // https://github.com/tc39/proposal-string-pad-start-end
 var $export = __webpack_require__(0);
-var $pad = __webpack_require__(319);
-var userAgent = __webpack_require__(72);
+var $pad = __webpack_require__(322);
+var userAgent = __webpack_require__(73);
 
 // https://github.com/zloirock/core-js/issues/280
 var WEBKIT_BUG = /Version\/10\.\d+(\.\d+)?( Mobile\/\w+)? Safari\//.test(userAgent);
@@ -100193,15 +101514,15 @@ $export($export.P + $export.F * WEBKIT_BUG, 'String', {
 
 
 /***/ }),
-/* 1050 */
+/* 1059 */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(1051);
+__webpack_require__(1060);
 module.exports = __webpack_require__(11).String.trimLeft;
 
 
 /***/ }),
-/* 1051 */
+/* 1060 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -100215,15 +101536,15 @@ __webpack_require__(47)('trimLeft', function ($trim) {
 
 
 /***/ }),
-/* 1052 */
+/* 1061 */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(1053);
+__webpack_require__(1062);
 module.exports = __webpack_require__(11).String.trimRight;
 
 
 /***/ }),
-/* 1053 */
+/* 1062 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -100237,37 +101558,37 @@ __webpack_require__(47)('trimRight', function ($trim) {
 
 
 /***/ }),
-/* 1054 */
+/* 1063 */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(1055);
+__webpack_require__(1064);
 module.exports = __webpack_require__(93).f('asyncIterator');
 
 
 /***/ }),
-/* 1055 */
+/* 1064 */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(291)('asyncIterator');
+__webpack_require__(294)('asyncIterator');
 
 
 /***/ }),
-/* 1056 */
+/* 1065 */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(1057);
+__webpack_require__(1066);
 module.exports = __webpack_require__(11).Object.getOwnPropertyDescriptors;
 
 
 /***/ }),
-/* 1057 */
+/* 1066 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // https://github.com/tc39/proposal-object-getownpropertydescriptors
 var $export = __webpack_require__(0);
-var ownKeys = __webpack_require__(318);
+var ownKeys = __webpack_require__(321);
 var toIObject = __webpack_require__(20);
-var gOPD = __webpack_require__(25);
+var gOPD = __webpack_require__(26);
 var createProperty = __webpack_require__(109);
 
 $export($export.S, 'Object', {
@@ -100288,20 +101609,20 @@ $export($export.S, 'Object', {
 
 
 /***/ }),
-/* 1058 */
+/* 1067 */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(1059);
+__webpack_require__(1068);
 module.exports = __webpack_require__(11).Object.values;
 
 
 /***/ }),
-/* 1059 */
+/* 1068 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // https://github.com/tc39/proposal-object-values-entries
 var $export = __webpack_require__(0);
-var $values = __webpack_require__(320)(false);
+var $values = __webpack_require__(323)(false);
 
 $export($export.S, 'Object', {
   values: function values(it) {
@@ -100311,20 +101632,20 @@ $export($export.S, 'Object', {
 
 
 /***/ }),
-/* 1060 */
+/* 1069 */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(1061);
+__webpack_require__(1070);
 module.exports = __webpack_require__(11).Object.entries;
 
 
 /***/ }),
-/* 1061 */
+/* 1070 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // https://github.com/tc39/proposal-object-values-entries
 var $export = __webpack_require__(0);
-var $entries = __webpack_require__(320)(true);
+var $entries = __webpack_require__(323)(true);
 
 $export($export.S, 'Object', {
   entries: function entries(it) {
@@ -100334,18 +101655,18 @@ $export($export.S, 'Object', {
 
 
 /***/ }),
-/* 1062 */
+/* 1071 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
-__webpack_require__(312);
-__webpack_require__(1063);
+__webpack_require__(315);
+__webpack_require__(1072);
 module.exports = __webpack_require__(11).Promise['finally'];
 
 
 /***/ }),
-/* 1063 */
+/* 1072 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -100355,7 +101676,7 @@ var $export = __webpack_require__(0);
 var core = __webpack_require__(11);
 var global = __webpack_require__(4);
 var speciesConstructor = __webpack_require__(56);
-var promiseResolve = __webpack_require__(314);
+var promiseResolve = __webpack_require__(317);
 
 $export($export.P + $export.R, 'Promise', { 'finally': function (onFinally) {
   var C = speciesConstructor(this, core.Promise || global.Promise);
@@ -100372,23 +101693,23 @@ $export($export.P + $export.R, 'Promise', { 'finally': function (onFinally) {
 
 
 /***/ }),
-/* 1064 */
+/* 1073 */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(1065);
-__webpack_require__(1066);
-__webpack_require__(1067);
+__webpack_require__(1074);
+__webpack_require__(1075);
+__webpack_require__(1076);
 module.exports = __webpack_require__(11);
 
 
 /***/ }),
-/* 1065 */
+/* 1074 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // ie9- setTimeout & setInterval additional parameters fix
 var global = __webpack_require__(4);
 var $export = __webpack_require__(0);
-var userAgent = __webpack_require__(72);
+var userAgent = __webpack_require__(73);
 var slice = [].slice;
 var MSIE = /MSIE .\./.test(userAgent); // <- dirty ie9- check
 var wrap = function (set) {
@@ -100408,7 +101729,7 @@ $export($export.G + $export.B + $export.F * MSIE, {
 
 
 /***/ }),
-/* 1066 */
+/* 1075 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var $export = __webpack_require__(0);
@@ -100420,7 +101741,7 @@ $export($export.G + $export.B, {
 
 
 /***/ }),
-/* 1067 */
+/* 1076 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var $iterators = __webpack_require__(112);
@@ -100484,7 +101805,7 @@ for (var collections = getKeys(DOMIterables), i = 0; i < collections.length; i++
 
 
 /***/ }),
-/* 1068 */
+/* 1077 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -101200,10 +102521,10 @@ try {
   // problems, please detail your unique predicament in a GitHub issue.
   Function("r", "regeneratorRuntime = r")(runtime);
 }
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(1069)(module)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(1078)(module)))
 
 /***/ }),
-/* 1069 */
+/* 1078 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -101235,32 +102556,32 @@ module.exports = function (module) {
 };
 
 /***/ }),
-/* 1070 */
+/* 1079 */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(1071);
-module.exports = __webpack_require__(321).global;
+__webpack_require__(1080);
+module.exports = __webpack_require__(324).global;
 
 
 /***/ }),
-/* 1071 */
+/* 1080 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // https://github.com/tc39/proposal-global
-var $export = __webpack_require__(1072);
+var $export = __webpack_require__(1081);
 
 $export($export.G, { global: __webpack_require__(117) });
 
 
 /***/ }),
-/* 1072 */
+/* 1081 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var global = __webpack_require__(117);
-var core = __webpack_require__(321);
-var ctx = __webpack_require__(1073);
-var hide = __webpack_require__(1075);
-var has = __webpack_require__(1082);
+var core = __webpack_require__(324);
+var ctx = __webpack_require__(1082);
+var hide = __webpack_require__(1084);
+var has = __webpack_require__(1091);
 var PROTOTYPE = 'prototype';
 
 var $export = function (type, name, source) {
@@ -101321,11 +102642,11 @@ module.exports = $export;
 
 
 /***/ }),
-/* 1073 */
+/* 1082 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // optional / simple context binding
-var aFunction = __webpack_require__(1074);
+var aFunction = __webpack_require__(1083);
 module.exports = function (fn, that, length) {
   aFunction(fn);
   if (that === undefined) return fn;
@@ -101347,7 +102668,7 @@ module.exports = function (fn, that, length) {
 
 
 /***/ }),
-/* 1074 */
+/* 1083 */
 /***/ (function(module, exports) {
 
 module.exports = function (it) {
@@ -101357,11 +102678,11 @@ module.exports = function (it) {
 
 
 /***/ }),
-/* 1075 */
+/* 1084 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var dP = __webpack_require__(1076);
-var createDesc = __webpack_require__(1081);
+var dP = __webpack_require__(1085);
+var createDesc = __webpack_require__(1090);
 module.exports = __webpack_require__(119) ? function (object, key, value) {
   return dP.f(object, key, createDesc(1, value));
 } : function (object, key, value) {
@@ -101371,12 +102692,12 @@ module.exports = __webpack_require__(119) ? function (object, key, value) {
 
 
 /***/ }),
-/* 1076 */
+/* 1085 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var anObject = __webpack_require__(1077);
-var IE8_DOM_DEFINE = __webpack_require__(1078);
-var toPrimitive = __webpack_require__(1080);
+var anObject = __webpack_require__(1086);
+var IE8_DOM_DEFINE = __webpack_require__(1087);
+var toPrimitive = __webpack_require__(1089);
 var dP = Object.defineProperty;
 
 exports.f = __webpack_require__(119) ? Object.defineProperty : function defineProperty(O, P, Attributes) {
@@ -101393,7 +102714,7 @@ exports.f = __webpack_require__(119) ? Object.defineProperty : function definePr
 
 
 /***/ }),
-/* 1077 */
+/* 1086 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var isObject = __webpack_require__(118);
@@ -101404,16 +102725,16 @@ module.exports = function (it) {
 
 
 /***/ }),
-/* 1078 */
+/* 1087 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = !__webpack_require__(119) && !__webpack_require__(322)(function () {
-  return Object.defineProperty(__webpack_require__(1079)('div'), 'a', { get: function () { return 7; } }).a != 7;
+module.exports = !__webpack_require__(119) && !__webpack_require__(325)(function () {
+  return Object.defineProperty(__webpack_require__(1088)('div'), 'a', { get: function () { return 7; } }).a != 7;
 });
 
 
 /***/ }),
-/* 1079 */
+/* 1088 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var isObject = __webpack_require__(118);
@@ -101426,7 +102747,7 @@ module.exports = function (it) {
 
 
 /***/ }),
-/* 1080 */
+/* 1089 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 7.1.1 ToPrimitive(input [, PreferredType])
@@ -101444,7 +102765,7 @@ module.exports = function (it, S) {
 
 
 /***/ }),
-/* 1081 */
+/* 1090 */
 /***/ (function(module, exports) {
 
 module.exports = function (bitmap, value) {
@@ -101458,7 +102779,7 @@ module.exports = function (bitmap, value) {
 
 
 /***/ }),
-/* 1082 */
+/* 1091 */
 /***/ (function(module, exports) {
 
 var hasOwnProperty = {}.hasOwnProperty;
@@ -101468,7 +102789,7 @@ module.exports = function (it, key) {
 
 
 /***/ }),
-/* 1083 */
+/* 1092 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -101476,10 +102797,10 @@ module.exports = function (it, key) {
 // To use it:  require('es6-promise/auto');
 
 
-module.exports = __webpack_require__(1084).polyfill();
+module.exports = __webpack_require__(1093).polyfill();
 
 /***/ }),
-/* 1084 */
+/* 1093 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -102660,18 +103981,9 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
   Promise$1.Promise = Promise$1;
   return Promise$1;
 });
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(76), __webpack_require__(17)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(77), __webpack_require__(17)))
 
 /***/ }),
-/* 1085 */,
-/* 1086 */,
-/* 1087 */,
-/* 1088 */,
-/* 1089 */,
-/* 1090 */,
-/* 1091 */,
-/* 1092 */,
-/* 1093 */,
 /* 1094 */,
 /* 1095 */,
 /* 1096 */,
@@ -102984,22 +104296,31 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 /* 1403 */,
 /* 1404 */,
 /* 1405 */,
-/* 1406 */
+/* 1406 */,
+/* 1407 */,
+/* 1408 */,
+/* 1409 */,
+/* 1410 */,
+/* 1411 */,
+/* 1412 */,
+/* 1413 */,
+/* 1414 */,
+/* 1415 */,
+/* 1416 */,
+/* 1417 */
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(123);
-__webpack_require__(832);
-__webpack_require__(833);
-__webpack_require__(834);
-__webpack_require__(835);
-__webpack_require__(836);
-__webpack_require__(837);
-__webpack_require__(896);
-__webpack_require__(1083);
-__webpack_require__(838);
-__webpack_require__(839);
-__webpack_require__(215);
-__webpack_require__(216);
+__webpack_require__(841);
+__webpack_require__(842);
+__webpack_require__(843);
+__webpack_require__(844);
+__webpack_require__(845);
+__webpack_require__(846);
+__webpack_require__(905);
+__webpack_require__(1092);
+__webpack_require__(847);
+__webpack_require__(848);
 __webpack_require__(217);
 __webpack_require__(218);
 __webpack_require__(219);
@@ -103014,19 +104335,22 @@ __webpack_require__(227);
 __webpack_require__(228);
 __webpack_require__(229);
 __webpack_require__(230);
+__webpack_require__(231);
+__webpack_require__(232);
+__webpack_require__(233);
 __webpack_require__(124);
 __webpack_require__(127);
 __webpack_require__(129);
-__webpack_require__(323);
-__webpack_require__(324);
+__webpack_require__(326);
+__webpack_require__(327);
 __webpack_require__(130);
 __webpack_require__(131);
 __webpack_require__(132);
 __webpack_require__(133);
 __webpack_require__(134);
 __webpack_require__(135);
-__webpack_require__(325);
-__webpack_require__(326);
+__webpack_require__(328);
+__webpack_require__(329);
 __webpack_require__(136);
 __webpack_require__(137);
 __webpack_require__(138);
@@ -103035,15 +104359,12 @@ __webpack_require__(140);
 __webpack_require__(141);
 __webpack_require__(142);
 __webpack_require__(143);
-__webpack_require__(327);
-__webpack_require__(328);
-__webpack_require__(329);
 __webpack_require__(330);
 __webpack_require__(331);
-__webpack_require__(144);
 __webpack_require__(332);
 __webpack_require__(333);
 __webpack_require__(334);
+__webpack_require__(144);
 __webpack_require__(335);
 __webpack_require__(336);
 __webpack_require__(337);
@@ -103052,32 +104373,32 @@ __webpack_require__(339);
 __webpack_require__(340);
 __webpack_require__(341);
 __webpack_require__(342);
-__webpack_require__(145);
 __webpack_require__(343);
+__webpack_require__(344);
+__webpack_require__(345);
+__webpack_require__(145);
+__webpack_require__(346);
 __webpack_require__(146);
 __webpack_require__(147);
 __webpack_require__(148);
 __webpack_require__(149);
 __webpack_require__(150);
 __webpack_require__(151);
-__webpack_require__(344);
-__webpack_require__(345);
-__webpack_require__(346);
 __webpack_require__(347);
-__webpack_require__(840);
-__webpack_require__(841);
-__webpack_require__(842);
-__webpack_require__(843);
-__webpack_require__(844);
-__webpack_require__(845);
-__webpack_require__(846);
-__webpack_require__(847);
-__webpack_require__(848);
 __webpack_require__(348);
-__webpack_require__(152);
 __webpack_require__(349);
 __webpack_require__(350);
+__webpack_require__(849);
+__webpack_require__(850);
+__webpack_require__(851);
+__webpack_require__(852);
+__webpack_require__(853);
+__webpack_require__(854);
+__webpack_require__(855);
+__webpack_require__(856);
+__webpack_require__(857);
 __webpack_require__(351);
+__webpack_require__(152);
 __webpack_require__(352);
 __webpack_require__(353);
 __webpack_require__(354);
@@ -103120,13 +104441,13 @@ __webpack_require__(390);
 __webpack_require__(391);
 __webpack_require__(392);
 __webpack_require__(393);
+__webpack_require__(394);
+__webpack_require__(395);
+__webpack_require__(396);
 __webpack_require__(153);
 __webpack_require__(154);
 __webpack_require__(155);
-__webpack_require__(886);
-__webpack_require__(231);
-__webpack_require__(232);
-__webpack_require__(233);
+__webpack_require__(895);
 __webpack_require__(234);
 __webpack_require__(235);
 __webpack_require__(236);
@@ -103182,25 +104503,25 @@ __webpack_require__(285);
 __webpack_require__(286);
 __webpack_require__(287);
 __webpack_require__(288);
-__webpack_require__(850);
-__webpack_require__(851);
-__webpack_require__(394);
-__webpack_require__(395);
-__webpack_require__(396);
+__webpack_require__(289);
+__webpack_require__(290);
+__webpack_require__(291);
+__webpack_require__(859);
+__webpack_require__(860);
 __webpack_require__(397);
 __webpack_require__(398);
 __webpack_require__(399);
 __webpack_require__(400);
 __webpack_require__(401);
-__webpack_require__(852);
-__webpack_require__(853);
-__webpack_require__(854);
-__webpack_require__(855);
-__webpack_require__(856);
-__webpack_require__(857);
 __webpack_require__(402);
 __webpack_require__(403);
 __webpack_require__(404);
+__webpack_require__(861);
+__webpack_require__(862);
+__webpack_require__(863);
+__webpack_require__(864);
+__webpack_require__(865);
+__webpack_require__(866);
 __webpack_require__(405);
 __webpack_require__(406);
 __webpack_require__(407);
@@ -103244,10 +104565,10 @@ __webpack_require__(444);
 __webpack_require__(445);
 __webpack_require__(446);
 __webpack_require__(447);
-__webpack_require__(858);
 __webpack_require__(448);
 __webpack_require__(449);
 __webpack_require__(450);
+__webpack_require__(867);
 __webpack_require__(451);
 __webpack_require__(452);
 __webpack_require__(453);
@@ -103259,13 +104580,13 @@ __webpack_require__(458);
 __webpack_require__(459);
 __webpack_require__(460);
 __webpack_require__(461);
-__webpack_require__(859);
-__webpack_require__(860);
-__webpack_require__(861);
-__webpack_require__(862);
 __webpack_require__(462);
 __webpack_require__(463);
 __webpack_require__(464);
+__webpack_require__(868);
+__webpack_require__(869);
+__webpack_require__(870);
+__webpack_require__(871);
 __webpack_require__(465);
 __webpack_require__(466);
 __webpack_require__(467);
@@ -103295,15 +104616,9 @@ __webpack_require__(490);
 __webpack_require__(491);
 __webpack_require__(492);
 __webpack_require__(493);
-__webpack_require__(863);
-__webpack_require__(864);
-__webpack_require__(865);
-__webpack_require__(866);
-__webpack_require__(867);
-__webpack_require__(868);
-__webpack_require__(869);
-__webpack_require__(870);
-__webpack_require__(871);
+__webpack_require__(494);
+__webpack_require__(495);
+__webpack_require__(496);
 __webpack_require__(872);
 __webpack_require__(873);
 __webpack_require__(874);
@@ -103311,9 +104626,15 @@ __webpack_require__(875);
 __webpack_require__(876);
 __webpack_require__(877);
 __webpack_require__(878);
-__webpack_require__(494);
-__webpack_require__(495);
-__webpack_require__(496);
+__webpack_require__(879);
+__webpack_require__(880);
+__webpack_require__(881);
+__webpack_require__(882);
+__webpack_require__(883);
+__webpack_require__(884);
+__webpack_require__(885);
+__webpack_require__(886);
+__webpack_require__(887);
 __webpack_require__(497);
 __webpack_require__(498);
 __webpack_require__(499);
@@ -103352,17 +104673,20 @@ __webpack_require__(531);
 __webpack_require__(532);
 __webpack_require__(533);
 __webpack_require__(534);
-__webpack_require__(879);
-__webpack_require__(880);
-__webpack_require__(881);
 __webpack_require__(535);
 __webpack_require__(536);
 __webpack_require__(537);
+__webpack_require__(888);
+__webpack_require__(889);
+__webpack_require__(890);
 __webpack_require__(538);
 __webpack_require__(539);
 __webpack_require__(540);
 __webpack_require__(541);
 __webpack_require__(542);
+__webpack_require__(543);
+__webpack_require__(544);
+__webpack_require__(545);
 __webpack_require__(156);
 __webpack_require__(157);
 __webpack_require__(158);
@@ -103421,9 +104745,8 @@ __webpack_require__(210);
 __webpack_require__(211);
 __webpack_require__(212);
 __webpack_require__(213);
-__webpack_require__(543);
-__webpack_require__(544);
-__webpack_require__(545);
+__webpack_require__(214);
+__webpack_require__(215);
 __webpack_require__(546);
 __webpack_require__(547);
 __webpack_require__(548);
@@ -103590,9 +104913,13 @@ __webpack_require__(708);
 __webpack_require__(709);
 __webpack_require__(710);
 __webpack_require__(711);
-__webpack_require__(889);
-__webpack_require__(849);
-module.exports = __webpack_require__(712);
+__webpack_require__(712);
+__webpack_require__(713);
+__webpack_require__(714);
+__webpack_require__(715);
+__webpack_require__(898);
+__webpack_require__(858);
+module.exports = __webpack_require__(716);
 
 
 /***/ })

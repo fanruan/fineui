@@ -8,7 +8,7 @@
 BI.FlexWrapperVerticalLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.FlexWrapperVerticalLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-flex-scrollable-vertical-layout clearfix",
+            baseCls: "bi-f-s-v clearfix",
             horizontalAlign: BI.HorizontalAlign.Left,
             verticalAlign: BI.VerticalAlign.Top,
             rowSize: [],
@@ -25,7 +25,7 @@ BI.FlexWrapperVerticalLayout = BI.inherit(BI.Layout, {
     render: function () {
         BI.FlexWrapperVerticalLayout.superclass.render.apply(this, arguments);
         var o = this.options;
-        this.$wrapper = BI.Widget._renderEngine.createElement("<div>").addClass("flex-scrollable-vertical-layout-wrapper h-" + o.horizontalAlign).addClass("v-" + o.verticalAlign);
+        this.$wrapper = BI.Widget._renderEngine.createElement("<div>").addClass("f-s-v-w h-" + o.horizontalAlign).addClass("v-" + o.verticalAlign);
         this.populate(this.options.items);
     },
 
@@ -35,35 +35,37 @@ BI.FlexWrapperVerticalLayout = BI.inherit(BI.Layout, {
         w.element.css({
             position: "relative"
         });
-        if (o.verticalAlign === BI.VerticalAlign.Top || o.verticalAlign === BI.VerticalAlign.Bottom) {
-            w.element.css({
-                "flex-shrink": "0"
-            });
+        if (o.rowSize[i] !== "auto") {
+            if (o.verticalAlign === BI.VerticalAlign.Stretch && o.rowSize[i] !== "") {
+                w.element.addClass("fill");
+            } else {
+                w.element.addClass("shrink-none");
+            }
         }
         if (o.rowSize[i] > 0) {
-            w.element.height(o.rowSize[i] <= 1 ? (o.rowSize[i] * 100 + "%") : o.rowSize[i]);
+            w.element.height(o.rowSize[i] <= 1 ? ((o.rowSize[i] * 100).toFixed(1) + "%") : (o.rowSize[i] / BI.pixRatio + BI.pixUnit));
         }
         if (o.rowSize[i] === "fill") {
-            w.element.css("flex", "1");
+            w.element.addClass("fill");
         }
         if (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
             w.element.css({
-                "margin-top": (i === 0 ? o.vgap : 0) + o.tgap + (item.tgap || 0) + (item.vgap || 0) + "px"
+                "margin-top": ((i === 0 ? o.vgap : 0) + o.tgap + (item.tgap || 0) + (item.vgap || 0)) / BI.pixRatio + BI.pixUnit
             });
         }
         if (o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0) !== 0) {
             w.element.css({
-                "margin-left": o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0) + "px"
+                "margin-left": (o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0)) / BI.pixRatio + BI.pixUnit
             });
         }
         if (o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0) !== 0) {
             w.element.css({
-                "margin-right": o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0) + "px"
+                "margin-right": (o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0)) / BI.pixRatio + BI.pixUnit
             });
         }
         if (o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0) !== 0) {
             w.element.css({
-                "margin-bottom": o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0) + "px"
+                "margin-bottom": (o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0)) / BI.pixRatio + BI.pixUnit
             });
         }
         return w;
