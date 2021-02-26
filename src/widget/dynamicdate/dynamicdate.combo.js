@@ -16,12 +16,6 @@ BI.DynamicDateCombo = BI.inherit(BI.Single, {
         supportDynamic: true,
     },
 
-    _init: function () {
-        var o = this.options;
-        o.height -= 2;
-        BI.DynamicDateCombo.superclass._init.apply(this, arguments);
-    },
-
     render: function () {
         var self = this, opts = this.options;
         this.storeTriggerValue = "";
@@ -61,7 +55,7 @@ BI.DynamicDateCombo = BI.inherit(BI.Single, {
                             format: opts.format,
                             allowEdit: opts.allowEdit,
                             watermark: opts.watermark,
-                            height: opts.height,
+                            height: opts.height - 2,
                             value: opts.value,
                             ref: function () {
                                 self.trigger = this;
