@@ -389,9 +389,9 @@ BI.BasicButton = BI.inherit(BI.Single, {
         return this.options.text;
     },
 
-    setValue: function (text) {
+    setValue: function (value) {
         BI.BasicButton.superclass.setValue.apply(this, arguments);
-        this.options.setText && this.options.setText.call(this, text);
+        this.options.setValue && this.options.setValue.call(this, value);
     },
 
     _setEnable: function (enable) {
