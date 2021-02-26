@@ -1,4 +1,4 @@
-/*! time: 2021-2-24 09:30:32 */
+/*! time: 2021-2-24 14:40:42 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -30499,6 +30499,9 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
             baseCls: "bi-textarea-editor",
             value: "",
             errorText: "",
+            adjustYOffset: 2,
+            adjustXOffset: 0,
+            offsetStyle: "left",
             validationChecker: function () {
                 return true;
             },
@@ -30626,7 +30629,9 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
         }
         if (!this.disabledError && BI.isKey(errorText)) {
             BI.Bubbles[b ? "show" : "hide"](this.getName(), errorText, this, {
-                adjustYOffset: 2
+                adjustYOffset: o.adjustYOffset,
+                adjustXOffset: o.adjustXOffset,
+                offsetStyle: o.offsetStyle,
             });
             return BI.Bubbles.get(this.getName());
         }
@@ -48343,7 +48348,7 @@ BI.MultiLayerDownListPopup = BI.inherit(BI.Pane, {
                     };
                     self._createChildren(item);
                 } else {
-                    item.type = "bi.down_list_item";
+                    item.type = item.type || "bi.down_list_item";
                     item.title = item.title || item.text;
                     item.textRgap = 10;
                     item.isNeedAdjustWidth = false;
@@ -48391,7 +48396,7 @@ BI.MultiLayerDownListPopup = BI.inherit(BI.Pane, {
             var fatherValue = BI.deepClone(self._formatEL(item).el.value);
             var childValue = BI.deepClone(child.value);
             self.singleValues.push(child.value);
-            child.type = "bi.down_list_item";
+            child.type = child.type || "bi.down_list_item";
             child.extraCls = " child-down-list-item";
             child.title = child.title || child.text;
             child.textRgap = 10;
