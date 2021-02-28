@@ -72,6 +72,9 @@
 
         // 获得一个当前对象的引用
         _initRef: function () {
+            if (this.options.__ref) {
+                this.options.__ref.call(this, this);
+            }
             if (this.options.ref) {
                 this.options.ref.call(this, this);
             }
@@ -79,6 +82,10 @@
 
         //释放当前对象
         _purgeRef: function () {
+            if (this.options.__ref) {
+                this.options.__ref.call(null);
+                this.options.__ref = null;
+            }
             if (this.options.ref) {
                 this.options.ref.call(null);
                 this.options.ref = null;

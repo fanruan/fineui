@@ -7,7 +7,7 @@
  */
 
 !(function () {
-    function callLifeHook(self, life) {
+    function callLifeHook (self, life) {
         var hook = self.options[life] || self[life];
         if (hook) {
             var hooks = BI.isArray(hook) ? hook : [hook];
@@ -32,7 +32,8 @@
                 baseCls: "",
                 extraCls: "",
                 cls: "",
-                css: null
+                css: null,
+                updateMode: "manual" // manual / auto
             });
         },
 
@@ -75,6 +76,10 @@
 
         update: function () {
         },
+
+        beforeUpdate: null,
+
+        updated: null,
 
         beforeDestroy: null,
 
@@ -242,6 +247,20 @@
         },
 
         _mountChildren: null,
+
+        _update: function (nextProps) {
+            var o = this.options;
+            callLifeHook(this, "beforeUpdate");
+            var nextChange = {};
+            BI.each(nextProps, function (key, value) {
+                if (o[key] !== value) {
+                    nextChange[key] = value;
+                }
+            });
+            var res = BI.isNotEmptyObject(nextChange) && this.update(nextChange);
+            callLifeHook(this, "updated");
+            return res;
+        },
 
         isMounted: function () {
             return this._isMounted;
@@ -534,12 +553,12 @@
         BI.Widget.context = context = contextStack.pop();
     };
 
-    function pushTarget(_current) {
+    function pushTarget (_current) {
         if (current) currentStack.push(current);
         BI.Widget.current = current = _current;
     }
 
-    function popTarget() {
+    function popTarget () {
         BI.Widget.current = current = currentStack.pop();
     }
 

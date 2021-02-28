@@ -199,11 +199,20 @@ BI.Single = BI.inherit(BI.Widget, {
         return this.options.value;
     },
 
+    update: function (props) {
+        if ("value" in props) {
+            this.setValue(props.value);
+        }
+        if ("text" in props) {
+            this.setText(props.text);
+        }
+    },
+
     destroyed: function () {
         if (BI.isNotNull(this.showTimeout)) {
             clearTimeout(this.showTimeout);
             this.showTimeout = null;
         }
         BI.Tooltips.remove(this.getName());
-    },
+    }
 });

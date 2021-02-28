@@ -183,6 +183,79 @@
         needPop && popTarget();
     };
 
+    BI.Widget.prototype._initElement = function () {
+        var self = this;
+        var render = BI.isFunction(this.options.render) ? this.options.render : this.render;
+        var els;
+        if (this.options.updateMode === "auto") {
+            // 自动更新模式
+            var childComponents = {};
+            var rendered = false;
+            initWatch(this, {});
+            this._watchers.push(Fix.watch(this.model, function () {
+                if (rendered) {
+                    var newEls = render && render.call(this);
+                    BI.each(childComponents, function (i, childComponent) {
+                        var nextProps = BI.get([newEls], childComponent.path);
+                        if (nextProps) {
+                            var shouldUpdate;
+                            if (shouldUpdate = (childComponent.component.shouldUpdate && childComponent.component.shouldUpdate(nextProps))) {
+                                childComponent.component._update(shouldUpdate === true ? nextProps : shouldUpdate);
+                            } else {
+                                childComponent.component._update(nextProps);
+                            }
+                            childComponent.props = BI.extend(childComponent.props, nextProps);
+                        }
+                    });
+                } else {
+                    els = render && render.call(this);
+
+                    function traverse (parent, path) {
+                        BI.each(parent, function (i, child) {
+                            const childPath = path.concat(i);
+                            if (BI.isArray(child)) {
+                                traverse(child, childPath);
+                            } else if (BI.isPlainObject(child)) {
+                                if (child.type) {
+                                    child.__ref = function (_ref) {
+                                        if (_ref) {
+                                            var comp = childComponents[this.getName()] = {};
+                                            comp.component = _ref;
+                                            comp.props = child;
+                                            comp.path = childPath;
+                                        } else {
+                                            delete childComponents[this.getName()];
+                                        }
+                                    };
+                                }
+                                traverse(child, childPath);
+                            }
+                        });
+                    }
+
+                    traverse([els], []);
+                    rendered = true;
+                }
+            }));
+        } else {
+            els = render && render.call(this);
+        }
+        if (BI.isPlainObject(els)) {
+            els = [els];
+        }
+        if (BI.isArray(els)) {
+            BI.each(els, function (i, el) {
+                if (el) {
+                    BI._lazyCreateWidget(el, {
+                        element: self
+                    });
+                }
+            });
+        }
+        // if (this._isRoot === true || !(this instanceof BI.Layout)) {
+        this._mount();
+    };
+
     var unMount = BI.Widget.prototype.__d;
     BI.Widget.prototype.__d = function () {
         try {
