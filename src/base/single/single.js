@@ -199,7 +199,10 @@ BI.Single = BI.inherit(BI.Widget, {
         return this.options.value;
     },
 
-    update: function (props) {
+    update: function (props, shouldUpdate) {
+        if (BI.isObject(shouldUpdate)) {
+            props = shouldUpdate;
+        }
         if ("value" in props) {
             this.setValue(props.value);
         }
