@@ -208,7 +208,7 @@ BI.Single = BI.inherit(BI.Widget, {
             this.setValue(props.value);
         }
         if ("text" in props) {
-            this.setText(props.text);
+            this.setText && this.setText(props.text);
         }
     },
 
