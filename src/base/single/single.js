@@ -192,6 +192,7 @@ BI.Single = BI.inherit(BI.Widget, {
     setValue: function (val) {
         if (!this.options.readonly) {
             this.options.value = val;
+            this.options.setValue && this.options.setValue(val);
         }
     },
 
@@ -219,3 +220,4 @@ BI.Single = BI.inherit(BI.Widget, {
         BI.Tooltips.remove(this.getName());
     }
 });
+BI.shortcut("bi.single", BI.Single);
