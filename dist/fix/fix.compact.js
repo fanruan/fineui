@@ -187,11 +187,10 @@
         var self = this;
         var render = BI.isFunction(this.options.render) ? this.options.render : this.render;
         var els;
-        if (this.options.updateMode === "auto") {
+        if (this.options.updateMode === "auto" && this._store) {
             // 自动更新模式
             var childComponents = {};
             var rendered = false;
-            initWatch(this, {});
             this._watchers.push(Fix.watch(this.model, function () {
                 if (rendered) {
                     var newEls = render && render.call(this);
