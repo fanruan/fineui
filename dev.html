@@ -70,26 +70,24 @@
             var store = BI.useStore(function () {
                 return BI.Models.getModel("demo.model");
             });
-            // setInterval(function () {
-            //     store.toggle();
-            // }, 1000);
+            setInterval(function () {
+                store.toggle();
+            }, 1000);
             return function () {
                 return {
                     type: "bi.vertical",
                     vgap: 20,
-                    items: BI.makeArray(10000).map(function (i) {
-                        return {
-                            type: "bi.label",
-                            text: i
-                        };
-                    })
+                    items: [{
+                        type: "demo.child"
+                    }, {
+                        type: "demo.child"
+                    }]
                 };
             };
         }
     });
     BI.shortcut("demo.parent", Widget);
-    var time = performance.now();
-    var widget = BI.createWidget({
+    BI.createWidget({
         type: "bi.absolute",
         items: [{
             el: {
@@ -99,10 +97,7 @@
             left: 100
         }],
         element: "#wrapper"
-        // root: true
     });
-    // widget.element.appendTo("#wrapper");
-    console.log(performance.now() - time);
 </script>
 </body>
 </html>
