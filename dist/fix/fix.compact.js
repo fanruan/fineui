@@ -197,12 +197,8 @@
                     BI.each(childComponents, function (i, childComponent) {
                         var nextProps = BI.get([newEls], childComponent.path);
                         if (nextProps) {
-                            var shouldUpdate;
-                            if (shouldUpdate = (childComponent.component.shouldUpdate && childComponent.component.shouldUpdate(nextProps))) {
-                                childComponent.component._update(shouldUpdate === true ? nextProps : shouldUpdate);
-                            } else {
-                                childComponent.component._update(nextProps);
-                            }
+                            var shouldUpdate = childComponent.component.shouldUpdate && childComponent.component.shouldUpdate(nextProps);
+                            childComponent.component._update(nextProps, shouldUpdate);
                             childComponent.props = BI.extend(childComponent.props, nextProps);
                         }
                     });

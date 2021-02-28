@@ -74,8 +74,7 @@
 
         shouldUpdate: null,
 
-        update: function () {
-        },
+        update: null,
 
         beforeUpdate: null,
 
@@ -248,16 +247,21 @@
 
         _mountChildren: null,
 
-        _update: function (nextProps) {
+        _update: function (nextProps, shouldUpdate) {
             var o = this.options;
             callLifeHook(this, "beforeUpdate");
-            var nextChange = {};
-            BI.each(nextProps, function (key, value) {
-                if (o[key] !== value) {
-                    nextChange[key] = value;
-                }
-            });
-            var res = BI.isNotEmptyObject(nextChange) && this.update(nextChange);
+            if (shouldUpdate) {
+                var res = this.update && this.update(nextProps, shouldUpdate);
+            } else if (BI.isNull(shouldUpdate)) {
+                // 默认使用shallowCompare的方式进行更新
+                var nextChange = {};
+                BI.each(nextProps, function (key, value) {
+                    if (o[key] !== value) {
+                        nextChange[key] = value;
+                    }
+                });
+                var res = this.update && BI.isNotEmptyObject(nextChange) && this.update(nextChange);
+            }
             callLifeHook(this, "updated");
             return res;
         },

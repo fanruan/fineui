@@ -361,11 +361,14 @@ BI.Layout = BI.inherit(BI.Widget, {
 
     patchItem: function (oldVnode, vnode, index) {
         var shouldUpdate = this.shouldUpdateItem(index, vnode);
+        var child = this._children[this._getChildName(index)];
         if (shouldUpdate) {
-            var child = this._children[this._getChildName(index)];
-            return child._update(shouldUpdate === true ? this._getOptions(vnode) : shouldUpdate);
+            return child._update(this._getOptions(vnode), shouldUpdate);
         }
         if (shouldUpdate === null && !this._compare(oldVnode, vnode)) {
+            if (child.update) {
+                return child.update(this._getOptions(vnode));
+            }
             return this.updateItemAt(index, vnode);
         }
     },
