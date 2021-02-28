@@ -268,7 +268,7 @@ BI.Layout = BI.inherit(BI.Widget, {
         if (!child.shouldUpdate) {
             return null;
         }
-        return child.shouldUpdate(this._getOptions(item)) !== false;
+        return child.shouldUpdate(this._getOptions(item));
     },
 
     updateItemAt: function (index, item) {
