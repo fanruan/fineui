@@ -227,22 +227,36 @@
          * @private
          */
         _mount: function (force, deep, lifeHook, predicate) {
+            if (this.__beforeMount(force, deep, lifeHook, predicate)) {
+                this.__afterMount(lifeHook, predicate);
+                return true;
+            }
+            return false;
+        },
+
+        __beforeMount: function (force, deep, lifeHook, predicate) {
             var self = this;
             if (!force && (this._isMounted || !this.isVisible() || this.__asking === true || !(this._isRoot === true || (this._parent && this._parent._isMounted === true)))) {
                 return false;
             }
             lifeHook !== false && callLifeHook(this, "beforeMount");
             this._isMounted = true;
-            this._mountChildren && this._mountChildren();
             BI.each(this._children, function (i, widget) {
                 !self.isEnabled() && widget._setEnable(false);
                 !self.isValid() && widget._setValid(false);
-                widget._mount && widget._mount(deep ? force : false, deep, lifeHook, predicate);
+                widget.__beforeMount && widget.__beforeMount(deep ? force : false, deep, lifeHook, predicate);
+            });
+            this._mountChildren && this._mountChildren();
+            return true;
+        },
+
+        __afterMount: function (lifeHook, predicate) {
+            BI.each(this._children, function (i, widget) {
+                widget.__afterMount && widget.__afterMount(lifeHook, predicate);
             });
             lifeHook !== false && callLifeHook(this, "mounted");
             this.fireEvent(BI.Events.MOUNT);
             predicate && predicate(this);
-            return true;
         },
 
         _mountChildren: null,
