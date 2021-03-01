@@ -39,7 +39,7 @@ BI.SingleSelectRadioItem = BI.inherit(BI.BasicButton, {
             items: BI.LogicFactory.createLogicItemsByDirection("left", {
                 type: "bi.center_adapt",
                 items: [this.radio],
-                width: 26
+                width: 16
             }, this.text)
         }))));
     },
