@@ -1,0 +1,103 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="http://fanruan.design/fineui/2.0/fineui.min.css"/>
+    <script src="http://localhost:9001/fineui.js"></script>
+</head>
+<body>
+<div id="wrapper"></div>
+<script>
+    var Model = BI.inherit(Fix.Model, {
+        state: function () {
+            return {
+                expand: false
+            };
+        },
+        childContext: ["text"],
+
+        computed: {
+            text: function () {
+                return this.model.expand ? "text-yes" : "text-not";
+            }
+        },
+
+        actions: {
+            toggle: function () {
+                this.model.expand = !this.model.expand;
+            }
+        }
+    });
+
+    BI.model("demo.model", Model);
+    var ChildModel = BI.inherit(Fix.Model, {
+        context: ["text"]
+    });
+
+    BI.model("demo.child_model", ChildModel);
+
+    var Child = BI.inherit(BI.Widget, {
+        props: {
+            updateMode: "auto"
+        },
+        setup: function () {
+            var store = BI.useStore(function () {
+                return BI.Models.getModel("demo.child_model");
+            });
+            return {
+                render: function () {
+                    return {
+                        type: "bi.vertical",
+                        items: [{
+                            type: "bi.button",
+                            text: store.model.text
+                        }, {
+                            type: "bi.label",
+                            text: store.model.text
+                        }]
+                    };
+                }
+            };
+        }
+    });
+    BI.shortcut("demo.child", Child);
+
+    var Widget = BI.inherit(BI.Widget, {
+        props: {
+            updateMode: "auto"
+        },
+        setup: function () {
+            var store = BI.useStore(function () {
+                return BI.Models.getModel("demo.model");
+            });
+            setInterval(function () {
+                store.toggle();
+            }, 1000);
+            return function () {
+                return {
+                    type: "bi.vertical",
+                    vgap: 20,
+                    items: [{
+                        type: "demo.child"
+                    }, {
+                        type: "demo.child"
+                    }]
+                };
+            };
+        }
+    });
+    BI.shortcut("demo.parent", Widget);
+    BI.createWidget({
+        type: "bi.absolute",
+        items: [{
+            el: {
+                type: "demo.parent"
+            },
+            top: 100,
+            left: 100
+        }],
+        element: "#wrapper"
+    });
+</script>
+</body>
+</html>

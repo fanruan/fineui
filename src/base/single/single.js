@@ -192,11 +192,24 @@ BI.Single = BI.inherit(BI.Widget, {
     setValue: function (val) {
         if (!this.options.readonly) {
             this.options.value = val;
+            this.options.setValue && this.options.setValue(val);
         }
     },
 
     getValue: function () {
         return this.options.value;
+    },
+
+    update: function (props, shouldUpdate) {
+        if (BI.isObject(shouldUpdate)) {
+            props = shouldUpdate;
+        }
+        if ("value" in props) {
+            this.setValue(props.value);
+        }
+        if ("text" in props) {
+            this.setText && this.setText(props.text);
+        }
     },
 
     destroyed: function () {
@@ -205,5 +218,6 @@ BI.Single = BI.inherit(BI.Widget, {
             this.showTimeout = null;
         }
         BI.Tooltips.remove(this.getName());
-    },
+    }
 });
+BI.shortcut("bi.single", BI.Single);
