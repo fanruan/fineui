@@ -277,7 +277,7 @@
         delete this.__cacheStore;
     };
 
-    _.each(["_mount"], function (name) {
+    _.each(["_mount", "__afterMount"], function (name) {
         var old = BI.Widget.prototype[name];
         old && (BI.Widget.prototype[name] = function () {
             this.store && pushTarget(this.store);
