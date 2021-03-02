@@ -1,4 +1,4 @@
-/*! time: 2021-3-1 14:10:42 */
+/*! time: 2021-3-2 15:20:41 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -2366,6 +2366,9 @@ if (!_global.BI) {
 
         // 获得一个当前对象的引用
         _initRef: function () {
+            if (this.options.__ref) {
+                this.options.__ref.call(this, this);
+            }
             if (this.options.ref) {
                 this.options.ref.call(this, this);
             }
@@ -2373,6 +2376,10 @@ if (!_global.BI) {
 
         //释放当前对象
         _purgeRef: function () {
+            if (this.options.__ref) {
+                this.options.__ref.call(null);
+                this.options.__ref = null;
+            }
             if (this.options.ref) {
                 this.options.ref.call(null);
                 this.options.ref = null;
@@ -9809,7 +9816,7 @@ BI.Req = {
  */
 
 !(function () {
-    function callLifeHook(self, life) {
+    function callLifeHook (self, life) {
         var hook = self.options[life] || self[life];
         if (hook) {
             var hooks = BI.isArray(hook) ? hook : [hook];
@@ -9834,7 +9841,8 @@ BI.Req = {
                 baseCls: "",
                 extraCls: "",
                 cls: "",
-                css: null
+                css: null,
+                updateMode: "manual" // manual / auto
             });
         },
 
@@ -9875,8 +9883,11 @@ BI.Req = {
 
         shouldUpdate: null,
 
-        update: function () {
-        },
+        update: null,
+
+        beforeUpdate: null,
+
+        updated: null,
 
         beforeDestroy: null,
 
@@ -10025,25 +10036,58 @@ BI.Req = {
          * @private
          */
         _mount: function (force, deep, lifeHook, predicate) {
+            if (this.__beforeMount(force, deep, lifeHook, predicate)) {
+                this.__afterMount(lifeHook, predicate);
+                return true;
+            }
+            return false;
+        },
+
+        __beforeMount: function (force, deep, lifeHook, predicate) {
             var self = this;
             if (!force && (this._isMounted || !this.isVisible() || this.__asking === true || !(this._isRoot === true || (this._parent && this._parent._isMounted === true)))) {
                 return false;
             }
             lifeHook !== false && callLifeHook(this, "beforeMount");
             this._isMounted = true;
-            this._mountChildren && this._mountChildren();
             BI.each(this._children, function (i, widget) {
                 !self.isEnabled() && widget._setEnable(false);
                 !self.isValid() && widget._setValid(false);
-                widget._mount && widget._mount(deep ? force : false, deep, lifeHook, predicate);
+                widget.__beforeMount && widget.__beforeMount(deep ? force : false, deep, lifeHook, predicate);
+            });
+            this._mountChildren && this._mountChildren();
+            return true;
+        },
+
+        __afterMount: function (lifeHook, predicate) {
+            BI.each(this._children, function (i, widget) {
+                widget.__afterMount && widget.__afterMount(lifeHook, predicate);
             });
             lifeHook !== false && callLifeHook(this, "mounted");
             this.fireEvent(BI.Events.MOUNT);
             predicate && predicate(this);
-            return true;
         },
 
         _mountChildren: null,
+
+        _update: function (nextProps, shouldUpdate) {
+            var o = this.options;
+            callLifeHook(this, "beforeUpdate");
+            if (shouldUpdate) {
+                var res = this.update && this.update(nextProps, shouldUpdate);
+            } else if (BI.isNull(shouldUpdate)) {
+                // 默认使用shallowCompare的方式进行更新
+                var nextChange = {};
+                BI.each(nextProps, function (key, value) {
+                    if (o[key] !== value) {
+                        nextChange[key] = value;
+                    }
+                });
+                var res = this.update && BI.isNotEmptyObject(nextChange) && this.update(nextChange);
+            }
+            callLifeHook(this, "updated");
+            return res;
+        },
 
         isMounted: function () {
             return this._isMounted;
@@ -10336,12 +10380,12 @@ BI.Req = {
         BI.Widget.context = context = contextStack.pop();
     };
 
-    function pushTarget(_current) {
+    function pushTarget (_current) {
         if (current) currentStack.push(current);
         BI.Widget.current = current = _current;
     }
 
-    function popTarget() {
+    function popTarget () {
         BI.Widget.current = current = currentStack.pop();
     }
 
@@ -11166,18 +11210,12 @@ BI.Layout = BI.inherit(BI.Widget, {
         if (!child.shouldUpdate) {
             return null;
         }
-        return child.shouldUpdate(this._getOptions(item)) === true;
+        return child.shouldUpdate(this._getOptions(item));
     },
 
     updateItemAt: function (index, item) {
         if (index < 0 || index > this.options.items.length - 1) {
             return;
-        }
-
-        var child = this._children[this._getChildName(index)];
-        var updated;
-        if (updated = child.update(this._getOptions(item))) {
-            return updated;
         }
         var del = this._children[this._getChildName(index)];
         delete this._children[this._getChildName(index)];
@@ -11265,7 +11303,14 @@ BI.Layout = BI.inherit(BI.Widget, {
 
     patchItem: function (oldVnode, vnode, index) {
         var shouldUpdate = this.shouldUpdateItem(index, vnode);
-        if (shouldUpdate === true || (shouldUpdate === null && !this._compare(oldVnode, vnode))) {
+        var child = this._children[this._getChildName(index)];
+        if (shouldUpdate) {
+            return child._update(this._getOptions(vnode), shouldUpdate);
+        }
+        if (shouldUpdate === null && !this._compare(oldVnode, vnode)) {
+            if (child.update) {
+                return child.update(this._getOptions(vnode));
+            }
             return this.updateItemAt(index, vnode);
         }
     },
@@ -18503,11 +18548,24 @@ BI.Single = BI.inherit(BI.Widget, {
     setValue: function (val) {
         if (!this.options.readonly) {
             this.options.value = val;
+            this.options.setValue && this.options.setValue(val);
         }
     },
 
     getValue: function () {
         return this.options.value;
+    },
+
+    update: function (props, shouldUpdate) {
+        if (BI.isObject(shouldUpdate)) {
+            props = shouldUpdate;
+        }
+        if ("value" in props) {
+            this.setValue(props.value);
+        }
+        if ("text" in props) {
+            this.setText && this.setText(props.text);
+        }
     },
 
     destroyed: function () {
@@ -18516,8 +18574,9 @@ BI.Single = BI.inherit(BI.Widget, {
             this.showTimeout = null;
         }
         BI.Tooltips.remove(this.getName());
-    },
+    }
 });
+BI.shortcut("bi.single", BI.Single);
 
 
 /***/ }),
@@ -19090,11 +19149,6 @@ BI.BasicButton = BI.inherit(BI.Single, {
 
     getText: function () {
         return this.options.text;
-    },
-
-    setValue: function (value) {
-        BI.BasicButton.superclass.setValue.apply(this, arguments);
-        this.options.setValue && this.options.setValue.call(this, value);
     },
 
     _setEnable: function (enable) {
@@ -24593,7 +24647,6 @@ BI.shortcut("bi.image_button", BI.ImageButton);
 /* 429 */
 /***/ (function(module, exports) {
 
-
 /**
  * 文字类型的按钮
  * @class BI.Button
@@ -24639,7 +24692,10 @@ BI.Button = BI.inherit(BI.BasicButton, {
         BI.Button.superclass._init.apply(this, arguments);
         var o = this.options, self = this;
         if (BI.isNumber(o.height) && !o.clear && !o.block) {
-            this.element.css({height: o.height / BI.pixRatio + BI.pixUnit, lineHeight: (o.height - 2) / BI.pixRatio + BI.pixUnit});
+            this.element.css({
+                height: o.height / BI.pixRatio + BI.pixUnit,
+                lineHeight: (o.height - 2) / BI.pixRatio + BI.pixUnit
+            });
         } else if (o.clear || o.block) {
             this.element.css({lineHeight: o.height / BI.pixRatio + BI.pixUnit});
         } else {
@@ -72786,6 +72842,74 @@ var _button = __webpack_require__(8);
         //     console.error(e);
         // }
         needPop && popTarget();
+    };
+
+    BI.Widget.prototype._initElement = function () {
+        var self = this;
+        var render = BI.isFunction(this.options.render) ? this.options.render : this.render;
+        var els;
+        if (this.options.updateMode === "auto" && this._store) {
+            // 自动更新模式
+            var childComponents = {};
+            var rendered = false;
+            this._watchers.push(Fix.watch(this.model, function () {
+                if (rendered) {
+                    var newEls = render && render.call(this);
+                    BI.each(childComponents, function (i, childComponent) {
+                        var nextProps = BI.get([newEls], childComponent.path);
+                        if (nextProps) {
+                            var shouldUpdate = childComponent.component.shouldUpdate && childComponent.component.shouldUpdate(nextProps);
+                            childComponent.component._update(nextProps, shouldUpdate);
+                            childComponent.props = BI.extend(childComponent.props, nextProps);
+                        }
+                    });
+                } else {
+                    els = render && render.call(this);
+
+                    function traverse (parent, path) {
+                        BI.each(parent, function (i, child) {
+                            var childPath = path.concat(i);
+                            if (BI.isArray(child)) {
+                                traverse(child, childPath);
+                            } else if (BI.isPlainObject(child)) {
+                                if (child.type) {
+                                    child.__ref = function (_ref) {
+                                        if (_ref) {
+                                            var comp = childComponents[this.getName()] = {};
+                                            comp.component = _ref;
+                                            comp.props = child;
+                                            comp.path = childPath;
+                                        } else {
+                                            delete childComponents[this.getName()];
+                                        }
+                                    };
+                                }
+                                traverse(child, childPath);
+                            }
+                        });
+                    }
+
+                    traverse([els], []);
+                    rendered = true;
+                }
+            }));
+        } else {
+            els = render && render.call(this);
+        }
+        if (BI.isPlainObject(els)) {
+            els = [els];
+        }
+        if (BI.isArray(els)) {
+            BI.each(els, function (i, el) {
+                if (el) {
+                    BI._lazyCreateWidget(el, {
+                        element: self
+                    });
+                }
+            });
+        }
+        // if (this._isRoot === true || !(this instanceof BI.Layout)) {
+        this._mount();
     };
 
     var unMount = BI.Widget.prototype.__d;

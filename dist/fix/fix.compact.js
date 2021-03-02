@@ -207,7 +207,7 @@
 
                     function traverse (parent, path) {
                         BI.each(parent, function (i, child) {
-                            const childPath = path.concat(i);
+                            var childPath = path.concat(i);
                             if (BI.isArray(child)) {
                                 traverse(child, childPath);
                             } else if (BI.isPlainObject(child)) {
