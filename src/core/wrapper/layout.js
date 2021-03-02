@@ -366,9 +366,9 @@ BI.Layout = BI.inherit(BI.Widget, {
             return child._update(this._getOptions(vnode), shouldUpdate);
         }
         if (shouldUpdate === null && !this._compare(oldVnode, vnode)) {
-            if (child.update) {
-                return child.update(this._getOptions(vnode));
-            }
+            // if (child.update) {
+            //     return child.update(this._getOptions(vnode));
+            // }
             return this.updateItemAt(index, vnode);
         }
     },
