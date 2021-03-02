@@ -100,7 +100,7 @@
 
             function render () {
                 if (self.options.beforeRender || self.beforeRender) {
-                    (self.options.beforeRender || self.beforeRender).call(this, BI.bind(self._render, this));
+                    (self.options.beforeRender || self.beforeRender).call(self, BI.bind(self._render, self));
                 } else {
                     self._render();
                 }
