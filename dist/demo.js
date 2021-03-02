@@ -1,4 +1,4 @@
-/*! time: 2021-3-2 15:20:41 */
+/*! time: 2021-3-2 20:00:40 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -14013,37 +14013,40 @@ module.exports = function (exec) {
          * @returns {boolean}
          * @private
          */
-        _mount: function (force, deep, lifeHook, predicate) {
-            if (this.__beforeMount(force, deep, lifeHook, predicate)) {
-                this.__afterMount(lifeHook, predicate);
-                return true;
-            }
-            return false;
-        },
-
-        __beforeMount: function (force, deep, lifeHook, predicate) {
+        _mount: function (force, deep, lifeHook, predicate, layer, queue) {
             var self = this;
+            if (!layer) {
+                layer = 0;
+            }
+            if (!queue) {
+                queue = [];
+            }
             if (!force && (this._isMounted || !this.isVisible() || this.__asking === true || !(this._isRoot === true || (this._parent && this._parent._isMounted === true)))) {
                 return false;
             }
             lifeHook !== false && callLifeHook(this, "beforeMount");
             this._isMounted = true;
+            queue.push(this);
             BI.each(this._children, function (i, widget) {
                 !self.isEnabled() && widget._setEnable(false);
                 !self.isValid() && widget._setValid(false);
-                widget.__beforeMount && widget.__beforeMount(deep ? force : false, deep, lifeHook, predicate);
+                widget._mount && widget._mount(deep ? force : false, deep, lifeHook, predicate, layer + 1, queue);
             });
             this._mountChildren && this._mountChildren();
+            if (layer === 0) {
+                BI.each(queue, function (i, w) {
+                    w.__afterMount(lifeHook, predicate);
+                });
+            }
             return true;
         },
 
         __afterMount: function (lifeHook, predicate) {
-            BI.each(this._children, function (i, widget) {
-                widget.__afterMount && widget.__afterMount(lifeHook, predicate);
-            });
-            lifeHook !== false && callLifeHook(this, "mounted");
-            this.fireEvent(BI.Events.MOUNT);
-            predicate && predicate(this);
+            if (this._isMounted) {
+                lifeHook !== false && callLifeHook(this, "mounted");
+                this.fireEvent(BI.Events.MOUNT);
+                predicate && predicate(this);
+            }
         },
 
         _mountChildren: null,
@@ -15286,9 +15289,9 @@ BI.Layout = BI.inherit(BI.Widget, {
             return child._update(this._getOptions(vnode), shouldUpdate);
         }
         if (shouldUpdate === null && !this._compare(oldVnode, vnode)) {
-            if (child.update) {
-                return child.update(this._getOptions(vnode));
-            }
+            // if (child.update) {
+            //     return child.update(this._getOptions(vnode));
+            // }
             return this.updateItemAt(index, vnode);
         }
     },
@@ -22532,18 +22535,6 @@ BI.Single = BI.inherit(BI.Widget, {
 
     getValue: function () {
         return this.options.value;
-    },
-
-    update: function (props, shouldUpdate) {
-        if (BI.isObject(shouldUpdate)) {
-            props = shouldUpdate;
-        }
-        if ("value" in props) {
-            this.setValue(props.value);
-        }
-        if ("text" in props) {
-            this.setText && this.setText(props.text);
-        }
     },
 
     destroyed: function () {
@@ -97974,6 +97965,9 @@ BI.shortcut("bi.simple_tree", BI.SimpleTreeView);
                 if (rendered) {
                     var newEls = render && render.call(this);
                     BI.each(childComponents, function (i, childComponent) {
+                        if (childComponent.component instanceof BI.Layout) {
+                            return; // 布局的过滤掉
+                        }
                         var nextProps = BI.get([newEls], childComponent.path);
                         if (nextProps) {
                             var shouldUpdate = childComponent.component.shouldUpdate && childComponent.component.shouldUpdate(nextProps);
