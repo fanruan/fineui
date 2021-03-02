@@ -195,6 +195,9 @@
                 if (rendered) {
                     var newEls = render && render.call(this);
                     BI.each(childComponents, function (i, childComponent) {
+                        if (childComponent.component instanceof BI.Layout) {
+                            return; // 布局的过滤掉
+                        }
                         var nextProps = BI.get([newEls], childComponent.path);
                         if (nextProps) {
                             var shouldUpdate = childComponent.component.shouldUpdate && childComponent.component.shouldUpdate(nextProps);
