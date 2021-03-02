@@ -1,4 +1,4 @@
-/*! time: 2021-3-2 20:00:40 */
+/*! time: 2021-3-2 21:30:35 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -10035,36 +10035,32 @@ BI.Req = {
          * @returns {boolean}
          * @private
          */
-        _mount: function (force, deep, lifeHook, predicate, layer, queue) {
+        _mount: function (force, deep, lifeHook, predicate, layer) {
             var self = this;
-            if (!layer) {
-                layer = 0;
-            }
-            if (!queue) {
-                queue = [];
-            }
             if (!force && (this._isMounted || !this.isVisible() || this.__asking === true || !(this._isRoot === true || (this._parent && this._parent._isMounted === true)))) {
                 return false;
             }
+            layer = layer || 0;
             lifeHook !== false && callLifeHook(this, "beforeMount");
             this._isMounted = true;
-            queue.push(this);
             BI.each(this._children, function (i, widget) {
                 !self.isEnabled() && widget._setEnable(false);
                 !self.isValid() && widget._setValid(false);
-                widget._mount && widget._mount(deep ? force : false, deep, lifeHook, predicate, layer + 1, queue);
+                widget._mount && widget._mount(deep ? force : false, deep, lifeHook, predicate, layer + 1);
             });
             this._mountChildren && this._mountChildren();
             if (layer === 0) {
-                BI.each(queue, function (i, w) {
-                    w.__afterMount(lifeHook, predicate);
-                });
+                // 最后再统一执行生命周期
+                this.__afterMount(lifeHook, predicate);
             }
             return true;
         },
 
         __afterMount: function (lifeHook, predicate) {
             if (this._isMounted) {
+                BI.each(this._children, function (i, widget) {
+                    widget.__afterMount && widget.__afterMount(lifeHook, predicate);
+                });
                 lifeHook !== false && callLifeHook(this, "mounted");
                 this.fireEvent(BI.Events.MOUNT);
                 predicate && predicate(this);
@@ -72929,7 +72925,7 @@ var _button = __webpack_require__(8);
         delete this.__cacheStore;
     };
 
-    _.each(["_mount"], function (name) {
+    _.each(["_mount", "__afterMount"], function (name) {
         var old = BI.Widget.prototype[name];
         old && (BI.Widget.prototype[name] = function () {
             this.store && pushTarget(this.store);
