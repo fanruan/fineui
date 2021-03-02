@@ -1,5 +1,3 @@
-import { BasicButtonWrapper } from "../../component/basicbuttonwrapper/basic.button.wrapper";
-
 export type Constructor<T> = new(...args: any[]) => T;
 
 /**
@@ -26,28 +24,6 @@ export function provider() {
 export function model() {
     return function decorator<U extends {new(...args:any[]):{}} & {xtype: string, context?: ReadonlyArray<string>}>(Target: U): void {
         BI.model(Target.xtype, Target);
-    };
-}
-
-/**
- * 给控件render外包装basicButton
- */
-export function click() {
-    return function (_target: any, _propertyKey: string, descriptor: PropertyDescriptor) {
-        const render = descriptor.value;
-
-        descriptor.value = function(this:any, ...args: any[]) {
-            return {
-                type: BasicButtonWrapper.xtype,
-                cls: 'cursor-default',
-                render: () => render.apply(this, args),
-                doClick: () => {
-                    this.fireEvent('click');
-                },
-            };
-        };
-
-        return descriptor;
     };
 }
 
