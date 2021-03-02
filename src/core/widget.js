@@ -233,23 +233,16 @@
             }
             lifeHook !== false && callLifeHook(this, "beforeMount");
             this._isMounted = true;
-            // this._mountChildren && this._mountChildren();
             BI.each(this._children, function (i, widget) {
                 !self.isEnabled() && widget._setEnable(false);
                 !self.isValid() && widget._setValid(false);
                 widget._mount && widget._mount(deep ? force : false, deep, lifeHook, predicate);
             });
             this._mountChildren && this._mountChildren();
-            this.__afterMount(lifeHook, predicate);
+            lifeHook !== false && callLifeHook(this, "mounted");
+            this.fireEvent(BI.Events.MOUNT);
+            predicate && predicate(this);
             return true;
-        },
-
-        __afterMount: function (lifeHook, predicate) {
-            if (this._isMounted) {
-                lifeHook !== false && callLifeHook(this, "mounted");
-                this.fireEvent(BI.Events.MOUNT);
-                predicate && predicate(this);
-            }
         },
 
         _mountChildren: null,
