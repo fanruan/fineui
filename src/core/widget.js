@@ -251,12 +251,14 @@
         },
 
         __afterMount: function (lifeHook, predicate) {
-            BI.each(this._children, function (i, widget) {
-                widget.__afterMount && widget.__afterMount(lifeHook, predicate);
-            });
-            lifeHook !== false && callLifeHook(this, "mounted");
-            this.fireEvent(BI.Events.MOUNT);
-            predicate && predicate(this);
+            if (this._isMounted) {
+                BI.each(this._children, function (i, widget) {
+                    widget.__afterMount && widget.__afterMount(lifeHook, predicate);
+                });
+                lifeHook !== false && callLifeHook(this, "mounted");
+                this.fireEvent(BI.Events.MOUNT);
+                predicate && predicate(this);
+            }
         },
 
         _mountChildren: null,
