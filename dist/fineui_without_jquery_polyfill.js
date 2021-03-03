@@ -1,4 +1,4 @@
-/*! time: 2021-3-3 12:00:39 */
+/*! time: 2021-3-3 15:20:43 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -30013,7 +30013,8 @@ BI.IconTreeLeafItem = BI.inherit(BI.BasicButton, {
             hgap: o.hgap,
             text: o.text,
             value: o.value,
-            py: o.py
+            py: o.py,
+            keyword: o.keyword
         });
         var type = BI.LogicFactory.createLogicTypeByDirection(BI.Direction.Left);
         var items = BI.LogicFactory.createLogicItemsByDirection(BI.Direction.Left, {
