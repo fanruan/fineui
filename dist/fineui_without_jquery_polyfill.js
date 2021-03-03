@@ -1,4 +1,4 @@
-/*! time: 2021-3-2 21:30:35 */
+/*! time: 2021-3-3 12:00:39 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -9868,9 +9868,11 @@ BI.Req = {
             }
         },
 
+        // 生命周期函数
         beforeInit: null,
 
-        // 生命周期函数
+        beforeRender: null,
+
         beforeCreate: null,
 
         created: null,
@@ -9903,14 +9905,24 @@ BI.Req = {
         },
 
         _initRender: function () {
+            var self = this;
+
+            function render () {
+                if (self.options.beforeRender || self.beforeRender) {
+                    (self.options.beforeRender || self.beforeRender).call(self, BI.bind(self._render, self));
+                } else {
+                    self._render();
+                }
+            }
+
             if (this.options.beforeInit || this.beforeInit) {
                 this.__asking = true;
-                (this.options.beforeInit || this.beforeInit).call(this, BI.bind(this._render, this));
+                (this.options.beforeInit || this.beforeInit).call(this, render);
                 if (this.__asking === true) {
                     this.__async = true;
                 }
             } else {
-                this._render();
+                render();
             }
         },
 
