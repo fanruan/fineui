@@ -1,4 +1,4 @@
-/*! time: 2021-3-1 14:10:42 */
+/*! time: 2021-3-4 17:10:44 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -2085,6 +2085,9 @@ if (!_global.BI) {
 
         // 获得一个当前对象的引用
         _initRef: function () {
+            if (this.options.__ref) {
+                this.options.__ref.call(this, this);
+            }
             if (this.options.ref) {
                 this.options.ref.call(this, this);
             }
@@ -2092,6 +2095,10 @@ if (!_global.BI) {
 
         //释放当前对象
         _purgeRef: function () {
+            if (this.options.__ref) {
+                this.options.__ref.call(null);
+                this.options.__ref = null;
+            }
             if (this.options.ref) {
                 this.options.ref.call(null);
                 this.options.ref = null;

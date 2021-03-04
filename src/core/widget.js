@@ -7,7 +7,7 @@
  */
 
 !(function () {
-    function callLifeHook(self, life) {
+    function callLifeHook (self, life) {
         var hook = self.options[life] || self[life];
         if (hook) {
             var hooks = BI.isArray(hook) ? hook : [hook];
@@ -32,7 +32,8 @@
                 baseCls: "",
                 extraCls: "",
                 cls: "",
-                css: null
+                css: null,
+                updateMode: "manual" // manual / auto
             });
         },
 
@@ -58,9 +59,11 @@
             }
         },
 
+        // 生命周期函数
         beforeInit: null,
 
-        // 生命周期函数
+        beforeRender: null,
+
         beforeCreate: null,
 
         created: null,
@@ -73,8 +76,11 @@
 
         shouldUpdate: null,
 
-        update: function () {
-        },
+        update: null,
+
+        beforeUpdate: null,
+
+        updated: null,
 
         beforeDestroy: null,
 
@@ -90,14 +96,24 @@
         },
 
         _initRender: function () {
+            var self = this;
+
+            function render () {
+                if (self.options.beforeRender || self.beforeRender) {
+                    (self.options.beforeRender || self.beforeRender).call(self, BI.bind(self._render, self));
+                } else {
+                    self._render();
+                }
+            }
+
             if (this.options.beforeInit || this.beforeInit) {
                 this.__asking = true;
-                (this.options.beforeInit || this.beforeInit).call(this, BI.bind(this._render, this));
+                (this.options.beforeInit || this.beforeInit).call(this, render);
                 if (this.__asking === true) {
                     this.__async = true;
                 }
             } else {
-                this._render();
+                render();
             }
         },
 
@@ -222,26 +238,58 @@
          * @returns {boolean}
          * @private
          */
-        _mount: function (force, deep, lifeHook, predicate) {
+        _mount: function (force, deep, lifeHook, predicate, layer) {
             var self = this;
             if (!force && (this._isMounted || !this.isVisible() || this.__asking === true || !(this._isRoot === true || (this._parent && this._parent._isMounted === true)))) {
                 return false;
             }
+            layer = layer || 0;
             lifeHook !== false && callLifeHook(this, "beforeMount");
             this._isMounted = true;
-            this._mountChildren && this._mountChildren();
             BI.each(this._children, function (i, widget) {
                 !self.isEnabled() && widget._setEnable(false);
                 !self.isValid() && widget._setValid(false);
-                widget._mount && widget._mount(deep ? force : false, deep, lifeHook, predicate);
+                widget._mount && widget._mount(deep ? force : false, deep, lifeHook, predicate, layer + 1);
             });
-            lifeHook !== false && callLifeHook(this, "mounted");
-            this.fireEvent(BI.Events.MOUNT);
-            predicate && predicate(this);
+            this._mountChildren && this._mountChildren();
+            if (layer === 0) {
+                // 最后再统一执行生命周期
+                this.__afterMount(lifeHook, predicate);
+            }
             return true;
         },
 
+        __afterMount: function (lifeHook, predicate) {
+            if (this._isMounted) {
+                BI.each(this._children, function (i, widget) {
+                    widget.__afterMount && widget.__afterMount(lifeHook, predicate);
+                });
+                lifeHook !== false && callLifeHook(this, "mounted");
+                this.fireEvent(BI.Events.MOUNT);
+                predicate && predicate(this);
+            }
+        },
+
         _mountChildren: null,
+
+        _update: function (nextProps, shouldUpdate) {
+            var o = this.options;
+            callLifeHook(this, "beforeUpdate");
+            if (shouldUpdate) {
+                var res = this.update && this.update(nextProps, shouldUpdate);
+            } else if (BI.isNull(shouldUpdate)) {
+                // 默认使用shallowCompare的方式进行更新
+                var nextChange = {};
+                BI.each(nextProps, function (key, value) {
+                    if (o[key] !== value) {
+                        nextChange[key] = value;
+                    }
+                });
+                var res = this.update && BI.isNotEmptyObject(nextChange) && this.update(nextChange);
+            }
+            callLifeHook(this, "updated");
+            return res;
+        },
 
         isMounted: function () {
             return this._isMounted;
@@ -534,12 +582,12 @@
         BI.Widget.context = context = contextStack.pop();
     };
 
-    function pushTarget(_current) {
+    function pushTarget (_current) {
         if (current) currentStack.push(current);
         BI.Widget.current = current = _current;
     }
 
-    function popTarget() {
+    function popTarget () {
         BI.Widget.current = current = currentStack.pop();
     }
 
