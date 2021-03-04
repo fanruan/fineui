@@ -1,4 +1,4 @@
-/*! time: 2021-3-4 09:50:42 */
+/*! time: 2021-3-4 17:10:44 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -93382,7 +93382,7 @@ BI.ColorChooser = BI.inherit(BI.Widget, {
 
     _defaultConfig: function () {
         return BI.extend(BI.ColorChooser.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-color-chooser bi-border",
+            baseCls: "bi-color-chooser",
             value: "",
             height: 24,
             el: {},
@@ -93391,8 +93391,6 @@ BI.ColorChooser = BI.inherit(BI.Widget, {
 
     _init: function () {
         var self = this, o = this.options;
-        o.height -= 2;
-        BI.isNumeric(o.width) && (o.width -= 2);
         BI.ColorChooser.superclass._init.apply(this, arguments);
         o.value = o.value || "";
         this.combo = BI.createWidget({
@@ -93407,8 +93405,8 @@ BI.ColorChooser = BI.inherit(BI.Widget, {
                 ref: function (_ref) {
                     self.trigger = _ref;
                 },
-                width: o.width,
-                height: o.height
+                width: o.width - 2,
+                height: o.height - 2
             }, o.el),
             popup: {
                 el: BI.extend({
@@ -94159,8 +94157,8 @@ BI.ColorChooserTrigger = BI.inherit(BI.Trigger, {
     _defaultConfig: function () {
         var conf = BI.ColorChooserTrigger.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
-            baseCls: (conf.baseCls || "") + " bi-color-chooser-trigger",
-            height: 24
+            baseCls: (conf.baseCls || "") + " bi-color-chooser-trigger bi-border bi-focus-shadow",
+            height: 22
         });
     },
 
@@ -94230,7 +94228,7 @@ BI.LongColorChooserTrigger = BI.inherit(BI.Trigger, {
     _defaultConfig: function () {
         var conf = BI.LongColorChooserTrigger.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
-            baseCls: (conf.baseCls || "") + " bi-color-chooser-trigger",
+            baseCls: (conf.baseCls || "") + " bi-color-chooser-trigger bi-border bi-focus-shadow",
             height: 24
         });
     },
