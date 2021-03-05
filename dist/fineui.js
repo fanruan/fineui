@@ -1,4 +1,4 @@
-/*! time: 2021-3-5 19:30:37 */
+/*! time: 2021-3-5 19:40:47 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -75615,11 +75615,11 @@ BI.prepares.push(function () {
             BI.Widget._renderEngine.createElement("body").append(canvas);
 
             var ctx = canvas.getContext("2d");
-            ctx.font = "12px Georgia";
+            ctx.font = "12px Helvetica Neue,Arial,PingFang SC,Hiragino Sans GB,Microsoft YaHei,微软雅黑,Heiti,黑体,sans-serif";
             var w = ctx.measureText(param).width + 4;
             canvas.width = w * ratio;
             canvas.height = 16 * ratio;
-            ctx.font = 12 * ratio + "px Georgia";
+            ctx.font = 12 * ratio + "px Helvetica Neue,Arial,PingFang SC,Hiragino Sans GB,Microsoft YaHei,微软雅黑,Heiti,黑体,sans-serif";
             ctx.fillStyle = fillStyle || "#3685f2";
             ctx.textBaseline = "middle";
             // ctx.fillStyle = "#EAF2FD";
