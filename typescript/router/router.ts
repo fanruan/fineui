@@ -20,7 +20,7 @@ export declare class History {
 
     getFragment(fragment?: string): string;
 
-    start(op: {[key: string]: any}): void;
+    start(op?: {[key: string]: any}): void;
 
     stop(): void;
 
