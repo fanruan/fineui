@@ -63,6 +63,7 @@ BI.GridView = BI.inherit(BI.Widget, {
         }
     },
 
+    // mounted之后绑定事件
     mounted: function () {
         var o = this.options;
         if (o.scrollLeft !== 0 || o.scrollTop !== 0) {

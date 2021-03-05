@@ -80,7 +80,7 @@ BI.Farbtastic = BI.inherit(BI.BasicButton, {
         };
     },
 
-    mounted: function () {
+    created: function () {
         var o = this.options;
         if (BI.isKey(o.value)) {
             this.setValue(o.value);
@@ -179,8 +179,6 @@ BI.Farbtastic = BI.inherit(BI.BasicButton, {
 
         // Saturation/Luminance gradient
         this.colorWrapper.element.css("backgroundColor", this._pack(this._HSLToRGB([this.hsl[0], 1, 0.5])));
-
-        this.fireEvent(BI.Farbtastic.EVENT_CHANGE, this.getValue(), this);
     },
 
     _absolutePosition: function (el) {
@@ -257,6 +255,7 @@ BI.Farbtastic = BI.inherit(BI.BasicButton, {
             var lum = Math.max(0, Math.min(1, -(pos.y / this.constants.SQUARE) + .5));
             this._setHSL([this.hsl[0], sat, lum]);
         }
+        this.fireEvent(BI.Farbtastic.EVENT_CHANGE, this.getValue(), this);
     },
 
     doClick: function (event) {

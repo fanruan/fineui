@@ -115,7 +115,7 @@ BI.SearchTextValueCombo = BI.inherit(BI.Widget, {
         };
     },
 
-    mounted: function () {
+    created: function () {
         var o = this.options;
         if(BI.isKey(o.value)) {
             this._checkError(o.value);

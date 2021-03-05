@@ -38,6 +38,7 @@ BI.ListView = BI.inherit(BI.Widget, {
         };
     },
 
+    // mounted之后绑定事件
     mounted: function () {
         var self = this, o = this.options;
         this._populate();

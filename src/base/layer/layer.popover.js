@@ -152,6 +152,7 @@ BI.Popover = BI.inherit(BI.Widget, {
         });
     },
 
+    // mounted之后绑定事件
     mounted: function () {
         var self = this; var o = this.options;
         this.dragger.element.mousedown(function (e) {
