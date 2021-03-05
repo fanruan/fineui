@@ -55,6 +55,9 @@ BI.MultiSelectInsertSearcher = BI.inherit(BI.Widget, {
 
             popup: BI.extend({
                 type: "bi.multi_select_search_insert_pane",
+                ref: function (_ref) {
+                    self.searchPane = _ref;
+                },
                 valueFormatter: o.valueFormatter,
                 keywordGetter: function () {
                     return self.editor.getValue();
@@ -70,7 +73,19 @@ BI.MultiSelectInsertSearcher = BI.inherit(BI.Widget, {
                 listeners: [{
                     eventName: BI.MultiSelectSearchInsertPane.EVENT_ADD_ITEM,
                     action: function () {
-                        self.fireEvent(BI.MultiSelectInsertSearcher.EVENT_ADD_ITEM);
+                        var keyword = self.searcher.getKeyword();
+                        self.storeValue = self.getValue();
+                        if (!self.searcher.hasMatched()) {
+                            if (self.storeValue.type === BI.Selection.Multi) {
+                                BI.pushDistinct(self.storeValue.value, keyword);
+                            }
+                            self.searchPane.setVisible(false);
+                            self.setValue(self.storeValue);
+                            self.populate();
+                            if (self.storeValue.type === BI.Selection.Multi) {
+                                self.fireEvent(BI.MultiSelectInsertSearcher.EVENT_ADD_ITEM);
+                            }
+                        }
                     }
                 }]
             }, o.popup),
@@ -79,6 +94,7 @@ BI.MultiSelectInsertSearcher = BI.inherit(BI.Widget, {
             masker: o.masker
         });
         this.searcher.on(BI.Searcher.EVENT_START, function () {
+            self.searchPane.setVisible(true);
             self.fireEvent(BI.MultiSelectInsertSearcher.EVENT_START);
         });
         this.searcher.on(BI.Searcher.EVENT_PAUSE, function () {
