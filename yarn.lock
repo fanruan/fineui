@@ -833,7 +833,7 @@
     "@babel/preset-env" "7.4.5"
     "@babel/preset-typescript" "7.3.3"
 
-"@fui/eslint-plugin@^1.0.0":
+"@fui/eslint-plugin@1.0.11":
   version "1.0.11"
   resolved "https://npm.fineres.com/@fui%2feslint-plugin/-/eslint-plugin-1.0.11.tgz#095e929ff5235225afada99edfc96290d672a58d"
   integrity sha512-s7SYhFjUxFm/ri5zRS0P/akKASusGuRtJ/l+dHJif60mnPgVoPrVImk5xuxAwnTkCk8chv5HkzO5WQ70W1r1Og==

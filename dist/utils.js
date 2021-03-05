@@ -1,4 +1,4 @@
-/*! time: 2021-3-5 15:30:40 */
+/*! time: 2021-3-5 16:27:07 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -82,12 +82,12 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 1238);
+/******/ 	return __webpack_require__(__webpack_require__.s = 1239);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 1099:
+/***/ 1100:
 /***/ (function(module, exports) {
 
 BI.i18n = {
@@ -320,7 +320,7 @@ if(_global.BI.prepares == null) {
 
 /***/ }),
 
-/***/ 1238:
+/***/ 1239:
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(123);
@@ -350,8 +350,8 @@ __webpack_require__(140);
 __webpack_require__(141);
 __webpack_require__(142);
 __webpack_require__(143);
-__webpack_require__(1099);
-__webpack_require__(1239);
+__webpack_require__(1100);
+__webpack_require__(1240);
 __webpack_require__(153);
 __webpack_require__(154);
 module.exports = __webpack_require__(155);
@@ -359,7 +359,14 @@ module.exports = __webpack_require__(155);
 
 /***/ }),
 
-/***/ 1239:
+/***/ 124:
+/***/ (function(module, exports, __webpack_require__) {
+
+__webpack_require__(125)(__webpack_require__(126))
+
+/***/ }),
+
+/***/ 1240:
 /***/ (function(module, exports) {
 
 /**
@@ -430,13 +437,6 @@ BI.Date._MD = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 // 实际上无论周几作为一周的第一天，周初周末都是在-6-0间做偏移，用一个数组就可以
 BI.Date._OFFSET = [0, -1, -2, -3, -4, -5, -6];
 
-
-/***/ }),
-
-/***/ 124:
-/***/ (function(module, exports, __webpack_require__) {
-
-__webpack_require__(125)(__webpack_require__(126))
 
 /***/ }),
 
