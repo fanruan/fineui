@@ -71,12 +71,13 @@ BI.Layout = BI.inherit(BI.Widget, {
         var self = this;
         var frag = BI.Widget._renderEngine.createFragment();
         var hasChild = false;
-        BI.each(this._children, function (i, widget) {
-            if (widget.element !== self.element) {
-                frag.appendChild(widget.element[0]);
+        for (var key in this._children) {
+            var child = this._children[key];
+            if (child.element !== self.element) {
+                frag.appendChild(child.element[0]);
                 hasChild = true;
             }
-        });
+        }
         if (hasChild === true) {
             this.appendFragment(frag);
         }

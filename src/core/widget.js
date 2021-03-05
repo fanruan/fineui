@@ -246,24 +246,28 @@
             layer = layer || 0;
             lifeHook !== false && callLifeHook(this, "beforeMount");
             this._isMounted = true;
-            BI.each(this._children, function (i, widget) {
-                !self.isEnabled() && widget._setEnable(false);
-                !self.isValid() && widget._setValid(false);
-                widget._mount && widget._mount(deep ? force : false, deep, lifeHook, predicate, layer + 1);
-            });
+            for (var key in this._children) {
+                var child = this._children[key];
+                !self.isEnabled() && child._setEnable(false);
+                !self.isValid() && child._setValid(false);
+                child._mount && child._mount(deep ? force : false, deep, lifeHook, predicate, layer + 1);
+            }
             this._mountChildren && this._mountChildren();
             if (layer === 0) {
-                // 最后再统一执行生命周期
-                this.__afterMount(lifeHook, predicate);
+                // mounted放到下一个宏任务里执行
+                setTimeout(function () {
+                    self.__afterMount(lifeHook, predicate);
+                }, 0);
             }
             return true;
         },
 
         __afterMount: function (lifeHook, predicate) {
             if (this._isMounted) {
-                BI.each(this._children, function (i, widget) {
-                    widget.__afterMount && widget.__afterMount(lifeHook, predicate);
-                });
+                for (var key in this._children) {
+                    var child = this._children[key];
+                    child.__afterMount && child.__afterMount(lifeHook, predicate);
+                }
                 lifeHook !== false && callLifeHook(this, "mounted");
                 this.fireEvent(BI.Events.MOUNT);
                 predicate && predicate(this);

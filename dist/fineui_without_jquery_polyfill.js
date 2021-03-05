@@ -1,4 +1,4 @@
-/*! time: 2021-3-4 09:50:42 */
+/*! time: 2021-3-5 17:10:44 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -82,7 +82,7 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 1415);
+/******/ 	return __webpack_require__(__webpack_require__.s = 1416);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -10055,24 +10055,28 @@ BI.Req = {
             layer = layer || 0;
             lifeHook !== false && callLifeHook(this, "beforeMount");
             this._isMounted = true;
-            BI.each(this._children, function (i, widget) {
-                !self.isEnabled() && widget._setEnable(false);
-                !self.isValid() && widget._setValid(false);
-                widget._mount && widget._mount(deep ? force : false, deep, lifeHook, predicate, layer + 1);
-            });
+            for (var key in this._children) {
+                var child = this._children[key];
+                !self.isEnabled() && child._setEnable(false);
+                !self.isValid() && child._setValid(false);
+                child._mount && child._mount(deep ? force : false, deep, lifeHook, predicate, layer + 1);
+            }
             this._mountChildren && this._mountChildren();
             if (layer === 0) {
-                // 最后再统一执行生命周期
-                this.__afterMount(lifeHook, predicate);
+                // mounted放到下一个宏任务里执行
+                setTimeout(function () {
+                    self.__afterMount(lifeHook, predicate);
+                }, 0);
             }
             return true;
         },
 
         __afterMount: function (lifeHook, predicate) {
             if (this._isMounted) {
-                BI.each(this._children, function (i, widget) {
-                    widget.__afterMount && widget.__afterMount(lifeHook, predicate);
-                });
+                for (var key in this._children) {
+                    var child = this._children[key];
+                    child.__afterMount && child.__afterMount(lifeHook, predicate);
+                }
                 lifeHook !== false && callLifeHook(this, "mounted");
                 this.fireEvent(BI.Events.MOUNT);
                 predicate && predicate(this);
@@ -11024,12 +11028,13 @@ BI.Layout = BI.inherit(BI.Widget, {
         var self = this;
         var frag = BI.Widget._renderEngine.createFragment();
         var hasChild = false;
-        BI.each(this._children, function (i, widget) {
-            if (widget.element !== self.element) {
-                frag.appendChild(widget.element[0]);
+        for (var key in this._children) {
+            var child = this._children[key];
+            if (child.element !== self.element) {
+                frag.appendChild(child.element[0]);
                 hasChild = true;
             }
-        });
+        }
         if (hasChild === true) {
             this.appendFragment(frag);
         }
@@ -69288,6 +69293,18 @@ Object.defineProperty(exports, "ImageButton", {
     return _button6.ImageButton;
   }
 });
+Object.defineProperty(exports, "History", {
+  enumerable: true,
+  get: function get() {
+    return _router.History;
+  }
+});
+Object.defineProperty(exports, "Router", {
+  enumerable: true,
+  get: function get() {
+    return _router.Router;
+  }
+});
 exports["default"] = void 0;
 
 var _combo = __webpack_require__(718);
@@ -69579,6 +69596,8 @@ var _textnode = __webpack_require__(838);
 var _popup3 = __webpack_require__(839);
 
 var _button6 = __webpack_require__(840);
+
+var _router = __webpack_require__(841);
 
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
@@ -70899,7 +70918,13 @@ var _pane = __webpack_require__(22);
 var _button = __webpack_require__(8);
 
 /***/ }),
-/* 841 */,
+/* 841 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+/***/ }),
 /* 842 */,
 /* 843 */,
 /* 844 */,
@@ -70949,7 +70974,8 @@ var _button = __webpack_require__(8);
 /* 888 */,
 /* 889 */,
 /* 890 */,
-/* 891 */
+/* 891 */,
+/* 892 */
 /***/ (function(module, exports) {
 
 ;(function () {
@@ -71112,17 +71138,17 @@ var _button = __webpack_require__(8);
 
 
 /***/ }),
-/* 892 */,
 /* 893 */,
 /* 894 */,
-/* 895 */
+/* 895 */,
+/* 896 */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(global) {module.exports = global["Fix"] = __webpack_require__(896);
+/* WEBPACK VAR INJECTION */(function(global) {module.exports = global["Fix"] = __webpack_require__(897);
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(17)))
 
 /***/ }),
-/* 896 */
+/* 897 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(setImmediate) {function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -72655,8 +72681,8 @@ var _button = __webpack_require__(8);
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(63).setImmediate))
 
 /***/ }),
-/* 897 */,
-/* 898 */
+/* 898 */,
+/* 899 */
 /***/ (function(module, exports) {
 
 ;(function () {
@@ -73023,7 +73049,6 @@ var _button = __webpack_require__(8);
 
 
 /***/ }),
-/* 899 */,
 /* 900 */,
 /* 901 */,
 /* 902 */,
@@ -73240,13 +73265,13 @@ var _button = __webpack_require__(8);
 /* 1113 */,
 /* 1114 */,
 /* 1115 */,
-/* 1116 */
+/* 1116 */,
+/* 1117 */
 /***/ (function(module, exports) {
 
 
 
 /***/ }),
-/* 1117 */,
 /* 1118 */,
 /* 1119 */,
 /* 1120 */,
@@ -73544,7 +73569,8 @@ var _button = __webpack_require__(8);
 /* 1412 */,
 /* 1413 */,
 /* 1414 */,
-/* 1415 */
+/* 1415 */,
+/* 1416 */
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(123);
@@ -73648,7 +73674,7 @@ __webpack_require__(396);
 __webpack_require__(153);
 __webpack_require__(154);
 __webpack_require__(155);
-__webpack_require__(895);
+__webpack_require__(896);
 __webpack_require__(397);
 __webpack_require__(398);
 __webpack_require__(399);
@@ -74028,9 +74054,9 @@ __webpack_require__(712);
 __webpack_require__(713);
 __webpack_require__(714);
 __webpack_require__(715);
-__webpack_require__(898);
-__webpack_require__(891);
-__webpack_require__(1116);
+__webpack_require__(899);
+__webpack_require__(892);
+__webpack_require__(1117);
 module.exports = __webpack_require__(716);
 
 
