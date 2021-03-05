@@ -1,4 +1,4 @@
-/*! time: 2021-3-4 17:10:44 */
+/*! time: 2021-3-5 15:30:40 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -14033,11 +14033,12 @@ module.exports = function (exec) {
             layer = layer || 0;
             lifeHook !== false && callLifeHook(this, "beforeMount");
             this._isMounted = true;
-            BI.each(this._children, function (i, widget) {
-                !self.isEnabled() && widget._setEnable(false);
-                !self.isValid() && widget._setValid(false);
-                widget._mount && widget._mount(deep ? force : false, deep, lifeHook, predicate, layer + 1);
-            });
+            for (var key in this._children) {
+                var child = this._children[key];
+                !self.isEnabled() && child._setEnable(false);
+                !self.isValid() && child._setValid(false);
+                child._mount && child._mount(deep ? force : false, deep, lifeHook, predicate, layer + 1);
+            }
             this._mountChildren && this._mountChildren();
             if (layer === 0) {
                 // 最后再统一执行生命周期
@@ -14048,9 +14049,10 @@ module.exports = function (exec) {
 
         __afterMount: function (lifeHook, predicate) {
             if (this._isMounted) {
-                BI.each(this._children, function (i, widget) {
-                    widget.__afterMount && widget.__afterMount(lifeHook, predicate);
-                });
+                for (var key in this._children) {
+                    var child = this._children[key];
+                    child.__afterMount && child.__afterMount(lifeHook, predicate);
+                }
                 lifeHook !== false && callLifeHook(this, "mounted");
                 this.fireEvent(BI.Events.MOUNT);
                 predicate && predicate(this);
@@ -15002,12 +15004,13 @@ BI.Layout = BI.inherit(BI.Widget, {
         var self = this;
         var frag = BI.Widget._renderEngine.createFragment();
         var hasChild = false;
-        BI.each(this._children, function (i, widget) {
-            if (widget.element !== self.element) {
-                frag.appendChild(widget.element[0]);
+        for (var key in this._children) {
+            var child = this._children[key];
+            if (child.element !== self.element) {
+                frag.appendChild(child.element[0]);
                 hasChild = true;
             }
-        });
+        }
         if (hasChild === true) {
             this.appendFragment(frag);
         }
