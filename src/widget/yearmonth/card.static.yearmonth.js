@@ -98,7 +98,7 @@ BI.StaticYearMonthCard = BI.inherit(BI.Widget, {
         };
     },
 
-    mounted: function() {
+    created: function() {
         this._checkMonthStatus(this.selectedYear);
     },
 

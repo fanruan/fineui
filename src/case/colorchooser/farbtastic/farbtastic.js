@@ -80,7 +80,7 @@ BI.Farbtastic = BI.inherit(BI.BasicButton, {
         };
     },
 
-    mounted: function () {
+    created: function () {
         var o = this.options;
         if (BI.isKey(o.value)) {
             this.setValue(o.value);

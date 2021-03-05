@@ -254,10 +254,10 @@
             }
             this._mountChildren && this._mountChildren();
             if (layer === 0) {
-                // mounted放到下一个宏任务里执行
-                setTimeout(function () {
-                    self.__afterMount(lifeHook, predicate);
-                }, 0);
+                // mounted里面会执行scrollTo之类的方法，如果放宏任务里会闪
+                // setTimeout(function () {
+                self.__afterMount(lifeHook, predicate);
+                // }, 0);
             }
             return true;
         },
