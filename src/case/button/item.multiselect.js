@@ -11,7 +11,8 @@ BI.MultiSelectItem = BI.inherit(BI.BasicButton, {
             logic: {
                 dynamic: false
             },
-            iconWrapperWidth: 26
+            textHgap: 5,
+            textRgap: 0
         });
     },
     _init: function () {
@@ -27,8 +28,8 @@ BI.MultiSelectItem = BI.inherit(BI.BasicButton, {
             whiteSpace: "nowrap",
             textHeight: o.height,
             height: o.height,
-            hgap: o.hgap,
-            rgap: o.rgap,
+            hgap: o.textHgap,
+            rgap: o.textHgap,
             text: o.text,
             keyword: o.keyword,
             value: o.value,
@@ -46,7 +47,7 @@ BI.MultiSelectItem = BI.inherit(BI.BasicButton, {
             items: BI.LogicFactory.createLogicItemsByDirection("left", {
                 type: "bi.center_adapt",
                 items: [this.checkbox],
-                width: o.iconWrapperWidth
+                width: 16
             }, this.text)
         }))));
     },
