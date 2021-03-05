@@ -8,9 +8,7 @@
   "devDependencies": {
     "@babel/polyfill": "7.6.0",
     "@fui/babel-preset-fineui": "^1.0.0",
-    "@fui/eslint-plugin": "1.0.7",
-    "@typescript-eslint/eslint-plugin": "1.11.0",
-    "@typescript-eslint/parser": "1.11.0",
+    "@fui/eslint-plugin": "^1.0.0",
     "autoprefixer": "9.6.1",
     "babel-loader": "8.0.6",
     "chai": "4.2.0",
