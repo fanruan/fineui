@@ -311,7 +311,7 @@ export interface BI extends _func, _i18n, _base, _inject, _var, _web, _utils {
     TextValueCheckComboPopup: typeof TextValueCheckComboPopup;
     ImageButton: typeof ImageButton;
     Router: typeof Router;
-    History: History,
+    history: History,
 }
 
 export default {
