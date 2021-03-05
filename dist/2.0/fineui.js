@@ -1,4 +1,4 @@
-/*! time: 2021-3-2 20:00:40 */
+/*! time: 2021-3-4 17:10:44 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -13846,9 +13846,11 @@ module.exports = function (exec) {
             }
         },
 
+        // 生命周期函数
         beforeInit: null,
 
-        // 生命周期函数
+        beforeRender: null,
+
         beforeCreate: null,
 
         created: null,
@@ -13881,14 +13883,24 @@ module.exports = function (exec) {
         },
 
         _initRender: function () {
+            var self = this;
+
+            function render () {
+                if (self.options.beforeRender || self.beforeRender) {
+                    (self.options.beforeRender || self.beforeRender).call(self, BI.bind(self._render, self));
+                } else {
+                    self._render();
+                }
+            }
+
             if (this.options.beforeInit || this.beforeInit) {
                 this.__asking = true;
-                (this.options.beforeInit || this.beforeInit).call(this, BI.bind(this._render, this));
+                (this.options.beforeInit || this.beforeInit).call(this, render);
                 if (this.__asking === true) {
                     this.__async = true;
                 }
             } else {
-                this._render();
+                render();
             }
         },
 
@@ -14013,36 +14025,32 @@ module.exports = function (exec) {
          * @returns {boolean}
          * @private
          */
-        _mount: function (force, deep, lifeHook, predicate, layer, queue) {
+        _mount: function (force, deep, lifeHook, predicate, layer) {
             var self = this;
-            if (!layer) {
-                layer = 0;
-            }
-            if (!queue) {
-                queue = [];
-            }
             if (!force && (this._isMounted || !this.isVisible() || this.__asking === true || !(this._isRoot === true || (this._parent && this._parent._isMounted === true)))) {
                 return false;
             }
+            layer = layer || 0;
             lifeHook !== false && callLifeHook(this, "beforeMount");
             this._isMounted = true;
-            queue.push(this);
             BI.each(this._children, function (i, widget) {
                 !self.isEnabled() && widget._setEnable(false);
                 !self.isValid() && widget._setValid(false);
-                widget._mount && widget._mount(deep ? force : false, deep, lifeHook, predicate, layer + 1, queue);
+                widget._mount && widget._mount(deep ? force : false, deep, lifeHook, predicate, layer + 1);
             });
             this._mountChildren && this._mountChildren();
             if (layer === 0) {
-                BI.each(queue, function (i, w) {
-                    w.__afterMount(lifeHook, predicate);
-                });
+                // 最后再统一执行生命周期
+                this.__afterMount(lifeHook, predicate);
             }
             return true;
         },
 
         __afterMount: function (lifeHook, predicate) {
             if (this._isMounted) {
+                BI.each(this._children, function (i, widget) {
+                    widget.__afterMount && widget.__afterMount(lifeHook, predicate);
+                });
                 lifeHook !== false && callLifeHook(this, "mounted");
                 this.fireEvent(BI.Events.MOUNT);
                 predicate && predicate(this);
@@ -33983,7 +33991,8 @@ BI.IconTreeLeafItem = BI.inherit(BI.BasicButton, {
             hgap: o.hgap,
             text: o.text,
             value: o.value,
-            py: o.py
+            py: o.py,
+            keyword: o.keyword
         });
         var type = BI.LogicFactory.createLogicTypeByDirection(BI.Direction.Left);
         var items = BI.LogicFactory.createLogicItemsByDirection(BI.Direction.Left, {
@@ -93373,7 +93382,7 @@ BI.ColorChooser = BI.inherit(BI.Widget, {
 
     _defaultConfig: function () {
         return BI.extend(BI.ColorChooser.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-color-chooser bi-border",
+            baseCls: "bi-color-chooser",
             value: "",
             height: 24,
             el: {},
@@ -93382,8 +93391,6 @@ BI.ColorChooser = BI.inherit(BI.Widget, {
 
     _init: function () {
         var self = this, o = this.options;
-        o.height -= 2;
-        BI.isNumeric(o.width) && (o.width -= 2);
         BI.ColorChooser.superclass._init.apply(this, arguments);
         o.value = o.value || "";
         this.combo = BI.createWidget({
@@ -93398,8 +93405,8 @@ BI.ColorChooser = BI.inherit(BI.Widget, {
                 ref: function (_ref) {
                     self.trigger = _ref;
                 },
-                width: o.width,
-                height: o.height
+                width: o.width - 2,
+                height: o.height - 2
             }, o.el),
             popup: {
                 el: BI.extend({
@@ -94150,8 +94157,8 @@ BI.ColorChooserTrigger = BI.inherit(BI.Trigger, {
     _defaultConfig: function () {
         var conf = BI.ColorChooserTrigger.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
-            baseCls: (conf.baseCls || "") + " bi-color-chooser-trigger",
-            height: 24
+            baseCls: (conf.baseCls || "") + " bi-color-chooser-trigger bi-border bi-focus-shadow",
+            height: 22
         });
     },
 
@@ -94221,7 +94228,7 @@ BI.LongColorChooserTrigger = BI.inherit(BI.Trigger, {
     _defaultConfig: function () {
         var conf = BI.LongColorChooserTrigger.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
-            baseCls: (conf.baseCls || "") + " bi-color-chooser-trigger",
+            baseCls: (conf.baseCls || "") + " bi-color-chooser-trigger bi-border bi-focus-shadow",
             height: 24
         });
     },
@@ -98047,7 +98054,7 @@ BI.shortcut("bi.simple_tree", BI.SimpleTreeView);
         delete this.__cacheStore;
     };
 
-    _.each(["_mount"], function (name) {
+    _.each(["_mount", "__afterMount"], function (name) {
         var old = BI.Widget.prototype[name];
         old && (BI.Widget.prototype[name] = function () {
             this.store && pushTarget(this.store);
