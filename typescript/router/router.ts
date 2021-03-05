@@ -1,5 +1,5 @@
 export declare class Router {
-    constructor(op: {[key: string]: string});
+    constructor(op: {[key: string]: any});
 
     route(route: string, callback: Function): this;
     route(route: string, name: string, callback?: Function): this;
