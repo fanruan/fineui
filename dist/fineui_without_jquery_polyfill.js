@@ -1,4 +1,4 @@
-/*! time: 2021-3-5 16:36:36 */
+/*! time: 2021-3-5 17:10:44 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -10063,8 +10063,10 @@ BI.Req = {
             }
             this._mountChildren && this._mountChildren();
             if (layer === 0) {
-                // 最后再统一执行生命周期
-                this.__afterMount(lifeHook, predicate);
+                // mounted放到下一个宏任务里执行
+                setTimeout(function () {
+                    self.__afterMount(lifeHook, predicate);
+                }, 0);
             }
             return true;
         },
