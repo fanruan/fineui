@@ -1,4 +1,4 @@
-/*! time: 2021-3-5 20:10:43 */
+/*! time: 2021-3-7 15:00:40 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -15893,7 +15893,7 @@ BI.shortcut("bi.adaptive", BI.AdaptiveLayout);
 BI.BorderLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.BorderLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-border",
+            baseCls: "bi-border-layout",
             items: {}
         });
     },
@@ -26621,8 +26621,8 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
                 },
                 left: 4,
                 right: 4,
-                top: 4,
-                bottom: 4
+                top: 2,
+                bottom: 2
             }]
         });
 
