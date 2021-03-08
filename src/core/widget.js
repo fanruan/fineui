@@ -559,6 +559,13 @@
             this.element.empty();
         },
 
+        // 默认的populate方法就是干掉重来
+        populate: function () {
+            this.empty();
+            this.purgeListeners();
+            this._init();
+        },
+
         _destroy: function () {
             this.__d();
             this.element.destroy();
