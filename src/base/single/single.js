@@ -138,10 +138,6 @@ BI.Single = BI.inherit(BI.Widget, {
         this._hoverBinded = false;
     },
 
-    populate: function (items) {
-        this.items = items || [];
-    },
-
     // opt: {container: '', belowMouse: false}
     setTitle: function (title, opt) {
         this.options.title = title;
