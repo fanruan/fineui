@@ -125,6 +125,22 @@
             callLifeHook(this, "created");
         },
 
+        _initCurrent: function () {
+            var o = this.options;
+            if (o._baseCls || o.baseCls || o.extraCls || o.cls) {
+                this.element.addClass((o._baseCls || "") + " " + (o.baseCls || "") + " " + (o.extraCls || "") + " " + (o.cls || ""));
+            }
+            if (o.attributes) {
+                this.element.attr(o.attributes);
+            }
+            if (o.data) {
+                this.element.data(o.data);
+            }
+            if (o.css) {
+                this.element.css(o.css);
+            }
+        },
+
         /**
          * 初始化根节点
          * @private
@@ -152,18 +168,7 @@
                 this.element = BI.Widget._renderEngine.createElement(this);
             }
             this.element._isWidget = true;
-            if (o._baseCls || o.baseCls || o.extraCls || o.cls) {
-                this.element.addClass((o._baseCls || "") + " " + (o.baseCls || "") + " " + (o.extraCls || "") + " " + (o.cls || ""));
-            }
-            if (o.attributes) {
-                this.element.attr(o.attributes);
-            }
-            if (o.data) {
-                this.element.data(o.data);
-            }
-            if (o.css) {
-                this.element.css(o.css);
-            }
+            this._initCurrent();
         },
 
         _initElementWidth: function () {
@@ -561,9 +566,11 @@
 
         // 默认的populate方法就是干掉重来
         populate: function () {
-            this.empty();
             this.purgeListeners();
+            this.empty();
+            this._initCurrent();
             this._init();
+            this._initRef();
         },
 
         _destroy: function () {
