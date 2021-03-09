@@ -73,7 +73,7 @@
                 store.toggle();
             }, 1000);
             BI.watch("text", function () {
-                child.populate();
+                child.reset();
             });
             return function () {
                 return {
