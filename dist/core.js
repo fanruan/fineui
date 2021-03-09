@@ -1,4 +1,4 @@
-/*! time: 2021-3-8 21:40:50 */
+/*! time: 2021-3-9 09:30:41 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -93455,8 +93455,8 @@ BI.ColorChooser = BI.inherit(BI.Widget, {
                 ref: function (_ref) {
                     self.trigger = _ref;
                 },
-                width: o.width - 2,
-                height: o.height - 2
+                width: o.el.type ? o.width : o.width - 2,
+                height: o.el.type ? o.height : o.height - 2
             }, o.el),
             popup: {
                 el: BI.extend({
