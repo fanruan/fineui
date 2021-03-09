@@ -1,4 +1,4 @@
-/*! time: 2021-3-9 09:30:41 */
+/*! time: 2021-3-9 09:50:45 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -22502,10 +22502,6 @@ BI.Single = BI.inherit(BI.Widget, {
         this._hoverBinded = false;
     },
 
-    populate: function (items) {
-        this.items = items || [];
-    },
-
     // opt: {container: '', belowMouse: false}
     setTitle: function (title, opt) {
         this.options.title = title;
@@ -28797,10 +28793,6 @@ BI.Button = BI.inherit(BI.BasicButton, {
 
     unHighLight: function () {
         this.text.unHighLight.apply(this.text, arguments);
-    },
-
-    destroy: function () {
-        BI.Button.superclass.destroy.apply(this, arguments);
     }
 });
 BI.shortcut("bi.button", BI.Button);
@@ -31939,10 +31931,6 @@ BI.shortcut("bi.radio", BI.Radio);
             if (!this.isReadOnly()) {
                 this.text.setValue(v);
             }
-        },
-
-        populate: function () {
-            BI.AbstractLabel.superclass.populate.apply(this, arguments);
         }
     });
 }());
