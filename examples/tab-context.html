@@ -3,12 +3,12 @@
     <meta charset="utf-8">
     <title></title>
     <link rel="stylesheet" type="text/css" href="../dist/2.0/fineui.css"/>
-    <!--    <script src="../dist/2.0/fineui.js"></script>-->
-    <script src="http://localhost:9001/fineui.js"></script>
+    <script src="../dist/2.0/fineui.js"></script>
 </head>
 <body>
 <div id="wrapper"></div>
 <script>
+    // tab上下文环境测试
     var Model = BI.inherit(Fix.Model, {
         state: function () {
             return {
@@ -45,14 +45,8 @@
             return {
                 render: function () {
                     return {
-                        type: "bi.vertical",
-                        items: [{
-                            type: "bi.button",
-                            text: store.model.text
-                        }, {
-                            type: "bi.label",
-                            text: store.model.text
-                        }]
+                        type: "bi.label",
+                        text: store.model.text
                     };
                 }
             };
@@ -73,7 +67,7 @@
                 store.toggle();
             }, 1000);
             BI.watch("text", function () {
-                child.reset();
+                // child.reset();
             });
             return function () {
                 return {
@@ -85,7 +79,23 @@
                             child = _ref;
                         }
                     }, {
-                        type: "demo.child"
+                        type: "bi.combo",
+                        el: {
+                            type: "bi.button",
+                            text: "点击"
+                        },
+                        popup: {
+                            el: {
+                                type: "bi.tab",
+                                height: 100,
+                                showIndex: 0,
+                                cardCreator: function () {
+                                    return {
+                                        type: "demo.child"
+                                    };
+                                }
+                            }
+                        }
                     }]
                 };
             };
