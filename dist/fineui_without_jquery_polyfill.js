@@ -1,4 +1,4 @@
-/*! time: 2021-3-9 20:00:38 */
+/*! time: 2021-3-9 20:10:50 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -839,7 +839,7 @@ if (!_global.BI) {
         },
 
         isWidget: function (widget) {
-            return widget instanceof BI.Widget || (BI.View && widget instanceof BI.View);
+            return widget instanceof BI.Widget;
         },
 
         createWidgets: function (items, options, context) {
@@ -876,7 +876,7 @@ if (!_global.BI) {
                         el: innerAttr.shift()
                     });
                 }
-                if (item.el instanceof BI.Widget || (BI.View && item.el instanceof BI.View)) {
+                if (item.el instanceof BI.Widget) {
                     innerAttr.shift();
                     return BI.extend({}, outerAttr.shift(), { type: null }, item);
                 }
@@ -9961,16 +9961,9 @@ BI.Req = {
             this._children = {};
             if (BI.isWidget(o.element)) {
                 this.element = this.options.element.element;
-                if (o.element instanceof BI.Widget) {
-                    this._parent = o.element;
-                    this._parent.addWidget(this.widgetName, this);
-                } else {
-                    this._isRoot = true;
-                }
+                this._parent = o.element;
+                this._parent.addWidget(this.widgetName, this);
             } else if (o.element) {
-                // if (o.root !== true) {
-                //     throw new Error("root is a required property");
-                // }
                 this.element = BI.Widget._renderEngine.createElement(this);
                 this._isRoot = true;
             } else {
@@ -10583,11 +10576,12 @@ BI.Req = {
             throw new Error("组件" + config.type + "未定义");
         }
         var pushed = false;
-        if (context) {
+        var widget = new cls();
+        widget._context = BI.Widget.context || context;
+        if (!BI.Widget.context && context) {
             pushed = true;
             BI.Widget.pushContext(context);
         }
-        var widget = new cls();
         widget._initProps(config);
         widget._constructed();
         widget._initRoot();
@@ -72792,7 +72786,7 @@ var _button = __webpack_require__(8);
             if (p instanceof Fix.Model || p.store || p.__cacheStore) {
                 break;
             }
-            p = p._parent || (p.options && p.options.element);
+            p = p._context || p._parent || (p.options && p.options.element);
         }
         if (p) {
             if (p instanceof Fix.Model) {
@@ -72802,26 +72796,6 @@ var _button = __webpack_require__(8);
             return p.__cacheStore || p.store;
         }
     }
-
-    // var _create = BI.createWidget;
-    // BI.createWidget = function (item, options, context) {
-    //     var pushed = false;
-    //     if (BI.isWidget(options)) {
-    //         pushContext(options);
-    //         pushed = true;
-    //     } else if (context != null) {
-    //         pushContext(context);
-    //         pushed = true;
-    //     }
-    //     var result = _create.apply(this, arguments);
-    //     // try {
-    //     //     var result = _create.apply(this, arguments);
-    //     // } catch (e) {
-    //     //     console.error(e);
-    //     // }
-    //     pushed && popContext();
-    //     return result;
-    // };
 
     _.each(["populate", "addItems", "prependItems"], function (name) {
         var old = BI.Loader.prototype[name];
@@ -72840,7 +72814,7 @@ var _button = __webpack_require__(8);
     function createStore () {
         var needPop = false;
         if (_global.Fix && this._store) {
-            var store = findStore(this.options.context || this._parent || this.options.element);
+            var store = findStore(this.options.context || this._context || this._parent || this.options.element);
             if (store) {
                 pushTarget(store);
                 needPop = true;
