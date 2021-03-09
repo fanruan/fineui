@@ -197,7 +197,7 @@ BI.Expander = BI.inherit(BI.Widget, {
     populate: function (items) {
         // this._assertPopupView();
         this.popupView && this.popupView.populate.apply(this.popupView, arguments);
-        this.expander.populate.apply(this.expander, arguments);
+        this.expander.populate && this.expander.populate.apply(this.expander, arguments);
     },
 
     _setEnable: function (arg) {
