@@ -565,7 +565,7 @@
         },
 
         // 默认的populate方法就是干掉重来
-        populate: function () {
+        reset: function () {
             this.purgeListeners();
             this.empty();
             this._initCurrent();
