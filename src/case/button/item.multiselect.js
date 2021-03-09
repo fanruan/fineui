@@ -11,7 +11,9 @@ BI.MultiSelectItem = BI.inherit(BI.BasicButton, {
             logic: {
                 dynamic: false
             },
-            iconWrapperWidth: 26
+            iconWrapperWidth: 16,
+            textHgap: 0,
+            textRgap: 0
         });
     },
     _init: function () {
@@ -27,8 +29,8 @@ BI.MultiSelectItem = BI.inherit(BI.BasicButton, {
             whiteSpace: "nowrap",
             textHeight: o.height,
             height: o.height,
-            hgap: o.hgap,
-            rgap: o.rgap,
+            hgap: o.textHgap,
+            rgap: o.textHgap,
             text: o.text,
             keyword: o.keyword,
             value: o.value,
