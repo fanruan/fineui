@@ -18,11 +18,12 @@
             throw new Error("组件" + config.type + "未定义");
         }
         var pushed = false;
-        if (context) {
+        var widget = new cls();
+        widget._context = BI.Widget.context || context;
+        if (!BI.Widget.context && context) {
             pushed = true;
             BI.Widget.pushContext(context);
         }
-        var widget = new cls();
         widget._initProps(config);
         widget._constructed();
         widget._initRoot();

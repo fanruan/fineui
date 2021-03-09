@@ -70,7 +70,7 @@ if (!_global.BI) {
         },
 
         isWidget: function (widget) {
-            return widget instanceof BI.Widget || (BI.View && widget instanceof BI.View);
+            return widget instanceof BI.Widget;
         },
 
         createWidgets: function (items, options, context) {
@@ -107,7 +107,7 @@ if (!_global.BI) {
                         el: innerAttr.shift()
                     });
                 }
-                if (item.el instanceof BI.Widget || (BI.View && item.el instanceof BI.View)) {
+                if (item.el instanceof BI.Widget) {
                     innerAttr.shift();
                     return BI.extend({}, outerAttr.shift(), { type: null }, item);
                 }
