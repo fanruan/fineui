@@ -11,7 +11,8 @@ BI.MultiSelectItem = BI.inherit(BI.BasicButton, {
             logic: {
                 dynamic: false
             },
-            textHgap: 5,
+            iconWrapperWidth: 16,
+            textHgap: 0,
             textRgap: 0
         });
     },
@@ -47,7 +48,7 @@ BI.MultiSelectItem = BI.inherit(BI.BasicButton, {
             items: BI.LogicFactory.createLogicItemsByDirection("left", {
                 type: "bi.center_adapt",
                 items: [this.checkbox],
-                width: 16
+                width: o.iconWrapperWidth
             }, this.text)
         }))));
     },
