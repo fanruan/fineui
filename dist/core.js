@@ -1,4 +1,4 @@
-/*! time: 2021-3-5 17:10:44 */
+/*! time: 2021-3-9 09:50:45 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -13912,6 +13912,22 @@ module.exports = function (exec) {
             callLifeHook(this, "created");
         },
 
+        _initCurrent: function () {
+            var o = this.options;
+            if (o._baseCls || o.baseCls || o.extraCls || o.cls) {
+                this.element.addClass((o._baseCls || "") + " " + (o.baseCls || "") + " " + (o.extraCls || "") + " " + (o.cls || ""));
+            }
+            if (o.attributes) {
+                this.element.attr(o.attributes);
+            }
+            if (o.data) {
+                this.element.data(o.data);
+            }
+            if (o.css) {
+                this.element.css(o.css);
+            }
+        },
+
         /**
          * 初始化根节点
          * @private
@@ -13939,18 +13955,7 @@ module.exports = function (exec) {
                 this.element = BI.Widget._renderEngine.createElement(this);
             }
             this.element._isWidget = true;
-            if (o._baseCls || o.baseCls || o.extraCls || o.cls) {
-                this.element.addClass((o._baseCls || "") + " " + (o.baseCls || "") + " " + (o.extraCls || "") + " " + (o.cls || ""));
-            }
-            if (o.attributes) {
-                this.element.attr(o.attributes);
-            }
-            if (o.data) {
-                this.element.data(o.data);
-            }
-            if (o.css) {
-                this.element.css(o.css);
-            }
+            this._initCurrent();
         },
 
         _initElementWidth: function () {
@@ -14041,10 +14046,10 @@ module.exports = function (exec) {
             }
             this._mountChildren && this._mountChildren();
             if (layer === 0) {
-                // mounted放到下一个宏任务里执行
-                setTimeout(function () {
-                    self.__afterMount(lifeHook, predicate);
-                }, 0);
+                // mounted里面会执行scrollTo之类的方法，如果放宏任务里会闪
+                // setTimeout(function () {
+                self.__afterMount(lifeHook, predicate);
+                // }, 0);
             }
             return true;
         },
@@ -14344,6 +14349,15 @@ module.exports = function (exec) {
             });
             this._children = {};
             this.element.empty();
+        },
+
+        // 默认的populate方法就是干掉重来
+        populate: function () {
+            this.purgeListeners();
+            this.empty();
+            this._initCurrent();
+            this._init();
+            this._initRef();
         },
 
         _destroy: function () {
@@ -19871,7 +19885,7 @@ BI.shortcut("bi.adaptive", BI.AdaptiveLayout);
 BI.BorderLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.BorderLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-border",
+            baseCls: "bi-border-layout",
             items: {}
         });
     },
@@ -22488,10 +22502,6 @@ BI.Single = BI.inherit(BI.Widget, {
         this._hoverBinded = false;
     },
 
-    populate: function (items) {
-        this.items = items || [];
-    },
-
     // opt: {container: '', belowMouse: false}
     setTitle: function (title, opt) {
         this.options.title = title;
@@ -23849,6 +23859,7 @@ BI.CollectionView = BI.inherit(BI.Widget, {
         }
     },
 
+    // mounted之后绑定事件
     mounted: function () {
         var  o = this.options;
         if (o.scrollLeft !== 0 || o.scrollTop !== 0) {
@@ -25610,7 +25621,7 @@ BI.Navigation = BI.inherit(BI.Widget, {
         });
     },
 
-    mounted: function () {
+    created: function () {
         var o = this.options;
         if (o.showIndex !== false) {
             this.setSelect(o.showIndex);
@@ -25718,6 +25729,7 @@ BI.Navigation = BI.inherit(BI.Widget, {
 BI.Navigation.EVENT_CHANGE = "EVENT_CHANGE";
 
 BI.shortcut("bi.navigation", BI.Navigation);
+
 
 /***/ }),
 /* 413 */
@@ -26418,7 +26430,7 @@ BI.Tab = BI.inherit(BI.Widget, {
         }
     },
 
-    mounted: function () {
+    created: function () {
         var o = this.options;
         if (o.showIndex !== false) {
             this.setSelect(o.showIndex);
@@ -26493,6 +26505,7 @@ BI.Tab = BI.inherit(BI.Widget, {
 BI.Tab.EVENT_CHANGE = "EVENT_CHANGE";
 
 BI.shortcut("bi.tab", BI.Tab);
+
 
 /***/ }),
 /* 416 */
@@ -26819,6 +26832,7 @@ BI.GridView = BI.inherit(BI.Widget, {
         }
     },
 
+    // mounted之后绑定事件
     mounted: function () {
         var o = this.options;
         if (o.scrollLeft !== 0 || o.scrollTop !== 0) {
@@ -27295,6 +27309,7 @@ BI.Popover = BI.inherit(BI.Widget, {
         });
     },
 
+    // mounted之后绑定事件
     mounted: function () {
         var self = this; var o = this.options;
         this.dragger.element.mousedown(function (e) {
@@ -27788,6 +27803,7 @@ BI.ListView = BI.inherit(BI.Widget, {
         };
     },
 
+    // mounted之后绑定事件
     mounted: function () {
         var self = this, o = this.options;
         this._populate();
@@ -27921,6 +27937,7 @@ BI.VirtualList = BI.inherit(BI.Widget, {
         };
     },
 
+    // mounted之后绑定事件
     mounted: function () {
         var self = this, o = this.options;
         this._populate();
@@ -28776,10 +28793,6 @@ BI.Button = BI.inherit(BI.BasicButton, {
 
     unHighLight: function () {
         this.text.unHighLight.apply(this.text, arguments);
-    },
-
-    destroy: function () {
-        BI.Button.superclass.destroy.apply(this, arguments);
     }
 });
 BI.shortcut("bi.button", BI.Button);
@@ -30592,8 +30605,8 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
                 },
                 left: 4,
                 right: 4,
-                top: 4,
-                bottom: 4
+                top: 2,
+                bottom: 2
             }]
         });
 
@@ -31918,10 +31931,6 @@ BI.shortcut("bi.radio", BI.Radio);
             if (!this.isReadOnly()) {
                 this.text.setValue(v);
             }
-        },
-
-        populate: function () {
-            BI.AbstractLabel.superclass.populate.apply(this, arguments);
         }
     });
 }());
@@ -36207,7 +36216,7 @@ BI.SearchTextValueCombo = BI.inherit(BI.Widget, {
         };
     },
 
-    mounted: function () {
+    created: function () {
         var o = this.options;
         if(BI.isKey(o.value)) {
             this._checkError(o.value);
@@ -36304,6 +36313,7 @@ BI.SearchTextValueComboPopup = BI.inherit(BI.Pane, {
         };
     },
 
+    // mounted之后做check
     mounted: function() {
         this.check();
     },
@@ -36329,6 +36339,7 @@ BI.SearchTextValueComboPopup = BI.inherit(BI.Pane, {
 });
 BI.SearchTextValueComboPopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.search_text_value_combo_popup", BI.SearchTextValueComboPopup);
+
 
 /***/ }),
 /* 507 */
@@ -42725,7 +42736,7 @@ BI.DynamicDatePane = BI.inherit(BI.Widget, {
         };
     },
 
-    mounted: function () {
+    created: function () {
         this.setValue(this.options.value);
     },
 
@@ -42756,7 +42767,6 @@ BI.DynamicDatePane = BI.inherit(BI.Widget, {
             this.ymd.setMaxDate(maxDate);
         }
     },
-
 
     setValue: function (v) {
         v = v || {};
@@ -43454,7 +43464,7 @@ BI.DynamicDateTimePane = BI.inherit(BI.Widget, {
         };
     },
 
-    mounted: function () {
+    created: function () {
         this.setValue(this.options.value);
     },
 
@@ -44917,7 +44927,7 @@ BI.DynamicDateCombo = BI.inherit(BI.Single, {
         };
     },
 
-    mounted: function () {
+    created: function () {
         this._checkDynamicValue(this.storeValue);
     },
 
@@ -45001,6 +45011,7 @@ BI.extend(BI.DynamicDateCombo, {
     Static: 1,
     Dynamic: 2
 });
+
 
 /***/ }),
 /* 569 */
@@ -46009,7 +46020,7 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
         };
     },
 
-    mounted: function () {
+    created: function () {
         this._checkDynamicValue(this.storeValue);
     },
 
@@ -46093,6 +46104,7 @@ BI.extend(BI.DynamicDateTimeCombo, {
     Static: 1,
     Dynamic: 2
 });
+
 
 /***/ }),
 /* 573 */
@@ -67688,7 +67700,7 @@ BI.StaticYearMonthCard = BI.inherit(BI.Widget, {
         };
     },
 
-    mounted: function() {
+    created: function() {
         this._checkMonthStatus(this.selectedYear);
     },
 
@@ -75615,11 +75627,11 @@ BI.prepares.push(function () {
             BI.Widget._renderEngine.createElement("body").append(canvas);
 
             var ctx = canvas.getContext("2d");
-            ctx.font = "12px Georgia";
+            ctx.font = "12px Helvetica Neue,Arial,PingFang SC,Hiragino Sans GB,Microsoft YaHei,微软雅黑,Heiti,黑体,sans-serif";
             var w = ctx.measureText(param).width + 4;
             canvas.width = w * ratio;
             canvas.height = 16 * ratio;
-            ctx.font = 12 * ratio + "px Georgia";
+            ctx.font = 12 * ratio + "px Helvetica Neue,Arial,PingFang SC,Hiragino Sans GB,Microsoft YaHei,微软雅黑,Heiti,黑体,sans-serif";
             ctx.fillStyle = fillStyle || "#3685f2";
             ctx.textBaseline = "middle";
             // ctx.fillStyle = "#EAF2FD";
@@ -93431,8 +93443,8 @@ BI.ColorChooser = BI.inherit(BI.Widget, {
                 ref: function (_ref) {
                     self.trigger = _ref;
                 },
-                width: o.width - 2,
-                height: o.height - 2
+                width: o.el.type ? o.width : o.width - 2,
+                height: o.el.type ? o.height : o.height - 2
             }, o.el),
             popup: {
                 el: BI.extend({
@@ -93683,6 +93695,7 @@ BI.HexColorChooserPopup = BI.inherit(BI.Widget, {
         };
     },
 
+    // 这里就实现的不好了，setValue里面有个editor，editor的setValue会检测错误然后出bubble提示
     mounted: function () {
         var self = this;
         var o = this.options;
@@ -93756,6 +93769,7 @@ BI.HexColorChooserPopup = BI.inherit(BI.Widget, {
 BI.HexColorChooserPopup.EVENT_VALUE_CHANGE = "EVENT_VALUE_CHANGE";
 BI.HexColorChooserPopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.hex_color_chooser_popup", BI.HexColorChooserPopup);
+
 
 /***/ }),
 /* 876 */
@@ -93978,6 +93992,7 @@ BI.ColorChooserPopup = BI.inherit(BI.Widget, {
         };
     },
 
+    // 这里就实现的不好了，setValue里面有个editor，editor的setValue会检测错误然后出bubble提示
     mounted: function () {
         var self = this;
         var o = this.options;
@@ -94051,6 +94066,7 @@ BI.ColorChooserPopup = BI.inherit(BI.Widget, {
 BI.ColorChooserPopup.EVENT_VALUE_CHANGE = "EVENT_VALUE_CHANGE";
 BI.ColorChooserPopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.color_chooser_popup", BI.ColorChooserPopup);
+
 
 /***/ }),
 /* 878 */
@@ -95598,7 +95614,7 @@ BI.Farbtastic = BI.inherit(BI.BasicButton, {
         };
     },
 
-    mounted: function () {
+    created: function () {
         var o = this.options;
         if (BI.isKey(o.value)) {
             this.setValue(o.value);
@@ -95697,8 +95713,6 @@ BI.Farbtastic = BI.inherit(BI.BasicButton, {
 
         // Saturation/Luminance gradient
         this.colorWrapper.element.css("backgroundColor", this._pack(this._HSLToRGB([this.hsl[0], 1, 0.5])));
-
-        this.fireEvent(BI.Farbtastic.EVENT_CHANGE, this.getValue(), this);
     },
 
     _absolutePosition: function (el) {
@@ -95775,6 +95789,7 @@ BI.Farbtastic = BI.inherit(BI.BasicButton, {
             var lum = Math.max(0, Math.min(1, -(pos.y / this.constants.SQUARE) + .5));
             this._setHSL([this.hsl[0], sat, lum]);
         }
+        this.fireEvent(BI.Farbtastic.EVENT_CHANGE, this.getValue(), this);
     },
 
     doClick: function (event) {
@@ -95796,6 +95811,7 @@ BI.Farbtastic = BI.inherit(BI.BasicButton, {
 });
 BI.Farbtastic.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.farbtastic", BI.Farbtastic);
+
 
 /***/ }),
 /* 889 */

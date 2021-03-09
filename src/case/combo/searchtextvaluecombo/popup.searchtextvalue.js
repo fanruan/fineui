@@ -45,6 +45,7 @@ BI.SearchTextValueComboPopup = BI.inherit(BI.Pane, {
         };
     },
 
+    // mounted之后做check
     mounted: function() {
         this.check();
     },

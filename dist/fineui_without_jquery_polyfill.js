@@ -1,4 +1,4 @@
-/*! time: 2021-3-5 17:10:44 */
+/*! time: 2021-3-9 09:50:45 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -9934,6 +9934,22 @@ BI.Req = {
             callLifeHook(this, "created");
         },
 
+        _initCurrent: function () {
+            var o = this.options;
+            if (o._baseCls || o.baseCls || o.extraCls || o.cls) {
+                this.element.addClass((o._baseCls || "") + " " + (o.baseCls || "") + " " + (o.extraCls || "") + " " + (o.cls || ""));
+            }
+            if (o.attributes) {
+                this.element.attr(o.attributes);
+            }
+            if (o.data) {
+                this.element.data(o.data);
+            }
+            if (o.css) {
+                this.element.css(o.css);
+            }
+        },
+
         /**
          * 初始化根节点
          * @private
@@ -9961,18 +9977,7 @@ BI.Req = {
                 this.element = BI.Widget._renderEngine.createElement(this);
             }
             this.element._isWidget = true;
-            if (o._baseCls || o.baseCls || o.extraCls || o.cls) {
-                this.element.addClass((o._baseCls || "") + " " + (o.baseCls || "") + " " + (o.extraCls || "") + " " + (o.cls || ""));
-            }
-            if (o.attributes) {
-                this.element.attr(o.attributes);
-            }
-            if (o.data) {
-                this.element.data(o.data);
-            }
-            if (o.css) {
-                this.element.css(o.css);
-            }
+            this._initCurrent();
         },
 
         _initElementWidth: function () {
@@ -10063,10 +10068,10 @@ BI.Req = {
             }
             this._mountChildren && this._mountChildren();
             if (layer === 0) {
-                // mounted放到下一个宏任务里执行
-                setTimeout(function () {
-                    self.__afterMount(lifeHook, predicate);
-                }, 0);
+                // mounted里面会执行scrollTo之类的方法，如果放宏任务里会闪
+                // setTimeout(function () {
+                self.__afterMount(lifeHook, predicate);
+                // }, 0);
             }
             return true;
         },
@@ -10366,6 +10371,15 @@ BI.Req = {
             });
             this._children = {};
             this.element.empty();
+        },
+
+        // 默认的populate方法就是干掉重来
+        populate: function () {
+            this.purgeListeners();
+            this.empty();
+            this._initCurrent();
+            this._init();
+            this._initRef();
         },
 
         _destroy: function () {
@@ -15893,7 +15907,7 @@ BI.shortcut("bi.adaptive", BI.AdaptiveLayout);
 BI.BorderLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.BorderLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-border",
+            baseCls: "bi-border-layout",
             items: {}
         });
     },
@@ -18510,10 +18524,6 @@ BI.Single = BI.inherit(BI.Widget, {
         this._hoverBinded = false;
     },
 
-    populate: function (items) {
-        this.items = items || [];
-    },
-
     // opt: {container: '', belowMouse: false}
     setTitle: function (title, opt) {
         this.options.title = title;
@@ -19871,6 +19881,7 @@ BI.CollectionView = BI.inherit(BI.Widget, {
         }
     },
 
+    // mounted之后绑定事件
     mounted: function () {
         var  o = this.options;
         if (o.scrollLeft !== 0 || o.scrollTop !== 0) {
@@ -21632,7 +21643,7 @@ BI.Navigation = BI.inherit(BI.Widget, {
         });
     },
 
-    mounted: function () {
+    created: function () {
         var o = this.options;
         if (o.showIndex !== false) {
             this.setSelect(o.showIndex);
@@ -21740,6 +21751,7 @@ BI.Navigation = BI.inherit(BI.Widget, {
 BI.Navigation.EVENT_CHANGE = "EVENT_CHANGE";
 
 BI.shortcut("bi.navigation", BI.Navigation);
+
 
 /***/ }),
 /* 413 */
@@ -22440,7 +22452,7 @@ BI.Tab = BI.inherit(BI.Widget, {
         }
     },
 
-    mounted: function () {
+    created: function () {
         var o = this.options;
         if (o.showIndex !== false) {
             this.setSelect(o.showIndex);
@@ -22515,6 +22527,7 @@ BI.Tab = BI.inherit(BI.Widget, {
 BI.Tab.EVENT_CHANGE = "EVENT_CHANGE";
 
 BI.shortcut("bi.tab", BI.Tab);
+
 
 /***/ }),
 /* 416 */
@@ -22841,6 +22854,7 @@ BI.GridView = BI.inherit(BI.Widget, {
         }
     },
 
+    // mounted之后绑定事件
     mounted: function () {
         var o = this.options;
         if (o.scrollLeft !== 0 || o.scrollTop !== 0) {
@@ -23317,6 +23331,7 @@ BI.Popover = BI.inherit(BI.Widget, {
         });
     },
 
+    // mounted之后绑定事件
     mounted: function () {
         var self = this; var o = this.options;
         this.dragger.element.mousedown(function (e) {
@@ -23810,6 +23825,7 @@ BI.ListView = BI.inherit(BI.Widget, {
         };
     },
 
+    // mounted之后绑定事件
     mounted: function () {
         var self = this, o = this.options;
         this._populate();
@@ -23943,6 +23959,7 @@ BI.VirtualList = BI.inherit(BI.Widget, {
         };
     },
 
+    // mounted之后绑定事件
     mounted: function () {
         var self = this, o = this.options;
         this._populate();
@@ -24798,10 +24815,6 @@ BI.Button = BI.inherit(BI.BasicButton, {
 
     unHighLight: function () {
         this.text.unHighLight.apply(this.text, arguments);
-    },
-
-    destroy: function () {
-        BI.Button.superclass.destroy.apply(this, arguments);
     }
 });
 BI.shortcut("bi.button", BI.Button);
@@ -26614,8 +26627,8 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
                 },
                 left: 4,
                 right: 4,
-                top: 4,
-                bottom: 4
+                top: 2,
+                bottom: 2
             }]
         });
 
@@ -27940,10 +27953,6 @@ BI.shortcut("bi.radio", BI.Radio);
             if (!this.isReadOnly()) {
                 this.text.setValue(v);
             }
-        },
-
-        populate: function () {
-            BI.AbstractLabel.superclass.populate.apply(this, arguments);
         }
     });
 }());
@@ -32229,7 +32238,7 @@ BI.SearchTextValueCombo = BI.inherit(BI.Widget, {
         };
     },
 
-    mounted: function () {
+    created: function () {
         var o = this.options;
         if(BI.isKey(o.value)) {
             this._checkError(o.value);
@@ -32326,6 +32335,7 @@ BI.SearchTextValueComboPopup = BI.inherit(BI.Pane, {
         };
     },
 
+    // mounted之后做check
     mounted: function() {
         this.check();
     },
@@ -32351,6 +32361,7 @@ BI.SearchTextValueComboPopup = BI.inherit(BI.Pane, {
 });
 BI.SearchTextValueComboPopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.search_text_value_combo_popup", BI.SearchTextValueComboPopup);
+
 
 /***/ }),
 /* 507 */
@@ -38747,7 +38758,7 @@ BI.DynamicDatePane = BI.inherit(BI.Widget, {
         };
     },
 
-    mounted: function () {
+    created: function () {
         this.setValue(this.options.value);
     },
 
@@ -38778,7 +38789,6 @@ BI.DynamicDatePane = BI.inherit(BI.Widget, {
             this.ymd.setMaxDate(maxDate);
         }
     },
-
 
     setValue: function (v) {
         v = v || {};
@@ -39476,7 +39486,7 @@ BI.DynamicDateTimePane = BI.inherit(BI.Widget, {
         };
     },
 
-    mounted: function () {
+    created: function () {
         this.setValue(this.options.value);
     },
 
@@ -40939,7 +40949,7 @@ BI.DynamicDateCombo = BI.inherit(BI.Single, {
         };
     },
 
-    mounted: function () {
+    created: function () {
         this._checkDynamicValue(this.storeValue);
     },
 
@@ -41023,6 +41033,7 @@ BI.extend(BI.DynamicDateCombo, {
     Static: 1,
     Dynamic: 2
 });
+
 
 /***/ }),
 /* 569 */
@@ -42031,7 +42042,7 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
         };
     },
 
-    mounted: function () {
+    created: function () {
         this._checkDynamicValue(this.storeValue);
     },
 
@@ -42115,6 +42126,7 @@ BI.extend(BI.DynamicDateTimeCombo, {
     Static: 1,
     Dynamic: 2
 });
+
 
 /***/ }),
 /* 573 */
@@ -63710,7 +63722,7 @@ BI.StaticYearMonthCard = BI.inherit(BI.Widget, {
         };
     },
 
-    mounted: function() {
+    created: function() {
         this._checkMonthStatus(this.selectedYear);
     },
 

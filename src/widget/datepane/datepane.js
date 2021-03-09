@@ -109,7 +109,7 @@ BI.DynamicDatePane = BI.inherit(BI.Widget, {
         };
     },
 
-    mounted: function () {
+    created: function () {
         this.setValue(this.options.value);
     },
 
@@ -140,7 +140,6 @@ BI.DynamicDatePane = BI.inherit(BI.Widget, {
             this.ymd.setMaxDate(maxDate);
         }
     },
-
 
     setValue: function (v) {
         v = v || {};

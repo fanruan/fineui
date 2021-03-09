@@ -381,10 +381,6 @@
             if (!this.isReadOnly()) {
                 this.text.setValue(v);
             }
-        },
-
-        populate: function () {
-            BI.AbstractLabel.superclass.populate.apply(this, arguments);
         }
     });
 }());

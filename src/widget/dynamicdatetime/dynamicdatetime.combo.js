@@ -246,7 +246,7 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
         };
     },
 
-    mounted: function () {
+    created: function () {
         this._checkDynamicValue(this.storeValue);
     },
 

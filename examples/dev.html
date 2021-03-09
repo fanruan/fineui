@@ -2,7 +2,8 @@
 <head>
     <meta charset="utf-8">
     <title></title>
-    <link rel="stylesheet" type="text/css" href="http://fanruan.design/fineui/2.0/fineui.min.css"/>
+    <link rel="stylesheet" type="text/css" href="../dist/2.0/fineui.css"/>
+    <!--    <script src="../dist/2.0/fineui.js"></script>-->
     <script src="http://localhost:9001/fineui.js"></script>
 </head>
 <body>
@@ -37,9 +38,6 @@
     BI.model("demo.child_model", ChildModel);
 
     var Child = BI.inherit(BI.Widget, {
-        props: {
-            updateMode: "auto"
-        },
         setup: function () {
             var store = BI.useStore(function () {
                 return BI.Models.getModel("demo.child_model");
@@ -67,18 +65,25 @@
             updateMode: "auto"
         },
         setup: function () {
+            var child;
             var store = BI.useStore(function () {
                 return BI.Models.getModel("demo.model");
             });
             setInterval(function () {
                 store.toggle();
             }, 1000);
+            BI.watch("text", function () {
+                child.populate();
+            });
             return function () {
                 return {
                     type: "bi.vertical",
                     vgap: 20,
                     items: [{
-                        type: "demo.child"
+                        type: "demo.child",
+                        ref: function (_ref) {
+                            child = _ref;
+                        }
                     }, {
                         type: "demo.child"
                     }]

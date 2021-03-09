@@ -15,7 +15,7 @@ export declare class History {
     getHash(window?: Window): string;
     getPath(): string;
     getFragment(fragment?: string): string;
-    start(op: {
+    start(op?: {
         [key: string]: any;
     }): void;
     stop(): void;
