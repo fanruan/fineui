@@ -1,4 +1,4 @@
-/*! time: 2021-3-9 19:40:47 */
+/*! time: 2021-3-9 20:00:38 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -40362,7 +40362,8 @@ BI.DynamicDateCard = BI.inherit(BI.Widget, {
                     type: "bi.multi_select_item",
                     logic: {
                         dynamic: true
-                    }
+                    },
+                    iconWrapperWidth: 26,
                 }),
                 layouts: [{
                     type: "bi.left",
@@ -40406,6 +40407,7 @@ BI.DynamicDateCard = BI.inherit(BI.Widget, {
                 items: [{
                     el: {
                         type: "bi.multi_select_item",
+                        iconWrapperWidth: 26,
                         ref: function () {
                             self.workDayBox = this;
                         },
@@ -41356,7 +41358,7 @@ BI.DynamicDatePopup = BI.inherit(BI.Widget, {
     _setInnerValue: function () {
         if (this.dateTab.getSelect() === BI.DynamicDateCombo.Static) {
             this.todayButton.setValue(BI.i18nText("BI-Multi_Date_Today"));
-            this.textButton.setEnable(!this._checkTodayValid());
+            this.todayButton.setEnable(!this._checkTodayValid());
         } else {
             var date = BI.DynamicDateHelper.getCalculation(this.dynamicPane.getValue());
             date = BI.print(date, "%Y-%X-%d");
