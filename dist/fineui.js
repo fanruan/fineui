@@ -1,4 +1,4 @@
-/*! time: 2021-3-9 16:00:44 */
+/*! time: 2021-3-9 19:40:47 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -15020,13 +15020,12 @@ BI.Layout = BI.inherit(BI.Widget, {
         var self = this;
         var frag = BI.Widget._renderEngine.createFragment();
         var hasChild = false;
-        for (var key in this._children) {
-            var child = this._children[key];
-            if (child.element !== self.element) {
-                frag.appendChild(child.element[0]);
+        BI.each(this._children, function (i, widget) {
+            if (widget.element !== self.element) {
+                frag.appendChild(widget.element[0]);
                 hasChild = true;
             }
-        }
+        });
         if (hasChild === true) {
             this.appendFragment(frag);
         }
@@ -15218,12 +15217,18 @@ BI.Layout = BI.inherit(BI.Widget, {
         if (!child.shouldUpdate) {
             return null;
         }
-        return child.shouldUpdate(this._getOptions(item));
+        return child.shouldUpdate(this._getOptions(item)) === true;
     },
 
     updateItemAt: function (index, item) {
         if (index < 0 || index > this.options.items.length - 1) {
             return;
+        }
+
+        var child = this._children[this._getChildName(index)];
+        var updated;
+        if (updated = child.update(this._getOptions(item))) {
+            return updated;
         }
         var del = this._children[this._getChildName(index)];
         delete this._children[this._getChildName(index)];
@@ -15311,14 +15316,7 @@ BI.Layout = BI.inherit(BI.Widget, {
 
     patchItem: function (oldVnode, vnode, index) {
         var shouldUpdate = this.shouldUpdateItem(index, vnode);
-        var child = this._children[this._getChildName(index)];
-        if (shouldUpdate) {
-            return child._update(this._getOptions(vnode), shouldUpdate);
-        }
-        if (shouldUpdate === null && !this._compare(oldVnode, vnode)) {
-            // if (child.update) {
-            //     return child.update(this._getOptions(vnode));
-            // }
+        if (shouldUpdate === true || (shouldUpdate === null && !this._compare(oldVnode, vnode))) {
             return this.updateItemAt(index, vnode);
         }
     },
@@ -32928,7 +32926,9 @@ BI.MultiSelectItem = BI.inherit(BI.BasicButton, {
             logic: {
                 dynamic: false
             },
-            iconWrapperWidth: 26
+            iconWrapperWidth: 16,
+            textHgap: 0,
+            textRgap: 0
         });
     },
     _init: function () {
@@ -32944,8 +32944,8 @@ BI.MultiSelectItem = BI.inherit(BI.BasicButton, {
             whiteSpace: "nowrap",
             textHeight: o.height,
             height: o.height,
-            hgap: o.hgap,
-            rgap: o.rgap,
+            hgap: o.textHgap,
+            rgap: o.textHgap,
             text: o.text,
             keyword: o.keyword,
             value: o.value,
@@ -32991,6 +32991,7 @@ BI.MultiSelectItem = BI.inherit(BI.BasicButton, {
 });
 BI.MultiSelectItem.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multi_select_item", BI.MultiSelectItem);
+
 
 /***/ }),
 /* 470 */
@@ -33128,7 +33129,10 @@ BI.SingleSelectRadioItem = BI.inherit(BI.BasicButton, {
             logic: {
                 dynamic: false
             },
-            height: 24
+            height: 24,
+            iconWrapperWidth: 16,
+            textHgap: 0,
+            textRgap: 0
         });
     },
     _init: function () {
@@ -33144,7 +33148,8 @@ BI.SingleSelectRadioItem = BI.inherit(BI.BasicButton, {
             whiteSpace: "nowrap",
             textHeight: o.height,
             height: o.height,
-            hgap: o.hgap,
+            hgap: o.textHgap,
+            rgap: o.textHgap,
             text: o.text,
             keyword: o.keyword,
             value: o.value,
@@ -33157,7 +33162,7 @@ BI.SingleSelectRadioItem = BI.inherit(BI.BasicButton, {
             items: BI.LogicFactory.createLogicItemsByDirection("left", {
                 type: "bi.center_adapt",
                 items: [this.radio],
-                width: 16
+                width: o.conWrapperWidth
             }, this.text)
         }))));
     },
