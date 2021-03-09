@@ -1,6 +1,7 @@
 import { Single } from "../single";
 export declare class BasicButton extends Single {
     static EVENT_CHANGE: string;
+    static xtype: string;
     _createShadow(): void;
     bindEvent(): void;
     _trigger(e: Event): void;
