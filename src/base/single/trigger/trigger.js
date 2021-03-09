@@ -24,7 +24,4 @@ BI.Trigger = BI.inherit(BI.Single, {
     getKey: function () {
 
     },
-    populate: function () {
-
-    }
 });
