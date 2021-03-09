@@ -152,9 +152,16 @@
             this._children = {};
             if (BI.isWidget(o.element)) {
                 this.element = this.options.element.element;
-                this._parent = o.element;
-                this._parent.addWidget(this.widgetName, this);
+                if (o.element instanceof BI.Widget) {
+                    this._parent = o.element;
+                    this._parent.addWidget(this.widgetName, this);
+                } else {
+                    this._isRoot = true;
+                }
             } else if (o.element) {
+                // if (o.root !== true) {
+                //     throw new Error("root is a required property");
+                // }
                 this.element = BI.Widget._renderEngine.createElement(this);
                 this._isRoot = true;
             } else {

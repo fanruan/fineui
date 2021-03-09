@@ -45,8 +45,14 @@
             return {
                 render: function () {
                     return {
-                        type: "bi.button",
-                        text: store.model.text
+                        type: "bi.vertical",
+                        items: [{
+                            type: "bi.button",
+                            text: store.model.text
+                        }, {
+                            type: "bi.label",
+                            text: store.model.text
+                        }]
                     };
                 }
             };
@@ -67,7 +73,7 @@
                 store.toggle();
             }, 1000);
             BI.watch("text", function () {
-                // child.reset();
+                child.populate();
             });
             return function () {
                 return {
@@ -79,23 +85,7 @@
                             child = _ref;
                         }
                     }, {
-                        type: "bi.combo",
-                        el: {
-                            type: "bi.button",
-                            text: "点击"
-                        },
-                        popup: {
-                            el: {
-                                type: "bi.tab",
-                                height: 100,
-                                showIndex: 0,
-                                cardCreator: function () {
-                                    return {
-                                        type: "demo.child"
-                                    };
-                                }
-                            }
-                        }
+                        type: "demo.child"
                     }]
                 };
             };
