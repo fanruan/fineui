@@ -82,7 +82,7 @@
             if (p instanceof Fix.Model || p.store || p.__cacheStore) {
                 break;
             }
-            p = p._context || p._parent || (p.options && p.options.element);
+            p = p._parent || (p.options && p.options.element) || p._context;
         }
         if (p) {
             if (p instanceof Fix.Model) {
@@ -106,7 +106,7 @@
     function createStore () {
         var needPop = false;
         if (_global.Fix && this._store) {
-            var store = findStore(this.options.context || this._context || this._parent || this.options.element);
+            var store = findStore(this.options.context || this._parent || this.options.element || this._context);
             if (store) {
                 pushTarget(store);
                 needPop = true;
