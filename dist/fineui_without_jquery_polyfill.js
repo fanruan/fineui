@@ -1,4 +1,4 @@
-/*! time: 2021-3-9 15:50:49 */
+/*! time: 2021-3-9 16:00:44 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -10374,7 +10374,7 @@ BI.Req = {
         },
 
         // 默认的populate方法就是干掉重来
-        populate: function () {
+        reset: function () {
             this.purgeListeners();
             this.empty();
             this._initCurrent();
@@ -20722,7 +20722,7 @@ BI.shortcut("bi.collection_view", BI.CollectionView);
         populate: function (items) {
             this._assertPopupView();
             this.popupView.populate.apply(this.popupView, arguments);
-            this.combo.populate.apply(this.combo, arguments);
+            this.combo.populate && this.combo.populate.apply(this.combo, arguments);
         },
 
         _setEnable: function (arg) {
@@ -21013,7 +21013,7 @@ BI.Expander = BI.inherit(BI.Widget, {
     populate: function (items) {
         // this._assertPopupView();
         this.popupView && this.popupView.populate.apply(this.popupView, arguments);
-        this.expander.populate.apply(this.expander, arguments);
+        this.expander.populate && this.expander.populate.apply(this.expander, arguments);
     },
 
     _setEnable: function (arg) {
@@ -22277,7 +22277,7 @@ BI.Switcher = BI.inherit(BI.Widget, {
     populate: function (items) {
         this._assertPopupView();
         this.popupView.populate.apply(this.popupView, arguments);
-        this.switcher.populate.apply(this.switcher, arguments);
+        this.switcher.populate && this.switcher.populate.apply(this.switcher, arguments);
     },
 
     _setEnable: function (arg) {
@@ -28593,7 +28593,7 @@ BI.Trigger = BI.inherit(BI.Single, {
 
     getKey: function () {
 
-    }
+    },
 });
 
 /***/ }),
