@@ -1,4 +1,4 @@
-/*! time: 2021-3-9 21:10:47 */
+/*! time: 2021-3-10 11:20:44 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -9816,7 +9816,7 @@ BI.Req = {
  */
 
 !(function () {
-    function callLifeHook (self, life) {
+    function callLifeHook(self, life) {
         var hook = self.options[life] || self[life];
         if (hook) {
             var hooks = BI.isArray(hook) ? hook : [hook];
@@ -9885,7 +9885,8 @@ BI.Req = {
 
         shouldUpdate: null,
 
-        update: null,
+        update: function () {
+        },
 
         beforeUpdate: null,
 
@@ -9907,7 +9908,7 @@ BI.Req = {
         _initRender: function () {
             var self = this;
 
-            function render () {
+            function render() {
                 if (self.options.beforeRender || self.beforeRender) {
                     (self.options.beforeRender || self.beforeRender).call(self, BI.bind(self._render, self));
                 } else {
@@ -10402,12 +10403,12 @@ BI.Req = {
         BI.Widget.context = context = contextStack.pop();
     };
 
-    function pushTarget (_current) {
+    function pushTarget(_current) {
         if (current) currentStack.push(current);
         BI.Widget.current = current = _current;
     }
 
-    function popTarget () {
+    function popTarget() {
         BI.Widget.current = current = currentStack.pop();
     }
 
