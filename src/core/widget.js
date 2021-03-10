@@ -7,7 +7,7 @@
  */
 
 !(function () {
-    function callLifeHook (self, life) {
+    function callLifeHook(self, life) {
         var hook = self.options[life] || self[life];
         if (hook) {
             var hooks = BI.isArray(hook) ? hook : [hook];
@@ -76,7 +76,8 @@
 
         shouldUpdate: null,
 
-        update: null,
+        update: function () {
+        },
 
         beforeUpdate: null,
 
@@ -98,7 +99,7 @@
         _initRender: function () {
             var self = this;
 
-            function render () {
+            function render() {
                 if (self.options.beforeRender || self.beforeRender) {
                     (self.options.beforeRender || self.beforeRender).call(self, BI.bind(self._render, self));
                 } else {
@@ -593,12 +594,12 @@
         BI.Widget.context = context = contextStack.pop();
     };
 
-    function pushTarget (_current) {
+    function pushTarget(_current) {
         if (current) currentStack.push(current);
         BI.Widget.current = current = _current;
     }
 
-    function popTarget () {
+    function popTarget() {
         BI.Widget.current = current = currentStack.pop();
     }
 
