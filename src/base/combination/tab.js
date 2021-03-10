@@ -76,7 +76,7 @@ BI.Tab = BI.inherit(BI.Widget, {
         }
     },
 
-    mounted: function () {
+    created: function () {
         var o = this.options;
         if (o.showIndex !== false) {
             this.setSelect(o.showIndex);

@@ -109,7 +109,7 @@ BI.DynamicDateTimePane = BI.inherit(BI.Widget, {
         };
     },
 
-    mounted: function () {
+    created: function () {
         this.setValue(this.options.value);
     },
 

@@ -1,4 +1,4 @@
-/*! time: 2021-2-26 15:02:26 */
+/*! time: 2021-3-9 21:10:47 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -82,7 +82,7 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 1415);
+/******/ 	return __webpack_require__(__webpack_require__.s = 1416);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -839,7 +839,7 @@ if (!_global.BI) {
         },
 
         isWidget: function (widget) {
-            return widget instanceof BI.Widget || (BI.View && widget instanceof BI.View);
+            return widget instanceof BI.Widget;
         },
 
         createWidgets: function (items, options, context) {
@@ -876,7 +876,7 @@ if (!_global.BI) {
                         el: innerAttr.shift()
                     });
                 }
-                if (item.el instanceof BI.Widget || (BI.View && item.el instanceof BI.View)) {
+                if (item.el instanceof BI.Widget) {
                     innerAttr.shift();
                     return BI.extend({}, outerAttr.shift(), { type: null }, item);
                 }
@@ -2366,6 +2366,9 @@ if (!_global.BI) {
 
         // 获得一个当前对象的引用
         _initRef: function () {
+            if (this.options.__ref) {
+                this.options.__ref.call(this, this);
+            }
             if (this.options.ref) {
                 this.options.ref.call(this, this);
             }
@@ -2373,6 +2376,10 @@ if (!_global.BI) {
 
         //释放当前对象
         _purgeRef: function () {
+            if (this.options.__ref) {
+                this.options.__ref.call(null);
+                this.options.__ref = null;
+            }
             if (this.options.ref) {
                 this.options.ref.call(null);
                 this.options.ref = null;
@@ -9809,7 +9816,7 @@ BI.Req = {
  */
 
 !(function () {
-    function callLifeHook(self, life) {
+    function callLifeHook (self, life) {
         var hook = self.options[life] || self[life];
         if (hook) {
             var hooks = BI.isArray(hook) ? hook : [hook];
@@ -9834,7 +9841,8 @@ BI.Req = {
                 baseCls: "",
                 extraCls: "",
                 cls: "",
-                css: null
+                css: null,
+                updateMode: "manual" // manual / auto
             });
         },
 
@@ -9860,9 +9868,11 @@ BI.Req = {
             }
         },
 
+        // 生命周期函数
         beforeInit: null,
 
-        // 生命周期函数
+        beforeRender: null,
+
         beforeCreate: null,
 
         created: null,
@@ -9875,8 +9885,11 @@ BI.Req = {
 
         shouldUpdate: null,
 
-        update: function () {
-        },
+        update: null,
+
+        beforeUpdate: null,
+
+        updated: null,
 
         beforeDestroy: null,
 
@@ -9892,14 +9905,24 @@ BI.Req = {
         },
 
         _initRender: function () {
+            var self = this;
+
+            function render () {
+                if (self.options.beforeRender || self.beforeRender) {
+                    (self.options.beforeRender || self.beforeRender).call(self, BI.bind(self._render, self));
+                } else {
+                    self._render();
+                }
+            }
+
             if (this.options.beforeInit || this.beforeInit) {
                 this.__asking = true;
-                (this.options.beforeInit || this.beforeInit).call(this, BI.bind(this._render, this));
+                (this.options.beforeInit || this.beforeInit).call(this, render);
                 if (this.__asking === true) {
                     this.__async = true;
                 }
             } else {
-                this._render();
+                render();
             }
         },
 
@@ -9909,6 +9932,22 @@ BI.Req = {
             this._initElement();
             this._initEffects();
             callLifeHook(this, "created");
+        },
+
+        _initCurrent: function () {
+            var o = this.options;
+            if (o._baseCls || o.baseCls || o.extraCls || o.cls) {
+                this.element.addClass((o._baseCls || "") + " " + (o.baseCls || "") + " " + (o.extraCls || "") + " " + (o.cls || ""));
+            }
+            if (o.attributes) {
+                this.element.attr(o.attributes);
+            }
+            if (o.data) {
+                this.element.data(o.data);
+            }
+            if (o.css) {
+                this.element.css(o.css);
+            }
         },
 
         /**
@@ -9922,34 +9961,16 @@ BI.Req = {
             this._children = {};
             if (BI.isWidget(o.element)) {
                 this.element = this.options.element.element;
-                if (o.element instanceof BI.Widget) {
-                    this._parent = o.element;
-                    this._parent.addWidget(this.widgetName, this);
-                } else {
-                    this._isRoot = true;
-                }
+                this._parent = o.element;
+                this._parent.addWidget(this.widgetName, this);
             } else if (o.element) {
-                // if (o.root !== true) {
-                //     throw new Error("root is a required property");
-                // }
                 this.element = BI.Widget._renderEngine.createElement(this);
                 this._isRoot = true;
             } else {
                 this.element = BI.Widget._renderEngine.createElement(this);
             }
             this.element._isWidget = true;
-            if (o._baseCls || o.baseCls || o.extraCls || o.cls) {
-                this.element.addClass((o._baseCls || "") + " " + (o.baseCls || "") + " " + (o.extraCls || "") + " " + (o.cls || ""));
-            }
-            if (o.attributes) {
-                this.element.attr(o.attributes);
-            }
-            if (o.data) {
-                this.element.data(o.data);
-            }
-            if (o.css) {
-                this.element.css(o.css);
-            }
+            this._initCurrent();
         },
 
         _initElementWidth: function () {
@@ -10024,26 +10045,62 @@ BI.Req = {
          * @returns {boolean}
          * @private
          */
-        _mount: function (force, deep, lifeHook, predicate) {
+        _mount: function (force, deep, lifeHook, predicate, layer) {
             var self = this;
             if (!force && (this._isMounted || !this.isVisible() || this.__asking === true || !(this._isRoot === true || (this._parent && this._parent._isMounted === true)))) {
                 return false;
             }
+            layer = layer || 0;
             lifeHook !== false && callLifeHook(this, "beforeMount");
             this._isMounted = true;
+            for (var key in this._children) {
+                var child = this._children[key];
+                !self.isEnabled() && child._setEnable(false);
+                !self.isValid() && child._setValid(false);
+                child._mount && child._mount(deep ? force : false, deep, lifeHook, predicate, layer + 1);
+            }
             this._mountChildren && this._mountChildren();
-            BI.each(this._children, function (i, widget) {
-                !self.isEnabled() && widget._setEnable(false);
-                !self.isValid() && widget._setValid(false);
-                widget._mount && widget._mount(deep ? force : false, deep, lifeHook, predicate);
-            });
-            lifeHook !== false && callLifeHook(this, "mounted");
-            this.fireEvent(BI.Events.MOUNT);
-            predicate && predicate(this);
+            if (layer === 0) {
+                // mounted里面会执行scrollTo之类的方法，如果放宏任务里会闪
+                // setTimeout(function () {
+                self.__afterMount(lifeHook, predicate);
+                // }, 0);
+            }
             return true;
         },
 
+        __afterMount: function (lifeHook, predicate) {
+            if (this._isMounted) {
+                for (var key in this._children) {
+                    var child = this._children[key];
+                    child.__afterMount && child.__afterMount(lifeHook, predicate);
+                }
+                lifeHook !== false && callLifeHook(this, "mounted");
+                this.fireEvent(BI.Events.MOUNT);
+                predicate && predicate(this);
+            }
+        },
+
         _mountChildren: null,
+
+        _update: function (nextProps, shouldUpdate) {
+            var o = this.options;
+            callLifeHook(this, "beforeUpdate");
+            if (shouldUpdate) {
+                var res = this.update && this.update(nextProps, shouldUpdate);
+            } else if (BI.isNull(shouldUpdate)) {
+                // 默认使用shallowCompare的方式进行更新
+                var nextChange = {};
+                BI.each(nextProps, function (key, value) {
+                    if (o[key] !== value) {
+                        nextChange[key] = value;
+                    }
+                });
+                var res = this.update && BI.isNotEmptyObject(nextChange) && this.update(nextChange);
+            }
+            callLifeHook(this, "updated");
+            return res;
+        },
 
         isMounted: function () {
             return this._isMounted;
@@ -10309,6 +10366,15 @@ BI.Req = {
             this.element.empty();
         },
 
+        // 默认的populate方法就是干掉重来
+        reset: function () {
+            this.purgeListeners();
+            this.empty();
+            this._initCurrent();
+            this._init();
+            this._initRef();
+        },
+
         _destroy: function () {
             this.__d();
             this.element.destroy();
@@ -10336,12 +10402,12 @@ BI.Req = {
         BI.Widget.context = context = contextStack.pop();
     };
 
-    function pushTarget(_current) {
+    function pushTarget (_current) {
         if (current) currentStack.push(current);
         BI.Widget.current = current = _current;
     }
 
-    function popTarget() {
+    function popTarget () {
         BI.Widget.current = current = currentStack.pop();
     }
 
@@ -10510,11 +10576,12 @@ BI.Req = {
             throw new Error("组件" + config.type + "未定义");
         }
         var pushed = false;
-        if (context) {
+        var widget = new cls();
+        widget._context = BI.Widget.context || context;
+        if (!BI.Widget.context && context) {
             pushed = true;
             BI.Widget.pushContext(context);
         }
-        var widget = new cls();
         widget._initProps(config);
         widget._constructed();
         widget._initRoot();
@@ -15832,7 +15899,7 @@ BI.shortcut("bi.adaptive", BI.AdaptiveLayout);
 BI.BorderLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.BorderLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-border",
+            baseCls: "bi-border-layout",
             items: {}
         });
     },
@@ -18449,10 +18516,6 @@ BI.Single = BI.inherit(BI.Widget, {
         this._hoverBinded = false;
     },
 
-    populate: function (items) {
-        this.items = items || [];
-    },
-
     // opt: {container: '', belowMouse: false}
     setTitle: function (title, opt) {
         this.options.title = title;
@@ -18503,6 +18566,7 @@ BI.Single = BI.inherit(BI.Widget, {
     setValue: function (val) {
         if (!this.options.readonly) {
             this.options.value = val;
+            this.options.setValue && this.options.setValue(val);
         }
     },
 
@@ -18516,8 +18580,9 @@ BI.Single = BI.inherit(BI.Widget, {
             this.showTimeout = null;
         }
         BI.Tooltips.remove(this.getName());
-    },
+    }
 });
+BI.shortcut("bi.single", BI.Single);
 
 
 /***/ }),
@@ -19060,6 +19125,7 @@ BI.BasicButton = BI.inherit(BI.Single, {
         if (o.shadow && !o.isShadowShowingOnSelected) {
             this.$mask && this.$mask.setVisible(false);
         }
+        this.options.setSelected && this.options.setSelected.call(this, b);
     },
 
     isSelected: function () {
@@ -19084,6 +19150,7 @@ BI.BasicButton = BI.inherit(BI.Single, {
 
     setText: function (text) {
         this.options.text = text;
+        this.options.setText && this.options.setText.call(this, text);
     },
 
     getText: function () {
@@ -19107,13 +19174,10 @@ BI.BasicButton = BI.inherit(BI.Single, {
     empty: function () {
         BI.Widget._renderEngine.createElement(document).unbind("mouseup." + this.getName());
         BI.BasicButton.superclass.empty.apply(this, arguments);
-    },
-
-    destroy: function () {
-        BI.BasicButton.superclass.destroy.apply(this, arguments);
     }
 });
 BI.BasicButton.EVENT_CHANGE = "BasicButton.EVENT_CHANGE";
+BI.shortcut("bi.basic_button", BI.BasicButton);
 
 
 /***/ }),
@@ -19809,6 +19873,7 @@ BI.CollectionView = BI.inherit(BI.Widget, {
         }
     },
 
+    // mounted之后绑定事件
     mounted: function () {
         var  o = this.options;
         if (o.scrollLeft !== 0 || o.scrollTop !== 0) {
@@ -20649,7 +20714,7 @@ BI.shortcut("bi.collection_view", BI.CollectionView);
         populate: function (items) {
             this._assertPopupView();
             this.popupView.populate.apply(this.popupView, arguments);
-            this.combo.populate.apply(this.combo, arguments);
+            this.combo.populate && this.combo.populate.apply(this.combo, arguments);
         },
 
         _setEnable: function (arg) {
@@ -20940,7 +21005,7 @@ BI.Expander = BI.inherit(BI.Widget, {
     populate: function (items) {
         // this._assertPopupView();
         this.popupView && this.popupView.populate.apply(this.popupView, arguments);
-        this.expander.populate.apply(this.expander, arguments);
+        this.expander.populate && this.expander.populate.apply(this.expander, arguments);
     },
 
     _setEnable: function (arg) {
@@ -21570,7 +21635,7 @@ BI.Navigation = BI.inherit(BI.Widget, {
         });
     },
 
-    mounted: function () {
+    created: function () {
         var o = this.options;
         if (o.showIndex !== false) {
             this.setSelect(o.showIndex);
@@ -21678,6 +21743,7 @@ BI.Navigation = BI.inherit(BI.Widget, {
 BI.Navigation.EVENT_CHANGE = "EVENT_CHANGE";
 
 BI.shortcut("bi.navigation", BI.Navigation);
+
 
 /***/ }),
 /* 413 */
@@ -22203,7 +22269,7 @@ BI.Switcher = BI.inherit(BI.Widget, {
     populate: function (items) {
         this._assertPopupView();
         this.popupView.populate.apply(this.popupView, arguments);
-        this.switcher.populate.apply(this.switcher, arguments);
+        this.switcher.populate && this.switcher.populate.apply(this.switcher, arguments);
     },
 
     _setEnable: function (arg) {
@@ -22378,7 +22444,7 @@ BI.Tab = BI.inherit(BI.Widget, {
         }
     },
 
-    mounted: function () {
+    created: function () {
         var o = this.options;
         if (o.showIndex !== false) {
             this.setSelect(o.showIndex);
@@ -22453,6 +22519,7 @@ BI.Tab = BI.inherit(BI.Widget, {
 BI.Tab.EVENT_CHANGE = "EVENT_CHANGE";
 
 BI.shortcut("bi.tab", BI.Tab);
+
 
 /***/ }),
 /* 416 */
@@ -22779,6 +22846,7 @@ BI.GridView = BI.inherit(BI.Widget, {
         }
     },
 
+    // mounted之后绑定事件
     mounted: function () {
         var o = this.options;
         if (o.scrollLeft !== 0 || o.scrollTop !== 0) {
@@ -23255,6 +23323,7 @@ BI.Popover = BI.inherit(BI.Widget, {
         });
     },
 
+    // mounted之后绑定事件
     mounted: function () {
         var self = this; var o = this.options;
         this.dragger.element.mousedown(function (e) {
@@ -23748,6 +23817,7 @@ BI.ListView = BI.inherit(BI.Widget, {
         };
     },
 
+    // mounted之后绑定事件
     mounted: function () {
         var self = this, o = this.options;
         this._populate();
@@ -23881,6 +23951,7 @@ BI.VirtualList = BI.inherit(BI.Widget, {
         };
     },
 
+    // mounted之后绑定事件
     mounted: function () {
         var self = this, o = this.options;
         this._populate();
@@ -24589,7 +24660,6 @@ BI.shortcut("bi.image_button", BI.ImageButton);
 /* 429 */
 /***/ (function(module, exports) {
 
-
 /**
  * 文字类型的按钮
  * @class BI.Button
@@ -24635,7 +24705,10 @@ BI.Button = BI.inherit(BI.BasicButton, {
         BI.Button.superclass._init.apply(this, arguments);
         var o = this.options, self = this;
         if (BI.isNumber(o.height) && !o.clear && !o.block) {
-            this.element.css({height: o.height / BI.pixRatio + BI.pixUnit, lineHeight: (o.height - 2) / BI.pixRatio + BI.pixUnit});
+            this.element.css({
+                height: o.height / BI.pixRatio + BI.pixUnit,
+                lineHeight: (o.height - 2) / BI.pixRatio + BI.pixUnit
+            });
         } else if (o.clear || o.block) {
             this.element.css({lineHeight: o.height / BI.pixRatio + BI.pixUnit});
         } else {
@@ -24734,10 +24807,6 @@ BI.Button = BI.inherit(BI.BasicButton, {
 
     unHighLight: function () {
         this.text.unHighLight.apply(this.text, arguments);
-    },
-
-    destroy: function () {
-        BI.Button.superclass.destroy.apply(this, arguments);
     }
 });
 BI.shortcut("bi.button", BI.Button);
@@ -26550,8 +26619,8 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
                 },
                 left: 4,
                 right: 4,
-                top: 4,
-                bottom: 4
+                top: 2,
+                bottom: 2
             }]
         });
 
@@ -27876,10 +27945,6 @@ BI.shortcut("bi.radio", BI.Radio);
             if (!this.isReadOnly()) {
                 this.text.setValue(v);
             }
-        },
-
-        populate: function () {
-            BI.AbstractLabel.superclass.populate.apply(this, arguments);
         }
     });
 }());
@@ -28520,7 +28585,7 @@ BI.Trigger = BI.inherit(BI.Single, {
 
     getKey: function () {
 
-    }
+    },
 });
 
 /***/ }),
@@ -28877,7 +28942,9 @@ BI.MultiSelectItem = BI.inherit(BI.BasicButton, {
             logic: {
                 dynamic: false
             },
-            iconWrapperWidth: 26
+            iconWrapperWidth: 16,
+            textHgap: 0,
+            textRgap: 0
         });
     },
     _init: function () {
@@ -28893,8 +28960,8 @@ BI.MultiSelectItem = BI.inherit(BI.BasicButton, {
             whiteSpace: "nowrap",
             textHeight: o.height,
             height: o.height,
-            hgap: o.hgap,
-            rgap: o.rgap,
+            hgap: o.textHgap,
+            rgap: o.textHgap,
             text: o.text,
             keyword: o.keyword,
             value: o.value,
@@ -28940,6 +29007,7 @@ BI.MultiSelectItem = BI.inherit(BI.BasicButton, {
 });
 BI.MultiSelectItem.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multi_select_item", BI.MultiSelectItem);
+
 
 /***/ }),
 /* 470 */
@@ -29077,7 +29145,10 @@ BI.SingleSelectRadioItem = BI.inherit(BI.BasicButton, {
             logic: {
                 dynamic: false
             },
-            height: 24
+            height: 24,
+            iconWrapperWidth: 16,
+            textHgap: 0,
+            textRgap: 0
         });
     },
     _init: function () {
@@ -29093,7 +29164,8 @@ BI.SingleSelectRadioItem = BI.inherit(BI.BasicButton, {
             whiteSpace: "nowrap",
             textHeight: o.height,
             height: o.height,
-            hgap: o.hgap,
+            hgap: o.textHgap,
+            rgap: o.textHgap,
             text: o.text,
             keyword: o.keyword,
             value: o.value,
@@ -29106,7 +29178,7 @@ BI.SingleSelectRadioItem = BI.inherit(BI.BasicButton, {
             items: BI.LogicFactory.createLogicItemsByDirection("left", {
                 type: "bi.center_adapt",
                 items: [this.radio],
-                width: 26
+                width: o.conWrapperWidth
             }, this.text)
         }))));
     },
@@ -29954,7 +30026,8 @@ BI.IconTreeLeafItem = BI.inherit(BI.BasicButton, {
             hgap: o.hgap,
             text: o.text,
             value: o.value,
-            py: o.py
+            py: o.py,
+            keyword: o.keyword
         });
         var type = BI.LogicFactory.createLogicTypeByDirection(BI.Direction.Left);
         var items = BI.LogicFactory.createLogicItemsByDirection(BI.Direction.Left, {
@@ -32164,7 +32237,7 @@ BI.SearchTextValueCombo = BI.inherit(BI.Widget, {
         };
     },
 
-    mounted: function () {
+    created: function () {
         var o = this.options;
         if(BI.isKey(o.value)) {
             this._checkError(o.value);
@@ -32261,6 +32334,7 @@ BI.SearchTextValueComboPopup = BI.inherit(BI.Pane, {
         };
     },
 
+    // mounted之后做check
     mounted: function() {
         this.check();
     },
@@ -32286,6 +32360,7 @@ BI.SearchTextValueComboPopup = BI.inherit(BI.Pane, {
 });
 BI.SearchTextValueComboPopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.search_text_value_combo_popup", BI.SearchTextValueComboPopup);
+
 
 /***/ }),
 /* 507 */
@@ -36254,13 +36329,10 @@ BI.SegmentButton = BI.inherit(BI.BasicButton, {
     setText: function (text) {
         BI.SegmentButton.superclass.setText.apply(this, arguments);
         this.text.setText(text);
-    },
-
-    destroy: function () {
-        BI.SegmentButton.superclass.destroy.apply(this, arguments);
     }
 });
 BI.shortcut("bi.segment_button", BI.SegmentButton);
+
 
 /***/ }),
 /* 533 */
@@ -38685,7 +38757,7 @@ BI.DynamicDatePane = BI.inherit(BI.Widget, {
         };
     },
 
-    mounted: function () {
+    created: function () {
         this.setValue(this.options.value);
     },
 
@@ -38716,7 +38788,6 @@ BI.DynamicDatePane = BI.inherit(BI.Widget, {
             this.ymd.setMaxDate(maxDate);
         }
     },
-
 
     setValue: function (v) {
         v = v || {};
@@ -39414,7 +39485,7 @@ BI.DynamicDateTimePane = BI.inherit(BI.Widget, {
         };
     },
 
-    mounted: function () {
+    created: function () {
         this.setValue(this.options.value);
     },
 
@@ -40285,7 +40356,8 @@ BI.DynamicDateCard = BI.inherit(BI.Widget, {
                     type: "bi.multi_select_item",
                     logic: {
                         dynamic: true
-                    }
+                    },
+                    iconWrapperWidth: 26,
                 }),
                 layouts: [{
                     type: "bi.left",
@@ -40329,6 +40401,7 @@ BI.DynamicDateCard = BI.inherit(BI.Widget, {
                 items: [{
                     el: {
                         type: "bi.multi_select_item",
+                        iconWrapperWidth: 26,
                         ref: function () {
                             self.workDayBox = this;
                         },
@@ -40646,13 +40719,22 @@ BI.DynamicDateCombo = BI.inherit(BI.Single, {
     },
 
     props: {
-        baseCls: "bi-dynamic-date-combo",
+        baseCls: "bi-dynamic-date-combo bi-border bi-focus-shadow bi-border-radius",
         height: 24,
         minDate: "1900-01-01",
         maxDate: "2099-12-31",
         format: "",
         allowEdit: true,
         supportDynamic: true,
+        attributes: {
+            tabIndex: -1
+        }
+    },
+
+    _init: function () {
+        var o = this.options;
+        o.height -= 2;
+        BI.DynamicDateCombo.superclass._init.apply(this, arguments);
     },
 
     render: function () {
@@ -40678,7 +40760,6 @@ BI.DynamicDateCombo = BI.inherit(BI.Single, {
                 items: [{
                     el: {
                         type: "bi.combo",
-                        cls: "bi-border bi-focus-shadow bi-border-radius",
                         container: opts.container,
                         ref: function () {
                             self.combo = this;
@@ -40694,7 +40775,7 @@ BI.DynamicDateCombo = BI.inherit(BI.Single, {
                             format: opts.format,
                             allowEdit: opts.allowEdit,
                             watermark: opts.watermark,
-                            height: opts.height - 2,
+                            height: opts.height,
                             value: opts.value,
                             ref: function () {
                                 self.trigger = this;
@@ -40877,7 +40958,7 @@ BI.DynamicDateCombo = BI.inherit(BI.Single, {
         };
     },
 
-    mounted: function () {
+    created: function () {
         this._checkDynamicValue(this.storeValue);
     },
 
@@ -40961,6 +41042,7 @@ BI.extend(BI.DynamicDateCombo, {
     Static: 1,
     Dynamic: 2
 });
+
 
 /***/ }),
 /* 569 */
@@ -41278,7 +41360,7 @@ BI.DynamicDatePopup = BI.inherit(BI.Widget, {
     _setInnerValue: function () {
         if (this.dateTab.getSelect() === BI.DynamicDateCombo.Static) {
             this.todayButton.setValue(BI.i18nText("BI-Multi_Date_Today"));
-            this.textButton.setEnable(!this._checkTodayValid());
+            this.todayButton.setEnable(!this._checkTodayValid());
         } else {
             var date = BI.DynamicDateHelper.getCalculation(this.dynamicPane.getValue());
             date = BI.print(date, "%Y-%X-%d");
@@ -41730,13 +41812,22 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
     },
 
     props: {
-        baseCls: "bi-dynamic-date-combo",
+        baseCls: "bi-dynamic-date-combo bi-border bi-focus-shadow bi-border-radius",
         height: 24,
         minDate: "1900-01-01",
         maxDate: "2099-12-31",
         format: "",
         allowEdit: true,
-        supportDynamic: true
+        supportDynamic: true,
+        attributes: {
+            tabIndex: -1
+        }
+    },
+
+    _init: function () {
+        var o = this.options;
+        o.height -= 2;
+        BI.DynamicDateTimeCombo.superclass._init.apply(this, arguments);
     },
 
     render: function () {
@@ -41762,7 +41853,6 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
                 items: [{
                     el: {
                         type: "bi.combo",
-                        cls: "bi-border bi-focus-shadow bi-border-radius",
                         destroyWhenHide: true,
                         container: opts.container,
                         ref: function () {
@@ -41778,7 +41868,7 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
                             allowEdit: opts.allowEdit,
                             watermark: opts.watermark,
                             format: opts.format,
-                            height: opts.height - 2,
+                            height: opts.height,
                             value: opts.value,
                             ref: function () {
                                 self.trigger = this;
@@ -41969,7 +42059,7 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
         };
     },
 
-    mounted: function () {
+    created: function () {
         this._checkDynamicValue(this.storeValue);
     },
 
@@ -42053,6 +42143,7 @@ BI.extend(BI.DynamicDateTimeCombo, {
     Static: 1,
     Dynamic: 2
 });
+
 
 /***/ }),
 /* 573 */
@@ -63648,7 +63739,7 @@ BI.StaticYearMonthCard = BI.inherit(BI.Widget, {
         };
     },
 
-    mounted: function() {
+    created: function() {
         this._checkMonthStatus(this.selectedYear);
     },
 
@@ -69231,6 +69322,18 @@ Object.defineProperty(exports, "ImageButton", {
     return _button6.ImageButton;
   }
 });
+Object.defineProperty(exports, "History", {
+  enumerable: true,
+  get: function get() {
+    return _router.History;
+  }
+});
+Object.defineProperty(exports, "Router", {
+  enumerable: true,
+  get: function get() {
+    return _router.Router;
+  }
+});
 exports["default"] = void 0;
 
 var _combo = __webpack_require__(718);
@@ -69522,6 +69625,8 @@ var _textnode = __webpack_require__(838);
 var _popup3 = __webpack_require__(839);
 
 var _button6 = __webpack_require__(840);
+
+var _router = __webpack_require__(841);
 
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
@@ -70842,7 +70947,13 @@ var _pane = __webpack_require__(22);
 var _button = __webpack_require__(8);
 
 /***/ }),
-/* 841 */,
+/* 841 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+/***/ }),
 /* 842 */,
 /* 843 */,
 /* 844 */,
@@ -70892,7 +71003,8 @@ var _button = __webpack_require__(8);
 /* 888 */,
 /* 889 */,
 /* 890 */,
-/* 891 */
+/* 891 */,
+/* 892 */
 /***/ (function(module, exports) {
 
 ;(function () {
@@ -71055,17 +71167,17 @@ var _button = __webpack_require__(8);
 
 
 /***/ }),
-/* 892 */,
 /* 893 */,
 /* 894 */,
-/* 895 */
+/* 895 */,
+/* 896 */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(global) {module.exports = global["Fix"] = __webpack_require__(896);
+/* WEBPACK VAR INJECTION */(function(global) {module.exports = global["Fix"] = __webpack_require__(897);
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(17)))
 
 /***/ }),
-/* 896 */
+/* 897 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(setImmediate) {function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -72598,8 +72710,8 @@ var _button = __webpack_require__(8);
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(63).setImmediate))
 
 /***/ }),
-/* 897 */,
-/* 898 */
+/* 898 */,
+/* 899 */
 /***/ (function(module, exports) {
 
 ;(function () {
@@ -72690,7 +72802,7 @@ var _button = __webpack_require__(8);
             if (p instanceof Fix.Model || p.store || p.__cacheStore) {
                 break;
             }
-            p = p._parent || (p.options && p.options.element);
+            p = p._parent || (p.options && p.options.element) || p._context;
         }
         if (p) {
             if (p instanceof Fix.Model) {
@@ -72700,26 +72812,6 @@ var _button = __webpack_require__(8);
             return p.__cacheStore || p.store;
         }
     }
-
-    // var _create = BI.createWidget;
-    // BI.createWidget = function (item, options, context) {
-    //     var pushed = false;
-    //     if (BI.isWidget(options)) {
-    //         pushContext(options);
-    //         pushed = true;
-    //     } else if (context != null) {
-    //         pushContext(context);
-    //         pushed = true;
-    //     }
-    //     var result = _create.apply(this, arguments);
-    //     // try {
-    //     //     var result = _create.apply(this, arguments);
-    //     // } catch (e) {
-    //     //     console.error(e);
-    //     // }
-    //     pushed && popContext();
-    //     return result;
-    // };
 
     _.each(["populate", "addItems", "prependItems"], function (name) {
         var old = BI.Loader.prototype[name];
@@ -72738,7 +72830,7 @@ var _button = __webpack_require__(8);
     function createStore () {
         var needPop = false;
         if (_global.Fix && this._store) {
-            var store = findStore(this.options.context || this._parent || this.options.element);
+            var store = findStore(this.options.context || this._parent || this.options.element || this._context);
             if (store) {
                 pushTarget(store);
                 needPop = true;
@@ -72787,6 +72879,77 @@ var _button = __webpack_require__(8);
         needPop && popTarget();
     };
 
+    BI.Widget.prototype._initElement = function () {
+        var self = this;
+        var render = BI.isFunction(this.options.render) ? this.options.render : this.render;
+        var els;
+        if (this.options.updateMode === "auto" && this._store) {
+            // 自动更新模式
+            var childComponents = {};
+            var rendered = false;
+            this._watchers.push(Fix.watch(this.model, function () {
+                if (rendered) {
+                    var newEls = render && render.call(this);
+                    BI.each(childComponents, function (i, childComponent) {
+                        if (childComponent.component instanceof BI.Layout) {
+                            return; // 布局的过滤掉
+                        }
+                        var nextProps = BI.get([newEls], childComponent.path);
+                        if (nextProps) {
+                            var shouldUpdate = childComponent.component.shouldUpdate && childComponent.component.shouldUpdate(nextProps);
+                            childComponent.component._update(nextProps, shouldUpdate);
+                            childComponent.props = BI.extend(childComponent.props, nextProps);
+                        }
+                    });
+                } else {
+                    els = render && render.call(this);
+
+                    function traverse (parent, path) {
+                        BI.each(parent, function (i, child) {
+                            var childPath = path.concat(i);
+                            if (BI.isArray(child)) {
+                                traverse(child, childPath);
+                            } else if (BI.isPlainObject(child)) {
+                                if (child.type) {
+                                    child.__ref = function (_ref) {
+                                        if (_ref) {
+                                            var comp = childComponents[this.getName()] = {};
+                                            comp.component = _ref;
+                                            comp.props = child;
+                                            comp.path = childPath;
+                                        } else {
+                                            delete childComponents[this.getName()];
+                                        }
+                                    };
+                                }
+                                traverse(child, childPath);
+                            }
+                        });
+                    }
+
+                    traverse([els], []);
+                    rendered = true;
+                }
+            }));
+        } else {
+            els = render && render.call(this);
+        }
+        if (BI.isPlainObject(els)) {
+            els = [els];
+        }
+        if (BI.isArray(els)) {
+            BI.each(els, function (i, el) {
+                if (el) {
+                    BI._lazyCreateWidget(el, {
+                        element: self
+                    });
+                }
+            });
+        }
+        // if (this._isRoot === true || !(this instanceof BI.Layout)) {
+        this._mount();
+    };
+
     var unMount = BI.Widget.prototype.__d;
     BI.Widget.prototype.__d = function () {
         try {
@@ -72810,7 +72973,7 @@ var _button = __webpack_require__(8);
         delete this.__cacheStore;
     };
 
-    _.each(["_mount"], function (name) {
+    _.each(["_mount", "__afterMount"], function (name) {
         var old = BI.Widget.prototype[name];
         old && (BI.Widget.prototype[name] = function () {
             this.store && pushTarget(this.store);
@@ -72895,7 +73058,6 @@ var _button = __webpack_require__(8);
 
 
 /***/ }),
-/* 899 */,
 /* 900 */,
 /* 901 */,
 /* 902 */,
@@ -73112,13 +73274,13 @@ var _button = __webpack_require__(8);
 /* 1113 */,
 /* 1114 */,
 /* 1115 */,
-/* 1116 */
+/* 1116 */,
+/* 1117 */
 /***/ (function(module, exports) {
 
 
 
 /***/ }),
-/* 1117 */,
 /* 1118 */,
 /* 1119 */,
 /* 1120 */,
@@ -73416,7 +73578,8 @@ var _button = __webpack_require__(8);
 /* 1412 */,
 /* 1413 */,
 /* 1414 */,
-/* 1415 */
+/* 1415 */,
+/* 1416 */
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(123);
@@ -73520,7 +73683,7 @@ __webpack_require__(396);
 __webpack_require__(153);
 __webpack_require__(154);
 __webpack_require__(155);
-__webpack_require__(895);
+__webpack_require__(896);
 __webpack_require__(397);
 __webpack_require__(398);
 __webpack_require__(399);
@@ -73900,9 +74063,9 @@ __webpack_require__(712);
 __webpack_require__(713);
 __webpack_require__(714);
 __webpack_require__(715);
-__webpack_require__(898);
-__webpack_require__(891);
-__webpack_require__(1116);
+__webpack_require__(899);
+__webpack_require__(892);
+__webpack_require__(1117);
 module.exports = __webpack_require__(716);
 
 

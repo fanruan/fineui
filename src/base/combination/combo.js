@@ -515,7 +515,7 @@
         populate: function (items) {
             this._assertPopupView();
             this.popupView.populate.apply(this.popupView, arguments);
-            this.combo.populate.apply(this.combo, arguments);
+            this.combo.populate && this.combo.populate.apply(this.combo, arguments);
         },
 
         _setEnable: function (arg) {

@@ -138,10 +138,6 @@ BI.Single = BI.inherit(BI.Widget, {
         this._hoverBinded = false;
     },
 
-    populate: function (items) {
-        this.items = items || [];
-    },
-
     // opt: {container: '', belowMouse: false}
     setTitle: function (title, opt) {
         this.options.title = title;
@@ -192,6 +188,7 @@ BI.Single = BI.inherit(BI.Widget, {
     setValue: function (val) {
         if (!this.options.readonly) {
             this.options.value = val;
+            this.options.setValue && this.options.setValue(val);
         }
     },
 
@@ -205,5 +202,6 @@ BI.Single = BI.inherit(BI.Widget, {
             this.showTimeout = null;
         }
         BI.Tooltips.remove(this.getName());
-    },
+    }
 });
+BI.shortcut("bi.single", BI.Single);

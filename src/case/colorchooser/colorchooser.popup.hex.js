@@ -177,6 +177,7 @@ BI.HexColorChooserPopup = BI.inherit(BI.Widget, {
         };
     },
 
+    // 这里就实现的不好了，setValue里面有个editor，editor的setValue会检测错误然后出bubble提示
     mounted: function () {
         var self = this;
         var o = this.options;

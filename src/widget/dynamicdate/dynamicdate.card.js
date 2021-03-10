@@ -46,7 +46,8 @@ BI.DynamicDateCard = BI.inherit(BI.Widget, {
                     type: "bi.multi_select_item",
                     logic: {
                         dynamic: true
-                    }
+                    },
+                    iconWrapperWidth: 26,
                 }),
                 layouts: [{
                     type: "bi.left",
@@ -90,6 +91,7 @@ BI.DynamicDateCard = BI.inherit(BI.Widget, {
                 items: [{
                     el: {
                         type: "bi.multi_select_item",
+                        iconWrapperWidth: 26,
                         ref: function () {
                             self.workDayBox = this;
                         },

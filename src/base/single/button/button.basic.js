@@ -357,6 +357,7 @@ BI.BasicButton = BI.inherit(BI.Single, {
         if (o.shadow && !o.isShadowShowingOnSelected) {
             this.$mask && this.$mask.setVisible(false);
         }
+        this.options.setSelected && this.options.setSelected.call(this, b);
     },
 
     isSelected: function () {
@@ -381,6 +382,7 @@ BI.BasicButton = BI.inherit(BI.Single, {
 
     setText: function (text) {
         this.options.text = text;
+        this.options.setText && this.options.setText.call(this, text);
     },
 
     getText: function () {
@@ -404,10 +406,7 @@ BI.BasicButton = BI.inherit(BI.Single, {
     empty: function () {
         BI.Widget._renderEngine.createElement(document).unbind("mouseup." + this.getName());
         BI.BasicButton.superclass.empty.apply(this, arguments);
-    },
-
-    destroy: function () {
-        BI.BasicButton.superclass.destroy.apply(this, arguments);
     }
 });
 BI.BasicButton.EVENT_CHANGE = "BasicButton.EVENT_CHANGE";
+BI.shortcut("bi.basic_button", BI.BasicButton);
