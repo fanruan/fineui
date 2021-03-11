@@ -1,4 +1,4 @@
-/*! time: 2021-3-11 09:10:42 */
+/*! time: 2021-3-11 09:40:38 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -28962,7 +28962,7 @@ BI.MultiSelectItem = BI.inherit(BI.BasicButton, {
             textHeight: o.height,
             height: o.height,
             hgap: o.textHgap,
-            rgap: o.textHgap,
+            rgap: o.textRgap,
             text: o.text,
             keyword: o.keyword,
             value: o.value,
