@@ -1,4 +1,4 @@
-/*! time: 2021-3-10 11:20:44 */
+/*! time: 2021-3-11 09:10:42 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -22614,14 +22614,14 @@ BI.shortcut("bi.single", BI.Single);
                     "padding-bottom": (o.vgap + o.bgap) / BI.pixRatio + BI.pixUnit
                 });
             }
-            if (BI.isNumber(o.height)) {
-                this.element.css({lineHeight: o.height / BI.pixRatio + BI.pixUnit});
+            if (BI.isWidthOrHeight(o.height)) {
+                this.element.css({ lineHeight: BI.isNumber(o.height) ? (o.height / BI.pixRatio + BI.pixUnit) : o.height });
             }
-            if (BI.isNumber(o.lineHeight)) {
-                this.element.css({lineHeight: o.lineHeight / BI.pixRatio + BI.pixUnit});
+            if (BI.isWidthOrHeight(o.lineHeight)) {
+                this.element.css({ lineHeight: BI.isNumber(o.lineHeight) ? (o.lineHeight / BI.pixRatio + BI.pixUnit) : o.lineHeight });
             }
             if (BI.isWidthOrHeight(o.maxWidth)) {
-                this.element.css({maxWidth: o.maxWidth / BI.pixRatio + BI.pixUnit});
+                this.element.css({ maxWidth: BI.isNumber(o.maxWidth) ? (o.maxWidth / BI.pixRatio + BI.pixUnit) : o.maxWidth });
             }
             this.element.css({
                 textAlign: o.textAlign,
