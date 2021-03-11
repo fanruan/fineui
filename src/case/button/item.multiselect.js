@@ -30,7 +30,7 @@ BI.MultiSelectItem = BI.inherit(BI.BasicButton, {
             textHeight: o.height,
             height: o.height,
             hgap: o.textHgap,
-            rgap: o.textHgap,
+            rgap: o.textRgap,
             text: o.text,
             keyword: o.keyword,
             value: o.value,
