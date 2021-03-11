@@ -1,4 +1,4 @@
-/*! time: 2021-3-9 21:10:47 */
+/*! time: 2021-3-11 09:10:42 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -13794,7 +13794,7 @@ module.exports = function (exec) {
  */
 
 !(function () {
-    function callLifeHook (self, life) {
+    function callLifeHook(self, life) {
         var hook = self.options[life] || self[life];
         if (hook) {
             var hooks = BI.isArray(hook) ? hook : [hook];
@@ -13863,7 +13863,8 @@ module.exports = function (exec) {
 
         shouldUpdate: null,
 
-        update: null,
+        update: function () {
+        },
 
         beforeUpdate: null,
 
@@ -13885,7 +13886,7 @@ module.exports = function (exec) {
         _initRender: function () {
             var self = this;
 
-            function render () {
+            function render() {
                 if (self.options.beforeRender || self.beforeRender) {
                     (self.options.beforeRender || self.beforeRender).call(self, BI.bind(self._render, self));
                 } else {
@@ -14380,12 +14381,12 @@ module.exports = function (exec) {
         BI.Widget.context = context = contextStack.pop();
     };
 
-    function pushTarget (_current) {
+    function pushTarget(_current) {
         if (current) currentStack.push(current);
         BI.Widget.current = current = _current;
     }
 
-    function popTarget () {
+    function popTarget() {
         BI.Widget.current = current = currentStack.pop();
     }
 
@@ -22613,14 +22614,14 @@ BI.shortcut("bi.single", BI.Single);
                     "padding-bottom": (o.vgap + o.bgap) / BI.pixRatio + BI.pixUnit
                 });
             }
-            if (BI.isNumber(o.height)) {
-                this.element.css({lineHeight: o.height / BI.pixRatio + BI.pixUnit});
+            if (BI.isWidthOrHeight(o.height)) {
+                this.element.css({ lineHeight: BI.isNumber(o.height) ? (o.height / BI.pixRatio + BI.pixUnit) : o.height });
             }
-            if (BI.isNumber(o.lineHeight)) {
-                this.element.css({lineHeight: o.lineHeight / BI.pixRatio + BI.pixUnit});
+            if (BI.isWidthOrHeight(o.lineHeight)) {
+                this.element.css({ lineHeight: BI.isNumber(o.lineHeight) ? (o.lineHeight / BI.pixRatio + BI.pixUnit) : o.lineHeight });
             }
             if (BI.isWidthOrHeight(o.maxWidth)) {
-                this.element.css({maxWidth: o.maxWidth / BI.pixRatio + BI.pixUnit});
+                this.element.css({ maxWidth: BI.isNumber(o.maxWidth) ? (o.maxWidth / BI.pixRatio + BI.pixUnit) : o.maxWidth });
             }
             this.element.css({
                 textAlign: o.textAlign,
