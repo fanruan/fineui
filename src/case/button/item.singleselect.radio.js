@@ -11,9 +11,7 @@ BI.SingleSelectRadioItem = BI.inherit(BI.BasicButton, {
                 dynamic: false
             },
             height: 24,
-            iconWrapperWidth: 16,
-            textHgap: 0,
-            textRgap: 0
+            iconWrapperWidth: 26,
         });
     },
     _init: function () {
@@ -43,7 +41,7 @@ BI.SingleSelectRadioItem = BI.inherit(BI.BasicButton, {
             items: BI.LogicFactory.createLogicItemsByDirection("left", {
                 type: "bi.center_adapt",
                 items: [this.radio],
-                width: o.conWrapperWidth
+                width: o.iconWrapperWidth
             }, this.text)
         }))));
     },
