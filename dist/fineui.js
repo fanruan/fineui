@@ -1,4 +1,4 @@
-/*! time: 2021-3-11 09:40:38 */
+/*! time: 2021-3-11 11:10:49 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -32921,8 +32921,9 @@ BI.MultiSelectItem = BI.inherit(BI.BasicButton, {
             logic: {
                 dynamic: false
             },
-            iconWrapperWidth: 16,
+            iconWrapperWidth: 26,
             textHgap: 0,
+            textLgap: 0,
             textRgap: 0
         });
     },
@@ -32941,6 +32942,7 @@ BI.MultiSelectItem = BI.inherit(BI.BasicButton, {
             height: o.height,
             hgap: o.textHgap,
             rgap: o.textRgap,
+            lgap: o.textLgap,
             text: o.text,
             keyword: o.keyword,
             value: o.value,
@@ -33125,8 +33127,9 @@ BI.SingleSelectRadioItem = BI.inherit(BI.BasicButton, {
                 dynamic: false
             },
             height: 24,
-            iconWrapperWidth: 16,
+            iconWrapperWidth: 26,
             textHgap: 0,
+            textLgap: 0,
             textRgap: 0
         });
     },
@@ -33144,7 +33147,8 @@ BI.SingleSelectRadioItem = BI.inherit(BI.BasicButton, {
             textHeight: o.height,
             height: o.height,
             hgap: o.textHgap,
-            rgap: o.textHgap,
+            rgap: o.textRgap,
+            lgap: o.textLgap,
             text: o.text,
             keyword: o.keyword,
             value: o.value,
@@ -33157,7 +33161,7 @@ BI.SingleSelectRadioItem = BI.inherit(BI.BasicButton, {
             items: BI.LogicFactory.createLogicItemsByDirection("left", {
                 type: "bi.center_adapt",
                 items: [this.radio],
-                width: o.conWrapperWidth
+                width: o.iconWrapperWidth
             }, this.text)
         }))));
     },
