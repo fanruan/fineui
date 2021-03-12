@@ -1,4 +1,4 @@
-/*! time: 2021-3-11 11:10:49 */
+/*! time: 2021-3-12 10:50:47 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -32940,8 +32940,8 @@ BI.MultiSelectItem = BI.inherit(BI.BasicButton, {
             whiteSpace: "nowrap",
             textHeight: o.height,
             height: o.height,
-            hgap: o.textHgap,
-            rgap: o.textRgap,
+            hgap: o.hgap,
+            rgap: o.rgap,
             lgap: o.textLgap,
             text: o.text,
             keyword: o.keyword,
@@ -33128,6 +33128,7 @@ BI.SingleSelectRadioItem = BI.inherit(BI.BasicButton, {
             },
             height: 24,
             iconWrapperWidth: 26,
+            hgap: 10,
             textHgap: 0,
             textLgap: 0,
             textRgap: 0
@@ -33146,7 +33147,7 @@ BI.SingleSelectRadioItem = BI.inherit(BI.BasicButton, {
             whiteSpace: "nowrap",
             textHeight: o.height,
             height: o.height,
-            hgap: o.textHgap,
+            hgap: o.hgap,
             rgap: o.textRgap,
             lgap: o.textLgap,
             text: o.text,
