@@ -12,6 +12,7 @@ BI.SingleSelectRadioItem = BI.inherit(BI.BasicButton, {
             },
             height: 24,
             iconWrapperWidth: 26,
+            hgap: 10,
             textHgap: 0,
             textLgap: 0,
             textRgap: 0
@@ -30,7 +31,7 @@ BI.SingleSelectRadioItem = BI.inherit(BI.BasicButton, {
             whiteSpace: "nowrap",
             textHeight: o.height,
             height: o.height,
-            hgap: o.textHgap,
+            hgap: o.hgap,
             rgap: o.textRgap,
             lgap: o.textLgap,
             text: o.text,
