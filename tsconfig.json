@@ -25,6 +25,8 @@
   "include": [
       "typescript/*.ts",
       "typescript/**/*.ts",
-      "types/*.d.ts"
+      "types/*.d.ts",
+      "src/*.js",
+      "src/**/*.js",
   ]
 }
