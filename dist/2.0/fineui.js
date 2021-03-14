@@ -1,4 +1,4 @@
-/*! time: 2021-3-12 10:50:47 */
+/*! time: 2021-3-14 20:00:22 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -27446,6 +27446,7 @@ BI.PopupView = BI.inherit(BI.Widget, {
             vgap: 0,
             hgap: 0,
             innerVGap: 0,
+            innerHGap: 0,
             direction: BI.Direction.Top, // 工具栏的方向
             stopEvent: false, // 是否停止mousedown、mouseup事件
             stopPropagation: false, // 是否停止mousedown、mouseup向上冒泡
@@ -27526,7 +27527,9 @@ BI.PopupView = BI.inherit(BI.Widget, {
         this.button_group.element.css({
             "min-height": BI.isNumeric(o.minHeight) ? (o.minHeight / BI.pixRatio + BI.pixUnit) : o.minHeight,
             "padding-top": o.innerVGap / BI.pixRatio + BI.pixUnit,
-            "padding-bottom": o.innerVGap / BI.pixRatio + BI.pixUnit
+            "padding-bottom": o.innerVGap / BI.pixRatio + BI.pixUnit,
+            "padding-left": o.innerHGap / BI.pixRatio + BI.pixUnit,
+            "padding-right": o.innerHGap / BI.pixRatio + BI.pixUnit,
         });
         return this.button_group;
     },
