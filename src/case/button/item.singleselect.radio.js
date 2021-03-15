@@ -11,7 +11,7 @@ BI.SingleSelectRadioItem = BI.inherit(BI.BasicButton, {
                 dynamic: false
             },
             height: 24,
-            iconWrapperWidth: 26,
+            iconWrapperWidth: 16,
             hgap: 10,
             textHgap: 0,
             textLgap: 0,
