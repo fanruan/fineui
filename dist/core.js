@@ -1,4 +1,4 @@
-/*! time: 2021-3-15 10:10:22 */
+/*! time: 2021-3-15 11:00:22 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -33130,7 +33130,7 @@ BI.SingleSelectRadioItem = BI.inherit(BI.BasicButton, {
                 dynamic: false
             },
             height: 24,
-            iconWrapperWidth: 26,
+            iconWrapperWidth: 16,
             hgap: 10,
             textHgap: 0,
             textLgap: 0,
