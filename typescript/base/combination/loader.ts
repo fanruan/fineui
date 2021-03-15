@@ -5,7 +5,19 @@ export declare class Loader extends Widget {
 
     static EVENT_CHANGE: string;
 
-    populate<T>(items: T[]): void;
+    _prevLoad(): void;
+
+    _nextLoad(): void;
+
+    hasPrev(): boolean;
+
+    hasNext(): boolean;
+
+    prependItems<T>(items: T[]): void;
+
+    addItems<T>(items: T[]): void;
+
+    populate(...args: any[]): void;
 
     setNotSelectedValue(...args: any[]): void;
 
