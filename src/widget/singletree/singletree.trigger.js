@@ -52,7 +52,6 @@ BI.SingleTreeTrigger = BI.inherit(BI.Trigger, {
     },
 
     populate: function (items) {
-        BI.SingleTreeTrigger.superclass.populate.apply(this, arguments);
         this.trigger.populate(items);
     }
 
