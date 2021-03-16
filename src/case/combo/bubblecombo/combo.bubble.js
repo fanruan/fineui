@@ -40,6 +40,7 @@ BI.BubbleCombo = BI.inherit(BI.Widget, {
             direction: o.direction,
             isDefaultInit: o.isDefaultInit,
             destroyWhenHide: o.destroyWhenHide,
+            hideWhenAnotherComboOpen: o.hideWhenAnotherComboOpen,
             isNeedAdjustHeight: o.isNeedAdjustHeight,
             isNeedAdjustWidth: o.isNeedAdjustWidth,
             adjustLength: this._getAdjustLength(),
