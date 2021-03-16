@@ -12,7 +12,9 @@ BI.SingleSelectRadioItem = BI.inherit(BI.BasicButton, {
             },
             height: 24,
             iconWrapperWidth: 16,
+            hgap: 10,
             textHgap: 0,
+            textLgap: 0,
             textRgap: 0
         });
     },
@@ -29,8 +31,9 @@ BI.SingleSelectRadioItem = BI.inherit(BI.BasicButton, {
             whiteSpace: "nowrap",
             textHeight: o.height,
             height: o.height,
-            hgap: o.textHgap,
-            rgap: o.textHgap,
+            hgap: o.hgap,
+            rgap: o.textRgap,
+            lgap: o.textLgap,
             text: o.text,
             keyword: o.keyword,
             value: o.value,
@@ -43,7 +46,7 @@ BI.SingleSelectRadioItem = BI.inherit(BI.BasicButton, {
             items: BI.LogicFactory.createLogicItemsByDirection("left", {
                 type: "bi.center_adapt",
                 items: [this.radio],
-                width: o.conWrapperWidth
+                width: o.iconWrapperWidth
             }, this.text)
         }))));
     },

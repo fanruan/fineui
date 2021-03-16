@@ -1,4 +1,4 @@
-/*! time: 2021-3-9 21:10:47 */
+/*! time: 2021-3-15 16:15:53 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -82,7 +82,7 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 1416);
+/******/ 	return __webpack_require__(__webpack_require__.s = 1417);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -9816,7 +9816,7 @@ BI.Req = {
  */
 
 !(function () {
-    function callLifeHook (self, life) {
+    function callLifeHook(self, life) {
         var hook = self.options[life] || self[life];
         if (hook) {
             var hooks = BI.isArray(hook) ? hook : [hook];
@@ -9885,7 +9885,8 @@ BI.Req = {
 
         shouldUpdate: null,
 
-        update: null,
+        update: function () {
+        },
 
         beforeUpdate: null,
 
@@ -9907,7 +9908,7 @@ BI.Req = {
         _initRender: function () {
             var self = this;
 
-            function render () {
+            function render() {
                 if (self.options.beforeRender || self.beforeRender) {
                     (self.options.beforeRender || self.beforeRender).call(self, BI.bind(self._render, self));
                 } else {
@@ -10402,12 +10403,12 @@ BI.Req = {
         BI.Widget.context = context = contextStack.pop();
     };
 
-    function pushTarget (_current) {
+    function pushTarget(_current) {
         if (current) currentStack.push(current);
         BI.Widget.current = current = _current;
     }
 
-    function popTarget () {
+    function popTarget() {
         BI.Widget.current = current = currentStack.pop();
     }
 
@@ -18635,14 +18636,14 @@ BI.shortcut("bi.single", BI.Single);
                     "padding-bottom": (o.vgap + o.bgap) / BI.pixRatio + BI.pixUnit
                 });
             }
-            if (BI.isNumber(o.height)) {
-                this.element.css({lineHeight: o.height / BI.pixRatio + BI.pixUnit});
+            if (BI.isWidthOrHeight(o.height)) {
+                this.element.css({ lineHeight: BI.isNumber(o.height) ? (o.height / BI.pixRatio + BI.pixUnit) : o.height });
             }
-            if (BI.isNumber(o.lineHeight)) {
-                this.element.css({lineHeight: o.lineHeight / BI.pixRatio + BI.pixUnit});
+            if (BI.isWidthOrHeight(o.lineHeight)) {
+                this.element.css({ lineHeight: BI.isNumber(o.lineHeight) ? (o.lineHeight / BI.pixRatio + BI.pixUnit) : o.lineHeight });
             }
             if (BI.isWidthOrHeight(o.maxWidth)) {
-                this.element.css({maxWidth: o.maxWidth / BI.pixRatio + BI.pixUnit});
+                this.element.css({ maxWidth: BI.isNumber(o.maxWidth) ? (o.maxWidth / BI.pixRatio + BI.pixUnit) : o.maxWidth });
             }
             this.element.css({
                 textAlign: o.textAlign,
@@ -23467,6 +23468,7 @@ BI.PopupView = BI.inherit(BI.Widget, {
             vgap: 0,
             hgap: 0,
             innerVGap: 0,
+            innerHGap: 0,
             direction: BI.Direction.Top, // 工具栏的方向
             stopEvent: false, // 是否停止mousedown、mouseup事件
             stopPropagation: false, // 是否停止mousedown、mouseup向上冒泡
@@ -23547,7 +23549,9 @@ BI.PopupView = BI.inherit(BI.Widget, {
         this.button_group.element.css({
             "min-height": BI.isNumeric(o.minHeight) ? (o.minHeight / BI.pixRatio + BI.pixUnit) : o.minHeight,
             "padding-top": o.innerVGap / BI.pixRatio + BI.pixUnit,
-            "padding-bottom": o.innerVGap / BI.pixRatio + BI.pixUnit
+            "padding-bottom": o.innerVGap / BI.pixRatio + BI.pixUnit,
+            "padding-left": o.innerHGap / BI.pixRatio + BI.pixUnit,
+            "padding-right": o.innerHGap / BI.pixRatio + BI.pixUnit,
         });
         return this.button_group;
     },
@@ -28942,8 +28946,9 @@ BI.MultiSelectItem = BI.inherit(BI.BasicButton, {
             logic: {
                 dynamic: false
             },
-            iconWrapperWidth: 16,
+            iconWrapperWidth: 26,
             textHgap: 0,
+            textLgap: 0,
             textRgap: 0
         });
     },
@@ -28960,8 +28965,9 @@ BI.MultiSelectItem = BI.inherit(BI.BasicButton, {
             whiteSpace: "nowrap",
             textHeight: o.height,
             height: o.height,
-            hgap: o.textHgap,
-            rgap: o.textHgap,
+            hgap: o.hgap,
+            rgap: o.rgap,
+            lgap: o.textLgap,
             text: o.text,
             keyword: o.keyword,
             value: o.value,
@@ -29147,7 +29153,9 @@ BI.SingleSelectRadioItem = BI.inherit(BI.BasicButton, {
             },
             height: 24,
             iconWrapperWidth: 16,
+            hgap: 10,
             textHgap: 0,
+            textLgap: 0,
             textRgap: 0
         });
     },
@@ -29164,8 +29172,9 @@ BI.SingleSelectRadioItem = BI.inherit(BI.BasicButton, {
             whiteSpace: "nowrap",
             textHeight: o.height,
             height: o.height,
-            hgap: o.textHgap,
-            rgap: o.textHgap,
+            hgap: o.hgap,
+            rgap: o.textRgap,
+            lgap: o.textLgap,
             text: o.text,
             keyword: o.keyword,
             value: o.value,
@@ -29178,7 +29187,7 @@ BI.SingleSelectRadioItem = BI.inherit(BI.BasicButton, {
             items: BI.LogicFactory.createLogicItemsByDirection("left", {
                 type: "bi.center_adapt",
                 items: [this.radio],
-                width: o.conWrapperWidth
+                width: o.iconWrapperWidth
             }, this.text)
         }))));
     },
@@ -61090,13 +61099,13 @@ BI.SingleTreeTrigger = BI.inherit(BI.Trigger, {
     },
 
     populate: function (items) {
-        BI.SingleTreeTrigger.superclass.populate.apply(this, arguments);
         this.trigger.populate(items);
     }
 
 });
 
 BI.shortcut("bi.single_tree_trigger", BI.SingleTreeTrigger);
+
 
 /***/ }),
 /* 675 */
@@ -69334,6 +69343,12 @@ Object.defineProperty(exports, "Router", {
     return _router.Router;
   }
 });
+Object.defineProperty(exports, "DateTimeCombo", {
+  enumerable: true,
+  get: function get() {
+    return _datetime.DateTimeCombo;
+  }
+});
 exports["default"] = void 0;
 
 var _combo = __webpack_require__(718);
@@ -69627,6 +69642,8 @@ var _popup3 = __webpack_require__(839);
 var _button6 = __webpack_require__(840);
 
 var _router = __webpack_require__(841);
+
+var _datetime = __webpack_require__(842);
 
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
@@ -70954,7 +70971,15 @@ var _button = __webpack_require__(8);
 
 
 /***/ }),
-/* 842 */,
+/* 842 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _single = __webpack_require__(2);
+
+/***/ }),
 /* 843 */,
 /* 844 */,
 /* 845 */,
@@ -71004,7 +71029,8 @@ var _button = __webpack_require__(8);
 /* 889 */,
 /* 890 */,
 /* 891 */,
-/* 892 */
+/* 892 */,
+/* 893 */
 /***/ (function(module, exports) {
 
 ;(function () {
@@ -71167,17 +71193,17 @@ var _button = __webpack_require__(8);
 
 
 /***/ }),
-/* 893 */,
 /* 894 */,
 /* 895 */,
-/* 896 */
+/* 896 */,
+/* 897 */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(global) {module.exports = global["Fix"] = __webpack_require__(897);
+/* WEBPACK VAR INJECTION */(function(global) {module.exports = global["Fix"] = __webpack_require__(898);
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(17)))
 
 /***/ }),
-/* 897 */
+/* 898 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(setImmediate) {function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -72710,8 +72736,8 @@ var _button = __webpack_require__(8);
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(63).setImmediate))
 
 /***/ }),
-/* 898 */,
-/* 899 */
+/* 899 */,
+/* 900 */
 /***/ (function(module, exports) {
 
 ;(function () {
@@ -73058,7 +73084,6 @@ var _button = __webpack_require__(8);
 
 
 /***/ }),
-/* 900 */,
 /* 901 */,
 /* 902 */,
 /* 903 */,
@@ -73275,13 +73300,13 @@ var _button = __webpack_require__(8);
 /* 1114 */,
 /* 1115 */,
 /* 1116 */,
-/* 1117 */
+/* 1117 */,
+/* 1118 */
 /***/ (function(module, exports) {
 
 
 
 /***/ }),
-/* 1118 */,
 /* 1119 */,
 /* 1120 */,
 /* 1121 */,
@@ -73579,7 +73604,8 @@ var _button = __webpack_require__(8);
 /* 1413 */,
 /* 1414 */,
 /* 1415 */,
-/* 1416 */
+/* 1416 */,
+/* 1417 */
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(123);
@@ -73683,7 +73709,7 @@ __webpack_require__(396);
 __webpack_require__(153);
 __webpack_require__(154);
 __webpack_require__(155);
-__webpack_require__(896);
+__webpack_require__(897);
 __webpack_require__(397);
 __webpack_require__(398);
 __webpack_require__(399);
@@ -74063,9 +74089,9 @@ __webpack_require__(712);
 __webpack_require__(713);
 __webpack_require__(714);
 __webpack_require__(715);
-__webpack_require__(899);
-__webpack_require__(892);
-__webpack_require__(1117);
+__webpack_require__(900);
+__webpack_require__(893);
+__webpack_require__(1118);
 module.exports = __webpack_require__(716);
 
 
