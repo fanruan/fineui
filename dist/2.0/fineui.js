@@ -1,4 +1,4 @@
-/*! time: 2021-3-15 16:15:53 */
+/*! time: 2021-3-16 19:40:26 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -10883,8 +10883,8 @@ _.extend(BI.Func, {
         name = name || "";
         while (true) {
             if (BI.every(array, function (i, item) {
-                    return BI.isKey(item) ? item !== name : item.name !== name;
-                })) {
+                return BI.isKey(item) ? item !== name : item.name !== name;
+            })) {
                 break;
             }
             name = src + (idx++);
@@ -10908,14 +10908,16 @@ _.extend(BI.Func, {
      * @param items
      * @param keyword
      * @param param  搜索哪个属性
+     * @param clone  是否需要deepClone
      */
-    getSearchResult: function (items, keyword, param) {
+    getSearchResult: function (items, keyword, param, clone) {
         var isArray = BI.isArray(items);
         items = isArray ? BI.flatten(items) : items;
         param || (param = "text");
+        BI.isNull(clone) && (clone = true);
         if (!BI.isKey(keyword)) {
             return {
-                find: BI.deepClone(items),
+                find: clone ? BI.deepClone(items) : items,
                 match: isArray ? [] : {}
             };
         }
@@ -10927,7 +10929,7 @@ _.extend(BI.Func, {
             if (BI.isNull(item)) {
                 return;
             }
-            item = BI.deepClone(item);
+            clone && (item = BI.deepClone(item));
             t = BI.stripEL(item);
             text = BI.find([t[param], t.text, t.value, t.name, t], function (index, val) {
                 return BI.isNotNull(val);
@@ -35182,6 +35184,7 @@ BI.BubbleCombo = BI.inherit(BI.Widget, {
             direction: o.direction,
             isDefaultInit: o.isDefaultInit,
             destroyWhenHide: o.destroyWhenHide,
+            hideWhenAnotherComboOpen: o.hideWhenAnotherComboOpen,
             isNeedAdjustHeight: o.isNeedAdjustHeight,
             isNeedAdjustWidth: o.isNeedAdjustWidth,
             adjustLength: this._getAdjustLength(),
@@ -35358,6 +35361,7 @@ BI.BubbleCombo.EVENT_AFTER_POPUPVIEW = "EVENT_AFTER_POPUPVIEW";
 BI.BubbleCombo.EVENT_BEFORE_HIDEVIEW = "EVENT_BEFORE_HIDEVIEW";
 BI.BubbleCombo.EVENT_AFTER_HIDEVIEW = "EVENT_AFTER_HIDEVIEW";
 BI.shortcut("bi.bubble_combo", BI.BubbleCombo);
+
 
 /***/ }),
 /* 498 */
