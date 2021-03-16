@@ -93,9 +93,7 @@ BI.PartTree = BI.inherit(BI.AsyncTree, {
                 //                if(checkState.checked === true && checkState.half === false && nodes[i].flag === true){
                 //                    continue;
                 //                }
-                // 未展开当前节点和展开当前节点后点击全选应该表现一致
-                // 这两种情况的check_Child_State分别为-1和2
-                if (BI.isNotEmptyArray(node.children) && node.check_Child_State !== 2) {
+                if (BI.isNotEmptyArray(node.children)) {
                     track(node.children);
                     return true;
                 }
