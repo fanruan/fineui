@@ -79,7 +79,6 @@ BI.MultiSelectInsertSearcher = BI.inherit(BI.Widget, {
             masker: o.masker
         });
         this.searcher.on(BI.Searcher.EVENT_START, function () {
-            self.searchPane.setVisible(true);
             self.fireEvent(BI.MultiSelectInsertSearcher.EVENT_START);
         });
         this.searcher.on(BI.Searcher.EVENT_PAUSE, function () {
