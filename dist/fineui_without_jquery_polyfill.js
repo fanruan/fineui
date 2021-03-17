@@ -1,4 +1,4 @@
-/*! time: 2021-3-16 20:50:33 */
+/*! time: 2021-3-17 20:30:26 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -43819,7 +43819,7 @@ BI.IntervalSlider = BI.inherit(BI.Single, {
         valueOne = BI.parseFloat(valueOne);
         valueTwo = BI.parseFloat(valueTwo);
         if((oldValueOne <= oldValueTwo && valueOne > valueTwo) || (oldValueOne >= oldValueTwo && valueOne < valueTwo)) {
-            var isSliderOneLeft = BI.parseFloat(this.sliderOne.element[0].style.left) < BI.parseFloat(this.sliderTwo.element[0].style.left);
+            var isSliderOneLeft = BI.parseFloat(this.labelOne.getValue()) < BI.parseFloat(this.labelTwo.getValue());
             this._resetLabelPosition(!isSliderOneLeft);
         }
     },
