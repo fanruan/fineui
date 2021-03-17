@@ -343,6 +343,12 @@ BI.IntervalSlider = BI.inherit(BI.Single, {
     _resetLabelPosition: function(needReverse) {
         this.labelOne.element.css({left: needReverse ? "100%" : "0%"});
         this.labelTwo.element.css({left: needReverse ? "0%" : "100%"});
+        // 掉转一次之后，再进行判断时，two在左边，one在右边，two>one时不再进行交换,所以要对两个控件也同步进行一个调转
+        if (needReverse) {
+            var tmp = this.labelOne;
+            this.labelOne = this.labelTwo;
+            this.labelTwo = tmp;
+        }
     },
 
     _setSliderOnePosition: function (percent) {
