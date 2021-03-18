@@ -39,8 +39,8 @@ BI.DatePicker = BI.inherit(BI.Widget, {
                 });
             }
             self.fireEvent(BI.DatePicker.EVENT_CHANGE);
-            self._checkLeftValid();
-            self._checkRightValid();
+            // self._checkLeftValid();
+            // self._checkRightValid();
         });
 
         this.right = BI.createWidget({
@@ -63,8 +63,8 @@ BI.DatePicker = BI.inherit(BI.Widget, {
                 });
             }
             self.fireEvent(BI.DatePicker.EVENT_CHANGE);
-            self._checkLeftValid();
-            self._checkRightValid();
+            // self._checkLeftValid();
+            // self._checkRightValid();
         });
 
         this.year = BI.createWidget({
@@ -194,16 +194,16 @@ BI.DatePicker = BI.inherit(BI.Widget, {
         this.options.min = minDate;
         this.year.setMinDate(minDate);
         this._refreshMonth(this._month);
-        this._checkLeftValid();
-        this._checkRightValid();
+        // this._checkLeftValid();
+        // this._checkRightValid();
     },
 
     setMaxDate: function (maxDate) {
         this.options.max = maxDate;
         this.year.setMaxDate(maxDate);
         this._refreshMonth(this._month);
-        this._checkLeftValid();
-        this._checkRightValid();
+        // this._checkLeftValid();
+        // this._checkRightValid();
     },
 
     setValue: function (ob) {
@@ -212,8 +212,8 @@ BI.DatePicker = BI.inherit(BI.Widget, {
         this.year.setValue(ob.year);
         this._refreshMonth(this._month);
         this.month.setValue(ob.month);
-        this._checkLeftValid();
-        this._checkRightValid();
+        // this._checkLeftValid();
+        // this._checkRightValid();
     },
 
     getValue: function () {

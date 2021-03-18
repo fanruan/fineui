@@ -15,6 +15,9 @@ BI.DynamicYearQuarterCard = BI.inherit(BI.Widget, {
         var self = this;
         return {
             type: "bi.vertical",
+            ref: function (_ref) {
+                self.wrapper = _ref;
+            },
             items: [{
                 type: "bi.label",
                 text: BI.i18nText("BI-Multi_Date_Relative_Current_Time"),
@@ -23,7 +26,6 @@ BI.DynamicYearQuarterCard = BI.inherit(BI.Widget, {
             }, {
                 type: "bi.dynamic_date_param_item",
                 validationChecker: BI.bind(self._checkDate, self),
-                errorText: BI.bind(this._errorTextGetter, this),
                 ref: function () {
                     self.year = this;
                 },
@@ -32,11 +34,14 @@ BI.DynamicYearQuarterCard = BI.inherit(BI.Widget, {
                     action: function () {
                         self.fireEvent("EVENT_CHANGE");
                     }
+                }, {
+                    eventName: "EVENT_INPUT_CHANGE",
+                    action: function () {
+                        BI.Bubbles.hide("dynamic-year-quarter-error");
+                    }
                 }]
             }, {
                 type: "bi.dynamic_date_param_item",
-                validationChecker: BI.bind(self._checkDate, self),
-                errorText: BI.bind(this._errorTextGetter, this),
                 dateType: BI.DynamicDateCard.TYPE.QUARTER,
                 ref: function () {
                     self.quarter = this;
@@ -46,6 +51,11 @@ BI.DynamicYearQuarterCard = BI.inherit(BI.Widget, {
                     action: function () {
                         self.fireEvent("EVENT_CHANGE");
                     }
+                }, {
+                    eventName: "EVENT_INPUT_CHANGE",
+                    action: function () {
+                        BI.Bubbles.hide("dynamic-year-quarter-error");
+                    }
                 }]
             }],
             vgap: 10,
@@ -53,7 +63,7 @@ BI.DynamicYearQuarterCard = BI.inherit(BI.Widget, {
         };
     },
 
-    _errorTextGetter: function () {
+    _getErrorText: function () {
         var o = this.options;
         var start = BI.parseDateTime(o.min, "%Y-%X-%d");
         var end = BI.parseDateTime(o.max, "%Y-%X-%d");
@@ -67,7 +77,7 @@ BI.DynamicYearQuarterCard = BI.inherit(BI.Widget, {
 
     _checkDate: function (obj) {
         var o = this.options;
-        var date = BI.DynamicDateHelper.getCalculation(BI.extend(this.getValue(), this._digestDateTypeValue(obj)));
+        var date = BI.DynamicDateHelper.getCalculation(BI.extend(this._getValue(), this._digestDateTypeValue(obj)));
 
         return !BI.checkDateVoid(date.getFullYear(), date.getMonth() + 1, date.getDate(), o.min, o.max)[0];
     },
@@ -113,14 +123,34 @@ BI.DynamicYearQuarterCard = BI.inherit(BI.Widget, {
         this.quarter.setValue(this._createValue(BI.DynamicDateCard.TYPE.QUARTER, v.quarter));
     },
 
-    getValue: function () {
+    _getValue: function () {
         var year = this.year.getValue();
         var quarter = this.quarter.getValue();
         return {
             year: (year.offset === 0 ? -year.value : year.value),
             quarter: (quarter.offset === 0 ? -quarter.value : quarter.value)
         };
-    }
+    },
+
+    getValue: function () {
+        return this.checkValidation() ? this._getValue() : {};
+    },
+
+    checkValidation: function (show) {
+        var errorText;
+        var yearInvalid = !this.year.checkValidation();
+        var quarterInvalid = !this.quarter.checkValidation();
+        var invalid = yearInvalid || quarterInvalid;
+        if (invalid) {
+            errorText = BI.i18nText("BI-Please_Input_Natural_Number");
+        } else {
+            invalid = !this._checkDate(this._getValue());
+            errorText = this._getErrorText();
+        }
+        invalid && show && BI.Bubbles.show("dynamic-year-quarter-error", errorText, this.wrapper);
+
+        return !invalid;
+    },
 });
 BI.DynamicYearQuarterCard.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.dynamic_year_quarter_card", BI.DynamicYearQuarterCard);

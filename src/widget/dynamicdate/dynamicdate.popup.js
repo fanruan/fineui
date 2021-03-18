@@ -59,7 +59,12 @@ BI.DynamicDatePopup = BI.inherit(BI.Widget, {
                         listeners: [{
                             eventName: BI.TextButton.EVENT_CHANGE,
                             action: function () {
-                                self.fireEvent(BI.DynamicDatePopup.BUTTON_OK_EVENT_CHANGE);
+                                var type = self.dateTab.getSelect();
+                                if (type === BI.DynamicDateCombo.Dynamic) {
+                                    self.dynamicPane.checkValidation(true) && self.fireEvent(BI.DynamicDatePopup.BUTTON_OK_EVENT_CHANGE);
+                                } else {
+                                    self.fireEvent(BI.DynamicDatePopup.BUTTON_OK_EVENT_CHANGE);
+                                }
                             }
                         }]
                     }]],
@@ -194,7 +199,7 @@ BI.DynamicDatePopup = BI.inherit(BI.Widget, {
         if (this.options.min !== minDate) {
             this.options.min = minDate;
             this.ymd && this.ymd.setMinDate(minDate);
-            this.dynamicPane && this.ymd.setMinDate(minDate);
+            this.dynamicPane && this.dynamicPane.setMinDate(minDate);
         }
     },
 
@@ -202,7 +207,7 @@ BI.DynamicDatePopup = BI.inherit(BI.Widget, {
         if (this.options.max !== maxDate) {
             this.options.max = maxDate;
             this.ymd && this.ymd.setMaxDate(maxDate);
-            this.dynamicPane && this.ymd.setMaxDate(maxDate);
+            this.dynamicPane && this.dynamicPane.setMaxDate(maxDate);
         }
     },
 
