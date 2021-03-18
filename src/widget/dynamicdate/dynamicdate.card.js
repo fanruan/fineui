@@ -142,18 +142,6 @@ BI.DynamicDateCard = BI.inherit(BI.Widget, {
                 el: {
                     type: "bi.dynamic_date_param_item",
                     validationChecker: BI.bind(self._checkDate, self),
-                    errorText: function () {
-                        var start = BI.parseDateTime(o.min, "%Y-%X-%d");
-                        var end = BI.parseDateTime(o.max, "%Y-%X-%d");
-                        return BI.i18nText("BI-Basic_Date_Range_Error",
-                            start.getFullYear(),
-                            start.getMonth() + 1,
-                            start.getDate(),
-                            end.getFullYear(),
-                            end.getMonth() + 1,
-                            end.getDate()
-                        );
-                    },
                     dateType: value.dateType,
                     value: value.value,
                     offset: value.offset,
@@ -161,6 +149,11 @@ BI.DynamicDateCard = BI.inherit(BI.Widget, {
                         eventName: "EVENT_CHANGE",
                         action: function () {
                             self.fireEvent("EVENT_CHANGE");
+                        }
+                    }, {
+                        eventName: "EVENT_INPUT_CHANGE",
+                        action: function () {
+                            BI.Bubbles.hide("dynamic-date-error");
                         }
                     }]
                 },
@@ -219,7 +212,7 @@ BI.DynamicDateCard = BI.inherit(BI.Widget, {
 
     _checkDate: function (obj) {
         var o = this.options;
-        var date = BI.DynamicDateHelper.getCalculation(BI.extend(this.getValue(), this._digestDateTypeValue(obj)));
+        var date = BI.DynamicDateHelper.getCalculation(BI.extend(this._getValue(), this._digestDateTypeValue(obj)));
 
         return !BI.checkDateVoid(date.getFullYear(), date.getMonth() + 1, date.getDate(), o.min, o.max)[0];
     },
@@ -358,7 +351,7 @@ BI.DynamicDateCard = BI.inherit(BI.Widget, {
         this.resultPane.populate(this._getParamJson(valuesItems, v.position));
     },
 
-    getValue: function () {
+    _getValue: function () {
         var self = this;
         var valueMap = {};
         var selectValues = this.checkgroup.getValue();
@@ -373,8 +366,45 @@ BI.DynamicDateCard = BI.inherit(BI.Widget, {
             var value = buttons[0].getValue();
             valueMap.workDay = (value.offset === 0 ? -value.value : +value.value);
         }
+
         return valueMap;
-    }
+    },
+
+    _getErrorText: function () {
+        var o = this.options;
+        var start = BI.parseDateTime(o.min, "%Y-%X-%d");
+        var end = BI.parseDateTime(o.max, "%Y-%X-%d");
+
+        return BI.i18nText("BI-Basic_Date_Range_Error",
+            start.getFullYear(),
+            start.getMonth() + 1,
+            start.getDate(),
+            end.getFullYear(),
+            end.getMonth() + 1,
+            end.getDate()
+        );
+    },
+
+    getValue: function () {
+        return this.checkValidation() ? this._getValue() : {};
+    },
+
+    checkValidation: function (show) {
+        var buttons = this.resultPane.getAllButtons();
+        var errorText;
+        var invalid = BI.any(buttons, function (idx, button) {
+            return button.checkValidation && !button.checkValidation();
+        });
+        if (invalid) {
+            errorText = BI.i18nText("BI-Please_Input_Natural_Number");
+        } else {
+            invalid = !this._checkDate(this._getValue());
+            errorText = this._getErrorText();
+        }
+        invalid && show && BI.Bubbles.show("dynamic-date-error", errorText, this.resultPane);
+
+        return !invalid;
+    },
 
 });
 BI.shortcut("bi.dynamic_date_card", BI.DynamicDateCard);
