@@ -6,9 +6,6 @@ BI.DynamicDateParamItem = BI.inherit(BI.Widget, {
         validationChecker: function() {
             return true;
         },
-        errorText: function () {
-            return BI.i18nText("BI-Please_Input_Natural_Number");
-        },
         value: 0,
         offset: 0,
         height: 24
@@ -24,29 +21,25 @@ BI.DynamicDateParamItem = BI.inherit(BI.Widget, {
                     cls: "bi-border",
                     height: 22,
                     validationChecker: function (v) {
-                        return BI.isNaturalNumber(v) && o.validationChecker(BI.extend({}, self.getValue(), {
-                            value: v
-                        }));
+                        return BI.isNaturalNumber(v);
                     },
                     value: o.value,
                     ref: function () {
                         self.editor = this;
                     },
-                    errorText: function (v) {
-                        if (BI.isEmptyString(v)) {
-                            return BI.i18nText("BI-Basic_Please_Input_Content");
-                        }
-                        if (!BI.isNumeric(v)) {
-                            return BI.i18nText("BI-Please_Input_Natural_Number");
-                        }
-
-                        return o.errorText(v);
+                    errorText: function () {
+                        return BI.i18nText("BI-Please_Input_Natural_Number");
                     },
                     allowBlank: false,
                     listeners: [{
                         eventName: BI.SignEditor.EVENT_CONFIRM,
                         action: function () {
                             self.fireEvent(BI.DynamicDateParamItem.EVENT_CHANGE);
+                        }
+                    }, {
+                        eventName: BI.SignEditor.EVENT_CHANGE,
+                        action: function () {
+                            self.fireEvent(BI.DynamicDateParamItem.EVENT_INPUT_CHANGE);
                         }
                     }]
                 },
@@ -112,6 +105,10 @@ BI.DynamicDateParamItem = BI.inherit(BI.Widget, {
         return text;
     },
 
+    checkValidation: function () {
+        return BI.isNaturalNumber(this.editor.getValue());
+    },
+
     setValue: function (v) {
         v = v || {};
         v.value = v.value || 0;
@@ -130,4 +127,5 @@ BI.DynamicDateParamItem = BI.inherit(BI.Widget, {
 
 });
 BI.DynamicDateParamItem.EVENT_CHANGE = "EVENT_CHANGE";
+BI.DynamicDateParamItem.EVENT_INPUT_CHANGE = "EVENT_INPUT_CHANGE";
 BI.shortcut("bi.dynamic_date_param_item", BI.DynamicDateParamItem);

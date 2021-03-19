@@ -67,7 +67,12 @@ BI.DynamicYearMonthPopup = BI.inherit(BI.Widget, {
                         listeners: [{
                             eventName: BI.TextButton.EVENT_CHANGE,
                             action: function () {
-                                self.fireEvent(BI.DynamicYearMonthPopup.BUTTON_OK_EVENT_CHANGE);
+                                var type = self.dateTab.getSelect();
+                                if (type === BI.DynamicDateCombo.Dynamic) {
+                                    self.dynamicPane.checkValidation(true) && self.fireEvent(BI.DynamicYearMonthPopup.BUTTON_OK_EVENT_CHANGE);
+                                } else {
+                                    self.fireEvent(BI.DynamicYearMonthPopup.BUTTON_OK_EVENT_CHANGE);
+                                }
                             }
                         }]
                     }]],

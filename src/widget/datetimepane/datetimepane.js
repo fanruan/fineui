@@ -88,20 +88,51 @@ BI.DynamicDateTimePane = BI.inherit(BI.Widget, {
                         case BI.DynamicDateTimePane.Dynamic:
                         default:
                             return {
-                                type: "bi.dynamic_date_card",
-                                min: o.minDate,
-                                max: o.maxDate,
-                                listeners: [{
-                                    eventName: "EVENT_CHANGE",
-                                    action: function () {
-                                        if(self._checkValue(self.getValue())) {
-                                            self.fireEvent("EVENT_CHANGE");
-                                        }
+                                type: "bi.vtape",
+                                items: [{
+                                    type: "bi.dynamic_date_card",
+                                    min: o.minDate,
+                                    max: o.maxDate,
+                                    ref: function () {
+                                        self.dynamicPane = this;
                                     }
-                                }],
-                                ref: function () {
-                                    self.dynamicPane = this;
-                                }
+                                }, {
+                                    el: {
+                                        type: "bi.center",
+                                        items: [{
+                                            type: "bi.text_button",
+                                            cls: "bi-high-light bi-border-top",
+                                            shadow: true,
+                                            text: BI.i18nText("BI-Basic_Clear"),
+                                            textHeight: 23,
+                                            listeners: [{
+                                                eventName: BI.TextButton.EVENT_CHANGE,
+                                                action: function () {
+                                                    self.setValue();
+                                                    self.fireEvent(BI.DynamicDatePane.EVENT_CHANGE);
+                                                }
+                                            }]
+                                        }, {
+                                            type: "bi.text_button",
+                                            cls: "bi-border-left bi-high-light bi-border-top",
+                                            textHeight: 23,
+                                            shadow: true,
+                                            text: BI.i18nText("BI-Basic_OK"),
+                                            listeners: [{
+                                                eventName: BI.TextButton.EVENT_CHANGE,
+                                                action: function () {
+                                                    var type = self.dateTab.getSelect();
+                                                    if (type === BI.DynamicDateCombo.Dynamic) {
+                                                        self.dynamicPane.checkValidation(true) && self.fireEvent(BI.DynamicDatePopup.BUTTON_OK_EVENT_CHANGE);
+                                                    } else {
+                                                        self.fireEvent(BI.DynamicDatePane.EVENT_CHANGE);
+                                                    }
+                                                }
+                                            }]
+                                        }]
+                                    },
+                                    height: 24
+                                }]
                             };
                     }
                 }

@@ -1,4 +1,4 @@
-/*! time: 2021-3-11 09:10:42 */
+/*! time: 2021-3-18 19:10:30 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -82,12 +82,12 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 1239);
+/******/ 	return __webpack_require__(__webpack_require__.s = 1240);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 1100:
+/***/ 1101:
 /***/ (function(module, exports) {
 
 BI.i18n = {
@@ -320,7 +320,14 @@ if(_global.BI.prepares == null) {
 
 /***/ }),
 
-/***/ 1239:
+/***/ 124:
+/***/ (function(module, exports, __webpack_require__) {
+
+__webpack_require__(125)(__webpack_require__(126))
+
+/***/ }),
+
+/***/ 1240:
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(123);
@@ -350,8 +357,8 @@ __webpack_require__(140);
 __webpack_require__(141);
 __webpack_require__(142);
 __webpack_require__(143);
-__webpack_require__(1100);
-__webpack_require__(1240);
+__webpack_require__(1101);
+__webpack_require__(1241);
 __webpack_require__(153);
 __webpack_require__(154);
 module.exports = __webpack_require__(155);
@@ -359,14 +366,7 @@ module.exports = __webpack_require__(155);
 
 /***/ }),
 
-/***/ 124:
-/***/ (function(module, exports, __webpack_require__) {
-
-__webpack_require__(125)(__webpack_require__(126))
-
-/***/ }),
-
-/***/ 1240:
+/***/ 1241:
 /***/ (function(module, exports) {
 
 /**
@@ -8081,8 +8081,8 @@ _.extend(BI.Func, {
         name = name || "";
         while (true) {
             if (BI.every(array, function (i, item) {
-                    return BI.isKey(item) ? item !== name : item.name !== name;
-                })) {
+                return BI.isKey(item) ? item !== name : item.name !== name;
+            })) {
                 break;
             }
             name = src + (idx++);
@@ -8106,14 +8106,16 @@ _.extend(BI.Func, {
      * @param items
      * @param keyword
      * @param param  搜索哪个属性
+     * @param clone  是否需要deepClone
      */
-    getSearchResult: function (items, keyword, param) {
+    getSearchResult: function (items, keyword, param, clone) {
         var isArray = BI.isArray(items);
         items = isArray ? BI.flatten(items) : items;
         param || (param = "text");
+        BI.isNull(clone) && (clone = true);
         if (!BI.isKey(keyword)) {
             return {
-                find: BI.deepClone(items),
+                find: clone ? BI.deepClone(items) : items,
                 match: isArray ? [] : {}
             };
         }
@@ -8125,7 +8127,7 @@ _.extend(BI.Func, {
             if (BI.isNull(item)) {
                 return;
             }
-            item = BI.deepClone(item);
+            clone && (item = BI.deepClone(item));
             t = BI.stripEL(item);
             text = BI.find([t[param], t.text, t.value, t.name, t], function (index, val) {
                 return BI.isNotNull(val);

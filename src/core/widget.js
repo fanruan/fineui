@@ -76,8 +76,7 @@
 
         shouldUpdate: null,
 
-        update: function () {
-        },
+        update: null,
 
         beforeUpdate: null,
 
