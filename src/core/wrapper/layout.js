@@ -71,12 +71,13 @@ BI.Layout = BI.inherit(BI.Widget, {
         var self = this;
         var frag = BI.Widget._renderEngine.createFragment();
         var hasChild = false;
-        BI.each(this._children, function (i, widget) {
-            if (widget.element !== self.element) {
-                frag.appendChild(widget.element[0]);
+        for (var key in this._children) {
+            var child = this._children[key];
+            if (child.element !== self.element) {
+                frag.appendChild(child.element[0]);
                 hasChild = true;
             }
-        });
+        }
         if (hasChild === true) {
             this.appendFragment(frag);
         }
@@ -268,18 +269,12 @@ BI.Layout = BI.inherit(BI.Widget, {
         if (!child.shouldUpdate) {
             return null;
         }
-        return child.shouldUpdate(this._getOptions(item)) === true;
+        return child.shouldUpdate(this._getOptions(item));
     },
 
     updateItemAt: function (index, item) {
         if (index < 0 || index > this.options.items.length - 1) {
             return;
-        }
-
-        var child = this._children[this._getChildName(index)];
-        var updated;
-        if (updated = child.update(this._getOptions(item))) {
-            return updated;
         }
         var del = this._children[this._getChildName(index)];
         delete this._children[this._getChildName(index)];
@@ -367,7 +362,14 @@ BI.Layout = BI.inherit(BI.Widget, {
 
     patchItem: function (oldVnode, vnode, index) {
         var shouldUpdate = this.shouldUpdateItem(index, vnode);
-        if (shouldUpdate === true || (shouldUpdate === null && !this._compare(oldVnode, vnode))) {
+        var child = this._children[this._getChildName(index)];
+        if (shouldUpdate) {
+            return child._update(this._getOptions(vnode), shouldUpdate);
+        }
+        if (shouldUpdate === null && !this._compare(oldVnode, vnode)) {
+            // if (child.update) {
+            //     return child.update(this._getOptions(vnode));
+            // }
             return this.updateItemAt(index, vnode);
         }
     },
