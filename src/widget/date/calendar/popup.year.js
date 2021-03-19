@@ -119,12 +119,13 @@ BI.YearPopup = BI.inherit(BI.Widget, {
     setValue: function (v) {
         var o = this.options;
         v = BI.parseInt(v);
+        // 切换年不受范围限制
         // 对于年控件来说，只要传入的minDate和maxDate的year区间包含v就是合法的
-        var startDate = BI.parseDateTime(o.min, "%Y-%X-%d");
-        var endDate = BI.parseDateTime(o.max, "%Y-%X-%d");
-        if (BI.checkDateVoid(v, 1, 1, BI.print(BI.getDate(startDate.getFullYear(), 0, 1), "%Y-%X-%d"), BI.print(BI.getDate(endDate.getFullYear(), 0, 1), "%Y-%X-%d"))[0]) {
-            v = BI.getDate().getFullYear();
-        }
+        // var startDate = BI.parseDateTime(o.min, "%Y-%X-%d");
+        // var endDate = BI.parseDateTime(o.max, "%Y-%X-%d");
+        // if (BI.checkDateVoid(v, 1, 1, BI.print(BI.getDate(startDate.getFullYear(), 0, 1), "%Y-%X-%d"), BI.print(BI.getDate(endDate.getFullYear(), 0, 1), "%Y-%X-%d"))[0]) {
+        //     v = BI.getDate().getFullYear();
+        // }
 
         this.selectedYear = v;
         this.navigation.setSelect(BI.YearCalendar.getPageByYear(v));

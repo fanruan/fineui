@@ -99,7 +99,10 @@ BI.DynamicYearQuarterCombo = BI.inherit(BI.Widget, {
                     }, {
                         eventName: BI.DynamicYearQuarterPopup.BUTTON_OK_EVENT_CHANGE,
                         action: function () {
-                            self.setValue(self.popup.getValue());
+                            var value = self.popup.getValue();
+                            if (self._checkValue(value)) {
+                                self.setValue(value);
+                            }
                             self.combo.hideView();
                             self.fireEvent(BI.DynamicDateCombo.EVENT_CONFIRM);
                         }
@@ -156,6 +159,19 @@ BI.DynamicYearQuarterCombo = BI.inherit(BI.Widget, {
                 this.comboWrapper.resize();
                 this.changeIcon.setVisible(false);
                 break;
+        }
+    },
+
+    _checkValue: function (v) {
+        var o = this.options;
+        switch (v.type) {
+            case BI.DynamicDateCombo.Dynamic:
+                return BI.isNotEmptyObject(v.value);
+            case BI.DynamicDateCombo.Static:
+                var value = v.value || {};
+                return !BI.checkDateVoid(value.year, (value.quarter - 1) * 3 + 1, 1, o.minDate, o.maxDate)[0];
+            default:
+                return true;
         }
     },
 

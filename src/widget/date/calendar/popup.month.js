@@ -18,6 +18,8 @@ BI.MonthPopup = BI.inherit(BI.Widget, {
         BI.MonthPopup.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
 
+        this.selectedMonth = BI.getDate().getMonth() + 1;
+
         this.month = BI.createWidget({
             type: "bi.button_group",
             element: this,
@@ -39,6 +41,7 @@ BI.MonthPopup = BI.inherit(BI.Widget, {
         });
 
         this.month.on(BI.Controller.EVENT_CHANGE, function (type) {
+            self.selectedMonth = this.getValue()[0];
             self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
             if (type === BI.Events.CLICK) {
                 self.fireEvent(BI.MonthPopup.EVENT_CHANGE);
@@ -82,11 +85,12 @@ BI.MonthPopup = BI.inherit(BI.Widget, {
     },
 
     getValue: function () {
-        return this.month.getValue()[0];
+        return this.selectedMonth;
     },
 
     setValue: function (v) {
         v = BI.parseInt(v);
+        this.selectedMonth = v;
         this.month.setValue([v]);
     }
 });
