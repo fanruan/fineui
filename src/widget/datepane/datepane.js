@@ -123,7 +123,7 @@ BI.DynamicDatePane = BI.inherit(BI.Widget, {
                                                 action: function () {
                                                     var type = self.dateTab.getSelect();
                                                     if (type === BI.DynamicDateCombo.Dynamic) {
-                                                        self.dynamicPane.checkValidation(true) && self.fireEvent(BI.DynamicDatePopup.BUTTON_OK_EVENT_CHANGE);
+                                                        self.dynamicPane.checkValidation(true) && self.fireEvent(BI.DynamicDatePopup.EVENT_CHANGE);
                                                     } else {
                                                         self.fireEvent(BI.DynamicDatePane.EVENT_CHANGE);
                                                     }
