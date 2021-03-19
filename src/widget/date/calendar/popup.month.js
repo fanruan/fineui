@@ -40,8 +40,8 @@ BI.MonthPopup = BI.inherit(BI.Widget, {
             value: o.value
         });
 
-        this.month.on(BI.Controller.EVENT_CHANGE, function (type) {
-            self.selectedMonth = this.getValue()[0];
+        this.month.on(BI.Controller.EVENT_CHANGE, function (type, value) {
+            self.selectedMonth = value;
             self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
             if (type === BI.Events.CLICK) {
                 self.fireEvent(BI.MonthPopup.EVENT_CHANGE);
