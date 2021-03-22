@@ -83,9 +83,7 @@ BI.YearPicker = BI.inherit(BI.Widget, {
                 width: 25
             }]
         });
-        this.setValue({
-            year: this._year
-        });
+        this.setValue(this._year);
     },
 
     _checkLeftValid: function () {
