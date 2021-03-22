@@ -1,4 +1,4 @@
-/*! time: 2021-3-19 14:20:27 */
+/*! time: 2021-3-22 09:40:29 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -41928,9 +41928,7 @@ BI.YearPicker = BI.inherit(BI.Widget, {
                 width: 25
             }]
         });
-        this.setValue({
-            year: this._year
-        });
+        this.setValue(this._year);
     },
 
     _checkLeftValid: function () {
@@ -42158,6 +42156,8 @@ BI.MonthPopup = BI.inherit(BI.Widget, {
         BI.MonthPopup.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
 
+        this.selectedMonth = BI.getDate().getMonth() + 1;
+
         this.month = BI.createWidget({
             type: "bi.button_group",
             element: this,
@@ -42178,7 +42178,8 @@ BI.MonthPopup = BI.inherit(BI.Widget, {
             value: o.value
         });
 
-        this.month.on(BI.Controller.EVENT_CHANGE, function (type) {
+        this.month.on(BI.Controller.EVENT_CHANGE, function (type, value) {
+            self.selectedMonth = value;
             self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
             if (type === BI.Events.CLICK) {
                 self.fireEvent(BI.MonthPopup.EVENT_CHANGE);
@@ -42222,11 +42223,12 @@ BI.MonthPopup = BI.inherit(BI.Widget, {
     },
 
     getValue: function () {
-        return this.month.getValue()[0];
+        return this.selectedMonth;
     },
 
     setValue: function (v) {
         v = BI.parseInt(v);
+        this.selectedMonth = v;
         this.month.setValue([v]);
     }
 });
@@ -42358,12 +42360,13 @@ BI.YearPopup = BI.inherit(BI.Widget, {
     setValue: function (v) {
         var o = this.options;
         v = BI.parseInt(v);
+        // 切换年不受范围限制
         // 对于年控件来说，只要传入的minDate和maxDate的year区间包含v就是合法的
-        var startDate = BI.parseDateTime(o.min, "%Y-%X-%d");
-        var endDate = BI.parseDateTime(o.max, "%Y-%X-%d");
-        if (BI.checkDateVoid(v, 1, 1, BI.print(BI.getDate(startDate.getFullYear(), 0, 1), "%Y-%X-%d"), BI.print(BI.getDate(endDate.getFullYear(), 0, 1), "%Y-%X-%d"))[0]) {
-            v = BI.getDate().getFullYear();
-        }
+        // var startDate = BI.parseDateTime(o.min, "%Y-%X-%d");
+        // var endDate = BI.parseDateTime(o.max, "%Y-%X-%d");
+        // if (BI.checkDateVoid(v, 1, 1, BI.print(BI.getDate(startDate.getFullYear(), 0, 1), "%Y-%X-%d"), BI.print(BI.getDate(endDate.getFullYear(), 0, 1), "%Y-%X-%d"))[0]) {
+        //     v = BI.getDate().getFullYear();
+        // }
 
         this.selectedYear = v;
         this.navigation.setSelect(BI.YearCalendar.getPageByYear(v));
@@ -42763,7 +42766,7 @@ BI.DynamicDatePane = BI.inherit(BI.Widget, {
                                                 action: function () {
                                                     var type = self.dateTab.getSelect();
                                                     if (type === BI.DynamicDateCombo.Dynamic) {
-                                                        self.dynamicPane.checkValidation(true) && self.fireEvent(BI.DynamicDatePopup.BUTTON_OK_EVENT_CHANGE);
+                                                        self.dynamicPane.checkValidation(true) && self.fireEvent(BI.DynamicDatePopup.EVENT_CHANGE);
                                                     } else {
                                                         self.fireEvent(BI.DynamicDatePane.EVENT_CHANGE);
                                                     }
@@ -43523,7 +43526,7 @@ BI.DynamicDateTimePane = BI.inherit(BI.Widget, {
                                                 action: function () {
                                                     var type = self.dateTab.getSelect();
                                                     if (type === BI.DynamicDateCombo.Dynamic) {
-                                                        self.dynamicPane.checkValidation(true) && self.fireEvent(BI.DynamicDatePopup.BUTTON_OK_EVENT_CHANGE);
+                                                        self.dynamicPane.checkValidation(true) && self.fireEvent(BI.DynamicDatePane.EVENT_CHANGE);
                                                     } else {
                                                         self.fireEvent(BI.DynamicDatePane.EVENT_CHANGE);
                                                     }
@@ -45068,10 +45071,13 @@ BI.DynamicDateCombo = BI.inherit(BI.Single, {
     },
 
     _checkValue: function (v) {
+        var o = this.options;
         switch (v.type) {
             case BI.DynamicDateCombo.Dynamic:
                 return BI.isNotEmptyObject(v.value);
             case BI.DynamicDateCombo.Static:
+                var value = v.value || {};
+                return !BI.checkDateVoid(value.year, value.month, value.day, o.minDate, o.maxDate)[0];
             default:
                 return true;
         }
@@ -46172,10 +46178,13 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
     },
 
     _checkValue: function (v) {
+        var o = this.options;
         switch (v.type) {
             case BI.DynamicDateCombo.Dynamic:
                 return BI.isNotEmptyObject(v.value);
             case BI.DynamicDateCombo.Static:
+                var value = v.value || {};
+                return !BI.checkDateVoid(value.year, value.month, value.day, o.minDate, o.maxDate)[0];
             default:
                 return true;
         }
@@ -68057,7 +68066,10 @@ BI.DynamicYearMonthCombo = BI.inherit(BI.Single, {
                     }, {
                         eventName: BI.DynamicYearMonthPopup.BUTTON_OK_EVENT_CHANGE,
                         action: function () {
-                            self.setValue(self.popup.getValue());
+                            var value = self.popup.getValue();
+                            if (self._checkValue(value)) {
+                                self.setValue(value);
+                            }
                             self.combo.hideView();
                             self.fireEvent(BI.DynamicDateCombo.EVENT_CONFIRM);
                         }
@@ -68114,6 +68126,19 @@ BI.DynamicYearMonthCombo = BI.inherit(BI.Single, {
                 this.comboWrapper.resize();
                 this.changeIcon.setVisible(false);
                 break;
+        }
+    },
+
+    _checkValue: function (v) {
+        var o = this.options;
+        switch (v.type) {
+            case BI.DynamicDateCombo.Dynamic:
+                return BI.isNotEmptyObject(v.value);
+            case BI.DynamicDateCombo.Static:
+                var value = v.value || {};
+                return !BI.checkDateVoid(value.year, value.month, 1, o.minDate, o.maxDate)[0];
+            default:
+                return true;
         }
     },
 
@@ -69327,7 +69352,10 @@ BI.DynamicYearQuarterCombo = BI.inherit(BI.Widget, {
                     }, {
                         eventName: BI.DynamicYearQuarterPopup.BUTTON_OK_EVENT_CHANGE,
                         action: function () {
-                            self.setValue(self.popup.getValue());
+                            var value = self.popup.getValue();
+                            if (self._checkValue(value)) {
+                                self.setValue(value);
+                            }
                             self.combo.hideView();
                             self.fireEvent(BI.DynamicDateCombo.EVENT_CONFIRM);
                         }
@@ -69384,6 +69412,19 @@ BI.DynamicYearQuarterCombo = BI.inherit(BI.Widget, {
                 this.comboWrapper.resize();
                 this.changeIcon.setVisible(false);
                 break;
+        }
+    },
+
+    _checkValue: function (v) {
+        var o = this.options;
+        switch (v.type) {
+            case BI.DynamicDateCombo.Dynamic:
+                return BI.isNotEmptyObject(v.value);
+            case BI.DynamicDateCombo.Static:
+                var value = v.value || {};
+                return !BI.checkDateVoid(value.year, (value.quarter - 1) * 3 + 1, 1, o.minDate, o.maxDate)[0];
+            default:
+                return true;
         }
     },
 
