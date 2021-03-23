@@ -389,6 +389,10 @@ BI.DynamicDateCard = BI.inherit(BI.Widget, {
         return this.checkValidation() ? this._getValue() : {};
     },
 
+    getInputValue: function () {
+        return this._getValue();
+    },
+
     checkValidation: function (show) {
         var buttons = this.resultPane.getAllButtons();
         var errorText;

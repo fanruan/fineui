@@ -181,7 +181,7 @@ BI.DynamicDateTimePopup = BI.inherit(BI.Widget, {
             this.todayButton.setValue(BI.i18nText("BI-Multi_Date_Today"));
             this.todayButton.setEnable(!this._checkTodayValid());
         } else {
-            var date = BI.DynamicDateHelper.getCalculation(this.dynamicPane.getValue());
+            var date = BI.DynamicDateHelper.getCalculation(this.dynamicPane.getInputValue());
             date = BI.print(date, "%Y-%X-%d");
             this.todayButton.setValue(date);
             this.todayButton.setEnable(false);
