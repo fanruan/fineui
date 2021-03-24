@@ -15,47 +15,53 @@ BI.DynamicYearMonthCard = BI.inherit(BI.Widget, {
         var self = this;
         return {
             type: "bi.vertical",
-            ref: function (_ref) {
-                self.wrapper = _ref;
-            },
             items: [{
                 type: "bi.label",
                 text: BI.i18nText("BI-Multi_Date_Relative_Current_Time"),
                 textAlign: "left",
                 height: 24
             }, {
-                type: "bi.dynamic_date_param_item",
-                validationChecker: BI.bind(self._checkDate, self),
-                ref: function () {
-                    self.year = this;
+                type: "bi.vertical",
+                ref: function (_ref) {
+                    self.wrapper = _ref;
                 },
-                listeners: [{
-                    eventName: "EVENT_CHANGE",
-                    action: function () {
-                        self.fireEvent("EVENT_CHANGE");
-                    }
+                items: [{
+                    el: {
+                        type: "bi.dynamic_date_param_item",
+                        validationChecker: BI.bind(self._checkDate, self),
+                        ref: function () {
+                            self.year = this;
+                        },
+                        listeners: [{
+                            eventName: "EVENT_CHANGE",
+                            action: function () {
+                                self.fireEvent("EVENT_CHANGE");
+                            }
+                        }, {
+                            eventName: "EVENT_INPUT_CHANGE",
+                            action: function () {
+                                BI.Bubbles.hide("dynamic-year-month-error");
+                            }
+                        }]
+                    },
+                    bgap: 10,
                 }, {
-                    eventName: "EVENT_INPUT_CHANGE",
-                    action: function () {
-                        BI.Bubbles.hide("dynamic-year-month-error");
-                    }
-                }]
-            }, {
-                type: "bi.dynamic_date_param_item",
-                dateType: BI.DynamicDateCard.TYPE.MONTH,
-                ref: function () {
-                    self.month = this;
-                },
-                listeners: [{
-                    eventName: "EVENT_CHANGE",
-                    action: function () {
-                        self.fireEvent("EVENT_CHANGE");
-                    }
-                }, {
-                    eventName: "EVENT_INPUT_CHANGE",
-                    action: function () {
-                        BI.Bubbles.hide("dynamic-year-month-error");
-                    }
+                    type: "bi.dynamic_date_param_item",
+                    dateType: BI.DynamicDateCard.TYPE.MONTH,
+                    ref: function () {
+                        self.month = this;
+                    },
+                    listeners: [{
+                        eventName: "EVENT_CHANGE",
+                        action: function () {
+                            self.fireEvent("EVENT_CHANGE");
+                        }
+                    }, {
+                        eventName: "EVENT_INPUT_CHANGE",
+                        action: function () {
+                            BI.Bubbles.hide("dynamic-year-month-error");
+                        }
+                    }]
                 }]
             }],
             vgap: 10,
@@ -130,6 +136,10 @@ BI.DynamicYearMonthCard = BI.inherit(BI.Widget, {
             year: (year.offset === 0 ? -year.value : year.value),
             month: (month.offset === 0 ? -month.value : month.value)
         };
+    },
+
+    getInputValue: function () {
+        return this._getValue();
     },
 
     getValue: function () {
