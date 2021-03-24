@@ -1,4 +1,4 @@
-/*! time: 2021-3-24 09:40:25 */
+/*! time: 2021-3-24 16:40:27 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -66538,6 +66538,10 @@ BI.DynamicYearCard = BI.inherit(BI.Widget, {
         };
     },
 
+    getInputValue: function () {
+        return this._getValue();
+    },
+
     getValue: function () {
         return this.checkValidation() ? this._getValue() : {};
     },
@@ -66551,7 +66555,7 @@ BI.DynamicYearCard = BI.inherit(BI.Widget, {
             invalid = !this._checkDate(this._getValue());
             errorText = this._getErrorText();
         }
-        invalid && show && BI.Bubbles.show("dynamic-year-error", errorText, this.wrapper);
+        invalid && show && BI.Bubbles.show("dynamic-year-error", errorText, this.item);
 
         return !invalid;
     },
@@ -67068,7 +67072,7 @@ BI.DynamicYearPopup = BI.inherit(BI.Widget, {
             this.yearButton.setValue(BI.i18nText("BI-Basic_Current_Year"));
             this.yearButton.setEnable(!this._checkYearValid());
         } else {
-            var date = BI.DynamicDateHelper.getCalculation(this.dynamicPane.getValue());
+            var date = BI.DynamicDateHelper.getCalculation(this.dynamicPane.getInputValue());
             date = BI.print(date, "%Y");
             this.yearButton.setValue(date);
             this.yearButton.setEnable(false);
@@ -67656,47 +67660,53 @@ BI.DynamicYearMonthCard = BI.inherit(BI.Widget, {
         var self = this;
         return {
             type: "bi.vertical",
-            ref: function (_ref) {
-                self.wrapper = _ref;
-            },
             items: [{
                 type: "bi.label",
                 text: BI.i18nText("BI-Multi_Date_Relative_Current_Time"),
                 textAlign: "left",
                 height: 24
             }, {
-                type: "bi.dynamic_date_param_item",
-                validationChecker: BI.bind(self._checkDate, self),
-                ref: function () {
-                    self.year = this;
+                type: "bi.vertical",
+                ref: function (_ref) {
+                    self.wrapper = _ref;
                 },
-                listeners: [{
-                    eventName: "EVENT_CHANGE",
-                    action: function () {
-                        self.fireEvent("EVENT_CHANGE");
-                    }
+                items: [{
+                    el: {
+                        type: "bi.dynamic_date_param_item",
+                        validationChecker: BI.bind(self._checkDate, self),
+                        ref: function () {
+                            self.year = this;
+                        },
+                        listeners: [{
+                            eventName: "EVENT_CHANGE",
+                            action: function () {
+                                self.fireEvent("EVENT_CHANGE");
+                            }
+                        }, {
+                            eventName: "EVENT_INPUT_CHANGE",
+                            action: function () {
+                                BI.Bubbles.hide("dynamic-year-month-error");
+                            }
+                        }]
+                    },
+                    bgap: 10,
                 }, {
-                    eventName: "EVENT_INPUT_CHANGE",
-                    action: function () {
-                        BI.Bubbles.hide("dynamic-year-month-error");
-                    }
-                }]
-            }, {
-                type: "bi.dynamic_date_param_item",
-                dateType: BI.DynamicDateCard.TYPE.MONTH,
-                ref: function () {
-                    self.month = this;
-                },
-                listeners: [{
-                    eventName: "EVENT_CHANGE",
-                    action: function () {
-                        self.fireEvent("EVENT_CHANGE");
-                    }
-                }, {
-                    eventName: "EVENT_INPUT_CHANGE",
-                    action: function () {
-                        BI.Bubbles.hide("dynamic-year-month-error");
-                    }
+                    type: "bi.dynamic_date_param_item",
+                    dateType: BI.DynamicDateCard.TYPE.MONTH,
+                    ref: function () {
+                        self.month = this;
+                    },
+                    listeners: [{
+                        eventName: "EVENT_CHANGE",
+                        action: function () {
+                            self.fireEvent("EVENT_CHANGE");
+                        }
+                    }, {
+                        eventName: "EVENT_INPUT_CHANGE",
+                        action: function () {
+                            BI.Bubbles.hide("dynamic-year-month-error");
+                        }
+                    }]
                 }]
             }],
             vgap: 10,
@@ -67771,6 +67781,10 @@ BI.DynamicYearMonthCard = BI.inherit(BI.Widget, {
             year: (year.offset === 0 ? -year.value : year.value),
             month: (month.offset === 0 ? -month.value : month.value)
         };
+    },
+
+    getInputValue: function () {
+        return this._getValue();
     },
 
     getValue: function () {
@@ -68289,7 +68303,7 @@ BI.DynamicYearMonthPopup = BI.inherit(BI.Widget, {
             this.textButton.setValue(BI.i18nText("BI-Basic_Current_Month"));
             this.textButton.setEnable(!this._checkTodayValid());
         } else {
-            var date = BI.DynamicDateHelper.getCalculation(this.dynamicPane.getValue());
+            var date = BI.DynamicDateHelper.getCalculation(this.dynamicPane.getInputValue());
             date = BI.print(date, "%Y-%x");
             this.textButton.setValue(date);
             this.textButton.setEnable(false);
@@ -68954,47 +68968,53 @@ BI.DynamicYearQuarterCard = BI.inherit(BI.Widget, {
         var self = this;
         return {
             type: "bi.vertical",
-            ref: function (_ref) {
-                self.wrapper = _ref;
-            },
             items: [{
                 type: "bi.label",
                 text: BI.i18nText("BI-Multi_Date_Relative_Current_Time"),
                 textAlign: "left",
                 height: 24
             }, {
-                type: "bi.dynamic_date_param_item",
-                validationChecker: BI.bind(self._checkDate, self),
-                ref: function () {
-                    self.year = this;
+                type: "bi.vertical",
+                ref: function (_ref) {
+                    self.wrapper = _ref;
                 },
-                listeners: [{
-                    eventName: "EVENT_CHANGE",
-                    action: function () {
-                        self.fireEvent("EVENT_CHANGE");
-                    }
+                items: [{
+                    el: {
+                        type: "bi.dynamic_date_param_item",
+                        validationChecker: BI.bind(self._checkDate, self),
+                        ref: function () {
+                            self.year = this;
+                        },
+                        listeners: [{
+                            eventName: "EVENT_CHANGE",
+                            action: function () {
+                                self.fireEvent("EVENT_CHANGE");
+                            }
+                        }, {
+                            eventName: "EVENT_INPUT_CHANGE",
+                            action: function () {
+                                BI.Bubbles.hide("dynamic-year-quarter-error");
+                            }
+                        }]
+                    },
+                    bgap: 10
                 }, {
-                    eventName: "EVENT_INPUT_CHANGE",
-                    action: function () {
-                        BI.Bubbles.hide("dynamic-year-quarter-error");
-                    }
-                }]
-            }, {
-                type: "bi.dynamic_date_param_item",
-                dateType: BI.DynamicDateCard.TYPE.QUARTER,
-                ref: function () {
-                    self.quarter = this;
-                },
-                listeners: [{
-                    eventName: "EVENT_CHANGE",
-                    action: function () {
-                        self.fireEvent("EVENT_CHANGE");
-                    }
-                }, {
-                    eventName: "EVENT_INPUT_CHANGE",
-                    action: function () {
-                        BI.Bubbles.hide("dynamic-year-quarter-error");
-                    }
+                    type: "bi.dynamic_date_param_item",
+                    dateType: BI.DynamicDateCard.TYPE.QUARTER,
+                    ref: function () {
+                        self.quarter = this;
+                    },
+                    listeners: [{
+                        eventName: "EVENT_CHANGE",
+                        action: function () {
+                            self.fireEvent("EVENT_CHANGE");
+                        }
+                    }, {
+                        eventName: "EVENT_INPUT_CHANGE",
+                        action: function () {
+                            BI.Bubbles.hide("dynamic-year-quarter-error");
+                        }
+                    }]
                 }]
             }],
             vgap: 10,
@@ -69069,6 +69089,10 @@ BI.DynamicYearQuarterCard = BI.inherit(BI.Widget, {
             year: (year.offset === 0 ? -year.value : year.value),
             quarter: (quarter.offset === 0 ? -quarter.value : quarter.value)
         };
+    },
+
+    getInputValue: function () {
+        return this._getValue();
     },
 
     getValue: function () {
@@ -69568,7 +69592,7 @@ BI.DynamicYearQuarterPopup = BI.inherit(BI.Widget, {
             this.textButton.setValue(BI.i18nText("BI-Basic_Current_Quarter"));
             this.textButton.setEnable(!this._checkTodayValid());
         } else {
-            var date = BI.DynamicDateHelper.getCalculation(this.dynamicPane.getValue());
+            var date = BI.DynamicDateHelper.getCalculation(this.dynamicPane.getInputValue());
             date = BI.print(date, "%Y-%Q");
             this.textButton.setValue(date);
             this.textButton.setEnable(false);
