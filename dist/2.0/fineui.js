@@ -1,4 +1,4 @@
-/*! time: 2021-3-22 09:40:29 */
+/*! time: 2021-3-24 09:40:25 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -44757,6 +44757,10 @@ BI.DynamicDateCard = BI.inherit(BI.Widget, {
         return this.checkValidation() ? this._getValue() : {};
     },
 
+    getInputValue: function () {
+        return this._getValue();
+    },
+
     checkValidation: function (show) {
         var buttons = this.resultPane.getAllButtons();
         var errorText;
@@ -45456,7 +45460,7 @@ BI.DynamicDatePopup = BI.inherit(BI.Widget, {
             this.todayButton.setValue(BI.i18nText("BI-Multi_Date_Today"));
             this.todayButton.setEnable(!this._checkTodayValid());
         } else {
-            var date = BI.DynamicDateHelper.getCalculation(this.dynamicPane.getValue());
+            var date = BI.DynamicDateHelper.getCalculation(this.dynamicPane.getInputValue());
             date = BI.print(date, "%Y-%X-%d");
             this.todayButton.setValue(date);
             this.todayButton.setEnable(false);
@@ -46429,7 +46433,7 @@ BI.DynamicDateTimePopup = BI.inherit(BI.Widget, {
             this.todayButton.setValue(BI.i18nText("BI-Multi_Date_Today"));
             this.todayButton.setEnable(!this._checkTodayValid());
         } else {
-            var date = BI.DynamicDateHelper.getCalculation(this.dynamicPane.getValue());
+            var date = BI.DynamicDateHelper.getCalculation(this.dynamicPane.getInputValue());
             date = BI.print(date, "%Y-%X-%d");
             this.todayButton.setValue(date);
             this.todayButton.setEnable(false);
