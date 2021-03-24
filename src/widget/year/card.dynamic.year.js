@@ -93,6 +93,10 @@ BI.DynamicYearCard = BI.inherit(BI.Widget, {
         };
     },
 
+    getInputValue: function () {
+        return this._getValue();
+    },
+
     getValue: function () {
         return this.checkValidation() ? this._getValue() : {};
     },
@@ -106,7 +110,7 @@ BI.DynamicYearCard = BI.inherit(BI.Widget, {
             invalid = !this._checkDate(this._getValue());
             errorText = this._getErrorText();
         }
-        invalid && show && BI.Bubbles.show("dynamic-year-error", errorText, this.wrapper);
+        invalid && show && BI.Bubbles.show("dynamic-year-error", errorText, this.item);
 
         return !invalid;
     },
