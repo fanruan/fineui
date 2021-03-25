@@ -1,4 +1,4 @@
-/*! time: 2021-3-24 16:40:27 */
+/*! time: 2021-3-25 15:20:26 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -923,14 +923,10 @@ if (!_global.BI) {
     });
     _.extend(BI, {
 
-        inherit: function (sb, sp, overrides) {
-            if (typeof sp === "object") {
-                overrides = sp;
-                sp = sb;
-                sb = function () {
-                    return sp.apply(this, arguments);
-                };
-            }
+        inherit: function (sp, overrides) {
+            var sb = function () {
+                return sp.apply(this, arguments);
+            };
             var F = function () {
             }, spp = sp.prototype;
             F.prototype = spp;

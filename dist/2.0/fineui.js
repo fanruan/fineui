@@ -1,4 +1,4 @@
-/*! time: 2021-3-24 16:40:27 */
+/*! time: 2021-3-25 15:20:26 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -3745,14 +3745,10 @@ if (!_global.BI) {
     });
     _.extend(BI, {
 
-        inherit: function (sb, sp, overrides) {
-            if (typeof sp === "object") {
-                overrides = sp;
-                sp = sb;
-                sb = function () {
-                    return sp.apply(this, arguments);
-                };
-            }
+        inherit: function (sp, overrides) {
+            var sb = function () {
+                return sp.apply(this, arguments);
+            };
             var F = function () {
             }, spp = sp.prototype;
             F.prototype = spp;
@@ -20480,7 +20476,7 @@ BI.shortcut("bi.division", BI.DivisionLayout);
 BI.FloatLeftLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.FloatLeftLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-left clearfix",
+            baseCls: "bi-left clearfix border-sizing",
             hgap: 0,
             vgap: 0,
             lgap: 0,
@@ -20491,6 +20487,19 @@ BI.FloatLeftLayout = BI.inherit(BI.Layout, {
     },
     render: function () {
         BI.FloatLeftLayout.superclass.render.apply(this, arguments);
+        var o = this.options;
+        if (o.hgap > 0) {
+            this.element.css({
+                "padding-left": o.hgap / 2 / BI.pixRatio + BI.pixUnit,
+                "padding-right": o.hgap / 2 / BI.pixRatio + BI.pixUnit
+            });
+        }
+        if (o.vgap > 0) {
+            this.element.css({
+                "padding-top": o.vgap / 2 / BI.pixRatio + BI.pixUnit,
+                "padding-bottom": o.vgap / 2 / BI.pixRatio + BI.pixUnit
+            });
+        }
         this.populate(this.options.items);
     },
 
@@ -20512,22 +20521,22 @@ BI.FloatLeftLayout = BI.inherit(BI.Layout, {
         }
         if (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
             w.element.css({
-                "margin-top": (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0)) / BI.pixRatio + BI.pixUnit
+                "margin-top": (o.vgap / 2 + o.tgap + (item.tgap || 0) + (item.vgap || 0)) / BI.pixRatio + BI.pixUnit
             });
         }
         if (o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0) !== 0) {
             w.element.css({
-                "margin-left": ((i === 0 ? o.hgap : 0) + o.lgap + (item.lgap || 0) + (item.hgap || 0)) / BI.pixRatio + BI.pixUnit
+                "margin-left": (o.hgap / 2 + o.lgap + (item.lgap || 0) + (item.hgap || 0)) / BI.pixRatio + BI.pixUnit
             });
         }
         if (o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0) !== 0) {
             w.element.css({
-                "margin-right": (o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0)) / BI.pixRatio + BI.pixUnit
+                "margin-right": (o.hgap / 2 + o.rgap + (item.rgap || 0) + (item.hgap || 0)) / BI.pixRatio + BI.pixUnit
             });
         }
         if (o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0) !== 0) {
             w.element.css({
-                "margin-bottom": (o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0)) / BI.pixRatio + BI.pixUnit
+                "margin-bottom": (o.vgap / 2 + o.bgap + (item.bgap || 0) + (item.vgap || 0)) / BI.pixRatio + BI.pixUnit
             });
         }
         return w;
@@ -20556,7 +20565,7 @@ BI.shortcut("bi.left", BI.FloatLeftLayout);
 BI.FloatRightLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.FloatRightLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-right clearfix",
+            baseCls: "bi-right clearfix border-sizing",
             hgap: 0,
             vgap: 0,
             lgap: 0,
@@ -20567,6 +20576,19 @@ BI.FloatRightLayout = BI.inherit(BI.Layout, {
     },
     render: function () {
         BI.FloatRightLayout.superclass.render.apply(this, arguments);
+        var o = this.options;
+        if (o.hgap > 0) {
+            this.element.css({
+                "padding-left": o.hgap / 2 / BI.pixRatio + BI.pixUnit,
+                "padding-right": o.hgap / 2 / BI.pixRatio + BI.pixUnit
+            });
+        }
+        if (o.vgap > 0) {
+            this.element.css({
+                "padding-top": o.vgap / 2 / BI.pixRatio + BI.pixUnit,
+                "padding-bottom": o.vgap / 2 / BI.pixRatio + BI.pixUnit
+            });
+        }
         this.populate(this.options.items);
     },
 
@@ -20588,22 +20610,22 @@ BI.FloatRightLayout = BI.inherit(BI.Layout, {
         }
         if (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
             w.element.css({
-                "margin-top": (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0)) / BI.pixRatio + BI.pixUnit
+                "margin-top": (o.vgap / 2 + o.tgap + (item.tgap || 0) + (item.vgap || 0)) / BI.pixRatio + BI.pixUnit
             });
         }
         if (o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0) !== 0) {
             w.element.css({
-                "margin-left": (o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0)) / BI.pixRatio + BI.pixUnit
+                "margin-left": (o.hgap / 2 + o.lgap + (item.lgap || 0) + (item.hgap || 0)) / BI.pixRatio + BI.pixUnit
             });
         }
         if (o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0) !== 0) {
             w.element.css({
-                "margin-right": ((i === 0 ? o.hgap : 0) + o.rgap + (item.rgap || 0) + (item.hgap || 0)) / BI.pixRatio + BI.pixUnit
+                "margin-right": (o.hgap / 2 + o.rgap + (item.rgap || 0) + (item.hgap || 0)) / BI.pixRatio + BI.pixUnit
             });
         }
         if (o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0) !== 0) {
             w.element.css({
-                "margin-bottom": (o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0)) / BI.pixRatio + BI.pixUnit
+                "margin-bottom": (o.vgap / 2 + o.bgap + (item.bgap || 0) + (item.vgap || 0)) / BI.pixRatio + BI.pixUnit
             });
         }
         return w;
