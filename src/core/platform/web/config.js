@@ -23,8 +23,11 @@ BI.prepares.push(function () {
         if (ob.horizontalAlign === BI.HorizontalAlign.Center || ob.horizontalAlign === BI.HorizontalAlign.Stretch) {
             return BI.extend({}, ob, {type: "bi.table_adapt"});
         }
-        if (!isIE && supportFlex) {
-            return BI.extend({}, ob, {type: "bi.flex_horizontal"});
+        if (supportFlex) {
+            // IE下其实也是可以使用flex布局的，只要排除掉出现滚动条的情况
+            if (!isIE || (ob.scrollable !== true && ob.scrolly !== true)) {
+                return BI.extend({}, ob, {type: "bi.flex_horizontal"});
+            }
         }
         // // 解决使用inline_vertical_adapt的顺序问题
         // // 从右往左放置时，为了兼容，我们统一采用从右到左的放置方式
@@ -40,8 +43,11 @@ BI.prepares.push(function () {
         var isIE = BI.isIE(), supportFlex = isSupportFlex(), justOneItem = (ob.items && ob.items.length <= 1);
         var isAdapt = !ob.horizontalAlign || ob.horizontalAlign === BI.HorizontalAlign.Center || ob.horizontalAlign === BI.HorizontalAlign.Stretch;
         if (!isAdapt || justOneItem) {
-            if (!isIE && supportFlex) {
-                return BI.extend({}, ob, {type: "bi.flex_center_adapt"});
+            if (supportFlex) {
+                // IE下其实也是可以使用flex布局的，只要排除掉出现滚动条的情况
+                if (!isIE || (ob.scrollable !== true && ob.scrollx !== true && ob.scrolly !== true)) {
+                    return BI.extend({}, ob, {type: "bi.flex_center_adapt"});
+                }
             }
             return BI.extend({}, ob, {type: "bi.inline_center_adapt"});
         }
@@ -51,8 +57,11 @@ BI.prepares.push(function () {
         var isIE = BI.isIE(), supportFlex = isSupportFlex(), justOneItem = (ob.items && ob.items.length <= 1);
         var isAdapt = ob.horizontalAlign === BI.HorizontalAlign.Center || ob.horizontalAlign === BI.HorizontalAlign.Stretch;
         if (!isAdapt || justOneItem) {
-            if (!isIE && supportFlex) {
-                return BI.extend({}, ob, {type: "bi.flex_vertical_center_adapt"});
+            if (supportFlex) {
+                // IE下其实也是可以使用flex布局的，只要排除掉出现滚动条的情况
+                if (!isIE || (ob.scrollable !== true && ob.scrolly !== true)) {
+                    return BI.extend({}, ob, {type: "bi.flex_vertical_adapt"});
+                }
             }
             return BI.extend({}, ob, {type: "bi.inline_vertical_adapt"});
         }
@@ -68,10 +77,22 @@ BI.prepares.push(function () {
         return ob;
     });
     BI.Plugin.configWidget("bi.horizontal_float", function (ob) {
-        if (!BI.isIE() && isSupportFlex()) {
-            return BI.extend({}, ob, {type: "bi.flex_horizontal_adapt"});
+        if (isSupportFlex()) {
+            // IE下其实也是可以使用flex布局的，只要排除掉出现滚动条的情况
+            if (!BI.isIE() || (ob.scrollable !== true && ob.scrollx !== true)) {
+                return BI.extend({}, ob, {type: "bi.flex_horizontal_adapt"});
+            }
         }
         return BI.extend({}, ob, {type: "bi.inline_horizontal_adapt"});
+    });
+    BI.Plugin.configWidget("bi.left_right_vertical_adapt", function (ob) {
+        if (isSupportFlex()) {
+            // IE下其实也是可以使用flex布局的，只要排除掉出现滚动条的情况
+            if (!BI.isIE() || (ob.scrollable !== true && ob.scrolly !== true)) {
+                return BI.extend({}, ob, {type: "bi.flex_left_right_vertical_adapt"});
+            }
+        }
+        return ob;
     });
 
     BI.Plugin.configWidget("bi.flex_horizontal", function (ob) {
