@@ -43,6 +43,17 @@ BI.InlineVerticalAdaptLayout = BI.inherit(BI.Layout, {
             "vertical-align": o.verticalAlign
         });
         w.element.addClass("i-v-a-item");
+        if (o.columnSize[i] === "fill") {
+            var left = o.hgap + (item.lgap || 0) + (item.hgap || 0),
+                right = o.hgap + (item.rgap || 0) + (item.hgap || 0);
+            for (var k = 0; k < i; k++) {
+                left += o.hgap + o.lgap + o.rgap + o.columnSize[k];
+            }
+            for (var k = i + 1; k < o.columnSize.length; k++) {
+                right += o.hgap + o.lgap + o.rgap + o.columnSize[k];
+            }
+            w.element.css("min-width", "calc(100% - " + ((left + right) / BI.pixRatio + BI.pixUnit) + ")");
+        }
         if (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
             w.element.css({
                 "margin-top": (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0)) / BI.pixRatio + BI.pixUnit
