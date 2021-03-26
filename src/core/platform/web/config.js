@@ -21,6 +21,18 @@ BI.prepares.push(function () {
         // 在横向自适应场景下我们需要使用table的自适应撑出滚动条的特性（flex处理不了这种情况）
         // 主要出现在center_adapt或者horizontal_adapt的场景，或者主动设置horizontalAlign的场景
         if (ob.horizontalAlign === BI.HorizontalAlign.Center || ob.horizontalAlign === BI.HorizontalAlign.Stretch) {
+            var justOneItem = (ob.items && ob.items.length <= 1);
+            // 在这种情况下，也可以通过flex支持该布局
+            if (supportFlex) {
+                // IE下其实也是可以使用flex布局的，只要排除掉出现滚动条的情况
+                if (!isIE || (ob.scrollable !== true && ob.scrolly !== true)) {
+                    return BI.extend({}, ob, {
+                        type: "bi.flex_horizontal",
+                        horizontalAlign: !justOneItem && ob.horizontalAlign === BI.HorizontalAlign.Center
+                            ? BI.HorizontalAlign.Left : ob.horizontalAlign
+                    });
+                }
+            }
             return BI.extend({}, ob, {type: "bi.table_adapt"});
         }
         if (supportFlex) {

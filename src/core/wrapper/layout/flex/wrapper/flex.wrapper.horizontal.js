@@ -37,16 +37,16 @@ BI.FlexWrapperHorizontalLayout = BI.inherit(BI.Layout, {
         });
         if (o.columnSize[i] !== "auto") {
             if (o.horizontalAlign === BI.HorizontalAlign.Stretch && o.columnSize[i] !== "") {
-                w.element.addClass("fill");
+                w.element.addClass("f-f");
             } else {
-                w.element.addClass("shrink-none");
+                w.element.addClass("f-s-n");
             }
         }
         if (o.columnSize[i] > 0) {
             w.element.width(o.columnSize[i] <= 1 ? ((o.columnSize[i] * 100).toFixed(1) + "%") : (o.columnSize[i] / BI.pixRatio + BI.pixUnit));
         }
         if (o.columnSize[i] === "fill") {
-            w.element.addClass("fill");
+            w.element.addClass("f-f");
         }
         if (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
             w.element.css({
