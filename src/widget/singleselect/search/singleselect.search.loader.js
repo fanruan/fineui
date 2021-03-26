@@ -90,7 +90,9 @@ BI.SingleSelectSearchLoader = BI.inherit(BI.Widget, {
                 dynamic: false
             },
             height: 25,
-            selected: false
+            selected: false,
+            iconWrapperWidth: 26,
+            hgap: this.options.allowNoSelect ? 10 : 0
         });
     },
 
