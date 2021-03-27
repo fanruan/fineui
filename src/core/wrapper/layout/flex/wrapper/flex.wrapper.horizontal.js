@@ -44,7 +44,7 @@ BI.FlexWrapperHorizontalLayout = BI.inherit(BI.Layout, {
             }
         }
         if (o.columnSize[i] > 0) {
-            w.element.width(o.columnSize[i] <= 1 ? ((o.columnSize[i] * 100).toFixed(1) + "%") : (o.columnSize[i] / BI.pixRatio + BI.pixUnit));
+            w.element.width(o.columnSize[i] === "" ? "" : (o.columnSize[i] <= 1 ? ((o.columnSize[i] * 100).toFixed(1) + "%") : (o.columnSize[i] / BI.pixRatio + BI.pixUnit)));
         }
         if (o.columnSize[i] === "fill") {
             w.element.addClass("f-f");

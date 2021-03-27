@@ -103,7 +103,7 @@ BI.TdLayout = BI.inherit(BI.Layout, {
             first(w, this.rows++, i);
             var td = BI._lazyCreateWidget({
                 type: "bi.default",
-                width: o.columnSize[i] <= 1 ? ((o.columnSize[i] * 100).toFixed(1) + "%") : (i === 0 ? o.hgap : 0) + o.hgap + o.lgap + o.rgap + o.columnSize[i],
+                width: o.columnSize[i] === "" ? "" : (o.columnSize[i] <= 1 ? ((o.columnSize[i] * 100).toFixed(1) + "%") : (i === 0 ? o.hgap : 0) + o.hgap + o.lgap + o.rgap + o.columnSize[i]),
                 tagName: "td",
                 items: [w]
             });
