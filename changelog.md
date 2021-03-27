@@ -1,6 +1,6 @@
 # 更新日志
 2.0(2021-03)
-- 优化left_right_vertical_adapt布局，去掉float布局只使用flex
+- 优化left_right_vertical_adapt布局，去掉float属性只使用flex
 - inline布局支持用calc计算fill列宽度
 - 时间类型控件无翻页限制
 - 时间类型控件优化动态时间面板的交互
