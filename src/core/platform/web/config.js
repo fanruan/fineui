@@ -25,13 +25,13 @@ BI.prepares.push(function () {
             // 在这种情况下，也可以通过flex支持该布局
             if (supportFlex) {
                 // IE下其实也是可以使用flex布局的，只要排除掉出现滚动条的情况
-                if (!isIE || (ob.scrollable !== true && ob.scrolly !== true)) {
-                    return BI.extend({}, ob, {
-                        type: "bi.flex_horizontal",
-                        horizontalAlign: !justOneItem && ob.horizontalAlign === BI.HorizontalAlign.Center
-                            ? BI.HorizontalAlign.Left : ob.horizontalAlign
-                    });
-                }
+                // if (!isIE || (ob.scrollable !== true && ob.scrolly !== true)) {
+                return BI.extend({}, ob, {
+                    type: "bi.flex_horizontal",
+                    horizontalAlign: !justOneItem && ob.horizontalAlign === BI.HorizontalAlign.Center
+                        ? BI.HorizontalAlign.Left : ob.horizontalAlign
+                });
+                // }
             }
             return BI.extend({}, ob, {type: "bi.table_adapt"});
         }
@@ -57,9 +57,9 @@ BI.prepares.push(function () {
         if (!isAdapt || justOneItem) {
             if (supportFlex) {
                 // IE下其实也是可以使用flex布局的，只要排除掉出现滚动条的情况
-                if (!isIE || (ob.scrollable !== true && ob.scrollx !== true && ob.scrolly !== true)) {
-                    return BI.extend({}, ob, {type: "bi.flex_center_adapt"});
-                }
+                // if (!isIE || (ob.scrollable !== true && ob.scrollx !== true && ob.scrolly !== true)) {
+                return BI.extend({}, ob, {type: "bi.flex_center_adapt"});
+                // }
             }
             return BI.extend({}, ob, {type: "bi.inline_center_adapt"});
         }
@@ -71,9 +71,9 @@ BI.prepares.push(function () {
         if (!isAdapt || justOneItem) {
             if (supportFlex) {
                 // IE下其实也是可以使用flex布局的，只要排除掉出现滚动条的情况
-                if (!isIE || (ob.scrollable !== true && ob.scrolly !== true)) {
-                    return BI.extend({}, ob, {type: "bi.flex_vertical_adapt"});
-                }
+                // if (!isIE || (ob.scrollable !== true && ob.scrolly !== true)) {
+                return BI.extend({}, ob, {type: "bi.flex_vertical_adapt"});
+                // }
             }
             return BI.extend({}, ob, {type: "bi.inline_vertical_adapt"});
         }
@@ -91,18 +91,18 @@ BI.prepares.push(function () {
     BI.Plugin.configWidget("bi.horizontal_float", function (ob) {
         if (isSupportFlex()) {
             // IE下其实也是可以使用flex布局的，只要排除掉出现滚动条的情况
-            if (!BI.isIE() || (ob.scrollable !== true && ob.scrollx !== true)) {
-                return BI.extend({}, ob, {type: "bi.flex_horizontal_adapt"});
-            }
+            // if (!BI.isIE() || (ob.scrollable !== true && ob.scrollx !== true)) {
+            return BI.extend({}, ob, {type: "bi.flex_horizontal_adapt"});
+            // }
         }
         return BI.extend({}, ob, {type: "bi.inline_horizontal_adapt"});
     });
     BI.Plugin.configWidget("bi.left_right_vertical_adapt", function (ob) {
         if (isSupportFlex()) {
             // IE下其实也是可以使用flex布局的，只要排除掉出现滚动条的情况
-            if (!BI.isIE() || (ob.scrollable !== true && ob.scrolly !== true)) {
-                return BI.extend({}, ob, {type: "bi.flex_left_right_vertical_adapt"});
-            }
+            // if (!BI.isIE() || (ob.scrollable !== true && ob.scrolly !== true)) {
+            return BI.extend({}, ob, {type: "bi.flex_left_right_vertical_adapt"});
+            // }
         }
         return ob;
     });
