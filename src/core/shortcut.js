@@ -57,12 +57,14 @@
             el = BI.extend({}, options, item);
             w = BI.Plugin.getWidget(el.type, el);
             if (w.type === el.type) {
-                w.listeners = (w.listeners || []).concat([{
-                    eventName: BI.Events.MOUNT,
-                    action: function () {
-                        BI.Plugin.getObject(el.type, this);
-                    }
-                }]);
+                if (BI.Plugin.hasObject(el.type)) {
+                    w.listeners = (w.listeners || []).concat([{
+                        eventName: BI.Events.MOUNT,
+                        action: function () {
+                            BI.Plugin.getObject(el.type, this);
+                        }
+                    }]);
+                }
                 return createWidget(w, context, lazy);
             }
             return BI.createWidget(w, options, context, lazy);
@@ -71,12 +73,14 @@
             el = BI.extend({}, options, item.el);
             w = BI.Plugin.getWidget(el.type, el);
             if (w.type === el.type) {
-                w.listeners = (w.listeners || []).concat([{
-                    eventName: BI.Events.MOUNT,
-                    action: function () {
-                        BI.Plugin.getObject(el.type, this);
-                    }
-                }]);
+                if (BI.Plugin.hasObject(el.type)) {
+                    w.listeners = (w.listeners || []).concat([{
+                        eventName: BI.Events.MOUNT,
+                        action: function () {
+                            BI.Plugin.getObject(el.type, this);
+                        }
+                    }]);
+                }
                 return createWidget(w, context, lazy);
             }
             return BI.createWidget(w, options, context, lazy);
