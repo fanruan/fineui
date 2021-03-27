@@ -113,13 +113,6 @@ BI.prepares.push(function () {
             }
         }
     });
-    BI.Plugin.configWidget("bi.flex_vertical", function (ob) {
-        if (ob.scrollable === true || ob.scrollx === true) {
-            if (ob.hgap > 0 || ob.rgap > 0) {// flex中最后一个margin-right不生效
-                return BI.extend({}, ob, {type: "bi.flex_scrollable_vertical"});
-            }
-        }
-    });
 
     BI.Plugin.configWidget("bi.radio", function (ob) {
         if (BI.isIE() && BI.getIEVersion() <= 9) {
