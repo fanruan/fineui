@@ -29,6 +29,14 @@
 }
 
 .bi-f-s-v, .bi-flex-scrollable-vertical-layout {
+  &.hack {
+    & .f-s-v-w, & .flex-scrollable-vertical-layout-wrapper {
+      &.h-center.v-middle {
+        height: 100%;
+      }
+    }
+  }
+
   & .f-s-v-w, & .flex-scrollable-vertical-layout-wrapper {
     .flex();
     .vertical();

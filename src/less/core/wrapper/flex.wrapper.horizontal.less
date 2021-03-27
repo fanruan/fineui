@@ -29,6 +29,12 @@
 }
 
 .bi-f-s-h, .bi-flex-scrollable-horizontal-layout {
+  &.hack {
+    & .f-s-h-w, & .flex-scrollable-horizontal-layout-wrapper {
+      height: 100%;
+    }
+  }
+
   & .f-s-h-w, & .flex-scrollable-horizontal-layout-wrapper {
     .flex();
     .horizontal();
