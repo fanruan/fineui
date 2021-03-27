@@ -49,6 +49,13 @@ BI.FlexWrapperVerticalLayout = BI.inherit(BI.Layout, {
         if (o.rowSize[i] === "fill") {
             w.element.addClass("f-f");
         }
+        w.element.addClass("c-e");
+        if (i === 0) {
+            w.element.addClass("f-c");
+        }
+        if (i === o.items.length - 1) {
+            w.element.addClass("l-c");
+        }
         if (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
             w.element.css({
                 "margin-top": ((i === 0 ? o.vgap : 0) + o.tgap + (item.tgap || 0) + (item.vgap || 0)) / BI.pixRatio + BI.pixUnit
