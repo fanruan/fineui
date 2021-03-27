@@ -9,7 +9,7 @@ BI.FlexWrapperHorizontalLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.FlexWrapperHorizontalLayout.superclass.props.apply(this, arguments), {
             // 逆天的IE设置min-height撑不起来高度
-            baseCls: "bi-f-s-h clearfix" + (BI.isIE() ? " hack" : ""),
+            baseCls: "bi-f-s-h",
             verticalAlign: BI.VerticalAlign.Top,
             horizontalAlign: BI.HorizontalAlign.Left,
             columnSize: [],
