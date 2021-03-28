@@ -1,4 +1,4 @@
-/*! time: 2021-3-25 15:20:26 */
+/*! time: 2021-3-28 17:00:27 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -82,7 +82,7 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 1417);
+/******/ 	return __webpack_require__(__webpack_require__.s = 1420);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -9802,7 +9802,9 @@ BI.Req = {
 /* 323 */,
 /* 324 */,
 /* 325 */,
-/* 326 */
+/* 326 */,
+/* 327 */,
+/* 328 */
 /***/ (function(module, exports) {
 
 /**
@@ -10551,7 +10553,7 @@ BI.Req = {
 
 
 /***/ }),
-/* 327 */
+/* 329 */
 /***/ (function(module, exports) {
 
 (function () {
@@ -10612,24 +10614,34 @@ BI.Req = {
         if (item.type || options.type) {
             el = BI.extend({}, options, item);
             w = BI.Plugin.getWidget(el.type, el);
-            w.listeners = (w.listeners || []).concat([{
-                eventName: BI.Events.MOUNT,
-                action: function () {
-                    BI.Plugin.getObject(el.type, this);
+            if (w.type === el.type) {
+                if (BI.Plugin.hasObject(el.type)) {
+                    w.listeners = (w.listeners || []).concat([{
+                        eventName: BI.Events.MOUNT,
+                        action: function () {
+                            BI.Plugin.getObject(el.type, this);
+                        }
+                    }]);
                 }
-            }]);
-            return w.type === el.type ? createWidget(w, context, lazy) : BI.createWidget(BI.extend({/**important**/}, el, {type: w.type}), options, context, lazy);
+                return createWidget(w, context, lazy);
+            }
+            return BI.createWidget(w, options, context, lazy);
         }
         if (item.el && (item.el.type || options.type)) {
             el = BI.extend({}, options, item.el);
             w = BI.Plugin.getWidget(el.type, el);
-            w.listeners = (w.listeners || []).concat([{
-                eventName: BI.Events.MOUNT,
-                action: function () {
-                    BI.Plugin.getObject(el.type, this);
+            if (w.type === el.type) {
+                if (BI.Plugin.hasObject(el.type)) {
+                    w.listeners = (w.listeners || []).concat([{
+                        eventName: BI.Events.MOUNT,
+                        action: function () {
+                            BI.Plugin.getObject(el.type, this);
+                        }
+                    }]);
                 }
-            }]);
-            return w.type === el.type ? createWidget(w, context, lazy) : BI.createWidget(BI.extend({/**important**/}, el, {type: w.type}), options, context, lazy);
+                return createWidget(w, context, lazy);
+            }
+            return BI.createWidget(w, options, context, lazy);
         }
         if (BI.isWidget(item.el)) {
             return item.el;
@@ -10650,7 +10662,7 @@ BI.Req = {
 
 
 /***/ }),
-/* 328 */
+/* 330 */
 /***/ (function(module, exports) {
 
 !(function () {
@@ -10762,7 +10774,7 @@ BI.Req = {
 })();
 
 /***/ }),
-/* 329 */
+/* 331 */
 /***/ (function(module, exports) {
 
 !(function () {
@@ -10916,7 +10928,7 @@ BI.Req = {
 })();
 
 /***/ }),
-/* 330 */
+/* 332 */
 /***/ (function(module, exports) {
 
 BI.BehaviorFactory = {
@@ -10958,7 +10970,7 @@ BI.Behavior = BI.inherit(BI.OB, {
 });
 
 /***/ }),
-/* 331 */
+/* 333 */
 /***/ (function(module, exports) {
 
 /**
@@ -11573,7 +11585,7 @@ BI.shortcut("bi.layout", BI.Layout);
 
 
 /***/ }),
-/* 332 */
+/* 334 */
 /***/ (function(module, exports) {
 
 BI.Plugin = BI.Plugin || {};
@@ -11659,6 +11671,10 @@ BI.Plugin = BI.Plugin || {};
             return res || object;
         },
 
+        hasObject: function (type) {
+            return __GlobalObjectConfigFns.length > 0 || !!_ObjectPlugin[type];
+        },
+
         registerObject: function (type, fn) {
             if (!_ObjectPlugin[type]) {
                 _ObjectPlugin[type] = [];
@@ -11677,7 +11693,7 @@ BI.Plugin = BI.Plugin || {};
 
 
 /***/ }),
-/* 333 */
+/* 335 */
 /***/ (function(module, exports) {
 
 /**
@@ -11721,7 +11737,7 @@ BI.ActionFactory = {
 };
 
 /***/ }),
-/* 334 */
+/* 336 */
 /***/ (function(module, exports) {
 
 /**
@@ -11750,7 +11766,7 @@ BI.ShowAction = BI.inherit(BI.Action, {
 
 
 /***/ }),
-/* 335 */
+/* 337 */
 /***/ (function(module, exports) {
 
 /**
@@ -11797,7 +11813,7 @@ BI.HighlightBehavior = BI.inherit(BI.Behavior, {
 });
 
 /***/ }),
-/* 336 */
+/* 338 */
 /***/ (function(module, exports) {
 
 /**
@@ -11836,7 +11852,7 @@ BI.RedMarkBehavior = BI.inherit(BI.Behavior, {
 });
 
 /***/ }),
-/* 337 */
+/* 339 */
 /***/ (function(module, exports) {
 
 /**
@@ -11858,7 +11874,7 @@ BI.Controller.EVENT_CHANGE = "__EVENT_CHANGE__";
 
 
 /***/ }),
-/* 338 */
+/* 340 */
 /***/ (function(module, exports) {
 
 /**
@@ -11913,7 +11929,7 @@ BI.BroadcastController = BI.inherit(BI.Controller, {
 });
 
 /***/ }),
-/* 339 */
+/* 341 */
 /***/ (function(module, exports) {
 
 /**
@@ -12223,7 +12239,7 @@ BI.BubblesController = BI.inherit(BI.Controller, {
 
 
 /***/ }),
-/* 340 */
+/* 342 */
 /***/ (function(module, exports) {
 
 /**
@@ -12398,7 +12414,7 @@ BI.LayerController = BI.inherit(BI.Controller, {
 });
 
 /***/ }),
-/* 341 */
+/* 343 */
 /***/ (function(module, exports) {
 
 /**
@@ -12419,7 +12435,7 @@ BI.MaskersController = BI.inherit(BI.LayerController, {
 });
 
 /***/ }),
-/* 342 */
+/* 344 */
 /***/ (function(module, exports) {
 
 /**
@@ -12581,7 +12597,7 @@ BI.PopoverController = BI.inherit(BI.Controller, {
 
 
 /***/ }),
-/* 343 */
+/* 345 */
 /***/ (function(module, exports) {
 
 /**
@@ -12659,7 +12675,7 @@ BI.ResizeController = BI.inherit(BI.Controller, {
 });
 
 /***/ }),
-/* 344 */
+/* 346 */
 /***/ (function(module, exports) {
 
 /**
@@ -12805,7 +12821,7 @@ BI.TooltipsController = BI.inherit(BI.Controller, {
 
 
 /***/ }),
-/* 345 */
+/* 347 */
 /***/ (function(module, exports) {
 
 /**
@@ -13248,7 +13264,7 @@ _.extend(BI, {
 });
 
 /***/ }),
-/* 346 */
+/* 348 */
 /***/ (function(module, exports) {
 
 BI.prepares.push(function () {
@@ -13319,7 +13335,7 @@ BI.prepares.push(function () {
 });
 
 /***/ }),
-/* 347 */
+/* 349 */
 /***/ (function(module, exports) {
 
 /**
@@ -13373,7 +13389,7 @@ BI.ShowListener = BI.inherit(BI.OB, {
 BI.ShowListener.EVENT_CHANGE = "EVENT_CHANGE";
 
 /***/ }),
-/* 348 */
+/* 350 */
 /***/ (function(module, exports) {
 
 /**
@@ -13428,7 +13444,7 @@ BI.StyleLoaderManager = BI.inherit(BI.OB, {
 });
 
 /***/ }),
-/* 349 */
+/* 351 */
 /***/ (function(module, exports) {
 
 /**
@@ -13514,7 +13530,7 @@ BI.LogicFactory = {
 };
 
 /***/ }),
-/* 350 */
+/* 352 */
 /***/ (function(module, exports) {
 
 /**
@@ -13716,7 +13732,7 @@ BI.HorizontalFillLayoutLogic = BI.inherit(BI.Logic, {
 
 
 /***/ }),
-/* 351 */
+/* 353 */
 /***/ (function(module, exports) {
 
 if (!Number.prototype.toFixed || (0.00008).toFixed(3) !== "0.000" ||
@@ -13863,13 +13879,13 @@ if (!Number.prototype.toFixed || (0.00008).toFixed(3) !== "0.000" ||
 }
 
 /***/ }),
-/* 352 */
+/* 354 */
 /***/ (function(module, exports) {
 
 BI.version = "2.0";
 
 /***/ }),
-/* 353 */
+/* 355 */
 /***/ (function(module, exports) {
 
 !(function () {
@@ -13922,7 +13938,7 @@ BI.version = "2.0";
 
 
 /***/ }),
-/* 354 */
+/* 356 */
 /***/ (function(module, exports) {
 
 /**
@@ -13975,7 +13991,7 @@ BI.shortcut("bi.absolute_center_adapt", BI.AbsoluteCenterLayout);
 
 
 /***/ }),
-/* 355 */
+/* 357 */
 /***/ (function(module, exports) {
 
 /**
@@ -14032,7 +14048,7 @@ BI.shortcut("bi.absolute_horizontal_adapt", BI.AbsoluteHorizontalLayout);
 
 
 /***/ }),
-/* 356 */
+/* 358 */
 /***/ (function(module, exports) {
 
 /**
@@ -14091,7 +14107,7 @@ BI.shortcut("bi.absolute_vertical_adapt", BI.AbsoluteVerticalLayout);
 
 
 /***/ }),
-/* 357 */
+/* 359 */
 /***/ (function(module, exports) {
 
 /**
@@ -14150,7 +14166,7 @@ BI.shortcut("bi.center_adapt", BI.CenterAdaptLayout);
 
 
 /***/ }),
-/* 358 */
+/* 360 */
 /***/ (function(module, exports) {
 
 /**
@@ -14209,7 +14225,7 @@ BI.shortcut("bi.horizontal_adapt", BI.HorizontalAdaptLayout);
 
 
 /***/ }),
-/* 359 */
+/* 361 */
 /***/ (function(module, exports) {
 
 /**
@@ -14407,7 +14423,7 @@ BI.shortcut("bi.right_vertical_adapt", BI.RightVerticalAdaptLayout);
 
 
 /***/ }),
-/* 360 */
+/* 362 */
 /***/ (function(module, exports) {
 
 /**
@@ -14447,7 +14463,7 @@ BI.TableAdaptLayout = BI.inherit(BI.Layout, {
     _addElement: function (i, item) {
         var o = this.options;
         var td;
-        var width = o.columnSize[i] <= 1 ? ((o.columnSize[i] * 100).toFixed(1) + "%") : o.columnSize[i];
+        var width = o.columnSize[i] === "" ? "" : (o.columnSize[i] <= 1 ? ((o.columnSize[i] * 100).toFixed(1) + "%") : (i === 0 ? o.hgap : 0) + o.hgap + o.lgap + o.rgap + o.columnSize[i]);
         if (!this.hasWidget(this._getChildName(i))) {
             var w = BI._lazyCreateWidget(item);
             w.element.css({position: "relative", top: "0", left: "0", margin: "0px auto"});
@@ -14518,7 +14534,7 @@ BI.shortcut("bi.table_adapt", BI.TableAdaptLayout);
 
 
 /***/ }),
-/* 361 */
+/* 363 */
 /***/ (function(module, exports) {
 
 /**
@@ -14576,7 +14592,7 @@ BI.shortcut("bi.vertical_adapt", BI.VerticalAdaptLayout);
 
 
 /***/ }),
-/* 362 */
+/* 364 */
 /***/ (function(module, exports) {
 
 /**
@@ -14645,7 +14661,7 @@ BI.shortcut("bi.horizontal_auto", BI.HorizontalAutoLayout);
 
 
 /***/ }),
-/* 363 */
+/* 365 */
 /***/ (function(module, exports) {
 
 /**
@@ -14656,7 +14672,7 @@ BI.shortcut("bi.horizontal_float", BI.FloatHorizontalLayout);
 
 
 /***/ }),
-/* 364 */
+/* 366 */
 /***/ (function(module, exports) {
 
 /**
@@ -14686,74 +14702,34 @@ BI.InlineCenterAdaptLayout = BI.inherit(BI.Layout, {
     },
 
     render: function () {
-        BI.InlineCenterAdaptLayout.superclass.render.apply(this, arguments);
-        var o = this.options;
-        this.element.css({
-            whiteSpace: "nowrap",
-            textAlign: o.horizontalAlign
-        });
-        this.populate(o.items);
-    },
-
-    _addElement: function (i, item, length) {
-        var o = this.options;
-        var w = BI.InlineCenterAdaptLayout.superclass._addElement.apply(this, arguments);
-        w.element.css({
-            width: o.columnSize[i] <= 1 ? ((o.columnSize[i] * 100).toFixed(1) + "%") : (o.columnSize[i] / BI.pixRatio + BI.pixUnit),
-            position: "relative",
-            "vertical-align": o.verticalAlign
-        });
-        w.element.addClass("i-c-a-item");
-        if (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
-            w.element.css({
-                "margin-top": (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0)) / BI.pixRatio + BI.pixUnit
-            });
-        }
-        if (o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0) !== 0) {
-            w.element.css({
-                "margin-left": ((i === 0 ? o.hgap : 0) + o.lgap + (item.lgap || 0) + (item.hgap || 0)) / BI.pixRatio + BI.pixUnit
-            });
-        }
-        if (o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0) !== 0) {
-            w.element.css({
-                "margin-right": (o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0)) / BI.pixRatio + BI.pixUnit
-            });
-        }
-        if (o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0) !== 0) {
-            w.element.css({
-                "margin-bottom": (o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0))
-            });
-        }
-        return w;
-    },
-
-    resize: function () {
-        this.stroke(this.options.items);
-    },
-
-    addItem: function (item) {
-        throw new Error("不能添加元素");
-    },
-
-    stroke: function (items) {
-        var self = this;
-        BI.each(items, function (i, item) {
-            if (item) {
-                self._addElement(i, item, items.length);
-            }
-        });
+        var self = this, o = this.options;
+        return {
+            type: "bi.inline",
+            ref: function (_ref) {
+                self.layout = _ref;
+            },
+            items: o.items,
+            horizontalAlign: o.horizontalAlign,
+            verticalAlign: o.verticalAlign,
+            columnSize: o.columnSize,
+            hgap: o.hgap,
+            vgap: o.vgap,
+            lgap: o.lgap,
+            rgap: o.rgap,
+            tgap: o.tgap,
+            bgap: o.bgap
+        };
     },
 
     populate: function (items) {
-        BI.InlineCenterAdaptLayout.superclass.populate.apply(this, arguments);
-        this._mount();
+        this.layout.populate.apply(this.layout, arguments);
     }
 });
 BI.shortcut("bi.inline_center_adapt", BI.InlineCenterAdaptLayout);
 
 
 /***/ }),
-/* 365 */
+/* 367 */
 /***/ (function(module, exports) {
 
 /**
@@ -14783,74 +14759,34 @@ BI.InlineHorizontalAdaptLayout = BI.inherit(BI.Layout, {
     },
 
     render: function () {
-        BI.InlineHorizontalAdaptLayout.superclass.render.apply(this, arguments);
-        var o = this.options;
-        this.element.css({
-            whiteSpace: "nowrap",
-            textAlign: o.horizontalAlign
-        });
-        this.populate(o.items);
-    },
-
-    _addElement: function (i, item, length) {
-        var o = this.options;
-        var w = BI.InlineHorizontalAdaptLayout.superclass._addElement.apply(this, arguments);
-        w.element.css({
-            width: o.columnSize[i] <= 1 ? ((o.columnSize[i] * 100).toFixed(1) + "%") : (o.columnSize[i] / BI.pixRatio + BI.pixUnit),
-            position: "relative",
-            "vertical-align": o.verticalAlign
-        });
-        w.element.addClass("i-h-a-item");
-        if (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
-            w.element.css({
-                "margin-top": (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0)) / BI.pixRatio + BI.pixUnit
-            });
-        }
-        if (o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0) !== 0) {
-            w.element.css({
-                "margin-left": ((i === 0 ? o.hgap : 0) + o.lgap + (item.lgap || 0) + (item.hgap || 0)) / BI.pixRatio + BI.pixUnit
-            });
-        }
-        if (o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0) !== 0) {
-            w.element.css({
-                "margin-right": (o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0)) / BI.pixRatio + BI.pixUnit
-            });
-        }
-        if (o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0) !== 0) {
-            w.element.css({
-                "margin-bottom": (o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0)) / BI.pixRatio + BI.pixUnit
-            });
-        }
-        return w;
-    },
-
-    resize: function () {
-        this.stroke(this.options.items);
-    },
-
-    addItem: function (item) {
-        throw new Error("不能添加元素");
-    },
-
-    stroke: function (items) {
-        var self = this;
-        BI.each(items, function (i, item) {
-            if (item) {
-                self._addElement(i, item, items.length);
-            }
-        });
+        var self = this, o = this.options;
+        return {
+            type: "bi.inline",
+            ref: function (_ref) {
+                self.layout = _ref;
+            },
+            items: o.items,
+            horizontalAlign: o.horizontalAlign,
+            verticalAlign: o.verticalAlign,
+            columnSize: o.columnSize,
+            hgap: o.hgap,
+            vgap: o.vgap,
+            lgap: o.lgap,
+            rgap: o.rgap,
+            tgap: o.tgap,
+            bgap: o.bgap
+        };
     },
 
     populate: function (items) {
-        BI.InlineHorizontalAdaptLayout.superclass.populate.apply(this, arguments);
-        this._mount();
+        this.layout.populate.apply(this.layout, arguments);
     }
 });
 BI.shortcut("bi.inline_horizontal_adapt", BI.InlineHorizontalAdaptLayout);
 
 
 /***/ }),
-/* 366 */
+/* 368 */
 /***/ (function(module, exports) {
 
 /**
@@ -14880,61 +14816,34 @@ BI.InlineVerticalAdaptLayout = BI.inherit(BI.Layout, {
     },
 
     render: function () {
-        BI.InlineVerticalAdaptLayout.superclass.render.apply(this, arguments);
-        var o = this.options;
-        this.element.css({
-            whiteSpace: "nowrap",
-            textAlign: o.horizontalAlign
-        });
-        this.populate(o.items);
-    },
-
-    _addElement: function (i, item) {
-        var o = this.options;
-        var w = BI.InlineVerticalAdaptLayout.superclass._addElement.apply(this, arguments);
-        w.element.css({
-            width: o.columnSize[i] <= 1 ? ((o.columnSize[i] * 100).toFixed(1) + "%") : (o.columnSize[i] / BI.pixRatio + BI.pixUnit),
-            position: "relative",
-            "vertical-align": o.verticalAlign
-        });
-        w.element.addClass("i-v-a-item");
-        if (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
-            w.element.css({
-                "margin-top": (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0)) / BI.pixRatio + BI.pixUnit
-            });
-        }
-        if (o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0) !== 0) {
-            w.element.css({
-                "margin-left": ((i === 0 ? o.hgap : 0) + o.lgap + (item.lgap || 0) + (item.hgap || 0)) / BI.pixRatio + BI.pixUnit
-            });
-        }
-        if (o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0) !== 0) {
-            w.element.css({
-                "margin-right": (o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0)) / BI.pixRatio + BI.pixUnit
-            });
-        }
-        if (o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0) !== 0) {
-            w.element.css({
-                "margin-bottom": (o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0)) / BI.pixRatio + BI.pixUnit
-            });
-        }
-        return w;
-    },
-
-    resize: function () {
-        this.stroke(this.options.items);
+        var self = this, o = this.options;
+        return {
+            type: "bi.inline",
+            ref: function (_ref) {
+                self.layout = _ref;
+            },
+            items: o.items,
+            horizontalAlign: o.horizontalAlign,
+            verticalAlign: o.verticalAlign,
+            columnSize: o.columnSize,
+            hgap: o.hgap,
+            vgap: o.vgap,
+            lgap: o.lgap,
+            rgap: o.rgap,
+            tgap: o.tgap,
+            bgap: o.bgap
+        };
     },
 
     populate: function (items) {
-        BI.InlineVerticalAdaptLayout.superclass.populate.apply(this, arguments);
-        this._mount();
+        this.layout.populate.apply(this.layout, arguments);
     }
 });
 BI.shortcut("bi.inline_vertical_adapt", BI.InlineVerticalAdaptLayout);
 
 
 /***/ }),
-/* 367 */
+/* 369 */
 /***/ (function(module, exports) {
 
 /**
@@ -14996,7 +14905,7 @@ BI.shortcut("bi.flex_center_adapt", BI.FlexCenterLayout);
 
 
 /***/ }),
-/* 368 */
+/* 370 */
 /***/ (function(module, exports) {
 
 /**
@@ -15059,7 +14968,7 @@ BI.shortcut("bi.flex_horizontal_center_adapt", BI.FlexHorizontalCenter);
 
 
 /***/ }),
-/* 369 */
+/* 371 */
 /***/ (function(module, exports) {
 
 /**
@@ -15099,17 +15008,24 @@ BI.FlexHorizontalLayout = BI.inherit(BI.Layout, {
             position: "relative"
         });
         if (o.columnSize[i] !== "auto") {
-            if (o.horizontalAlign === BI.HorizontalAlign.Stretch && o.columnSize[i] !== "") {
-                w.element.addClass("fill");
+            if (o.horizontalAlign === BI.HorizontalAlign.Stretch && o.columnSize[i] === "fill") {
+                w.element.addClass("f-f");
             } else {
-                w.element.addClass("shrink-none");
+                w.element.addClass("f-s-n");
             }
         }
         if (o.columnSize[i] > 0) {
-            w.element.width(o.columnSize[i] <= 1 ? ((o.columnSize[i] * 100).toFixed(1) + "%") : (o.columnSize[i] / BI.pixRatio + BI.pixUnit));
+            w.element.width(o.columnSize[i] === "" ? "" : (o.columnSize[i] <= 1 ? ((o.columnSize[i] * 100).toFixed(1) + "%") : (o.columnSize[i] / BI.pixRatio + BI.pixUnit)));
         }
         if (o.columnSize[i] === "fill") {
-            w.element.addClass("fill");
+            w.element.addClass("f-f");
+        }
+        w.element.addClass("c-e");
+        if (i === 0) {
+            w.element.addClass("f-c");
+        }
+        if (i === o.items.length - 1) {
+            w.element.addClass("l-c");
         }
         if (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
             w.element.css({
@@ -15147,7 +15063,115 @@ BI.shortcut("bi.flex_horizontal", BI.FlexHorizontalLayout);
 
 
 /***/ }),
-/* 370 */
+/* 372 */
+/***/ (function(module, exports) {
+
+BI.FlexLeftRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
+    props: function () {
+        return BI.extend(BI.FlexLeftRightVerticalAdaptLayout.superclass.props.apply(this, arguments), {
+            baseCls: "bi-f-lr-v-c",
+            items: {},
+            llgap: 0,
+            lrgap: 0,
+            lhgap: 0,
+            ltgap: 0,
+            lbgap: 0,
+            lvgap: 0,
+            rlgap: 0,
+            rrgap: 0,
+            rhgap: 0,
+            rtgap: 0,
+            rbgap: 0,
+            rvgap: 0
+        });
+    },
+    render: function () {
+        var o = this.options, self = this;
+        BI.FlexLeftRightVerticalAdaptLayout.superclass.render.apply(this, arguments);
+        return {
+            type: "bi.flex_vertical_adapt",
+            ref: function (_ref) {
+                self.layout = _ref;
+            },
+            items: this._formatItems(),
+            scrollx: o.scrollx,
+            scrolly: o.scrolly,
+            scrollable: o.scrollable
+        };
+    },
+
+    _formatItems: function () {
+        var o = this.options;
+        var leftItems = o.items.left || [];
+        var rightItems = o.items.right || [];
+        leftItems = BI.map(leftItems, function (i, item) {
+            var json = {
+                el: BI.stripEL(item)
+            };
+            if (o.lvgap + o.ltgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
+                json.tgap = o.lvgap + o.ltgap + (item.tgap || 0) + (item.vgap || 0);
+            }
+            if (o.lhgap + o.llgap + (item.lgap || 0) + (item.hgap || 0) !== 0) {
+                json.lgap = (i === 0 ? o.lhgap : 0) + o.llgap + (item.lgap || 0) + (item.hgap || 0);
+            }
+            if (o.lhgap + o.lrgap + (item.rgap || 0) + (item.hgap || 0) !== 0) {
+                json.rgap = o.lhgap + o.lrgap + (item.rgap || 0) + (item.hgap || 0);
+            }
+            if (o.lvgap + o.lbgap + (item.bgap || 0) + (item.vgap || 0) !== 0) {
+                json.bgap = o.lvgap + o.lbgap + (item.bgap || 0) + (item.vgap || 0);
+            }
+            return json;
+        });
+        rightItems = BI.map(rightItems, function (i, item) {
+            if (i === 0) {
+                if (BI.isWidget(item)) {
+                    item.addClass("flex-left-auto");
+                } else {
+                    var t = BI.stripEL(item);
+                    t.cls = (t.cls || "") + " flex-left-auto";
+                }
+            }
+            var json = {
+                el: BI.stripEL(item)
+            };
+            if (o.rvgap + o.rtgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
+                json.tgap = o.rvgap + o.rtgap + (item.tgap || 0) + (item.vgap || 0);
+            }
+            if (o.rhgap + o.rlgap + (item.lgap || 0) + (item.hgap || 0) !== 0) {
+                if (i > 0) {
+                    json.lgap = o.rlgap + (item.lgap || 0) + (item.hgap || 0);
+                }
+            }
+            if (o.rhgap + o.rrgap + (item.rgap || 0) + (item.hgap || 0) !== 0) {
+                json.rgap = o.rhgap + o.rrgap + (item.rgap || 0) + (item.hgap || 0);
+            }
+            if (o.rvgap + o.rbgap + (item.bgap || 0) + (item.vgap || 0) !== 0) {
+                json.bgap = o.rvgap + o.rbgap + (item.bgap || 0) + (item.vgap || 0);
+            }
+            return json;
+        });
+        return leftItems.concat(rightItems);
+    },
+
+    resize: function () {
+        // console.log("left_right_vertical_adapt布局不需要resize");
+    },
+
+    addItem: function () {
+        // do nothing
+        throw new Error("cannot be added");
+    },
+
+    populate: function (items) {
+        this.options.items = items;
+        this.layout.populate(this._formatItems());
+    }
+});
+BI.shortcut("bi.flex_left_right_vertical_adapt", BI.FlexLeftRightVerticalAdaptLayout);
+
+
+/***/ }),
+/* 373 */
 /***/ (function(module, exports) {
 
 /**
@@ -15211,7 +15235,7 @@ BI.shortcut("bi.flex_vertical_center_adapt", BI.FlexVerticalCenter);
 
 
 /***/ }),
-/* 371 */
+/* 374 */
 /***/ (function(module, exports) {
 
 /**
@@ -15250,17 +15274,24 @@ BI.FlexVerticalLayout = BI.inherit(BI.Layout, {
             position: "relative"
         });
         if (o.rowSize[i] !== "auto") {
-            if (o.verticalAlign === BI.VerticalAlign.Stretch && o.rowSize[i] !== "") {
-                w.element.addClass("fill");
+            if (o.verticalAlign === BI.VerticalAlign.Stretch && o.rowSize[i] === "fill") {
+                w.element.addClass("f-f");
             } else {
-                w.element.addClass("shrink-none");
+                w.element.addClass("f-s-n");
             }
         }
         if (o.rowSize[i] > 0) {
-            w.element.height(o.rowSize[i] <= 1 ? ((o.rowSize[i] * 100).toFixed(1) + "%") : (o.rowSize[i] / BI.pixRatio + BI.pixUnit));
+            w.element.height(o.rowSize[i] === "" ? "" : (o.rowSize[i] <= 1 ? ((o.rowSize[i] * 100).toFixed(1) + "%") : (o.rowSize[i] / BI.pixRatio + BI.pixUnit)));
         }
         if (o.rowSize[i] === "fill") {
-            w.element.addClass("fill");
+            w.element.addClass("f-f");
+        }
+        w.element.addClass("c-e");
+        if (i === 0) {
+            w.element.addClass("f-c");
+        }
+        if (i === o.items.length - 1) {
+            w.element.addClass("l-c");
         }
         if (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
             w.element.css({
@@ -15298,7 +15329,7 @@ BI.shortcut("bi.flex_vertical", BI.FlexVerticalLayout);
 
 
 /***/ }),
-/* 372 */
+/* 375 */
 /***/ (function(module, exports) {
 
 /**
@@ -15359,7 +15390,7 @@ BI.shortcut("bi.flex_scrollable_center_adapt", BI.FlexWrapperCenterLayout);
 
 
 /***/ }),
-/* 373 */
+/* 376 */
 /***/ (function(module, exports) {
 
 /**
@@ -15420,7 +15451,7 @@ BI.shortcut("bi.flex_scrollable_horizontal_center_adapt", BI.FlexWrapperHorizont
 
 
 /***/ }),
-/* 374 */
+/* 377 */
 /***/ (function(module, exports) {
 
 /**
@@ -15433,7 +15464,7 @@ BI.shortcut("bi.flex_scrollable_horizontal_center_adapt", BI.FlexWrapperHorizont
 BI.FlexWrapperHorizontalLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.FlexWrapperHorizontalLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-f-s-h clearfix",
+            baseCls: "bi-f-s-h",
             verticalAlign: BI.VerticalAlign.Top,
             horizontalAlign: BI.HorizontalAlign.Left,
             columnSize: [],
@@ -15450,6 +15481,7 @@ BI.FlexWrapperHorizontalLayout = BI.inherit(BI.Layout, {
     render: function () {
         BI.FlexWrapperHorizontalLayout.superclass.render.apply(this, arguments);
         var o = this.options;
+        this.element.addClass("v-" + o.verticalAlign).addClass("h-" + o.horizontalAlign);
         this.$wrapper = BI.Widget._renderEngine.createElement("<div>").addClass("f-s-h-w v-" + o.verticalAlign).addClass("h-" + o.horizontalAlign);
         this.populate(this.options.items);
     },
@@ -15462,16 +15494,23 @@ BI.FlexWrapperHorizontalLayout = BI.inherit(BI.Layout, {
         });
         if (o.columnSize[i] !== "auto") {
             if (o.horizontalAlign === BI.HorizontalAlign.Stretch && o.columnSize[i] !== "") {
-                w.element.addClass("fill");
+                w.element.addClass("f-f");
             } else {
-                w.element.addClass("shrink-none");
+                w.element.addClass("f-s-n");
             }
         }
         if (o.columnSize[i] > 0) {
-            w.element.width(o.columnSize[i] <= 1 ? ((o.columnSize[i] * 100).toFixed(1) + "%") : (o.columnSize[i] / BI.pixRatio + BI.pixUnit));
+            w.element.width(o.columnSize[i] === "" ? "" : (o.columnSize[i] <= 1 ? ((o.columnSize[i] * 100).toFixed(1) + "%") : (o.columnSize[i] / BI.pixRatio + BI.pixUnit)));
         }
         if (o.columnSize[i] === "fill") {
-            w.element.addClass("fill");
+            w.element.addClass("f-f");
+        }
+        w.element.addClass("c-e");
+        if (i === 0) {
+            w.element.addClass("f-c");
+        }
+        if (i === o.items.length - 1) {
+            w.element.addClass("l-c");
         }
         if (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
             w.element.css({
@@ -15518,7 +15557,7 @@ BI.shortcut("bi.flex_scrollable_horizontal", BI.FlexWrapperHorizontalLayout);
 
 
 /***/ }),
-/* 375 */
+/* 378 */
 /***/ (function(module, exports) {
 
 /**
@@ -15579,7 +15618,7 @@ BI.shortcut("bi.flex_scrollable_vertical_center_adapt", BI.FlexWrapperVerticalCe
 
 
 /***/ }),
-/* 376 */
+/* 379 */
 /***/ (function(module, exports) {
 
 /**
@@ -15592,7 +15631,7 @@ BI.shortcut("bi.flex_scrollable_vertical_center_adapt", BI.FlexWrapperVerticalCe
 BI.FlexWrapperVerticalLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.FlexWrapperVerticalLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-f-s-v clearfix",
+            baseCls: "bi-f-s-v",
             horizontalAlign: BI.HorizontalAlign.Left,
             verticalAlign: BI.VerticalAlign.Top,
             rowSize: [],
@@ -15609,6 +15648,7 @@ BI.FlexWrapperVerticalLayout = BI.inherit(BI.Layout, {
     render: function () {
         BI.FlexWrapperVerticalLayout.superclass.render.apply(this, arguments);
         var o = this.options;
+        this.element.addClass("v-" + o.verticalAlign).addClass("h-" + o.horizontalAlign);
         this.$wrapper = BI.Widget._renderEngine.createElement("<div>").addClass("f-s-v-w h-" + o.horizontalAlign).addClass("v-" + o.verticalAlign);
         this.populate(this.options.items);
     },
@@ -15621,16 +15661,23 @@ BI.FlexWrapperVerticalLayout = BI.inherit(BI.Layout, {
         });
         if (o.rowSize[i] !== "auto") {
             if (o.verticalAlign === BI.VerticalAlign.Stretch && o.rowSize[i] !== "") {
-                w.element.addClass("fill");
+                w.element.addClass("f-f");
             } else {
-                w.element.addClass("shrink-none");
+                w.element.addClass("f-s-n");
             }
         }
         if (o.rowSize[i] > 0) {
-            w.element.height(o.rowSize[i] <= 1 ? ((o.rowSize[i] * 100).toFixed(1) + "%") : (o.rowSize[i] / BI.pixRatio + BI.pixUnit));
+            w.element.height(o.rowSize[i] === "" ? "" : (o.rowSize[i] <= 1 ? ((o.rowSize[i] * 100).toFixed(1) + "%") : (o.rowSize[i] / BI.pixRatio + BI.pixUnit)));
         }
         if (o.rowSize[i] === "fill") {
-            w.element.addClass("fill");
+            w.element.addClass("f-f");
+        }
+        w.element.addClass("c-e");
+        if (i === 0) {
+            w.element.addClass("f-c");
+        }
+        if (i === o.items.length - 1) {
+            w.element.addClass("l-c");
         }
         if (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
             w.element.css({
@@ -15677,7 +15724,7 @@ BI.shortcut("bi.flex_scrollable_vertical", BI.FlexWrapperVerticalLayout);
 
 
 /***/ }),
-/* 377 */
+/* 380 */
 /***/ (function(module, exports) {
 
 /**
@@ -15789,7 +15836,7 @@ BI.shortcut("bi.absolute", BI.AbsoluteLayout);
 
 
 /***/ }),
-/* 378 */
+/* 381 */
 /***/ (function(module, exports) {
 
 BI.AdaptiveLayout = BI.inherit(BI.Layout, {
@@ -15887,7 +15934,7 @@ BI.shortcut("bi.adaptive", BI.AdaptiveLayout);
 
 
 /***/ }),
-/* 379 */
+/* 382 */
 /***/ (function(module, exports) {
 
 /**
@@ -16034,7 +16081,7 @@ BI.shortcut("bi.border", BI.BorderLayout);
 
 
 /***/ }),
-/* 380 */
+/* 383 */
 /***/ (function(module, exports) {
 
 /**
@@ -16250,7 +16297,7 @@ BI.shortcut("bi.card", BI.CardLayout);
 
 
 /***/ }),
-/* 381 */
+/* 384 */
 /***/ (function(module, exports) {
 
 /**
@@ -16315,7 +16362,7 @@ BI.shortcut("bi.default", BI.DefaultLayout);
 
 
 /***/ }),
-/* 382 */
+/* 385 */
 /***/ (function(module, exports) {
 
 /**
@@ -16483,7 +16530,7 @@ BI.shortcut("bi.division", BI.DivisionLayout);
 
 
 /***/ }),
-/* 383 */
+/* 386 */
 /***/ (function(module, exports) {
 
 /**
@@ -16666,7 +16713,7 @@ BI.shortcut("bi.right", BI.FloatRightLayout);
 
 
 /***/ }),
-/* 384 */
+/* 387 */
 /***/ (function(module, exports) {
 
 /**
@@ -16802,7 +16849,7 @@ BI.shortcut("bi.grid", BI.GridLayout);
 
 
 /***/ }),
-/* 385 */
+/* 388 */
 /***/ (function(module, exports) {
 
 /**
@@ -16846,7 +16893,7 @@ BI.HorizontalLayout = BI.inherit(BI.Layout, {
     _addElement: function (i, item) {
         var o = this.options;
         var td;
-        var width = o.columnSize[i] <= 1 ? ((o.columnSize[i] * 100).toFixed(1) + "%") : o.columnSize[i];
+        var width = o.columnSize[i] === "" ? "" : (o.columnSize[i] <= 1 ? ((o.columnSize[i] * 100).toFixed(1) + "%") : (i === 0 ? o.hgap : 0) + o.hgap + o.lgap + o.rgap + o.columnSize[i]);
         if (!this.hasWidget(this._getChildName(i))) {
             var w = BI._lazyCreateWidget(item);
             w.element.css({position: "relative", margin: "0px auto"});
@@ -16986,7 +17033,7 @@ BI.shortcut("bi.horizontal_cell", BI.HorizontalCellLayout);
 
 
 /***/ }),
-/* 386 */
+/* 389 */
 /***/ (function(module, exports) {
 
 /**
@@ -17003,6 +17050,9 @@ BI.InlineLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.InlineLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-i",
+            horizontalAlign: BI.HorizontalAlign.Left,
+            verticalAlign: BI.VerticalAlign.Top,
+            columnSize: [],
             hgap: 0,
             vgap: 0,
             lgap: 0,
@@ -17014,13 +17064,36 @@ BI.InlineLayout = BI.inherit(BI.Layout, {
 
     render: function () {
         BI.InlineLayout.superclass.render.apply(this, arguments);
-        this.populate(this.options.items);
+        var o = this.options;
+        this.element.css({
+            textAlign: o.horizontalAlign
+        });
+        this.populate(o.items);
     },
 
-    _addElement: function (i, item) {
+    _addElement: function (i, item, length) {
         var o = this.options;
         var w = BI.InlineLayout.superclass._addElement.apply(this, arguments);
-        w.element.css({"position": "relative", display: "inline-block", "*display": "inline", "*zoom": 1});
+        w.element.css({
+            width: o.columnSize[i] === "" ? "" : (o.columnSize[i] <= 1 ? ((o.columnSize[i] * 100).toFixed(1) + "%") : (o.columnSize[i] / BI.pixRatio + BI.pixUnit)),
+            position: "relative",
+            "vertical-align": o.verticalAlign
+        });
+        w.element.addClass("i-item");
+        if (o.columnSize[i] === "fill") {
+            var left = o.hgap + (item.lgap || 0) + (item.hgap || 0),
+                right = o.hgap + (item.rgap || 0) + (item.hgap || 0);
+            for (var k = 0; k < i; k++) {
+                left += o.hgap + o.lgap + o.rgap + o.columnSize[k];
+            }
+            for (var k = i + 1; k < o.columnSize.length; k++) {
+                right += o.hgap + o.lgap + o.rgap + o.columnSize[k];
+            }
+            w.element.css("min-width", "calc(100% - " + ((left + right) / BI.pixRatio + BI.pixUnit) + ")");
+            if (o.horizontalAlign === BI.HorizontalAlign.Stretch) {
+                w.element.width(0);
+            }
+        }
         if (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
             w.element.css({
                 "margin-top": (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0)) / BI.pixRatio + BI.pixUnit
@@ -17048,6 +17121,19 @@ BI.InlineLayout = BI.inherit(BI.Layout, {
         this.stroke(this.options.items);
     },
 
+    addItem: function (item) {
+        throw new Error("不能添加元素");
+    },
+
+    stroke: function (items) {
+        var self = this;
+        BI.each(items, function (i, item) {
+            if (item) {
+                self._addElement(i, item, items.length);
+            }
+        });
+    },
+
     populate: function (items) {
         BI.InlineLayout.superclass.populate.apply(this, arguments);
         this._mount();
@@ -17057,7 +17143,7 @@ BI.shortcut("bi.inline", BI.InlineLayout);
 
 
 /***/ }),
-/* 387 */
+/* 390 */
 /***/ (function(module, exports) {
 
 /**
@@ -17118,7 +17204,7 @@ BI.shortcut("bi.lattice", BI.LatticeLayout);
 
 
 /***/ }),
-/* 388 */
+/* 391 */
 /***/ (function(module, exports) {
 
 /**
@@ -17132,21 +17218,11 @@ BI.TableLayout = BI.inherit(BI.Layout, {
         return BI.extend(BI.TableLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-t",
             scrolly: true,
-            columnSize: [200, 200, "fill"],
+            columnSize: [],
             rowSize: 30,  // or [30,30,30]
             hgap: 0,
             vgap: 0,
-            items: [[
-                {
-                    el: {text: "label1"}
-                },
-                {
-                    el: {text: "label2"}
-                },
-                {
-                    el: {text: "label3"}
-                }
-            ]]
+            items: []
         });
     },
     render: function () {
@@ -17273,7 +17349,7 @@ BI.shortcut("bi.table", BI.TableLayout);
 
 
 /***/ }),
-/* 389 */
+/* 392 */
 /***/ (function(module, exports) {
 
 /**
@@ -17506,7 +17582,7 @@ BI.shortcut("bi.vtape", BI.VTapeLayout);
 
 
 /***/ }),
-/* 390 */
+/* 393 */
 /***/ (function(module, exports) {
 
 /**
@@ -17518,20 +17594,14 @@ BI.TdLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.TdLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-td",
-            columnSize: [200, 200, 200],
+            columnSize: [],
             hgap: 0,
             vgap: 0,
-            items: [[
-                {
-                    el: {text: "label1"}
-                },
-                {
-                    el: {text: "label2"}
-                },
-                {
-                    el: {text: "label3"}
-                }
-            ]]
+            tgap: 0,
+            bgap: 0,
+            lgap: 0,
+            rgap: 0,
+            items: []
         });
     },
     render: function () {
@@ -17596,22 +17666,31 @@ BI.TdLayout = BI.inherit(BI.Layout, {
         for (var i = 0; i < arr.length; i++) {
             var w = BI._lazyCreateWidget(arr[i]);
             w.element.css({position: "relative", top: "0", left: "0", margin: "0px auto"});
-            if (arr[i].lgap) {
-                w.element.css({"margin-left": arr[i].lgap / BI.pixRatio + BI.pixUnit});
+            var item = arr[i];
+            if (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
+                w.element.css({
+                    "margin-top": (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0)) / BI.pixRatio + BI.pixUnit
+                });
             }
-            if (arr[i].rgap) {
-                w.element.css({"margin-right": arr[i].rgap / BI.pixRatio + BI.pixUnit});
+            if (o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0) !== 0) {
+                w.element.css({
+                    "margin-left": ((i === 0 ? o.hgap : 0) + o.lgap + (item.lgap || 0) + (item.hgap || 0)) / BI.pixRatio + BI.pixUnit
+                });
             }
-            if (arr[i].tgap) {
-                w.element.css({"margin-top": arr[i].tgap / BI.pixRatio + BI.pixUnit});
+            if (o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0) !== 0) {
+                w.element.css({
+                    "margin-right": (o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0)) / BI.pixRatio + BI.pixUnit
+                });
             }
-            if (arr[i].bgap) {
-                w.element.css({"margin-bottom": arr[i].bgap / BI.pixRatio + BI.pixUnit});
+            if (o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0) !== 0) {
+                w.element.css({
+                    "margin-bottom": (o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0)) / BI.pixRatio + BI.pixUnit
+                });
             }
             first(w, this.rows++, i);
             var td = BI._lazyCreateWidget({
                 type: "bi.default",
-                width: o.columnSize[i] <= 1 ? ((o.columnSize[i] * 100).toFixed(1) + "%") : o.columnSize[i],
+                width: o.columnSize[i] === "" ? "" : (o.columnSize[i] <= 1 ? ((o.columnSize[i] * 100).toFixed(1) + "%") : (i === 0 ? o.hgap : 0) + o.hgap + o.lgap + o.rgap + o.columnSize[i]),
                 tagName: "td",
                 items: [w]
             });
@@ -17656,7 +17735,7 @@ BI.shortcut("bi.td", BI.TdLayout);
 
 
 /***/ }),
-/* 391 */
+/* 394 */
 /***/ (function(module, exports) {
 
 /**
@@ -17724,7 +17803,7 @@ BI.shortcut("bi.vertical", BI.VerticalLayout);
 
 
 /***/ }),
-/* 392 */
+/* 395 */
 /***/ (function(module, exports) {
 
 /**
@@ -17922,7 +18001,7 @@ BI.shortcut("bi.window", BI.WindowLayout);
 
 
 /***/ }),
-/* 393 */
+/* 396 */
 /***/ (function(module, exports) {
 
 /**
@@ -18004,7 +18083,7 @@ BI.shortcut("bi.center", BI.CenterLayout);
 
 
 /***/ }),
-/* 394 */
+/* 397 */
 /***/ (function(module, exports) {
 
 /**
@@ -18085,7 +18164,7 @@ BI.shortcut("bi.float_center", BI.FloatCenterLayout);
 
 
 /***/ }),
-/* 395 */
+/* 398 */
 /***/ (function(module, exports) {
 
 /**
@@ -18165,7 +18244,7 @@ BI.shortcut("bi.horizontal_center", BI.HorizontalCenterLayout);
 
 
 /***/ }),
-/* 396 */
+/* 399 */
 /***/ (function(module, exports) {
 
 /**
@@ -18246,7 +18325,7 @@ BI.shortcut("bi.vertical_center", BI.VerticalCenterLayout);
 
 
 /***/ }),
-/* 397 */
+/* 400 */
 /***/ (function(module, exports) {
 
 /**
@@ -18399,7 +18478,7 @@ BI.Pane.EVENT_LOADED = "EVENT_LOADED";
 BI.Pane.EVENT_LOADING = "EVENT_LOADING";
 
 /***/ }),
-/* 398 */
+/* 401 */
 /***/ (function(module, exports) {
 
 /**
@@ -18612,7 +18691,7 @@ BI.shortcut("bi.single", BI.Single);
 
 
 /***/ }),
-/* 399 */
+/* 402 */
 /***/ (function(module, exports) {
 
 /**
@@ -18789,7 +18868,7 @@ BI.shortcut("bi.single", BI.Single);
 
 
 /***/ }),
-/* 400 */
+/* 403 */
 /***/ (function(module, exports) {
 
 /**
@@ -19207,7 +19286,7 @@ BI.shortcut("bi.basic_button", BI.BasicButton);
 
 
 /***/ }),
-/* 401 */
+/* 404 */
 /***/ (function(module, exports) {
 
 /**
@@ -19268,7 +19347,7 @@ BI.NodeButton = BI.inherit(BI.BasicButton, {
 });
 
 /***/ }),
-/* 402 */
+/* 405 */
 /***/ (function(module, exports) {
 
 /**
@@ -19295,7 +19374,7 @@ BI.Tip = BI.inherit(BI.Single, {
 });
 
 /***/ }),
-/* 403 */
+/* 406 */
 /***/ (function(module, exports) {
 
 /**
@@ -19630,7 +19709,7 @@ BI.ButtonGroup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.button_group", BI.ButtonGroup);
 
 /***/ }),
-/* 404 */
+/* 407 */
 /***/ (function(module, exports) {
 
 /**
@@ -19817,7 +19896,7 @@ BI.ButtonTree.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.button_tree", BI.ButtonTree);
 
 /***/ }),
-/* 405 */
+/* 408 */
 /***/ (function(module, exports) {
 
 BI.prepares.push(function () {
@@ -19833,7 +19912,7 @@ BI.prepares.push(function () {
 
 
 /***/ }),
-/* 406 */
+/* 409 */
 /***/ (function(module, exports) {
 
 /**
@@ -20220,7 +20299,7 @@ BI.shortcut("bi.collection_view", BI.CollectionView);
 
 
 /***/ }),
-/* 407 */
+/* 410 */
 /***/ (function(module, exports) {
 
 !(function () {
@@ -20829,7 +20908,7 @@ BI.shortcut("bi.collection_view", BI.CollectionView);
 
 
 /***/ }),
-/* 408 */
+/* 411 */
 /***/ (function(module, exports) {
 
 /**
@@ -21116,7 +21195,7 @@ BI.Expander.EVENT_AFTER_HIDEVIEW = "EVENT_AFTER_HIDEVIEW";
 BI.shortcut("bi.expander", BI.Expander);
 
 /***/ }),
-/* 409 */
+/* 412 */
 /***/ (function(module, exports) {
 
 /**
@@ -21218,7 +21297,7 @@ BI.ComboGroup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.combo_group", BI.ComboGroup);
 
 /***/ }),
-/* 410 */
+/* 413 */
 /***/ (function(module, exports) {
 
 BI.VirtualGroup = BI.inherit(BI.Widget, {
@@ -21339,7 +21418,7 @@ BI.VirtualGroup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.virtual_group", BI.VirtualGroup);
 
 /***/ }),
-/* 411 */
+/* 414 */
 /***/ (function(module, exports) {
 
 /**
@@ -21604,7 +21683,7 @@ BI.Loader.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.loader", BI.Loader);
 
 /***/ }),
-/* 412 */
+/* 415 */
 /***/ (function(module, exports) {
 
 /**
@@ -21772,7 +21851,7 @@ BI.shortcut("bi.navigation", BI.Navigation);
 
 
 /***/ }),
-/* 413 */
+/* 416 */
 /***/ (function(module, exports) {
 
 /**
@@ -22096,7 +22175,7 @@ BI.Searcher.EVENT_AFTER_INIT = "EVENT_AFTER_INIT";
 BI.shortcut("bi.searcher", BI.Searcher);
 
 /***/ }),
-/* 414 */
+/* 417 */
 /***/ (function(module, exports) {
 
 /**
@@ -22389,7 +22468,7 @@ BI.Switcher.EVENT_AFTER_HIDEVIEW = "EVENT_AFTER_HIDEVIEW";
 BI.shortcut("bi.switcher", BI.Switcher);
 
 /***/ }),
-/* 415 */
+/* 418 */
 /***/ (function(module, exports) {
 
 /**
@@ -22548,7 +22627,7 @@ BI.shortcut("bi.tab", BI.Tab);
 
 
 /***/ }),
-/* 416 */
+/* 419 */
 /***/ (function(module, exports) {
 
 /**
@@ -22595,7 +22674,7 @@ BI.EL = BI.inherit(BI.Widget, {
 BI.shortcut("bi.el", BI.EL);
 
 /***/ }),
-/* 417 */
+/* 420 */
 /***/ (function(module, exports) {
 
 /**
@@ -22804,7 +22883,7 @@ BI.Msg = function () {
 
 
 /***/ }),
-/* 418 */
+/* 421 */
 /***/ (function(module, exports) {
 
 /**
@@ -23192,7 +23271,7 @@ BI.shortcut("bi.grid_view", BI.GridView);
 
 
 /***/ }),
-/* 419 */
+/* 422 */
 /***/ (function(module, exports) {
 
 /**
@@ -23470,7 +23549,7 @@ BI.Popover.EVENT_CONFIRM = "EVENT_CONFIRM";
 
 
 /***/ }),
-/* 420 */
+/* 423 */
 /***/ (function(module, exports) {
 
 /**
@@ -23657,7 +23736,7 @@ BI.shortcut("bi.popup_view", BI.PopupView);
 
 
 /***/ }),
-/* 421 */
+/* 424 */
 /***/ (function(module, exports) {
 
 /**
@@ -23803,7 +23882,7 @@ BI.SearcherView.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.searcher_view", BI.SearcherView);
 
 /***/ }),
-/* 422 */
+/* 425 */
 /***/ (function(module, exports) {
 
 /**
@@ -23928,7 +24007,7 @@ BI.shortcut("bi.list_view", BI.ListView);
 
 
 /***/ }),
-/* 423 */
+/* 426 */
 /***/ (function(module, exports) {
 
 /**
@@ -24120,7 +24199,7 @@ BI.shortcut("bi.virtual_list", BI.VirtualList);
 
 
 /***/ }),
-/* 424 */
+/* 427 */
 /***/ (function(module, exports) {
 
 /**
@@ -24414,7 +24493,7 @@ BI.Pager.EVENT_AFTER_POPULATE = "EVENT_AFTER_POPULATE";
 BI.shortcut("bi.pager", BI.Pager);
 
 /***/ }),
-/* 425 */
+/* 428 */
 /***/ (function(module, exports) {
 
 /**
@@ -24451,7 +24530,7 @@ BI.A = BI.inherit(BI.Text, {
 BI.shortcut("bi.a", BI.A);
 
 /***/ }),
-/* 426 */
+/* 429 */
 /***/ (function(module, exports) {
 
 /**
@@ -24536,7 +24615,7 @@ BI.LoadingBar = BI.inherit(BI.Single, {
 BI.shortcut("bi.loading_bar", BI.LoadingBar);
 
 /***/ }),
-/* 427 */
+/* 430 */
 /***/ (function(module, exports) {
 
 /**
@@ -24594,7 +24673,7 @@ BI.shortcut("bi.icon_button", BI.IconButton);
 
 
 /***/ }),
-/* 428 */
+/* 431 */
 /***/ (function(module, exports) {
 
 /**
@@ -24686,7 +24765,7 @@ BI.ImageButton.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.image_button", BI.ImageButton);
 
 /***/ }),
-/* 429 */
+/* 432 */
 /***/ (function(module, exports) {
 
 /**
@@ -24843,7 +24922,7 @@ BI.Button.EVENT_CHANGE = "EVENT_CHANGE";
 
 
 /***/ }),
-/* 430 */
+/* 433 */
 /***/ (function(module, exports) {
 
 /**
@@ -24938,7 +25017,7 @@ BI.TextButton.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.text_button", BI.TextButton);
 
 /***/ }),
-/* 431 */
+/* 434 */
 /***/ (function(module, exports) {
 
 /**
@@ -25062,7 +25141,7 @@ BI.BlankIconIconTextItem.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.blank_icon_icon_text_item", BI.BlankIconIconTextItem);
 
 /***/ }),
-/* 432 */
+/* 435 */
 /***/ (function(module, exports) {
 
 /**
@@ -25193,7 +25272,7 @@ BI.BlankIconTextIconItem.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.blank_icon_text_icon_item", BI.BlankIconTextIconItem);
 
 /***/ }),
-/* 433 */
+/* 436 */
 /***/ (function(module, exports) {
 
 /**
@@ -25302,7 +25381,7 @@ BI.BlankIconTextItem.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.blank_icon_text_item", BI.BlankIconTextItem);
 
 /***/ }),
-/* 434 */
+/* 437 */
 /***/ (function(module, exports) {
 
 /**
@@ -25430,7 +25509,7 @@ BI.IconTextIconItem.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.icon_text_icon_item", BI.IconTextIconItem);
 
 /***/ }),
-/* 435 */
+/* 438 */
 /***/ (function(module, exports) {
 
 /**
@@ -25535,7 +25614,7 @@ BI.IconTextItem.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.icon_text_item", BI.IconTextItem);
 
 /***/ }),
-/* 436 */
+/* 439 */
 /***/ (function(module, exports) {
 
 /**
@@ -25640,7 +25719,7 @@ BI.TextIconItem.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.text_icon_item", BI.TextIconItem);
 
 /***/ }),
-/* 437 */
+/* 440 */
 /***/ (function(module, exports) {
 
 /**
@@ -25731,7 +25810,7 @@ BI.TextItem.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.text_item", BI.TextItem);
 
 /***/ }),
-/* 438 */
+/* 441 */
 /***/ (function(module, exports) {
 
 /**
@@ -25849,7 +25928,7 @@ BI.IconTextIconNode.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.icon_text_icon_node", BI.IconTextIconNode);
 
 /***/ }),
-/* 439 */
+/* 442 */
 /***/ (function(module, exports) {
 
 /**
@@ -25944,7 +26023,7 @@ BI.IconTextNode.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.icon_text_node", BI.IconTextNode);
 
 /***/ }),
-/* 440 */
+/* 443 */
 /***/ (function(module, exports) {
 
 /**
@@ -26038,7 +26117,7 @@ BI.TextIconNode.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.text_icon_node", BI.TextIconNode);
 
 /***/ }),
-/* 441 */
+/* 444 */
 /***/ (function(module, exports) {
 
 /**
@@ -26120,7 +26199,7 @@ BI.TextNode.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.text_node", BI.TextNode);
 
 /***/ }),
-/* 442 */
+/* 445 */
 /***/ (function(module, exports) {
 
 /**
@@ -26498,7 +26577,7 @@ BI.shortcut("bi.editor", BI.Editor);
 
 
 /***/ }),
-/* 443 */
+/* 446 */
 /***/ (function(module, exports) {
 
 /**
@@ -26604,7 +26683,7 @@ BI.shortcut("bi.multifile_editor", BI.MultifileEditor);
 
 
 /***/ }),
-/* 444 */
+/* 447 */
 /***/ (function(module, exports) {
 
 /**
@@ -26812,7 +26891,7 @@ BI.shortcut("bi.textarea_editor", BI.TextAreaEditor);
 
 
 /***/ }),
-/* 445 */
+/* 448 */
 /***/ (function(module, exports) {
 
 /**
@@ -26932,7 +27011,7 @@ BI.shortcut("bi.html", BI.Html);
 
 
 /***/ }),
-/* 446 */
+/* 449 */
 /***/ (function(module, exports) {
 
 /**
@@ -26958,7 +27037,7 @@ BI.Icon = BI.inherit(BI.Single, {
 BI.shortcut("bi.icon", BI.Icon);
 
 /***/ }),
-/* 447 */
+/* 450 */
 /***/ (function(module, exports) {
 
 /**
@@ -27022,7 +27101,7 @@ BI.shortcut("bi.iframe", BI.Iframe);
 
 
 /***/ }),
-/* 448 */
+/* 451 */
 /***/ (function(module, exports) {
 
 /**
@@ -27068,7 +27147,7 @@ BI.shortcut("bi.img", BI.Img);
 
 
 /***/ }),
-/* 449 */
+/* 452 */
 /***/ (function(module, exports) {
 
 /**
@@ -27095,7 +27174,7 @@ BI.ImageCheckbox.EVENT_CHANGE = BI.IconButton.EVENT_CHANGE;
 BI.shortcut("bi.image_checkbox", BI.ImageCheckbox);
 
 /***/ }),
-/* 450 */
+/* 453 */
 /***/ (function(module, exports) {
 
 /**
@@ -27161,7 +27240,7 @@ BI.Checkbox.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.checkbox", BI.Checkbox);
 
 /***/ }),
-/* 451 */
+/* 454 */
 /***/ (function(module, exports) {
 
 /**
@@ -27483,7 +27562,7 @@ BI.shortcut("bi.input", BI.Input);
 
 
 /***/ }),
-/* 452 */
+/* 455 */
 /***/ (function(module, exports) {
 
 /**
@@ -27521,7 +27600,7 @@ BI.ImageRadio.EVENT_CHANGE = BI.IconButton.EVENT_CHANGE;
 BI.shortcut("bi.image_radio", BI.ImageRadio);
 
 /***/ }),
-/* 453 */
+/* 456 */
 /***/ (function(module, exports) {
 
 /**
@@ -27588,7 +27667,7 @@ BI.Radio.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.radio", BI.Radio);
 
 /***/ }),
-/* 454 */
+/* 457 */
 /***/ (function(module, exports) {
 
 /**
@@ -27980,7 +28059,7 @@ BI.shortcut("bi.radio", BI.Radio);
 
 
 /***/ }),
-/* 455 */
+/* 458 */
 /***/ (function(module, exports) {
 
 /**
@@ -28010,7 +28089,7 @@ BI.HtmlLabel = BI.inherit(BI.AbstractLabel, {
 BI.shortcut("bi.html_label", BI.HtmlLabel);
 
 /***/ }),
-/* 456 */
+/* 459 */
 /***/ (function(module, exports) {
 
 /**
@@ -28058,7 +28137,7 @@ BI.shortcut("bi.icon_label", BI.IconLabel);
 
 
 /***/ }),
-/* 457 */
+/* 460 */
 /***/ (function(module, exports) {
 
 /**
@@ -28086,7 +28165,7 @@ BI.shortcut("bi.label", BI.Label);
 
 
 /***/ }),
-/* 458 */
+/* 461 */
 /***/ (function(module, exports) {
 
 /**
@@ -28126,7 +28205,7 @@ BI.shortcut("bi.link", BI.Link);
 
 
 /***/ }),
-/* 459 */
+/* 462 */
 /***/ (function(module, exports) {
 
 /**
@@ -28175,7 +28254,7 @@ BI.shortcut("bi.link", BI.Link);
 
 
 /***/ }),
-/* 460 */
+/* 463 */
 /***/ (function(module, exports) {
 
 /**
@@ -28393,7 +28472,7 @@ BI.shortcut("bi.bubble_view", BI.BubbleView);
 
 
 /***/ }),
-/* 461 */
+/* 464 */
 /***/ (function(module, exports) {
 
 /**
@@ -28497,7 +28576,7 @@ BI.shortcut("bi.toast", BI.Toast);
 
 
 /***/ }),
-/* 462 */
+/* 465 */
 /***/ (function(module, exports) {
 
 /**
@@ -28586,7 +28665,7 @@ BI.Tooltip = BI.inherit(BI.Tip, {
 BI.shortcut("bi.tooltip", BI.Tooltip);
 
 /***/ }),
-/* 463 */
+/* 466 */
 /***/ (function(module, exports) {
 
 /**
@@ -28618,7 +28697,7 @@ BI.Trigger = BI.inherit(BI.Single, {
 });
 
 /***/ }),
-/* 464 */
+/* 467 */
 /***/ (function(module, exports) {
 
 /**
@@ -28771,7 +28850,7 @@ BI.CustomTree.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.custom_tree", BI.CustomTree);
 
 /***/ }),
-/* 465 */
+/* 468 */
 /***/ (function(module, exports) {
 
 /**
@@ -28859,7 +28938,7 @@ BI.IconChangeButton.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.icon_change_button", BI.IconChangeButton);
 
 /***/ }),
-/* 466 */
+/* 469 */
 /***/ (function(module, exports) {
 
 /**
@@ -28884,7 +28963,7 @@ BI.shortcut("bi.trigger_icon_button", BI.TriggerIconButton);
 
 
 /***/ }),
-/* 467 */
+/* 470 */
 /***/ (function(module, exports) {
 
 /**
@@ -28910,7 +28989,7 @@ BI.HalfIconButton.EVENT_CHANGE = BI.IconButton.EVENT_CHANGE;
 BI.shortcut("bi.half_icon_button", BI.HalfIconButton);
 
 /***/ }),
-/* 468 */
+/* 471 */
 /***/ (function(module, exports) {
 
 /**
@@ -28955,7 +29034,7 @@ BI.HalfButton.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.half_button", BI.HalfButton);
 
 /***/ }),
-/* 469 */
+/* 472 */
 /***/ (function(module, exports) {
 
 /**
@@ -29041,7 +29120,7 @@ BI.shortcut("bi.multi_select_item", BI.MultiSelectItem);
 
 
 /***/ }),
-/* 470 */
+/* 473 */
 /***/ (function(module, exports) {
 
 /**
@@ -29105,7 +29184,7 @@ BI.SingleSelectIconTextItem = BI.inherit(BI.Single, {
 BI.shortcut("bi.single_select_icon_text_item", BI.SingleSelectIconTextItem);
 
 /***/ }),
-/* 471 */
+/* 474 */
 /***/ (function(module, exports) {
 
 BI.SingleSelectItem = BI.inherit(BI.BasicButton, {
@@ -29161,7 +29240,7 @@ BI.SingleSelectItem.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.single_select_item", BI.SingleSelectItem);
 
 /***/ }),
-/* 472 */
+/* 475 */
 /***/ (function(module, exports) {
 
 /**
@@ -29245,7 +29324,7 @@ BI.shortcut("bi.single_select_radio_item", BI.SingleSelectRadioItem);
 
 
 /***/ }),
-/* 473 */
+/* 476 */
 /***/ (function(module, exports) {
 
 /**
@@ -29333,7 +29412,7 @@ BI.shortcut("bi.arrow_group_node", BI.ArrowNode);
 
 
 /***/ }),
-/* 474 */
+/* 477 */
 /***/ (function(module, exports) {
 
 /**
@@ -29421,7 +29500,7 @@ BI.shortcut("bi.first_plus_group_node", BI.FirstPlusGroupNode);
 
 
 /***/ }),
-/* 475 */
+/* 478 */
 /***/ (function(module, exports) {
 
 /**
@@ -29529,7 +29608,7 @@ BI.shortcut("bi.icon_arrow_node", BI.IconArrowNode);
 
 
 /***/ }),
-/* 476 */
+/* 479 */
 /***/ (function(module, exports) {
 
 /**
@@ -29616,7 +29695,7 @@ BI.LastPlusGroupNode = BI.inherit(BI.NodeButton, {
 BI.shortcut("bi.last_plus_group_node", BI.LastPlusGroupNode);
 
 /***/ }),
-/* 477 */
+/* 480 */
 /***/ (function(module, exports) {
 
 /**
@@ -29703,7 +29782,7 @@ BI.MidPlusGroupNode = BI.inherit(BI.NodeButton, {
 BI.shortcut("bi.mid_plus_group_node", BI.MidPlusGroupNode);
 
 /***/ }),
-/* 478 */
+/* 481 */
 /***/ (function(module, exports) {
 
 BI.MultiLayerIconArrowNode = BI.inherit(BI.NodeButton, {
@@ -29798,7 +29877,7 @@ BI.shortcut("bi.multilayer_icon_arrow_node", BI.MultiLayerIconArrowNode);
 
 
 /***/ }),
-/* 479 */
+/* 482 */
 /***/ (function(module, exports) {
 
 /**
@@ -29881,7 +29960,7 @@ BI.PlusGroupNode = BI.inherit(BI.NodeButton, {
 BI.shortcut("bi.plus_group_node", BI.PlusGroupNode);
 
 /***/ }),
-/* 480 */
+/* 483 */
 /***/ (function(module, exports) {
 
 /**
@@ -29933,7 +30012,7 @@ BI.Switch.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.switch", BI.Switch);
 
 /***/ }),
-/* 481 */
+/* 484 */
 /***/ (function(module, exports) {
 
 BI.FirstTreeLeafItem = BI.inherit(BI.BasicButton, {
@@ -30019,7 +30098,7 @@ BI.FirstTreeLeafItem = BI.inherit(BI.BasicButton, {
 BI.shortcut("bi.first_tree_leaf_item", BI.FirstTreeLeafItem);
 
 /***/ }),
-/* 482 */
+/* 485 */
 /***/ (function(module, exports) {
 
 BI.IconTreeLeafItem = BI.inherit(BI.BasicButton, {
@@ -30106,7 +30185,7 @@ BI.IconTreeLeafItem = BI.inherit(BI.BasicButton, {
 BI.shortcut("bi.icon_tree_leaf_item", BI.IconTreeLeafItem);
 
 /***/ }),
-/* 483 */
+/* 486 */
 /***/ (function(module, exports) {
 
 BI.LastTreeLeafItem = BI.inherit(BI.BasicButton, {
@@ -30192,7 +30271,7 @@ BI.LastTreeLeafItem = BI.inherit(BI.BasicButton, {
 BI.shortcut("bi.last_tree_leaf_item", BI.LastTreeLeafItem);
 
 /***/ }),
-/* 484 */
+/* 487 */
 /***/ (function(module, exports) {
 
 BI.MidTreeLeafItem = BI.inherit(BI.BasicButton, {
@@ -30278,7 +30357,7 @@ BI.MidTreeLeafItem = BI.inherit(BI.BasicButton, {
 BI.shortcut("bi.mid_tree_leaf_item", BI.MidTreeLeafItem);
 
 /***/ }),
-/* 485 */
+/* 488 */
 /***/ (function(module, exports) {
 
 /**
@@ -30382,7 +30461,7 @@ BI.shortcut("bi.multilayer_icon_tree_leaf_item", BI.MultiLayerIconTreeLeafItem);
 
 
 /***/ }),
-/* 486 */
+/* 489 */
 /***/ (function(module, exports) {
 
 BI.RootTreeLeafItem = BI.inherit(BI.BasicButton, {
@@ -30462,7 +30541,7 @@ BI.shortcut("bi.root_tree_leaf_item", BI.RootTreeLeafItem);
 
 
 /***/ }),
-/* 487 */
+/* 490 */
 /***/ (function(module, exports) {
 
 /**
@@ -30538,7 +30617,7 @@ BI.shortcut("bi.tree_text_leaf_item", BI.TreeTextLeafItem);
 
 
 /***/ }),
-/* 488 */
+/* 491 */
 /***/ (function(module, exports) {
 
 /**
@@ -30596,7 +30675,7 @@ BI.CalendarDateItem = BI.inherit(BI.BasicButton, {
 BI.shortcut("bi.calendar_date_item", BI.CalendarDateItem);
 
 /***/ }),
-/* 489 */
+/* 492 */
 /***/ (function(module, exports) {
 
 /**
@@ -30835,7 +30914,7 @@ BI.extend(BI.Calendar, {
 BI.shortcut("bi.calendar", BI.Calendar);
 
 /***/ }),
-/* 490 */
+/* 493 */
 /***/ (function(module, exports) {
 
 /**
@@ -31011,7 +31090,7 @@ BI.extend(BI.YearCalendar, {
 BI.shortcut("bi.year_calendar", BI.YearCalendar);
 
 /***/ }),
-/* 491 */
+/* 494 */
 /***/ (function(module, exports) {
 
 /**
@@ -31037,7 +31116,7 @@ BI.ArrowTreeGroupNodeCheckbox = BI.inherit(BI.IconButton, {
 BI.shortcut("bi.arrow_group_node_checkbox", BI.ArrowTreeGroupNodeCheckbox);
 
 /***/ }),
-/* 492 */
+/* 495 */
 /***/ (function(module, exports) {
 
 /**
@@ -31068,7 +31147,7 @@ BI.CheckingMarkNode = BI.inherit(BI.IconButton, {
 BI.shortcut("bi.checking_mark_node", BI.CheckingMarkNode);
 
 /***/ }),
-/* 493 */
+/* 496 */
 /***/ (function(module, exports) {
 
 /**
@@ -31097,7 +31176,7 @@ BI.FirstTreeNodeCheckbox = BI.inherit(BI.IconButton, {
 BI.shortcut("bi.first_tree_node_checkbox", BI.FirstTreeNodeCheckbox);
 
 /***/ }),
-/* 494 */
+/* 497 */
 /***/ (function(module, exports) {
 
 /**
@@ -31126,7 +31205,7 @@ BI.LastTreeNodeCheckbox = BI.inherit(BI.IconButton, {
 BI.shortcut("bi.last_tree_node_checkbox", BI.LastTreeNodeCheckbox);
 
 /***/ }),
-/* 495 */
+/* 498 */
 /***/ (function(module, exports) {
 
 /**
@@ -31155,7 +31234,7 @@ BI.MidTreeNodeCheckbox = BI.inherit(BI.IconButton, {
 BI.shortcut("bi.mid_tree_node_checkbox", BI.MidTreeNodeCheckbox);
 
 /***/ }),
-/* 496 */
+/* 499 */
 /***/ (function(module, exports) {
 
 /**
@@ -31184,7 +31263,7 @@ BI.TreeNodeCheckbox = BI.inherit(BI.IconButton, {
 BI.shortcut("bi.tree_node_checkbox", BI.TreeNodeCheckbox);
 
 /***/ }),
-/* 497 */
+/* 500 */
 /***/ (function(module, exports) {
 
 /**
@@ -31409,7 +31488,7 @@ BI.shortcut("bi.bubble_combo", BI.BubbleCombo);
 
 
 /***/ }),
-/* 498 */
+/* 501 */
 /***/ (function(module, exports) {
 
 /**
@@ -31579,7 +31658,7 @@ BI.shortcut("bi.text_bubble_bar_popup_view", BI.TextBubblePopupBarView);
 
 
 /***/ }),
-/* 499 */
+/* 502 */
 /***/ (function(module, exports) {
 
 /**
@@ -31680,7 +31759,7 @@ BI.shortcut("bi.editor_icon_check_combo", BI.EditorIconCheckCombo);
 
 
 /***/ }),
-/* 500 */
+/* 503 */
 /***/ (function(module, exports) {
 
 /**
@@ -31784,7 +31863,7 @@ BI.IconCombo.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.icon_combo", BI.IconCombo);
 
 /***/ }),
-/* 501 */
+/* 504 */
 /***/ (function(module, exports) {
 
 /**
@@ -31854,7 +31933,7 @@ BI.IconComboPopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.icon_combo_popup", BI.IconComboPopup);
 
 /***/ }),
-/* 502 */
+/* 505 */
 /***/ (function(module, exports) {
 
 /**
@@ -31961,7 +32040,7 @@ BI.IconComboTrigger.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.icon_combo_trigger", BI.IconComboTrigger);
 
 /***/ }),
-/* 503 */
+/* 506 */
 /***/ (function(module, exports) {
 
 /**
@@ -32071,7 +32150,7 @@ BI.shortcut("bi.icon_text_value_combo", BI.IconTextValueCombo);
 
 
 /***/ }),
-/* 504 */
+/* 507 */
 /***/ (function(module, exports) {
 
 /**
@@ -32153,7 +32232,7 @@ BI.shortcut("bi.icon_text_value_combo_popup", BI.IconTextValueComboPopup);
 
 
 /***/ }),
-/* 505 */
+/* 508 */
 /***/ (function(module, exports) {
 
 /**
@@ -32320,7 +32399,7 @@ BI.shortcut("bi.search_text_value_combo", BI.SearchTextValueCombo);
 
 
 /***/ }),
-/* 506 */
+/* 509 */
 /***/ (function(module, exports) {
 
 /**
@@ -32399,7 +32478,7 @@ BI.shortcut("bi.search_text_value_combo_popup", BI.SearchTextValueComboPopup);
 
 
 /***/ }),
-/* 507 */
+/* 510 */
 /***/ (function(module, exports) {
 
 /**
@@ -32518,7 +32597,7 @@ BI.SearchTextValueTrigger.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.search_text_value_trigger", BI.SearchTextValueTrigger);
 
 /***/ }),
-/* 508 */
+/* 511 */
 /***/ (function(module, exports) {
 
 /**
@@ -32608,7 +32687,7 @@ BI.TextValueCheckCombo.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.text_value_check_combo", BI.TextValueCheckCombo);
 
 /***/ }),
-/* 509 */
+/* 512 */
 /***/ (function(module, exports) {
 
 BI.TextValueCheckComboPopup = BI.inherit(BI.Pane, {
@@ -32676,7 +32755,7 @@ BI.shortcut("bi.text_value_check_combo_popup", BI.TextValueCheckComboPopup);
 
 
 /***/ }),
-/* 510 */
+/* 513 */
 /***/ (function(module, exports) {
 
 /**
@@ -32781,7 +32860,7 @@ BI.shortcut("bi.text_value_combo", BI.TextValueCombo);
 
 
 /***/ }),
-/* 511 */
+/* 514 */
 /***/ (function(module, exports) {
 
 /**
@@ -32855,7 +32934,7 @@ BI.SmallTextValueCombo.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.small_text_value_combo", BI.SmallTextValueCombo);
 
 /***/ }),
-/* 512 */
+/* 515 */
 /***/ (function(module, exports) {
 
 BI.TextValueComboPopup = BI.inherit(BI.Pane, {
@@ -32921,7 +33000,7 @@ BI.TextValueComboPopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.text_value_combo_popup", BI.TextValueComboPopup);
 
 /***/ }),
-/* 513 */
+/* 516 */
 /***/ (function(module, exports) {
 
 /**
@@ -33108,7 +33187,7 @@ BI.ClearEditor.EVENT_EMPTY = "EVENT_EMPTY";
 BI.shortcut("bi.clear_editor", BI.ClearEditor);
 
 /***/ }),
-/* 514 */
+/* 517 */
 /***/ (function(module, exports) {
 
 /**
@@ -33390,7 +33469,7 @@ BI.shortcut("bi.shelter_editor", BI.ShelterEditor);
 
 
 /***/ }),
-/* 515 */
+/* 518 */
 /***/ (function(module, exports) {
 
 /**
@@ -33671,7 +33750,7 @@ BI.SignEditor.EVENT_EMPTY = "EVENT_EMPTY";
 BI.shortcut("bi.sign_editor", BI.SignEditor);
 
 /***/ }),
-/* 516 */
+/* 519 */
 /***/ (function(module, exports) {
 
 /**
@@ -33987,7 +34066,7 @@ BI.shortcut("bi.state_editor", BI.StateEditor);
 
 
 /***/ }),
-/* 517 */
+/* 520 */
 /***/ (function(module, exports) {
 
 /**
@@ -34274,7 +34353,7 @@ BI.SimpleStateEditor.EVENT_EMPTY = "EVENT_EMPTY";
 BI.shortcut("bi.simple_state_editor", BI.SimpleStateEditor);
 
 /***/ }),
-/* 518 */
+/* 521 */
 /***/ (function(module, exports) {
 
 /**
@@ -34340,7 +34419,7 @@ BI.shortcut("bi.multi_popup_view", BI.MultiPopupView);
 
 
 /***/ }),
-/* 519 */
+/* 522 */
 /***/ (function(module, exports) {
 
 /**
@@ -34399,7 +34478,7 @@ BI.shortcut("bi.popup_panel", BI.PopupPanel);
 
 
 /***/ }),
-/* 520 */
+/* 523 */
 /***/ (function(module, exports) {
 
 /**
@@ -34581,7 +34660,7 @@ BI.ListPane.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.list_pane", BI.ListPane);
 
 /***/ }),
-/* 521 */
+/* 524 */
 /***/ (function(module, exports) {
 
 /**
@@ -34666,7 +34745,7 @@ BI.shortcut("bi.panel", BI.Panel);
 
 
 /***/ }),
-/* 522 */
+/* 525 */
 /***/ (function(module, exports) {
 
 BI.LinearSegmentButton = BI.inherit(BI.BasicButton, {
@@ -34725,7 +34804,7 @@ BI.LinearSegmentButton = BI.inherit(BI.BasicButton, {
 BI.shortcut("bi.linear_segment_button", BI.LinearSegmentButton);
 
 /***/ }),
-/* 523 */
+/* 526 */
 /***/ (function(module, exports) {
 
 BI.LinearSegment = BI.inherit(BI.Widget, {
@@ -34781,7 +34860,7 @@ BI.LinearSegment = BI.inherit(BI.Widget, {
 BI.shortcut("bi.linear_segment", BI.LinearSegment);
 
 /***/ }),
-/* 524 */
+/* 527 */
 /***/ (function(module, exports) {
 
 /**
@@ -35004,7 +35083,7 @@ BI.shortcut("bi.select_list", BI.SelectList);
 
 
 /***/ }),
-/* 525 */
+/* 528 */
 /***/ (function(module, exports) {
 
 /**
@@ -35112,7 +35191,7 @@ BI.LazyLoader.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.lazy_loader", BI.LazyLoader);
 
 /***/ }),
-/* 526 */
+/* 529 */
 /***/ (function(module, exports) {
 
 /**
@@ -35313,7 +35392,7 @@ BI.ListLoader.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.list_loader", BI.ListLoader);
 
 /***/ }),
-/* 527 */
+/* 530 */
 /***/ (function(module, exports) {
 
 /**
@@ -35495,7 +35574,7 @@ BI.shortcut("bi.sort_list", BI.SortList);
 
 
 /***/ }),
-/* 528 */
+/* 531 */
 /***/ (function(module, exports) {
 
 /**
@@ -35531,7 +35610,7 @@ BI.LoadingPane = BI.inherit(BI.Pane, {
 });
 
 /***/ }),
-/* 529 */
+/* 532 */
 /***/ (function(module, exports) {
 
 /**
@@ -35745,7 +35824,7 @@ BI.AllCountPager.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.all_count_pager", BI.AllCountPager);
 
 /***/ }),
-/* 530 */
+/* 533 */
 /***/ (function(module, exports) {
 
 /**
@@ -36026,7 +36105,7 @@ BI.DirectionPager.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.direction_pager", BI.DirectionPager);
 
 /***/ }),
-/* 531 */
+/* 534 */
 /***/ (function(module, exports) {
 
 /**
@@ -36319,7 +36398,7 @@ BI.DetailPager.EVENT_AFTER_POPULATE = "EVENT_AFTER_POPULATE";
 BI.shortcut("bi.detail_pager", BI.DetailPager);
 
 /***/ }),
-/* 532 */
+/* 535 */
 /***/ (function(module, exports) {
 
 /**
@@ -36371,7 +36450,7 @@ BI.shortcut("bi.segment_button", BI.SegmentButton);
 
 
 /***/ }),
-/* 533 */
+/* 536 */
 /***/ (function(module, exports) {
 
 /**
@@ -36440,7 +36519,7 @@ BI.Segment.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.segment", BI.Segment);
 
 /***/ }),
-/* 534 */
+/* 537 */
 /***/ (function(module, exports) {
 
 /**
@@ -36585,7 +36664,7 @@ BI.shortcut("bi.multi_select_bar", BI.MultiSelectBar);
 
 
 /***/ }),
-/* 535 */
+/* 538 */
 /***/ (function(module, exports) {
 
 /**
@@ -36727,7 +36806,7 @@ BI.shortcut("bi.level_tree", BI.LevelTree);
 
 
 /***/ }),
-/* 536 */
+/* 539 */
 /***/ (function(module, exports) {
 
 !(function () {
@@ -36810,7 +36889,7 @@ BI.shortcut("bi.level_tree", BI.LevelTree);
 
 
 /***/ }),
-/* 537 */
+/* 540 */
 /***/ (function(module, exports) {
 
 !(function () {
@@ -36869,7 +36948,7 @@ BI.shortcut("bi.level_tree", BI.LevelTree);
 
 
 /***/ }),
-/* 538 */
+/* 541 */
 /***/ (function(module, exports) {
 
 /**
@@ -36971,7 +37050,7 @@ BI.shortcut("bi.editor_trigger", BI.EditorTrigger);
 
 
 /***/ }),
-/* 539 */
+/* 542 */
 /***/ (function(module, exports) {
 
 /**
@@ -37006,7 +37085,7 @@ BI.IconTrigger = BI.inherit(BI.Trigger, {
 BI.shortcut("bi.icon_trigger", BI.IconTrigger);
 
 /***/ }),
-/* 540 */
+/* 543 */
 /***/ (function(module, exports) {
 
 /**
@@ -37116,7 +37195,7 @@ BI.IconTextTrigger = BI.inherit(BI.Trigger, {
 BI.shortcut("bi.icon_text_trigger", BI.IconTextTrigger);
 
 /***/ }),
-/* 541 */
+/* 544 */
 /***/ (function(module, exports) {
 
 /**
@@ -37195,7 +37274,7 @@ BI.SelectIconTextTrigger = BI.inherit(BI.Trigger, {
 BI.shortcut("bi.select_icon_text_trigger", BI.SelectIconTextTrigger);
 
 /***/ }),
-/* 542 */
+/* 545 */
 /***/ (function(module, exports) {
 
 /**
@@ -37274,7 +37353,7 @@ BI.shortcut("bi.text_trigger", BI.TextTrigger);
 
 
 /***/ }),
-/* 543 */
+/* 546 */
 /***/ (function(module, exports) {
 
 /**
@@ -37351,7 +37430,7 @@ BI.shortcut("bi.select_text_trigger", BI.SelectTextTrigger);
 
 
 /***/ }),
-/* 544 */
+/* 547 */
 /***/ (function(module, exports) {
 
 /**
@@ -37420,7 +37499,7 @@ BI.SmallSelectTextTrigger = BI.inherit(BI.Trigger, {
 BI.shortcut("bi.small_select_text_trigger", BI.SmallSelectTextTrigger);
 
 /***/ }),
-/* 545 */
+/* 548 */
 /***/ (function(module, exports) {
 
 /**
@@ -37482,7 +37561,7 @@ BI.SmallTextTrigger = BI.inherit(BI.Trigger, {
 BI.shortcut("bi.small_text_trigger", BI.SmallTextTrigger);
 
 /***/ }),
-/* 546 */
+/* 549 */
 /***/ (function(module, exports) {
 
 /**
@@ -37560,7 +37639,7 @@ BI.MonthDateCombo.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.month_date_combo", BI.MonthDateCombo);
 
 /***/ }),
-/* 547 */
+/* 550 */
 /***/ (function(module, exports) {
 
 /**
@@ -37650,7 +37729,7 @@ BI.shortcut("bi.year_date_combo", BI.YearDateCombo);
 
 
 /***/ }),
-/* 548 */
+/* 551 */
 /***/ (function(module, exports) {
 
 /**
@@ -37884,7 +37963,7 @@ BI.shortcut("bi.date_picker", BI.DatePicker);
 
 
 /***/ }),
-/* 549 */
+/* 552 */
 /***/ (function(module, exports) {
 
 /**
@@ -38021,7 +38100,7 @@ BI.shortcut("bi.year_picker", BI.YearPicker);
 
 
 /***/ }),
-/* 550 */
+/* 553 */
 /***/ (function(module, exports) {
 
 /**
@@ -38177,7 +38256,7 @@ BI.DateCalendarPopup.EVENT_BEFORE_YEAR_MONTH_POPUPVIEW = "EVENT_BEFORE_YEAR_MONT
 BI.shortcut("bi.date_calendar_popup", BI.DateCalendarPopup);
 
 /***/ }),
-/* 551 */
+/* 554 */
 /***/ (function(module, exports) {
 
 /**
@@ -38280,7 +38359,7 @@ BI.MonthPopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.month_popup", BI.MonthPopup);
 
 /***/ }),
-/* 552 */
+/* 555 */
 /***/ (function(module, exports) {
 
 /**
@@ -38421,7 +38500,7 @@ BI.YearPopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.year_popup", BI.YearPopup);
 
 /***/ }),
-/* 553 */
+/* 556 */
 /***/ (function(module, exports) {
 
 /**
@@ -38492,7 +38571,7 @@ BI.DateTriangleTrigger = BI.inherit(BI.Trigger, {
 BI.shortcut("bi.date_triangle_trigger", BI.DateTriangleTrigger);
 
 /***/ }),
-/* 554 */
+/* 557 */
 /***/ (function(module, exports) {
 
 /**
@@ -38682,7 +38761,7 @@ BI.StaticDatePaneCard.EVENT_BEFORE_YEAR_MONTH_POPUPVIEW = "EVENT_BEFORE_YEAR_MON
 BI.shortcut("bi.static_date_pane_card", BI.StaticDatePaneCard);
 
 /***/ }),
-/* 555 */
+/* 558 */
 /***/ (function(module, exports) {
 
 BI.DynamicDatePane = BI.inherit(BI.Widget, {
@@ -38905,7 +38984,7 @@ BI.extend(BI.DynamicDatePane, {
 
 
 /***/ }),
-/* 556 */
+/* 559 */
 /***/ (function(module, exports) {
 
 /**
@@ -39045,7 +39124,7 @@ BI.shortcut("bi.date_time_combo", BI.DateTimeCombo);
 
 
 /***/ }),
-/* 557 */
+/* 560 */
 /***/ (function(module, exports) {
 
 /**
@@ -39164,7 +39243,7 @@ BI.shortcut("bi.date_time_popup", BI.DateTimePopup);
 
 
 /***/ }),
-/* 558 */
+/* 561 */
 /***/ (function(module, exports) {
 
 /**
@@ -39232,7 +39311,7 @@ BI.shortcut("bi.date_time_trigger", BI.DateTimeTrigger);
 
 
 /***/ }),
-/* 559 */
+/* 562 */
 /***/ (function(module, exports) {
 
 BI.StaticDateTimePaneCard = BI.inherit(BI.Widget, {
@@ -39442,7 +39521,7 @@ BI.StaticDateTimePaneCard.EVENT_BEFORE_YEAR_MONTH_POPUPVIEW = "EVENT_BEFORE_YEAR
 BI.shortcut("bi.static_date_time_pane_card", BI.StaticDateTimePaneCard);
 
 /***/ }),
-/* 560 */
+/* 563 */
 /***/ (function(module, exports) {
 
 BI.DynamicDateTimePane = BI.inherit(BI.Widget, {
@@ -39661,7 +39740,7 @@ BI.extend(BI.DynamicDateTimePane, {
 
 
 /***/ }),
-/* 561 */
+/* 564 */
 /***/ (function(module, exports) {
 
 /**
@@ -39758,7 +39837,7 @@ BI.DownListCombo.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
 BI.shortcut("bi.down_list_combo", BI.DownListCombo);
 
 /***/ }),
-/* 562 */
+/* 565 */
 /***/ (function(module, exports) {
 
 /**
@@ -39814,7 +39893,7 @@ BI.DownListGroup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.down_list_group", BI.DownListGroup);
 
 /***/ }),
-/* 563 */
+/* 566 */
 /***/ (function(module, exports) {
 
 BI.DownListItem = BI.inherit(BI.BasicButton, {
@@ -39917,7 +39996,7 @@ BI.DownListItem.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.down_list_item", BI.DownListItem);
 
 /***/ }),
-/* 564 */
+/* 567 */
 /***/ (function(module, exports) {
 
 BI.DownListGroupItem = BI.inherit(BI.BasicButton, {
@@ -40043,7 +40122,7 @@ BI.DownListGroupItem.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.down_list_group_item", BI.DownListGroupItem);
 
 /***/ }),
-/* 565 */
+/* 568 */
 /***/ (function(module, exports) {
 
 /**
@@ -40335,7 +40414,7 @@ BI.DownListPopup.EVENT_SON_VALUE_CHANGE = "EVENT_SON_VALUE_CHANGE";
 BI.shortcut("bi.down_list_popup", BI.DownListPopup);
 
 /***/ }),
-/* 566 */
+/* 569 */
 /***/ (function(module, exports) {
 
 !(function () {
@@ -40407,7 +40486,7 @@ BI.shortcut("bi.down_list_popup", BI.DownListPopup);
 
 
 /***/ }),
-/* 567 */
+/* 570 */
 /***/ (function(module, exports) {
 
 BI.DynamicDateCard = BI.inherit(BI.Widget, {
@@ -40843,7 +40922,7 @@ BI.extend(BI.DynamicDateCard, {
 });
 
 /***/ }),
-/* 568 */
+/* 571 */
 /***/ (function(module, exports) {
 
 BI.DynamicDateCombo = BI.inherit(BI.Single, {
@@ -41184,7 +41263,7 @@ BI.extend(BI.DynamicDateCombo, {
 
 
 /***/ }),
-/* 569 */
+/* 572 */
 /***/ (function(module, exports) {
 
 BI.DynamicDateParamItem = BI.inherit(BI.Widget, {
@@ -41321,7 +41400,7 @@ BI.shortcut("bi.dynamic_date_param_item", BI.DynamicDateParamItem);
 
 
 /***/ }),
-/* 570 */
+/* 573 */
 /***/ (function(module, exports) {
 
 BI.DynamicDatePopup = BI.inherit(BI.Widget, {
@@ -41584,7 +41663,7 @@ BI.DynamicDatePopup.EVENT_BEFORE_YEAR_MONTH_POPUPVIEW = "EVENT_BEFORE_YEAR_MONTH
 BI.shortcut("bi.dynamic_date_popup", BI.DynamicDatePopup);
 
 /***/ }),
-/* 571 */
+/* 574 */
 /***/ (function(module, exports) {
 
 BI.DynamicDateTrigger = BI.inherit(BI.Trigger, {
@@ -41942,7 +42021,7 @@ BI.shortcut("bi.dynamic_date_trigger", BI.DynamicDateTrigger);
 
 
 /***/ }),
-/* 572 */
+/* 575 */
 /***/ (function(module, exports) {
 
 BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
@@ -42291,7 +42370,7 @@ BI.extend(BI.DynamicDateTimeCombo, {
 
 
 /***/ }),
-/* 573 */
+/* 576 */
 /***/ (function(module, exports) {
 
 BI.DynamicDateTimePopup = BI.inherit(BI.Widget, {
@@ -42562,7 +42641,7 @@ BI.DynamicDateTimePopup.EVENT_BEFORE_YEAR_MONTH_POPUPVIEW = "EVENT_BEFORE_YEAR_M
 BI.shortcut("bi.dynamic_date_time_popup", BI.DynamicDateTimePopup);
 
 /***/ }),
-/* 574 */
+/* 577 */
 /***/ (function(module, exports) {
 
 BI.DynamicDateTimeSelect = BI.inherit(BI.Widget, {
@@ -42779,7 +42858,7 @@ BI.extend(BI.DynamicDateTimeSelect, {
 });
 
 /***/ }),
-/* 575 */
+/* 578 */
 /***/ (function(module, exports) {
 
 BI.DynamicDateTimeTrigger = BI.inherit(BI.Trigger, {
@@ -43161,7 +43240,7 @@ BI.DynamicDateTimeTrigger.EVENT_KEY_DOWN = "EVENT_KEY_DOWN";
 BI.shortcut("bi.dynamic_date_time_trigger", BI.DynamicDateTimeTrigger);
 
 /***/ }),
-/* 576 */
+/* 579 */
 /***/ (function(module, exports) {
 
 /**
@@ -43382,7 +43461,7 @@ BI.SearchEditor.EVENT_EMPTY = "EVENT_EMPTY";
 BI.shortcut("bi.search_editor", BI.SearchEditor);
 
 /***/ }),
-/* 577 */
+/* 580 */
 /***/ (function(module, exports) {
 
 /**
@@ -43407,7 +43486,7 @@ BI.SmallSearchEditor = BI.inherit(BI.SearchEditor, {
 BI.shortcut("bi.small_search_editor", BI.SmallSearchEditor);
 
 /***/ }),
-/* 578 */
+/* 581 */
 /***/ (function(module, exports) {
 
 /**
@@ -43586,7 +43665,7 @@ BI.TextEditor.EVENT_EMPTY = "EVENT_EMPTY";
 BI.shortcut("bi.text_editor", BI.TextEditor);
 
 /***/ }),
-/* 579 */
+/* 582 */
 /***/ (function(module, exports) {
 
 /**
@@ -43611,7 +43690,7 @@ BI.SmallTextEditor = BI.inherit(BI.TextEditor, {
 BI.shortcut("bi.small_text_editor", BI.SmallTextEditor);
 
 /***/ }),
-/* 580 */
+/* 583 */
 /***/ (function(module, exports) {
 
 /**
@@ -44156,7 +44235,7 @@ BI.IntervalSlider.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.interval_slider", BI.IntervalSlider);
 
 /***/ }),
-/* 581 */
+/* 584 */
 /***/ (function(module, exports) {
 
 /**
@@ -44383,7 +44462,7 @@ BI.AccurateCalculationModel = BI.inherit(BI.Widget, {
 });
 
 /***/ }),
-/* 582 */
+/* 585 */
 /***/ (function(module, exports) {
 
 /**
@@ -44478,7 +44557,7 @@ BI.MultiLayerDownListCombo.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
 BI.shortcut("bi.multi_layer_down_list_combo", BI.MultiLayerDownListCombo);
 
 /***/ }),
-/* 583 */
+/* 586 */
 /***/ (function(module, exports) {
 
 /**
@@ -44805,7 +44884,7 @@ BI.MultiLayerDownListPopup.EVENT_SON_VALUE_CHANGE = "EVENT_SON_VALUE_CHANGE";
 BI.shortcut("bi.multi_layer_down_list_popup", BI.MultiLayerDownListPopup);
 
 /***/ }),
-/* 584 */
+/* 587 */
 /***/ (function(module, exports) {
 
 /**
@@ -45049,7 +45128,7 @@ BI.MultiLayerSelectTreeCombo.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
 BI.shortcut("bi.multilayer_select_tree_combo", BI.MultiLayerSelectTreeCombo);
 
 /***/ }),
-/* 585 */
+/* 588 */
 /***/ (function(module, exports) {
 
 /**
@@ -45146,7 +45225,7 @@ BI.MultiLayerSelectTreeInsertSearchPane.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multilayer_select_tree_insert_search_pane", BI.MultiLayerSelectTreeInsertSearchPane);
 
 /***/ }),
-/* 586 */
+/* 589 */
 /***/ (function(module, exports) {
 
 /**
@@ -45341,7 +45420,7 @@ BI.shortcut("bi.multilayer_select_level_tree", BI.MultiLayerSelectLevelTree);
 
 
 /***/ }),
-/* 587 */
+/* 590 */
 /***/ (function(module, exports) {
 
 /**
@@ -45423,7 +45502,7 @@ BI.MultiLayerSelectTreePopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multilayer_select_tree_popup", BI.MultiLayerSelectTreePopup);
 
 /***/ }),
-/* 588 */
+/* 591 */
 /***/ (function(module, exports) {
 
 /**
@@ -45678,7 +45757,7 @@ BI.MultiLayerSelectTreeTrigger.EVENT_ADD_ITEM = "EVENT_ADD_ITEM";
 BI.shortcut("bi.multilayer_select_tree_trigger", BI.MultiLayerSelectTreeTrigger);
 
 /***/ }),
-/* 589 */
+/* 592 */
 /***/ (function(module, exports) {
 
 /**
@@ -45783,7 +45862,7 @@ BI.shortcut("bi.multilayer_select_tree_first_plus_group_node", BI.MultiLayerSele
 
 
 /***/ }),
-/* 590 */
+/* 593 */
 /***/ (function(module, exports) {
 
 /**
@@ -45877,7 +45956,7 @@ BI.shortcut("bi.multilayer_select_tree_last_plus_group_node", BI.MultiLayerSelec
 
 
 /***/ }),
-/* 591 */
+/* 594 */
 /***/ (function(module, exports) {
 
 /**
@@ -45971,7 +46050,7 @@ BI.shortcut("bi.multilayer_select_tree_mid_plus_group_node", BI.MultiLayerSelect
 
 
 /***/ }),
-/* 592 */
+/* 595 */
 /***/ (function(module, exports) {
 
 /**
@@ -46069,7 +46148,7 @@ BI.shortcut("bi.multilayer_select_tree_plus_group_node", BI.MultiLayerSelectTree
 
 
 /***/ }),
-/* 593 */
+/* 596 */
 /***/ (function(module, exports) {
 
 /**
@@ -46316,7 +46395,7 @@ BI.MultiLayerSingleTreeCombo.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
 BI.shortcut("bi.multilayer_single_tree_combo", BI.MultiLayerSingleTreeCombo);
 
 /***/ }),
-/* 594 */
+/* 597 */
 /***/ (function(module, exports) {
 
 /**
@@ -46413,7 +46492,7 @@ BI.MultiLayerSingleTreeInsertSearchPane.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multilayer_single_tree_insert_search_pane", BI.MultiLayerSingleTreeInsertSearchPane);
 
 /***/ }),
-/* 595 */
+/* 598 */
 /***/ (function(module, exports) {
 
 /**
@@ -46607,7 +46686,7 @@ BI.shortcut("bi.multilayer_single_level_tree", BI.MultiLayerSingleLevelTree);
 
 
 /***/ }),
-/* 596 */
+/* 599 */
 /***/ (function(module, exports) {
 
 /**
@@ -46688,7 +46767,7 @@ BI.MultiLayerSingleTreePopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multilayer_single_tree_popup", BI.MultiLayerSingleTreePopup);
 
 /***/ }),
-/* 597 */
+/* 600 */
 /***/ (function(module, exports) {
 
 /**
@@ -46944,7 +47023,7 @@ BI.MultiLayerSingleTreeTrigger.EVENT_ADD_ITEM = "EVENT_ADD_ITEM";
 BI.shortcut("bi.multilayer_single_tree_trigger", BI.MultiLayerSingleTreeTrigger);
 
 /***/ }),
-/* 598 */
+/* 601 */
 /***/ (function(module, exports) {
 
 /**
@@ -47041,7 +47120,7 @@ BI.shortcut("bi.multilayer_single_tree_first_plus_group_node", BI.MultiLayerSing
 
 
 /***/ }),
-/* 599 */
+/* 602 */
 /***/ (function(module, exports) {
 
 /**
@@ -47137,7 +47216,7 @@ BI.shortcut("bi.multilayer_single_tree_last_plus_group_node", BI.MultiLayerSingl
 
 
 /***/ }),
-/* 600 */
+/* 603 */
 /***/ (function(module, exports) {
 
 /**
@@ -47233,7 +47312,7 @@ BI.shortcut("bi.multilayer_single_tree_mid_plus_group_node", BI.MultiLayerSingle
 
 
 /***/ }),
-/* 601 */
+/* 604 */
 /***/ (function(module, exports) {
 
 /**
@@ -47340,7 +47419,7 @@ BI.MultiLayerSingleTreePlusGroupNode = BI.inherit(BI.NodeButton, {
 BI.shortcut("bi.multilayer_single_tree_plus_group_node", BI.MultiLayerSingleTreePlusGroupNode);
 
 /***/ }),
-/* 602 */
+/* 605 */
 /***/ (function(module, exports) {
 
 /**
@@ -47432,7 +47511,7 @@ BI.shortcut("bi.multilayer_single_tree_first_tree_leaf_item", BI.MultiLayerSingl
 
 
 /***/ }),
-/* 603 */
+/* 606 */
 /***/ (function(module, exports) {
 
 /**
@@ -47524,7 +47603,7 @@ BI.shortcut("bi.multilayer_single_tree_last_tree_leaf_item", BI.MultiLayerSingle
 
 
 /***/ }),
-/* 604 */
+/* 607 */
 /***/ (function(module, exports) {
 
 /**
@@ -47616,7 +47695,7 @@ BI.shortcut("bi.multilayer_single_tree_mid_tree_leaf_item", BI.MultiLayerSingleT
 
 
 /***/ }),
-/* 605 */
+/* 608 */
 /***/ (function(module, exports) {
 
 /**
@@ -47729,7 +47808,7 @@ BI.MultiSelectCheckPane = BI.inherit(BI.Widget, {
 BI.shortcut("bi.multi_select_check_pane", BI.MultiSelectCheckPane);
 
 /***/ }),
-/* 606 */
+/* 609 */
 /***/ (function(module, exports) {
 
 /**
@@ -47821,7 +47900,7 @@ BI.DisplaySelectedList = BI.inherit(BI.Pane, {
 BI.shortcut("bi.display_selected_list", BI.DisplaySelectedList);
 
 /***/ }),
-/* 607 */
+/* 610 */
 /***/ (function(module, exports) {
 
 /**
@@ -48307,7 +48386,7 @@ BI.shortcut("bi.multi_select_combo", BI.MultiSelectCombo);
 
 
 /***/ }),
-/* 608 */
+/* 611 */
 /***/ (function(module, exports) {
 
 /**
@@ -48811,7 +48890,7 @@ BI.shortcut("bi.multi_select_no_bar_combo", BI.MultiSelectNoBarCombo);
 
 
 /***/ }),
-/* 609 */
+/* 612 */
 /***/ (function(module, exports) {
 
 /**
@@ -49313,7 +49392,7 @@ BI.shortcut("bi.multi_select_insert_combo", BI.MultiSelectInsertCombo);
 
 
 /***/ }),
-/* 610 */
+/* 613 */
 /***/ (function(module, exports) {
 
 /**
@@ -49809,7 +49888,7 @@ BI.shortcut("bi.multi_select_insert_no_bar_combo", BI.MultiSelectInsertNoBarComb
 
 
 /***/ }),
-/* 611 */
+/* 614 */
 /***/ (function(module, exports) {
 
 /**
@@ -49971,7 +50050,7 @@ BI.MultiSelectInsertTrigger.EVENT_BLUR = "EVENT_BLUR";
 BI.shortcut("bi.multi_select_insert_trigger", BI.MultiSelectInsertTrigger);
 
 /***/ }),
-/* 612 */
+/* 615 */
 /***/ (function(module, exports) {
 
 /**
@@ -50165,7 +50244,7 @@ BI.MultiSelectLoader.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multi_select_loader", BI.MultiSelectLoader);
 
 /***/ }),
-/* 613 */
+/* 616 */
 /***/ (function(module, exports) {
 
 /**
@@ -50349,7 +50428,7 @@ BI.shortcut("bi.multi_select_no_bar_loader", BI.MultiSelectNoBarLoader);
 
 
 /***/ }),
-/* 614 */
+/* 617 */
 /***/ (function(module, exports) {
 
 /**
@@ -50449,7 +50528,7 @@ BI.MultiSelectPopupView.EVENT_CLICK_CLEAR = "EVENT_CLICK_CLEAR";
 BI.shortcut("bi.multi_select_popup_view", BI.MultiSelectPopupView);
 
 /***/ }),
-/* 615 */
+/* 618 */
 /***/ (function(module, exports) {
 
 /**
@@ -50545,7 +50624,7 @@ BI.MultiSelectNoBarPopupView.EVENT_CLICK_CLEAR = "EVENT_CLICK_CLEAR";
 BI.shortcut("bi.multi_select_no_bar_popup_view", BI.MultiSelectNoBarPopupView);
 
 /***/ }),
-/* 616 */
+/* 619 */
 /***/ (function(module, exports) {
 
 /**
@@ -50703,7 +50782,7 @@ BI.MultiSelectTrigger.EVENT_FOCUS = "EVENT_FOCUS";
 BI.shortcut("bi.multi_select_trigger", BI.MultiSelectTrigger);
 
 /***/ }),
-/* 617 */
+/* 620 */
 /***/ (function(module, exports) {
 
 /**
@@ -50841,7 +50920,7 @@ BI.MultiSelectSearchInsertPane.EVENT_ADD_ITEM = "EVENT_ADD_ITEM";
 BI.shortcut("bi.multi_select_search_insert_pane", BI.MultiSelectSearchInsertPane);
 
 /***/ }),
-/* 618 */
+/* 621 */
 /***/ (function(module, exports) {
 
 /**
@@ -51008,7 +51087,7 @@ BI.MultiSelectSearchLoader.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multi_select_search_loader", BI.MultiSelectSearchLoader);
 
 /***/ }),
-/* 619 */
+/* 622 */
 /***/ (function(module, exports) {
 
 /**
@@ -51132,7 +51211,7 @@ BI.MultiSelectSearchPane.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multi_select_search_pane", BI.MultiSelectSearchPane);
 
 /***/ }),
-/* 620 */
+/* 623 */
 /***/ (function(module, exports) {
 
 /**
@@ -51237,7 +51316,7 @@ BI.shortcut("bi.multi_select_check_selected_button", BI.MultiSelectCheckSelected
 
 
 /***/ }),
-/* 621 */
+/* 624 */
 /***/ (function(module, exports) {
 
 /**
@@ -51341,7 +51420,7 @@ BI.shortcut("bi.multi_select_editor", BI.MultiSelectEditor);
 
 
 /***/ }),
-/* 622 */
+/* 625 */
 /***/ (function(module, exports) {
 
 /**
@@ -51553,7 +51632,7 @@ BI.MultiSelectInsertSearcher.EVENT_BLUR = "EVENT_BLUR";
 BI.shortcut("bi.multi_select_insert_searcher", BI.MultiSelectInsertSearcher);
 
 /***/ }),
-/* 623 */
+/* 626 */
 /***/ (function(module, exports) {
 
 /**
@@ -51758,7 +51837,7 @@ BI.MultiSelectSearcher.EVENT_BLUR = "EVENT_BLUR";
 BI.shortcut("bi.multi_select_searcher", BI.MultiSelectSearcher);
 
 /***/ }),
-/* 624 */
+/* 627 */
 /***/ (function(module, exports) {
 
 /**
@@ -51875,7 +51954,7 @@ BI.MultiSelectCheckSelectedSwitcher.EVENT_AFTER_HIDEVIEW = "EVENT_AFTER_HIDEVIEW
 BI.shortcut("bi.multi_select_check_selected_switcher", BI.MultiSelectCheckSelectedSwitcher);
 
 /***/ }),
-/* 625 */
+/* 628 */
 /***/ (function(module, exports) {
 
 /**
@@ -52226,7 +52305,7 @@ BI.shortcut("bi.multi_select_insert_list", BI.MultiSelectInsertList);
 
 
 /***/ }),
-/* 626 */
+/* 629 */
 /***/ (function(module, exports) {
 
 /**
@@ -52583,7 +52662,7 @@ BI.MultiSelectInsertNoBarList.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multi_select_insert_no_bar_list", BI.MultiSelectInsertNoBarList);
 
 /***/ }),
-/* 627 */
+/* 630 */
 /***/ (function(module, exports) {
 
 /**
@@ -52941,7 +53020,7 @@ BI.MultiSelectList.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multi_select_list", BI.MultiSelectList);
 
 /***/ }),
-/* 628 */
+/* 631 */
 /***/ (function(module, exports) {
 
 /**
@@ -53119,7 +53198,7 @@ BI.shortcut("bi.multi_select_tree", BI.MultiSelectTree);
 
 
 /***/ }),
-/* 629 */
+/* 632 */
 /***/ (function(module, exports) {
 
 /**
@@ -53182,7 +53261,7 @@ BI.MultiSelectTreePopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multi_select_tree_popup", BI.MultiSelectTreePopup);
 
 /***/ }),
-/* 630 */
+/* 633 */
 /***/ (function(module, exports) {
 
 /**
@@ -53306,7 +53385,7 @@ BI.MultiTreeCheckPane.EVENT_CONTINUE_CLICK = "EVENT_CONTINUE_CLICK";
 BI.shortcut("bi.multi_tree_check_pane", BI.MultiTreeCheckPane);
 
 /***/ }),
-/* 631 */
+/* 634 */
 /***/ (function(module, exports) {
 
 /**
@@ -53666,7 +53745,7 @@ BI.shortcut("bi.multi_tree_combo", BI.MultiTreeCombo);
 
 
 /***/ }),
-/* 632 */
+/* 635 */
 /***/ (function(module, exports) {
 
 /**
@@ -54041,7 +54120,7 @@ BI.shortcut("bi.multi_tree_insert_combo", BI.MultiTreeInsertCombo);
 
 
 /***/ }),
-/* 633 */
+/* 636 */
 /***/ (function(module, exports) {
 
 /**
@@ -54440,7 +54519,7 @@ BI.shortcut("bi.multi_tree_list_combo", BI.MultiTreeListCombo);
 
 
 /***/ }),
-/* 634 */
+/* 637 */
 /***/ (function(module, exports) {
 
 /**
@@ -54547,7 +54626,7 @@ BI.MultiTreePopup.EVENT_AFTERINIT = "EVENT_AFTERINIT";
 BI.shortcut("bi.multi_tree_popup_view", BI.MultiTreePopup);
 
 /***/ }),
-/* 635 */
+/* 638 */
 /***/ (function(module, exports) {
 
 /**
@@ -54620,7 +54699,7 @@ BI.MultiTreeCheckSelectedButton.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multi_tree_check_selected_button", BI.MultiTreeCheckSelectedButton);
 
 /***/ }),
-/* 636 */
+/* 639 */
 /***/ (function(module, exports) {
 
 /**
@@ -54744,7 +54823,7 @@ BI.MultiTreeSearchInsertPane.EVENT_ADD_ITEM = "EVENT_ADD_ITEM";
 BI.shortcut("bi.multi_tree_search_insert_pane", BI.MultiTreeSearchInsertPane);
 
 /***/ }),
-/* 637 */
+/* 640 */
 /***/ (function(module, exports) {
 
 /**
@@ -54825,7 +54904,7 @@ BI.MultiTreeSearchPane.EVENT_CLICK_CLEAR = "EVENT_CLICK_CLEAR";
 BI.shortcut("bi.multi_tree_search_pane", BI.MultiTreeSearchPane);
 
 /***/ }),
-/* 638 */
+/* 641 */
 /***/ (function(module, exports) {
 
 /**
@@ -54994,7 +55073,7 @@ BI.MultiListTreeSearcher.EVENT_PAUSE = "EVENT_PAUSE";
 BI.shortcut("bi.multi_list_tree_searcher", BI.MultiListTreeSearcher);
 
 /***/ }),
-/* 639 */
+/* 642 */
 /***/ (function(module, exports) {
 
 /**
@@ -55195,7 +55274,7 @@ BI.MultiTreeSearcher.EVENT_PAUSE = "EVENT_PAUSE";
 BI.shortcut("bi.multi_tree_searcher", BI.MultiTreeSearcher);
 
 /***/ }),
-/* 640 */
+/* 643 */
 /***/ (function(module, exports) {
 
 /**
@@ -55354,7 +55433,7 @@ BI.NumberEditor.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.number_editor", BI.NumberEditor);
 
 /***/ }),
-/* 641 */
+/* 644 */
 /***/ (function(module, exports) {
 
 // 小于号的值为：0，小于等于号的值为:1
@@ -55902,7 +55981,7 @@ BI.NumberInterval.EVENT_ERROR = "EVENT_ERROR";
 BI.shortcut("bi.number_interval", BI.NumberInterval);
 
 /***/ }),
-/* 642 */
+/* 645 */
 /***/ (function(module, exports) {
 
 BI.NumberIntervalSingleEidtor = BI.inherit(BI.Single, {
@@ -55991,7 +56070,7 @@ BI.NumberIntervalSingleEidtor.EVENT_CONFIRM = "EVENT_CONFIRM";
 BI.shortcut("bi.number_interval_single_editor", BI.NumberIntervalSingleEidtor);
 
 /***/ }),
-/* 643 */
+/* 646 */
 /***/ (function(module, exports) {
 
 /**
@@ -56494,7 +56573,7 @@ BI.shortcut("bi.search_multi_text_value_combo", BI.SearchMultiTextValueCombo);
 
 
 /***/ }),
-/* 644 */
+/* 647 */
 /***/ (function(module, exports) {
 
 BI.SearchMultiSelectTrigger = BI.inherit(BI.Trigger, {
@@ -56654,7 +56733,7 @@ BI.shortcut("bi.search_multi_select_trigger", BI.SearchMultiSelectTrigger);
 
 
 /***/ }),
-/* 645 */
+/* 648 */
 /***/ (function(module, exports) {
 
 /**
@@ -56834,7 +56913,7 @@ BI.SearchMultiSelectLoader.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.search_multi_select_loader", BI.SearchMultiSelectLoader);
 
 /***/ }),
-/* 646 */
+/* 649 */
 /***/ (function(module, exports) {
 
 BI.SearchMultiSelectPopupView = BI.inherit(BI.Widget, {
@@ -56927,7 +57006,7 @@ BI.SearchMultiSelectPopupView.EVENT_CLICK_CLEAR = "EVENT_CLICK_CLEAR";
 BI.shortcut("bi.search_multi_select_popup_view", BI.SearchMultiSelectPopupView);
 
 /***/ }),
-/* 647 */
+/* 650 */
 /***/ (function(module, exports) {
 
 BI.SearchMultiSelectSearcher = BI.inherit(BI.Widget, {
@@ -57110,7 +57189,7 @@ BI.shortcut("bi.search_multi_select_searcher", BI.SearchMultiSelectSearcher);
 
 
 /***/ }),
-/* 648 */
+/* 651 */
 /***/ (function(module, exports) {
 
 /**
@@ -57201,7 +57280,7 @@ BI.SelectTreeFirstPlusGroupNode = BI.inherit(BI.NodeButton, {
 BI.shortcut("bi.select_tree_first_plus_group_node", BI.SelectTreeFirstPlusGroupNode);
 
 /***/ }),
-/* 649 */
+/* 652 */
 /***/ (function(module, exports) {
 
 /**
@@ -57292,7 +57371,7 @@ BI.SelectTreeLastPlusGroupNode = BI.inherit(BI.NodeButton, {
 BI.shortcut("bi.select_tree_last_plus_group_node", BI.SelectTreeLastPlusGroupNode);
 
 /***/ }),
-/* 650 */
+/* 653 */
 /***/ (function(module, exports) {
 
 /**
@@ -57383,7 +57462,7 @@ BI.SelectTreeMidPlusGroupNode = BI.inherit(BI.NodeButton, {
 BI.shortcut("bi.select_tree_mid_plus_group_node", BI.SelectTreeMidPlusGroupNode);
 
 /***/ }),
-/* 651 */
+/* 654 */
 /***/ (function(module, exports) {
 
 /**
@@ -57474,7 +57553,7 @@ BI.SelectTreePlusGroupNode = BI.inherit(BI.NodeButton, {
 BI.shortcut("bi.select_tree_plus_group_node", BI.SelectTreePlusGroupNode);
 
 /***/ }),
-/* 652 */
+/* 655 */
 /***/ (function(module, exports) {
 
 /**
@@ -57553,7 +57632,7 @@ BI.SelectTreeCombo = BI.inherit(BI.Widget, {
 BI.shortcut("bi.select_tree_combo", BI.SelectTreeCombo);
 
 /***/ }),
-/* 653 */
+/* 656 */
 /***/ (function(module, exports) {
 
 /**
@@ -57635,7 +57714,7 @@ BI.SelectTreeExpander = BI.inherit(BI.Widget, {
 BI.shortcut("bi.select_tree_expander", BI.SelectTreeExpander);
 
 /***/ }),
-/* 654 */
+/* 657 */
 /***/ (function(module, exports) {
 
 /**
@@ -57741,7 +57820,7 @@ BI.SelectTreePopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.select_level_tree", BI.SelectTreePopup);
 
 /***/ }),
-/* 655 */
+/* 658 */
 /***/ (function(module, exports) {
 
 /**
@@ -57900,7 +57979,7 @@ BI.shortcut("bi.single_select_search_loader", BI.SingleSelectSearchLoader);
 
 
 /***/ }),
-/* 656 */
+/* 659 */
 /***/ (function(module, exports) {
 
 /**
@@ -58034,7 +58113,7 @@ BI.SingleSelectSearchInsertPane.EVENT_ADD_ITEM = "EVENT_ADD_ITEM";
 BI.shortcut("bi.single_select_search_insert_pane", BI.SingleSelectSearchInsertPane);
 
 /***/ }),
-/* 657 */
+/* 660 */
 /***/ (function(module, exports) {
 
 /**
@@ -58154,7 +58233,7 @@ BI.SingleSelectSearchPane.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.single_select_search_pane", BI.SingleSelectSearchPane);
 
 /***/ }),
-/* 658 */
+/* 661 */
 /***/ (function(module, exports) {
 
 /**
@@ -58448,7 +58527,7 @@ BI.shortcut("bi.single_select_combo", BI.SingleSelectCombo);
 
 
 /***/ }),
-/* 659 */
+/* 662 */
 /***/ (function(module, exports) {
 
 /**
@@ -58745,7 +58824,7 @@ BI.SingleSelectInsertCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
 BI.shortcut("bi.single_select_insert_combo", BI.SingleSelectInsertCombo);
 
 /***/ }),
-/* 660 */
+/* 663 */
 /***/ (function(module, exports) {
 
 /**
@@ -58910,7 +58989,7 @@ BI.shortcut("bi.single_select_list", BI.SingleSelectList);
 
 
 /***/ }),
-/* 661 */
+/* 664 */
 /***/ (function(module, exports) {
 
 /**
@@ -59077,7 +59156,7 @@ BI.shortcut("bi.single_select_loader", BI.SingleSelectLoader);
 
 
 /***/ }),
-/* 662 */
+/* 665 */
 /***/ (function(module, exports) {
 
 /**
@@ -59160,7 +59239,7 @@ BI.SingleSelectPopupView.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.single_select_popup_view", BI.SingleSelectPopupView);
 
 /***/ }),
-/* 663 */
+/* 666 */
 /***/ (function(module, exports) {
 
 /**
@@ -59302,7 +59381,7 @@ BI.SingleSelectTrigger.EVENT_BLUR = "EVENT_BLUR";
 BI.shortcut("bi.single_select_trigger", BI.SingleSelectTrigger);
 
 /***/ }),
-/* 664 */
+/* 667 */
 /***/ (function(module, exports) {
 
 /**
@@ -59564,7 +59643,7 @@ BI.shortcut("bi.single_select_insert_list", BI.SingleSelectInsertList);
 
 
 /***/ }),
-/* 665 */
+/* 668 */
 /***/ (function(module, exports) {
 
 /**
@@ -59657,7 +59736,7 @@ BI.SingleSelectEditor.EVENT_PAUSE = "EVENT_PAUSE";
 BI.shortcut("bi.single_select_editor", BI.SingleSelectEditor);
 
 /***/ }),
-/* 666 */
+/* 669 */
 /***/ (function(module, exports) {
 
 /**
@@ -59828,7 +59907,7 @@ BI.shortcut("bi.single_select_searcher", BI.SingleSelectSearcher);
 
 
 /***/ }),
-/* 667 */
+/* 670 */
 /***/ (function(module, exports) {
 
 BI.SignTextEditor = BI.inherit(BI.Widget, {
@@ -60028,7 +60107,7 @@ BI.SignTextEditor.EVENT_CLICK_LABEL = "EVENT_CLICK_LABEL";
 BI.shortcut("bi.sign_text_editor", BI.SignTextEditor);
 
 /***/ }),
-/* 668 */
+/* 671 */
 /***/ (function(module, exports) {
 
 /**
@@ -60069,7 +60148,7 @@ BI.SliderIconButton = BI.inherit(BI.Widget, {
 BI.shortcut("bi.single_slider_button", BI.SliderIconButton);
 
 /***/ }),
-/* 669 */
+/* 672 */
 /***/ (function(module, exports) {
 
 /**
@@ -60416,7 +60495,7 @@ BI.SingleSlider.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.single_slider", BI.SingleSlider);
 
 /***/ }),
-/* 670 */
+/* 673 */
 /***/ (function(module, exports) {
 
 /**
@@ -60732,7 +60811,7 @@ BI.SingleSliderLabel.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.single_slider_label", BI.SingleSliderLabel);
 
 /***/ }),
-/* 671 */
+/* 674 */
 /***/ (function(module, exports) {
 
 /**
@@ -61022,7 +61101,7 @@ BI.SingleSliderNormal.EVENT_DRAG = "EVENT_DRAG";
 BI.shortcut("bi.single_slider_normal", BI.SingleSliderNormal);
 
 /***/ }),
-/* 672 */
+/* 675 */
 /***/ (function(module, exports) {
 
 /**
@@ -61107,7 +61186,7 @@ BI.SingleTreeCombo.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
 BI.shortcut("bi.single_tree_combo", BI.SingleTreeCombo);
 
 /***/ }),
-/* 673 */
+/* 676 */
 /***/ (function(module, exports) {
 
 /**
@@ -61178,7 +61257,7 @@ BI.SingleTreePopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.single_level_tree", BI.SingleTreePopup);
 
 /***/ }),
-/* 674 */
+/* 677 */
 /***/ (function(module, exports) {
 
 /**
@@ -61244,7 +61323,7 @@ BI.shortcut("bi.single_tree_trigger", BI.SingleTreeTrigger);
 
 
 /***/ }),
-/* 675 */
+/* 678 */
 /***/ (function(module, exports) {
 
 /**
@@ -61347,7 +61426,7 @@ BI.TextValueDownListCombo.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.text_value_down_list_combo", BI.TextValueDownListCombo);
 
 /***/ }),
-/* 676 */
+/* 679 */
 /***/ (function(module, exports) {
 
 /**
@@ -61407,7 +61486,7 @@ BI.DownListSelectTextTrigger = BI.inherit(BI.Trigger, {
 BI.shortcut("bi.down_list_select_text_trigger", BI.DownListSelectTextTrigger);
 
 /***/ }),
-/* 677 */
+/* 680 */
 /***/ (function(module, exports) {
 
 !(function () {
@@ -61506,7 +61585,7 @@ BI.shortcut("bi.down_list_select_text_trigger", BI.DownListSelectTextTrigger);
 })();
 
 /***/ }),
-/* 678 */
+/* 681 */
 /***/ (function(module, exports) {
 
 /**
@@ -61744,7 +61823,7 @@ BI.shortcut("bi.down_list_select_text_trigger", BI.DownListSelectTextTrigger);
 })();
 
 /***/ }),
-/* 679 */
+/* 682 */
 /***/ (function(module, exports) {
 
 !(function () {
@@ -61936,7 +62015,7 @@ BI.shortcut("bi.down_list_select_text_trigger", BI.DownListSelectTextTrigger);
 })();
 
 /***/ }),
-/* 680 */
+/* 683 */
 /***/ (function(module, exports) {
 
 /**
@@ -62151,7 +62230,7 @@ BI.shortcut("bi.date_interval", BI.DateInterval);
 
 
 /***/ }),
-/* 681 */
+/* 684 */
 /***/ (function(module, exports) {
 
 /**
@@ -62359,7 +62438,7 @@ BI.TimeInterval.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.time_interval", BI.TimeInterval);
 
 /***/ }),
-/* 682 */
+/* 685 */
 /***/ (function(module, exports) {
 
 /**
@@ -62484,7 +62563,7 @@ BI.shortcut("bi.time_interval", BI.TimeInterval);
 })();
 
 /***/ }),
-/* 683 */
+/* 686 */
 /***/ (function(module, exports) {
 
 /**
@@ -62608,7 +62687,7 @@ BI.DynamicYearCard.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.dynamic_year_card", BI.DynamicYearCard);
 
 /***/ }),
-/* 684 */
+/* 687 */
 /***/ (function(module, exports) {
 
 /**
@@ -62807,7 +62886,7 @@ BI.StaticYearCard.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.static_year_card", BI.StaticYearCard);
 
 /***/ }),
-/* 685 */
+/* 688 */
 /***/ (function(module, exports) {
 
 BI.DynamicYearCombo = BI.inherit(BI.Widget, {
@@ -63024,7 +63103,7 @@ BI.extend(BI.DynamicYearCombo, {
 
 
 /***/ }),
-/* 686 */
+/* 689 */
 /***/ (function(module, exports) {
 
 /**
@@ -63276,7 +63355,7 @@ BI.DynamicYearPopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.dynamic_year_popup", BI.DynamicYearPopup);
 
 /***/ }),
-/* 687 */
+/* 690 */
 /***/ (function(module, exports) {
 
 BI.DynamicYearTrigger = BI.inherit(BI.Trigger, {
@@ -63471,7 +63550,7 @@ BI.DynamicYearTrigger.EVENT_VALID = "EVENT_VALID";
 BI.shortcut("bi.dynamic_year_trigger", BI.DynamicYearTrigger);
 
 /***/ }),
-/* 688 */
+/* 691 */
 /***/ (function(module, exports) {
 
 /**
@@ -63684,7 +63763,7 @@ BI.YearInterval.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
 BI.shortcut("bi.year_interval", BI.YearInterval);
 
 /***/ }),
-/* 689 */
+/* 692 */
 /***/ (function(module, exports) {
 
 /**
@@ -63855,7 +63934,7 @@ BI.DynamicYearMonthCard.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.dynamic_year_month_card", BI.DynamicYearMonthCard);
 
 /***/ }),
-/* 690 */
+/* 693 */
 /***/ (function(module, exports) {
 
 BI.StaticYearMonthCard = BI.inherit(BI.Widget, {
@@ -64024,7 +64103,7 @@ BI.shortcut("bi.static_year_month_card", BI.StaticYearMonthCard);
 
 
 /***/ }),
-/* 691 */
+/* 694 */
 /***/ (function(module, exports) {
 
 BI.DynamicYearMonthCombo = BI.inherit(BI.Single, {
@@ -64255,7 +64334,7 @@ BI.extend(BI.DynamicYearMonthCombo, {
 
 
 /***/ }),
-/* 692 */
+/* 695 */
 /***/ (function(module, exports) {
 
 /**
@@ -64502,7 +64581,7 @@ BI.DynamicYearMonthPopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.dynamic_year_month_popup", BI.DynamicYearMonthPopup);
 
 /***/ }),
-/* 693 */
+/* 696 */
 /***/ (function(module, exports) {
 
 BI.DynamicYearMonthTrigger = BI.inherit(BI.Trigger, {
@@ -64780,7 +64859,7 @@ BI.DynamicYearMonthTrigger.EVENT_KEY_DOWN = "EVENT_KEY_DOWN";
 BI.shortcut("bi.dynamic_year_month_trigger", BI.DynamicYearMonthTrigger);
 
 /***/ }),
-/* 694 */
+/* 697 */
 /***/ (function(module, exports) {
 
 BI.YearMonthInterval = BI.inherit(BI.Single, {
@@ -64992,7 +65071,7 @@ BI.shortcut("bi.year_month_interval", BI.YearMonthInterval);
 
 
 /***/ }),
-/* 695 */
+/* 698 */
 /***/ (function(module, exports) {
 
 /**
@@ -65163,7 +65242,7 @@ BI.DynamicYearQuarterCard.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.dynamic_year_quarter_card", BI.DynamicYearQuarterCard);
 
 /***/ }),
-/* 696 */
+/* 699 */
 /***/ (function(module, exports) {
 
 BI.StaticYearQuarterCard = BI.inherit(BI.Widget, {
@@ -65320,7 +65399,7 @@ BI.shortcut("bi.static_year_quarter_card", BI.StaticYearQuarterCard);
 
 
 /***/ }),
-/* 697 */
+/* 700 */
 /***/ (function(module, exports) {
 
 BI.DynamicYearQuarterCombo = BI.inherit(BI.Widget, {
@@ -65551,7 +65630,7 @@ BI.extend(BI.DynamicYearQuarterCombo, {
 
 
 /***/ }),
-/* 698 */
+/* 701 */
 /***/ (function(module, exports) {
 
 BI.DynamicYearQuarterPopup = BI.inherit(BI.Widget, {
@@ -65791,7 +65870,7 @@ BI.DynamicYearQuarterPopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.dynamic_year_quarter_popup", BI.DynamicYearQuarterPopup);
 
 /***/ }),
-/* 699 */
+/* 702 */
 /***/ (function(module, exports) {
 
 BI.DynamicYearQuarterTrigger = BI.inherit(BI.Trigger, {
@@ -66053,7 +66132,7 @@ BI.DynamicYearQuarterTrigger.EVENT_VALID = "EVENT_VALID";
 BI.shortcut("bi.dynamic_year_quarter_trigger", BI.DynamicYearQuarterTrigger);
 
 /***/ }),
-/* 700 */
+/* 703 */
 /***/ (function(module, exports) {
 
 /**
@@ -66264,7 +66343,7 @@ BI.YearQuarterInterval.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
 BI.shortcut("bi.year_quarter_interval", BI.YearQuarterInterval);
 
 /***/ }),
-/* 701 */
+/* 704 */
 /***/ (function(module, exports) {
 
 /**
@@ -66370,7 +66449,7 @@ BI.AbstractAllValueChooser = BI.inherit(BI.Widget, {
 });
 
 /***/ }),
-/* 702 */
+/* 705 */
 /***/ (function(module, exports) {
 
 /**
@@ -66452,7 +66531,7 @@ BI.shortcut("bi.all_value_chooser_combo", BI.AllValueChooserCombo);
 
 
 /***/ }),
-/* 703 */
+/* 706 */
 /***/ (function(module, exports) {
 
 /**
@@ -66526,7 +66605,7 @@ BI.shortcut("bi.all_value_chooser_pane", BI.AllValueChooserPane);
 
 
 /***/ }),
-/* 704 */
+/* 707 */
 /***/ (function(module, exports) {
 
 BI.AllValueMultiTextValueCombo = BI.inherit(BI.Widget, {
@@ -66597,7 +66676,7 @@ BI.shortcut("bi.all_value_multi_text_value_combo", BI.AllValueMultiTextValueComb
 
 
 /***/ }),
-/* 705 */
+/* 708 */
 /***/ (function(module, exports) {
 
 BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
@@ -67457,7 +67536,7 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
 
 
 /***/ }),
-/* 706 */
+/* 709 */
 /***/ (function(module, exports) {
 
 BI.AbstractListTreeValueChooser = BI.inherit(BI.AbstractTreeValueChooser, {
@@ -67749,7 +67828,7 @@ BI.AbstractListTreeValueChooser = BI.inherit(BI.AbstractTreeValueChooser, {
 });
 
 /***/ }),
-/* 707 */
+/* 710 */
 /***/ (function(module, exports) {
 
 /**
@@ -67865,7 +67944,7 @@ BI.shortcut("bi.list_tree_value_chooser_insert_combo", BI.ListTreeValueChooserIn
 
 
 /***/ }),
-/* 708 */
+/* 711 */
 /***/ (function(module, exports) {
 
 /**
@@ -67980,7 +68059,7 @@ BI.shortcut("bi.tree_value_chooser_insert_combo", BI.TreeValueChooserInsertCombo
 
 
 /***/ }),
-/* 709 */
+/* 712 */
 /***/ (function(module, exports) {
 
 /**
@@ -68099,7 +68178,7 @@ BI.shortcut("bi.tree_value_chooser_combo", BI.TreeValueChooserCombo);
 
 
 /***/ }),
-/* 710 */
+/* 713 */
 /***/ (function(module, exports) {
 
 /**
@@ -68167,7 +68246,7 @@ BI.shortcut("bi.tree_value_chooser_pane", BI.TreeValueChooserPane);
 
 
 /***/ }),
-/* 711 */
+/* 714 */
 /***/ (function(module, exports) {
 
 /**
@@ -68279,7 +68358,7 @@ BI.AbstractValueChooser = BI.inherit(BI.Widget, {
 });
 
 /***/ }),
-/* 712 */
+/* 715 */
 /***/ (function(module, exports) {
 
 /**
@@ -68389,7 +68468,7 @@ BI.shortcut("bi.value_chooser_insert_combo", BI.ValueChooserInsertCombo);
 
 
 /***/ }),
-/* 713 */
+/* 716 */
 /***/ (function(module, exports) {
 
 /**
@@ -68503,7 +68582,7 @@ BI.shortcut("bi.value_chooser_combo", BI.ValueChooserCombo);
 
 
 /***/ }),
-/* 714 */
+/* 717 */
 /***/ (function(module, exports) {
 
 /**
@@ -68605,7 +68684,7 @@ BI.shortcut("bi.value_chooser_no_bar_combo", BI.ValueChooserNoBarCombo);
 
 
 /***/ }),
-/* 715 */
+/* 718 */
 /***/ (function(module, exports) {
 
 /**
@@ -68681,20 +68760,20 @@ BI.shortcut("bi.value_chooser_pane", BI.ValueChooserPane);
 
 
 /***/ }),
-/* 716 */
+/* 719 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var _index = _interopRequireDefault(__webpack_require__(717));
+var _index = _interopRequireDefault(__webpack_require__(720));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 BI.extend(BI, _index["default"]);
 
 /***/ }),
-/* 717 */
+/* 720 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -69643,11 +69722,11 @@ Object.defineProperty(exports, "DateTimeCombo", {
 });
 exports["default"] = void 0;
 
-var _combo = __webpack_require__(718);
+var _combo = __webpack_require__(721);
 
 var _group = __webpack_require__(80);
 
-var _tab = __webpack_require__(719);
+var _tab = __webpack_require__(722);
 
 var _pane = __webpack_require__(22);
 
@@ -69655,23 +69734,23 @@ var _button = __webpack_require__(8);
 
 var _button2 = __webpack_require__(57);
 
-var _button3 = __webpack_require__(720);
+var _button3 = __webpack_require__(723);
 
-var _button4 = __webpack_require__(721);
+var _button4 = __webpack_require__(724);
 
-var _icontextitem = __webpack_require__(722);
+var _icontextitem = __webpack_require__(725);
 
-var _editor = __webpack_require__(723);
+var _editor = __webpack_require__(726);
 
-var _iframe = __webpack_require__(724);
+var _iframe = __webpack_require__(727);
 
-var _checkbox = __webpack_require__(725);
+var _checkbox = __webpack_require__(728);
 
-var _input = __webpack_require__(726);
+var _input = __webpack_require__(729);
 
 var _abstract = __webpack_require__(81);
 
-var _label = __webpack_require__(727);
+var _label = __webpack_require__(730);
 
 var _single = __webpack_require__(2);
 
@@ -69679,21 +69758,21 @@ var _text = __webpack_require__(82);
 
 var _trigger = __webpack_require__(83);
 
-var _icon = __webpack_require__(728);
+var _icon = __webpack_require__(731);
 
-var _item = __webpack_require__(729);
+var _item = __webpack_require__(732);
 
-var _combo2 = __webpack_require__(730);
+var _combo2 = __webpack_require__(733);
 
-var _combo3 = __webpack_require__(731);
+var _combo3 = __webpack_require__(734);
 
-var _combo4 = __webpack_require__(732);
+var _combo4 = __webpack_require__(735);
 
-var _editor2 = __webpack_require__(733);
+var _editor2 = __webpack_require__(736);
 
-var _loading_pane = __webpack_require__(734);
+var _loading_pane = __webpack_require__(737);
 
-var _allvalueMultitextvalue = __webpack_require__(735);
+var _allvalueMultitextvalue = __webpack_require__(738);
 
 var _abstract2 = __webpack_require__(45);
 
@@ -69701,15 +69780,15 @@ var _abstractTreevaluechooser = __webpack_require__(84);
 
 var _action = __webpack_require__(85);
 
-var _action2 = __webpack_require__(736);
+var _action2 = __webpack_require__(739);
 
 var _behavior = __webpack_require__(58);
 
-var _behavior2 = __webpack_require__(737);
+var _behavior2 = __webpack_require__(740);
 
-var _behavior3 = __webpack_require__(738);
+var _behavior3 = __webpack_require__(741);
 
-var decorator = _interopRequireWildcard(__webpack_require__(739));
+var decorator = _interopRequireWildcard(__webpack_require__(742));
 
 var _ob = __webpack_require__(34);
 
@@ -69717,225 +69796,225 @@ var _widget = __webpack_require__(1);
 
 var _layout = __webpack_require__(3);
 
-var _layout2 = __webpack_require__(740);
+var _layout2 = __webpack_require__(743);
 
-var _layout3 = __webpack_require__(741);
+var _layout3 = __webpack_require__(744);
 
-var _layout4 = __webpack_require__(742);
+var _layout4 = __webpack_require__(745);
 
-var _layout5 = __webpack_require__(743);
+var _layout5 = __webpack_require__(746);
 
-var _combo5 = __webpack_require__(744);
+var _combo5 = __webpack_require__(747);
 
-var _icon2 = __webpack_require__(745);
+var _icon2 = __webpack_require__(748);
 
-var _adapt = __webpack_require__(746);
+var _adapt = __webpack_require__(749);
 
-var _adapt2 = __webpack_require__(747);
+var _adapt2 = __webpack_require__(750);
 
-var _icontexticonitem = __webpack_require__(748);
+var _icontexticonitem = __webpack_require__(751);
 
-var _auto = __webpack_require__(749);
+var _auto = __webpack_require__(752);
 
-var _inline = __webpack_require__(750);
+var _inline = __webpack_require__(753);
 
-var _adapt3 = __webpack_require__(751);
+var _adapt3 = __webpack_require__(754);
 
 var _button5 = __webpack_require__(59);
 
 var _editor3 = __webpack_require__(86);
 
-var _icon3 = __webpack_require__(752);
+var _icon3 = __webpack_require__(755);
 
-var _layer = __webpack_require__(753);
+var _layer = __webpack_require__(756);
 
-var _combo6 = __webpack_require__(754);
+var _combo6 = __webpack_require__(757);
 
-var _dynamicdate = __webpack_require__(755);
+var _dynamicdate = __webpack_require__(758);
 
-var _customtree = __webpack_require__(756);
+var _customtree = __webpack_require__(759);
 
-var _tree = __webpack_require__(757);
+var _tree = __webpack_require__(760);
 
-var _nodeIcon = __webpack_require__(758);
+var _nodeIcon = __webpack_require__(761);
 
-var _itemMid = __webpack_require__(759);
+var _itemMid = __webpack_require__(762);
 
-var _itemFirst = __webpack_require__(760);
+var _itemFirst = __webpack_require__(763);
 
-var _itemLast = __webpack_require__(761);
+var _itemLast = __webpack_require__(764);
 
-var _editorText = __webpack_require__(762);
+var _editorText = __webpack_require__(765);
 
-var _editor4 = __webpack_require__(763);
+var _editor4 = __webpack_require__(766);
 
-var _absolute = __webpack_require__(764);
+var _absolute = __webpack_require__(767);
 
-var _adapt4 = __webpack_require__(765);
+var _adapt4 = __webpack_require__(768);
 
-var _layout6 = __webpack_require__(766);
+var _layout6 = __webpack_require__(769);
 
-var _adapt5 = __webpack_require__(767);
+var _adapt5 = __webpack_require__(770);
 
-var _adapt6 = __webpack_require__(768);
+var _adapt6 = __webpack_require__(771);
 
-var _multiselectInsert = __webpack_require__(769);
+var _multiselectInsert = __webpack_require__(772);
 
-var _multiselect = __webpack_require__(770);
+var _multiselect = __webpack_require__(773);
 
-var _editor5 = __webpack_require__(771);
+var _editor5 = __webpack_require__(774);
 
-var _multilayersingletree = __webpack_require__(772);
+var _multilayersingletree = __webpack_require__(775);
 
-var _colorchooser = __webpack_require__(773);
+var _colorchooser = __webpack_require__(776);
 
-var _a = __webpack_require__(774);
+var _a = __webpack_require__(777);
 
-var _html = __webpack_require__(775);
+var _html = __webpack_require__(778);
 
-var _switcher = __webpack_require__(776);
+var _switcher = __webpack_require__(779);
 
-var _loader = __webpack_require__(777);
+var _loader = __webpack_require__(780);
 
-var _pane2 = __webpack_require__(778);
+var _pane2 = __webpack_require__(781);
 
-var _toolbar = __webpack_require__(779);
+var _toolbar = __webpack_require__(782);
 
-var _list = __webpack_require__(780);
+var _list = __webpack_require__(783);
 
 var _abstract3 = __webpack_require__(87);
 
-var _combo7 = __webpack_require__(781);
+var _combo7 = __webpack_require__(784);
 
-var _editor6 = __webpack_require__(782);
+var _editor6 = __webpack_require__(785);
 
-var _item2 = __webpack_require__(783);
+var _item2 = __webpack_require__(786);
 
-var _dynamicdatetime = __webpack_require__(784);
+var _dynamicdatetime = __webpack_require__(787);
 
-var _multiTree = __webpack_require__(785);
+var _multiTree = __webpack_require__(788);
 
-var _middle = __webpack_require__(786);
+var _middle = __webpack_require__(789);
 
-var _group2 = __webpack_require__(787);
+var _group2 = __webpack_require__(790);
 
-var _layout7 = __webpack_require__(788);
+var _layout7 = __webpack_require__(791);
 
-var _icon4 = __webpack_require__(789);
+var _icon4 = __webpack_require__(792);
 
-var _searcher = __webpack_require__(790);
+var _searcher = __webpack_require__(793);
 
-var _combo8 = __webpack_require__(791);
+var _combo8 = __webpack_require__(794);
 
-var _combo9 = __webpack_require__(792);
+var _combo9 = __webpack_require__(795);
 
-var _comboTreevaluechooser = __webpack_require__(793);
+var _comboTreevaluechooser = __webpack_require__(796);
 
-var _radio = __webpack_require__(794);
+var _radio = __webpack_require__(797);
 
-var _multilayerselecttree = __webpack_require__(795);
+var _multilayerselecttree = __webpack_require__(798);
 
-var _multilayersingletree2 = __webpack_require__(796);
+var _multilayersingletree2 = __webpack_require__(799);
 
 var _treeview = __webpack_require__(60);
 
-var _multiTree2 = __webpack_require__(797);
+var _multiTree2 = __webpack_require__(800);
 
-var _itemSingleselect = __webpack_require__(798);
+var _itemSingleselect = __webpack_require__(801);
 
-var _singleselectInsert = __webpack_require__(799);
+var _singleselectInsert = __webpack_require__(802);
 
-var _singleselect = __webpack_require__(800);
+var _singleselect = __webpack_require__(803);
 
-var _layout8 = __webpack_require__(801);
+var _layout8 = __webpack_require__(804);
 
-var _combo10 = __webpack_require__(802);
+var _combo10 = __webpack_require__(805);
 
-var _time = __webpack_require__(803);
+var _time = __webpack_require__(806);
 
 var _listtreeview = __webpack_require__(88);
 
-var _listasynctree = __webpack_require__(804);
+var _listasynctree = __webpack_require__(807);
 
-var _asynctree = __webpack_require__(805);
+var _asynctree = __webpack_require__(808);
 
-var _multilayersingletree3 = __webpack_require__(806);
+var _multilayersingletree3 = __webpack_require__(809);
 
-var _multilayerselecttree2 = __webpack_require__(807);
+var _multilayerselecttree2 = __webpack_require__(810);
 
-var _multiTreeList = __webpack_require__(808);
+var _multiTreeList = __webpack_require__(811);
 
-var _multiTreeInsert = __webpack_require__(809);
+var _multiTreeInsert = __webpack_require__(812);
 
-var _combo11 = __webpack_require__(810);
+var _combo11 = __webpack_require__(813);
 
-var _switch = __webpack_require__(811);
+var _switch = __webpack_require__(814);
 
-var _layout9 = __webpack_require__(812);
+var _layout9 = __webpack_require__(815);
 
-var _editor7 = __webpack_require__(813);
+var _editor7 = __webpack_require__(816);
 
-var _triggerText = __webpack_require__(814);
+var _triggerText = __webpack_require__(817);
 
-var _dateinterval = __webpack_require__(815);
+var _dateinterval = __webpack_require__(818);
 
-var _datepane = __webpack_require__(816);
+var _datepane = __webpack_require__(819);
 
-var _pagerAll = __webpack_require__(817);
+var _pagerAll = __webpack_require__(820);
 
 var _layer2 = __webpack_require__(89);
 
-var _popup = __webpack_require__(818);
+var _popup = __webpack_require__(821);
 
-var _check = __webpack_require__(819);
+var _check = __webpack_require__(822);
 
-var _numberinterval = __webpack_require__(820);
+var _numberinterval = __webpack_require__(823);
 
-var _combo12 = __webpack_require__(821);
+var _combo12 = __webpack_require__(824);
 
-var _combo13 = __webpack_require__(822);
+var _combo13 = __webpack_require__(825);
 
-var _intervalslider = __webpack_require__(823);
+var _intervalslider = __webpack_require__(826);
 
-var _multiselectlist = __webpack_require__(824);
+var _multiselectlist = __webpack_require__(827);
 
-var _yearmonthinterval = __webpack_require__(825);
+var _yearmonthinterval = __webpack_require__(828);
 
-var _numbereditor = __webpack_require__(826);
+var _numbereditor = __webpack_require__(829);
 
-var _combo14 = __webpack_require__(827);
+var _combo14 = __webpack_require__(830);
 
-var _linear = __webpack_require__(828);
+var _linear = __webpack_require__(831);
 
-var _img = __webpack_require__(829);
+var _img = __webpack_require__(832);
 
-var _combo15 = __webpack_require__(830);
+var _combo15 = __webpack_require__(833);
 
-var _combo16 = __webpack_require__(831);
+var _combo16 = __webpack_require__(834);
 
-var _listview = __webpack_require__(832);
+var _listview = __webpack_require__(835);
 
-var _middleFloat = __webpack_require__(833);
+var _middleFloat = __webpack_require__(836);
 
-var _popup2 = __webpack_require__(834);
+var _popup2 = __webpack_require__(837);
 
 var _controller = __webpack_require__(90);
 
-var _controller2 = __webpack_require__(835);
+var _controller2 = __webpack_require__(838);
 
-var _popupCalendar = __webpack_require__(836);
+var _popupCalendar = __webpack_require__(839);
 
-var _tree2 = __webpack_require__(837);
+var _tree2 = __webpack_require__(840);
 
-var _textnode = __webpack_require__(838);
+var _textnode = __webpack_require__(841);
 
-var _popup3 = __webpack_require__(839);
+var _popup3 = __webpack_require__(842);
 
-var _button6 = __webpack_require__(840);
+var _button6 = __webpack_require__(843);
 
-var _router = __webpack_require__(841);
+var _router = __webpack_require__(844);
 
-var _datetime = __webpack_require__(842);
+var _datetime = __webpack_require__(845);
 
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
@@ -69947,40 +70026,13 @@ var _default = {
 exports["default"] = _default;
 
 /***/ }),
-/* 718 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _widget = __webpack_require__(1);
-
-/***/ }),
-/* 719 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _widget = __webpack_require__(1);
-
-/***/ }),
-/* 720 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _button = __webpack_require__(8);
-
-/***/ }),
 /* 721 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var _button = __webpack_require__(8);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 722 */
@@ -69989,7 +70041,7 @@ var _button = __webpack_require__(8);
 "use strict";
 
 
-var _button = __webpack_require__(8);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 723 */
@@ -69998,7 +70050,7 @@ var _button = __webpack_require__(8);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _button = __webpack_require__(8);
 
 /***/ }),
 /* 724 */
@@ -70007,7 +70059,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _button = __webpack_require__(8);
 
 /***/ }),
 /* 725 */
@@ -70034,7 +70086,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _abstract = __webpack_require__(81);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 728 */
@@ -70043,7 +70095,7 @@ var _abstract = __webpack_require__(81);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _button = __webpack_require__(8);
 
 /***/ }),
 /* 729 */
@@ -70052,7 +70104,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _button = __webpack_require__(8);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 730 */
@@ -70061,7 +70113,7 @@ var _button = __webpack_require__(8);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _abstract = __webpack_require__(81);
 
 /***/ }),
 /* 731 */
@@ -70070,7 +70122,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 732 */
@@ -70079,7 +70131,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _button = __webpack_require__(8);
 
 /***/ }),
 /* 733 */
@@ -70097,7 +70149,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _pane = __webpack_require__(22);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 735 */
@@ -70115,7 +70167,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _action = __webpack_require__(85);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 737 */
@@ -70124,7 +70176,7 @@ var _action = __webpack_require__(85);
 "use strict";
 
 
-var _behavior = __webpack_require__(58);
+var _pane = __webpack_require__(22);
 
 /***/ }),
 /* 738 */
@@ -70133,10 +70185,37 @@ var _behavior = __webpack_require__(58);
 "use strict";
 
 
-var _behavior = __webpack_require__(58);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 739 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _action = __webpack_require__(85);
+
+/***/ }),
+/* 740 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _behavior = __webpack_require__(58);
+
+/***/ }),
+/* 741 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _behavior = __webpack_require__(58);
+
+/***/ }),
+/* 742 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -70347,33 +70426,6 @@ type UnionToTuple<U> = UnionToTupleRecursively<U, []>;
 exports.Model = Model;
 
 /***/ }),
-/* 740 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _layout = __webpack_require__(3);
-
-/***/ }),
-/* 741 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _layout = __webpack_require__(3);
-
-/***/ }),
-/* 742 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _layout = __webpack_require__(3);
-
-/***/ }),
 /* 743 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -70389,7 +70441,7 @@ var _layout = __webpack_require__(3);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _layout = __webpack_require__(3);
 
 /***/ }),
 /* 745 */
@@ -70398,7 +70450,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _layout = __webpack_require__(3);
 
 /***/ }),
 /* 746 */
@@ -70416,7 +70468,7 @@ var _layout = __webpack_require__(3);
 "use strict";
 
 
-var _layout = __webpack_require__(3);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 748 */
@@ -70425,7 +70477,7 @@ var _layout = __webpack_require__(3);
 "use strict";
 
 
-var _button = __webpack_require__(8);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 749 */
@@ -70452,7 +70504,7 @@ var _layout = __webpack_require__(3);
 "use strict";
 
 
-var _layout = __webpack_require__(3);
+var _button = __webpack_require__(8);
 
 /***/ }),
 /* 752 */
@@ -70461,7 +70513,7 @@ var _layout = __webpack_require__(3);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _layout = __webpack_require__(3);
 
 /***/ }),
 /* 753 */
@@ -70470,7 +70522,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _layout = __webpack_require__(3);
 
 /***/ }),
 /* 754 */
@@ -70479,7 +70531,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _layout = __webpack_require__(3);
 
 /***/ }),
 /* 755 */
@@ -70506,7 +70558,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _group = __webpack_require__(80);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 758 */
@@ -70515,7 +70567,7 @@ var _group = __webpack_require__(80);
 "use strict";
 
 
-var _button = __webpack_require__(57);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 759 */
@@ -70524,7 +70576,7 @@ var _button = __webpack_require__(57);
 "use strict";
 
 
-var _button = __webpack_require__(8);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 760 */
@@ -70533,7 +70585,7 @@ var _button = __webpack_require__(8);
 "use strict";
 
 
-var _button = __webpack_require__(8);
+var _group = __webpack_require__(80);
 
 /***/ }),
 /* 761 */
@@ -70542,7 +70594,7 @@ var _button = __webpack_require__(8);
 "use strict";
 
 
-var _button = __webpack_require__(8);
+var _button = __webpack_require__(57);
 
 /***/ }),
 /* 762 */
@@ -70551,7 +70603,7 @@ var _button = __webpack_require__(8);
 "use strict";
 
 
-var _editor = __webpack_require__(86);
+var _button = __webpack_require__(8);
 
 /***/ }),
 /* 763 */
@@ -70560,7 +70612,7 @@ var _editor = __webpack_require__(86);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _button = __webpack_require__(8);
 
 /***/ }),
 /* 764 */
@@ -70569,7 +70621,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _layout = __webpack_require__(3);
+var _button = __webpack_require__(8);
 
 /***/ }),
 /* 765 */
@@ -70578,7 +70630,7 @@ var _layout = __webpack_require__(3);
 "use strict";
 
 
-var _layout = __webpack_require__(3);
+var _editor = __webpack_require__(86);
 
 /***/ }),
 /* 766 */
@@ -70587,7 +70639,7 @@ var _layout = __webpack_require__(3);
 "use strict";
 
 
-var _layout = __webpack_require__(3);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 767 */
@@ -70614,7 +70666,7 @@ var _layout = __webpack_require__(3);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _layout = __webpack_require__(3);
 
 /***/ }),
 /* 770 */
@@ -70623,7 +70675,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _layout = __webpack_require__(3);
 
 /***/ }),
 /* 771 */
@@ -70632,7 +70684,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _layout = __webpack_require__(3);
 
 /***/ }),
 /* 772 */
@@ -70641,7 +70693,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _pane = __webpack_require__(22);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 773 */
@@ -70650,7 +70702,7 @@ var _pane = __webpack_require__(22);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 774 */
@@ -70659,7 +70711,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _text = __webpack_require__(82);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 775 */
@@ -70668,7 +70720,7 @@ var _text = __webpack_require__(82);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _pane = __webpack_require__(22);
 
 /***/ }),
 /* 776 */
@@ -70686,7 +70738,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _text = __webpack_require__(82);
 
 /***/ }),
 /* 778 */
@@ -70695,7 +70747,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _pane = __webpack_require__(22);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 779 */
@@ -70704,7 +70756,7 @@ var _pane = __webpack_require__(22);
 "use strict";
 
 
-var _button = __webpack_require__(8);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 780 */
@@ -70722,7 +70774,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _abstract = __webpack_require__(87);
+var _pane = __webpack_require__(22);
 
 /***/ }),
 /* 782 */
@@ -70731,7 +70783,7 @@ var _abstract = __webpack_require__(87);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _button = __webpack_require__(8);
 
 /***/ }),
 /* 783 */
@@ -70740,7 +70792,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _button = __webpack_require__(8);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 784 */
@@ -70749,7 +70801,7 @@ var _button = __webpack_require__(8);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _abstract = __webpack_require__(87);
 
 /***/ }),
 /* 785 */
@@ -70767,7 +70819,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _layout = __webpack_require__(3);
+var _button = __webpack_require__(8);
 
 /***/ }),
 /* 787 */
@@ -70776,7 +70828,7 @@ var _layout = __webpack_require__(3);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 788 */
@@ -70785,7 +70837,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _layout = __webpack_require__(3);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 789 */
@@ -70794,7 +70846,7 @@ var _layout = __webpack_require__(3);
 "use strict";
 
 
-var _button = __webpack_require__(59);
+var _layout = __webpack_require__(3);
 
 /***/ }),
 /* 790 */
@@ -70812,7 +70864,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _abstractTreevaluechooser = __webpack_require__(84);
+var _layout = __webpack_require__(3);
 
 /***/ }),
 /* 792 */
@@ -70821,7 +70873,7 @@ var _abstractTreevaluechooser = __webpack_require__(84);
 "use strict";
 
 
-var _abstract = __webpack_require__(45);
+var _button = __webpack_require__(59);
 
 /***/ }),
 /* 793 */
@@ -70830,7 +70882,7 @@ var _abstract = __webpack_require__(45);
 "use strict";
 
 
-var _abstract = __webpack_require__(45);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 794 */
@@ -70839,7 +70891,7 @@ var _abstract = __webpack_require__(45);
 "use strict";
 
 
-var _button = __webpack_require__(8);
+var _abstractTreevaluechooser = __webpack_require__(84);
 
 /***/ }),
 /* 795 */
@@ -70848,7 +70900,7 @@ var _button = __webpack_require__(8);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _abstract = __webpack_require__(45);
 
 /***/ }),
 /* 796 */
@@ -70857,7 +70909,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _abstract = __webpack_require__(45);
 
 /***/ }),
 /* 797 */
@@ -70866,7 +70918,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _pane = __webpack_require__(22);
+var _button = __webpack_require__(8);
 
 /***/ }),
 /* 798 */
@@ -70875,7 +70927,7 @@ var _pane = __webpack_require__(22);
 "use strict";
 
 
-var _button = __webpack_require__(8);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 799 */
@@ -70884,7 +70936,7 @@ var _button = __webpack_require__(8);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 800 */
@@ -70893,7 +70945,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _pane = __webpack_require__(22);
 
 /***/ }),
 /* 801 */
@@ -70902,7 +70954,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _layout = __webpack_require__(3);
+var _button = __webpack_require__(8);
 
 /***/ }),
 /* 802 */
@@ -70929,7 +70981,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _listtreeview = __webpack_require__(88);
+var _layout = __webpack_require__(3);
 
 /***/ }),
 /* 805 */
@@ -70938,7 +70990,7 @@ var _listtreeview = __webpack_require__(88);
 "use strict";
 
 
-var _treeview = __webpack_require__(60);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 806 */
@@ -70947,7 +70999,7 @@ var _treeview = __webpack_require__(60);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 807 */
@@ -70956,7 +71008,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _listtreeview = __webpack_require__(88);
 
 /***/ }),
 /* 808 */
@@ -70965,7 +71017,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _treeview = __webpack_require__(60);
 
 /***/ }),
 /* 809 */
@@ -70974,7 +71026,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 810 */
@@ -70992,7 +71044,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _button = __webpack_require__(8);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 812 */
@@ -71001,7 +71053,7 @@ var _button = __webpack_require__(8);
 "use strict";
 
 
-var _layout = __webpack_require__(3);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 813 */
@@ -71019,7 +71071,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _trigger = __webpack_require__(83);
+var _button = __webpack_require__(8);
 
 /***/ }),
 /* 815 */
@@ -71028,7 +71080,7 @@ var _trigger = __webpack_require__(83);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _layout = __webpack_require__(3);
 
 /***/ }),
 /* 816 */
@@ -71046,10 +71098,37 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _trigger = __webpack_require__(83);
 
 /***/ }),
 /* 818 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _single = __webpack_require__(2);
+
+/***/ }),
+/* 819 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _widget = __webpack_require__(1);
+
+/***/ }),
+/* 820 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _widget = __webpack_require__(1);
+
+/***/ }),
+/* 821 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -71060,40 +71139,13 @@ var _layer = __webpack_require__(89);
 var _widget = __webpack_require__(1);
 
 /***/ }),
-/* 819 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _button = __webpack_require__(59);
-
-/***/ }),
-/* 820 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _single = __webpack_require__(2);
-
-/***/ }),
-/* 821 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _widget = __webpack_require__(1);
-
-/***/ }),
 /* 822 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _button = __webpack_require__(59);
 
 /***/ }),
 /* 823 */
@@ -71111,7 +71163,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 825 */
@@ -71120,7 +71172,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 826 */
@@ -71129,7 +71181,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 827 */
@@ -71138,7 +71190,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 828 */
@@ -71147,7 +71199,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 829 */
@@ -71156,7 +71208,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 830 */
@@ -71183,7 +71235,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 833 */
@@ -71192,7 +71244,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _layout = __webpack_require__(3);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 834 */
@@ -71210,7 +71262,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _controller = __webpack_require__(90);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 836 */
@@ -71219,7 +71271,7 @@ var _controller = __webpack_require__(90);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _layout = __webpack_require__(3);
 
 /***/ }),
 /* 837 */
@@ -71228,6 +71280,8 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
+var _widget = __webpack_require__(1);
+
 /***/ }),
 /* 838 */
 /***/ (function(module, exports, __webpack_require__) {
@@ -71235,7 +71289,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _button = __webpack_require__(57);
+var _controller = __webpack_require__(90);
 
 /***/ }),
 /* 839 */
@@ -71244,7 +71298,7 @@ var _button = __webpack_require__(57);
 "use strict";
 
 
-var _pane = __webpack_require__(22);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 840 */
@@ -71253,14 +71307,14 @@ var _pane = __webpack_require__(22);
 "use strict";
 
 
-var _button = __webpack_require__(8);
-
 /***/ }),
 /* 841 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
+
+var _button = __webpack_require__(57);
 
 /***/ }),
 /* 842 */
@@ -71269,12 +71323,34 @@ var _button = __webpack_require__(8);
 "use strict";
 
 
+var _pane = __webpack_require__(22);
+
+/***/ }),
+/* 843 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _button = __webpack_require__(8);
+
+/***/ }),
+/* 844 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+/***/ }),
+/* 845 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
 var _single = __webpack_require__(2);
 
 /***/ }),
-/* 843 */,
-/* 844 */,
-/* 845 */,
 /* 846 */,
 /* 847 */,
 /* 848 */,
@@ -71322,7 +71398,10 @@ var _single = __webpack_require__(2);
 /* 890 */,
 /* 891 */,
 /* 892 */,
-/* 893 */
+/* 893 */,
+/* 894 */,
+/* 895 */,
+/* 896 */
 /***/ (function(module, exports) {
 
 ;(function () {
@@ -71485,17 +71564,17 @@ var _single = __webpack_require__(2);
 
 
 /***/ }),
-/* 894 */,
-/* 895 */,
-/* 896 */,
-/* 897 */
+/* 897 */,
+/* 898 */,
+/* 899 */,
+/* 900 */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(global) {module.exports = global["Fix"] = __webpack_require__(898);
+/* WEBPACK VAR INJECTION */(function(global) {module.exports = global["Fix"] = __webpack_require__(901);
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(17)))
 
 /***/ }),
-/* 898 */
+/* 901 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(setImmediate) {function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -73028,8 +73107,8 @@ var _single = __webpack_require__(2);
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(63).setImmediate))
 
 /***/ }),
-/* 899 */,
-/* 900 */
+/* 902 */,
+/* 903 */
 /***/ (function(module, exports) {
 
 ;(function () {
@@ -73376,9 +73455,6 @@ var _single = __webpack_require__(2);
 
 
 /***/ }),
-/* 901 */,
-/* 902 */,
-/* 903 */,
 /* 904 */,
 /* 905 */,
 /* 906 */,
@@ -73593,15 +73669,15 @@ var _single = __webpack_require__(2);
 /* 1115 */,
 /* 1116 */,
 /* 1117 */,
-/* 1118 */
+/* 1118 */,
+/* 1119 */,
+/* 1120 */,
+/* 1121 */
 /***/ (function(module, exports) {
 
 
 
 /***/ }),
-/* 1119 */,
-/* 1120 */,
-/* 1121 */,
 /* 1122 */,
 /* 1123 */,
 /* 1124 */,
@@ -73897,15 +73973,18 @@ var _single = __webpack_require__(2);
 /* 1414 */,
 /* 1415 */,
 /* 1416 */,
-/* 1417 */
+/* 1417 */,
+/* 1418 */,
+/* 1419 */,
+/* 1420 */
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(123);
 __webpack_require__(124);
 __webpack_require__(127);
 __webpack_require__(129);
-__webpack_require__(326);
-__webpack_require__(327);
+__webpack_require__(328);
+__webpack_require__(329);
 __webpack_require__(130);
 __webpack_require__(131);
 __webpack_require__(132);
@@ -73920,14 +73999,12 @@ __webpack_require__(140);
 __webpack_require__(141);
 __webpack_require__(142);
 __webpack_require__(143);
-__webpack_require__(330);
-__webpack_require__(331);
 __webpack_require__(332);
 __webpack_require__(333);
 __webpack_require__(334);
-__webpack_require__(144);
 __webpack_require__(335);
 __webpack_require__(336);
+__webpack_require__(144);
 __webpack_require__(337);
 __webpack_require__(338);
 __webpack_require__(339);
@@ -73937,24 +74014,24 @@ __webpack_require__(342);
 __webpack_require__(343);
 __webpack_require__(344);
 __webpack_require__(345);
-__webpack_require__(145);
 __webpack_require__(346);
+__webpack_require__(347);
+__webpack_require__(145);
+__webpack_require__(348);
 __webpack_require__(146);
 __webpack_require__(147);
 __webpack_require__(148);
 __webpack_require__(149);
 __webpack_require__(150);
 __webpack_require__(151);
-__webpack_require__(347);
-__webpack_require__(348);
 __webpack_require__(349);
 __webpack_require__(350);
 __webpack_require__(351);
-__webpack_require__(328);
-__webpack_require__(329);
-__webpack_require__(152);
 __webpack_require__(352);
 __webpack_require__(353);
+__webpack_require__(330);
+__webpack_require__(331);
+__webpack_require__(152);
 __webpack_require__(354);
 __webpack_require__(355);
 __webpack_require__(356);
@@ -73998,13 +74075,13 @@ __webpack_require__(393);
 __webpack_require__(394);
 __webpack_require__(395);
 __webpack_require__(396);
-__webpack_require__(153);
-__webpack_require__(154);
-__webpack_require__(155);
-__webpack_require__(897);
 __webpack_require__(397);
 __webpack_require__(398);
 __webpack_require__(399);
+__webpack_require__(153);
+__webpack_require__(154);
+__webpack_require__(155);
+__webpack_require__(900);
 __webpack_require__(400);
 __webpack_require__(401);
 __webpack_require__(402);
@@ -74151,6 +74228,9 @@ __webpack_require__(542);
 __webpack_require__(543);
 __webpack_require__(544);
 __webpack_require__(545);
+__webpack_require__(546);
+__webpack_require__(547);
+__webpack_require__(548);
 __webpack_require__(156);
 __webpack_require__(157);
 __webpack_require__(158);
@@ -74211,9 +74291,6 @@ __webpack_require__(212);
 __webpack_require__(213);
 __webpack_require__(214);
 __webpack_require__(215);
-__webpack_require__(546);
-__webpack_require__(547);
-__webpack_require__(548);
 __webpack_require__(549);
 __webpack_require__(550);
 __webpack_require__(551);
@@ -74381,10 +74458,13 @@ __webpack_require__(712);
 __webpack_require__(713);
 __webpack_require__(714);
 __webpack_require__(715);
-__webpack_require__(900);
-__webpack_require__(893);
-__webpack_require__(1118);
-module.exports = __webpack_require__(716);
+__webpack_require__(716);
+__webpack_require__(717);
+__webpack_require__(718);
+__webpack_require__(903);
+__webpack_require__(896);
+__webpack_require__(1121);
+module.exports = __webpack_require__(719);
 
 
 /***/ })
