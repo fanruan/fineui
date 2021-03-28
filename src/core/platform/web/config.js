@@ -52,7 +52,7 @@ BI.prepares.push(function () {
         return BI.extend({}, ob, {type: "bi.table_adapt"});
     });
     BI.Plugin.configWidget("bi.center_adapt", function (ob) {
-        var isIE = BI.isIE(), supportFlex = isSupportFlex(), justOneItem = (ob.items && ob.items.length <= 1);
+        var supportFlex = isSupportFlex(), justOneItem = (ob.items && ob.items.length <= 1);
         var isAdapt = !ob.horizontalAlign || ob.horizontalAlign === BI.HorizontalAlign.Center || ob.horizontalAlign === BI.HorizontalAlign.Stretch;
         if (!isAdapt || justOneItem) {
             if (supportFlex) {
@@ -66,7 +66,7 @@ BI.prepares.push(function () {
         return ob;
     });
     BI.Plugin.configWidget("bi.vertical_adapt", function (ob) {
-        var isIE = BI.isIE(), supportFlex = isSupportFlex(), justOneItem = (ob.items && ob.items.length <= 1);
+        var supportFlex = isSupportFlex(), justOneItem = (ob.items && ob.items.length <= 1);
         var isAdapt = ob.horizontalAlign === BI.HorizontalAlign.Center || ob.horizontalAlign === BI.HorizontalAlign.Stretch;
         if (!isAdapt || justOneItem) {
             if (supportFlex) {
