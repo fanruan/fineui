@@ -34,17 +34,24 @@ BI.FlexVerticalLayout = BI.inherit(BI.Layout, {
             position: "relative"
         });
         if (o.rowSize[i] !== "auto") {
-            if (o.verticalAlign === BI.VerticalAlign.Stretch && o.rowSize[i] !== "") {
-                w.element.addClass("fill");
+            if (o.verticalAlign === BI.VerticalAlign.Stretch && o.rowSize[i] === "fill") {
+                w.element.addClass("f-f");
             } else {
-                w.element.addClass("shrink-none");
+                w.element.addClass("f-s-n");
             }
         }
         if (o.rowSize[i] > 0) {
-            w.element.height(o.rowSize[i] <= 1 ? ((o.rowSize[i] * 100).toFixed(1) + "%") : (o.rowSize[i] / BI.pixRatio + BI.pixUnit));
+            w.element.height(o.rowSize[i] === "" ? "" : (o.rowSize[i] <= 1 ? ((o.rowSize[i] * 100).toFixed(1) + "%") : (o.rowSize[i] / BI.pixRatio + BI.pixUnit)));
         }
         if (o.rowSize[i] === "fill") {
-            w.element.addClass("fill");
+            w.element.addClass("f-f");
+        }
+        w.element.addClass("c-e");
+        if (i === 0) {
+            w.element.addClass("f-c");
+        }
+        if (i === o.items.length - 1) {
+            w.element.addClass("l-c");
         }
         if (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
             w.element.css({
