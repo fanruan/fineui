@@ -52,6 +52,9 @@ BI.InlineLayout = BI.inherit(BI.Layout, {
                 right += o.hgap + o.lgap + o.rgap + o.columnSize[k];
             }
             w.element.css("min-width", "calc(100% - " + ((left + right) / BI.pixRatio + BI.pixUnit) + ")");
+            if (o.horizontalAlign === BI.HorizontalAlign.Stretch) {
+                w.element.width(0);
+            }
         }
         if (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
             w.element.css({
