@@ -33,22 +33,29 @@ BI.prepares.push(function () {
                 });
                 // }
             }
+            // // IE9以上可以使用calc计算布局
+            // if (!isIE || BI.getIEVersion() > 8) {
+            //     return BI.extend({}, ob, {
+            //         type: "bi.inline",
+            //         horizontalAlign: !justOneItem && ob.horizontalAlign === BI.HorizontalAlign.Center
+            //             ? BI.HorizontalAlign.Left : ob.horizontalAlign
+            //     });
+            // }
             return BI.extend({}, ob, {type: "bi.table_adapt"});
         }
         if (supportFlex) {
             // IE下其实也是可以使用flex布局的，只要排除掉出现滚动条的情况
-            if (!isIE || (ob.scrollable !== true && ob.scrolly !== true)) {
-                return BI.extend({}, ob, {type: "bi.flex_horizontal"});
-            }
+            // if (!isIE || (ob.scrollable !== true && ob.scrolly !== true)) {
+            return BI.extend({}, ob, {type: "bi.flex_horizontal"});
+            // }
         }
-        // // 解决使用inline_vertical_adapt的顺序问题
-        // // 从右往左放置时，为了兼容，我们统一采用从右到左的放置方式
-        // if (ob.horizontalAlign === BI.HorizontalAlign.Right) {
-        //     return BI.extend({verticalAlign: BI.VerticalAlign.Top}, ob, {
-        //         type: "bi.inline_vertical_adapt",
-        //         items: ob.items && ob.items.reverse()
+        // // IE9以上采用inline
+        // if (!isIE || BI.getIEVersion() > 8) {
+        //     return BI.extend({}, ob, {
+        //         type: "bi.inline"
         //     });
         // }
+        // 否则采用table，不过horizontalAlign的right就不支持了。
         return BI.extend({}, ob, {type: "bi.table_adapt"});
     });
     BI.Plugin.configWidget("bi.center_adapt", function (ob) {
@@ -61,7 +68,9 @@ BI.prepares.push(function () {
                 return BI.extend({}, ob, {type: "bi.flex_center_adapt"});
                 // }
             }
-            return BI.extend({}, ob, {type: "bi.inline_center_adapt"});
+            if (!BI.isIE() || BI.getIEVersion() > 8) {
+                return BI.extend({}, ob, {type: "bi.inline_center_adapt"});
+            }
         }
         return ob;
     });
@@ -75,7 +84,9 @@ BI.prepares.push(function () {
                 return BI.extend({}, ob, {type: "bi.flex_vertical_adapt"});
                 // }
             }
-            return BI.extend({}, ob, {type: "bi.inline_vertical_adapt"});
+            if (!BI.isIE() || BI.getIEVersion() > 8) {
+                return BI.extend({}, ob, {type: "bi.inline_vertical_adapt"});
+            }
         }
         return ob;
     });
