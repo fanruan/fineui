@@ -57,7 +57,7 @@ BI.FlexLeftRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
         rightItems = BI.map(rightItems, function (i, item) {
             if (i === 0) {
                 if (BI.isWidget(item)) {
-                    item.addClass("flex-left-auto");
+                    item.element.addClass("flex-left-auto");
                 } else {
                     var t = BI.stripEL(item);
                     t.cls = (t.cls || "") + " flex-left-auto";
