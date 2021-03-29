@@ -109,7 +109,9 @@ BI.SingleSelectLoader = BI.inherit(BI.Widget, {
             logic: this.options.logic,
             cls: "bi-list-item-active",
             height: 24,
-            selected: false
+            selected: false,
+            iconWrapperWidth: 26,
+            hgap: this.options.allowNoSelect ? 10 : 0
         });
     },
 
