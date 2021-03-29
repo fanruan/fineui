@@ -1,4 +1,4 @@
-/*! time: 2021-3-29 09:30:29 */
+/*! time: 2021-3-29 11:30:24 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -19113,7 +19113,7 @@ BI.FlexLeftRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
         rightItems = BI.map(rightItems, function (i, item) {
             if (i === 0) {
                 if (BI.isWidget(item)) {
-                    item.addClass("flex-left-auto");
+                    item.element.addClass("flex-left-auto");
                 } else {
                     var t = BI.stripEL(item);
                     t.cls = (t.cls || "") + " flex-left-auto";
