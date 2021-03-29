@@ -12,6 +12,9 @@ BI.InlineLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.InlineLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-i",
+            horizontalAlign: BI.HorizontalAlign.Left,
+            verticalAlign: BI.VerticalAlign.Top,
+            columnSize: [],
             hgap: 0,
             vgap: 0,
             lgap: 0,
@@ -23,13 +26,36 @@ BI.InlineLayout = BI.inherit(BI.Layout, {
 
     render: function () {
         BI.InlineLayout.superclass.render.apply(this, arguments);
-        this.populate(this.options.items);
+        var o = this.options;
+        this.element.css({
+            textAlign: o.horizontalAlign
+        });
+        this.populate(o.items);
     },
 
-    _addElement: function (i, item) {
+    _addElement: function (i, item, length) {
         var o = this.options;
         var w = BI.InlineLayout.superclass._addElement.apply(this, arguments);
-        w.element.css({"position": "relative", display: "inline-block", "*display": "inline", "*zoom": 1});
+        w.element.css({
+            width: o.columnSize[i] === "" ? "" : (o.columnSize[i] <= 1 ? ((o.columnSize[i] * 100).toFixed(1) + "%") : (o.columnSize[i] / BI.pixRatio + BI.pixUnit)),
+            position: "relative",
+            "vertical-align": o.verticalAlign
+        });
+        w.element.addClass("i-item");
+        if (o.columnSize[i] === "fill") {
+            var left = o.hgap + (item.lgap || 0) + (item.hgap || 0),
+                right = o.hgap + (item.rgap || 0) + (item.hgap || 0);
+            for (var k = 0; k < i; k++) {
+                left += o.hgap + o.lgap + o.rgap + o.columnSize[k];
+            }
+            for (var k = i + 1; k < o.columnSize.length; k++) {
+                right += o.hgap + o.lgap + o.rgap + o.columnSize[k];
+            }
+            w.element.css("min-width", "calc(100% - " + ((left + right) / BI.pixRatio + BI.pixUnit) + ")");
+            if (o.horizontalAlign === BI.HorizontalAlign.Stretch) {
+                w.element.width(0);
+            }
+        }
         if (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
             w.element.css({
                 "margin-top": (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0)) / BI.pixRatio + BI.pixUnit
@@ -55,6 +81,19 @@ BI.InlineLayout = BI.inherit(BI.Layout, {
 
     resize: function () {
         this.stroke(this.options.items);
+    },
+
+    addItem: function (item) {
+        throw new Error("不能添加元素");
+    },
+
+    stroke: function (items) {
+        var self = this;
+        BI.each(items, function (i, item) {
+            if (item) {
+                self._addElement(i, item, items.length);
+            }
+        });
     },
 
     populate: function (items) {

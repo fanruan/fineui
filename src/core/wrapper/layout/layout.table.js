@@ -9,21 +9,11 @@ BI.TableLayout = BI.inherit(BI.Layout, {
         return BI.extend(BI.TableLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-t",
             scrolly: true,
-            columnSize: [200, 200, "fill"],
+            columnSize: [],
             rowSize: 30,  // or [30,30,30]
             hgap: 0,
             vgap: 0,
-            items: [[
-                {
-                    el: {text: "label1"}
-                },
-                {
-                    el: {text: "label2"}
-                },
-                {
-                    el: {text: "label3"}
-                }
-            ]]
+            items: []
         });
     },
     render: function () {

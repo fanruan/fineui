@@ -271,10 +271,13 @@ BI.DynamicDateCombo = BI.inherit(BI.Single, {
     },
 
     _checkValue: function (v) {
+        var o = this.options;
         switch (v.type) {
             case BI.DynamicDateCombo.Dynamic:
                 return BI.isNotEmptyObject(v.value);
             case BI.DynamicDateCombo.Static:
+                var value = v.value || {};
+                return !BI.checkDateVoid(value.year, value.month, value.day, o.minDate, o.maxDate)[0];
             default:
                 return true;
         }

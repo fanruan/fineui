@@ -437,14 +437,10 @@ if (!_global.BI) {
     });
     _.extend(BI, {
 
-        inherit: function (sb, sp, overrides) {
-            if (typeof sp === "object") {
-                overrides = sp;
-                sp = sb;
-                sb = function () {
-                    return sp.apply(this, arguments);
-                };
-            }
+        inherit: function (sp, overrides) {
+            var sb = function () {
+                return sp.apply(this, arguments);
+            };
             var F = function () {
             }, spp = sp.prototype;
             F.prototype = spp;
