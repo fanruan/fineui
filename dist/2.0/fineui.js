@@ -1,4 +1,4 @@
-/*! time: 2021-3-28 17:00:27 */
+/*! time: 2021-3-29 09:30:29 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -61903,7 +61903,9 @@ BI.SingleSelectSearchLoader = BI.inherit(BI.Widget, {
                 dynamic: false
             },
             height: 25,
-            selected: false
+            selected: false,
+            iconWrapperWidth: 26,
+            hgap: this.options.allowNoSelect ? 10 : 0
         });
     },
 
@@ -63091,7 +63093,9 @@ BI.SingleSelectLoader = BI.inherit(BI.Widget, {
             logic: this.options.logic,
             cls: "bi-list-item-active",
             height: 24,
-            selected: false
+            selected: false,
+            iconWrapperWidth: 26,
+            hgap: this.options.allowNoSelect ? 10 : 0
         });
     },
 
