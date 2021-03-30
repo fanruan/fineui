@@ -138,10 +138,6 @@ BI.Single = BI.inherit(BI.Widget, {
         this._hoverBinded = false;
     },
 
-    populate: function (items) {
-        this.items = items || [];
-    },
-
     // opt: {container: '', belowMouse: false}
     setTitle: function (title, opt) {
         this.options.title = title;
@@ -198,18 +194,6 @@ BI.Single = BI.inherit(BI.Widget, {
 
     getValue: function () {
         return this.options.value;
-    },
-
-    update: function (props, shouldUpdate) {
-        if (BI.isObject(shouldUpdate)) {
-            props = shouldUpdate;
-        }
-        if ("value" in props) {
-            this.setValue(props.value);
-        }
-        if ("text" in props) {
-            this.setText && this.setText(props.text);
-        }
     },
 
     destroyed: function () {

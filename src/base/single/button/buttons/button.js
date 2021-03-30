@@ -145,10 +145,6 @@ BI.Button = BI.inherit(BI.BasicButton, {
 
     unHighLight: function () {
         this.text.unHighLight.apply(this.text, arguments);
-    },
-
-    destroy: function () {
-        BI.Button.superclass.destroy.apply(this, arguments);
     }
 });
 BI.shortcut("bi.button", BI.Button);

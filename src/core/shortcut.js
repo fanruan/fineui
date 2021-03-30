@@ -18,11 +18,12 @@
             throw new Error("组件" + config.type + "未定义");
         }
         var pushed = false;
-        if (context) {
+        var widget = new cls();
+        widget._context = BI.Widget.context || context;
+        if (!BI.Widget.context && context) {
             pushed = true;
             BI.Widget.pushContext(context);
         }
-        var widget = new cls();
         widget._initProps(config);
         widget._constructed();
         widget._initRoot();
@@ -55,24 +56,34 @@
         if (item.type || options.type) {
             el = BI.extend({}, options, item);
             w = BI.Plugin.getWidget(el.type, el);
-            w.listeners = (w.listeners || []).concat([{
-                eventName: BI.Events.MOUNT,
-                action: function () {
-                    BI.Plugin.getObject(el.type, this);
+            if (w.type === el.type) {
+                if (BI.Plugin.hasObject(el.type)) {
+                    w.listeners = (w.listeners || []).concat([{
+                        eventName: BI.Events.MOUNT,
+                        action: function () {
+                            BI.Plugin.getObject(el.type, this);
+                        }
+                    }]);
                 }
-            }]);
-            return w.type === el.type ? createWidget(w, context, lazy) : BI.createWidget(BI.extend({/**important**/}, el, {type: w.type}), options, context, lazy);
+                return createWidget(w, context, lazy);
+            }
+            return BI.createWidget(w, options, context, lazy);
         }
         if (item.el && (item.el.type || options.type)) {
             el = BI.extend({}, options, item.el);
             w = BI.Plugin.getWidget(el.type, el);
-            w.listeners = (w.listeners || []).concat([{
-                eventName: BI.Events.MOUNT,
-                action: function () {
-                    BI.Plugin.getObject(el.type, this);
+            if (w.type === el.type) {
+                if (BI.Plugin.hasObject(el.type)) {
+                    w.listeners = (w.listeners || []).concat([{
+                        eventName: BI.Events.MOUNT,
+                        action: function () {
+                            BI.Plugin.getObject(el.type, this);
+                        }
+                    }]);
                 }
-            }]);
-            return w.type === el.type ? createWidget(w, context, lazy) : BI.createWidget(BI.extend({/**important**/}, el, {type: w.type}), options, context, lazy);
+                return createWidget(w, context, lazy);
+            }
+            return BI.createWidget(w, options, context, lazy);
         }
         if (BI.isWidget(item.el)) {
             return item.el;

@@ -86,7 +86,7 @@
             if (p instanceof Fix.Model || p.store || p.__cacheStore) {
                 break;
             }
-            p = p._parent || (p.options && p.options.element);
+            p = p._parent || (p.options && p.options.element) || p._context;
         }
         if (p) {
             if (p instanceof Fix.Model) {
@@ -96,26 +96,6 @@
             return p.__cacheStore || p.store;
         }
     }
-
-    // var _create = BI.createWidget;
-    // BI.createWidget = function (item, options, context) {
-    //     var pushed = false;
-    //     if (BI.isWidget(options)) {
-    //         pushContext(options);
-    //         pushed = true;
-    //     } else if (context != null) {
-    //         pushContext(context);
-    //         pushed = true;
-    //     }
-    //     var result = _create.apply(this, arguments);
-    //     // try {
-    //     //     var result = _create.apply(this, arguments);
-    //     // } catch (e) {
-    //     //     console.error(e);
-    //     // }
-    //     pushed && popContext();
-    //     return result;
-    // };
 
     _.each(["populate", "addItems", "prependItems"], function (name) {
         var old = BI.Loader.prototype[name];
@@ -134,7 +114,7 @@
     function createStore () {
         var needPop = false;
         if (_global.Fix && this._store) {
-            var store = findStore(this.options.context || this._parent || this.options.element);
+            var store = findStore(this.options.context || this._parent || this.options.element || this._context);
             if (store) {
                 pushTarget(store);
                 needPop = true;
@@ -195,6 +175,9 @@
                 if (rendered) {
                     var newEls = render && render.call(this);
                     BI.each(childComponents, function (i, childComponent) {
+                        if (childComponent.component instanceof BI.Layout) {
+                            return; // 布局的过滤掉
+                        }
                         var nextProps = BI.get([newEls], childComponent.path);
                         if (nextProps) {
                             var shouldUpdate = childComponent.component.shouldUpdate && childComponent.component.shouldUpdate(nextProps);
@@ -274,7 +257,7 @@
         delete this.__cacheStore;
     };
 
-    _.each(["_mount"], function (name) {
+    _.each(["_mount", "__afterMount"], function (name) {
         var old = BI.Widget.prototype[name];
         old && (BI.Widget.prototype[name] = function () {
             this.store && pushTarget(this.store);

@@ -28,8 +28,8 @@ BI.YearPicker = BI.inherit(BI.Widget, {
         this.left.on(BI.IconButton.EVENT_CHANGE, function () {
             self.setValue(self.year.getValue() - 1);
             self.fireEvent(BI.YearPicker.EVENT_CHANGE);
-            self._checkLeftValid();
-            self._checkRightValid();
+            // self._checkLeftValid();
+            // self._checkRightValid();
         });
 
         this.right = BI.createWidget({
@@ -42,8 +42,8 @@ BI.YearPicker = BI.inherit(BI.Widget, {
         this.right.on(BI.IconButton.EVENT_CHANGE, function () {
             self.setValue(self.year.getValue() + 1);
             self.fireEvent(BI.YearPicker.EVENT_CHANGE);
-            self._checkLeftValid();
-            self._checkRightValid();
+            // self._checkLeftValid();
+            // self._checkRightValid();
         });
 
         this.year = BI.createWidget({
@@ -83,9 +83,7 @@ BI.YearPicker = BI.inherit(BI.Widget, {
                 width: 25
             }]
         });
-        this.setValue({
-            year: this._year
-        });
+        this.setValue(this._year);
     },
 
     _checkLeftValid: function () {
@@ -105,23 +103,23 @@ BI.YearPicker = BI.inherit(BI.Widget, {
     setMinDate: function (minDate) {
         this.options.min = minDate;
         this.year.setMinDate(minDate);
-        this._checkLeftValid();
-        this._checkRightValid();
+        // this._checkLeftValid();
+        // this._checkRightValid();
     },
 
     setMaxDate: function (maxDate) {
         this.options.max = maxDate;
         this.year.setMaxDate(maxDate);
-        this._checkLeftValid();
-        this._checkRightValid();
+        // this._checkLeftValid();
+        // this._checkRightValid();
     },
 
 
     setValue: function (v) {
         this._year = v;
         this.year.setValue(v);
-        this._checkLeftValid();
-        this._checkRightValid();
+        // this._checkLeftValid();
+        // this._checkRightValid();
     },
 
     getValue: function () {

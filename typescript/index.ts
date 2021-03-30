@@ -153,6 +153,7 @@ import { TextNode } from "./base/single/button/node/textnode";
 import { TextValueCheckComboPopup } from "./case/combo/textvaluecheckcombo/popup.textvaluecheck";
 import { ImageButton } from './base/single/button/buttons/button.image';
 import { History, Router } from "./router/router";
+import { DateTimeCombo } from './widget/datetime/datetime.combo';
 
 
 export interface BI extends _func, _i18n, _base, _inject, _var, _web, _utils {
@@ -312,6 +313,7 @@ export interface BI extends _func, _i18n, _base, _inject, _var, _web, _utils {
     ImageButton: typeof ImageButton;
     Router: typeof Router;
     history: History,
+    DateTimeCombo: typeof DateTimeCombo;
 }
 
 export default {
@@ -473,4 +475,5 @@ export {
     ImageButton,
     Router,
     History,
+    DateTimeCombo,
 };

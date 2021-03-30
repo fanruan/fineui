@@ -70,7 +70,7 @@ if (!_global.BI) {
         },
 
         isWidget: function (widget) {
-            return widget instanceof BI.Widget || (BI.View && widget instanceof BI.View);
+            return widget instanceof BI.Widget;
         },
 
         createWidgets: function (items, options, context) {
@@ -107,7 +107,7 @@ if (!_global.BI) {
                         el: innerAttr.shift()
                     });
                 }
-                if (item.el instanceof BI.Widget || (BI.View && item.el instanceof BI.View)) {
+                if (item.el instanceof BI.Widget) {
                     innerAttr.shift();
                     return BI.extend({}, outerAttr.shift(), { type: null }, item);
                 }
@@ -437,14 +437,10 @@ if (!_global.BI) {
     });
     _.extend(BI, {
 
-        inherit: function (sb, sp, overrides) {
-            if (typeof sp === "object") {
-                overrides = sp;
-                sp = sb;
-                sb = function () {
-                    return sp.apply(this, arguments);
-                };
-            }
+        inherit: function (sp, overrides) {
+            var sb = function () {
+                return sp.apply(this, arguments);
+            };
             var F = function () {
             }, spp = sp.prototype;
             F.prototype = spp;

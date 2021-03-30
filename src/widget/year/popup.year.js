@@ -67,7 +67,12 @@ BI.DynamicYearPopup = BI.inherit(BI.Widget, {
                         listeners: [{
                             eventName: BI.TextButton.EVENT_CHANGE,
                             action: function () {
-                                self.fireEvent(BI.DynamicYearPopup.BUTTON_OK_EVENT_CHANGE);
+                                var type = self.dateTab.getSelect();
+                                if (type === BI.DynamicDateCombo.Dynamic) {
+                                    self.dynamicPane.checkValidation(true) && self.fireEvent(BI.DynamicYearMonthPopup.BUTTON_OK_EVENT_CHANGE);
+                                } else {
+                                    self.fireEvent(BI.DynamicYearPopup.BUTTON_OK_EVENT_CHANGE);
+                                }
                             }
                         }]
                     }]],
@@ -82,7 +87,7 @@ BI.DynamicYearPopup = BI.inherit(BI.Widget, {
             this.yearButton.setValue(BI.i18nText("BI-Basic_Current_Year"));
             this.yearButton.setEnable(!this._checkYearValid());
         } else {
-            var date = BI.DynamicDateHelper.getCalculation(this.dynamicPane.getValue());
+            var date = BI.DynamicDateHelper.getCalculation(this.dynamicPane.getInputValue());
             date = BI.print(date, "%Y");
             this.yearButton.setValue(date);
             this.yearButton.setEnable(false);

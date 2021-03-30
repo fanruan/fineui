@@ -1,4 +1,4 @@
-/*! time: 2021-3-1 14:10:42 */
+/*! time: 2021-3-29 18:50:32 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -82,12 +82,12 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 1238);
+/******/ 	return __webpack_require__(__webpack_require__.s = 1243);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 1099:
+/***/ 1104:
 /***/ (function(module, exports) {
 
 BI.i18n = {
@@ -320,7 +320,14 @@ if(_global.BI.prepares == null) {
 
 /***/ }),
 
-/***/ 1238:
+/***/ 124:
+/***/ (function(module, exports, __webpack_require__) {
+
+__webpack_require__(125)(__webpack_require__(126))
+
+/***/ }),
+
+/***/ 1243:
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(123);
@@ -350,8 +357,8 @@ __webpack_require__(140);
 __webpack_require__(141);
 __webpack_require__(142);
 __webpack_require__(143);
-__webpack_require__(1099);
-__webpack_require__(1239);
+__webpack_require__(1104);
+__webpack_require__(1244);
 __webpack_require__(153);
 __webpack_require__(154);
 module.exports = __webpack_require__(155);
@@ -359,7 +366,7 @@ module.exports = __webpack_require__(155);
 
 /***/ }),
 
-/***/ 1239:
+/***/ 1244:
 /***/ (function(module, exports) {
 
 /**
@@ -430,13 +437,6 @@ BI.Date._MD = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 // 实际上无论周几作为一周的第一天，周初周末都是在-6-0间做偏移，用一个数组就可以
 BI.Date._OFFSET = [0, -1, -2, -3, -4, -5, -6];
 
-
-/***/ }),
-
-/***/ 124:
-/***/ (function(module, exports, __webpack_require__) {
-
-__webpack_require__(125)(__webpack_require__(126))
 
 /***/ }),
 
@@ -556,7 +556,7 @@ if (!_global.BI) {
         },
 
         isWidget: function (widget) {
-            return widget instanceof BI.Widget || (BI.View && widget instanceof BI.View);
+            return widget instanceof BI.Widget;
         },
 
         createWidgets: function (items, options, context) {
@@ -593,7 +593,7 @@ if (!_global.BI) {
                         el: innerAttr.shift()
                     });
                 }
-                if (item.el instanceof BI.Widget || (BI.View && item.el instanceof BI.View)) {
+                if (item.el instanceof BI.Widget) {
                     innerAttr.shift();
                     return BI.extend({}, outerAttr.shift(), { type: null }, item);
                 }
@@ -923,14 +923,10 @@ if (!_global.BI) {
     });
     _.extend(BI, {
 
-        inherit: function (sb, sp, overrides) {
-            if (typeof sp === "object") {
-                overrides = sp;
-                sp = sb;
-                sb = function () {
-                    return sp.apply(this, arguments);
-                };
-            }
+        inherit: function (sp, overrides) {
+            var sb = function () {
+                return sp.apply(this, arguments);
+            };
             var F = function () {
             }, spp = sp.prototype;
             F.prototype = spp;
@@ -2085,6 +2081,9 @@ if (!_global.BI) {
 
         // 获得一个当前对象的引用
         _initRef: function () {
+            if (this.options.__ref) {
+                this.options.__ref.call(this, this);
+            }
             if (this.options.ref) {
                 this.options.ref.call(this, this);
             }
@@ -2092,6 +2091,10 @@ if (!_global.BI) {
 
         //释放当前对象
         _purgeRef: function () {
+            if (this.options.__ref) {
+                this.options.__ref.call(null);
+                this.options.__ref = null;
+            }
             if (this.options.ref) {
                 this.options.ref.call(null);
                 this.options.ref = null;
@@ -8074,8 +8077,8 @@ _.extend(BI.Func, {
         name = name || "";
         while (true) {
             if (BI.every(array, function (i, item) {
-                    return BI.isKey(item) ? item !== name : item.name !== name;
-                })) {
+                return BI.isKey(item) ? item !== name : item.name !== name;
+            })) {
                 break;
             }
             name = src + (idx++);
@@ -8099,14 +8102,16 @@ _.extend(BI.Func, {
      * @param items
      * @param keyword
      * @param param  搜索哪个属性
+     * @param clone  是否需要deepClone
      */
-    getSearchResult: function (items, keyword, param) {
+    getSearchResult: function (items, keyword, param, clone) {
         var isArray = BI.isArray(items);
         items = isArray ? BI.flatten(items) : items;
         param || (param = "text");
+        BI.isNull(clone) && (clone = true);
         if (!BI.isKey(keyword)) {
             return {
-                find: BI.deepClone(items),
+                find: clone ? BI.deepClone(items) : items,
                 match: isArray ? [] : {}
             };
         }
@@ -8118,7 +8123,7 @@ _.extend(BI.Func, {
             if (BI.isNull(item)) {
                 return;
             }
-            item = BI.deepClone(item);
+            clone && (item = BI.deepClone(item));
             t = BI.stripEL(item);
             text = BI.find([t[param], t.text, t.value, t.name, t], function (index, val) {
                 return BI.isNotNull(val);

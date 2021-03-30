@@ -82,7 +82,7 @@
             if (p instanceof Fix.Model || p.store || p.__cacheStore) {
                 break;
             }
-            p = p._parent || (p.options && p.options.element);
+            p = p._parent || (p.options && p.options.element) || p._context;
         }
         if (p) {
             if (p instanceof Fix.Model) {
@@ -92,21 +92,6 @@
             return p.__cacheStore || p.store;
         }
     }
-
-    // var _create = BI.createWidget;
-    // BI.createWidget = function (item, options, context) {
-    //     var pushed = false;
-    //     if (BI.isWidget(options)) {
-    //         pushContext(options);
-    //         pushed = true;
-    //     } else if (context != null) {
-    //         pushContext(context);
-    //         pushed = true;
-    //     }
-    //     var result = _create.apply(this, arguments);
-    //     pushed && popContext();
-    //     return result;
-    // };
 
     _.each(["populate", "addItems", "prependItems"], function (name) {
         var old = BI.Loader.prototype[name];
@@ -121,7 +106,7 @@
     function createStore () {
         var needPop = false;
         if (_global.Fix && this._store) {
-            var store = findStore(this.options.context || this._parent || this.options.element);
+            var store = findStore(this.options.context || this._parent || this.options.element || this._context);
             if (store) {
                 pushTarget(store);
                 needPop = true;
@@ -178,6 +163,77 @@
         needPop && popTarget();
     };
 
+    BI.Widget.prototype._initElement = function () {
+        var self = this;
+        var render = BI.isFunction(this.options.render) ? this.options.render : this.render;
+        var els;
+        if (this.options.updateMode === "auto" && this._store) {
+            // 自动更新模式
+            var childComponents = {};
+            var rendered = false;
+            this._watchers.push(Fix.watch(this.model, function () {
+                if (rendered) {
+                    var newEls = render && render.call(this);
+                    BI.each(childComponents, function (i, childComponent) {
+                        if (childComponent.component instanceof BI.Layout) {
+                            return; // 布局的过滤掉
+                        }
+                        var nextProps = BI.get([newEls], childComponent.path);
+                        if (nextProps) {
+                            var shouldUpdate = childComponent.component.shouldUpdate && childComponent.component.shouldUpdate(nextProps);
+                            childComponent.component._update(nextProps, shouldUpdate);
+                            childComponent.props = BI.extend(childComponent.props, nextProps);
+                        }
+                    });
+                } else {
+                    els = render && render.call(this);
+
+                    function traverse (parent, path) {
+                        BI.each(parent, function (i, child) {
+                            var childPath = path.concat(i);
+                            if (BI.isArray(child)) {
+                                traverse(child, childPath);
+                            } else if (BI.isPlainObject(child)) {
+                                if (child.type) {
+                                    child.__ref = function (_ref) {
+                                        if (_ref) {
+                                            var comp = childComponents[this.getName()] = {};
+                                            comp.component = _ref;
+                                            comp.props = child;
+                                            comp.path = childPath;
+                                        } else {
+                                            delete childComponents[this.getName()];
+                                        }
+                                    };
+                                }
+                                traverse(child, childPath);
+                            }
+                        });
+                    }
+
+                    traverse([els], []);
+                    rendered = true;
+                }
+            }));
+        } else {
+            els = render && render.call(this);
+        }
+        if (BI.isPlainObject(els)) {
+            els = [els];
+        }
+        if (BI.isArray(els)) {
+            BI.each(els, function (i, el) {
+                if (el) {
+                    BI._lazyCreateWidget(el, {
+                        element: self
+                    });
+                }
+            });
+        }
+        // if (this._isRoot === true || !(this instanceof BI.Layout)) {
+        this._mount();
+    };
+
     var unMount = BI.Widget.prototype.__d;
     BI.Widget.prototype.__d = function () {
         unMount.apply(this, arguments);
@@ -197,7 +253,7 @@
         delete this.__cacheStore;
     };
 
-    _.each(["_mount"], function (name) {
+    _.each(["_mount", "__afterMount"], function (name) {
         var old = BI.Widget.prototype[name];
         old && (BI.Widget.prototype[name] = function () {
             this.store && pushTarget(this.store);

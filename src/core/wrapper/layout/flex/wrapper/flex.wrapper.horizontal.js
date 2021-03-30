@@ -8,7 +8,7 @@
 BI.FlexWrapperHorizontalLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.FlexWrapperHorizontalLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-f-s-h clearfix",
+            baseCls: "bi-f-s-h",
             verticalAlign: BI.VerticalAlign.Top,
             horizontalAlign: BI.HorizontalAlign.Left,
             columnSize: [],
@@ -25,6 +25,7 @@ BI.FlexWrapperHorizontalLayout = BI.inherit(BI.Layout, {
     render: function () {
         BI.FlexWrapperHorizontalLayout.superclass.render.apply(this, arguments);
         var o = this.options;
+        this.element.addClass("v-" + o.verticalAlign).addClass("h-" + o.horizontalAlign);
         this.$wrapper = BI.Widget._renderEngine.createElement("<div>").addClass("f-s-h-w v-" + o.verticalAlign).addClass("h-" + o.horizontalAlign);
         this.populate(this.options.items);
     },
@@ -37,16 +38,23 @@ BI.FlexWrapperHorizontalLayout = BI.inherit(BI.Layout, {
         });
         if (o.columnSize[i] !== "auto") {
             if (o.horizontalAlign === BI.HorizontalAlign.Stretch && o.columnSize[i] !== "") {
-                w.element.addClass("fill");
+                w.element.addClass("f-f");
             } else {
-                w.element.addClass("shrink-none");
+                w.element.addClass("f-s-n");
             }
         }
         if (o.columnSize[i] > 0) {
-            w.element.width(o.columnSize[i] <= 1 ? ((o.columnSize[i] * 100).toFixed(1) + "%") : (o.columnSize[i] / BI.pixRatio + BI.pixUnit));
+            w.element.width(o.columnSize[i] === "" ? "" : (o.columnSize[i] <= 1 ? ((o.columnSize[i] * 100).toFixed(1) + "%") : (o.columnSize[i] / BI.pixRatio + BI.pixUnit)));
         }
         if (o.columnSize[i] === "fill") {
-            w.element.addClass("fill");
+            w.element.addClass("f-f");
+        }
+        w.element.addClass("c-e");
+        if (i === 0) {
+            w.element.addClass("f-c");
+        }
+        if (i === o.items.length - 1) {
+            w.element.addClass("l-c");
         }
         if (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
             w.element.css({

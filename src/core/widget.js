@@ -7,7 +7,7 @@
  */
 
 !(function () {
-    function callLifeHook (self, life) {
+    function callLifeHook(self, life) {
         var hook = self.options[life] || self[life];
         if (hook) {
             var hooks = BI.isArray(hook) ? hook : [hook];
@@ -59,9 +59,11 @@
             }
         },
 
+        // 生命周期函数
         beforeInit: null,
 
-        // 生命周期函数
+        beforeRender: null,
+
         beforeCreate: null,
 
         created: null,
@@ -94,14 +96,24 @@
         },
 
         _initRender: function () {
+            var self = this;
+
+            function render() {
+                if (self.options.beforeRender || self.beforeRender) {
+                    (self.options.beforeRender || self.beforeRender).call(self, BI.bind(self._render, self));
+                } else {
+                    self._render();
+                }
+            }
+
             if (this.options.beforeInit || this.beforeInit) {
                 this.__asking = true;
-                (this.options.beforeInit || this.beforeInit).call(this, BI.bind(this._render, this));
+                (this.options.beforeInit || this.beforeInit).call(this, render);
                 if (this.__asking === true) {
                     this.__async = true;
                 }
             } else {
-                this._render();
+                render();
             }
         },
 
@@ -111,6 +123,22 @@
             this._initElement();
             this._initEffects();
             callLifeHook(this, "created");
+        },
+
+        _initCurrent: function () {
+            var o = this.options;
+            if (o._baseCls || o.baseCls || o.extraCls || o.cls) {
+                this.element.addClass((o._baseCls || "") + " " + (o.baseCls || "") + " " + (o.extraCls || "") + " " + (o.cls || ""));
+            }
+            if (o.attributes) {
+                this.element.attr(o.attributes);
+            }
+            if (o.data) {
+                this.element.data(o.data);
+            }
+            if (o.css) {
+                this.element.css(o.css);
+            }
         },
 
         /**
@@ -124,34 +152,16 @@
             this._children = {};
             if (BI.isWidget(o.element)) {
                 this.element = this.options.element.element;
-                if (o.element instanceof BI.Widget) {
-                    this._parent = o.element;
-                    this._parent.addWidget(this.widgetName, this);
-                } else {
-                    this._isRoot = true;
-                }
+                this._parent = o.element;
+                this._parent.addWidget(this.widgetName, this);
             } else if (o.element) {
-                // if (o.root !== true) {
-                //     throw new Error("root is a required property");
-                // }
                 this.element = BI.Widget._renderEngine.createElement(this);
                 this._isRoot = true;
             } else {
                 this.element = BI.Widget._renderEngine.createElement(this);
             }
             this.element._isWidget = true;
-            if (o._baseCls || o.baseCls || o.extraCls || o.cls) {
-                this.element.addClass((o._baseCls || "") + " " + (o.baseCls || "") + " " + (o.extraCls || "") + " " + (o.cls || ""));
-            }
-            if (o.attributes) {
-                this.element.attr(o.attributes);
-            }
-            if (o.data) {
-                this.element.data(o.data);
-            }
-            if (o.css) {
-                this.element.css(o.css);
-            }
+            this._initCurrent();
         },
 
         _initElementWidth: function () {
@@ -226,37 +236,40 @@
          * @returns {boolean}
          * @private
          */
-        _mount: function (force, deep, lifeHook, predicate) {
-            if (this.__beforeMount(force, deep, lifeHook, predicate)) {
-                this.__afterMount(lifeHook, predicate);
-                return true;
-            }
-            return false;
-        },
-
-        __beforeMount: function (force, deep, lifeHook, predicate) {
+        _mount: function (force, deep, lifeHook, predicate, layer) {
             var self = this;
             if (!force && (this._isMounted || !this.isVisible() || this.__asking === true || !(this._isRoot === true || (this._parent && this._parent._isMounted === true)))) {
                 return false;
             }
+            layer = layer || 0;
             lifeHook !== false && callLifeHook(this, "beforeMount");
             this._isMounted = true;
-            BI.each(this._children, function (i, widget) {
-                !self.isEnabled() && widget._setEnable(false);
-                !self.isValid() && widget._setValid(false);
-                widget.__beforeMount && widget.__beforeMount(deep ? force : false, deep, lifeHook, predicate);
-            });
+            for (var key in this._children) {
+                var child = this._children[key];
+                !self.isEnabled() && child._setEnable(false);
+                !self.isValid() && child._setValid(false);
+                child._mount && child._mount(deep ? force : false, deep, lifeHook, predicate, layer + 1);
+            }
             this._mountChildren && this._mountChildren();
+            if (layer === 0) {
+                // mounted里面会执行scrollTo之类的方法，如果放宏任务里会闪
+                // setTimeout(function () {
+                self.__afterMount(lifeHook, predicate);
+                // }, 0);
+            }
             return true;
         },
 
         __afterMount: function (lifeHook, predicate) {
-            BI.each(this._children, function (i, widget) {
-                widget.__afterMount && widget.__afterMount(lifeHook, predicate);
-            });
-            lifeHook !== false && callLifeHook(this, "mounted");
-            this.fireEvent(BI.Events.MOUNT);
-            predicate && predicate(this);
+            if (this._isMounted) {
+                for (var key in this._children) {
+                    var child = this._children[key];
+                    child.__afterMount && child.__afterMount(lifeHook, predicate);
+                }
+                lifeHook !== false && callLifeHook(this, "mounted");
+                this.fireEvent(BI.Events.MOUNT);
+                predicate && predicate(this);
+            }
         },
 
         _mountChildren: null,
@@ -544,6 +557,15 @@
             this.element.empty();
         },
 
+        // 默认的populate方法就是干掉重来
+        reset: function () {
+            this.purgeListeners();
+            this.empty();
+            this._initCurrent();
+            this._init();
+            this._initRef();
+        },
+
         _destroy: function () {
             this.__d();
             this.element.destroy();
@@ -571,12 +593,12 @@
         BI.Widget.context = context = contextStack.pop();
     };
 
-    function pushTarget (_current) {
+    function pushTarget(_current) {
         if (current) currentStack.push(current);
         BI.Widget.current = current = _current;
     }
 
-    function popTarget () {
+    function popTarget() {
         BI.Widget.current = current = currentStack.pop();
     }
 

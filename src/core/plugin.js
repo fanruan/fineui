@@ -81,6 +81,10 @@ BI.Plugin = BI.Plugin || {};
             return res || object;
         },
 
+        hasObject: function (type) {
+            return __GlobalObjectConfigFns.length > 0 || !!_ObjectPlugin[type];
+        },
+
         registerObject: function (type, fn) {
             if (!_ObjectPlugin[type]) {
                 _ObjectPlugin[type] = [];

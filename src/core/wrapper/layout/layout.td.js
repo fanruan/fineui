@@ -7,20 +7,14 @@ BI.TdLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.TdLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-td",
-            columnSize: [200, 200, 200],
+            columnSize: [],
             hgap: 0,
             vgap: 0,
-            items: [[
-                {
-                    el: {text: "label1"}
-                },
-                {
-                    el: {text: "label2"}
-                },
-                {
-                    el: {text: "label3"}
-                }
-            ]]
+            tgap: 0,
+            bgap: 0,
+            lgap: 0,
+            rgap: 0,
+            items: []
         });
     },
     render: function () {
@@ -85,22 +79,31 @@ BI.TdLayout = BI.inherit(BI.Layout, {
         for (var i = 0; i < arr.length; i++) {
             var w = BI._lazyCreateWidget(arr[i]);
             w.element.css({position: "relative", top: "0", left: "0", margin: "0px auto"});
-            if (arr[i].lgap) {
-                w.element.css({"margin-left": arr[i].lgap / BI.pixRatio + BI.pixUnit});
+            var item = arr[i];
+            if (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
+                w.element.css({
+                    "margin-top": (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0)) / BI.pixRatio + BI.pixUnit
+                });
             }
-            if (arr[i].rgap) {
-                w.element.css({"margin-right": arr[i].rgap / BI.pixRatio + BI.pixUnit});
+            if (o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0) !== 0) {
+                w.element.css({
+                    "margin-left": ((i === 0 ? o.hgap : 0) + o.lgap + (item.lgap || 0) + (item.hgap || 0)) / BI.pixRatio + BI.pixUnit
+                });
             }
-            if (arr[i].tgap) {
-                w.element.css({"margin-top": arr[i].tgap / BI.pixRatio + BI.pixUnit});
+            if (o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0) !== 0) {
+                w.element.css({
+                    "margin-right": (o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0)) / BI.pixRatio + BI.pixUnit
+                });
             }
-            if (arr[i].bgap) {
-                w.element.css({"margin-bottom": arr[i].bgap / BI.pixRatio + BI.pixUnit});
+            if (o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0) !== 0) {
+                w.element.css({
+                    "margin-bottom": (o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0)) / BI.pixRatio + BI.pixUnit
+                });
             }
             first(w, this.rows++, i);
             var td = BI._lazyCreateWidget({
                 type: "bi.default",
-                width: o.columnSize[i] <= 1 ? ((o.columnSize[i] * 100).toFixed(1) + "%") : o.columnSize[i],
+                width: o.columnSize[i] === "" ? "" : (o.columnSize[i] <= 1 ? ((o.columnSize[i] * 100).toFixed(1) + "%") : (i === 0 ? o.hgap : 0) + o.hgap + o.lgap + o.rgap + o.columnSize[i]),
                 tagName: "td",
                 items: [w]
             });
