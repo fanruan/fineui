@@ -1,5 +1,9 @@
 .bi-f-lr-v-c {
   > .flex-left-auto {
     margin-left: auto;
+
+    &:not(.invisible) + .flex-left-auto {
+      margin-left: initial;
+    }
   }
 }

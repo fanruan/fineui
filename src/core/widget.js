@@ -183,6 +183,7 @@
             if (o.invisible) {
                 // 用display属性做显示和隐藏，否则jquery会在显示时将display设为block会覆盖掉display:flex属性
                 this.element.css("display", "none");
+                this.element.addClass("invisible");
             }
         },
 
@@ -354,9 +355,11 @@
             if (visible === true) {
                 // 用this.element.show()会把display属性改成block
                 this.element.css("display", "");
+                this.element.removeClass("invisible");
                 this._mount();
             } else if (visible === false) {
                 this.element.css("display", "none");
+                this.element.addClass("invisible");
             }
             this.fireEvent(BI.Events.VIEW, visible);
         },

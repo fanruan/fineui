@@ -55,14 +55,14 @@ BI.FlexLeftRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
             return json;
         });
         rightItems = BI.map(rightItems, function (i, item) {
-            if (i === 0) {
-                if (BI.isWidget(item)) {
-                    item.element.addClass("flex-left-auto");
-                } else {
-                    var t = BI.stripEL(item);
-                    t.cls = (t.cls || "") + " flex-left-auto";
-                }
+            // if (i === 0) {
+            if (BI.isWidget(item)) {
+                item.element.addClass("flex-left-auto");
+            } else {
+                var t = BI.stripEL(item);
+                t.cls = (t.cls || "") + " flex-left-auto";
             }
+            // }
             var json = {
                 el: BI.stripEL(item)
             };
