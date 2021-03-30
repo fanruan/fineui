@@ -55,14 +55,6 @@ BI.FlexLeftRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
             return json;
         });
         rightItems = BI.map(rightItems, function (i, item) {
-            // if (i === 0) {
-            if (BI.isWidget(item)) {
-                item.element.addClass("flex-left-auto");
-            } else {
-                var t = BI.stripEL(item);
-                t.cls = (t.cls || "") + " flex-left-auto";
-            }
-            // }
             var json = {
                 el: BI.stripEL(item)
             };
@@ -70,9 +62,7 @@ BI.FlexLeftRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
                 json.tgap = o.rvgap + o.rtgap + (item.tgap || 0) + (item.vgap || 0);
             }
             if (o.rhgap + o.rlgap + (item.lgap || 0) + (item.hgap || 0) !== 0) {
-                if (i > 0) {
-                    json.lgap = o.rlgap + (item.lgap || 0) + (item.hgap || 0);
-                }
+                json.lgap = o.rlgap + (item.lgap || 0) + (item.hgap || 0);
             }
             if (o.rhgap + o.rrgap + (item.rgap || 0) + (item.hgap || 0) !== 0) {
                 json.rgap = o.rhgap + o.rrgap + (item.rgap || 0) + (item.hgap || 0);
@@ -82,7 +72,11 @@ BI.FlexLeftRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
             }
             return json;
         });
-        return leftItems.concat(rightItems);
+        return leftItems.concat({
+            type: "bi.flex_vertical_adapt",
+            cls: "flex-left-auto",
+            items: rightItems
+        });
     },
 
     resize: function () {
