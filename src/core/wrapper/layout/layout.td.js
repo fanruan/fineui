@@ -8,6 +8,7 @@ BI.TdLayout = BI.inherit(BI.Layout, {
         return BI.extend(BI.TdLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-td",
             columnSize: [],
+            verticalAlign: BI.VerticalAlign.Middle,
             hgap: 0,
             vgap: 0,
             tgap: 0,
@@ -101,15 +102,21 @@ BI.TdLayout = BI.inherit(BI.Layout, {
                 });
             }
             first(w, this.rows++, i);
+            var width = o.columnSize[i] === "" ? "" : (o.columnSize[i] <= 1 ? ((o.columnSize[i] * 100).toFixed(1) + "%") : (i === 0 ? o.hgap : 0) + o.hgap + o.lgap + o.rgap + o.columnSize[i]);
             var td = BI._lazyCreateWidget({
                 type: "bi.default",
-                width: o.columnSize[i] === "" ? "" : (o.columnSize[i] <= 1 ? ((o.columnSize[i] * 100).toFixed(1) + "%") : (i === 0 ? o.hgap : 0) + o.hgap + o.lgap + o.rgap + o.columnSize[i]),
+                width: width,
                 tagName: "td",
                 items: [w]
             });
+            // 对于表现为td的元素设置最大宽度，有几点需要注意
+            // 1、由于直接对td设置最大宽度是在规范中未定义的, 所以要使用类似td:firstChild来迂回实现
+            // 2、不能给多个td设置最大宽度，这样只会平分宽度
+            // 3、多百分比宽度就算了
             td.element.css({
+                "max-width": BI.isNumber(o.columnSize[i]) ? (o.columnSize[i] <= 1 ? width : width / BI.pixRatio + BI.pixUnit) : width,
                 position: "relative",
-                "vertical-align": "middle",
+                "vertical-align": o.verticalAlign,
                 margin: "0",
                 padding: "0",
                 border: "none"
