@@ -2,6 +2,12 @@
   > .flex-left-auto {
     margin-left: auto;
 
+    + .flex-left-auto.invisible {
+      + .flex-left-auto {
+        margin-left: initial;
+      }
+    }
+
     &:not(.invisible) + .flex-left-auto {
       margin-left: initial;
     }
