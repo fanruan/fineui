@@ -1,4 +1,4 @@
-/*! time: 2021-3-29 18:50:32 */
+/*! time: 2021-3-30 13:00:29 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -13980,6 +13980,7 @@ module.exports = function (exec) {
             if (o.invisible) {
                 // 用display属性做显示和隐藏，否则jquery会在显示时将display设为block会覆盖掉display:flex属性
                 this.element.css("display", "none");
+                this.element.addClass("invisible");
             }
         },
 
@@ -14151,9 +14152,11 @@ module.exports = function (exec) {
             if (visible === true) {
                 // 用this.element.show()会把display属性改成block
                 this.element.css("display", "");
+                this.element.removeClass("invisible");
                 this._mount();
             } else if (visible === false) {
                 this.element.css("display", "none");
+                this.element.addClass("invisible");
             }
             this.fireEvent(BI.Events.VIEW, visible);
         },
@@ -19117,14 +19120,14 @@ BI.FlexLeftRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
             return json;
         });
         rightItems = BI.map(rightItems, function (i, item) {
-            if (i === 0) {
-                if (BI.isWidget(item)) {
-                    item.element.addClass("flex-left-auto");
-                } else {
-                    var t = BI.stripEL(item);
-                    t.cls = (t.cls || "") + " flex-left-auto";
-                }
+            // if (i === 0) {
+            if (BI.isWidget(item)) {
+                item.element.addClass("flex-left-auto");
+            } else {
+                var t = BI.stripEL(item);
+                t.cls = (t.cls || "") + " flex-left-auto";
             }
+            // }
             var json = {
                 el: BI.stripEL(item)
             };
@@ -21595,6 +21598,7 @@ BI.TdLayout = BI.inherit(BI.Layout, {
         return BI.extend(BI.TdLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-td",
             columnSize: [],
+            verticalAlign: BI.VerticalAlign.Middle,
             hgap: 0,
             vgap: 0,
             tgap: 0,
@@ -21688,15 +21692,21 @@ BI.TdLayout = BI.inherit(BI.Layout, {
                 });
             }
             first(w, this.rows++, i);
+            var width = o.columnSize[i] === "" ? "" : (o.columnSize[i] <= 1 ? ((o.columnSize[i] * 100).toFixed(1) + "%") : (i === 0 ? o.hgap : 0) + o.hgap + o.lgap + o.rgap + o.columnSize[i]);
             var td = BI._lazyCreateWidget({
                 type: "bi.default",
-                width: o.columnSize[i] === "" ? "" : (o.columnSize[i] <= 1 ? ((o.columnSize[i] * 100).toFixed(1) + "%") : (i === 0 ? o.hgap : 0) + o.hgap + o.lgap + o.rgap + o.columnSize[i]),
+                width: width,
                 tagName: "td",
                 items: [w]
             });
+            // 对于表现为td的元素设置最大宽度，有几点需要注意
+            // 1、由于直接对td设置最大宽度是在规范中未定义的, 所以要使用类似td:firstChild来迂回实现
+            // 2、不能给多个td设置最大宽度，这样只会平分宽度
+            // 3、多百分比宽度就算了
             td.element.css({
+                "max-width": BI.isNumber(o.columnSize[i]) ? (o.columnSize[i] <= 1 ? width : width / BI.pixRatio + BI.pixUnit) : width,
                 position: "relative",
-                "vertical-align": "middle",
+                "vertical-align": o.verticalAlign,
                 margin: "0",
                 padding: "0",
                 border: "none"
