@@ -26,7 +26,7 @@ BI.TableAdaptLayout = BI.inherit(BI.Layout, {
             position: "relative",
             display: "table",
             width: (o.horizontalAlign === BI.HorizontalAlign.Center || o.horizontalAlign === BI.HorizontalAlign.Stretch) ? "100%" : "auto",
-            height: (o.verticalAlign === BI.VerticalAlign.Middle || o.verticalAlign === BI.VerticalAlign.Stretch) ? "100%" : "auto",
+            height: (o.verticalAlign !== BI.VerticalAlign.Top) ? "100%" : "auto",
             "white-space": "nowrap"
         });
         this.populate(this.options.items);
@@ -61,8 +61,6 @@ BI.TableAdaptLayout = BI.inherit(BI.Layout, {
             position: "relative",
             display: "table-cell",
             "vertical-align": o.verticalAlign,
-            margin: "0",
-            padding: "0",
             height: "100%"
         });
         if (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
