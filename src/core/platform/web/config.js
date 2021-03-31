@@ -69,7 +69,7 @@ BI.prepares.push(function () {
                 return BI.extend({}, ob, {type: "bi.flex_center_adapt"});
                 // }
             }
-            if (!BI.isIE() || BI.getIEVersion() > 8) {
+            if (!BI.isIE() || BI.getIEVersion() >= 8) {
                 return BI.extend({}, ob, {type: "bi.inline_center_adapt"});
             }
         }
