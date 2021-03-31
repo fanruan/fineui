@@ -8,6 +8,7 @@ BI.HorizontalAdaptLayout = BI.inherit(BI.Layout, {
         return BI.extend(BI.HorizontalAdaptLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-h-a",
             verticalAlign: BI.VerticalAlign.Top,
+            horizontalAlign: BI.HorizontalAlign.Center,
             columnSize: [],
             scrollx: false,
             hgap: 0,
@@ -24,7 +25,7 @@ BI.HorizontalAdaptLayout = BI.inherit(BI.Layout, {
         return {
             type: "bi.horizontal",
             verticalAlign: o.verticalAlign,
-            horizontalAlign: BI.HorizontalAlign.Center,
+            horizontalAlign: o.horizontalAlign,
             columnSize: o.columnSize,
             items: o.items,
             scrollx: o.scrollx,

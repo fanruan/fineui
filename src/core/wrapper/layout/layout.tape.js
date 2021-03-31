@@ -13,20 +13,7 @@ BI.HTapeLayout = BI.inherit(BI.Layout, {
             rgap: 0,
             tgap: 0,
             bgap: 0,
-            items: [
-                {
-                    width: 100,
-                    el: {type: "bi.button", text: "button1"}
-                },
-                {
-                    width: "fill",
-                    el: {type: "bi.button", text: "button2"}
-                },
-                {
-                    width: 200,
-                    el: {type: "bi.button", text: "button3"}
-                }
-            ]
+            items: []
         });
     },
     render: function () {
@@ -129,20 +116,7 @@ BI.VTapeLayout = BI.inherit(BI.Layout, {
             rgap: 0,
             tgap: 0,
             bgap: 0,
-            items: [
-                {
-                    height: 100,
-                    el: {type: "bi.button", text: "button1"}
-                },
-                {
-                    height: "fill",
-                    el: {type: "bi.button", text: "button2"}
-                },
-                {
-                    height: 200,
-                    el: {type: "bi.button", text: "button3"}
-                }
-            ]
+            items: []
         });
     },
     render: function () {

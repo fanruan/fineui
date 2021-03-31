@@ -10,6 +10,7 @@ BI.FlexVerticalCenter = BI.inherit(BI.Layout, {
         return BI.extend(BI.FlexVerticalCenter.superclass.props.apply(this, arguments), {
             baseCls: "bi-f-v-c",
             horizontalAlign: BI.HorizontalAlign.Left,
+            verticalAlign: BI.VerticalAlign.Middle,
             columnSize: [],
             scrollx: false,
             hgap: 0,
@@ -27,7 +28,7 @@ BI.FlexVerticalCenter = BI.inherit(BI.Layout, {
             ref: function (_ref) {
                 self.wrapper = _ref;
             },
-            verticalAlign: BI.VerticalAlign.Middle,
+            verticalAlign: o.verticalAlign,
             horizontalAlign: o.horizontalAlign,
             columnSize: o.columnSize,
             rowSize: o.rowSize,
