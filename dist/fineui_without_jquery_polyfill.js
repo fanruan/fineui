@@ -1,4 +1,4 @@
-/*! time: 2021-3-31 16:10:29 */
+/*! time: 2021-3-31 23:40:33 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -2494,6 +2494,6349 @@ if (!_global.BI) {
 /* 130 */
 /***/ (function(module, exports) {
 
+(function () {
+    var moduleInjection = {};
+    BI.module = BI.module || function (xtype, cls) {
+        if (moduleInjection[xtype] != null) {
+            _global.console && console.error("module:[" + xtype + "] has been registed");
+        }
+        moduleInjection[xtype] = cls;
+    };
+
+    var constantInjection = {};
+    BI.constant = BI.constant || function (xtype, cls) {
+        if (constantInjection[xtype] != null) {
+            _global.console && console.error("constant:[" + xtype + "] has been registed");
+        }
+        constantInjection[xtype] = cls;
+    };
+
+    var modelInjection = {};
+    BI.model = BI.model || function (xtype, cls) {
+        if (modelInjection[xtype] != null) {
+            _global.console && console.error("model:[" + xtype + "] has been registed");
+        }
+        modelInjection[xtype] = cls;
+    };
+
+    var storeInjection = {};
+    BI.store = BI.store || function (xtype, cls) {
+        if (storeInjection[xtype] != null) {
+            _global.console && console.error("store:[" + xtype + "] has been registed");
+        }
+        storeInjection[xtype] = cls;
+    };
+
+    var serviceInjection = {};
+    BI.service = BI.service || function (xtype, cls) {
+        if (serviceInjection[xtype] != null) {
+            _global.console && console.error("service:[" + xtype + "] has been registed");
+        }
+        serviceInjection[xtype] = cls;
+    };
+
+    var providerInjection = {};
+    BI.provider = BI.provider || function (xtype, cls) {
+        if (providerInjection[xtype] != null) {
+            _global.console && console.error("provider:[" + xtype + "] has been registed");
+        }
+        providerInjection[xtype] = cls;
+    };
+
+    var configFunctions = {};
+    BI.config = BI.config || function (type, configFn, opt) {
+        if (BI.initialized) {
+            if (constantInjection[type]) {
+                return (constantInjection[type] = configFn(constantInjection[type]));
+            }
+            if (providerInjection[type]) {
+                if (!providers[type]) {
+                    providers[type] = new providerInjection[type]();
+                }
+                // 如果config被重新配置的话，需要删除掉之前的实例
+                if (providerInstance[type]) {
+                    delete providerInstance[type];
+                }
+                return configFn(providers[type]);
+            }
+            return BI.Plugin.configWidget(type, configFn, opt);
+        }
+        if (!configFunctions[type]) {
+            configFunctions[type] = [];
+            BI.prepares.push(function () {
+                var queue = configFunctions[type];
+                for (var i = 0; i < queue.length; i++) {
+                    if (constantInjection[type]) {
+                        constantInjection[type] = queue[i](constantInjection[type]);
+                        continue;
+                    }
+                    if (providerInjection[type]) {
+                        if (!providers[type]) {
+                            providers[type] = new providerInjection[type]();
+                        }
+                        if (providerInstance[type]) {
+                            delete providerInstance[type];
+                        }
+                        queue[i](providers[type]);
+                        continue;
+                    }
+                    BI.Plugin.configWidget(type, queue[i]);
+                }
+                configFunctions[type] = null;
+            });
+        }
+        configFunctions[type].push(configFn);
+    };
+
+    BI.getReference = BI.getReference || function (type, fn) {
+        return BI.Plugin.registerObject(type, fn);
+    };
+
+    var actions = {};
+    var globalAction = [];
+    BI.action = BI.action || function (type, actionFn) {
+        if (BI.isFunction(type)) {
+            globalAction.push(type);
+            return function () {
+                BI.remove(globalAction, function (idx) {
+                    return globalAction.indexOf(actionFn) === idx;
+                });
+            };
+        }
+        if (!actions[type]) {
+            actions[type] = [];
+        }
+        actions[type].push(actionFn);
+        return function () {
+            BI.remove(actions[type], function (idx) {
+                return actions[type].indexOf(actionFn) === idx;
+            });
+            if (actions[type].length === 0) {
+                delete actions[type];
+            }
+        };
+    };
+
+    var points = {};
+    BI.point = BI.point || function (type, action, pointFn, after) {
+        if (!points[type]) {
+            points[type] = {};
+        }
+        if (!points[type][action]) {
+            points[type][action] = {};
+        }
+        if (!points[type][action][after ? "after" : "before"]) {
+            points[type][action][after ? "after" : "before"] = [];
+        }
+        points[type][action][after ? "after" : "before"].push(pointFn);
+    };
+
+    BI.Modules = BI.Modules || {
+        getModule: function (type) {
+            if (!moduleInjection[type]) {
+                _global.console && console.error("module:[" + type + "] does not exists");
+                return false;
+            }
+            return moduleInjection[type];
+        },
+        getAllModules: function () {
+            return moduleInjection;
+        }
+    };
+
+    BI.Constants = BI.Constants || {
+        getConstant: function (type) {
+            return constantInjection[type];
+        }
+    };
+
+    var callPoint = function (inst, types) {
+        types = BI.isArray(types) ? types : [types];
+        BI.each(types, function (idx, type) {
+            if (points[type]) {
+                for (var action in points[type]) {
+                    var bfns = points[type][action].before;
+                    if (bfns) {
+                        BI.aspect.before(inst, action, function (bfns) {
+                            return function () {
+                                for (var i = 0, len = bfns.length; i < len; i++) {
+                                    try {
+                                        bfns[i].apply(inst, arguments);
+                                    } catch (e) {
+                                        _global.console && console.error(e);
+                                    }
+                                }
+                            };
+                        }(bfns));
+                    }
+                    var afns = points[type][action].after;
+                    if (afns) {
+                        BI.aspect.after(inst, action, function (afns) {
+                            return function () {
+                                for (var i = 0, len = afns.length; i < len; i++) {
+                                    try {
+                                        afns[i].apply(inst, arguments);
+                                    } catch (e) {
+                                        _global.console && console.error(e);
+                                    }
+                                }
+                            };
+                        }(afns));
+                    }
+                }
+            }
+        });
+    };
+
+    BI.Models = BI.Models || {
+        getModel: function (type, config) {
+            var inst = new modelInjection[type](config);
+            inst._constructor && inst._constructor(config);
+            inst.mixins && callPoint(inst, inst.mixins);
+            callPoint(inst, type);
+            return inst;
+        }
+    };
+
+    var stores = {};
+
+    BI.Stores = BI.Stores || {
+        getStore: function (type, config) {
+            if (stores[type]) {
+                return stores[type];
+            }
+            var inst = stores[type] = new storeInjection[type](config);
+            inst._constructor && inst._constructor(config, function () {
+                delete stores[type];
+            });
+            callPoint(inst, type);
+            return inst;
+        }
+    };
+
+    var services = {};
+
+    BI.Services = BI.Services || {
+        getService: function (type, config) {
+            if (services[type]) {
+                return services[type];
+            }
+            services[type] = new serviceInjection[type](config);
+            callPoint(services[type], type);
+            return services[type];
+        }
+    };
+
+    var providers = {},
+        providerInstance = {};
+
+    BI.Providers = BI.Providers || {
+        getProvider: function (type, config) {
+            if (!providers[type]) {
+                providers[type] = new providerInjection[type]();
+            }
+            if (!providerInstance[type]) {
+                providerInstance[type] = new (providers[type].$get())(config);
+            }
+            return providerInstance[type];
+        }
+    };
+
+    BI.Actions = BI.Actions || {
+        runAction: function (type, event, config) {
+            BI.each(actions[type], function (i, act) {
+                try {
+                    act(event, config);
+                } catch (e) {
+                    _global.console && console.error(e);
+                }
+            });
+        },
+        runGlobalAction: function () {
+            var args = [].slice.call(arguments);
+            BI.each(globalAction, function (i, act) {
+                try {
+                    act.apply(null, args);
+                } catch (e) {
+                    _global.console && console.error(e);
+                }
+            });
+        }
+    };
+
+    BI.getResource = BI.getResource || function (type, config) {
+        if (constantInjection[type]) {
+            return BI.Constants.getConstant(type);
+        }
+        if (modelInjection[type]) {
+            return BI.Models.getModel(type, config);
+        }
+        if (storeInjection[type]) {
+            return BI.Stores.getStore(type, config);
+        }
+        if (serviceInjection[type]) {
+            return BI.Services.getService(type, config);
+        }
+        if (providerInjection[type]) {
+            return BI.Providers.getProvider(type, config);
+        }
+    };
+})();
+
+
+/***/ }),
+/* 131 */
+/***/ (function(module, exports) {
+
+BI.prepares.push(function () {
+    BI.Date = BI.Date || {};
+    // 牵扯到国际化这些常量在页面加载后再生效
+    // full day names
+    BI.Date._DN = [BI.i18nText("BI-Basic_Sunday"),
+        BI.i18nText("BI-Basic_Monday"),
+        BI.i18nText("BI-Basic_Tuesday"),
+        BI.i18nText("BI-Basic_Wednesday"),
+        BI.i18nText("BI-Basic_Thursday"),
+        BI.i18nText("BI-Basic_Friday"),
+        BI.i18nText("BI-Basic_Saturday"),
+        BI.i18nText("BI-Basic_Sunday")];
+
+    // short day names
+    BI.Date._SDN = [BI.i18nText("BI-Basic_Simple_Sunday"),
+        BI.i18nText("BI-Basic_Simple_Monday"),
+        BI.i18nText("BI-Basic_Simple_Tuesday"),
+        BI.i18nText("BI-Basic_Simple_Wednesday"),
+        BI.i18nText("BI-Basic_Simple_Thursday"),
+        BI.i18nText("BI-Basic_Simple_Friday"),
+        BI.i18nText("BI-Basic_Simple_Saturday"),
+        BI.i18nText("BI-Basic_Simple_Sunday")];
+
+    // Monday first, etc.
+    BI.Date._FD = 1;
+
+    // full month namesdat
+    BI.Date._MN = [
+        BI.i18nText("BI-Basic_January"),
+        BI.i18nText("BI-Basic_February"),
+        BI.i18nText("BI-Basic_March"),
+        BI.i18nText("BI-Basic_April"),
+        BI.i18nText("BI-Basic_May"),
+        BI.i18nText("BI-Basic_June"),
+        BI.i18nText("BI-Basic_July"),
+        BI.i18nText("BI-Basic_August"),
+        BI.i18nText("BI-Basic_September"),
+        BI.i18nText("BI-Basic_October"),
+        BI.i18nText("BI-Basic_November"),
+        BI.i18nText("BI-Basic_December")];
+
+    // short month names
+    BI.Date._SMN = [0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11];
+
+    BI.Date._QN = ["", BI.i18nText("BI-Quarter_1"),
+        BI.i18nText("BI-Quarter_2"),
+        BI.i18nText("BI-Quarter_3"),
+        BI.i18nText("BI-Quarter_4")];
+
+    /** Adds the number of days array to the Date object. */
+    BI.Date._MD = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+
+    // 实际上无论周几作为一周的第一天，周初周末都是在-6-0间做偏移，用一个数组就可以
+    BI.Date._OFFSET = [0, -1, -2, -3, -4, -5, -6];
+});
+
+/***/ }),
+/* 132 */
+/***/ (function(module, exports) {
+
+/**
+ * 事件集合
+ * @class BI.Events
+ */
+_.extend(BI, {
+    Events: {
+
+        /**
+         * @static
+         * @property keydown事件
+         */
+        KEYDOWN: "_KEYDOWN",
+
+        /**
+         * @static
+         * @property 回撤事件
+         */
+        BACKSPACE: "_BACKSPACE",
+
+        /**
+         * @static
+         * @property 空格事件
+         */
+        SPACE: "_SPACE",
+
+        /**
+         * @static
+         * @property 回车事件
+         */
+        ENTER: "_ENTER",
+
+        /**
+         * @static
+         * @property 确定事件
+         */
+        CONFIRM: "_CONFIRM",
+
+        /**
+         * @static
+         * @property 错误事件
+         */
+        ERROR: "_ERROR",
+
+        /**
+         * @static
+         * @property 暂停事件
+         */
+        PAUSE: "_PAUSE",
+
+        /**
+         * @static
+         * @property destroy事件
+         */
+        DESTROY: "_DESTROY",
+
+        /**
+         * @static
+         * @property 挂载事件
+         */
+        MOUNT: "_MOUNT",
+
+        /**
+         * @static
+         * @property 取消挂载事件
+         */
+        UNMOUNT: "_UNMOUNT",
+
+        /**
+         * @static
+         * @property 清除选择
+         */
+        CLEAR: "_CLEAR",
+
+        /**
+         * @static
+         * @property 添加数据
+         */
+        ADD: "_ADD",
+
+        /**
+         * @static
+         * @property 正在编辑状态事件
+         */
+        EDITING: "_EDITING",
+
+        /**
+         * @static
+         * @property 空状态事件
+         */
+        EMPTY: "_EMPTY",
+
+        /**
+         * @static
+         * @property 显示隐藏事件
+         */
+        VIEW: "_VIEW",
+
+        /**
+         * @static
+         * @property 窗体改变大小
+         */
+        RESIZE: "_RESIZE",
+
+        /**
+         * @static
+         * @property 编辑前事件
+         */
+        BEFOREEDIT: "_BEFOREEDIT",
+
+        /**
+         * @static
+         * @property 编辑后事件
+         */
+        AFTEREDIT: "_AFTEREDIT",
+
+        /**
+         * @static
+         * @property 开始编辑事件
+         */
+        STARTEDIT: "_STARTEDIT",
+
+        /**
+         * @static
+         * @property 停止编辑事件
+         */
+        STOPEDIT: "_STOPEDIT",
+
+        /**
+         * @static
+         * @property 值改变事件
+         */
+        CHANGE: "_CHANGE",
+
+        /**
+         * @static
+         * @property 下拉弹出菜单事件
+         */
+        EXPAND: "_EXPAND",
+
+        /**
+         * @static
+         * @property 关闭下拉菜单事件
+         */
+        COLLAPSE: "_COLLAPSE",
+
+        /**
+         * @static
+         * @property 回调事件
+         */
+        CALLBACK: "_CALLBACK",
+
+        /**
+         * @static
+         * @property 点击事件
+         */
+        CLICK: "_CLICK",
+
+        /**
+         * @static
+         * @property 状态改变事件，一般是用在复选按钮和单选按钮
+         */
+        STATECHANGE: "_STATECHANGE",
+
+        /**
+         * @static
+         * @property 状态改变前事件
+         */
+        BEFORESTATECHANGE: "_BEFORESTATECHANGE",
+
+
+        /**
+         * @static
+         * @property 初始化事件
+         */
+        INIT: "_INIT",
+
+        /**
+         * @static
+         * @property 初始化后事件
+         */
+        AFTERINIT: "_AFTERINIT",
+
+        /**
+         * @static
+         * @property 滚动条滚动事件
+         */
+        SCROLL: "_SCROLL",
+
+
+        /**
+         * @static
+         * @property 开始加载事件
+         */
+        STARTLOAD: "_STARTLOAD",
+
+        /**
+         * @static
+         * @property 加载后事件
+         */
+        AFTERLOAD: "_AFTERLOAD",
+
+
+        /**
+         * @static
+         * @property 提交前事件
+         */
+        BS: "beforesubmit",
+
+        /**
+         * @static
+         * @property 提交后事件
+         */
+        AS: "aftersubmit",
+
+        /**
+         * @static
+         * @property 提交完成事件
+         */
+        SC: "submitcomplete",
+
+        /**
+         * @static
+         * @property 提交失败事件
+         */
+        SF: "submitfailure",
+
+        /**
+         * @static
+         * @property 提交成功事件
+         */
+        SS: "submitsuccess",
+
+        /**
+         * @static
+         * @property 校验提交前事件
+         */
+        BVW: "beforeverifywrite",
+
+        /**
+         * @static
+         * @property 校验提交后事件
+         */
+        AVW: "afterverifywrite",
+
+        /**
+         * @static
+         * @property 校验后事件
+         */
+        AV: "afterverify",
+
+        /**
+         * @static
+         * @property 填报前事件
+         */
+        BW: "beforewrite",
+
+        /**
+         * @static
+         * @property 填报后事件
+         */
+        AW: "afterwrite",
+
+        /**
+         * @static
+         * @property 填报成功事件
+         */
+        WS: "writesuccess",
+
+        /**
+         * @static
+         * @property 填报失败事件
+         */
+        WF: "writefailure",
+
+        /**
+         * @static
+         * @property 添加行前事件
+         */
+        BA: "beforeappend",
+
+        /**
+         * @static
+         * @property 添加行后事件
+         */
+        AA: "afterappend",
+
+        /**
+         * @static
+         * @property 删除行前事件
+         */
+        BD: "beforedelete",
+
+        /**
+         * @static
+         * @property 删除行后事件
+         */
+        AD: "beforedelete",
+
+        /**
+         * @static
+         * @property 未提交离开事件
+         */
+        UC: "unloadcheck",
+
+
+        /**
+         * @static
+         * @property PDF导出前事件
+         */
+        BTOPDF: "beforetopdf",
+
+        /**
+         * @static
+         * @property PDF导出后事件
+         */
+        ATOPDF: "aftertopdf",
+
+        /**
+         * @static
+         * @property Excel导出前事件
+         */
+        BTOEXCEL: "beforetoexcel",
+
+        /**
+         * @static
+         * @property Excel导出后事件
+         */
+        ATOEXCEL: "aftertoexcel",
+
+        /**
+         * @static
+         * @property Word导出前事件
+         */
+        BTOWORD: "beforetoword",
+
+        /**
+         * @static
+         * @property Word导出后事件
+         */
+        ATOWORD: "aftertoword",
+
+        /**
+         * @static
+         * @property 图片导出前事件
+         */
+        BTOIMAGE: "beforetoimage",
+
+        /**
+         * @static
+         * @property 图片导出后事件
+         */
+        ATOIMAGE: "aftertoimage",
+
+        /**
+         * @static
+         * @property HTML导出前事件
+         */
+        BTOHTML: "beforetohtml",
+
+        /**
+         * @static
+         * @property HTML导出后事件
+         */
+        ATOHTML: "aftertohtml",
+
+        /**
+         * @static
+         * @property Excel导入前事件
+         */
+        BIMEXCEL: "beforeimportexcel",
+
+        /**
+         * @static
+         * @property Excel导出后事件
+         */
+        AIMEXCEL: "afterimportexcel",
+
+        /**
+         * @static
+         * @property PDF打印前事件
+         */
+        BPDFPRINT: "beforepdfprint",
+
+        /**
+         * @static
+         * @property PDF打印后事件
+         */
+        APDFPRINT: "afterpdfprint",
+
+        /**
+         * @static
+         * @property Flash打印前事件
+         */
+        BFLASHPRINT: "beforeflashprint",
+
+        /**
+         * @static
+         * @property Flash打印后事件
+         */
+        AFLASHPRINT: "afterflashprint",
+
+        /**
+         * @static
+         * @property Applet打印前事件
+         */
+        BAPPLETPRINT: "beforeappletprint",
+
+        /**
+         * @static
+         * @property Applet打印后事件
+         */
+        AAPPLETPRINT: "afterappletprint",
+
+        /**
+         * @static
+         * @property 服务器打印前事件
+         */
+        BSEVERPRINT: "beforeserverprint",
+
+        /**
+         * @static
+         * @property 服务器打印后事件
+         */
+        ASERVERPRINT: "afterserverprint",
+
+        /**
+         * @static
+         * @property 邮件发送前事件
+         */
+        BEMAIL: "beforeemail",
+
+        /**
+         * @static
+         * @property 邮件发送后事件
+         */
+        AEMAIL: "afteremail"
+    }
+});
+
+/***/ }),
+/* 133 */
+/***/ (function(module, exports) {
+
+/**
+ * 常量
+ */
+
+_.extend(BI, {
+    MAX: 0xfffffffffffffff,
+    MIN: -0xfffffffffffffff,
+    EVENT_RESPONSE_TIME: 200,
+    zIndex_layer: 1e5,
+    zIndex_popover: 1e6,
+    zIndex_popup: 1e7,
+    zIndex_masker: 1e8,
+    zIndex_tip: 1e9,
+    emptyStr: "",
+    pixUnit: "px",
+    pixRatio: 1,
+    emptyFn: function () {
+    },
+    empty: null,
+    Key: {
+        48: "0",
+        49: "1",
+        50: "2",
+        51: "3",
+        52: "4",
+        53: "5",
+        54: "6",
+        55: "7",
+        56: "8",
+        57: "9",
+        65: "a",
+        66: "b",
+        67: "c",
+        68: "d",
+        69: "e",
+        70: "f",
+        71: "g",
+        72: "h",
+        73: "i",
+        74: "j",
+        75: "k",
+        76: "l",
+        77: "m",
+        78: "n",
+        79: "o",
+        80: "p",
+        81: "q",
+        82: "r",
+        83: "s",
+        84: "t",
+        85: "u",
+        86: "v",
+        87: "w",
+        88: "x",
+        89: "y",
+        90: "z",
+        96: "0",
+        97: "1",
+        98: "2",
+        99: "3",
+        100: "4",
+        101: "5",
+        102: "6",
+        103: "7",
+        104: "8",
+        105: "9",
+        106: "*",
+        107: "+",
+        109: "-",
+        110: ".",
+        111: "/"
+    },
+    KeyCode: {
+        BACKSPACE: 8,
+        COMMA: 188,
+        DELETE: 46,
+        DOWN: 40,
+        END: 35,
+        ENTER: 13,
+        ESCAPE: 27,
+        HOME: 36,
+        LEFT: 37,
+        NUMPAD_ADD: 107,
+        NUMPAD_DECIMAL: 110,
+        NUMPAD_DIVIDE: 111,
+        NUMPAD_ENTER: 108,
+        NUMPAD_MULTIPLY: 106,
+        NUMPAD_SUBTRACT: 109,
+        PAGE_DOWN: 34,
+        PAGE_UP: 33,
+        PERIOD: 190,
+        RIGHT: 39,
+        SPACE: 32,
+        TAB: 9,
+        UP: 38
+    },
+    Status: {
+        SUCCESS: 1,
+        WRONG: 2,
+        START: 3,
+        END: 4,
+        WAITING: 5,
+        READY: 6,
+        RUNNING: 7,
+        OUTOFBOUNDS: 8,
+        NULL: -1
+    },
+    Direction: {
+        Top: "top",
+        Bottom: "bottom",
+        Left: "left",
+        Right: "right",
+        Custom: "custom"
+    },
+    Axis: {
+        Vertical: "vertical",
+        Horizontal: "horizontal"
+    },
+    Selection: {
+        Default: -2,
+        None: -1,
+        Single: 0,
+        Multi: 1,
+        All: 2
+    },
+    HorizontalAlign: {
+        Left: "left",
+        Right: "right",
+        Center: "center",
+        Stretch: "stretch"
+    },
+    VerticalAlign: {
+        Middle: "middle",
+        Top: "top",
+        Bottom: "bottom",
+        Stretch: "stretch"
+    },
+    StartOfWeek: 1
+});
+
+
+/***/ }),
+/* 134 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/* WEBPACK VAR INJECTION */(function(global) {(function () {
+    var _global;
+    if (typeof window !== "undefined") {
+        _global = window;
+    } else if (typeof global !== "undefined") {
+        _global = global;
+    } else if (typeof self !== "undefined") {
+        _global = self;
+    } else {
+        _global = this;
+    }
+    if (!_global.BI) {
+        _global.BI = {};
+    }
+
+    function isEmpty (value) {
+        // 判断是否为空值
+        var result = value === "" || value === null || value === undefined;
+        return result;
+    }
+
+    // 判断是否是无效的日期
+    function isInvalidDate (date) {
+        return date == "Invalid Date" || date == "NaN";
+    }
+
+    /**
+     * CHART-1400
+     * 使用数值计算的方式来获取任意数值的科学技术表示值。
+     * 科学计数格式
+     */
+    function _eFormat (text, fmt) {
+        text = +text;
+
+        return eFormat(text, fmt);
+
+        /**
+         * 科学计数格式具体计算过程
+         * @param num
+         * @param format {String}有两种形式，
+         *      1、"0.00E00"这样的字符串表示正常的科学计数表示，只不过规定了数值精确到百分位，
+         *         而数量级的绝对值如果是10以下的时候在前面补零。
+         *      2、 "##0.0E0"这样的字符串则规定用科学计数法表示之后的数值的整数部分是三位，精确到十分位，
+         *         数量级没有规定，因为没见过实数里有用科学计数法表示之后E的后面会小于一位的情况（0无所谓）。
+         * @returns {*}
+         */
+        function eFormat (num, format) {
+            var neg = num < 0 ? (num *= -1, "-") : "",
+                magnitudeNeg = "";
+
+            var funcName = num > 0 && num < 1 ? "floor" : "ceil";  // -0.9999->-1
+            // 数量级
+            var magnitude = Math[funcName](Math.log(num) / Math.log(10));
+
+            if (!isFinite(magnitude)) {
+                return format.replace(/#/ig, "").replace(/\.e/ig, "E");
+            }
+
+            num = num / Math.pow(10, magnitude);
+
+            // 让num转化成[1, 10)区间上的数
+            if (num > 0 && num < 1) {
+                num *= 10;
+                magnitude -= 1;
+            }
+
+            // 计算出format中需要显示的整数部分的位数，然后更新这个数值，也更新数量级
+            var integerLen = getInteger(magnitude, format);
+            integerLen > 1 && (magnitude -= integerLen - 1, num *= Math.pow(10, integerLen - 1));
+
+            magnitude < 0 && (magnitudeNeg = "-", magnitude *= -1);
+
+            // 获取科学计数法精确到的位数
+            var precision = getPrecision(format);
+            // 判断num经过四舍五入之后是否有进位
+            var isValueCarry = isValueCarried(num);
+
+            num *= Math.pow(10, precision);
+            num = Math.round(num);
+            // 如果出现进位的情况，将num除以10
+            isValueCarry && (num /= 10, magnitude += magnitudeNeg === "-" ? -1 : 1);
+            num /= Math.pow(10, precision);
+
+            // 小数部分保留precision位
+            num = num.toFixed(precision);
+            // 格式化指数的部分
+            magnitude = formatExponential(format, magnitude, magnitudeNeg);
+
+            return neg + num + "E" + magnitude;
+        }
+
+        // 获取format格式规定的数量级的形式
+        function formatExponential (format, num, magnitudeNeg) {
+            num += "";
+            if (!/e/ig.test(format)) {
+                return num;
+            }
+            format = format.split(/e/ig)[1];
+
+            while (num.length < format.length) {
+                num = "0" + num;
+            }
+
+            // 如果magnitudeNeg是一个"-"，而且num正好全是0，那么就别显示负号了
+            var isAllZero = true;
+            for (var i = 0, len = num.length; i < len; i++) {
+                if (!isAllZero) {
+                    continue;
+                }
+                isAllZero = num.charAt(i) === "0";
+            }
+            magnitudeNeg = isAllZero ? "" : magnitudeNeg;
+
+            return magnitudeNeg + num;
+        }
+
+        // 获取format规定的科学计数法精确到的位数
+        function getPrecision (format) {
+            if (!/e/ig.test(format)) {
+                return 0;
+            }
+            var arr = format.split(/e/ig)[0].split(".");
+
+            return arr.length > 1 ? arr[1].length : 0;
+        }
+
+        // 获取数值科学计数法表示之后整数的位数
+        // 这边我们还需要考虑#和0的问题
+        function getInteger (magnitude, format) {
+            if (!/e/ig.test(format)) {
+                return 0;
+            }
+            // return format.split(/e/ig)[0].split(".")[0].length;
+
+            var formatLeft = format.split(/e/ig)[0].split(".")[0], i, f, len = formatLeft.length;
+            var valueLeftLen = 0;
+
+            for (i = 0; i < len; i++) {
+                f = formatLeft.charAt(i);
+                // "#"所在的位置到末尾长度小于等于值的整数部分长度，那么这个#才可以占位
+                if (f == 0 || (f == "#" && (len - i <= magnitude + 1))) {
+                    valueLeftLen++;
+                }
+            }
+
+            return valueLeftLen;
+        }
+
+        // 判断num通过round函数之后是否有进位
+        function isValueCarried (num) {
+            var roundNum = Math.round(num);
+            num = (num + "").split(".")[0];
+            roundNum = (roundNum + "").split(".")[0];
+            return num.length !== roundNum.length;
+        }
+    }
+
+    //'#.##'之类的格式处理 1.324e-18 这种的科学数字
+    function _dealNumberPrecision (text, fright) {
+        if (/[eE]/.test(text)) {
+            var precision = 0, i = 0, ch;
+
+            if (/[%‰]$/.test(fright)) {
+                precision = /[%]$/.test(fright) ? 2 : 3;
+            }
+
+            for (var len = fright.length; i < len; i++) {
+                if ((ch = fright.charAt(i)) == "0" || ch == "#") {
+                    precision++;
+                }
+            }
+            return Number(text).toFixed(precision);
+        }
+
+        return text;
+    }
+
+    /**
+     * 数字格式
+     */
+    function _numberFormat (text, format) {
+        var text = text + "";
+
+        //在调用数字格式的时候如果text里没有任何数字则不处理
+        if (!(/[0-9]/.test(text)) || !format) {
+            return text;
+        }
+
+        // 数字格式，区分正负数
+        var numMod = format.indexOf(";");
+        if (numMod > -1) {
+            if (text >= 0) {
+                return _numberFormat(text + "", format.substring(0, numMod));
+            }
+            return _numberFormat((-text) + "", format.substr(numMod + 1));
+
+        } else {
+            // 兼容格式处理负数的情况(copy:fr-jquery.format.js)
+            if (+text < 0 && format.charAt(0) !== "-") {
+                return _numberFormat((-text) + "", "-" + format);
+            }
+        }
+
+        var fp = format.split("."), fleft = fp[0] || "", fright = fp[1] || "";
+        text = _dealNumberPrecision(text, fright);
+        var tp = text.split("."), tleft = tp[0] || "", tright = tp[1] || "";
+
+        // 百分比,千分比的小数点移位处理
+        if (/[%‰]$/.test(format)) {
+            var paddingZero = /[%]$/.test(format) ? "00" : "000";
+            tright += paddingZero;
+            tleft += tright.substr(0, paddingZero.length);
+            tleft = tleft.replace(/^0+/gi, "");
+            tright = tright.substr(paddingZero.length).replace(/0+$/gi, "");
+        }
+        var right = _dealWithRight(tright, fright);
+        if (right.leftPlus) {
+            // 小数点后有进位
+            tleft = parseInt(tleft) + 1 + "";
+
+            tleft = isNaN(tleft) ? "1" : tleft;
+        }
+        right = right.num;
+        var left = _dealWithLeft(tleft, fleft);
+        if (!(/[0-9]/.test(left))) {
+            left = left + "0";
+        }
+        if (!(/[0-9]/.test(right))) {
+            return left + right;
+        } else {
+            return left + "." + right;
+        }
+    }
+
+    /**
+     * 处理小数点右边小数部分
+     * @param tright 右边内容
+     * @param fright 右边格式
+     * @returns {JSON} 返回处理结果和整数部分是否需要进位
+     * @private
+     */
+    function _dealWithRight (tright, fright) {
+        var right = "", j = 0, i = 0;
+        for (var len = fright.length; i < len; i++) {
+            var ch = fright.charAt(i);
+            var c = tright.charAt(j);
+            switch (ch) {
+                case "0":
+                    if (isEmpty(c)) {
+                        c = "0";
+                    }
+                    right += c;
+                    j++;
+                    break;
+                case "#":
+                    right += c;
+                    j++;
+                    break;
+                default :
+                    right += ch;
+                    break;
+            }
+        }
+        var rll = tright.substr(j);
+        var result = {};
+        if (!isEmpty(rll) && rll.charAt(0) > 4) {
+            // 有多余字符，需要四舍五入
+            result.leftPlus = true;
+            var numReg = right.match(/^[0-9]+/);
+            if (numReg) {
+                var num = numReg[0];
+                var orilen = num.length;
+                var newnum = parseInt(num) + 1 + "";
+                // 进位到整数部分
+                if (newnum.length > orilen) {
+                    newnum = newnum.substr(1);
+                } else {
+                    newnum = BI.leftPad(newnum, orilen, "0");
+                    result.leftPlus = false;
+                }
+                right = right.replace(/^[0-9]+/, newnum);
+            }
+        }
+        result.num = right;
+        return result;
+    }
+
+    /**
+     * 处理小数点左边整数部分
+     * @param tleft 左边内容
+     * @param fleft 左边格式
+     * @returns {string} 返回处理结果
+     * @private
+     */
+    function _dealWithLeft (tleft, fleft) {
+        var left = "";
+        var j = tleft.length - 1;
+        var combo = -1, last = -1;
+        var i = fleft.length - 1;
+        for (; i >= 0; i--) {
+            var ch = fleft.charAt(i);
+            var c = tleft.charAt(j);
+            switch (ch) {
+                case "0":
+                    if (isEmpty(c)) {
+                        c = "0";
+                    }
+                    last = -1;
+                    left = c + left;
+                    j--;
+                    break;
+                case "#":
+                    last = i;
+                    left = c + left;
+                    j--;
+                    break;
+                case ",":
+                    if (!isEmpty(c)) {
+                        // 计算一个,分隔区间的长度
+                        var com = fleft.match(/,[#0]+/);
+                        if (com) {
+                            combo = com[0].length - 1;
+                        }
+                        left = "," + left;
+                    }
+                    break;
+                default :
+                    left = ch + left;
+                    break;
+            }
+        }
+        if (last > -1) {
+            // 处理剩余字符
+            var tll = tleft.substr(0, j + 1);
+            left = left.substr(0, last) + tll + left.substr(last);
+        }
+        if (combo > 0) {
+            // 处理,分隔区间
+            var res = left.match(/[0-9]+,/);
+            if (res) {
+                res = res[0];
+                var newstr = "", n = res.length - 1 - combo;
+                for (; n >= 0; n = n - combo) {
+                    newstr = res.substr(n, combo) + "," + newstr;
+                }
+                var lres = res.substr(0, n + combo);
+                if (!isEmpty(lres)) {
+                    newstr = lres + "," + newstr;
+                }
+            }
+            left = left.replace(/[0-9]+,/, newstr);
+        }
+        return left;
+    }
+
+
+    BI.cjkEncode = function (text) {
+        // alex:如果非字符串,返回其本身(cjkEncode(234) 返回 ""是不对的)
+        if (typeof text !== "string") {
+            return text;
+        }
+
+        var newText = "";
+        for (var i = 0; i < text.length; i++) {
+            var code = text.charCodeAt(i);
+            if (code >= 128 || code === 91 || code === 93) {// 91 is "[", 93 is "]".
+                newText += "[" + code.toString(16) + "]";
+            } else {
+                newText += text.charAt(i);
+            }
+        }
+
+        return newText;
+    };
+
+    /**
+     * 将cjkEncode处理过的字符串转化为原始字符串
+     *
+     * @static
+     * @param text 需要做解码的字符串
+     * @return {String} 解码后的字符串
+     */
+    BI.cjkDecode = function (text) {
+        if (text == null) {
+            return "";
+        }
+        // 查找没有 "[", 直接返回.  kunsnat:数字的时候, 不支持indexOf方法, 也是直接返回.
+        if (!isNaN(text) || text.indexOf("[") == -1) {
+            return text;
+        }
+
+        var newText = "";
+        for (var i = 0; i < text.length; i++) {
+            var ch = text.charAt(i);
+            if (ch == "[") {
+                var rightIdx = text.indexOf("]", i + 1);
+                if (rightIdx > i + 1) {
+                    var subText = text.substring(i + 1, rightIdx);
+                    // james：主要是考虑[CDATA[]]这样的值的出现
+                    if (subText.length > 0) {
+                        ch = String.fromCharCode(eval("0x" + subText));
+                    }
+
+                    i = rightIdx;
+                }
+            }
+
+            newText += ch;
+        }
+
+        return newText;
+    };
+
+    // replace the html special tags
+    var SPECIAL_TAGS = {
+        "&": "&amp;",
+        "\"": "&quot;",
+        "<": "&lt;",
+        ">": "&gt;",
+        " ": "&nbsp;"
+    };
+    BI.htmlEncode = function (text) {
+        return BI.isNull(text) ? "" : BI.replaceAll(text + "", "&|\"|<|>|\\s", function (v) {
+            return SPECIAL_TAGS[v] ? SPECIAL_TAGS[v] : "&nbsp;";
+        });
+    };
+    // html decode
+    BI.htmlDecode = function (text) {
+        return BI.isNull(text) ? "" : BI.replaceAll(text + "", "&amp;|&quot;|&lt;|&gt;|&nbsp;", function (v) {
+            switch (v) {
+                case "&amp;":
+                    return "&";
+                case "&quot;":
+                    return "\"";
+                case "&lt;":
+                    return "<";
+                case "&gt;":
+                    return ">";
+                case "&nbsp;":
+                default:
+                    return " ";
+            }
+        });
+    };
+
+    BI.cjkEncodeDO = function (o) {
+        if (BI.isPlainObject(o)) {
+            var result = {};
+            _.each(o, function (v, k) {
+                if (!(typeof v === "string")) {
+                    v = BI.jsonEncode(v);
+                }
+                // wei:bug 43338，如果key是中文，cjkencode后o的长度就加了1，ie9以下版本死循环，所以新建对象result。
+                k = BI.cjkEncode(k);
+                result[k] = BI.cjkEncode(v);
+            });
+            return result;
+        }
+        return o;
+    };
+
+    BI.jsonEncode = function (o) {
+        // james:这个Encode是抄的EXT的
+        var useHasOwn = !!{}.hasOwnProperty;
+
+        // crashes Safari in some instances
+        // var validRE = /^("(\\.|[^"\\\n\r])*?"|[,:{}\[\]0-9.\-+Eaeflnr-u \n\r\t])+?$/;
+
+        var m = {
+            "\b": "\\b",
+            "\t": "\\t",
+            "\n": "\\n",
+            "\f": "\\f",
+            "\r": "\\r",
+            "\"": "\\\"",
+            "\\": "\\\\"
+        };
+
+        var encodeString = function (s) {
+            if (/["\\\x00-\x1f]/.test(s)) {
+                return "\"" + s.replace(/([\x00-\x1f\\"])/g, function (a, b) {
+                    var c = m[b];
+                    if (c) {
+                        return c;
+                    }
+                    c = b.charCodeAt();
+                    return "\\u00" +
+                        Math.floor(c / 16).toString(16) +
+                        (c % 16).toString(16);
+                }) + "\"";
+            }
+            return "\"" + s + "\"";
+        };
+
+        var encodeArray = function (o) {
+            var a = ["["], b, i, l = o.length, v;
+            for (i = 0; i < l; i += 1) {
+                v = o[i];
+                switch (typeof v) {
+                    case "undefined":
+                    case "function":
+                    case "unknown":
+                        break;
+                    default:
+                        if (b) {
+                            a.push(",");
+                        }
+                        a.push(v === null ? "null" : BI.jsonEncode(v));
+                        b = true;
+                }
+            }
+            a.push("]");
+            return a.join("");
+        };
+
+        if (typeof o === "undefined" || o === null) {
+            return "null";
+        } else if (BI.isArray(o)) {
+            return encodeArray(o);
+        } else if (o instanceof Date) {
+            /*
+             * alex:原来只是把年月日时分秒简单地拼成一个String,无法decode
+             * 现在这么处理就可以decode了,但是JS.jsonDecode和Java.JSONObject也要跟着改一下
+             */
+            return BI.jsonEncode({
+                __time__: o.getTime()
+            });
+        } else if (typeof o === "string") {
+            return encodeString(o);
+        } else if (typeof o === "number") {
+            return isFinite(o) ? String(o) : "null";
+        } else if (typeof o === "boolean") {
+            return String(o);
+        } else if (BI.isFunction(o)) {
+            return String(o);
+        }
+        var a = ["{"], b, i, v;
+        for (i in o) {
+            if (!useHasOwn || o.hasOwnProperty(i)) {
+                v = o[i];
+                switch (typeof v) {
+                    case "undefined":
+                    case "unknown":
+                        break;
+                    default:
+                        if (b) {
+                            a.push(",");
+                        }
+                        a.push(BI.jsonEncode(i), ":",
+                            v === null ? "null" : BI.jsonEncode(v));
+                        b = true;
+                }
+            }
+        }
+        a.push("}");
+        return a.join("");
+
+    };
+
+    BI.jsonDecode = function (text) {
+
+        try {
+            // 注意0啊
+            // var jo = $.parseJSON(text) || {};
+            var jo = BI.$ ? BI.$.parseJSON(text) : _global.JSON.parse(text);
+            if (jo == null) {
+                jo = {};
+            }
+        } catch (e) {
+            /*
+             * richie:浏览器只支持标准的JSON字符串转换，而jQuery会默认调用浏览器的window.JSON.parse()函数进行解析
+             * 比如：var str = "{'a':'b'}",这种形式的字符串转换为JSON就会抛异常
+             */
+            try {
+                jo = new Function("return " + text)() || {};
+            } catch (e) {
+                // do nothing
+            }
+            if (jo == null) {
+                jo = [];
+            }
+        }
+        if (!_hasDateInJson(text)) {
+            return jo;
+        }
+
+        function _hasDateInJson (json) {
+            if (!json || typeof json !== "string") {
+                return false;
+            }
+            return json.indexOf("__time__") != -1;
+        }
+
+        return (function (o) {
+            if (typeof o === "string") {
+                return o;
+            }
+            if (o && o.__time__ != null) {
+                return new Date(o.__time__);
+            }
+            for (var a in o) {
+                if (o[a] == o || typeof o[a] === "object" || _.isFunction(o[a])) {
+                    break;
+                }
+                o[a] = arguments.callee(o[a]);
+            }
+
+            return o;
+        })(jo);
+    };
+
+    /**
+     * 获取编码后的url
+     * @param urlTemplate url模板
+     * @param param 参数
+     * @returns {*|String}
+     * @example
+     * BI.getEncodeURL("design/{tableName}/{fieldName}",{tableName: "A", fieldName: "a"}) //  design/A/a
+     */
+    BI.getEncodeURL = function (urlTemplate, param) {
+        return BI.replaceAll(urlTemplate, "\\{(.*?)\\}", function (ori, str) {
+            return BI.encodeURIComponent(BI.isObject(param) ? param[str] : param);
+        });
+    };
+
+    BI.encodeURIComponent = function (url) {
+        BI.specialCharsMap = BI.specialCharsMap || {};
+        url = url || "";
+        url = BI.replaceAll(url + "", BI.keys(BI.specialCharsMap || []).join("|"), function (str) {
+            switch (str) {
+                case "\\":
+                    return BI.specialCharsMap["\\\\"] || str;
+                default:
+                    return BI.specialCharsMap[str] || str;
+            }
+        });
+        return _global.encodeURIComponent(url);
+    };
+
+    BI.decodeURIComponent = function (url) {
+        var reserveSpecialCharsMap = {};
+        BI.each(BI.specialCharsMap, function (initialChar, encodeChar) {
+            reserveSpecialCharsMap[encodeChar] = initialChar === "\\\\" ? "\\" : initialChar;
+        });
+        url = url || "";
+        url = BI.replaceAll(url + "", BI.keys(reserveSpecialCharsMap || []).join("|"), function (str) {
+            return reserveSpecialCharsMap[str] || str;
+        });
+        return _global.decodeURIComponent(url);
+    };
+
+    BI.contentFormat = function (cv, fmt) {
+        if (isEmpty(cv)) {
+            // 原值为空，返回空字符
+            return "";
+        }
+        var text = cv.toString();
+        if (isEmpty(fmt)) {
+            // 格式为空，返回原字符
+            return text;
+        }
+        if (fmt.match(/^T/)) {
+            // T - 文本格式
+            return text;
+        } else if (fmt.match(/^D/)) {
+            // D - 日期(时间)格式
+            if (!(cv instanceof Date)) {
+                if (typeof cv === "number") {
+                    // 毫秒数类型
+                    cv = new Date(cv);
+                } else {
+                    //字符串类型转化为date类型
+                    cv = new Date(Date.parse(("" + cv).replace(/-|\./g, "/")));
+                }
+            }
+            if (!isInvalidDate(cv) && !BI.isNull(cv)) {
+                var needTrim = fmt.match(/^DT/);
+                text = BI.date2Str(cv, fmt.substring(needTrim ? 2 : 1));
+            }
+        } else if (fmt.match(/E/)) {
+            // 科学计数格式
+            text = _eFormat(text, fmt);
+        } else {
+            // 数字格式
+            text = _numberFormat(text, fmt);
+        }
+        // ¤ - 货币格式
+        text = text.replace(/¤/g, "￥");
+        return text;
+    };
+
+    /**
+     * 将Java提供的日期格式字符串装换为JS识别的日期格式字符串
+     * @class FR.parseFmt
+     * @param fmt 日期格式
+     * @returns {String}
+     */
+    BI.parseFmt = function (fmt) {
+        if (!fmt) {
+            return "";
+        }
+        //日期
+        fmt = String(fmt)
+        //年
+            .replace(/y{4,}/g, "%Y")//yyyy的时候替换为Y
+            .replace(/y{2}/g, "%y")//yy的时候替换为y
+            //月
+            .replace(/M{4,}/g, "%b")//MMMM的时候替换为b，八
+            .replace(/M{3}/g, "%B")//MMM的时候替换为M，八月
+            .replace(/M{2}/g, "%X")//MM的时候替换为X，08
+            .replace(/M{1}/g, "%x")//M的时候替换为x，8
+            .replace(/a{1}/g, "%p");
+        //天
+        if (new RegExp("d{2,}", "g").test(fmt)) {
+            fmt = fmt.replace(/d{2,}/g, "%d");//dd的时候替换为d
+        } else {
+            fmt = fmt.replace(/d{1}/g, "%e");//d的时候替换为j
+        }
+        //时
+        if (new RegExp("h{2,}", "g").test(fmt)) {//12小时制
+            fmt = fmt.replace(/h{2,}/g, "%I");
+        } else {
+            fmt = fmt.replace(/h{1}/g, "%I");
+        }
+        if (new RegExp("H{2,}", "g").test(fmt)) {//24小时制
+            fmt = fmt.replace(/H{2,}/g, "%H");
+        } else {
+            fmt = fmt.replace(/H{1}/g, "%H");
+        }
+        fmt = fmt.replace(/m{2,}/g, "%M")//分
+        //秒
+            .replace(/s{2,}/g, "%S");
+
+        return fmt;
+    };
+
+    /**
+     * 把字符串按照对应的格式转化成日期对象
+     *
+     *      @example
+     *      var result = BI.str2Date('2013-12-12', 'yyyy-MM-dd');//Thu Dec 12 2013 00:00:00 GMT+0800
+     *
+     * @class BI.str2Date
+     * @param str 字符串
+     * @param format 日期格式
+     * @returns {*}
+     */
+    BI.str2Date = function (str, format) {
+        if (typeof str != "string" || typeof format != "string") {
+            return null;
+        }
+        var fmt = BI.parseFmt(format);
+        return BI.parseDateTime(str, fmt);
+    };
+
+    /**
+     * 把日期对象按照指定格式转化成字符串
+     *
+     *      @example
+     *      var date = new Date('Thu Dec 12 2013 00:00:00 GMT+0800');
+     *      var result = BI.date2Str(date, 'yyyy-MM-dd');//2013-12-12
+     *
+     * @class BI.date2Str
+     * @param date 日期
+     * @param format 日期格式
+     * @returns {String}
+     */
+    BI.date2Str = function (date, format) {
+        if (!date) {
+            return "";
+        }
+        // O(len(format))
+        var len = format.length, result = "";
+        if (len > 0) {
+            var flagch = format.charAt(0), start = 0, str = flagch;
+            for (var i = 1; i < len; i++) {
+                var ch = format.charAt(i);
+                if (flagch !== ch) {
+                    result += compileJFmt({
+                        char: flagch,
+                        str: str,
+                        len: i - start
+                    }, date);
+                    flagch = ch;
+                    start = i;
+                    str = flagch;
+                } else {
+                    str += ch;
+                }
+            }
+            result += compileJFmt({
+                char: flagch,
+                str: str,
+                len: len - start
+            }, date);
+        }
+        return result;
+
+        function compileJFmt (jfmt, date) {
+            var str = jfmt.str, len = jfmt.len, ch = jfmt["char"];
+            switch (ch) {
+                case "E": // 星期
+                    str = BI.Date._DN[date.getDay()];
+                    break;
+                case "y": // 年
+                    if (len <= 3) {
+                        str = (date.getFullYear() + "").slice(2, 4);
+                    } else {
+                        str = date.getFullYear();
+                    }
+                    break;
+                case "M": // 月
+                    if (len > 2) {
+                        str = BI.Date._MN[date.getMonth()];
+                    } else if (len < 2) {
+                        str = date.getMonth() + 1;
+                    } else {
+                        str = BI.leftPad(date.getMonth() + 1 + "", 2, "0");
+                    }
+                    break;
+                case "d": // 日
+                    if (len > 1) {
+                        str = BI.leftPad(date.getDate() + "", 2, "0");
+                    } else {
+                        str = date.getDate();
+                    }
+                    break;
+                case "h": // 时(12)
+                    var hour = date.getHours() % 12;
+                    if (hour === 0) {
+                        hour = 12;
+                    }
+                    if (len > 1) {
+                        str = BI.leftPad(hour + "", 2, "0");
+                    } else {
+                        str = hour;
+                    }
+                    break;
+                case "H": // 时(24)
+                    if (len > 1) {
+                        str = BI.leftPad(date.getHours() + "", 2, "0");
+                    } else {
+                        str = date.getHours();
+                    }
+                    break;
+                case "m":
+                    if (len > 1) {
+                        str = BI.leftPad(date.getMinutes() + "", 2, "0");
+                    } else {
+                        str = date.getMinutes();
+                    }
+                    break;
+                case "s":
+                    if (len > 1) {
+                        str = BI.leftPad(date.getSeconds() + "", 2, "0");
+                    } else {
+                        str = date.getSeconds();
+                    }
+                    break;
+                case "a":
+                    str = date.getHours() < 12 ? "am" : "pm";
+                    break;
+                case "z":
+                    str = BI.getTimezone(date);
+                    break;
+                default:
+                    str = jfmt.str;
+                    break;
+            }
+            return str;
+        }
+    };
+
+    BI.object2Number = function (value) {
+        if (value == null) {
+            return 0;
+        }
+        if (typeof value === "number") {
+            return value;
+        }
+        var str = value + "";
+        if (str.indexOf(".") === -1) {
+            return parseInt(str);
+        }
+        return parseFloat(str);
+    };
+
+    BI.object2Date = function (obj) {
+        if (obj == null) {
+            return new Date();
+        }
+        if (obj instanceof Date) {
+            return obj;
+        } else if (typeof obj === "number") {
+            return new Date(obj);
+        }
+        var str = obj + "";
+        str = str.replace(/-/g, "/");
+        var dt = new Date(str);
+        if (!isInvalidDate(dt)) {
+            return dt;
+        }
+
+        return new Date();
+
+    };
+
+    BI.object2Time = function (obj) {
+        if (obj == null) {
+            return new Date();
+        }
+        if (obj instanceof Date) {
+            return obj;
+        }
+        var str = obj + "";
+        str = str.replace(/-/g, "/");
+        var dt = new Date(str);
+        if (!isInvalidDate(dt)) {
+            return dt;
+        }
+        if (str.indexOf("/") === -1 && str.indexOf(":") !== -1) {
+            dt = new Date("1970/01/01 " + str);
+            if (!isInvalidDate(dt)) {
+                return dt;
+            }
+        }
+        dt = BI.parseDateTime(str, "HH:mm:ss");
+        if (!isInvalidDate(dt)) {
+            return dt;
+        }
+        return new Date();
+
+    };
+})();
+
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(17)))
+
+/***/ }),
+/* 135 */
+/***/ (function(module, exports) {
+
+/**
+ * 对数组对象的扩展
+ * @class Array
+ */
+_.extend(BI, {
+
+    pushArray: function (sArray, array) {
+        for (var i = 0; i < array.length; i++) {
+            sArray.push(array[i]);
+        }
+    },
+    pushDistinct: function (sArray, obj) {
+        if (!BI.contains(sArray, obj)) {
+            sArray.push(obj);
+        }
+    },
+    pushDistinctArray: function (sArray, array) {
+        for (var i = 0, len = array.length; i < len; i++) {
+            BI.pushDistinct(sArray, array[i]);
+        }
+    }
+});
+
+
+/***/ }),
+/* 136 */
+/***/ (function(module, exports) {
+
+/** Constants used for time computations */
+BI.Date = BI.Date || {};
+BI.Date.SECOND = 1000;
+BI.Date.MINUTE = 60 * BI.Date.SECOND;
+BI.Date.HOUR = 60 * BI.Date.MINUTE;
+BI.Date.DAY = 24 * BI.Date.HOUR;
+BI.Date.WEEK = 7 * BI.Date.DAY;
+
+_.extend(BI, {
+    /**
+     * 获取时区
+     * @returns {String}
+     */
+    getTimezone: function (date) {
+        return date.toString().replace(/^.* (?:\((.*)\)|([A-Z]{1,4})(?:[\-+][0-9]{4})?(?: -?\d+)?)$/, "$1$2").replace(/[^A-Z]/g, "");
+    },
+
+    /** Returns the number of days in the current month */
+    getMonthDays: function (date, month) {
+        var year = date.getFullYear();
+        if (typeof month === "undefined") {
+            month = date.getMonth();
+        }
+        if (((0 == (year % 4)) && ((0 != (year % 100)) || (0 == (year % 400)))) && month == 1) {
+            return 29;
+        }
+        return BI.Date._MD[month];
+
+    },
+
+    /**
+     * 获取每月的最后一天
+     * @returns {Date}
+     */
+    getLastDateOfMonth: function (date) {
+        return BI.getDate(date.getFullYear(), date.getMonth(), BI.getMonthDays(date));
+    },
+
+    /** Returns the number of day in the year. */
+    getDayOfYear: function (date) {
+        var now = BI.getDate(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0);
+        var then = BI.getDate(date.getFullYear(), 0, 0, 0, 0, 0);
+        var time = now - then;
+        return Math.floor(time / BI.Date.DAY);
+    },
+
+    /** Returns the number of the week in year, as defined in ISO 8601. */
+    getWeekNumber: function (date) {
+        var d = BI.getDate(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0);
+        var week = d.getDay();
+        var startOfWeek = BI.StartOfWeek % 7;
+        var middleDay = (startOfWeek + 3) % 7;
+        middleDay = middleDay || 7;
+        // 偏移到周周首之前需要多少天
+        var offsetWeekStartCount = week < startOfWeek ? (7 + week - startOfWeek) : (week - startOfWeek);
+        var offsetWeekMiddleCount = middleDay < startOfWeek ? (7 + middleDay - startOfWeek) : (middleDay - startOfWeek);
+        d.setDate(d.getDate() - offsetWeekStartCount + offsetWeekMiddleCount);
+        var ms = d.valueOf();
+        d.setMonth(0);
+        d.setDate(1);
+        return Math.floor((ms - d.valueOf()) / (7 * 864e5)) + 1;
+    },
+
+    getQuarter: function (date) {
+        return Math.floor(date.getMonth() / 3) + 1;
+    },
+
+    // 离当前时间多少天的时间
+    getOffsetDate: function (date, offset) {
+        return BI.getDate(BI.getTime(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds()) + offset * 864e5);
+    },
+
+    getOffsetQuarter: function (date, n) {
+        var dt = BI.getDate(BI.getTime(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds()));
+        var day = dt.getDate();
+        var monthDay = BI.getMonthDays(BI.getDate(dt.getFullYear(), dt.getMonth() + BI.parseInt(n) * 3, 1));
+        if (day > monthDay) {
+            day = monthDay;
+        }
+        dt.setDate(day);
+        dt.setMonth(dt.getMonth() + parseInt(n) * 3);
+        return dt;
+    },
+
+    // 得到本季度的起始月份
+    getQuarterStartMonth: function (date) {
+        var quarterStartMonth = 0;
+        var nowMonth = date.getMonth();
+        if (nowMonth < 3) {
+            quarterStartMonth = 0;
+        }
+        if (2 < nowMonth && nowMonth < 6) {
+            quarterStartMonth = 3;
+        }
+        if (5 < nowMonth && nowMonth < 9) {
+            quarterStartMonth = 6;
+        }
+        if (nowMonth > 8) {
+            quarterStartMonth = 9;
+        }
+        return quarterStartMonth;
+    },
+    // 获得本季度的起始日期
+    getQuarterStartDate: function (date) {
+        return BI.getDate(date.getFullYear(), BI.getQuarterStartMonth(date), 1);
+    },
+    // 得到本季度的结束日期
+    getQuarterEndDate: function (date) {
+        var quarterEndMonth = BI.getQuarterStartMonth(date) + 2;
+        return BI.getDate(date.getFullYear(), quarterEndMonth, BI.getMonthDays(date, quarterEndMonth));
+    },
+
+    // 指定日期n个月之前或之后的日期
+    getOffsetMonth: function (date, n) {
+        var dt = BI.getDate(BI.getTime(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds()));
+        var day = dt.getDate();
+        var monthDay = BI.getMonthDays(BI.getDate(dt.getFullYear(), dt.getMonth() + parseInt(n), 1));
+        if (day > monthDay) {
+            day = monthDay;
+        }
+        dt.setDate(day);
+        dt.setMonth(dt.getMonth() + parseInt(n));
+        return dt;
+    },
+
+    // 获得本周的起始日期
+    getWeekStartDate: function (date) {
+        var w = date.getDay();
+        var startOfWeek = BI.StartOfWeek % 7;
+        return BI.getOffsetDate(date, BI.Date._OFFSET[w < startOfWeek ? (7 + w - startOfWeek) : (w - startOfWeek)]);
+    },
+    // 得到本周的结束日期
+    getWeekEndDate: function (date) {
+        var w = date.getDay();
+        var startOfWeek = BI.StartOfWeek % 7;
+        return BI.getOffsetDate(date, BI.Date._OFFSET[w < startOfWeek ? (7 + w - startOfWeek) : (w - startOfWeek)] + 6);
+    },
+
+    // 格式化打印日期
+    print: function (date, str) {
+        var m = date.getMonth();
+        var d = date.getDate();
+        var y = date.getFullYear();
+        var yWith4number = y + "";
+        while (yWith4number.length < 4) {
+            yWith4number = "0" + yWith4number;
+        }
+        var wn = BI.getWeekNumber(date);
+        var qr = BI.getQuarter(date);
+        var w = date.getDay();
+        var s = {};
+        var hr = date.getHours();
+        var pm = (hr >= 12);
+        var ir = (pm) ? (hr - 12) : hr;
+        var dy = BI.getDayOfYear(date);
+        if (ir == 0) {
+            ir = 12;
+        }
+        var min = date.getMinutes();
+        var sec = date.getSeconds();
+        s["%a"] = BI.Date._SDN[w]; // abbreviated weekday name [FIXME: I18N]
+        s["%A"] = BI.Date._DN[w]; // full weekday name
+        s["%b"] = BI.Date._SMN[m]; // abbreviated month name [FIXME: I18N]
+        s["%B"] = BI.Date._MN[m]; // full month name
+        // FIXME: %c : preferred date and time representation for the current locale
+        s["%C"] = 1 + Math.floor(y / 100); // the century number
+        s["%d"] = (d < 10) ? ("0" + d) : d; // the day of the month (range 01 to 31)
+        s["%e"] = d; // the day of the month (range 1 to 31)
+        // FIXME: %D : american date style: %m/%d/%y
+        // FIXME: %E, %F, %G, %g, %h (man strftime)
+        s["%H"] = (hr < 10) ? ("0" + hr) : hr; // hour, range 00 to 23 (24h format)
+        s["%I"] = (ir < 10) ? ("0" + ir) : ir; // hour, range 01 to 12 (12h format)
+        s["%j"] = (dy < 100) ? ((dy < 10) ? ("00" + dy) : ("0" + dy)) : dy; // day of the year (range 001 to 366)
+        s["%k"] = hr + "";		// hour, range 0 to 23 (24h format)
+        s["%l"] = ir + "";		// hour, range 1 to 12 (12h format)
+        s["%X"] = (m < 9) ? ("0" + (1 + m)) : (1 + m); // month, range 01 to 12
+        s["%x"] = m + 1; // month, range 1 to 12
+        s["%M"] = (min < 10) ? ("0" + min) : min; // minute, range 00 to 59
+        s["%n"] = "\n";		// a newline character
+        s["%p"] = pm ? "PM" : "AM";
+        s["%P"] = pm ? "pm" : "am";
+        // FIXME: %r : the time in am/pm notation %I:%M:%S %p
+        // FIXME: %R : the time in 24-hour notation %H:%M
+        s["%s"] = Math.floor(date.getTime() / 1000);
+        s["%S"] = (sec < 10) ? ("0" + sec) : sec; // seconds, range 00 to 59
+        s["%t"] = "\t";		// a tab character
+        // FIXME: %T : the time in 24-hour notation (%H:%M:%S)
+        s["%U"] = s["%W"] = s["%V"] = (wn < 10) ? ("0" + wn) : wn;
+        s["%u"] = w + 1;	// the day of the week (range 1 to 7, 1 = MON)
+        s["%w"] = w;		// the day of the week (range 0 to 6, 0 = SUN)
+        // FIXME: %x : preferred date representation for the current locale without the time
+        // FIXME: %X : preferred time representation for the current locale without the date
+        s["%y"] = yWith4number.substr(2, 2); // year without the century (range 00 to 99)
+        s["%Y"] = yWith4number;		// year with the century
+        s["%%"] = "%";		// a literal '%' character
+        s["%q"] = "0" + qr;
+        s["%Q"] = qr;
+
+        var re = /%./g;
+        BI.isKhtml = BI.isKhtml || function () {
+            if(!_global.navigator) {
+                return false;
+            }
+            return /Konqueror|Safari|KHTML/i.test(navigator.userAgent);
+        };
+
+        // 包含年周的格式化，ISO8601标准周的计数会影响年
+        if ((str.indexOf("%Y") !== -1 || str.indexOf("%y") !== -1) && (str.indexOf("%W") !== -1 || str.indexOf("%U") !== -1 || str.indexOf("%V") !== -1)) {
+            switch (wn) {
+                // 如果周数是1，但是当前却在12月，表示此周数为下一年的
+                case 1:
+                    if (m === 11) {
+                        s["%y"] = parseInt(s["%y"]) + 1;
+                        s["%Y"] = parseInt(s["%Y"]) + 1;
+                    }
+                    break;
+                // 如果周数是53，但是当前却在1月，表示此周数为上一年的
+                case 53:
+                    if (m === 0) {
+                        s["%y"] = parseInt(s["%y"]) - 1;
+                        s["%Y"] = parseInt(s["%Y"]) - 1;
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        if (!BI.isKhtml()) {
+            return str.replace(re, function (par) {
+                return s[par] || par;
+            });
+        }
+        var a = str.match(re);
+        for (var i = 0; i < a.length; i++) {
+            var tmp = s[a[i]];
+            if (tmp) {
+                re = new RegExp(a[i], "g");
+                str = str.replace(re, tmp);
+            }
+        }
+
+        return str;
+    }
+});
+
+
+/***/ }),
+/* 137 */
+/***/ (function(module, exports) {
+
+/**
+ * 基本的函数
+ * Created by GUY on 2015/6/24.
+ */
+BI.Func = BI.Func || {};
+_.extend(BI.Func, {
+    /**
+     * 创建唯一的名字
+     * @param array
+     * @param name
+     * @returns {*}
+     */
+    createDistinctName: function (array, name) {
+        var src = name, idx = 1;
+        name = name || "";
+        while (true) {
+            if (BI.every(array, function (i, item) {
+                return BI.isKey(item) ? item !== name : item.name !== name;
+            })) {
+                break;
+            }
+            name = src + (idx++);
+        }
+        return name;
+    },
+
+    /**
+     * 获取字符宽度
+     * @param str
+     * @return {number}
+     */
+    getGBWidth: function (str) {
+        str = str + "";
+        str = str.replace(/[^\x00-\xff]/g, "xx");
+        return Math.ceil(str.length / 2);
+    },
+
+    /**
+     * 获取搜索结果
+     * @param items
+     * @param keyword
+     * @param param  搜索哪个属性
+     * @param clone  是否需要deepClone
+     */
+    getSearchResult: function (items, keyword, param, clone) {
+        var isArray = BI.isArray(items);
+        items = isArray ? BI.flatten(items) : items;
+        param || (param = "text");
+        BI.isNull(clone) && (clone = true);
+        if (!BI.isKey(keyword)) {
+            return {
+                find: clone ? BI.deepClone(items) : items,
+                match: isArray ? [] : {}
+            };
+        }
+        var t, text, py;
+        keyword = BI.toUpperCase(keyword);
+        var matched = isArray ? [] : {}, find = isArray ? [] : {};
+        BI.each(items, function (i, item) {
+            // 兼容item为null的处理
+            if (BI.isNull(item)) {
+                return;
+            }
+            clone && (item = BI.deepClone(item));
+            t = BI.stripEL(item);
+            text = BI.find([t[param], t.text, t.value, t.name, t], function (index, val) {
+                return BI.isNotNull(val);
+            });
+
+            if (BI.isNull(text) || BI.isObject(text)) return;
+
+            py = BI.makeFirstPY(text, {
+                splitChar: "\u200b"
+            });
+            text = BI.toUpperCase(text);
+            py = BI.toUpperCase(py);
+            var pidx;
+            if (text.indexOf(keyword) > -1) {
+                if (text === keyword) {
+                    isArray ? matched.push(item) : (matched[i] = item);
+                } else {
+                    isArray ? find.push(item) : (find[i] = item);
+                }
+                // BI-56386 这边两个pid / text.length是为了防止截取的首字符串不是完整的，但光这样做还不够，即时错位了，也不能说明就不符合条件
+            } else if (pidx = py.indexOf(keyword), (pidx > -1)) {
+                if (text === keyword || keyword.length === text.length) {
+                    isArray ? matched.push(item) : (matched[i] = item);
+                } else {
+                    isArray ? find.push(item) : (find[i] = item);
+                }
+            }
+        });
+        return {
+            match: matched,
+            find: find
+        };
+    },
+
+    /**
+     * 获取按GB2312排序的结果
+     * @param items
+     * @param key
+     * @return {any[]}
+     */
+    getSortedResult: function (items, key) {
+        var getTextOfItem = BI.isFunction(key) ? key :
+            function (item, key) {
+                if (BI.isNotNull(key)) {
+                    return item[key];
+                }
+                if (BI.isNotNull(item.text)) {
+                    return item.text;
+                }
+                if (BI.isNotNull(item.value)) {
+                    return item.value;
+                }
+                return item;
+            };
+
+        return items.sort(function (item1, item2) {
+            var str1 = getTextOfItem(item1, key);
+            var str2 = getTextOfItem(item2, key);
+            if (BI.isNull(str1) && BI.isNull(str2)) {
+                return 0;
+            }
+            if (BI.isNull(str1)) {
+                return -1;
+            }
+            if (BI.isNull(str2)) {
+                return 1;
+            }
+            if (str1 === str2) {
+                return 0;
+            }
+            var len1 = str1.length, len2 = str2.length;
+            for (var i = 0; i < len1 && i < len2; i++) {
+                var char1 = str1[i];
+                var char2 = str2[i];
+                if (char1 !== char2) {
+                    // 找不到的字符都往后面放
+                    return (BI.isNull(BI.CODE_INDEX[char1]) ? BI.MAX : BI.CODE_INDEX[char1]) - (BI.isNull(BI.CODE_INDEX[char2]) ? BI.MAX : BI.CODE_INDEX[char2]);
+                }
+            }
+            return len1 - len2;
+        });
+    }
+});
+
+_.extend(BI, {
+    beforeFunc: function (sFunc, func) {
+        var __self = sFunc;
+        return function () {
+            if (func.apply(sFunc, arguments) === false) {
+                return false;
+            }
+            return __self.apply(sFunc, arguments);
+        };
+    },
+
+    afterFunc: function (sFunc, func) {
+        var __self = sFunc;
+        return function () {
+            var ret = __self.apply(sFunc, arguments);
+            if (ret === false) {
+                return false;
+            }
+            func.apply(sFunc, arguments);
+            return ret;
+        };
+    }
+});
+
+
+/***/ }),
+/* 138 */
+/***/ (function(module, exports) {
+
+_.extend(BI, {
+    // 给Number类型增加一个add方法，调用起来更加方便。
+    add: function (num, arg) {
+        return accAdd(arg, num);
+
+        /**
+         ** 加法函数，用来得到精确的加法结果
+         ** 说明：javascript的加法结果会有误差，在两个浮点数相加的时候会比较明显。这个函数返回较为精确的加法结果。
+         ** 调用：accAdd(arg1,arg2)
+         ** 返回值：arg1加上arg2的精确结果
+         **/
+        function accAdd (arg1, arg2) {
+            var r1, r2, m, c;
+            try {
+                r1 = arg1.toString().split(".")[1].length;
+            } catch (e) {
+                r1 = 0;
+            }
+            try {
+                r2 = arg2.toString().split(".")[1].length;
+            } catch (e) {
+                r2 = 0;
+            }
+            c = Math.abs(r1 - r2);
+            m = Math.pow(10, Math.max(r1, r2));
+            if (c > 0) {
+                var cm = Math.pow(10, c);
+                if (r1 > r2) {
+                    arg1 = Number(arg1.toString().replace(".", ""));
+                    arg2 = Number(arg2.toString().replace(".", "")) * cm;
+                } else {
+                    arg1 = Number(arg1.toString().replace(".", "")) * cm;
+                    arg2 = Number(arg2.toString().replace(".", ""));
+                }
+            } else {
+                arg1 = Number(arg1.toString().replace(".", ""));
+                arg2 = Number(arg2.toString().replace(".", ""));
+            }
+            return (arg1 + arg2) / m;
+        }
+    },
+
+    // 给Number类型增加一个sub方法，调用起来更加方便。
+    sub: function (num, arg) {
+        return accSub(num, arg);
+
+        /**
+         ** 减法函数，用来得到精确的减法结果
+         ** 说明：javascript的减法结果会有误差，在两个浮点数相减的时候会比较明显。这个函数返回较为精确的减法结果。
+         ** 调用：accSub(arg1,arg2)
+         ** 返回值：arg1加上arg2的精确结果
+         **/
+        function accSub (arg1, arg2) {
+            var r1, r2, m, n;
+            try {
+                r1 = arg1.toString().split(".")[1].length;
+            } catch (e) {
+                r1 = 0;
+            }
+            try {
+                r2 = arg2.toString().split(".")[1].length;
+            } catch (e) {
+                r2 = 0;
+            }
+            m = Math.pow(10, Math.max(r1, r2)); // last modify by deeka //动态控制精度长度
+            n = (r1 >= r2) ? r1 : r2;
+            return ((arg1 * m - arg2 * m) / m).toFixed(n);
+        }
+    },
+
+    // 给Number类型增加一个mul方法，调用起来更加方便。
+    mul: function (num, arg) {
+        return accMul(arg, num);
+
+        /**
+         ** 乘法函数，用来得到精确的乘法结果
+         ** 说明：javascript的乘法结果会有误差，在两个浮点数相乘的时候会比较明显。这个函数返回较为精确的乘法结果。
+         ** 调用：accMul(arg1,arg2)
+         ** 返回值：arg1乘以 arg2的精确结果
+         **/
+        function accMul (arg1, arg2) {
+            var m = 0, s1 = arg1.toString(), s2 = arg2.toString();
+            try {
+                m += s1.split(".")[1].length;
+            } catch (e) {
+            }
+            try {
+                m += s2.split(".")[1].length;
+            } catch (e) {
+            }
+            return Number(s1.replace(".", "")) * Number(s2.replace(".", "")) / Math.pow(10, m);
+        }
+    },
+    
+    // 给Number类型增加一个div方法，调用起来更加方便。
+    div: function (num, arg) {
+        return accDivide(num, arg);
+
+        /**
+         * Return digits length of a number
+         * @param {*number} num Input number
+         */
+        function digitLength (num) {
+            // Get digit length of e
+            var eSplit = num.toString().split(/[eE]/);
+            var len = (eSplit[0].split(".")[1] || "").length - (+(eSplit[1] || 0));
+            return len > 0 ? len : 0;
+        }
+        /**
+         * 把小数转成整数，支持科学计数法。如果是小数则放大成整数
+         * @param {*number} num 输入数
+         */
+        function float2Fixed (num) {
+            if (num.toString().indexOf("e") === -1) {
+                return Number(num.toString().replace(".", ""));
+            }
+            var dLen = digitLength(num);
+            return dLen > 0 ? num * Math.pow(10, dLen) : num;
+        }
+
+        /**
+         * 精确乘法
+         */
+        function times (num1, num2) {
+            var others = [];
+            for (var _i = 2; _i < arguments.length; _i++) {
+                others[_i - 2] = arguments[_i];
+            }
+            if (others.length > 0) {
+                return times.apply(void 0, [times(num1, num2), others[0]].concat(others.slice(1)));
+            }
+            var num1Changed = float2Fixed(num1);
+            var num2Changed = float2Fixed(num2);
+            var baseNum = digitLength(num1) + digitLength(num2);
+            var leftValue = num1Changed * num2Changed;
+            return leftValue / Math.pow(10, baseNum);
+        }
+
+        /**
+         * 精确除法
+         */
+        function accDivide (num1, num2) {
+            var others = [];
+            for (var _i = 2; _i < arguments.length; _i++) {
+                others[_i - 2] = arguments[_i];
+            }
+            if (others.length > 0) {
+                return accDivide.apply(void 0, [accDivide(num1, num2), others[0]].concat(others.slice(1)));
+            }
+            var num1Changed = float2Fixed(num1);
+            var num2Changed = float2Fixed(num2);
+            return times((num1Changed / num2Changed), Math.pow(10, digitLength(num2) - digitLength(num1)));
+        }
+    }
+
+});
+
+/***/ }),
+/* 139 */
+/***/ (function(module, exports) {
+
+/**
+ * 对字符串对象的扩展
+ * @class String
+ */
+_.extend(BI, {
+
+    /**
+     * 判断字符串是否已指定的字符串开始
+     * @param str source字符串
+     * @param {String} startTag   指定的开始字符串
+     * @return {Boolean}  如果字符串以指定字符串开始则返回true，否则返回false
+     */
+    startWith: function (str, startTag) {
+        str = str || "";
+        if (startTag == null || startTag == "" || str.length === 0 || startTag.length > str.length) {
+            return false;
+        }
+        return str.substr(0, startTag.length) == startTag;
+    },
+    /**
+     * 判断字符串是否以指定的字符串结束
+     * @param str source字符串
+     * @param {String} endTag 指定的字符串
+     * @return {Boolean}  如果字符串以指定字符串结束则返回true，否则返回false
+     */
+    endWith: function (str, endTag) {
+        if (endTag == null || endTag == "" || str.length === 0 || endTag.length > str.length) {
+            return false;
+        }
+        return str.substring(str.length - endTag.length) == endTag;
+    },
+
+    /**
+     * 获取url中指定名字的参数
+     * @param str source字符串
+     * @param {String} name 参数的名字
+     * @return {String} 参数的值
+     */
+    getQuery: function (str, name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+        var r = str.substr(str.indexOf("?") + 1).match(reg);
+        if (r) {
+            return unescape(r[2]);
+        }
+        return null;
+    },
+
+    /**
+     * 给url加上给定的参数
+     * @param str source字符串
+     * @param {Object} paras 参数对象，是一个键值对对象
+     * @return {String} 添加了给定参数的url
+     */
+    appendQuery: function (str, paras) {
+        if (!paras) {
+            return str;
+        }
+        var src = str;
+        // 没有问号说明还没有参数
+        if (src.indexOf("?") === -1) {
+            src += "?";
+        }
+        // 如果以问号结尾，说明没有其他参数
+        if (BI.endWith(src, "?") !== false) {
+        } else {
+            src += "&";
+        }
+        _.each(paras, function (value, name) {
+            if (typeof(name) === "string") {
+                src += name + "=" + value + "&";
+            }
+        });
+        src = src.substr(0, src.length - 1);
+        return src;
+    },
+    /**
+     * 将所有符合第一个字符串所表示的字符串替换成为第二个字符串
+     * @param str source字符串
+     * @param {String} s1 要替换的字符串的正则表达式
+     * @param {String} s2 替换的结果字符串
+     * @returns {String} 替换后的字符串
+     */
+    replaceAll: function (str, s1, s2) {
+        return BI.isString(str) ? str.replace(new RegExp(s1, "gm"), s2) : str;
+    },
+    /**
+     * 总是让字符串以指定的字符开头
+     * @param str source字符串
+     * @param {String} start 指定的字符
+     * @returns {String} 以指定字符开头的字符串
+     */
+    perfectStart: function (str, start) {
+        if (BI.startWith(str, start)) {
+            return str;
+        }
+        return start + str;
+
+    },
+
+    /**
+     * 获取字符串中某字符串的所有项位置数组
+     * @param str source字符串
+     * @param {String} sub 子字符串
+     * @return {Number[]} 子字符串在父字符串中出现的所有位置组成的数组
+     */
+    allIndexOf: function (str, sub) {
+        if (typeof sub !== "string") {
+            return [];
+        }
+        var location = [];
+        var offset = 0;
+        while (str.length > 0) {
+            var loc = str.indexOf(sub);
+            if (loc === -1) {
+                break;
+            }
+            location.push(offset + loc);
+            str = str.substring(loc + sub.length, str.length);
+            offset += loc + sub.length;
+        }
+        return location;
+    }
+});
+
+/***/ }),
+/* 140 */
+/***/ (function(module, exports) {
+
+/**
+ * 汉字拼音索引
+ */
+
+!(function () {
+    var _ChineseFirstPY = "YDYQSXMWZSSXJBYMGCCZQPSSQBYCDSCDQLDYLYBSSJGYZZJJFKCCLZDHWDWZJLJPFYYNWJJTMYHZWZHFLZPPQHGSCYYYNJQYXXGJHHSDSJNKKTMOMLCRXYPSNQSECCQZGGLLYJLMYZZSECYKYYHQWJSSGGYXYZYJWWKDJHYCHMYXJTLXJYQBYXZLDWRDJRWYSRLDZJPCBZJJBRCFTLECZSTZFXXZHTRQHYBDLYCZSSYMMRFMYQZPWWJJYFCRWFDFZQPYDDWYXKYJAWJFFXYPSFTZYHHYZYSWCJYXSCLCXXWZZXNBGNNXBXLZSZSBSGPYSYZDHMDZBQBZCWDZZYYTZHBTSYYBZGNTNXQYWQSKBPHHLXGYBFMJEBJHHGQTJCYSXSTKZHLYCKGLYSMZXYALMELDCCXGZYRJXSDLTYZCQKCNNJWHJTZZCQLJSTSTBNXBTYXCEQXGKWJYFLZQLYHYXSPSFXLMPBYSXXXYDJCZYLLLSJXFHJXPJBTFFYABYXBHZZBJYZLWLCZGGBTSSMDTJZXPTHYQTGLJSCQFZKJZJQNLZWLSLHDZBWJNCJZYZSQQYCQYRZCJJWYBRTWPYFTWEXCSKDZCTBZHYZZYYJXZCFFZZMJYXXSDZZOTTBZLQWFCKSZSXFYRLNYJMBDTHJXSQQCCSBXYYTSYFBXDZTGBCNSLCYZZPSAZYZZSCJCSHZQYDXLBPJLLMQXTYDZXSQJTZPXLCGLQTZWJBHCTSYJSFXYEJJTLBGXSXJMYJQQPFZASYJNTYDJXKJCDJSZCBARTDCLYJQMWNQNCLLLKBYBZZSYHQQLTWLCCXTXLLZNTYLNEWYZYXCZXXGRKRMTCNDNJTSYYSSDQDGHSDBJGHRWRQLYBGLXHLGTGXBQJDZPYJSJYJCTMRNYMGRZJCZGJMZMGXMPRYXKJNYMSGMZJYMKMFXMLDTGFBHCJHKYLPFMDXLQJJSMTQGZSJLQDLDGJYCALCMZCSDJLLNXDJFFFFJCZFMZFFPFKHKGDPSXKTACJDHHZDDCRRCFQYJKQCCWJDXHWJLYLLZGCFCQDSMLZPBJJPLSBCJGGDCKKDEZSQCCKJGCGKDJTJDLZYCXKLQSCGJCLTFPCQCZGWPJDQYZJJBYJHSJDZWGFSJGZKQCCZLLPSPKJGQJHZZLJPLGJGJJTHJJYJZCZMLZLYQBGJWMLJKXZDZNJQSYZMLJLLJKYWXMKJLHSKJGBMCLYYMKXJQLBMLLKMDXXKWYXYSLMLPSJQQJQXYXFJTJDXMXXLLCXQBSYJBGWYMBGGBCYXPJYGPEPFGDJGBHBNSQJYZJKJKHXQFGQZKFHYGKHDKLLSDJQXPQYKYBNQSXQNSZSWHBSXWHXWBZZXDMNSJBSBKBBZKLYLXGWXDRWYQZMYWSJQLCJXXJXKJEQXSCYETLZHLYYYSDZPAQYZCMTLSHTZCFYZYXYLJSDCJQAGYSLCQLYYYSHMRQQKLDXZSCSSSYDYCJYSFSJBFRSSZQSBXXPXJYSDRCKGJLGDKZJZBDKTCSYQPYHSTCLDJDHMXMCGXYZHJDDTMHLTXZXYLYMOHYJCLTYFBQQXPFBDFHHTKSQHZYYWCNXXCRWHOWGYJLEGWDQCWGFJYCSNTMYTOLBYGWQWESJPWNMLRYDZSZTXYQPZGCWXHNGPYXSHMYQJXZTDPPBFYHZHTJYFDZWKGKZBLDNTSXHQEEGZZYLZMMZYJZGXZXKHKSTXNXXWYLYAPSTHXDWHZYMPXAGKYDXBHNHXKDPJNMYHYLPMGOCSLNZHKXXLPZZLBMLSFBHHGYGYYGGBHSCYAQTYWLXTZQCEZYDQDQMMHTKLLSZHLSJZWFYHQSWSCWLQAZYNYTLSXTHAZNKZZSZZLAXXZWWCTGQQTDDYZTCCHYQZFLXPSLZYGPZSZNGLNDQTBDLXGTCTAJDKYWNSYZLJHHZZCWNYYZYWMHYCHHYXHJKZWSXHZYXLYSKQYSPSLYZWMYPPKBYGLKZHTYXAXQSYSHXASMCHKDSCRSWJPWXSGZJLWWSCHSJHSQNHCSEGNDAQTBAALZZMSSTDQJCJKTSCJAXPLGGXHHGXXZCXPDMMHLDGTYBYSJMXHMRCPXXJZCKZXSHMLQXXTTHXWZFKHCCZDYTCJYXQHLXDHYPJQXYLSYYDZOZJNYXQEZYSQYAYXWYPDGXDDXSPPYZNDLTWRHXYDXZZJHTCXMCZLHPYYYYMHZLLHNXMYLLLMDCPPXHMXDKYCYRDLTXJCHHZZXZLCCLYLNZSHZJZZLNNRLWHYQSNJHXYNTTTKYJPYCHHYEGKCTTWLGQRLGGTGTYGYHPYHYLQYQGCWYQKPYYYTTTTLHYHLLTYTTSPLKYZXGZWGPYDSSZZDQXSKCQNMJJZZBXYQMJRTFFBTKHZKBXLJJKDXJTLBWFZPPTKQTZTGPDGNTPJYFALQMKGXBDCLZFHZCLLLLADPMXDJHLCCLGYHDZFGYDDGCYYFGYDXKSSEBDHYKDKDKHNAXXYBPBYYHXZQGAFFQYJXDMLJCSQZLLPCHBSXGJYNDYBYQSPZWJLZKSDDTACTBXZDYZYPJZQSJNKKTKNJDJGYYPGTLFYQKASDNTCYHBLWDZHBBYDWJRYGKZYHEYYFJMSDTYFZJJHGCXPLXHLDWXXJKYTCYKSSSMTWCTTQZLPBSZDZWZXGZAGYKTYWXLHLSPBCLLOQMMZSSLCMBJCSZZKYDCZJGQQDSMCYTZQQLWZQZXSSFPTTFQMDDZDSHDTDWFHTDYZJYQJQKYPBDJYYXTLJHDRQXXXHAYDHRJLKLYTWHLLRLLRCXYLBWSRSZZSYMKZZHHKYHXKSMDSYDYCJPBZBSQLFCXXXNXKXWYWSDZYQOGGQMMYHCDZTTFJYYBGSTTTYBYKJDHKYXBELHTYPJQNFXFDYKZHQKZBYJTZBXHFDXKDASWTAWAJLDYJSFHBLDNNTNQJTJNCHXFJSRFWHZFMDRYJYJWZPDJKZYJYMPCYZNYNXFBYTFYFWYGDBNZZZDNYTXZEMMQBSQEHXFZMBMFLZZSRXYMJGSXWZJSPRYDJSJGXHJJGLJJYNZZJXHGXKYMLPYYYCXYTWQZSWHWLYRJLPXSLSXMFSWWKLCTNXNYNPSJSZHDZEPTXMYYWXYYSYWLXJQZQXZDCLEEELMCPJPCLWBXSQHFWWTFFJTNQJHJQDXHWLBYZNFJLALKYYJLDXHHYCSTYYWNRJYXYWTRMDRQHWQCMFJDYZMHMYYXJWMYZQZXTLMRSPWWCHAQBXYGZYPXYYRRCLMPYMGKSJSZYSRMYJSNXTPLNBAPPYPYLXYYZKYNLDZYJZCZNNLMZHHARQMPGWQTZMXXMLLHGDZXYHXKYXYCJMFFYYHJFSBSSQLXXNDYCANNMTCJCYPRRNYTYQNYYMBMSXNDLYLYSLJRLXYSXQMLLYZLZJJJKYZZCSFBZXXMSTBJGNXYZHLXNMCWSCYZYFZLXBRNNNYLBNRTGZQYSATSWRYHYJZMZDHZGZDWYBSSCSKXSYHYTXXGCQGXZZSHYXJSCRHMKKBXCZJYJYMKQHZJFNBHMQHYSNJNZYBKNQMCLGQHWLZNZSWXKHLJHYYBQLBFCDSXDLDSPFZPSKJYZWZXZDDXJSMMEGJSCSSMGCLXXKYYYLNYPWWWGYDKZJGGGZGGSYCKNJWNJPCXBJJTQTJWDSSPJXZXNZXUMELPXFSXTLLXCLJXJJLJZXCTPSWXLYDHLYQRWHSYCSQYYBYAYWJJJQFWQCQQCJQGXALDBZZYJGKGXPLTZYFXJLTPADKYQHPMATLCPDCKBMTXYBHKLENXDLEEGQDYMSAWHZMLJTWYGXLYQZLJEEYYBQQFFNLYXRDSCTGJGXYYNKLLYQKCCTLHJLQMKKZGCYYGLLLJDZGYDHZWXPYSJBZKDZGYZZHYWYFQYTYZSZYEZZLYMHJJHTSMQWYZLKYYWZCSRKQYTLTDXWCTYJKLWSQZWBDCQYNCJSRSZJLKCDCDTLZZZACQQZZDDXYPLXZBQJYLZLLLQDDZQJYJYJZYXNYYYNYJXKXDAZWYRDLJYYYRJLXLLDYXJCYWYWNQCCLDDNYYYNYCKCZHXXCCLGZQJGKWPPCQQJYSBZZXYJSQPXJPZBSBDSFNSFPZXHDWZTDWPPTFLZZBZDMYYPQJRSDZSQZSQXBDGCPZSWDWCSQZGMDHZXMWWFYBPDGPHTMJTHZSMMBGZMBZJCFZWFZBBZMQCFMBDMCJXLGPNJBBXGYHYYJGPTZGZMQBQTCGYXJXLWZKYDPDYMGCFTPFXYZTZXDZXTGKMTYBBCLBJASKYTSSQYYMSZXFJEWLXLLSZBQJJJAKLYLXLYCCTSXMCWFKKKBSXLLLLJYXTYLTJYYTDPJHNHNNKBYQNFQYYZBYYESSESSGDYHFHWTCJBSDZZTFDMXHCNJZYMQWSRYJDZJQPDQBBSTJGGFBKJBXTGQHNGWJXJGDLLTHZHHYYYYYYSXWTYYYCCBDBPYPZYCCZYJPZYWCBDLFWZCWJDXXHYHLHWZZXJTCZLCDPXUJCZZZLYXJJTXPHFXWPYWXZPTDZZBDZCYHJHMLXBQXSBYLRDTGJRRCTTTHYTCZWMXFYTWWZCWJWXJYWCSKYBZSCCTZQNHXNWXXKHKFHTSWOCCJYBCMPZZYKBNNZPBZHHZDLSYDDYTYFJPXYNGFXBYQXCBHXCPSXTYZDMKYSNXSXLHKMZXLYHDHKWHXXSSKQYHHCJYXGLHZXCSNHEKDTGZXQYPKDHEXTYKCNYMYYYPKQYYYKXZLTHJQTBYQHXBMYHSQCKWWYLLHCYYLNNEQXQWMCFBDCCMLJGGXDQKTLXKGNQCDGZJWYJJLYHHQTTTNWCHMXCXWHWSZJYDJCCDBQCDGDNYXZTHCQRXCBHZTQCBXWGQWYYBXHMBYMYQTYEXMQKYAQYRGYZSLFYKKQHYSSQYSHJGJCNXKZYCXSBXYXHYYLSTYCXQTHYSMGSCPMMGCCCCCMTZTASMGQZJHKLOSQYLSWTMXSYQKDZLJQQYPLSYCZTCQQPBBQJZCLPKHQZYYXXDTDDTSJCXFFLLCHQXMJLWCJCXTSPYCXNDTJSHJWXDQQJSKXYAMYLSJHMLALYKXCYYDMNMDQMXMCZNNCYBZKKYFLMCHCMLHXRCJJHSYLNMTJZGZGYWJXSRXCWJGJQHQZDQJDCJJZKJKGDZQGJJYJYLXZXXCDQHHHEYTMHLFSBDJSYYSHFYSTCZQLPBDRFRZTZYKYWHSZYQKWDQZRKMSYNBCRXQBJYFAZPZZEDZCJYWBCJWHYJBQSZYWRYSZPTDKZPFPBNZTKLQYHBBZPNPPTYZZYBQNYDCPJMMCYCQMCYFZZDCMNLFPBPLNGQJTBTTNJZPZBBZNJKLJQYLNBZQHKSJZNGGQSZZKYXSHPZSNBCGZKDDZQANZHJKDRTLZLSWJLJZLYWTJNDJZJHXYAYNCBGTZCSSQMNJPJYTYSWXZFKWJQTKHTZPLBHSNJZSYZBWZZZZLSYLSBJHDWWQPSLMMFBJDWAQYZTCJTBNNWZXQXCDSLQGDSDPDZHJTQQPSWLYYJZLGYXYZLCTCBJTKTYCZJTQKBSJLGMGZDMCSGPYNJZYQYYKNXRPWSZXMTNCSZZYXYBYHYZAXYWQCJTLLCKJJTJHGDXDXYQYZZBYWDLWQCGLZGJGQRQZCZSSBCRPCSKYDZNXJSQGXSSJMYDNSTZTPBDLTKZWXQWQTZEXNQCZGWEZKSSBYBRTSSSLCCGBPSZQSZLCCGLLLZXHZQTHCZMQGYZQZNMCOCSZJMMZSQPJYGQLJYJPPLDXRGZYXCCSXHSHGTZNLZWZKJCXTCFCJXLBMQBCZZWPQDNHXLJCTHYZLGYLNLSZZPCXDSCQQHJQKSXZPBAJYEMSMJTZDXLCJYRYYNWJBNGZZTMJXLTBSLYRZPYLSSCNXPHLLHYLLQQZQLXYMRSYCXZLMMCZLTZSDWTJJLLNZGGQXPFSKYGYGHBFZPDKMWGHCXMSGDXJMCJZDYCABXJDLNBCDQYGSKYDQTXDJJYXMSZQAZDZFSLQXYJSJZYLBTXXWXQQZBJZUFBBLYLWDSLJHXJYZJWTDJCZFQZQZZDZSXZZQLZCDZFJHYSPYMPQZMLPPLFFXJJNZZYLSJEYQZFPFZKSYWJJJHRDJZZXTXXGLGHYDXCSKYSWMMZCWYBAZBJKSHFHJCXMHFQHYXXYZFTSJYZFXYXPZLCHMZMBXHZZSXYFYMNCWDABAZLXKTCSHHXKXJJZJSTHYGXSXYYHHHJWXKZXSSBZZWHHHCWTZZZPJXSNXQQJGZYZYWLLCWXZFXXYXYHXMKYYSWSQMNLNAYCYSPMJKHWCQHYLAJJMZXHMMCNZHBHXCLXTJPLTXYJHDYYLTTXFSZHYXXSJBJYAYRSMXYPLCKDUYHLXRLNLLSTYZYYQYGYHHSCCSMZCTZQXKYQFPYYRPFFLKQUNTSZLLZMWWTCQQYZWTLLMLMPWMBZSSTZRBPDDTLQJJBXZCSRZQQYGWCSXFWZLXCCRSZDZMCYGGDZQSGTJSWLJMYMMZYHFBJDGYXCCPSHXNZCSBSJYJGJMPPWAFFYFNXHYZXZYLREMZGZCYZSSZDLLJCSQFNXZKPTXZGXJJGFMYYYSNBTYLBNLHPFZDCYFBMGQRRSSSZXYSGTZRNYDZZCDGPJAFJFZKNZBLCZSZPSGCYCJSZLMLRSZBZZLDLSLLYSXSQZQLYXZLSKKBRXBRBZCYCXZZZEEYFGKLZLYYHGZSGZLFJHGTGWKRAAJYZKZQTSSHJJXDCYZUYJLZYRZDQQHGJZXSSZBYKJPBFRTJXLLFQWJHYLQTYMBLPZDXTZYGBDHZZRBGXHWNJTJXLKSCFSMWLSDQYSJTXKZSCFWJLBXFTZLLJZLLQBLSQMQQCGCZFPBPHZCZJLPYYGGDTGWDCFCZQYYYQYSSCLXZSKLZZZGFFCQNWGLHQYZJJCZLQZZYJPJZZBPDCCMHJGXDQDGDLZQMFGPSYTSDYFWWDJZJYSXYYCZCYHZWPBYKXRYLYBHKJKSFXTZJMMCKHLLTNYYMSYXYZPYJQYCSYCWMTJJKQYRHLLQXPSGTLYYCLJSCPXJYZFNMLRGJJTYZBXYZMSJYJHHFZQMSYXRSZCWTLRTQZSSTKXGQKGSPTGCZNJSJCQCXHMXGGZTQYDJKZDLBZSXJLHYQGGGTHQSZPYHJHHGYYGKGGCWJZZYLCZLXQSFTGZSLLLMLJSKCTBLLZZSZMMNYTPZSXQHJCJYQXYZXZQZCPSHKZZYSXCDFGMWQRLLQXRFZTLYSTCTMJCXJJXHJNXTNRZTZFQYHQGLLGCXSZSJDJLJCYDSJTLNYXHSZXCGJZYQPYLFHDJSBPCCZHJJJQZJQDYBSSLLCMYTTMQTBHJQNNYGKYRQYQMZGCJKPDCGMYZHQLLSLLCLMHOLZGDYYFZSLJCQZLYLZQJESHNYLLJXGJXLYSYYYXNBZLJSSZCQQCJYLLZLTJYLLZLLBNYLGQCHXYYXOXCXQKYJXXXYKLXSXXYQXCYKQXQCSGYXXYQXYGYTQOHXHXPYXXXULCYEYCHZZCBWQBBWJQZSCSZSSLZYLKDESJZWMYMCYTSDSXXSCJPQQSQYLYYZYCMDJDZYWCBTJSYDJKCYDDJLBDJJSODZYSYXQQYXDHHGQQYQHDYXWGMMMAJDYBBBPPBCMUUPLJZSMTXERXJMHQNUTPJDCBSSMSSSTKJTSSMMTRCPLZSZMLQDSDMJMQPNQDXCFYNBFSDQXYXHYAYKQYDDLQYYYSSZBYDSLNTFQTZQPZMCHDHCZCWFDXTMYQSPHQYYXSRGJCWTJTZZQMGWJJTJHTQJBBHWZPXXHYQFXXQYWYYHYSCDYDHHQMNMTMWCPBSZPPZZGLMZFOLLCFWHMMSJZTTDHZZYFFYTZZGZYSKYJXQYJZQBHMBZZLYGHGFMSHPZFZSNCLPBQSNJXZSLXXFPMTYJYGBXLLDLXPZJYZJYHHZCYWHJYLSJEXFSZZYWXKZJLUYDTMLYMQJPWXYHXSKTQJEZRPXXZHHMHWQPWQLYJJQJJZSZCPHJLCHHNXJLQWZJHBMZYXBDHHYPZLHLHLGFWLCHYYTLHJXCJMSCPXSTKPNHQXSRTYXXTESYJCTLSSLSTDLLLWWYHDHRJZSFGXTSYCZYNYHTDHWJSLHTZDQDJZXXQHGYLTZPHCSQFCLNJTCLZPFSTPDYNYLGMJLLYCQHYSSHCHYLHQYQTMZYPBYWRFQYKQSYSLZDQJMPXYYSSRHZJNYWTQDFZBWWTWWRXCWHGYHXMKMYYYQMSMZHNGCEPMLQQMTCWCTMMPXJPJJHFXYYZSXZHTYBMSTSYJTTQQQYYLHYNPYQZLCYZHZWSMYLKFJXLWGXYPJYTYSYXYMZCKTTWLKSMZSYLMPWLZWXWQZSSAQSYXYRHSSNTSRAPXCPWCMGDXHXZDZYFJHGZTTSBJHGYZSZYSMYCLLLXBTYXHBBZJKSSDMALXHYCFYGMQYPJYCQXJLLLJGSLZGQLYCJCCZOTYXMTMTTLLWTGPXYMZMKLPSZZZXHKQYSXCTYJZYHXSHYXZKXLZWPSQPYHJWPJPWXQQYLXSDHMRSLZZYZWTTCYXYSZZSHBSCCSTPLWSSCJCHNLCGCHSSPHYLHFHHXJSXYLLNYLSZDHZXYLSXLWZYKCLDYAXZCMDDYSPJTQJZLNWQPSSSWCTSTSZLBLNXSMNYYMJQBQHRZWTYYDCHQLXKPZWBGQYBKFCMZWPZLLYYLSZYDWHXPSBCMLJBSCGBHXLQHYRLJXYSWXWXZSLDFHLSLYNJLZYFLYJYCDRJLFSYZFSLLCQYQFGJYHYXZLYLMSTDJCYHBZLLNWLXXYGYYHSMGDHXXHHLZZJZXCZZZCYQZFNGWPYLCPKPYYPMCLQKDGXZGGWQBDXZZKZFBXXLZXJTPJPTTBYTSZZDWSLCHZHSLTYXHQLHYXXXYYZYSWTXZKHLXZXZPYHGCHKCFSYHUTJRLXFJXPTZTWHPLYXFCRHXSHXKYXXYHZQDXQWULHYHMJTBFLKHTXCWHJFWJCFPQRYQXCYYYQYGRPYWSGSUNGWCHKZDXYFLXXHJJBYZWTSXXNCYJJYMSWZJQRMHXZWFQSYLZJZGBHYNSLBGTTCSYBYXXWXYHXYYXNSQYXMQYWRGYQLXBBZLJSYLPSYTJZYHYZAWLRORJMKSCZJXXXYXCHDYXRYXXJDTSQFXLYLTSFFYXLMTYJMJUYYYXLTZCSXQZQHZXLYYXZHDNBRXXXJCTYHLBRLMBRLLAXKYLLLJLYXXLYCRYLCJTGJCMTLZLLCYZZPZPCYAWHJJFYBDYYZSMPCKZDQYQPBPCJPDCYZMDPBCYYDYCNNPLMTMLRMFMMGWYZBSJGYGSMZQQQZTXMKQWGXLLPJGZBQCDJJJFPKJKCXBLJMSWMDTQJXLDLPPBXCWRCQFBFQJCZAHZGMYKPHYYHZYKNDKZMBPJYXPXYHLFPNYYGXJDBKXNXHJMZJXSTRSTLDXSKZYSYBZXJLXYSLBZYSLHXJPFXPQNBYLLJQKYGZMCYZZYMCCSLCLHZFWFWYXZMWSXTYNXJHPYYMCYSPMHYSMYDYSHQYZCHMJJMZCAAGCFJBBHPLYZYLXXSDJGXDHKXXTXXNBHRMLYJSLTXMRHNLXQJXYZLLYSWQGDLBJHDCGJYQYCMHWFMJYBMBYJYJWYMDPWHXQLDYGPDFXXBCGJSPCKRSSYZJMSLBZZJFLJJJLGXZGYXYXLSZQYXBEXYXHGCXBPLDYHWETTWWCJMBTXCHXYQXLLXFLYXLLJLSSFWDPZSMYJCLMWYTCZPCHQEKCQBWLCQYDPLQPPQZQFJQDJHYMMCXTXDRMJWRHXCJZYLQXDYYNHYYHRSLSRSYWWZJYMTLTLLGTQCJZYABTCKZCJYCCQLJZQXALMZYHYWLWDXZXQDLLQSHGPJFJLJHJABCQZDJGTKHSSTCYJLPSWZLXZXRWGLDLZRLZXTGSLLLLZLYXXWGDZYGBDPHZPBRLWSXQBPFDWOFMWHLYPCBJCCLDMBZPBZZLCYQXLDOMZBLZWPDWYYGDSTTHCSQSCCRSSSYSLFYBFNTYJSZDFNDPDHDZZMBBLSLCMYFFGTJJQWFTMTPJWFNLBZCMMJTGBDZLQLPYFHYYMJYLSDCHDZJWJCCTLJCLDTLJJCPDDSQDSSZYBNDBJLGGJZXSXNLYCYBJXQYCBYLZCFZPPGKCXZDZFZTJJFJSJXZBNZYJQTTYJYHTYCZHYMDJXTTMPXSPLZCDWSLSHXYPZGTFMLCJTYCBPMGDKWYCYZCDSZZYHFLYCTYGWHKJYYLSJCXGYWJCBLLCSNDDBTZBSCLYZCZZSSQDLLMQYYHFSLQLLXFTYHABXGWNYWYYPLLSDLDLLBJCYXJZMLHLJDXYYQYTDLLLBUGBFDFBBQJZZMDPJHGCLGMJJPGAEHHBWCQXAXHHHZCHXYPHJAXHLPHJPGPZJQCQZGJJZZUZDMQYYBZZPHYHYBWHAZYJHYKFGDPFQSDLZMLJXKXGALXZDAGLMDGXMWZQYXXDXXPFDMMSSYMPFMDMMKXKSYZYSHDZKXSYSMMZZZMSYDNZZCZXFPLSTMZDNMXCKJMZTYYMZMZZMSXHHDCZJEMXXKLJSTLWLSQLYJZLLZJSSDPPMHNLZJCZYHMXXHGZCJMDHXTKGRMXFWMCGMWKDTKSXQMMMFZZYDKMSCLCMPCGMHSPXQPZDSSLCXKYXTWLWJYAHZJGZQMCSNXYYMMPMLKJXMHLMLQMXCTKZMJQYSZJSYSZHSYJZJCDAJZYBSDQJZGWZQQXFKDMSDJLFWEHKZQKJPEYPZYSZCDWYJFFMZZYLTTDZZEFMZLBNPPLPLPEPSZALLTYLKCKQZKGENQLWAGYXYDPXLHSXQQWQCQXQCLHYXXMLYCCWLYMQYSKGCHLCJNSZKPYZKCQZQLJPDMDZHLASXLBYDWQLWDNBQCRYDDZTJYBKBWSZDXDTNPJDTCTQDFXQQMGNXECLTTBKPWSLCTYQLPWYZZKLPYGZCQQPLLKCCYLPQMZCZQCLJSLQZDJXLDDHPZQDLJJXZQDXYZQKZLJCYQDYJPPYPQYKJYRMPCBYMCXKLLZLLFQPYLLLMBSGLCYSSLRSYSQTMXYXZQZFDZUYSYZTFFMZZSMZQHZSSCCMLYXWTPZGXZJGZGSJSGKDDHTQGGZLLBJDZLCBCHYXYZHZFYWXYZYMSDBZZYJGTSMTFXQYXQSTDGSLNXDLRYZZLRYYLXQHTXSRTZNGZXBNQQZFMYKMZJBZYMKBPNLYZPBLMCNQYZZZSJZHJCTZKHYZZJRDYZHNPXGLFZTLKGJTCTSSYLLGZRZBBQZZKLPKLCZYSSUYXBJFPNJZZXCDWXZYJXZZDJJKGGRSRJKMSMZJLSJYWQSKYHQJSXPJZZZLSNSHRNYPZTWCHKLPSRZLZXYJQXQKYSJYCZTLQZYBBYBWZPQDWWYZCYTJCJXCKCWDKKZXSGKDZXWWYYJQYYTCYTDLLXWKCZKKLCCLZCQQDZLQLCSFQCHQHSFSMQZZLNBJJZBSJHTSZDYSJQJPDLZCDCWJKJZZLPYCGMZWDJJBSJQZSYZYHHXJPBJYDSSXDZNCGLQMBTSFSBPDZDLZNFGFJGFSMPXJQLMBLGQCYYXBQKDJJQYRFKZTJDHCZKLBSDZCFJTPLLJGXHYXZCSSZZXSTJYGKGCKGYOQXJPLZPBPGTGYJZGHZQZZLBJLSQFZGKQQJZGYCZBZQTLDXRJXBSXXPZXHYZYCLWDXJJHXMFDZPFZHQHQMQGKSLYHTYCGFRZGNQXCLPDLBZCSCZQLLJBLHBZCYPZZPPDYMZZSGYHCKCPZJGSLJLNSCDSLDLXBMSTLDDFJMKDJDHZLZXLSZQPQPGJLLYBDSZGQLBZLSLKYYHZTTNTJYQTZZPSZQZTLLJTYYLLQLLQYZQLBDZLSLYYZYMDFSZSNHLXZNCZQZPBWSKRFBSYZMTHBLGJPMCZZLSTLXSHTCSYZLZBLFEQHLXFLCJLYLJQCBZLZJHHSSTBRMHXZHJZCLXFNBGXGTQJCZTMSFZKJMSSNXLJKBHSJXNTNLZDNTLMSJXGZJYJCZXYJYJWRWWQNZTNFJSZPZSHZJFYRDJSFSZJZBJFZQZZHZLXFYSBZQLZSGYFTZDCSZXZJBQMSZKJRHYJZCKMJKHCHGTXKXQGLXPXFXTRTYLXJXHDTSJXHJZJXZWZLCQSBTXWXGXTXXHXFTSDKFJHZYJFJXRZSDLLLTQSQQZQWZXSYQTWGWBZCGZLLYZBCLMQQTZHZXZXLJFRMYZFLXYSQXXJKXRMQDZDMMYYBSQBHGZMWFWXGMXLZPYYTGZYCCDXYZXYWGSYJYZNBHPZJSQSYXSXRTFYZGRHZTXSZZTHCBFCLSYXZLZQMZLMPLMXZJXSFLBYZMYQHXJSXRXSQZZZSSLYFRCZJRCRXHHZXQYDYHXSJJHZCXZBTYNSYSXJBQLPXZQPYMLXZKYXLXCJLCYSXXZZLXDLLLJJYHZXGYJWKJRWYHCPSGNRZLFZWFZZNSXGXFLZSXZZZBFCSYJDBRJKRDHHGXJLJJTGXJXXSTJTJXLYXQFCSGSWMSBCTLQZZWLZZKXJMLTMJYHSDDBXGZHDLBMYJFRZFSGCLYJBPMLYSMSXLSZJQQHJZFXGFQFQBPXZGYYQXGZTCQWYLTLGWSGWHRLFSFGZJMGMGBGTJFSYZZGZYZAFLSSPMLPFLCWBJZCLJJMZLPJJLYMQDMYYYFBGYGYZMLYZDXQYXRQQQHSYYYQXYLJTYXFSFSLLGNQCYHYCWFHCCCFXPYLYPLLZYXXXXXKQHHXSHJZCFZSCZJXCPZWHHHHHAPYLQALPQAFYHXDYLUKMZQGGGDDESRNNZLTZGCHYPPYSQJJHCLLJTOLNJPZLJLHYMHEYDYDSQYCDDHGZUNDZCLZYZLLZNTNYZGSLHSLPJJBDGWXPCDUTJCKLKCLWKLLCASSTKZZDNQNTTLYYZSSYSSZZRYLJQKCQDHHCRXRZYDGRGCWCGZQFFFPPJFZYNAKRGYWYQPQXXFKJTSZZXSWZDDFBBXTBGTZKZNPZZPZXZPJSZBMQHKCYXYLDKLJNYPKYGHGDZJXXEAHPNZKZTZCMXCXMMJXNKSZQNMNLWBWWXJKYHCPSTMCSQTZJYXTPCTPDTNNPGLLLZSJLSPBLPLQHDTNJNLYYRSZFFJFQWDPHZDWMRZCCLODAXNSSNYZRESTYJWJYJDBCFXNMWTTBYLWSTSZGYBLJPXGLBOCLHPCBJLTMXZLJYLZXCLTPNCLCKXTPZJSWCYXSFYSZDKNTLBYJCYJLLSTGQCBXRYZXBXKLYLHZLQZLNZCXWJZLJZJNCJHXMNZZGJZZXTZJXYCYYCXXJYYXJJXSSSJSTSSTTPPGQTCSXWZDCSYFPTFBFHFBBLZJCLZZDBXGCXLQPXKFZFLSYLTUWBMQJHSZBMDDBCYSCCLDXYCDDQLYJJWMQLLCSGLJJSYFPYYCCYLTJANTJJPWYCMMGQYYSXDXQMZHSZXPFTWWZQSWQRFKJLZJQQYFBRXJHHFWJJZYQAZMYFRHCYYBYQWLPEXCCZSTYRLTTDMQLYKMBBGMYYJPRKZNPBSXYXBHYZDJDNGHPMFSGMWFZMFQMMBCMZZCJJLCNUXYQLMLRYGQZCYXZLWJGCJCGGMCJNFYZZJHYCPRRCMTZQZXHFQGTJXCCJEAQCRJYHPLQLSZDJRBCQHQDYRHYLYXJSYMHZYDWLDFRYHBPYDTSSCNWBXGLPZMLZZTQSSCPJMXXYCSJYTYCGHYCJWYRXXLFEMWJNMKLLSWTXHYYYNCMMCWJDQDJZGLLJWJRKHPZGGFLCCSCZMCBLTBHBQJXQDSPDJZZGHGLFQYWBZYZJLTSTDHQHCTCBCHFLQMPWDSHYYTQWCNZZJTLBYMBPDYYYXSQKXWYYFLXXNCWCXYPMAELYKKJMZZZBRXYYQJFLJPFHHHYTZZXSGQQMHSPGDZQWBWPJHZJDYSCQWZKTXXSQLZYYMYSDZGRXCKKUJLWPYSYSCSYZLRMLQSYLJXBCXTLWDQZPCYCYKPPPNSXFYZJJRCEMHSZMSXLXGLRWGCSTLRSXBZGBZGZTCPLUJLSLYLYMTXMTZPALZXPXJTJWTCYYZLBLXBZLQMYLXPGHDSLSSDMXMBDZZSXWHAMLCZCPJMCNHJYSNSYGCHSKQMZZQDLLKABLWJXSFMOCDXJRRLYQZKJMYBYQLYHETFJZFRFKSRYXFJTWDSXXSYSQJYSLYXWJHSNLXYYXHBHAWHHJZXWMYLJCSSLKYDZTXBZSYFDXGXZJKHSXXYBSSXDPYNZWRPTQZCZENYGCXQFJYKJBZMLJCMQQXUOXSLYXXLYLLJDZBTYMHPFSTTQQWLHOKYBLZZALZXQLHZWRRQHLSTMYPYXJJXMQSJFNBXYXYJXXYQYLTHYLQYFMLKLJTMLLHSZWKZHLJMLHLJKLJSTLQXYLMBHHLNLZXQJHXCFXXLHYHJJGBYZZKBXSCQDJQDSUJZYYHZHHMGSXCSYMXFEBCQWWRBPYYJQTYZCYQYQQZYHMWFFHGZFRJFCDPXNTQYZPDYKHJLFRZXPPXZDBBGZQSTLGDGYLCQMLCHHMFYWLZYXKJLYPQHSYWMQQGQZMLZJNSQXJQSYJYCBEHSXFSZPXZWFLLBCYYJDYTDTHWZSFJMQQYJLMQXXLLDTTKHHYBFPWTYYSQQWNQWLGWDEBZWCMYGCULKJXTMXMYJSXHYBRWFYMWFRXYQMXYSZTZZTFYKMLDHQDXWYYNLCRYJBLPSXCXYWLSPRRJWXHQYPHTYDNXHHMMYWYTZCSQMTSSCCDALWZTCPQPYJLLQZYJSWXMZZMMYLMXCLMXCZMXMZSQTZPPQQBLPGXQZHFLJJHYTJSRXWZXSCCDLXTYJDCQJXSLQYCLZXLZZXMXQRJMHRHZJBHMFLJLMLCLQNLDXZLLLPYPSYJYSXCQQDCMQJZZXHNPNXZMEKMXHYKYQLXSXTXJYYHWDCWDZHQYYBGYBCYSCFGPSJNZDYZZJZXRZRQJJYMCANYRJTLDPPYZBSTJKXXZYPFDWFGZZRPYMTNGXZQBYXNBUFNQKRJQZMJEGRZGYCLKXZDSKKNSXKCLJSPJYYZLQQJYBZSSQLLLKJXTBKTYLCCDDBLSPPFYLGYDTZJYQGGKQTTFZXBDKTYYHYBBFYTYYBCLPDYTGDHRYRNJSPTCSNYJQHKLLLZSLYDXXWBCJQSPXBPJZJCJDZFFXXBRMLAZHCSNDLBJDSZBLPRZTSWSBXBCLLXXLZDJZSJPYLYXXYFTFFFBHJJXGBYXJPMMMPSSJZJMTLYZJXSWXTYLEDQPJMYGQZJGDJLQJWJQLLSJGJGYGMSCLJJXDTYGJQJQJCJZCJGDZZSXQGSJGGCXHQXSNQLZZBXHSGZXCXYLJXYXYYDFQQJHJFXDHCTXJYRXYSQTJXYEFYYSSYYJXNCYZXFXMSYSZXYYSCHSHXZZZGZZZGFJDLTYLNPZGYJYZYYQZPBXQBDZTZCZYXXYHHSQXSHDHGQHJHGYWSZTMZMLHYXGEBTYLZKQWYTJZRCLEKYSTDBCYKQQSAYXCJXWWGSBHJYZYDHCSJKQCXSWXFLTYNYZPZCCZJQTZWJQDZZZQZLJJXLSBHPYXXPSXSHHEZTXFPTLQYZZXHYTXNCFZYYHXGNXMYWXTZSJPTHHGYMXMXQZXTSBCZYJYXXTYYZYPCQLMMSZMJZZLLZXGXZAAJZYXJMZXWDXZSXZDZXLEYJJZQBHZWZZZQTZPSXZTDSXJJJZNYAZPHXYYSRNQDTHZHYYKYJHDZXZLSWCLYBZYECWCYCRYLCXNHZYDZYDYJDFRJJHTRSQTXYXJRJHOJYNXELXSFSFJZGHPZSXZSZDZCQZBYYKLSGSJHCZSHDGQGXYZGXCHXZJWYQWGYHKSSEQZZNDZFKWYSSTCLZSTSYMCDHJXXYWEYXCZAYDMPXMDSXYBSQMJMZJMTZQLPJYQZCGQHXJHHLXXHLHDLDJQCLDWBSXFZZYYSCHTYTYYBHECXHYKGJPXHHYZJFXHWHBDZFYZBCAPNPGNYDMSXHMMMMAMYNBYJTMPXYYMCTHJBZYFCGTYHWPHFTWZZEZSBZEGPFMTSKFTYCMHFLLHGPZJXZJGZJYXZSBBQSCZZLZCCSTPGXMJSFTCCZJZDJXCYBZLFCJSYZFGSZLYBCWZZBYZDZYPSWYJZXZBDSYUXLZZBZFYGCZXBZHZFTPBGZGEJBSTGKDMFHYZZJHZLLZZGJQZLSFDJSSCBZGPDLFZFZSZYZYZSYGCXSNXXCHCZXTZZLJFZGQSQYXZJQDCCZTQCDXZJYQJQCHXZTDLGSCXZSYQJQTZWLQDQZTQCHQQJZYEZZZPBWKDJFCJPZTYPQYQTTYNLMBDKTJZPQZQZZFPZSBNJLGYJDXJDZZKZGQKXDLPZJTCJDQBXDJQJSTCKNXBXZMSLYJCQMTJQWWCJQNJNLLLHJCWQTBZQYDZCZPZZDZYDDCYZZZCCJTTJFZDPRRTZTJDCQTQZDTJNPLZBCLLCTZSXKJZQZPZLBZRBTJDCXFCZDBCCJJLTQQPLDCGZDBBZJCQDCJWYNLLZYZCCDWLLXWZLXRXNTQQCZXKQLSGDFQTDDGLRLAJJTKUYMKQLLTZYTDYYCZGJWYXDXFRSKSTQTENQMRKQZHHQKDLDAZFKYPBGGPZREBZZYKZZSPEGJXGYKQZZZSLYSYYYZWFQZYLZZLZHWCHKYPQGNPGBLPLRRJYXCCSYYHSFZFYBZYYTGZXYLXCZWXXZJZBLFFLGSKHYJZEYJHLPLLLLCZGXDRZELRHGKLZZYHZLYQSZZJZQLJZFLNBHGWLCZCFJYSPYXZLZLXGCCPZBLLCYBBBBUBBCBPCRNNZCZYRBFSRLDCGQYYQXYGMQZWTZYTYJXYFWTEHZZJYWLCCNTZYJJZDEDPZDZTSYQJHDYMBJNYJZLXTSSTPHNDJXXBYXQTZQDDTJTDYYTGWSCSZQFLSHLGLBCZPHDLYZJYCKWTYTYLBNYTSDSYCCTYSZYYEBHEXHQDTWNYGYCLXTSZYSTQMYGZAZCCSZZDSLZCLZRQXYYELJSBYMXSXZTEMBBLLYYLLYTDQYSHYMRQWKFKBFXNXSBYCHXBWJYHTQBPBSBWDZYLKGZSKYHXQZJXHXJXGNLJKZLYYCDXLFYFGHLJGJYBXQLYBXQPQGZTZPLNCYPXDJYQYDYMRBESJYYHKXXSTMXRCZZYWXYQYBMCLLYZHQYZWQXDBXBZWZMSLPDMYSKFMZKLZCYQYCZLQXFZZYDQZPZYGYJYZMZXDZFYFYTTQTZHGSPCZMLCCYTZXJCYTJMKSLPZHYSNZLLYTPZCTZZCKTXDHXXTQCYFKSMQCCYYAZHTJPCYLZLYJBJXTPNYLJYYNRXSYLMMNXJSMYBCSYSYLZYLXJJQYLDZLPQBFZZBLFNDXQKCZFYWHGQMRDSXYCYTXNQQJZYYPFZXDYZFPRXEJDGYQBXRCNFYYQPGHYJDYZXGRHTKYLNWDZNTSMPKLBTHBPYSZBZTJZSZZJTYYXZPHSSZZBZCZPTQFZMYFLYPYBBJQXZMXXDJMTSYSKKBJZXHJCKLPSMKYJZCXTMLJYXRZZQSLXXQPYZXMKYXXXJCLJPRMYYGADYSKQLSNDHYZKQXZYZTCGHZTLMLWZYBWSYCTBHJHJFCWZTXWYTKZLXQSHLYJZJXTMPLPYCGLTBZZTLZJCYJGDTCLKLPLLQPJMZPAPXYZLKKTKDZCZZBNZDYDYQZJYJGMCTXLTGXSZLMLHBGLKFWNWZHDXUHLFMKYSLGXDTWWFRJEJZTZHYDXYKSHWFZCQSHKTMQQHTZHYMJDJSKHXZJZBZZXYMPAGQMSTPXLSKLZYNWRTSQLSZBPSPSGZWYHTLKSSSWHZZLYYTNXJGMJSZSUFWNLSOZTXGXLSAMMLBWLDSZYLAKQCQCTMYCFJBSLXCLZZCLXXKSBZQCLHJPSQPLSXXCKSLNHPSFQQYTXYJZLQLDXZQJZDYYDJNZPTUZDSKJFSLJHYLZSQZLBTXYDGTQFDBYAZXDZHZJNHHQBYKNXJJQCZMLLJZKSPLDYCLBBLXKLELXJLBQYCXJXGCNLCQPLZLZYJTZLJGYZDZPLTQCSXFDMNYCXGBTJDCZNBGBQYQJWGKFHTNPYQZQGBKPBBYZMTJDYTBLSQMPSXTBNPDXKLEMYYCJYNZCTLDYKZZXDDXHQSHDGMZSJYCCTAYRZLPYLTLKXSLZCGGEXCLFXLKJRTLQJAQZNCMBYDKKCXGLCZJZXJHPTDJJMZQYKQSECQZDSHHADMLZFMMZBGNTJNNLGBYJBRBTMLBYJDZXLCJLPLDLPCQDHLXZLYCBLCXZZJADJLNZMMSSSMYBHBSQKBHRSXXJMXSDZNZPXLGBRHWGGFCXGMSKLLTSJYYCQLTSKYWYYHYWXBXQYWPYWYKQLSQPTNTKHQCWDQKTWPXXHCPTHTWUMSSYHBWCRWXHJMKMZNGWTMLKFGHKJYLSYYCXWHYECLQHKQHTTQKHFZLDXQWYZYYDESBPKYRZPJFYYZJCEQDZZDLATZBBFJLLCXDLMJSSXEGYGSJQXCWBXSSZPDYZCXDNYXPPZYDLYJCZPLTXLSXYZYRXCYYYDYLWWNZSAHJSYQYHGYWWAXTJZDAXYSRLTDPSSYYFNEJDXYZHLXLLLZQZSJNYQYQQXYJGHZGZCYJCHZLYCDSHWSHJZYJXCLLNXZJJYYXNFXMWFPYLCYLLABWDDHWDXJMCXZTZPMLQZHSFHZYNZTLLDYWLSLXHYMMYLMBWWKYXYADTXYLLDJPYBPWUXJMWMLLSAFDLLYFLBHHHBQQLTZJCQJLDJTFFKMMMBYTHYGDCQRDDWRQJXNBYSNWZDBYYTBJHPYBYTTJXAAHGQDQTMYSTQXKBTZPKJLZRBEQQSSMJJBDJOTGTBXPGBKTLHQXJJJCTHXQDWJLWRFWQGWSHCKRYSWGFTGYGBXSDWDWRFHWYTJJXXXJYZYSLPYYYPAYXHYDQKXSHXYXGSKQHYWFDDDPPLCJLQQEEWXKSYYKDYPLTJTHKJLTCYYHHJTTPLTZZCDLTHQKZXQYSTEEYWYYZYXXYYSTTJKLLPZMCYHQGXYHSRMBXPLLNQYDQHXSXXWGDQBSHYLLPJJJTHYJKYPPTHYYKTYEZYENMDSHLCRPQFDGFXZPSFTLJXXJBSWYYSKSFLXLPPLBBBLBSFXFYZBSJSSYLPBBFFFFSSCJDSTZSXZRYYSYFFSYZYZBJTBCTSBSDHRTJJBYTCXYJEYLXCBNEBJDSYXYKGSJZBXBYTFZWGENYHHTHZHHXFWGCSTBGXKLSXYWMTMBYXJSTZSCDYQRCYTWXZFHMYMCXLZNSDJTTTXRYCFYJSBSDYERXJLJXBBDEYNJGHXGCKGSCYMBLXJMSZNSKGXFBNBPTHFJAAFXYXFPXMYPQDTZCXZZPXRSYWZDLYBBKTYQPQJPZYPZJZNJPZJLZZFYSBTTSLMPTZRTDXQSJEHBZYLZDHLJSQMLHTXTJECXSLZZSPKTLZKQQYFSYGYWPCPQFHQHYTQXZKRSGTTSQCZLPTXCDYYZXSQZSLXLZMYCPCQBZYXHBSXLZDLTCDXTYLZJYYZPZYZLTXJSJXHLPMYTXCQRBLZSSFJZZTNJYTXMYJHLHPPLCYXQJQQKZZSCPZKSWALQSBLCCZJSXGWWWYGYKTJBBZTDKHXHKGTGPBKQYSLPXPJCKBMLLXDZSTBKLGGQKQLSBKKTFXRMDKBFTPZFRTBBRFERQGXYJPZSSTLBZTPSZQZSJDHLJQLZBPMSMMSXLQQNHKNBLRDDNXXDHDDJCYYGYLXGZLXSYGMQQGKHBPMXYXLYTQWLWGCPBMQXCYZYDRJBHTDJYHQSHTMJSBYPLWHLZFFNYPMHXXHPLTBQPFBJWQDBYGPNZTPFZJGSDDTQSHZEAWZZYLLTYYBWJKXXGHLFKXDJTMSZSQYNZGGSWQSPHTLSSKMCLZXYSZQZXNCJDQGZDLFNYKLJCJLLZLMZZNHYDSSHTHZZLZZBBHQZWWYCRZHLYQQJBEYFXXXWHSRXWQHWPSLMSSKZTTYGYQQWRSLALHMJTQJSMXQBJJZJXZYZKXBYQXBJXSHZTSFJLXMXZXFGHKZSZGGYLCLSARJYHSLLLMZXELGLXYDJYTLFBHBPNLYZFBBHPTGJKWETZHKJJXZXXGLLJLSTGSHJJYQLQZFKCGNNDJSSZFDBCTWWSEQFHQJBSAQTGYPQLBXBMMYWXGSLZHGLZGQYFLZBYFZJFRYSFMBYZHQGFWZSYFYJJPHZBYYZFFWODGRLMFTWLBZGYCQXCDJYGZYYYYTYTYDWEGAZYHXJLZYYHLRMGRXXZCLHNELJJTJTPWJYBJJBXJJTJTEEKHWSLJPLPSFYZPQQBDLQJJTYYQLYZKDKSQJYYQZLDQTGJQYZJSUCMRYQTHTEJMFCTYHYPKMHYZWJDQFHYYXWSHCTXRLJHQXHCCYYYJLTKTTYTMXGTCJTZAYYOCZLYLBSZYWJYTSJYHBYSHFJLYGJXXTMZYYLTXXYPZLXYJZYZYYPNHMYMDYYLBLHLSYYQQLLNJJYMSOYQBZGDLYXYLCQYXTSZEGXHZGLHWBLJHEYXTWQMAKBPQCGYSHHEGQCMWYYWLJYJHYYZLLJJYLHZYHMGSLJLJXCJJYCLYCJPCPZJZJMMYLCQLNQLJQJSXYJMLSZLJQLYCMMHCFMMFPQQMFYLQMCFFQMMMMHMZNFHHJGTTHHKHSLNCHHYQDXTMMQDCYZYXYQMYQYLTDCYYYZAZZCYMZYDLZFFFMMYCQZWZZMABTBYZTDMNZZGGDFTYPCGQYTTSSFFWFDTZQSSYSTWXJHXYTSXXYLBYQHWWKXHZXWZNNZZJZJJQJCCCHYYXBZXZCYZTLLCQXYNJYCYYCYNZZQYYYEWYCZDCJYCCHYJLBTZYYCQWMPWPYMLGKDLDLGKQQBGYCHJXY";
+
+    // 此处收录了375个多音字,数据来自于http://www.51windows.net/pages/pinyin.asp
+    var oMultiDiff = {
+        19969: "DZ",
+        19975: "WM",
+        19988: "QJ",
+        20048: "YL",
+        20056: "SC",
+        20060: "NM",
+        20094: "QG",
+        20127: "QJ",
+        20167: "QC",
+        20193: "YG",
+        20250: "KH",
+        20256: "ZC",
+        20282: "SC",
+        20285: "QJG",
+        20291: "TD",
+        20314: "YD",
+        20315: "BF",
+        20340: "NE",
+        20375: "TD",
+        20389: "YJ",
+        20391: "CZ",
+        20415: "PB",
+        20446: "YS",
+        20447: "SQ",
+        20504: "TC",
+        20608: "KG",
+        20854: "QJ",
+        20857: "ZC",
+        20911: "PF",
+        20985: "AW",
+        21032: "PB",
+        21048: "XQ",
+        21049: "SC",
+        21089: "YS",
+        21119: "JC",
+        21242: "SB",
+        21273: "SC",
+        21305: "YP",
+        21306: "QO",
+        21330: "ZC",
+        21333: "SDC",
+        21345: "QK",
+        21378: "CA",
+        21397: "SC",
+        21414: "XS",
+        21442: "SC",
+        21477: "JG",
+        21480: "TD",
+        21484: "ZS",
+        21494: "YX",
+        21505: "YX",
+        21512: "HG",
+        21523: "XH",
+        21537: "PB",
+        21542: "PF",
+        21549: "KH",
+        21571: "E",
+        21574: "DA",
+        21588: "TD",
+        21589: "O",
+        21618: "ZC",
+        21621: "KHA",
+        21632: "ZJ",
+        21654: "KG",
+        21679: "LKG",
+        21683: "KH",
+        21710: "A",
+        21719: "YH",
+        21734: "WOE",
+        21769: "A",
+        21780: "WN",
+        21804: "XH",
+        21834: "A",
+        21899: "ZD",
+        21903: "RN",
+        21908: "WO",
+        21939: "ZC",
+        21956: "SA",
+        21964: "YA",
+        21970: "TD",
+        22003: "A",
+        22031: "JG",
+        22040: "XS",
+        22060: "ZC",
+        22066: "ZC",
+        22079: "MH",
+        22129: "XJ",
+        22179: "XA",
+        22237: "NJ",
+        22244: "TD",
+        22280: "JQ",
+        22300: "YH",
+        22313: "XW",
+        22331: "YQ",
+        22343: "YJ",
+        22351: "PH",
+        22395: "DC",
+        22412: "TD",
+        22484: "PB",
+        22500: "PB",
+        22534: "ZD",
+        22549: "DH",
+        22561: "PB",
+        22612: "TD",
+        22771: "KQ",
+        22831: "HB",
+        22841: "JG",
+        22855: "QJ",
+        22865: "XQ",
+        23013: "ML",
+        23081: "WM",
+        23487: "SX",
+        23558: "QJ",
+        23561: "YW",
+        23586: "YW",
+        23614: "YW",
+        23615: "SN",
+        23631: "PB",
+        23646: "ZS",
+        23663: "ZT",
+        23673: "YG",
+        23762: "TD",
+        23769: "ZS",
+        23780: "QJ",
+        23884: "QK",
+        24055: "XH",
+        24113: "DC",
+        24162: "ZC",
+        24191: "GA",
+        24273: "QJ",
+        24324: "NL",
+        24377: "TD",
+        24378: "QJ",
+        24439: "PF",
+        24554: "ZS",
+        24683: "TD",
+        24694: "WE",
+        24733: "LK",
+        24925: "TN",
+        25094: "ZG",
+        25100: "XQ",
+        25103: "XH",
+        25153: "PB",
+        25170: "PB",
+        25179: "KG",
+        25203: "PB",
+        25240: "ZS",
+        25282: "FB",
+        25303: "NA",
+        25324: "KG",
+        25341: "ZY",
+        25373: "WZ",
+        25375: "XJ",
+        25384: "A",
+        25457: "A",
+        25528: "SD",
+        25530: "SC",
+        25552: "TD",
+        25774: "ZC",
+        25874: "ZC",
+        26044: "YW",
+        26080: "WM",
+        26292: "PB",
+        26333: "PB",
+        26355: "ZY",
+        26366: "CZ",
+        26397: "ZC",
+        26399: "QJ",
+        26415: "ZS",
+        26451: "SB",
+        26526: "ZC",
+        26552: "JG",
+        26561: "TD",
+        26588: "JG",
+        26597: "CZ",
+        26629: "ZS",
+        26638: "YL",
+        26646: "XQ",
+        26653: "KG",
+        26657: "XJ",
+        26727: "HG",
+        26894: "ZC",
+        26937: "ZS",
+        26946: "ZC",
+        26999: "KJ",
+        27099: "KJ",
+        27449: "YQ",
+        27481: "XS",
+        27542: "ZS",
+        27663: "ZS",
+        27748: "TS",
+        27784: "SC",
+        27788: "ZD",
+        27795: "TD",
+        27812: "O",
+        27850: "PB",
+        27852: "MB",
+        27895: "SL",
+        27898: "PL",
+        27973: "QJ",
+        27981: "KH",
+        27986: "HX",
+        27994: "XJ",
+        28044: "YC",
+        28065: "WG",
+        28177: "SM",
+        28267: "QJ",
+        28291: "KH",
+        28337: "ZQ",
+        28463: "TL",
+        28548: "DC",
+        28601: "TD",
+        28689: "PB",
+        28805: "JG",
+        28820: "QG",
+        28846: "PB",
+        28952: "TD",
+        28975: "ZC",
+        29100: "A",
+        29325: "QJ",
+        29575: "SL",
+        29602: "FB",
+        30010: "TD",
+        30044: "CX",
+        30058: "PF",
+        30091: "YSP",
+        30111: "YN",
+        30229: "XJ",
+        30427: "SC",
+        30465: "SX",
+        30631: "YQ",
+        30655: "QJ",
+        30684: "QJG",
+        30707: "SD",
+        30729: "XH",
+        30796: "LG",
+        30917: "PB",
+        31074: "NM",
+        31085: "JZ",
+        31109: "SC",
+        31181: "ZC",
+        31192: "MLB",
+        31293: "JQ",
+        31400: "YX",
+        31584: "YJ",
+        31896: "ZN",
+        31909: "ZY",
+        31995: "XJ",
+        32321: "PF",
+        32327: "ZY",
+        32418: "HG",
+        32420: "XQ",
+        32421: "HG",
+        32438: "LG",
+        32473: "GJ",
+        32488: "TD",
+        32521: "QJ",
+        32527: "PB",
+        32562: "ZSQ",
+        32564: "JZ",
+        32735: "ZD",
+        32793: "PB",
+        33071: "PF",
+        33098: "XL",
+        33100: "YA",
+        33152: "PB",
+        33261: "CX",
+        33324: "BP",
+        33333: "TD",
+        33406: "YA",
+        33426: "WM",
+        33432: "PB",
+        33445: "JG",
+        33486: "ZN",
+        33493: "TS",
+        33507: "QJ",
+        33540: "QJ",
+        33544: "ZC",
+        33564: "XQ",
+        33617: "YT",
+        33632: "QJ",
+        33636: "XH",
+        33637: "YX",
+        33694: "WG",
+        33705: "PF",
+        33728: "YW",
+        33882: "SR",
+        34067: "WM",
+        34074: "YW",
+        34121: "QJ",
+        34255: "ZC",
+        34259: "XL",
+        34425: "JH",
+        34430: "XH",
+        34485: "KH",
+        34503: "YS",
+        34532: "HG",
+        34552: "XS",
+        34558: "YE",
+        34593: "ZL",
+        34660: "YQ",
+        34892: "XH",
+        34928: "SC",
+        34999: "QJ",
+        35048: "PB",
+        35059: "SC",
+        35098: "ZC",
+        35203: "TQ",
+        35265: "JX",
+        35299: "JX",
+        35782: "SZ",
+        35828: "YS",
+        35830: "E",
+        35843: "TD",
+        35895: "YG",
+        35977: "MH",
+        36158: "JG",
+        36228: "QJ",
+        36426: "XQ",
+        36466: "DC",
+        36710: "CJ",
+        36711: "ZYG",
+        36767: "PB",
+        36866: "SK",
+        36951: "YW",
+        37034: "YX",
+        37063: "XH",
+        37218: "ZC",
+        37325: "ZC",
+        38063: "PB",
+        38079: "TD",
+        38085: "QY",
+        38107: "DC",
+        38116: "TD",
+        38123: "YD",
+        38224: "HG",
+        38241: "XTC",
+        38271: "ZC",
+        38415: "YE",
+        38426: "KH",
+        38461: "YD",
+        38463: "AE",
+        38466: "PB",
+        38477: "XJ",
+        38518: "YT",
+        38551: "WK",
+        38585: "ZC",
+        38704: "XS",
+        38739: "LJ",
+        38761: "GJ",
+        38808: "SQ",
+        39048: "JG",
+        39049: "XJ",
+        39052: "HG",
+        39076: "CZ",
+        39271: "XT",
+        39534: "TD",
+        39552: "TD",
+        39584: "PB",
+        39647: "SB",
+        39730: "LG",
+        39748: "TPB",
+        40109: "ZQ",
+        40479: "ND",
+        40516: "HG",
+        40536: "HG",
+        40583: "QJ",
+        40765: "YQ",
+        40784: "QJ",
+        40840: "YK",
+        40863: "QJG"
+    };
+
+    var _checkPYCh = function (ch) {
+        var uni = ch.charCodeAt(0);
+        // 如果不在汉字处理范围之内,返回原字符,也可以调用自己的处理函数
+        if (uni > 40869 || uni < 19968) {return ch;} // dealWithOthers(ch);
+        return (oMultiDiff[uni] ? oMultiDiff[uni] : (_ChineseFirstPY.charAt(uni - 19968)));
+    };
+
+    var _mkPYRslt = function (arr, options) {
+        var ignoreMulti = options.ignoreMulti;
+        var splitChar = options.splitChar;
+        var arrRslt = [""], k, multiLen = 0;
+        for (var i = 0, len = arr.length; i < len; i++) {
+            var str = arr[i];
+            var strlen = str.length;
+            // 多音字过多的情况下，指数增长会造成浏览器卡死，超过20完全卡死，18勉强能用，考虑到不同性能最好是16或者14
+            // 超过14个多音字之后，后面的都用第一个拼音
+            if (strlen == 1 || multiLen > 14 || ignoreMulti) {
+                var tmpStr = str.substring(0, 1);
+                for (k = 0; k < arrRslt.length; k++) {
+                    arrRslt[k] += tmpStr;
+                }
+            } else {
+                var tmpArr = arrRslt.slice(0);
+                arrRslt = [];
+                multiLen ++;
+                for (k = 0; k < strlen; k++) {
+                    // 复制一个相同的arrRslt
+                    var tmp = tmpArr.slice(0);
+                    // 把当前字符str[k]添加到每个元素末尾
+                    for (var j = 0; j < tmp.length; j++) {
+                        tmp[j] += str.charAt(k);
+                    }
+                    // 把复制并修改后的数组连接到arrRslt上
+                    arrRslt = arrRslt.concat(tmp);
+                }
+            }
+        }
+        // BI-56386 这边直接将所有多音字组合拼接是有风险的，因为丢失了每一组的起始索引信息, 外部使用indexOf等方法会造成错位
+        // 一旦错位就可能认为不符合条件， 但实际上还是有可能符合条件的，故此处以一个无法搜索的不可见字符作为连接
+        return arrRslt.join(splitChar || "").toLowerCase();
+    };
+
+    _.extend(BI, {
+        makeFirstPY: function (str, options) {
+            options = options || {};
+            if (typeof (str) !== "string") {return "" + str;}
+            var arrResult = []; // 保存中间结果的数组
+            for (var i = 0, len = str.length; i < len; i++) {
+                // 获得unicode码
+                var ch = str.charAt(i);
+                // 检查该unicode码是否在处理范围之内,在则返回该码对映汉字的拼音首字母,不在则调用其它函数处理
+                arrResult.push(_checkPYCh(ch));
+            }
+            // 处理arrResult,返回所有可能的拼音首字母串数组
+            return _mkPYRslt(arrResult, options);
+        }
+    });
+})();
+
+/***/ }),
+/* 141 */
+/***/ (function(module, exports) {
+
+!(function () {
+    var i18nStore = {};
+    _.extend(BI, {
+        addI18n: function (i18n) {
+            BI.extend(i18nStore, i18n);
+        },
+        i18nText: function (key) {
+            var localeText = i18nStore[key] || (BI.i18n && BI.i18n[key]) || "";
+            if (!localeText) {
+                localeText = key;
+            }
+            var len = arguments.length;
+            if (len > 1) {
+                if (localeText.indexOf("{R1}") > -1) {
+                    for (var i = 1; i < len; i++) {
+                        var key = "{R" + i + "}";
+                        localeText = BI.replaceAll(localeText, key, arguments[i] + "");
+                    }
+                } else {
+                    var args = Array.prototype.slice.call(arguments);
+                    var count = 1;
+                    return BI.replaceAll(localeText, "\\{\\s*\\}", function () {
+                        return args[count++] + "";
+                    });
+                }
+            }
+            return localeText;
+        }
+    });
+})();
+
+/***/ }),
+/* 142 */
+/***/ (function(module, exports) {
+
+/**
+ * 缓冲池
+ * @type {{Buffer: {}}}
+ */
+
+(function () {
+    var Buffer = {};
+    var MODE = false;// 设置缓存模式为关闭
+
+    BI.BufferPool = {
+        put: function (name, cache) {
+            if (BI.isNotNull(Buffer[name])) {
+                throw new Error("Buffer Pool has the key already!");
+            }
+            Buffer[name] = cache;
+        },
+
+        get: function (name) {
+            return Buffer[name];
+        }
+    };
+})();
+
+/***/ }),
+/* 143 */
+/***/ (function(module, exports) {
+
+/**
+ * 共享池
+ * @type {{Shared: {}}}
+ */
+
+(function () {
+    var _Shared = {};
+    BI.SharingPool = {
+        _Shared: _Shared,
+        put: function (name, shared) {
+            _Shared[name] = shared;
+        },
+
+        cat: function () {
+            var args = Array.prototype.slice.call(arguments, 0),
+                copy = _Shared;
+            for (var i = 0; i < args.length; i++) {
+                copy = copy && copy[args[i]];
+            }
+            return copy;
+        },
+
+        get: function () {
+            return BI.deepClone(this.cat.apply(this, arguments));
+        },
+
+        remove: function (key) {
+            delete _Shared[key];
+        }
+    };
+})();
+
+/***/ }),
+/* 144 */
+/***/ (function(module, exports) {
+
+BI.Req = {
+
+};
+
+
+/***/ }),
+/* 145 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
+/* 146 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
+/* 147 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
+/* 148 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
+/* 149 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
+/* 150 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
+/* 151 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
+/* 152 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
+/* 153 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
+/* 154 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
+/* 155 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
+/* 156 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
+/* 157 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
+/* 158 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
+/* 159 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
+/* 160 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
+/* 161 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
+/* 162 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
+/* 163 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
+/* 164 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
+/* 165 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
+/* 166 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
+/* 167 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
+/* 168 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
+/* 169 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
+/* 170 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
+/* 171 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
+/* 172 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
+/* 173 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
+/* 174 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
+/* 175 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
+/* 176 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
+/* 177 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
+/* 178 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
+/* 179 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
+/* 180 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
+/* 181 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
+/* 182 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
+/* 183 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
+/* 184 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
+/* 185 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
+/* 186 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
+/* 187 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
+/* 188 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
+/* 189 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
+/* 190 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
+/* 191 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
+/* 192 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
+/* 193 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
+/* 194 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
+/* 195 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
+/* 196 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
+/* 197 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
+/* 198 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
+/* 199 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
+/* 200 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
+/* 201 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
+/* 202 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
+/* 203 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
+/* 204 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
+/* 205 */,
+/* 206 */,
+/* 207 */,
+/* 208 */,
+/* 209 */,
+/* 210 */,
+/* 211 */,
+/* 212 */,
+/* 213 */,
+/* 214 */,
+/* 215 */,
+/* 216 */,
+/* 217 */,
+/* 218 */,
+/* 219 */,
+/* 220 */,
+/* 221 */,
+/* 222 */,
+/* 223 */,
+/* 224 */,
+/* 225 */,
+/* 226 */,
+/* 227 */,
+/* 228 */,
+/* 229 */,
+/* 230 */,
+/* 231 */,
+/* 232 */,
+/* 233 */,
+/* 234 */,
+/* 235 */,
+/* 236 */,
+/* 237 */,
+/* 238 */,
+/* 239 */,
+/* 240 */,
+/* 241 */,
+/* 242 */,
+/* 243 */,
+/* 244 */,
+/* 245 */,
+/* 246 */,
+/* 247 */,
+/* 248 */,
+/* 249 */,
+/* 250 */,
+/* 251 */,
+/* 252 */,
+/* 253 */,
+/* 254 */,
+/* 255 */,
+/* 256 */,
+/* 257 */,
+/* 258 */,
+/* 259 */,
+/* 260 */,
+/* 261 */,
+/* 262 */,
+/* 263 */,
+/* 264 */,
+/* 265 */,
+/* 266 */,
+/* 267 */,
+/* 268 */,
+/* 269 */,
+/* 270 */,
+/* 271 */,
+/* 272 */,
+/* 273 */,
+/* 274 */,
+/* 275 */,
+/* 276 */,
+/* 277 */,
+/* 278 */,
+/* 279 */,
+/* 280 */,
+/* 281 */,
+/* 282 */,
+/* 283 */,
+/* 284 */,
+/* 285 */,
+/* 286 */,
+/* 287 */,
+/* 288 */,
+/* 289 */,
+/* 290 */,
+/* 291 */,
+/* 292 */,
+/* 293 */,
+/* 294 */,
+/* 295 */,
+/* 296 */,
+/* 297 */,
+/* 298 */,
+/* 299 */,
+/* 300 */,
+/* 301 */,
+/* 302 */,
+/* 303 */,
+/* 304 */,
+/* 305 */,
+/* 306 */,
+/* 307 */,
+/* 308 */,
+/* 309 */,
+/* 310 */,
+/* 311 */,
+/* 312 */,
+/* 313 */,
+/* 314 */,
+/* 315 */,
+/* 316 */,
+/* 317 */
+/***/ (function(module, exports) {
+
+/**
+ * Widget超类
+ * @class BI.Widget
+ * @extends BI.OB
+ *
+ * @cfg {JSON} options 配置属性
+ */
+
+!(function () {
+    function callLifeHook(self, life) {
+        var hook = self.options[life] || self[life];
+        if (hook) {
+            var hooks = BI.isArray(hook) ? hook : [hook];
+            BI.each(hooks, function (i, hook) {
+                hook.call(self);
+            });
+        }
+    }
+
+    BI.Widget = BI.Widget || BI.inherit(BI.OB, {
+        _defaultConfig: function () {
+            return BI.extend(BI.Widget.superclass._defaultConfig.apply(this), {
+                root: false,
+                tagName: "div",
+                attributes: null,
+                data: null,
+
+                tag: null,
+                disabled: false,
+                invisible: false,
+                invalid: false,
+                baseCls: "",
+                extraCls: "",
+                cls: "",
+                css: null,
+                updateMode: "manual" // manual / auto
+            });
+        },
+
+        _constructor: function () {
+
+        },
+
+        // 覆盖父类的_constructor方法，widget不走ob的生命周期
+        _constructed: function () {
+            if (this.setup) {
+                pushTarget(this);
+                this.service = this.setup(this.options);
+                this.render = BI.isPlainObject(this.service) ? this.service.render : this.service;
+                popTarget();
+            }
+        },
+
+        _lazyConstructor: function () {
+            if (!this.__constructed) {
+                this.__constructed = true;
+                this._init();
+                this._initRef();
+            }
+        },
+
+        // 生命周期函数
+        beforeInit: null,
+
+        beforeRender: null,
+
+        beforeCreate: null,
+
+        created: null,
+
+        render: null,
+
+        beforeMount: null,
+
+        mounted: null,
+
+        shouldUpdate: null,
+
+        update: null,
+
+        beforeUpdate: null,
+
+        updated: null,
+
+        beforeDestroy: null,
+
+        destroyed: null,
+
+        _init: function () {
+            BI.Widget.superclass._init.apply(this, arguments);
+            this._initElementWidth();
+            this._initElementHeight();
+            this._initVisual();
+            this._initState();
+            this._initRender();
+        },
+
+        _initRender: function () {
+            var self = this;
+
+            function render() {
+                if (self.options.beforeRender || self.beforeRender) {
+                    (self.options.beforeRender || self.beforeRender).call(self, BI.bind(self._render, self));
+                } else {
+                    self._render();
+                }
+            }
+
+            if (this.options.beforeInit || this.beforeInit) {
+                this.__asking = true;
+                (this.options.beforeInit || this.beforeInit).call(this, render);
+                if (this.__asking === true) {
+                    this.__async = true;
+                }
+            } else {
+                render();
+            }
+        },
+
+        _render: function () {
+            this.__asking = false;
+            callLifeHook(this, "beforeCreate");
+            this._initElement();
+            this._initEffects();
+            callLifeHook(this, "created");
+        },
+
+        _initCurrent: function () {
+            var o = this.options;
+            if (o._baseCls || o.baseCls || o.extraCls || o.cls) {
+                this.element.addClass((o._baseCls || "") + " " + (o.baseCls || "") + " " + (o.extraCls || "") + " " + (o.cls || ""));
+            }
+            if (o.attributes) {
+                this.element.attr(o.attributes);
+            }
+            if (o.data) {
+                this.element.data(o.data);
+            }
+            if (o.css) {
+                this.element.css(o.css);
+            }
+        },
+
+        /**
+         * 初始化根节点
+         * @private
+         */
+        _initRoot: function () {
+            var o = this.options;
+            this.widgetName = o.widgetName || BI.uniqueId("widget");
+            this._isRoot = o.root;
+            this._children = {};
+            if (BI.isWidget(o.element)) {
+                this.element = this.options.element.element;
+                this._parent = o.element;
+                this._parent.addWidget(this.widgetName, this);
+            } else if (o.element) {
+                this.element = BI.Widget._renderEngine.createElement(this);
+                this._isRoot = true;
+            } else {
+                this.element = BI.Widget._renderEngine.createElement(this);
+            }
+            this.element._isWidget = true;
+            this._initCurrent();
+        },
+
+        _initElementWidth: function () {
+            var o = this.options;
+            if (BI.isWidthOrHeight(o.width)) {
+                this.element.css("width", BI.isNumber(o.width) ? o.width / BI.pixRatio + BI.pixUnit : o.width);
+            }
+        },
+
+        _initElementHeight: function () {
+            var o = this.options;
+            if (BI.isWidthOrHeight(o.height)) {
+                this.element.css("height", BI.isNumber(o.height) ? o.height / BI.pixRatio + BI.pixUnit : o.height);
+            }
+        },
+
+        _initVisual: function () {
+            var o = this.options;
+            if (o.invisible) {
+                // 用display属性做显示和隐藏，否则jquery会在显示时将display设为block会覆盖掉display:flex属性
+                this.element.css("display", "none");
+            }
+        },
+
+        _initEffects: function () {
+            var o = this.options;
+            if (o.disabled || o.invalid) {
+                if (this.options.disabled) {
+                    this.setEnable(false);
+                }
+                if (this.options.invalid) {
+                    this.setValid(false);
+                }
+            }
+        },
+
+        _initState: function () {
+            this._isMounted = false;
+        },
+
+        _initElement: function () {
+            var self = this;
+            var render = BI.isFunction(this.options.render) ? this.options.render : this.render;
+            var els = render && render.call(this);
+            if (BI.isPlainObject(els)) {
+                els = [els];
+            }
+            if (BI.isArray(els)) {
+                BI.each(els, function (i, el) {
+                    if (el) {
+                        BI._lazyCreateWidget(el, {
+                            element: self
+                        });
+                    }
+                });
+            }
+            // if (this._isRoot === true || !(this instanceof BI.Layout)) {
+            this._mount();
+            // }
+        },
+
+        _setParent: function (parent) {
+            this._parent = parent;
+        },
+
+        /**
+         *
+         * @param force 是否强制挂载子节点
+         * @param deep 子节点是否也是按照当前force处理
+         * @param lifeHook 生命周期钩子触不触发，默认触发
+         * @param predicate 递归每个widget的回调
+         * @returns {boolean}
+         * @private
+         */
+        _mount: function (force, deep, lifeHook, predicate, layer) {
+            var self = this;
+            if (!force && (this._isMounted || !this.isVisible() || this.__asking === true || !(this._isRoot === true || (this._parent && this._parent._isMounted === true)))) {
+                return false;
+            }
+            layer = layer || 0;
+            lifeHook !== false && callLifeHook(this, "beforeMount");
+            this._isMounted = true;
+            for (var key in this._children) {
+                var child = this._children[key];
+                !self.isEnabled() && child._setEnable(false);
+                !self.isValid() && child._setValid(false);
+                child._mount && child._mount(deep ? force : false, deep, lifeHook, predicate, layer + 1);
+            }
+            this._mountChildren && this._mountChildren();
+            if (layer === 0) {
+                // mounted里面会执行scrollTo之类的方法，如果放宏任务里会闪
+                // setTimeout(function () {
+                self.__afterMount(lifeHook, predicate);
+                // }, 0);
+            }
+            return true;
+        },
+
+        __afterMount: function (lifeHook, predicate) {
+            if (this._isMounted) {
+                for (var key in this._children) {
+                    var child = this._children[key];
+                    child.__afterMount && child.__afterMount(lifeHook, predicate);
+                }
+                lifeHook !== false && callLifeHook(this, "mounted");
+                this.fireEvent(BI.Events.MOUNT);
+                predicate && predicate(this);
+            }
+        },
+
+        _mountChildren: null,
+
+        _update: function (nextProps, shouldUpdate) {
+            var o = this.options;
+            callLifeHook(this, "beforeUpdate");
+            if (shouldUpdate) {
+                var res = this.update && this.update(nextProps, shouldUpdate);
+            } else if (BI.isNull(shouldUpdate)) {
+                // 默认使用shallowCompare的方式进行更新
+                var nextChange = {};
+                BI.each(nextProps, function (key, value) {
+                    if (o[key] !== value) {
+                        nextChange[key] = value;
+                    }
+                });
+                var res = this.update && BI.isNotEmptyObject(nextChange) && this.update(nextChange);
+            }
+            callLifeHook(this, "updated");
+            return res;
+        },
+
+        isMounted: function () {
+            return this._isMounted;
+        },
+
+        setWidth: function (w) {
+            this.options.width = w;
+            this._initElementWidth();
+        },
+
+        setHeight: function (h) {
+            this.options.height = h;
+            this._initElementHeight();
+        },
+
+        _setEnable: function (enable) {
+            if (enable === true) {
+                this.options.disabled = false;
+            } else if (enable === false) {
+                this.options.disabled = true;
+            }
+            // 递归将所有子组件使能
+            BI.each(this._children, function (i, child) {
+                !child._manualSetEnable && child._setEnable && child._setEnable(enable);
+            });
+        },
+
+        _setValid: function (valid) {
+            if (valid === true) {
+                this.options.invalid = false;
+            } else if (valid === false) {
+                this.options.invalid = true;
+            }
+            // 递归将所有子组件使有效
+            BI.each(this._children, function (i, child) {
+                !child._manualSetValid && child._setValid && child._setValid(valid);
+            });
+        },
+
+        _setVisible: function (visible) {
+            if (visible === true) {
+                this.options.invisible = false;
+            } else if (visible === false) {
+                this.options.invisible = true;
+            }
+        },
+
+        setEnable: function (enable) {
+            this._manualSetEnable = true;
+            this._setEnable(enable);
+            if (enable === true) {
+                this.element.removeClass("base-disabled disabled");
+            } else if (enable === false) {
+                this.element.addClass("base-disabled disabled");
+            }
+        },
+
+        setVisible: function (visible) {
+            this._setVisible(visible);
+            if (visible === true) {
+                // 用this.element.show()会把display属性改成block
+                this.element.css("display", "");
+                this._mount();
+            } else if (visible === false) {
+                this.element.css("display", "none");
+            }
+            this.fireEvent(BI.Events.VIEW, visible);
+        },
+
+        setValid: function (valid) {
+            this._manualSetValid = true;
+            this._setValid(valid);
+            if (valid === true) {
+                this.element.removeClass("base-invalid invalid");
+            } else if (valid === false) {
+                this.element.addClass("base-invalid invalid");
+            }
+        },
+
+        doBehavior: function () {
+            var args = arguments;
+            // 递归将所有子组件使有效
+            BI.each(this._children, function (i, child) {
+                child.doBehavior && child.doBehavior.apply(child, args);
+            });
+        },
+
+        getWidth: function () {
+            return this.options.width;
+        },
+
+        getHeight: function () {
+            return this.options.height;
+        },
+
+        isValid: function () {
+            return !this.options.invalid;
+        },
+
+        addWidget: function (name, widget) {
+            var self = this;
+            if (name instanceof BI.Widget) {
+                widget = name;
+                name = widget.getName();
+            }
+            if (BI.isKey(name)) {
+                name = name + "";
+            }
+            name = name || widget.getName() || BI.uniqueId("widget");
+            if (this._children[name]) {
+                throw new Error("name has already been existed");
+            }
+            widget._setParent && widget._setParent(this);
+            widget.on(BI.Events.DESTROY, function () {
+                BI.remove(self._children, this);
+            });
+            return (this._children[name] = widget);
+        },
+
+        getWidgetByName: function (name) {
+            if (!BI.isKey(name) || name === this.getName()) {
+                return this;
+            }
+            name = name + "";
+            var widget = void 0, other = {};
+            BI.any(this._children, function (i, wi) {
+                if (i === name) {
+                    widget = wi;
+                    return true;
+                }
+                other[i] = wi;
+            });
+            if (!widget) {
+                BI.any(other, function (i, wi) {
+                    return (widget = wi.getWidgetByName(i));
+                });
+            }
+            return widget;
+        },
+
+        removeWidget: function (nameOrWidget) {
+            var self = this;
+            if (BI.isWidget(nameOrWidget)) {
+                BI.remove(this._children, nameOrWidget);
+            } else {
+                delete this._children[nameOrWidget];
+            }
+        },
+
+        hasWidget: function (name) {
+            return this._children[name] != null;
+        },
+
+        getName: function () {
+            return this.widgetName;
+        },
+
+        setTag: function (tag) {
+            this.options.tag = tag;
+        },
+
+        getTag: function () {
+            return this.options.tag;
+        },
+
+        attr: function (key, value) {
+            var self = this;
+            if (BI.isPlainObject(key)) {
+                BI.each(key, function (k, v) {
+                    self.attr(k, v);
+                });
+                return;
+            }
+            if (BI.isNotNull(value)) {
+                return this.options[key] = value;
+            }
+            return this.options[key];
+        },
+
+        css: function (name, value) {
+            return this.element.css(name, value);
+        },
+
+        getText: function () {
+
+        },
+
+        setText: function (text) {
+
+        },
+
+        getValue: function () {
+
+        },
+
+        setValue: function (value) {
+
+        },
+
+        isEnabled: function () {
+            return !this.options.disabled;
+        },
+
+        isVisible: function () {
+            return !this.options.invisible;
+        },
+
+        disable: function () {
+            this.setEnable(false);
+        },
+
+        enable: function () {
+            this.setEnable(true);
+        },
+
+        valid: function () {
+            this.setValid(true);
+        },
+
+        invalid: function () {
+            this.setValid(false);
+        },
+
+        invisible: function () {
+            this.setVisible(false);
+        },
+
+        visible: function () {
+            this.setVisible(true);
+        },
+
+        __d: function () {
+            callLifeHook(this, "beforeDestroy");
+            this.beforeDestroy = null;
+            BI.each(this._children, function (i, widget) {
+                widget && widget._unMount && widget._unMount();
+            });
+            this._children = {};
+            this._parent = null;
+            this._isMounted = false;
+            callLifeHook(this, "destroyed");
+            this.destroyed = null;
+        },
+
+        _unMount: function () {
+            this.__d();
+            this.fireEvent(BI.Events.UNMOUNT);
+            this.purgeListeners();
+        },
+
+        isolate: function () {
+            if (this._parent) {
+                this._parent.removeWidget(this);
+            }
+            BI.DOM.hang([this]);
+        },
+
+        empty: function () {
+            BI.each(this._children, function (i, widget) {
+                widget && widget._unMount && widget._unMount();
+            });
+            this._children = {};
+            this.element.empty();
+        },
+
+        // 默认的populate方法就是干掉重来
+        reset: function () {
+            this.purgeListeners();
+            this.empty();
+            this._initCurrent();
+            this._init();
+            this._initRef();
+        },
+
+        _destroy: function () {
+            this.__d();
+            this.element.destroy();
+            this.purgeListeners();
+        },
+
+        destroy: function () {
+            this.__d();
+            this.element.destroy();
+            this.fireEvent(BI.Events.UNMOUNT);
+            this.fireEvent(BI.Events.DESTROY);
+            this._purgeRef();
+            this.purgeListeners();
+        }
+    });
+    var context = null, current = null;
+    var contextStack = [], currentStack = [];
+
+    BI.Widget.pushContext = function (_context) {
+        if (context) contextStack.push(context);
+        BI.Widget.context = context = _context;
+    };
+
+    BI.Widget.popContext = function () {
+        BI.Widget.context = context = contextStack.pop();
+    };
+
+    function pushTarget(_current) {
+        if (current) currentStack.push(current);
+        BI.Widget.current = current = _current;
+    }
+
+    function popTarget() {
+        BI.Widget.current = current = currentStack.pop();
+    }
+
+    BI.useStore = function (_store) {
+        if (current && current.store) {
+            return current.store;
+        }
+        if (current && current.$storeDelegate) {
+            return current.$storeDelegate;
+        }
+        if (current) {
+            var delegate = {}, origin;
+            if (_global.Proxy) {
+                var proxy = new Proxy(delegate, {
+                    get: function (target, key) {
+                        return Reflect.get(origin, key);
+                    },
+                    set: function (target, key, value) {
+                        return Reflect.set(origin, key, value);
+                    }
+                });
+                current._store = function () {
+                    origin = _store.apply(this, arguments);
+                    return origin;
+                };
+                return current.$storeDelegate = proxy;
+            }
+            current._store = function () {
+                var st = _store.apply(this, arguments);
+                BI.extend(delegate, st);
+                return st;
+            };
+            return current.$storeDelegate = delegate;
+        }
+    };
+
+    BI.watch = function (watch, handler) {
+        if (BI.Widget.current) {
+            BI.Widget.current.$watchDelayCallbacks || (BI.Widget.current.$watchDelayCallbacks = []);
+            BI.Widget.current.$watchDelayCallbacks.push([watch, handler]);
+        }
+    };
+
+    BI.onBeforeMount = function (beforeMount) {
+        if (current) {
+            if (!current.beforeMount) {
+                current.beforeMount = [];
+            } else if (!BI.isArray(current.beforeMount)) {
+                current.beforeMount = [current.beforeMount];
+            }
+            current.beforeMount.push(beforeMount);
+        }
+    };
+    BI.onMounted = function (mounted) {
+        if (current) {
+            if (!current.mounted) {
+                current.mounted = [];
+            } else if (!BI.isArray(current.mounted)) {
+                current.mounted = [current.mounted];
+            }
+            current.mounted.push(mounted);
+        }
+    };
+    BI.onBeforeUnmount = function (beforeDestroy) {
+        if (current) {
+            if (!current.beforeDestroy) {
+                current.beforeDestroy = [];
+            } else if (!BI.isArray(current.beforeDestroy)) {
+                current.beforeDestroy = [current.beforeDestroy];
+            }
+            current.beforeDestroy.push(beforeDestroy);
+        }
+    };
+    BI.onUnmounted = function (destroyed) {
+        if (current) {
+            if (!current.destroyed) {
+                current.destroyed = [];
+            } else if (!BI.isArray(current.destroyed)) {
+                current.destroyed = [current.destroyed];
+            }
+            current.destroyed.push(destroyed);
+        }
+    };
+
+    BI.Widget.registerRenderEngine = function (engine) {
+        BI.Widget._renderEngine = engine;
+    };
+    BI.Widget.registerRenderEngine({
+        createElement: function (widget) {
+            if (BI.isWidget(widget)) {
+                var o = widget.options;
+                if (o.element) {
+                    return BI.$(o.element);
+                }
+                if (o.tagName) {
+                    return BI.$(document.createElement(o.tagName));
+                }
+                return BI.$(document.createDocumentFragment());
+            }
+            return BI.$(widget);
+        },
+        createFragment: function () {
+            return document.createDocumentFragment();
+        }
+    });
+
+    BI.mount = function (widget, container, predicate, hydrate) {
+        if (hydrate === true) {
+            // 将widget的element元素都挂载好，并建立相互关系
+            widget.element.data("__widgets", [widget]);
+            var res = widget._mount(true, false, false, function (w) {
+                BI.each(w._children, function (i, child) {
+                    var ws = child.element.data("__widgets");
+                    if (!ws) {
+                        ws = [];
+                    }
+                    ws.push(child);
+                    child.element.data("__widgets", ws);
+                });
+                predicate && predicate.apply(this, arguments);
+            });
+            // 将新的dom树属性（事件等）patch到已存在的dom上
+            var c = BI.Widget._renderEngine.createElement;
+            BI.DOM.patchProps(widget.element, c(c(container).children()[0]));
+
+            var triggerLifeHook = function (w) {
+                w.beforeMount && w.beforeMount();
+                w.mounted && w.mounted();
+                BI.each(w._children, function (i, child) {
+                    triggerLifeHook(child);
+                });
+            };
+            // 最后触发组件树生命周期函数
+            triggerLifeHook(widget);
+            return res;
+        }
+        if (container) {
+            BI.Widget._renderEngine.createElement(container).append(widget.element);
+        }
+        return widget._mount(true, false, false, predicate);
+    };
+})();
+
+
+/***/ }),
+/* 318 */
+/***/ (function(module, exports) {
+
+(function () {
+    var kv = {};
+    BI.shortcut = BI.component = BI.shortcut || function (xtype, cls) {
+        if (kv[xtype] != null) {
+            _global.console && console.error("shortcut:[" + xtype + "] has been registed");
+        }
+        if (cls) {
+            cls["xtype"] = xtype;
+        }
+        kv[xtype] = cls;
+    };
+
+    // 根据配置属性生成widget
+    var createWidget = function (config, context, lazy) {
+        var cls = kv[config.type];
+
+        if (!cls) {
+            throw new Error("组件" + config.type + "未定义");
+        }
+        var pushed = false;
+        var widget = new cls();
+        widget._context = BI.Widget.context || context;
+        if (!BI.Widget.context && context) {
+            pushed = true;
+            BI.Widget.pushContext(context);
+        }
+        widget._initProps(config);
+        widget._constructed();
+        widget._initRoot();
+        // if (!lazy || config.element || config.root) {
+        widget._lazyConstructor();
+        // }
+        pushed && BI.Widget.popContext();
+        return widget;
+    };
+
+    BI.createWidget = BI.createWidget || function (item, options, context, lazy) {
+        // 先把准备环境准备好
+        BI.init();
+        var el, w;
+        item || (item = {});
+        if (BI.isWidget(options)) {
+            context = options;
+            options = {};
+        } else {
+            options || (options = {});
+        }
+        if (BI.isEmpty(item) && BI.isEmpty(options)) {
+            return BI.createWidget({
+                type: "bi.layout"
+            });
+        }
+        if (BI.isWidget(item)) {
+            return item;
+        }
+        if (item.type || options.type) {
+            el = BI.extend({}, options, item);
+            w = BI.Plugin.getWidget(el.type, el);
+            if (w.type === el.type) {
+                if (BI.Plugin.hasObject(el.type)) {
+                    w.listeners = (w.listeners || []).concat([{
+                        eventName: BI.Events.MOUNT,
+                        action: function () {
+                            BI.Plugin.getObject(el.type, this);
+                        }
+                    }]);
+                }
+                return createWidget(w, context, lazy);
+            }
+            return BI.createWidget(w, options, context, lazy);
+        }
+        if (item.el && (item.el.type || options.type)) {
+            el = BI.extend({}, options, item.el);
+            w = BI.Plugin.getWidget(el.type, el);
+            if (w.type === el.type) {
+                if (BI.Plugin.hasObject(el.type)) {
+                    w.listeners = (w.listeners || []).concat([{
+                        eventName: BI.Events.MOUNT,
+                        action: function () {
+                            BI.Plugin.getObject(el.type, this);
+                        }
+                    }]);
+                }
+                return createWidget(w, context, lazy);
+            }
+            return BI.createWidget(w, options, context, lazy);
+        }
+        if (BI.isWidget(item.el)) {
+            return item.el;
+        }
+        throw new Error("无法根据item创建组件");
+    };
+
+    BI._lazyCreateWidget = BI._lazyCreateWidget || function (item, options, context) {
+        return BI.createWidget(item, options, context, true);
+    };
+
+    BI.createElement = BI.createElement || function () {
+        var widget = BI.createWidget.apply(this, arguments);
+        return widget.element;
+    };
+
+})();
+
+
+/***/ }),
+/* 319 */
+/***/ (function(module, exports) {
+
+BI.Plugin = BI.Plugin || {};
+!(function () {
+    var _WidgetsPlugin = {};
+    var _ObjectPlugin = {};
+    var _ConfigPlugin = {};
+    var _GlobalWidgetConfigFns = [];
+    var __GlobalObjectConfigFns = [];
+    BI.defaults(BI.Plugin, {
+
+        getWidget: function (type, options) {
+            if (_GlobalWidgetConfigFns.length > 0) {
+                var fns = _GlobalWidgetConfigFns.slice(0);
+                for (var i = fns.length - 1; i >= 0; i--) {
+                    fns[i](type, options);
+                }
+            }
+
+            var res;
+            if (_ConfigPlugin[type]) {
+                for (var i = _ConfigPlugin[type].length - 1; i >= 0; i--) {
+                    if (res = _ConfigPlugin[type][i](options)) {
+                        options = res;
+                    }
+                }
+            }
+            // Deprecated
+            if (_WidgetsPlugin[type]) {
+                for (var i = _WidgetsPlugin[type].length - 1; i >= 0; i--) {
+                    if (res = _WidgetsPlugin[type][i](options)) {
+                        return res;
+                    }
+                }
+            }
+            return options;
+        },
+
+        config: function (widgetConfigFn, objectConfigFn) {
+            _GlobalWidgetConfigFns = _GlobalWidgetConfigFns.concat(_.isArray(widgetConfigFn) ? widgetConfigFn : [widgetConfigFn]);
+            __GlobalObjectConfigFns = __GlobalObjectConfigFns.concat(_.isArray(objectConfigFn) ? objectConfigFn : [objectConfigFn]);
+        },
+
+        configWidget: function (type, fn, opt) {
+            // opt.single: true 最后一次注册有效
+            if (!_ConfigPlugin[type] || (opt && opt.single)) {
+                _ConfigPlugin[type] = [];
+            }
+            _ConfigPlugin[type].push(fn);
+        },
+
+        // Deprecated
+        registerWidget: function (type, fn) {
+            if (!_WidgetsPlugin[type]) {
+                _WidgetsPlugin[type] = [];
+            }
+            if (_WidgetsPlugin[type].length > 0) {
+                console.log("组件已经注册过了!");
+            }
+            _WidgetsPlugin[type].push(fn);
+        },
+
+        relieveWidget: function (type) {
+            delete _WidgetsPlugin[type];
+        },
+
+        getObject: function (type, object) {
+            if (__GlobalObjectConfigFns.length > 0) {
+                var fns = __GlobalObjectConfigFns.slice(0);
+                for (var i = fns.length - 1; i >= 0; i--) {
+                    fns[i](type, object);
+                }
+            }
+
+            if (_ObjectPlugin[type]) {
+                var res;
+                for (var i = 0, len = _ObjectPlugin[type].length; i < len; i++) {
+                    if (res = _ObjectPlugin[type][i](object)) {
+                        object = res;
+                    }
+                }
+            }
+            return res || object;
+        },
+
+        hasObject: function (type) {
+            return __GlobalObjectConfigFns.length > 0 || !!_ObjectPlugin[type];
+        },
+
+        registerObject: function (type, fn) {
+            if (!_ObjectPlugin[type]) {
+                _ObjectPlugin[type] = [];
+            }
+            if (_ObjectPlugin[type].length > 0) {
+                console.log("对象已经注册过了!");
+            }
+            _ObjectPlugin[type].push(fn);
+        },
+
+        relieveObject: function (type) {
+            delete _ObjectPlugin[type];
+        }
+    });
+})();
+
+
+/***/ }),
+/* 320 */
+/***/ (function(module, exports) {
+
+/**
+ * guy
+ * 由一个元素切换到另一个元素的行为
+ * @class BI.Action
+ * @extends BI.OB
+ * @abstract
+ */
+BI.Action = BI.inherit(BI.OB, {
+    _defaultConfig: function () {
+        return BI.extend(BI.Action.superclass._defaultConfig.apply(this, arguments), {
+            src: null,
+            tar: null
+        });
+    },
+
+    _init: function () {
+        BI.Action.superclass._init.apply(this, arguments);
+    },
+
+    actionPerformed: function (src, tar, callback) {
+
+    },
+
+    actionBack: function (tar, src, callback) {
+
+    }
+});
+
+BI.ActionFactory = {
+    createAction: function (key, options) {
+        var action;
+        switch (key) {
+            case "show":
+                action = BI.ShowAction;
+                break;
+        }
+        return new action(options);
+    }
+};
+
+/***/ }),
+/* 321 */
+/***/ (function(module, exports) {
+
+/**
+ * guy
+ * 由一个元素切换到另一个元素的行为
+ * @class BI.ShowAction
+ * @extends BI.Action
+ */
+BI.ShowAction = BI.inherit(BI.Action, {
+    _defaultConfig: function () {
+        return BI.extend(BI.ShowAction.superclass._defaultConfig.apply(this, arguments), {});
+    },
+
+    actionPerformed: function (src, tar, callback) {
+        tar = tar || this.options.tar;
+        tar.setVisible(true);
+        callback && callback();
+    },
+
+    actionBack: function (tar, src, callback) {
+        tar = tar || this.options.tar;
+        tar.setVisible(false);
+        callback && callback();
+    }
+});
+
+
+/***/ }),
+/* 322 */
+/***/ (function(module, exports) {
+
+BI.BehaviorFactory = {
+    createBehavior: function (key, options) {
+        var behavior;
+        switch (key) {
+            case "highlight":
+                behavior = BI.HighlightBehavior;
+                break;
+            case "redmark":
+                behavior = BI.RedMarkBehavior;
+                break;
+        }
+        return new behavior(options);
+    }
+};
+
+/**
+ * guy
+ * 行为控件
+ * @class BI.Behavior
+ * @extends BI.OB
+ */
+BI.Behavior = BI.inherit(BI.OB, {
+    _defaultConfig: function () {
+        return BI.extend(BI.Behavior.superclass._defaultConfig.apply(this, arguments), {
+            rule: function () {return true;}
+        });
+    },
+
+    _init: function () {
+        BI.Behavior.superclass._init.apply(this, arguments);
+
+    },
+
+    doBehavior: function () {
+
+    }
+});
+
+/***/ }),
+/* 323 */
+/***/ (function(module, exports) {
+
+/**
+ * guy
+ *
+ * @class BI.HighlightBehavior
+ * @extends BI.Behavior
+ */
+BI.HighlightBehavior = BI.inherit(BI.Behavior, {
+    _defaultConfig: function () {
+        return BI.extend(BI.HighlightBehavior.superclass._defaultConfig.apply(this, arguments), {});
+    },
+
+    _init: function () {
+        BI.HighlightBehavior.superclass._init.apply(this, arguments);
+
+    },
+
+    doBehavior: function (items) {
+        var args = Array.prototype.slice.call(arguments, 1),
+            o = this.options;
+        BI.each(items, function (i, item) {
+            if (item instanceof BI.Single) {
+                var rule = o.rule(item.getValue(), item);
+
+                function doBe (run) {
+                    if (run === true) {
+                        item.doHighLight && item.doHighLight.apply(item, args);
+                    } else {
+                        item.unHighLight && item.unHighLight.apply(item, args);
+                    }
+                }
+
+                if (BI.isFunction(rule)) {
+                    rule(doBe);
+                } else {
+                    doBe(rule);
+                }
+            } else {
+                item.doBehavior && item.doBehavior.apply(item, args);
+            }
+        });
+    }
+});
+
+/***/ }),
+/* 324 */
+/***/ (function(module, exports) {
+
+/**
+ * guy
+ * 标红行为
+ * @class BI.RedMarkBehavior
+ * @extends BI.Behavior
+ */
+BI.RedMarkBehavior = BI.inherit(BI.Behavior, {
+    _defaultConfig: function () {
+        return BI.extend(BI.RedMarkBehavior.superclass._defaultConfig.apply(this, arguments), {
+
+        });
+    },
+
+    _init: function () {
+        BI.RedMarkBehavior.superclass._init.apply(this, arguments);
+
+    },
+
+    doBehavior: function (items) {
+        var args  = Array.prototype.slice.call(arguments, 1),
+            o     = this.options;
+        BI.each(items, function (i, item) {
+            if(item instanceof BI.Single) {
+                if (o.rule(item.getValue(), item)) {
+                    item.doRedMark && item.doRedMark.apply(item, args);
+                } else {
+                    item.doRedMark && item.unRedMark.apply(item, args);
+                }
+            } else {
+                item.doBehavior && item.doBehavior.apply(item, args);
+            }
+        });
+    }
+});
+
+/***/ }),
+/* 325 */
+/***/ (function(module, exports) {
+
+/**
+ * guy
+ * 控制器
+ * Controller层超类
+ * @class BI.Controller
+ * @extends BI.OB
+ * @abstract
+ */
+BI.Controller = BI.inherit(BI.OB, {
+    _defaultConfig: function () {
+        return BI.extend(BI.Controller.superclass._defaultConfig.apply(this, arguments), {
+
+        });
+    }
+});
+BI.Controller.EVENT_CHANGE = "__EVENT_CHANGE__";
+
+
+/***/ }),
+/* 326 */
+/***/ (function(module, exports) {
+
+/**
+ * 广播
+ *
+ * Created by GUY on 2015/12/23.
+ * @class
+ */
+BI.BroadcastController = BI.inherit(BI.Controller, {
+    _defaultConfig: function () {
+        return BI.extend(BI.BroadcastController.superclass._defaultConfig.apply(this, arguments), {});
+    },
+
+    _init: function () {
+        BI.BroadcastController.superclass._init.apply(this, arguments);
+        this._broadcasts = {};
+    },
+
+    on: function (name, fn) {
+        var self = this;
+        if (!this._broadcasts[name]) {
+            this._broadcasts[name] = [];
+        }
+        this._broadcasts[name].push(fn);
+        return function () {
+            self.remove(name, fn);
+        };
+    },
+
+    send: function (name) {
+        var args = [].slice.call(arguments, 1);
+        BI.each(this._broadcasts[name], function (i, fn) {
+            fn.apply(null, args);
+        });
+    },
+
+    remove: function (name, fn) {
+        var self = this;
+        if (fn) {
+            BI.remove(this._broadcasts[name], function (idx) {
+                return self._broadcasts[name].indexOf(fn) === idx;
+            });
+            this._broadcasts[name].remove(fn);
+            if (this._broadcasts[name].length === 0) {
+                delete this._broadcasts[name];
+            }
+        } else {
+            delete this._broadcasts[name];
+        }
+        return this;
+    }
+});
+
+/***/ }),
+/* 327 */
+/***/ (function(module, exports) {
+
+/**
+ * 气泡图控制器
+ * 控制气泡图的显示方向
+ *
+ * Created by GUY on 2015/8/21.
+ * @class
+ */
+BI.BubblesController = BI.inherit(BI.Controller, {
+    _defaultConfig: function () {
+        return BI.extend(BI.BubblesController.superclass._defaultConfig.apply(this, arguments), {});
+    },
+
+    _const: {
+        bubbleHeight: 18
+    },
+
+    _init: function () {
+        BI.BubblesController.superclass._init.apply(this, arguments);
+        var self = this;
+        this.fixedBubblesManager = {};
+        this.fixedStoreBubbles = {};
+        this.bubblesManager = {};
+        this.storeBubbles = {};
+        BI.Resizers.add("bubbleController" + BI.uniqueId(), function () {
+            BI.each(self.fixedBubblesManager, function (name) {
+                self.remove(name);
+            });
+            self.fixedBubblesManager = {};
+            self.fixedStoreBubbles = {};
+        });
+    },
+
+    _createBubble: function (direct, text, level, height, fixed) {
+        return BI.createWidget({
+            type: fixed === false ? "bi.bubble_view" : "bi.bubble",
+            text: text,
+            level: level,
+            height: height || 18,
+            direction: direct
+        });
+    },
+
+    _getOffsetLeft: function (name, context, offsetStyle) {
+        var left = 0;
+        if ("center" === offsetStyle) {
+            left = context.element.offset().left + (context.element.bounds().width - this.get(name).element.bounds().width) / 2;
+            if (left < 0) {
+                left = 0;
+            }
+            return left;
+        }
+        if ("right" === offsetStyle) {
+            left = context.element.offset().left + context.element.bounds().width - this.get(name).element.bounds().width;
+            if (left < 0) {
+                left = 0;
+            }
+            return left;
+        }
+        return context.element.offset().left;
+    },
+
+    _getOffsetTop: function (name, context, offsetStyle) {
+        var top = 0;
+        if ("center" === offsetStyle) {
+            top = context.element.offset().top + (context.element.bounds().height - this.get(name).element.bounds().height) / 2;
+            if (top < 0) {
+                top = 0;
+            }
+            return top;
+        } else if ("right" === offsetStyle) {
+            top = context.element.offset().top + context.element.bounds().height - this.get(name).element.bounds().height;
+            if (top < 0) {
+                top = 0;
+            }
+            return top;
+        }
+        return context.element.offset().top;
+    },
+
+    _getLeftPosition: function (name, context, offsetStyle) {
+        var position = BI.DOM.getLeftPosition(context, this.get(name));
+        position.top = this._getOffsetTop(name, context, offsetStyle);
+        return position;
+    },
+
+    _getBottomPosition: function (name, context, offsetStyle) {
+        var position = BI.DOM.getBottomPosition(context, this.get(name));
+        position.left = this._getOffsetLeft(name, context, offsetStyle);
+        return position;
+    },
+
+    _getTopPosition: function (name, context, offsetStyle) {
+        var position = BI.DOM.getTopPosition(context, this.get(name));
+        position.left = this._getOffsetLeft(name, context, offsetStyle);
+        return position;
+    },
+
+    _getRightPosition: function (name, context, offsetStyle) {
+        var position = BI.DOM.getRightPosition(context, this.get(name));
+        position.top = this._getOffsetTop(name, context, offsetStyle);
+        return position;
+    },
+
+    /**
+     *
+     * @param name
+     * @param text
+     * @param context
+     * @param offsetStyle center, left, right三种类型， 默认left
+     * @returns {BI.BubblesController}
+     */
+    show: function (name, text, context, opt) {
+        opt || (opt = {});
+        var container = opt.container || context;
+        var offsetStyle = opt.offsetStyle || "left";
+        var level = opt.level || "error";
+        var adjustYOffset = opt.adjustYOffset || 0;
+        var adjustXOffset = opt.adjustXOffset || 0;
+        var fixed = opt.fixed !== false;
+        // 如果是非固定位置（fixed）的bubble
+        if (fixed === false) {
+            if (!this.storeBubbles[name]) {
+                this.storeBubbles[name] = {};
+            }
+            if (!this.storeBubbles[name]["top"]) {
+                this.storeBubbles[name]["top"] = this._createBubble("top", text, level, null, fixed);
+            }
+            BI.createWidget({
+                type: "bi.absolute",
+                element: container,
+                items: [{
+                    el: this.storeBubbles[name]["top"]
+                }]
+            });
+            this.set(name, this.storeBubbles[name]["top"]);
+            var bubble = this.storeBubbles[name]["top"];
+            var bounds = bubble.element.bounds();
+            if (BI.DOM.isTopSpaceEnough(context, this.get(name), adjustYOffset)) {
+                var top = -(bounds.height + adjustYOffset);
+                switch (offsetStyle) {
+                    case "center":
+                        bubble.element.css({
+                            left: (context.element.bounds().width - bounds.width) / 2 + adjustXOffset,
+                            top: top
+                        });
+                        break;
+                    case "right":
+                        bubble.element.css({
+                            right: adjustXOffset,
+                            top: top
+                        });
+                        break;
+                    default:
+                        bubble.element.css({
+                            left: adjustXOffset,
+                            top: top
+                        });
+                        break;
+                }
+            } else {
+                var bottom = -(bounds.height + adjustYOffset);
+                switch (offsetStyle) {
+                    case "center":
+                        bubble.element.css({
+                            left: (context.element.bounds().width - bounds.width) / 2 + adjustXOffset,
+                            bottom: bottom
+                        });
+                        break;
+                    case "right":
+                        bubble.element.css({
+                            right: adjustXOffset,
+                            bottom: bottom
+                        });
+                        break;
+                    default:
+                        bubble.element.css({
+                            left: adjustXOffset,
+                            bottom: bottom
+                        });
+                        break;
+                }
+            }
+        } else {
+            if (!this.fixedStoreBubbles[name]) {
+                this.fixedStoreBubbles[name] = {};
+            }
+            if (!this.fixedStoreBubbles[name]["top"]) {
+                this.fixedStoreBubbles[name]["top"] = this._createBubble("top", text, level, null, fixed);
+            }
+            BI.createWidget({
+                type: "bi.absolute",
+                element: container,
+                items: [{
+                    el: this.fixedStoreBubbles[name]["top"]
+                }]
+            });
+            this.set(name, this.fixedStoreBubbles[name]["top"]);
+            var position = this._getTopPosition(name, context, offsetStyle);
+            this.get(name).element.css({left: position.left + adjustXOffset, top: position.top - adjustYOffset});
+            if (!BI.DOM.isTopSpaceEnough(context, this.get(name), adjustYOffset)) {
+                this.get(name).invisible();
+                if (!this.fixedStoreBubbles[name]["bottom"]) {
+                    this.fixedStoreBubbles[name]["bottom"] = this._createBubble("bottom", text, level);
+                }
+                BI.createWidget({
+                    type: "bi.absolute",
+                    element: container,
+                    items: [{
+                        el: this.fixedStoreBubbles[name]["bottom"]
+                    }]
+                });
+                this.set(name, this.fixedStoreBubbles[name]["bottom"]);
+                var position = this._getBottomPosition(name, context, offsetStyle);
+                this.get(name).element.css({left: position.left + adjustXOffset, top: position.top + adjustYOffset});
+                if (!BI.DOM.isBottomSpaceEnough(context, this.get(name), adjustYOffset)) {
+                    this.get(name).invisible();
+                    if (!this.fixedStoreBubbles[name]["right"]) {
+                        this.fixedStoreBubbles[name]["right"] = this._createBubble("right", text, level);
+                    }
+                    BI.createWidget({
+                        type: "bi.absolute",
+                        element: container,
+                        items: [{
+                            el: this.fixedStoreBubbles[name]["right"]
+                        }]
+                    });
+                    this.set(name, this.fixedStoreBubbles[name]["right"]);
+                    var position = this._getRightPosition(name, context, offsetStyle);
+                    this.get(name).element.css({
+                        left: position.left + adjustXOffset,
+                        top: position.top - adjustYOffset
+                    });
+                    if (!BI.DOM.isRightSpaceEnough(context, this.get(name), adjustXOffset)) {
+                        this.get(name).invisible();
+                        if (!this.fixedStoreBubbles[name]["left"]) {
+                            this.fixedStoreBubbles[name]["left"] = this._createBubble("left", text, level, 30);
+                        }
+                        BI.createWidget({
+                            type: "bi.absolute",
+                            element: container,
+                            items: [{
+                                el: this.fixedStoreBubbles[name]["left"]
+                            }]
+                        });
+                        this.set(name, this.fixedStoreBubbles[name]["left"]);
+                        var position = this._getLeftPosition(name, context, offsetStyle);
+                        this.get(name).element.css({
+                            left: position.left - adjustXOffset,
+                            top: position.top - adjustYOffset
+                        });
+                    }
+                }
+            }
+        }
+        this.get(name).setText(text);
+        this.get(name).visible();
+        return this;
+    },
+
+    hide: function (name) {
+        if (!this.has(name)) {
+            return this;
+        }
+        this.get(name).invisible();
+        return this;
+    },
+
+    add: function (name, bubble) {
+        if (this.has(name)) {
+            return this;
+        }
+        this.set(name, bubble);
+        return this;
+    },
+
+    get: function (name) {
+        return this.fixedBubblesManager[name] || this.bubblesManager[name];
+    },
+
+    set: function (name, bubble, fixed) {
+        fixed === false ? (this.bubblesManager[name] = bubble) : (this.fixedBubblesManager[name] = bubble);
+    },
+
+    has: function (name) {
+        return this.fixedBubblesManager[name] != null || this.bubblesManager[name] != null;
+    },
+
+    remove: function (name) {
+        if (!this.has(name)) {
+            return this;
+        }
+        BI.each(this.fixedStoreBubbles[name], function (dir, bubble) {
+            bubble.destroy();
+        });
+        delete this.fixedStoreBubbles[name];
+        delete this.fixedBubblesManager[name];
+        BI.each(this.storeBubbles[name], function (dir, bubble) {
+            bubble.destroy();
+        });
+        delete this.storeBubbles[name];
+        delete this.bubblesManager[name];
+        return this;
+    }
+});
+
+
+/***/ }),
+/* 328 */
+/***/ (function(module, exports) {
+
+/**
+ * 弹出层面板控制器, z-index在10w层级
+ *
+ * Created by GUY on 2015/6/24.
+ * @class
+ */
+BI.LayerController = BI.inherit(BI.Controller, {
+    _defaultConfig: function () {
+        return BI.extend(BI.LayerController.superclass._defaultConfig.apply(this, arguments), {
+            render: "body"
+        });
+    },
+
+    _init: function () {
+        BI.LayerController.superclass._init.apply(this, arguments);
+        this.layerManager = {};
+        this.layouts = {};
+        this.zindex = BI.zIndex_layer;
+        BI.Resizers.add("layerController" + BI.uniqueId(), BI.bind(this._resize, this));
+    },
+
+    _resize: function () {
+        BI.each(this.layouts, function (i, layer) {
+            if (layer.element.is(":visible")) {
+                layer.element.trigger("__resize__");
+            }
+        });
+    },
+
+    make: function (name, container, op, context) {
+        if (BI.isWidget(container)) {
+            op = op || {};
+            op.container = container;
+        } else {
+            context = op;
+            op = container;
+        }
+        return this.create(name, null, op, context);
+    },
+
+    create: function (name, from, op, context) {
+        if (this.has(name)) {
+            return this.get(name);
+        }
+        op || (op = {});
+        var offset = op.offset || {};
+        var w = from;
+        if (BI.isWidget(from)) {
+            w = from.element;
+        }
+        if (BI.isNotEmptyString(w)) {
+            w = BI.Widget._renderEngine.createElement(w);
+        }
+        if (this.has(name)) {
+            return this.get(name);
+        }
+        var widget = BI.createWidget((op.render || {}), BI.extend({
+            type: "bi.layout"
+        }, op), context);
+        var layout = BI.createWidget({
+            type: "bi.absolute",
+            invisible: true,
+            items: [{
+                el: widget,
+                left: 0,
+                right: 0,
+                top: 0,
+                bottom: 0
+            }]
+        }, context);
+        BI.createWidget({
+            type: "bi.absolute",
+            element: op.container || this.options.render,
+            items: [{
+                el: layout,
+                left: offset.left || 0,
+                right: offset.right || 0,
+                top: offset.top || 0,
+                bottom: offset.bottom || 0
+            }]
+        });
+        if (w) {
+            layout.element.addClass("bi-popup-view");
+            layout.element.css({
+                left: w.offset().left + (offset.left || 0),
+                top: w.offset().top + (offset.top || 0),
+                width: offset.width || (w.outerWidth() - (offset.left || 0) - (offset.right || 0)) || "",
+                height: offset.height || (w.outerHeight() - (offset.top || 0) - (offset.bottom || 0)) || ""
+            });
+            layout.element.on("__resize__", function () {
+                w.is(":visible") &&
+                layout.element.css({
+                    left: w.offset().left + (offset.left || 0),
+                    top: w.offset().top + (offset.top || 0),
+                    width: offset.width || (w.outerWidth() - (offset.left || 0) - (offset.right || 0)) || "",
+                    height: offset.height || (w.outerHeight() - (offset.top || 0) - (offset.bottom || 0)) || ""
+                });
+            });
+        }
+        this.add(name, widget, layout);
+        return widget;
+    },
+
+    hide: function (name, callback) {
+        if (!this.has(name)) {
+            return this;
+        }
+        this._getLayout(name).invisible();
+        this._getLayout(name).element.hide(0, callback);
+        return this;
+    },
+
+    show: function (name, callback) {
+        if (!this.has(name)) {
+            return this;
+        }
+        this._getLayout(name).visible();
+        this._getLayout(name).element.css("z-index", this.zindex++).show(0, callback).trigger("__resize__");
+        return this;
+    },
+
+    isVisible: function (name) {
+        return this.has(name) && this._getLayout(name).isVisible();
+    },
+
+    add: function (name, layer, layout) {
+        if (this.has(name)) {
+            throw new Error("name is already exist");
+        }
+        layout.setVisible(false);
+        this.layerManager[name] = layer;
+        this.layouts[name] = layout;
+        layout.element.css("z-index", this.zindex++);
+        return this;
+    },
+
+    _getLayout: function (name) {
+        return this.layouts[name];
+    },
+
+    get: function (name) {
+        return this.layerManager[name];
+    },
+
+    has: function (name) {
+        return this.layerManager[name] != null;
+    },
+
+    remove: function (name) {
+        if (!this.has(name)) {
+            return this;
+        }
+        this.layerManager[name].destroy();
+        this.layouts[name].destroy();
+        delete this.layerManager[name];
+        delete this.layouts[name];
+        return this;
+    },
+
+    removeAll: function () {
+        var self = this;
+        BI.each(BI.keys(this.layerManager), function (index, name) {
+            self.layerManager[name].destroy();
+            self.layouts[name].destroy();
+        });
+        this.layerManager = {};
+        this.layouts = {};
+        return this;
+    }
+});
+
+/***/ }),
+/* 329 */
+/***/ (function(module, exports) {
+
+/**
+ * 遮罩面板, z-index在1亿层级
+ *
+ * Created by GUY on 2015/6/24.
+ * @class
+ */
+BI.MaskersController = BI.inherit(BI.LayerController, {
+    _defaultConfig: function () {
+        return BI.extend(BI.MaskersController.superclass._defaultConfig.apply(this, arguments), {});
+    },
+
+    _init: function () {
+        BI.MaskersController.superclass._init.apply(this, arguments);
+        this.zindex = BI.zIndex_masker;
+    }
+});
+
+/***/ }),
+/* 330 */
+/***/ (function(module, exports) {
+
+/**
+ * guy
+ * popover弹出层控制器, z-index在100w层级
+ * @class BI.popoverController
+ * @extends BI.Controller
+ */
+BI.PopoverController = BI.inherit(BI.Controller, {
+    _defaultConfig: function () {
+        return BI.extend(BI.PopoverController.superclass._defaultConfig.apply(this, arguments), {
+            modal: true, // 模态窗口
+            render: "body"
+        });
+    },
+
+    _init: function () {
+        BI.PopoverController.superclass._init.apply(this, arguments);
+        this.modal = this.options.modal;
+        this.floatManager = {};
+        this.floatLayer = {};
+        this.floatContainer = {};
+        this.floatOpened = {};
+        this.zindex = BI.zIndex_popover;
+        this.zindexMap = {};
+    },
+
+    _check: function (name) {
+        return BI.isNotNull(this.floatManager[name]);
+    },
+
+    create: function (name, options, context) {
+        if (this._check(name)) {
+            return this;
+        }
+        var popover = BI.createWidget(options || {}, {
+            type: "bi.popover"
+        }, context);
+        this.add(name, popover, options, context);
+        return this;
+    },
+
+    add: function (name, popover, options, context) {
+        var self = this;
+        options || (options = {});
+        if (this._check(name)) {
+            return this;
+        }
+        this.floatContainer[name] = BI.createWidget({
+            type: "bi.absolute",
+            cls: "bi-popup-view",
+            items: [{
+                el: (this.floatLayer[name] = BI.createWidget({
+                    type: "bi.absolute",
+                    items: [popover]
+                }, context)),
+                left: 0,
+                right: 0,
+                top: 0,
+                bottom: 0
+            }]
+        });
+        this.floatManager[name] = popover;
+        (function (key) {
+            popover.on(BI.Popover.EVENT_CLOSE, function () {
+                self.close(key);
+            });
+        })(name);
+        BI.createWidget({
+            type: "bi.absolute",
+            element: options.container || this.options.render,
+            items: [{
+                el: this.floatContainer[name],
+                left: 0,
+                right: 0,
+                top: 0,
+                bottom: 0
+            }]
+        });
+        return this;
+    },
+
+    open: function (name) {
+        if (!this._check(name)) {
+            return this;
+        }
+        if (!this.floatOpened[name]) {
+            this.floatOpened[name] = true;
+            var container = this.floatContainer[name];
+            container.element.css("zIndex", this.zindex++);
+            this.modal && container.element.__hasZIndexMask__(this.zindexMap[name]) && container.element.__releaseZIndexMask__(this.zindexMap[name]);
+            this.zindexMap[name] = this.zindex;
+            this.modal && container.element.__buildZIndexMask__(this.zindex++);
+            this.get(name).setZindex(this.zindex++);
+            this.floatContainer[name].visible();
+            var popover = this.get(name);
+            popover.show && popover.show();
+            var W = BI.Widget._renderEngine.createElement(this.options.render).width(), H = BI.Widget._renderEngine.createElement(this.options.render).height();
+            var w = popover.element.width(), h = popover.element.height();
+            var left = (W - w) / 2, top = (H - h) / 2;
+            if (left < 0) {
+                left = 0;
+            }
+            if (top < 0) {
+                top = 0;
+            }
+            popover.element.css({
+                left: left / BI.pixRatio + BI.pixUnit,
+                top: top / BI.pixRatio + BI.pixUnit
+            });
+        }
+        return this;
+    },
+
+    close: function (name) {
+        if (!this._check(name)) {
+            return this;
+        }
+        if (this.floatOpened[name]) {
+            delete this.floatOpened[name];
+            this.floatContainer[name].invisible();
+            this.modal && this.floatContainer[name].element.__releaseZIndexMask__(this.zindexMap[name]);
+        }
+        return this;
+    },
+
+    get: function (name) {
+        return this.floatManager[name];
+    },
+
+    remove: function (name) {
+        if (!this._check(name)) {
+            return this;
+        }
+        this.floatContainer[name].destroy();
+        this.modal && this.floatContainer[name].element.__releaseZIndexMask__(this.zindexMap[name]);
+        delete this.floatManager[name];
+        delete this.floatLayer[name];
+        delete this.zindexMap[name];
+        delete this.floatContainer[name];
+        delete this.floatOpened[name];
+        return this;
+    },
+
+    removeAll: function () {
+        var self = this;
+        BI.each(this.floatContainer, function (name, container) {
+            container.destroy();
+            self.modal && self.floatContainer[name].element.__releaseZIndexMask__(self.zindexMap[name]);
+        });
+        this.floatManager = {};
+        this.floatLayer = {};
+        this.floatContainer = {};
+        this.floatOpened = {};
+        this.zindexMap = {};
+        return this;
+    }
+});
+
+
+/***/ }),
+/* 331 */
+/***/ (function(module, exports) {
+
+/**
+ * window.resize 控制器
+ *
+ * Created by GUY on 2015/6/24.
+ * @class
+ */
+BI.ResizeController = BI.inherit(BI.Controller, {
+    _defaultConfig: function () {
+        return BI.extend(BI.ResizeController.superclass._defaultConfig.apply(this, arguments), {});
+    },
+
+    _init: function () {
+        BI.ResizeController.superclass._init.apply(this, arguments);
+        var self = this;
+        this.resizerManger = {};
+        var fn = BI.debounce(function (ev) {
+            // if (BI.isWindow(ev.target)) {
+            self._resize(ev);
+            // }
+        }, 30);
+        if ("onorientationchange" in _global) {
+            _global.onorientationchange = fn;
+        } else {
+            BI.Widget._renderEngine.createElement(_global).resize(fn);
+        }
+    },
+
+    _resize: function (ev) {
+        BI.each(this.resizerManger, function (key, resizer) {
+            if (resizer instanceof BI.$) {
+                if (resizer.is(":visible")) {
+                    resizer.trigger("__resize__");
+                }
+                return;
+            }
+            if (resizer instanceof BI.Layout) {
+                resizer.resize();
+                return;
+            }
+            if (BI.isFunction(resizer)) {
+                resizer(ev);
+                return;
+            }
+        });
+    },
+
+    add: function (name, resizer) {
+        var self = this;
+        if (this.has(name)) {
+            return this;
+        }
+        this.resizerManger[name] = resizer;
+        return function () {
+            self.remove(name);
+        };
+    },
+
+    get: function (name) {
+        return this.resizerManger[name];
+    },
+
+    has: function (name) {
+        return this.resizerManger[name] != null;
+    },
+
+    remove: function (name) {
+        if (!this.has(name)) {
+            return this;
+        }
+        delete this.resizerManger[name];
+        return this;
+    }
+});
+
+/***/ }),
+/* 332 */
+/***/ (function(module, exports) {
+
+/**
+ * tooltip控制器
+ * 控制tooltip的显示,  且页面中只有一个tooltip显示
+ *
+ * Created by GUY on 2015/9/8.
+ * @class BI.TooltipsController
+ * @extends BI.Controller
+ */
+BI.TooltipsController = BI.inherit(BI.Controller, {
+    _defaultConfig: function () {
+        return BI.extend(BI.TooltipsController.superclass._defaultConfig.apply(this, arguments), {});
+    },
+
+    _const: {
+        height: 18
+    },
+
+    _init: function () {
+        BI.TooltipsController.superclass._init.apply(this, arguments);
+        this.tooltipsManager = {};
+        this.showingTips = {};// 存储正在显示的tooltip
+    },
+
+    _createTooltip: function (text, level) {
+        return BI.createWidget({
+            type: "bi.tooltip",
+            text: text,
+            level: level,
+            stopEvent: true
+        });
+    },
+
+    hide: function (name, callback) {
+        if (!this.has(name)) {
+            return this;
+        }
+        delete this.showingTips[name];
+        this.get(name).element.hide(0, callback);
+        this.get(name).invisible();
+        return this;
+    },
+
+    create: function (name, text, level, context) {
+        if (!this.has(name)) {
+            var tooltip = this._createTooltip(text, level);
+            this.add(name, tooltip);
+            BI.createWidget({
+                type: "bi.absolute",
+                element: context || "body",
+                items: [{
+                    el: tooltip
+                }]
+            });
+            tooltip.invisible();
+        }
+        return this.get(name);
+    },
+
+    // opt: {container: '', belowMouse: false}
+    show: function (e, name, text, level, context, opt) {
+        opt || (opt = {});
+        var self = this;
+        BI.each(this.showingTips, function (i, tip) {
+            self.hide(i);
+        });
+        this.showingTips = {};
+        if (!this.has(name)) {
+            this.create(name, text, level, opt.container || "body");
+        }
+        if (!opt.belowMouse) {
+            var offset = context.element.offset();
+            var bounds = context.element.bounds();
+            if (bounds.height === 0 || bounds.width === 0) {
+                return;
+            }
+            var top = offset.top + bounds.height + 5;
+        }
+        var tooltip = this.get(name);
+        tooltip.setText(text);
+        tooltip.element.css({
+            left: "0px",
+            top: "0px"
+        });
+        tooltip.visible();
+        tooltip.element.height(tooltip.element[0].scrollHeight);
+        this.showingTips[name] = true;
+        // scale影响要计算在内
+        // var scale = context.element.offset().left / context.element.get(0).getBoundingClientRect().left;
+        // var x = (e.pageX || e.clientX) * scale + 15, y = (e.pageY || e.clientY) * scale + 15;
+        var x = (e.pageX || e.clientX) + 15, y = (e.pageY || e.clientY) + 15;
+        if (x + tooltip.element.outerWidth() > BI.Widget._renderEngine.createElement("body").outerWidth()) {
+            x -= tooltip.element.outerWidth() + 15;
+        }
+        var bodyHeight = BI.Widget._renderEngine.createElement("body").outerHeight();
+        if (y + tooltip.element.outerHeight() > bodyHeight || top + tooltip.element.outerHeight() > bodyHeight) {
+            y -= tooltip.element.outerHeight() + 15;
+            !opt.belowMouse && (y = Math.min(y, offset.top - tooltip.element.outerHeight() - 5));
+        } else {
+            !opt.belowMouse && (y = Math.max(y, top));
+        }
+        tooltip.element.css({
+            left: x < 0 ? 0 : x / BI.pixRatio + BI.pixUnit,
+            top: y < 0 ? 0 : y / BI.pixRatio + BI.pixUnit
+        });
+        tooltip.element.hover(function () {
+            self.remove(name);
+            context.element.trigger("mouseleave.title" + context.getName());
+        });
+        return this;
+    },
+
+    add: function (name, bubble) {
+        if (this.has(name)) {
+            return this;
+        }
+        this.set(name, bubble);
+        return this;
+    },
+
+    get: function (name) {
+        return this.tooltipsManager[name];
+    },
+
+    set: function (name, bubble) {
+        this.tooltipsManager[name] = bubble;
+    },
+
+    has: function (name) {
+        return this.tooltipsManager[name] != null;
+    },
+
+    remove: function (name) {
+        if (!this.has(name)) {
+            return this;
+        }
+        this.tooltipsManager[name].destroy();
+        delete this.tooltipsManager[name];
+        return this;
+    }
+});
+
+
+/***/ }),
+/* 333 */
+/***/ (function(module, exports) {
+
+/**
+ * guy
+ * 检测某个Widget的EventChange事件然后去show某个card
+ * @type {*|void|Object}
+ * @class BI.ShowListener
+ * @extends BI.OB
+ */
+BI.ShowListener = BI.inherit(BI.OB, {
+    _defaultConfig: function () {
+        return BI.extend(BI.ShowListener.superclass._defaultConfig.apply(this, arguments), {
+            eventObj: BI.createWidget(),
+            cardLayout: null,
+            cardNameCreator: function (v) {
+                return v;
+            },
+            cardCreator: BI.emptyFn,
+            afterCardCreated: BI.emptyFn,
+            afterCardShow: BI.emptyFn
+        });
+    },
+
+    _init: function () {
+        BI.ShowListener.superclass._init.apply(this, arguments);
+        var self = this, o = this.options;
+        if (o.eventObj) {
+            o.eventObj.on(BI.Controller.EVENT_CHANGE, function (type, v, ob) {
+                if (type === BI.Events.CLICK) {
+                    v = v || o.eventObj.getValue();
+                    v = BI.isArray(v) ? (v.length > 1 ? v.toString() : v[0]) : v;
+                    if (BI.isNull(v)) {
+                        throw new Error("value cannot be null");
+                    }
+                    var cardName = o.cardNameCreator(v);
+                    if (!o.cardLayout.isCardExisted(cardName)) {
+                        var card = o.cardCreator(cardName);
+                        o.cardLayout.addCardByName(cardName, card);
+                        o.afterCardCreated(cardName);
+                    }
+                    o.cardLayout.showCardByName(cardName);
+                    BI.nextTick(function () {
+                        o.afterCardShow(cardName);
+                        self.fireEvent(BI.ShowListener.EVENT_CHANGE, cardName);
+                    });
+                }
+            });
+        }
+    }
+});
+BI.ShowListener.EVENT_CHANGE = "EVENT_CHANGE";
+
+/***/ }),
+/* 334 */
+/***/ (function(module, exports) {
+
+/**
+ * style加载管理器
+ *
+ * Created by GUY on 2015/9/7.
+ * @class
+ */
+BI.StyleLoaderManager = BI.inherit(BI.OB, {
+    _defaultConfig: function () {
+        return BI.extend(BI.StyleLoaderManager.superclass._defaultConfig.apply(this, arguments), {});
+    },
+
+    _init: function () {
+        BI.StyleLoaderManager.superclass._init.apply(this, arguments);
+        this.stylesManager = {};
+    },
+
+    loadStyle: function (name, styleString) {
+        if(!_global.document) {
+            return;
+        }
+        var d = document, styles = d.createElement("style");
+        d.getElementsByTagName("head")[0].appendChild(styles);
+        styles.setAttribute("type", "text/css");
+        if (styles.styleSheet) {
+            styles.styleSheet.cssText = styleString;
+        } else {
+            styles.appendChild(document.createTextNode(styleString));
+        }
+        this.stylesManager[name] = styles;
+
+        return this;
+    },
+
+    get: function (name) {
+        return this.stylesManager[name];
+    },
+
+    has: function (name) {
+        return this.stylesManager[name] != null;
+    },
+
+    removeStyle: function (name) {
+        if (!this.has(name)) {
+            return this;
+        }
+        this.stylesManager[name].parentNode.removeChild(this.stylesManager[name]);
+        delete this.stylesManager[name];
+        return this;
+    }
+});
+
+/***/ }),
+/* 335 */
+/***/ (function(module, exports) {
+
+/**
+ * @class BI.Logic
+ * @extends BI.OB
+ */
+BI.Logic = BI.inherit(BI.OB, {
+    createLogic: function () {
+        return this.options || {};
+    }
+});
+
+BI.LogicFactory = {
+    Type: {
+        Vertical: "vertical",
+        Horizontal: "horizontal",
+        Table: "table",
+        HorizontalFill: "horizontal_fill"
+    },
+    createLogic: function (key, options) {
+        var logic;
+        switch (key) {
+            case BI.LogicFactory.Type.Vertical:
+                logic = BI.VerticalLayoutLogic;
+                break;
+            case BI.LogicFactory.Type.Horizontal:
+                logic = BI.HorizontalLayoutLogic;
+                break;
+            case BI.LogicFactory.Type.Table:
+                logic = BI.TableLayoutLogic;
+                break;
+            case BI.LogicFactory.Type.HorizontalFill:
+                logic = BI.HorizontalFillLayoutLogic;
+                break;
+            default :
+                logic = BI.Logic;
+                break;
+        }
+        return new logic(options).createLogic();
+    },
+
+    createLogicTypeByDirection: function (direction) {
+        switch (direction) {
+            case BI.Direction.Top:
+            case BI.Direction.Bottom:
+            case BI.Direction.Custom:
+                return BI.LogicFactory.Type.Vertical;
+                break;
+            case BI.Direction.Left:
+            case BI.Direction.Right:
+                return BI.LogicFactory.Type.Horizontal;
+        }
+    },
+
+    createLogicItemsByDirection: function (direction) {
+        var layout;
+        var items = Array.prototype.slice.call(arguments, 1);
+        items = BI.map(items, function (i, item) {
+            if (BI.isWidget(item)) {
+                return {
+                    el: item,
+                    width: item.options.width,
+                    height: item.options.height
+                };
+            }
+            return item;
+        });
+        switch (direction) {
+            case BI.Direction.Bottom:
+                layout = BI.LogicFactory.Type.Vertical;
+                items.reverse();
+                break;
+            case BI.Direction.Right:
+                layout = BI.LogicFactory.Type.Horizontal;
+                items.reverse();
+                break;
+            case BI.Direction.Custom:
+                items = items.slice(1);
+                break;
+        }
+        return items;
+    }
+};
+
+/***/ }),
+/* 336 */
+/***/ (function(module, exports) {
+
+/**
+ * guy
+ * 上下布局逻辑
+ * 上下布局的时候要考虑到是动态布局还是静态布局
+ *
+ * @class BI.VerticalLayoutLogic
+ * @extends BI.Logic
+ */
+BI.VerticalLayoutLogic = BI.inherit(BI.Logic, {
+    _defaultConfig: function () {
+        return BI.extend(BI.VerticalLayoutLogic.superclass._defaultConfig.apply(this, arguments), {
+            dynamic: false,
+            scrollable: null,
+            scrolly: false,
+            scrollx: false,
+            items: [],
+            hgap: 0,
+            vgap: 0,
+            lgap: 0,
+            rgap: 0,
+            tgap: 0,
+            bgap: 0
+        });
+    },
+
+    createLogic: function () {
+        var layout, o = this.options;
+        if (o.dynamic) {
+            layout = "bi.vertical";
+        } else {
+            layout = "bi.vtape";
+        }
+        return {
+            type: layout,
+            scrollable: o.scrollable,
+            scrolly: o.scrolly,
+            scrollx: o.scrollx,
+            hgap: o.hgap,
+            vgap: o.vgap,
+            lgap: o.lgap,
+            rgap: o.rgap,
+            tgap: o.tgap,
+            bgap: o.bgap,
+            items: o.items
+        };
+    }
+});
+
+
+/**
+ * guy
+ * 左右布局逻辑
+ * 左右布局的时候要考虑到是动态布局还是静态布局
+ *
+ * @class BI.HorizontalLayoutLogic
+ * @extends BI.Logic
+ */
+BI.HorizontalLayoutLogic = BI.inherit(BI.Logic, {
+    _defaultConfig: function () {
+        return BI.extend(BI.HorizontalLayoutLogic.superclass._defaultConfig.apply(this, arguments), {
+            dynamic: false,
+            scrollable: null,
+            scrolly: false,
+            scrollx: false,
+            items: [],
+            hgap: 0,
+            vgap: 0,
+            lgap: 0,
+            rgap: 0,
+            tgap: 0,
+            bgap: 0
+        });
+    },
+
+    createLogic: function () {
+        var layout, o = this.options;
+        if (o.dynamic) {
+            layout = "bi.vertical_adapt";
+        } else {
+            layout = "bi.htape";
+        }
+        return {
+            type: layout,
+            scrollable: o.scrollable,
+            scrolly: o.scrolly,
+            scrollx: o.scrollx,
+            hgap: o.hgap,
+            vgap: o.vgap,
+            lgap: o.lgap,
+            rgap: o.rgap,
+            tgap: o.tgap,
+            bgap: o.bgap,
+            items: o.items
+        };
+    }
+});
+
+/**
+ * guy
+ * 表格布局逻辑
+ * 表格布局的时候要考虑到是动态布局还是静态布局
+ *
+ * @class BI.TableLayoutLogic
+ * @extends BI.OB
+ */
+BI.TableLayoutLogic = BI.inherit(BI.Logic, {
+    _defaultConfig: function () {
+        return BI.extend(BI.TableLayoutLogic.superclass._defaultConfig.apply(this, arguments), {
+            dynamic: false,
+            scrollable: null,
+            scrolly: false,
+            scrollx: false,
+            columns: 0,
+            rows: 0,
+            columnSize: [],
+            rowSize: [],
+            hgap: 0,
+            vgap: 0,
+            items: []
+        });
+    },
+
+    createLogic: function () {
+        var layout, o = this.options;
+        if (o.dynamic) {
+            layout = "bi.table";
+        } else {
+            layout = "bi.window";
+        }
+        return {
+            type: layout,
+            scrollable: o.scrollable,
+            scrolly: o.scrolly,
+            scrollx: o.scrollx,
+            columns: o.columns,
+            rows: o.rows,
+            columnSize: o.columnSize,
+            rowSize: o.rowSize,
+            hgap: o.hgap,
+            vgap: o.vgap,
+            items: o.items
+        };
+    }
+});
+
+/**
+ * guy
+ * 左右充满布局逻辑
+ *
+ * @class BI.HorizontalFillLayoutLogic
+ * @extends BI.Logic
+ */
+BI.HorizontalFillLayoutLogic = BI.inherit(BI.Logic, {
+    _defaultConfig: function () {
+        return BI.extend(BI.HorizontalFillLayoutLogic.superclass._defaultConfig.apply(this, arguments), {
+            dynamic: false,
+            scrollable: null,
+            scrolly: false,
+            scrollx: false,
+            items: [],
+            hgap: 0,
+            vgap: 0,
+            lgap: 0,
+            rgap: 0,
+            tgap: 0,
+            bgap: 0
+        });
+    },
+
+    createLogic: function () {
+        var layout, o = this.options;
+        var columnSize = [];
+        BI.each(o.items, function (i, item) {
+            columnSize.push(item.width || 0);
+        });
+        if (o.dynamic) {
+            layout = "bi.horizontal_adapt";
+        } else {
+            layout = "bi.htape";
+        }
+        return {
+            type: layout,
+            columnSize: columnSize,
+            scrollable: o.scrollable,
+            scrolly: o.scrolly,
+            scrollx: o.scrollx,
+            hgap: o.hgap,
+            vgap: o.vgap,
+            lgap: o.lgap,
+            rgap: o.rgap,
+            tgap: o.tgap,
+            bgap: o.bgap,
+            items: o.items
+        };
+    }
+});
+
+
+/***/ }),
+/* 337 */
+/***/ (function(module, exports) {
+
+if (!Number.prototype.toFixed || (0.00008).toFixed(3) !== "0.000" ||
+    (0.9).toFixed(0) === "0" || (1.255).toFixed(2) !== "1.25" ||
+    (1000000000000000128).toFixed(0) !== "1000000000000000128") {
+    (function () {
+        var base, size, data, i;
+        base = 1e7;
+        size = 6;
+        data = [0, 0, 0, 0, 0, 0];
+        function multiply (n, c) {
+            var i = -1;
+            while (++i < size) {
+                c += n * data[i];
+                data[i] = c % base;
+                c = Math.floor(c / base);
+            }
+        }
+
+        function divide (n) {
+            var i = size, c = 0;
+            while (--i >= 0) {
+                c += data[i];
+                data[i] = Math.floor(c / n);
+                c = (c % n) * base;
+            }
+        }
+
+        function toString () {
+            var i = size;
+            var s = "";
+            while (--i >= 0) {
+                if (s !== "" || i === 0 || data[i] !== 0) {
+                    var t = String(data[i]);
+                    if (s === "") {
+                        s = t;
+                    } else {
+                        s += "0000000".slice(0, 7 - t.length) + t;
+                    }
+                }
+            }
+            return s;
+        }
+
+        function pow (x, n, acc) {
+            return (n === 0 ? acc : (n % 2 === 1 ? pow(x, n - 1, acc * x)
+                : pow(x * x, n / 2, acc)));
+        }
+
+        function log (x) {
+            var n = 0;
+            while (x >= 4096) {
+                n += 12;
+                x /= 4096;
+            }
+            while (x >= 2) {
+                n += 1;
+                x /= 2;
+            }
+            return n;
+        }
+
+        Number.prototype.toFixed = function (fractionDigits) {
+            var f, x, s, m, e, z, j, k;
+            f = Number(fractionDigits);
+            f = f !== f ? 0 : Math.floor(f);
+
+            if (f < 0 || f > 20) {
+                throw new RangeError("Number.toFixed called with invalid number of decimals");
+            }
+
+            x = Number(this);
+
+            if (x !== x) {
+                return "NaN";
+            }
+
+            if (x <= -1e21 || x > 1e21) {
+                return String(x);
+            }
+
+            s = "";
+
+            if (x < 0) {
+                s = "-";
+                x = -x;
+            }
+
+            m = "0";
+
+            if (x > 1e-21) {
+                // 1e-21<x<1e21
+                // -70<log2(x)<70
+                e = log(x * pow(2, 69, 1)) - 69;
+                z = (e < 0 ? x * pow(2, -e, 1) : x / pow(2, e, 1));
+                z *= 0x10000000000000;// Math.pow(2,52);
+                e = 52 - e;
+
+                // -18<e<122
+                // x=z/2^e
+                if (e > 0) {
+                    multiply(0, z);
+                    j = f;
+
+                    while (j >= 7) {
+                        multiply(1e7, 0);
+                        j -= 7;
+                    }
+
+                    multiply(pow(10, j, 1), 0);
+                    j = e - 1;
+
+                    while (j >= 23) {
+                        divide(1 << 23);
+                        j -= 23;
+                    }
+                    divide(1 << j);
+                    multiply(1, 1);
+                    divide(2);
+                    m = toString();
+                } else {
+                    multiply(0, z);
+                    multiply(1 << (-e), 0);
+                    m = toString() + "0.00000000000000000000".slice(2, 2 + f);
+                }
+            }
+
+            if (f > 0) {
+                k = m.length;
+
+                if (k <= f) {
+                    m = s + "0.0000000000000000000".slice(0, f - k + 2) + m;
+                } else {
+                    m = s + m.slice(0, k - f) + "." + m.slice(k - f);
+                }
+            } else {
+                m = s + m;
+            }
+
+            return m;
+        };
+
+    })();
+}
+
+/***/ }),
+/* 338 */
+/***/ (function(module, exports) {
+
 !(function () {
     /*
     CryptoJS v3.1.2
@@ -4842,7 +11185,7 @@ if (!_global.BI) {
 }());
 
 /***/ }),
-/* 131 */
+/* 339 */
 /***/ (function(module, exports) {
 
 !(function () {
@@ -4910,7 +11253,7 @@ if (!_global.BI) {
 })();
 
 /***/ }),
-/* 132 */
+/* 340 */
 /***/ (function(module, exports) {
 
 
@@ -5045,7 +11388,7 @@ if (!_global.BI) {
 })();
 
 /***/ }),
-/* 133 */
+/* 341 */
 /***/ (function(module, exports) {
 
 
@@ -5127,7 +11470,7 @@ BI.Cache = {
 };
 
 /***/ }),
-/* 134 */
+/* 342 */
 /***/ (function(module, exports) {
 
 BI.CellSizeAndPositionManager = function (cellCount, cellSizeGetter, estimatedCellSize) {
@@ -5403,452 +11746,7 @@ BI.ScalingCellSizeAndPositionManager.prototype = {
 };
 
 /***/ }),
-/* 135 */
-/***/ (function(module, exports) {
-
-/**
- * 汉字拼音索引
- */
-
-!(function () {
-    var _ChineseFirstPY = "YDYQSXMWZSSXJBYMGCCZQPSSQBYCDSCDQLDYLYBSSJGYZZJJFKCCLZDHWDWZJLJPFYYNWJJTMYHZWZHFLZPPQHGSCYYYNJQYXXGJHHSDSJNKKTMOMLCRXYPSNQSECCQZGGLLYJLMYZZSECYKYYHQWJSSGGYXYZYJWWKDJHYCHMYXJTLXJYQBYXZLDWRDJRWYSRLDZJPCBZJJBRCFTLECZSTZFXXZHTRQHYBDLYCZSSYMMRFMYQZPWWJJYFCRWFDFZQPYDDWYXKYJAWJFFXYPSFTZYHHYZYSWCJYXSCLCXXWZZXNBGNNXBXLZSZSBSGPYSYZDHMDZBQBZCWDZZYYTZHBTSYYBZGNTNXQYWQSKBPHHLXGYBFMJEBJHHGQTJCYSXSTKZHLYCKGLYSMZXYALMELDCCXGZYRJXSDLTYZCQKCNNJWHJTZZCQLJSTSTBNXBTYXCEQXGKWJYFLZQLYHYXSPSFXLMPBYSXXXYDJCZYLLLSJXFHJXPJBTFFYABYXBHZZBJYZLWLCZGGBTSSMDTJZXPTHYQTGLJSCQFZKJZJQNLZWLSLHDZBWJNCJZYZSQQYCQYRZCJJWYBRTWPYFTWEXCSKDZCTBZHYZZYYJXZCFFZZMJYXXSDZZOTTBZLQWFCKSZSXFYRLNYJMBDTHJXSQQCCSBXYYTSYFBXDZTGBCNSLCYZZPSAZYZZSCJCSHZQYDXLBPJLLMQXTYDZXSQJTZPXLCGLQTZWJBHCTSYJSFXYEJJTLBGXSXJMYJQQPFZASYJNTYDJXKJCDJSZCBARTDCLYJQMWNQNCLLLKBYBZZSYHQQLTWLCCXTXLLZNTYLNEWYZYXCZXXGRKRMTCNDNJTSYYSSDQDGHSDBJGHRWRQLYBGLXHLGTGXBQJDZPYJSJYJCTMRNYMGRZJCZGJMZMGXMPRYXKJNYMSGMZJYMKMFXMLDTGFBHCJHKYLPFMDXLQJJSMTQGZSJLQDLDGJYCALCMZCSDJLLNXDJFFFFJCZFMZFFPFKHKGDPSXKTACJDHHZDDCRRCFQYJKQCCWJDXHWJLYLLZGCFCQDSMLZPBJJPLSBCJGGDCKKDEZSQCCKJGCGKDJTJDLZYCXKLQSCGJCLTFPCQCZGWPJDQYZJJBYJHSJDZWGFSJGZKQCCZLLPSPKJGQJHZZLJPLGJGJJTHJJYJZCZMLZLYQBGJWMLJKXZDZNJQSYZMLJLLJKYWXMKJLHSKJGBMCLYYMKXJQLBMLLKMDXXKWYXYSLMLPSJQQJQXYXFJTJDXMXXLLCXQBSYJBGWYMBGGBCYXPJYGPEPFGDJGBHBNSQJYZJKJKHXQFGQZKFHYGKHDKLLSDJQXPQYKYBNQSXQNSZSWHBSXWHXWBZZXDMNSJBSBKBBZKLYLXGWXDRWYQZMYWSJQLCJXXJXKJEQXSCYETLZHLYYYSDZPAQYZCMTLSHTZCFYZYXYLJSDCJQAGYSLCQLYYYSHMRQQKLDXZSCSSSYDYCJYSFSJBFRSSZQSBXXPXJYSDRCKGJLGDKZJZBDKTCSYQPYHSTCLDJDHMXMCGXYZHJDDTMHLTXZXYLYMOHYJCLTYFBQQXPFBDFHHTKSQHZYYWCNXXCRWHOWGYJLEGWDQCWGFJYCSNTMYTOLBYGWQWESJPWNMLRYDZSZTXYQPZGCWXHNGPYXSHMYQJXZTDPPBFYHZHTJYFDZWKGKZBLDNTSXHQEEGZZYLZMMZYJZGXZXKHKSTXNXXWYLYAPSTHXDWHZYMPXAGKYDXBHNHXKDPJNMYHYLPMGOCSLNZHKXXLPZZLBMLSFBHHGYGYYGGBHSCYAQTYWLXTZQCEZYDQDQMMHTKLLSZHLSJZWFYHQSWSCWLQAZYNYTLSXTHAZNKZZSZZLAXXZWWCTGQQTDDYZTCCHYQZFLXPSLZYGPZSZNGLNDQTBDLXGTCTAJDKYWNSYZLJHHZZCWNYYZYWMHYCHHYXHJKZWSXHZYXLYSKQYSPSLYZWMYPPKBYGLKZHTYXAXQSYSHXASMCHKDSCRSWJPWXSGZJLWWSCHSJHSQNHCSEGNDAQTBAALZZMSSTDQJCJKTSCJAXPLGGXHHGXXZCXPDMMHLDGTYBYSJMXHMRCPXXJZCKZXSHMLQXXTTHXWZFKHCCZDYTCJYXQHLXDHYPJQXYLSYYDZOZJNYXQEZYSQYAYXWYPDGXDDXSPPYZNDLTWRHXYDXZZJHTCXMCZLHPYYYYMHZLLHNXMYLLLMDCPPXHMXDKYCYRDLTXJCHHZZXZLCCLYLNZSHZJZZLNNRLWHYQSNJHXYNTTTKYJPYCHHYEGKCTTWLGQRLGGTGTYGYHPYHYLQYQGCWYQKPYYYTTTTLHYHLLTYTTSPLKYZXGZWGPYDSSZZDQXSKCQNMJJZZBXYQMJRTFFBTKHZKBXLJJKDXJTLBWFZPPTKQTZTGPDGNTPJYFALQMKGXBDCLZFHZCLLLLADPMXDJHLCCLGYHDZFGYDDGCYYFGYDXKSSEBDHYKDKDKHNAXXYBPBYYHXZQGAFFQYJXDMLJCSQZLLPCHBSXGJYNDYBYQSPZWJLZKSDDTACTBXZDYZYPJZQSJNKKTKNJDJGYYPGTLFYQKASDNTCYHBLWDZHBBYDWJRYGKZYHEYYFJMSDTYFZJJHGCXPLXHLDWXXJKYTCYKSSSMTWCTTQZLPBSZDZWZXGZAGYKTYWXLHLSPBCLLOQMMZSSLCMBJCSZZKYDCZJGQQDSMCYTZQQLWZQZXSSFPTTFQMDDZDSHDTDWFHTDYZJYQJQKYPBDJYYXTLJHDRQXXXHAYDHRJLKLYTWHLLRLLRCXYLBWSRSZZSYMKZZHHKYHXKSMDSYDYCJPBZBSQLFCXXXNXKXWYWSDZYQOGGQMMYHCDZTTFJYYBGSTTTYBYKJDHKYXBELHTYPJQNFXFDYKZHQKZBYJTZBXHFDXKDASWTAWAJLDYJSFHBLDNNTNQJTJNCHXFJSRFWHZFMDRYJYJWZPDJKZYJYMPCYZNYNXFBYTFYFWYGDBNZZZDNYTXZEMMQBSQEHXFZMBMFLZZSRXYMJGSXWZJSPRYDJSJGXHJJGLJJYNZZJXHGXKYMLPYYYCXYTWQZSWHWLYRJLPXSLSXMFSWWKLCTNXNYNPSJSZHDZEPTXMYYWXYYSYWLXJQZQXZDCLEEELMCPJPCLWBXSQHFWWTFFJTNQJHJQDXHWLBYZNFJLALKYYJLDXHHYCSTYYWNRJYXYWTRMDRQHWQCMFJDYZMHMYYXJWMYZQZXTLMRSPWWCHAQBXYGZYPXYYRRCLMPYMGKSJSZYSRMYJSNXTPLNBAPPYPYLXYYZKYNLDZYJZCZNNLMZHHARQMPGWQTZMXXMLLHGDZXYHXKYXYCJMFFYYHJFSBSSQLXXNDYCANNMTCJCYPRRNYTYQNYYMBMSXNDLYLYSLJRLXYSXQMLLYZLZJJJKYZZCSFBZXXMSTBJGNXYZHLXNMCWSCYZYFZLXBRNNNYLBNRTGZQYSATSWRYHYJZMZDHZGZDWYBSSCSKXSYHYTXXGCQGXZZSHYXJSCRHMKKBXCZJYJYMKQHZJFNBHMQHYSNJNZYBKNQMCLGQHWLZNZSWXKHLJHYYBQLBFCDSXDLDSPFZPSKJYZWZXZDDXJSMMEGJSCSSMGCLXXKYYYLNYPWWWGYDKZJGGGZGGSYCKNJWNJPCXBJJTQTJWDSSPJXZXNZXUMELPXFSXTLLXCLJXJJLJZXCTPSWXLYDHLYQRWHSYCSQYYBYAYWJJJQFWQCQQCJQGXALDBZZYJGKGXPLTZYFXJLTPADKYQHPMATLCPDCKBMTXYBHKLENXDLEEGQDYMSAWHZMLJTWYGXLYQZLJEEYYBQQFFNLYXRDSCTGJGXYYNKLLYQKCCTLHJLQMKKZGCYYGLLLJDZGYDHZWXPYSJBZKDZGYZZHYWYFQYTYZSZYEZZLYMHJJHTSMQWYZLKYYWZCSRKQYTLTDXWCTYJKLWSQZWBDCQYNCJSRSZJLKCDCDTLZZZACQQZZDDXYPLXZBQJYLZLLLQDDZQJYJYJZYXNYYYNYJXKXDAZWYRDLJYYYRJLXLLDYXJCYWYWNQCCLDDNYYYNYCKCZHXXCCLGZQJGKWPPCQQJYSBZZXYJSQPXJPZBSBDSFNSFPZXHDWZTDWPPTFLZZBZDMYYPQJRSDZSQZSQXBDGCPZSWDWCSQZGMDHZXMWWFYBPDGPHTMJTHZSMMBGZMBZJCFZWFZBBZMQCFMBDMCJXLGPNJBBXGYHYYJGPTZGZMQBQTCGYXJXLWZKYDPDYMGCFTPFXYZTZXDZXTGKMTYBBCLBJASKYTSSQYYMSZXFJEWLXLLSZBQJJJAKLYLXLYCCTSXMCWFKKKBSXLLLLJYXTYLTJYYTDPJHNHNNKBYQNFQYYZBYYESSESSGDYHFHWTCJBSDZZTFDMXHCNJZYMQWSRYJDZJQPDQBBSTJGGFBKJBXTGQHNGWJXJGDLLTHZHHYYYYYYSXWTYYYCCBDBPYPZYCCZYJPZYWCBDLFWZCWJDXXHYHLHWZZXJTCZLCDPXUJCZZZLYXJJTXPHFXWPYWXZPTDZZBDZCYHJHMLXBQXSBYLRDTGJRRCTTTHYTCZWMXFYTWWZCWJWXJYWCSKYBZSCCTZQNHXNWXXKHKFHTSWOCCJYBCMPZZYKBNNZPBZHHZDLSYDDYTYFJPXYNGFXBYQXCBHXCPSXTYZDMKYSNXSXLHKMZXLYHDHKWHXXSSKQYHHCJYXGLHZXCSNHEKDTGZXQYPKDHEXTYKCNYMYYYPKQYYYKXZLTHJQTBYQHXBMYHSQCKWWYLLHCYYLNNEQXQWMCFBDCCMLJGGXDQKTLXKGNQCDGZJWYJJLYHHQTTTNWCHMXCXWHWSZJYDJCCDBQCDGDNYXZTHCQRXCBHZTQCBXWGQWYYBXHMBYMYQTYEXMQKYAQYRGYZSLFYKKQHYSSQYSHJGJCNXKZYCXSBXYXHYYLSTYCXQTHYSMGSCPMMGCCCCCMTZTASMGQZJHKLOSQYLSWTMXSYQKDZLJQQYPLSYCZTCQQPBBQJZCLPKHQZYYXXDTDDTSJCXFFLLCHQXMJLWCJCXTSPYCXNDTJSHJWXDQQJSKXYAMYLSJHMLALYKXCYYDMNMDQMXMCZNNCYBZKKYFLMCHCMLHXRCJJHSYLNMTJZGZGYWJXSRXCWJGJQHQZDQJDCJJZKJKGDZQGJJYJYLXZXXCDQHHHEYTMHLFSBDJSYYSHFYSTCZQLPBDRFRZTZYKYWHSZYQKWDQZRKMSYNBCRXQBJYFAZPZZEDZCJYWBCJWHYJBQSZYWRYSZPTDKZPFPBNZTKLQYHBBZPNPPTYZZYBQNYDCPJMMCYCQMCYFZZDCMNLFPBPLNGQJTBTTNJZPZBBZNJKLJQYLNBZQHKSJZNGGQSZZKYXSHPZSNBCGZKDDZQANZHJKDRTLZLSWJLJZLYWTJNDJZJHXYAYNCBGTZCSSQMNJPJYTYSWXZFKWJQTKHTZPLBHSNJZSYZBWZZZZLSYLSBJHDWWQPSLMMFBJDWAQYZTCJTBNNWZXQXCDSLQGDSDPDZHJTQQPSWLYYJZLGYXYZLCTCBJTKTYCZJTQKBSJLGMGZDMCSGPYNJZYQYYKNXRPWSZXMTNCSZZYXYBYHYZAXYWQCJTLLCKJJTJHGDXDXYQYZZBYWDLWQCGLZGJGQRQZCZSSBCRPCSKYDZNXJSQGXSSJMYDNSTZTPBDLTKZWXQWQTZEXNQCZGWEZKSSBYBRTSSSLCCGBPSZQSZLCCGLLLZXHZQTHCZMQGYZQZNMCOCSZJMMZSQPJYGQLJYJPPLDXRGZYXCCSXHSHGTZNLZWZKJCXTCFCJXLBMQBCZZWPQDNHXLJCTHYZLGYLNLSZZPCXDSCQQHJQKSXZPBAJYEMSMJTZDXLCJYRYYNWJBNGZZTMJXLTBSLYRZPYLSSCNXPHLLHYLLQQZQLXYMRSYCXZLMMCZLTZSDWTJJLLNZGGQXPFSKYGYGHBFZPDKMWGHCXMSGDXJMCJZDYCABXJDLNBCDQYGSKYDQTXDJJYXMSZQAZDZFSLQXYJSJZYLBTXXWXQQZBJZUFBBLYLWDSLJHXJYZJWTDJCZFQZQZZDZSXZZQLZCDZFJHYSPYMPQZMLPPLFFXJJNZZYLSJEYQZFPFZKSYWJJJHRDJZZXTXXGLGHYDXCSKYSWMMZCWYBAZBJKSHFHJCXMHFQHYXXYZFTSJYZFXYXPZLCHMZMBXHZZSXYFYMNCWDABAZLXKTCSHHXKXJJZJSTHYGXSXYYHHHJWXKZXSSBZZWHHHCWTZZZPJXSNXQQJGZYZYWLLCWXZFXXYXYHXMKYYSWSQMNLNAYCYSPMJKHWCQHYLAJJMZXHMMCNZHBHXCLXTJPLTXYJHDYYLTTXFSZHYXXSJBJYAYRSMXYPLCKDUYHLXRLNLLSTYZYYQYGYHHSCCSMZCTZQXKYQFPYYRPFFLKQUNTSZLLZMWWTCQQYZWTLLMLMPWMBZSSTZRBPDDTLQJJBXZCSRZQQYGWCSXFWZLXCCRSZDZMCYGGDZQSGTJSWLJMYMMZYHFBJDGYXCCPSHXNZCSBSJYJGJMPPWAFFYFNXHYZXZYLREMZGZCYZSSZDLLJCSQFNXZKPTXZGXJJGFMYYYSNBTYLBNLHPFZDCYFBMGQRRSSSZXYSGTZRNYDZZCDGPJAFJFZKNZBLCZSZPSGCYCJSZLMLRSZBZZLDLSLLYSXSQZQLYXZLSKKBRXBRBZCYCXZZZEEYFGKLZLYYHGZSGZLFJHGTGWKRAAJYZKZQTSSHJJXDCYZUYJLZYRZDQQHGJZXSSZBYKJPBFRTJXLLFQWJHYLQTYMBLPZDXTZYGBDHZZRBGXHWNJTJXLKSCFSMWLSDQYSJTXKZSCFWJLBXFTZLLJZLLQBLSQMQQCGCZFPBPHZCZJLPYYGGDTGWDCFCZQYYYQYSSCLXZSKLZZZGFFCQNWGLHQYZJJCZLQZZYJPJZZBPDCCMHJGXDQDGDLZQMFGPSYTSDYFWWDJZJYSXYYCZCYHZWPBYKXRYLYBHKJKSFXTZJMMCKHLLTNYYMSYXYZPYJQYCSYCWMTJJKQYRHLLQXPSGTLYYCLJSCPXJYZFNMLRGJJTYZBXYZMSJYJHHFZQMSYXRSZCWTLRTQZSSTKXGQKGSPTGCZNJSJCQCXHMXGGZTQYDJKZDLBZSXJLHYQGGGTHQSZPYHJHHGYYGKGGCWJZZYLCZLXQSFTGZSLLLMLJSKCTBLLZZSZMMNYTPZSXQHJCJYQXYZXZQZCPSHKZZYSXCDFGMWQRLLQXRFZTLYSTCTMJCXJJXHJNXTNRZTZFQYHQGLLGCXSZSJDJLJCYDSJTLNYXHSZXCGJZYQPYLFHDJSBPCCZHJJJQZJQDYBSSLLCMYTTMQTBHJQNNYGKYRQYQMZGCJKPDCGMYZHQLLSLLCLMHOLZGDYYFZSLJCQZLYLZQJESHNYLLJXGJXLYSYYYXNBZLJSSZCQQCJYLLZLTJYLLZLLBNYLGQCHXYYXOXCXQKYJXXXYKLXSXXYQXCYKQXQCSGYXXYQXYGYTQOHXHXPYXXXULCYEYCHZZCBWQBBWJQZSCSZSSLZYLKDESJZWMYMCYTSDSXXSCJPQQSQYLYYZYCMDJDZYWCBTJSYDJKCYDDJLBDJJSODZYSYXQQYXDHHGQQYQHDYXWGMMMAJDYBBBPPBCMUUPLJZSMTXERXJMHQNUTPJDCBSSMSSSTKJTSSMMTRCPLZSZMLQDSDMJMQPNQDXCFYNBFSDQXYXHYAYKQYDDLQYYYSSZBYDSLNTFQTZQPZMCHDHCZCWFDXTMYQSPHQYYXSRGJCWTJTZZQMGWJJTJHTQJBBHWZPXXHYQFXXQYWYYHYSCDYDHHQMNMTMWCPBSZPPZZGLMZFOLLCFWHMMSJZTTDHZZYFFYTZZGZYSKYJXQYJZQBHMBZZLYGHGFMSHPZFZSNCLPBQSNJXZSLXXFPMTYJYGBXLLDLXPZJYZJYHHZCYWHJYLSJEXFSZZYWXKZJLUYDTMLYMQJPWXYHXSKTQJEZRPXXZHHMHWQPWQLYJJQJJZSZCPHJLCHHNXJLQWZJHBMZYXBDHHYPZLHLHLGFWLCHYYTLHJXCJMSCPXSTKPNHQXSRTYXXTESYJCTLSSLSTDLLLWWYHDHRJZSFGXTSYCZYNYHTDHWJSLHTZDQDJZXXQHGYLTZPHCSQFCLNJTCLZPFSTPDYNYLGMJLLYCQHYSSHCHYLHQYQTMZYPBYWRFQYKQSYSLZDQJMPXYYSSRHZJNYWTQDFZBWWTWWRXCWHGYHXMKMYYYQMSMZHNGCEPMLQQMTCWCTMMPXJPJJHFXYYZSXZHTYBMSTSYJTTQQQYYLHYNPYQZLCYZHZWSMYLKFJXLWGXYPJYTYSYXYMZCKTTWLKSMZSYLMPWLZWXWQZSSAQSYXYRHSSNTSRAPXCPWCMGDXHXZDZYFJHGZTTSBJHGYZSZYSMYCLLLXBTYXHBBZJKSSDMALXHYCFYGMQYPJYCQXJLLLJGSLZGQLYCJCCZOTYXMTMTTLLWTGPXYMZMKLPSZZZXHKQYSXCTYJZYHXSHYXZKXLZWPSQPYHJWPJPWXQQYLXSDHMRSLZZYZWTTCYXYSZZSHBSCCSTPLWSSCJCHNLCGCHSSPHYLHFHHXJSXYLLNYLSZDHZXYLSXLWZYKCLDYAXZCMDDYSPJTQJZLNWQPSSSWCTSTSZLBLNXSMNYYMJQBQHRZWTYYDCHQLXKPZWBGQYBKFCMZWPZLLYYLSZYDWHXPSBCMLJBSCGBHXLQHYRLJXYSWXWXZSLDFHLSLYNJLZYFLYJYCDRJLFSYZFSLLCQYQFGJYHYXZLYLMSTDJCYHBZLLNWLXXYGYYHSMGDHXXHHLZZJZXCZZZCYQZFNGWPYLCPKPYYPMCLQKDGXZGGWQBDXZZKZFBXXLZXJTPJPTTBYTSZZDWSLCHZHSLTYXHQLHYXXXYYZYSWTXZKHLXZXZPYHGCHKCFSYHUTJRLXFJXPTZTWHPLYXFCRHXSHXKYXXYHZQDXQWULHYHMJTBFLKHTXCWHJFWJCFPQRYQXCYYYQYGRPYWSGSUNGWCHKZDXYFLXXHJJBYZWTSXXNCYJJYMSWZJQRMHXZWFQSYLZJZGBHYNSLBGTTCSYBYXXWXYHXYYXNSQYXMQYWRGYQLXBBZLJSYLPSYTJZYHYZAWLRORJMKSCZJXXXYXCHDYXRYXXJDTSQFXLYLTSFFYXLMTYJMJUYYYXLTZCSXQZQHZXLYYXZHDNBRXXXJCTYHLBRLMBRLLAXKYLLLJLYXXLYCRYLCJTGJCMTLZLLCYZZPZPCYAWHJJFYBDYYZSMPCKZDQYQPBPCJPDCYZMDPBCYYDYCNNPLMTMLRMFMMGWYZBSJGYGSMZQQQZTXMKQWGXLLPJGZBQCDJJJFPKJKCXBLJMSWMDTQJXLDLPPBXCWRCQFBFQJCZAHZGMYKPHYYHZYKNDKZMBPJYXPXYHLFPNYYGXJDBKXNXHJMZJXSTRSTLDXSKZYSYBZXJLXYSLBZYSLHXJPFXPQNBYLLJQKYGZMCYZZYMCCSLCLHZFWFWYXZMWSXTYNXJHPYYMCYSPMHYSMYDYSHQYZCHMJJMZCAAGCFJBBHPLYZYLXXSDJGXDHKXXTXXNBHRMLYJSLTXMRHNLXQJXYZLLYSWQGDLBJHDCGJYQYCMHWFMJYBMBYJYJWYMDPWHXQLDYGPDFXXBCGJSPCKRSSYZJMSLBZZJFLJJJLGXZGYXYXLSZQYXBEXYXHGCXBPLDYHWETTWWCJMBTXCHXYQXLLXFLYXLLJLSSFWDPZSMYJCLMWYTCZPCHQEKCQBWLCQYDPLQPPQZQFJQDJHYMMCXTXDRMJWRHXCJZYLQXDYYNHYYHRSLSRSYWWZJYMTLTLLGTQCJZYABTCKZCJYCCQLJZQXALMZYHYWLWDXZXQDLLQSHGPJFJLJHJABCQZDJGTKHSSTCYJLPSWZLXZXRWGLDLZRLZXTGSLLLLZLYXXWGDZYGBDPHZPBRLWSXQBPFDWOFMWHLYPCBJCCLDMBZPBZZLCYQXLDOMZBLZWPDWYYGDSTTHCSQSCCRSSSYSLFYBFNTYJSZDFNDPDHDZZMBBLSLCMYFFGTJJQWFTMTPJWFNLBZCMMJTGBDZLQLPYFHYYMJYLSDCHDZJWJCCTLJCLDTLJJCPDDSQDSSZYBNDBJLGGJZXSXNLYCYBJXQYCBYLZCFZPPGKCXZDZFZTJJFJSJXZBNZYJQTTYJYHTYCZHYMDJXTTMPXSPLZCDWSLSHXYPZGTFMLCJTYCBPMGDKWYCYZCDSZZYHFLYCTYGWHKJYYLSJCXGYWJCBLLCSNDDBTZBSCLYZCZZSSQDLLMQYYHFSLQLLXFTYHABXGWNYWYYPLLSDLDLLBJCYXJZMLHLJDXYYQYTDLLLBUGBFDFBBQJZZMDPJHGCLGMJJPGAEHHBWCQXAXHHHZCHXYPHJAXHLPHJPGPZJQCQZGJJZZUZDMQYYBZZPHYHYBWHAZYJHYKFGDPFQSDLZMLJXKXGALXZDAGLMDGXMWZQYXXDXXPFDMMSSYMPFMDMMKXKSYZYSHDZKXSYSMMZZZMSYDNZZCZXFPLSTMZDNMXCKJMZTYYMZMZZMSXHHDCZJEMXXKLJSTLWLSQLYJZLLZJSSDPPMHNLZJCZYHMXXHGZCJMDHXTKGRMXFWMCGMWKDTKSXQMMMFZZYDKMSCLCMPCGMHSPXQPZDSSLCXKYXTWLWJYAHZJGZQMCSNXYYMMPMLKJXMHLMLQMXCTKZMJQYSZJSYSZHSYJZJCDAJZYBSDQJZGWZQQXFKDMSDJLFWEHKZQKJPEYPZYSZCDWYJFFMZZYLTTDZZEFMZLBNPPLPLPEPSZALLTYLKCKQZKGENQLWAGYXYDPXLHSXQQWQCQXQCLHYXXMLYCCWLYMQYSKGCHLCJNSZKPYZKCQZQLJPDMDZHLASXLBYDWQLWDNBQCRYDDZTJYBKBWSZDXDTNPJDTCTQDFXQQMGNXECLTTBKPWSLCTYQLPWYZZKLPYGZCQQPLLKCCYLPQMZCZQCLJSLQZDJXLDDHPZQDLJJXZQDXYZQKZLJCYQDYJPPYPQYKJYRMPCBYMCXKLLZLLFQPYLLLMBSGLCYSSLRSYSQTMXYXZQZFDZUYSYZTFFMZZSMZQHZSSCCMLYXWTPZGXZJGZGSJSGKDDHTQGGZLLBJDZLCBCHYXYZHZFYWXYZYMSDBZZYJGTSMTFXQYXQSTDGSLNXDLRYZZLRYYLXQHTXSRTZNGZXBNQQZFMYKMZJBZYMKBPNLYZPBLMCNQYZZZSJZHJCTZKHYZZJRDYZHNPXGLFZTLKGJTCTSSYLLGZRZBBQZZKLPKLCZYSSUYXBJFPNJZZXCDWXZYJXZZDJJKGGRSRJKMSMZJLSJYWQSKYHQJSXPJZZZLSNSHRNYPZTWCHKLPSRZLZXYJQXQKYSJYCZTLQZYBBYBWZPQDWWYZCYTJCJXCKCWDKKZXSGKDZXWWYYJQYYTCYTDLLXWKCZKKLCCLZCQQDZLQLCSFQCHQHSFSMQZZLNBJJZBSJHTSZDYSJQJPDLZCDCWJKJZZLPYCGMZWDJJBSJQZSYZYHHXJPBJYDSSXDZNCGLQMBTSFSBPDZDLZNFGFJGFSMPXJQLMBLGQCYYXBQKDJJQYRFKZTJDHCZKLBSDZCFJTPLLJGXHYXZCSSZZXSTJYGKGCKGYOQXJPLZPBPGTGYJZGHZQZZLBJLSQFZGKQQJZGYCZBZQTLDXRJXBSXXPZXHYZYCLWDXJJHXMFDZPFZHQHQMQGKSLYHTYCGFRZGNQXCLPDLBZCSCZQLLJBLHBZCYPZZPPDYMZZSGYHCKCPZJGSLJLNSCDSLDLXBMSTLDDFJMKDJDHZLZXLSZQPQPGJLLYBDSZGQLBZLSLKYYHZTTNTJYQTZZPSZQZTLLJTYYLLQLLQYZQLBDZLSLYYZYMDFSZSNHLXZNCZQZPBWSKRFBSYZMTHBLGJPMCZZLSTLXSHTCSYZLZBLFEQHLXFLCJLYLJQCBZLZJHHSSTBRMHXZHJZCLXFNBGXGTQJCZTMSFZKJMSSNXLJKBHSJXNTNLZDNTLMSJXGZJYJCZXYJYJWRWWQNZTNFJSZPZSHZJFYRDJSFSZJZBJFZQZZHZLXFYSBZQLZSGYFTZDCSZXZJBQMSZKJRHYJZCKMJKHCHGTXKXQGLXPXFXTRTYLXJXHDTSJXHJZJXZWZLCQSBTXWXGXTXXHXFTSDKFJHZYJFJXRZSDLLLTQSQQZQWZXSYQTWGWBZCGZLLYZBCLMQQTZHZXZXLJFRMYZFLXYSQXXJKXRMQDZDMMYYBSQBHGZMWFWXGMXLZPYYTGZYCCDXYZXYWGSYJYZNBHPZJSQSYXSXRTFYZGRHZTXSZZTHCBFCLSYXZLZQMZLMPLMXZJXSFLBYZMYQHXJSXRXSQZZZSSLYFRCZJRCRXHHZXQYDYHXSJJHZCXZBTYNSYSXJBQLPXZQPYMLXZKYXLXCJLCYSXXZZLXDLLLJJYHZXGYJWKJRWYHCPSGNRZLFZWFZZNSXGXFLZSXZZZBFCSYJDBRJKRDHHGXJLJJTGXJXXSTJTJXLYXQFCSGSWMSBCTLQZZWLZZKXJMLTMJYHSDDBXGZHDLBMYJFRZFSGCLYJBPMLYSMSXLSZJQQHJZFXGFQFQBPXZGYYQXGZTCQWYLTLGWSGWHRLFSFGZJMGMGBGTJFSYZZGZYZAFLSSPMLPFLCWBJZCLJJMZLPJJLYMQDMYYYFBGYGYZMLYZDXQYXRQQQHSYYYQXYLJTYXFSFSLLGNQCYHYCWFHCCCFXPYLYPLLZYXXXXXKQHHXSHJZCFZSCZJXCPZWHHHHHAPYLQALPQAFYHXDYLUKMZQGGGDDESRNNZLTZGCHYPPYSQJJHCLLJTOLNJPZLJLHYMHEYDYDSQYCDDHGZUNDZCLZYZLLZNTNYZGSLHSLPJJBDGWXPCDUTJCKLKCLWKLLCASSTKZZDNQNTTLYYZSSYSSZZRYLJQKCQDHHCRXRZYDGRGCWCGZQFFFPPJFZYNAKRGYWYQPQXXFKJTSZZXSWZDDFBBXTBGTZKZNPZZPZXZPJSZBMQHKCYXYLDKLJNYPKYGHGDZJXXEAHPNZKZTZCMXCXMMJXNKSZQNMNLWBWWXJKYHCPSTMCSQTZJYXTPCTPDTNNPGLLLZSJLSPBLPLQHDTNJNLYYRSZFFJFQWDPHZDWMRZCCLODAXNSSNYZRESTYJWJYJDBCFXNMWTTBYLWSTSZGYBLJPXGLBOCLHPCBJLTMXZLJYLZXCLTPNCLCKXTPZJSWCYXSFYSZDKNTLBYJCYJLLSTGQCBXRYZXBXKLYLHZLQZLNZCXWJZLJZJNCJHXMNZZGJZZXTZJXYCYYCXXJYYXJJXSSSJSTSSTTPPGQTCSXWZDCSYFPTFBFHFBBLZJCLZZDBXGCXLQPXKFZFLSYLTUWBMQJHSZBMDDBCYSCCLDXYCDDQLYJJWMQLLCSGLJJSYFPYYCCYLTJANTJJPWYCMMGQYYSXDXQMZHSZXPFTWWZQSWQRFKJLZJQQYFBRXJHHFWJJZYQAZMYFRHCYYBYQWLPEXCCZSTYRLTTDMQLYKMBBGMYYJPRKZNPBSXYXBHYZDJDNGHPMFSGMWFZMFQMMBCMZZCJJLCNUXYQLMLRYGQZCYXZLWJGCJCGGMCJNFYZZJHYCPRRCMTZQZXHFQGTJXCCJEAQCRJYHPLQLSZDJRBCQHQDYRHYLYXJSYMHZYDWLDFRYHBPYDTSSCNWBXGLPZMLZZTQSSCPJMXXYCSJYTYCGHYCJWYRXXLFEMWJNMKLLSWTXHYYYNCMMCWJDQDJZGLLJWJRKHPZGGFLCCSCZMCBLTBHBQJXQDSPDJZZGHGLFQYWBZYZJLTSTDHQHCTCBCHFLQMPWDSHYYTQWCNZZJTLBYMBPDYYYXSQKXWYYFLXXNCWCXYPMAELYKKJMZZZBRXYYQJFLJPFHHHYTZZXSGQQMHSPGDZQWBWPJHZJDYSCQWZKTXXSQLZYYMYSDZGRXCKKUJLWPYSYSCSYZLRMLQSYLJXBCXTLWDQZPCYCYKPPPNSXFYZJJRCEMHSZMSXLXGLRWGCSTLRSXBZGBZGZTCPLUJLSLYLYMTXMTZPALZXPXJTJWTCYYZLBLXBZLQMYLXPGHDSLSSDMXMBDZZSXWHAMLCZCPJMCNHJYSNSYGCHSKQMZZQDLLKABLWJXSFMOCDXJRRLYQZKJMYBYQLYHETFJZFRFKSRYXFJTWDSXXSYSQJYSLYXWJHSNLXYYXHBHAWHHJZXWMYLJCSSLKYDZTXBZSYFDXGXZJKHSXXYBSSXDPYNZWRPTQZCZENYGCXQFJYKJBZMLJCMQQXUOXSLYXXLYLLJDZBTYMHPFSTTQQWLHOKYBLZZALZXQLHZWRRQHLSTMYPYXJJXMQSJFNBXYXYJXXYQYLTHYLQYFMLKLJTMLLHSZWKZHLJMLHLJKLJSTLQXYLMBHHLNLZXQJHXCFXXLHYHJJGBYZZKBXSCQDJQDSUJZYYHZHHMGSXCSYMXFEBCQWWRBPYYJQTYZCYQYQQZYHMWFFHGZFRJFCDPXNTQYZPDYKHJLFRZXPPXZDBBGZQSTLGDGYLCQMLCHHMFYWLZYXKJLYPQHSYWMQQGQZMLZJNSQXJQSYJYCBEHSXFSZPXZWFLLBCYYJDYTDTHWZSFJMQQYJLMQXXLLDTTKHHYBFPWTYYSQQWNQWLGWDEBZWCMYGCULKJXTMXMYJSXHYBRWFYMWFRXYQMXYSZTZZTFYKMLDHQDXWYYNLCRYJBLPSXCXYWLSPRRJWXHQYPHTYDNXHHMMYWYTZCSQMTSSCCDALWZTCPQPYJLLQZYJSWXMZZMMYLMXCLMXCZMXMZSQTZPPQQBLPGXQZHFLJJHYTJSRXWZXSCCDLXTYJDCQJXSLQYCLZXLZZXMXQRJMHRHZJBHMFLJLMLCLQNLDXZLLLPYPSYJYSXCQQDCMQJZZXHNPNXZMEKMXHYKYQLXSXTXJYYHWDCWDZHQYYBGYBCYSCFGPSJNZDYZZJZXRZRQJJYMCANYRJTLDPPYZBSTJKXXZYPFDWFGZZRPYMTNGXZQBYXNBUFNQKRJQZMJEGRZGYCLKXZDSKKNSXKCLJSPJYYZLQQJYBZSSQLLLKJXTBKTYLCCDDBLSPPFYLGYDTZJYQGGKQTTFZXBDKTYYHYBBFYTYYBCLPDYTGDHRYRNJSPTCSNYJQHKLLLZSLYDXXWBCJQSPXBPJZJCJDZFFXXBRMLAZHCSNDLBJDSZBLPRZTSWSBXBCLLXXLZDJZSJPYLYXXYFTFFFBHJJXGBYXJPMMMPSSJZJMTLYZJXSWXTYLEDQPJMYGQZJGDJLQJWJQLLSJGJGYGMSCLJJXDTYGJQJQJCJZCJGDZZSXQGSJGGCXHQXSNQLZZBXHSGZXCXYLJXYXYYDFQQJHJFXDHCTXJYRXYSQTJXYEFYYSSYYJXNCYZXFXMSYSZXYYSCHSHXZZZGZZZGFJDLTYLNPZGYJYZYYQZPBXQBDZTZCZYXXYHHSQXSHDHGQHJHGYWSZTMZMLHYXGEBTYLZKQWYTJZRCLEKYSTDBCYKQQSAYXCJXWWGSBHJYZYDHCSJKQCXSWXFLTYNYZPZCCZJQTZWJQDZZZQZLJJXLSBHPYXXPSXSHHEZTXFPTLQYZZXHYTXNCFZYYHXGNXMYWXTZSJPTHHGYMXMXQZXTSBCZYJYXXTYYZYPCQLMMSZMJZZLLZXGXZAAJZYXJMZXWDXZSXZDZXLEYJJZQBHZWZZZQTZPSXZTDSXJJJZNYAZPHXYYSRNQDTHZHYYKYJHDZXZLSWCLYBZYECWCYCRYLCXNHZYDZYDYJDFRJJHTRSQTXYXJRJHOJYNXELXSFSFJZGHPZSXZSZDZCQZBYYKLSGSJHCZSHDGQGXYZGXCHXZJWYQWGYHKSSEQZZNDZFKWYSSTCLZSTSYMCDHJXXYWEYXCZAYDMPXMDSXYBSQMJMZJMTZQLPJYQZCGQHXJHHLXXHLHDLDJQCLDWBSXFZZYYSCHTYTYYBHECXHYKGJPXHHYZJFXHWHBDZFYZBCAPNPGNYDMSXHMMMMAMYNBYJTMPXYYMCTHJBZYFCGTYHWPHFTWZZEZSBZEGPFMTSKFTYCMHFLLHGPZJXZJGZJYXZSBBQSCZZLZCCSTPGXMJSFTCCZJZDJXCYBZLFCJSYZFGSZLYBCWZZBYZDZYPSWYJZXZBDSYUXLZZBZFYGCZXBZHZFTPBGZGEJBSTGKDMFHYZZJHZLLZZGJQZLSFDJSSCBZGPDLFZFZSZYZYZSYGCXSNXXCHCZXTZZLJFZGQSQYXZJQDCCZTQCDXZJYQJQCHXZTDLGSCXZSYQJQTZWLQDQZTQCHQQJZYEZZZPBWKDJFCJPZTYPQYQTTYNLMBDKTJZPQZQZZFPZSBNJLGYJDXJDZZKZGQKXDLPZJTCJDQBXDJQJSTCKNXBXZMSLYJCQMTJQWWCJQNJNLLLHJCWQTBZQYDZCZPZZDZYDDCYZZZCCJTTJFZDPRRTZTJDCQTQZDTJNPLZBCLLCTZSXKJZQZPZLBZRBTJDCXFCZDBCCJJLTQQPLDCGZDBBZJCQDCJWYNLLZYZCCDWLLXWZLXRXNTQQCZXKQLSGDFQTDDGLRLAJJTKUYMKQLLTZYTDYYCZGJWYXDXFRSKSTQTENQMRKQZHHQKDLDAZFKYPBGGPZREBZZYKZZSPEGJXGYKQZZZSLYSYYYZWFQZYLZZLZHWCHKYPQGNPGBLPLRRJYXCCSYYHSFZFYBZYYTGZXYLXCZWXXZJZBLFFLGSKHYJZEYJHLPLLLLCZGXDRZELRHGKLZZYHZLYQSZZJZQLJZFLNBHGWLCZCFJYSPYXZLZLXGCCPZBLLCYBBBBUBBCBPCRNNZCZYRBFSRLDCGQYYQXYGMQZWTZYTYJXYFWTEHZZJYWLCCNTZYJJZDEDPZDZTSYQJHDYMBJNYJZLXTSSTPHNDJXXBYXQTZQDDTJTDYYTGWSCSZQFLSHLGLBCZPHDLYZJYCKWTYTYLBNYTSDSYCCTYSZYYEBHEXHQDTWNYGYCLXTSZYSTQMYGZAZCCSZZDSLZCLZRQXYYELJSBYMXSXZTEMBBLLYYLLYTDQYSHYMRQWKFKBFXNXSBYCHXBWJYHTQBPBSBWDZYLKGZSKYHXQZJXHXJXGNLJKZLYYCDXLFYFGHLJGJYBXQLYBXQPQGZTZPLNCYPXDJYQYDYMRBESJYYHKXXSTMXRCZZYWXYQYBMCLLYZHQYZWQXDBXBZWZMSLPDMYSKFMZKLZCYQYCZLQXFZZYDQZPZYGYJYZMZXDZFYFYTTQTZHGSPCZMLCCYTZXJCYTJMKSLPZHYSNZLLYTPZCTZZCKTXDHXXTQCYFKSMQCCYYAZHTJPCYLZLYJBJXTPNYLJYYNRXSYLMMNXJSMYBCSYSYLZYLXJJQYLDZLPQBFZZBLFNDXQKCZFYWHGQMRDSXYCYTXNQQJZYYPFZXDYZFPRXEJDGYQBXRCNFYYQPGHYJDYZXGRHTKYLNWDZNTSMPKLBTHBPYSZBZTJZSZZJTYYXZPHSSZZBZCZPTQFZMYFLYPYBBJQXZMXXDJMTSYSKKBJZXHJCKLPSMKYJZCXTMLJYXRZZQSLXXQPYZXMKYXXXJCLJPRMYYGADYSKQLSNDHYZKQXZYZTCGHZTLMLWZYBWSYCTBHJHJFCWZTXWYTKZLXQSHLYJZJXTMPLPYCGLTBZZTLZJCYJGDTCLKLPLLQPJMZPAPXYZLKKTKDZCZZBNZDYDYQZJYJGMCTXLTGXSZLMLHBGLKFWNWZHDXUHLFMKYSLGXDTWWFRJEJZTZHYDXYKSHWFZCQSHKTMQQHTZHYMJDJSKHXZJZBZZXYMPAGQMSTPXLSKLZYNWRTSQLSZBPSPSGZWYHTLKSSSWHZZLYYTNXJGMJSZSUFWNLSOZTXGXLSAMMLBWLDSZYLAKQCQCTMYCFJBSLXCLZZCLXXKSBZQCLHJPSQPLSXXCKSLNHPSFQQYTXYJZLQLDXZQJZDYYDJNZPTUZDSKJFSLJHYLZSQZLBTXYDGTQFDBYAZXDZHZJNHHQBYKNXJJQCZMLLJZKSPLDYCLBBLXKLELXJLBQYCXJXGCNLCQPLZLZYJTZLJGYZDZPLTQCSXFDMNYCXGBTJDCZNBGBQYQJWGKFHTNPYQZQGBKPBBYZMTJDYTBLSQMPSXTBNPDXKLEMYYCJYNZCTLDYKZZXDDXHQSHDGMZSJYCCTAYRZLPYLTLKXSLZCGGEXCLFXLKJRTLQJAQZNCMBYDKKCXGLCZJZXJHPTDJJMZQYKQSECQZDSHHADMLZFMMZBGNTJNNLGBYJBRBTMLBYJDZXLCJLPLDLPCQDHLXZLYCBLCXZZJADJLNZMMSSSMYBHBSQKBHRSXXJMXSDZNZPXLGBRHWGGFCXGMSKLLTSJYYCQLTSKYWYYHYWXBXQYWPYWYKQLSQPTNTKHQCWDQKTWPXXHCPTHTWUMSSYHBWCRWXHJMKMZNGWTMLKFGHKJYLSYYCXWHYECLQHKQHTTQKHFZLDXQWYZYYDESBPKYRZPJFYYZJCEQDZZDLATZBBFJLLCXDLMJSSXEGYGSJQXCWBXSSZPDYZCXDNYXPPZYDLYJCZPLTXLSXYZYRXCYYYDYLWWNZSAHJSYQYHGYWWAXTJZDAXYSRLTDPSSYYFNEJDXYZHLXLLLZQZSJNYQYQQXYJGHZGZCYJCHZLYCDSHWSHJZYJXCLLNXZJJYYXNFXMWFPYLCYLLABWDDHWDXJMCXZTZPMLQZHSFHZYNZTLLDYWLSLXHYMMYLMBWWKYXYADTXYLLDJPYBPWUXJMWMLLSAFDLLYFLBHHHBQQLTZJCQJLDJTFFKMMMBYTHYGDCQRDDWRQJXNBYSNWZDBYYTBJHPYBYTTJXAAHGQDQTMYSTQXKBTZPKJLZRBEQQSSMJJBDJOTGTBXPGBKTLHQXJJJCTHXQDWJLWRFWQGWSHCKRYSWGFTGYGBXSDWDWRFHWYTJJXXXJYZYSLPYYYPAYXHYDQKXSHXYXGSKQHYWFDDDPPLCJLQQEEWXKSYYKDYPLTJTHKJLTCYYHHJTTPLTZZCDLTHQKZXQYSTEEYWYYZYXXYYSTTJKLLPZMCYHQGXYHSRMBXPLLNQYDQHXSXXWGDQBSHYLLPJJJTHYJKYPPTHYYKTYEZYENMDSHLCRPQFDGFXZPSFTLJXXJBSWYYSKSFLXLPPLBBBLBSFXFYZBSJSSYLPBBFFFFSSCJDSTZSXZRYYSYFFSYZYZBJTBCTSBSDHRTJJBYTCXYJEYLXCBNEBJDSYXYKGSJZBXBYTFZWGENYHHTHZHHXFWGCSTBGXKLSXYWMTMBYXJSTZSCDYQRCYTWXZFHMYMCXLZNSDJTTTXRYCFYJSBSDYERXJLJXBBDEYNJGHXGCKGSCYMBLXJMSZNSKGXFBNBPTHFJAAFXYXFPXMYPQDTZCXZZPXRSYWZDLYBBKTYQPQJPZYPZJZNJPZJLZZFYSBTTSLMPTZRTDXQSJEHBZYLZDHLJSQMLHTXTJECXSLZZSPKTLZKQQYFSYGYWPCPQFHQHYTQXZKRSGTTSQCZLPTXCDYYZXSQZSLXLZMYCPCQBZYXHBSXLZDLTCDXTYLZJYYZPZYZLTXJSJXHLPMYTXCQRBLZSSFJZZTNJYTXMYJHLHPPLCYXQJQQKZZSCPZKSWALQSBLCCZJSXGWWWYGYKTJBBZTDKHXHKGTGPBKQYSLPXPJCKBMLLXDZSTBKLGGQKQLSBKKTFXRMDKBFTPZFRTBBRFERQGXYJPZSSTLBZTPSZQZSJDHLJQLZBPMSMMSXLQQNHKNBLRDDNXXDHDDJCYYGYLXGZLXSYGMQQGKHBPMXYXLYTQWLWGCPBMQXCYZYDRJBHTDJYHQSHTMJSBYPLWHLZFFNYPMHXXHPLTBQPFBJWQDBYGPNZTPFZJGSDDTQSHZEAWZZYLLTYYBWJKXXGHLFKXDJTMSZSQYNZGGSWQSPHTLSSKMCLZXYSZQZXNCJDQGZDLFNYKLJCJLLZLMZZNHYDSSHTHZZLZZBBHQZWWYCRZHLYQQJBEYFXXXWHSRXWQHWPSLMSSKZTTYGYQQWRSLALHMJTQJSMXQBJJZJXZYZKXBYQXBJXSHZTSFJLXMXZXFGHKZSZGGYLCLSARJYHSLLLMZXELGLXYDJYTLFBHBPNLYZFBBHPTGJKWETZHKJJXZXXGLLJLSTGSHJJYQLQZFKCGNNDJSSZFDBCTWWSEQFHQJBSAQTGYPQLBXBMMYWXGSLZHGLZGQYFLZBYFZJFRYSFMBYZHQGFWZSYFYJJPHZBYYZFFWODGRLMFTWLBZGYCQXCDJYGZYYYYTYTYDWEGAZYHXJLZYYHLRMGRXXZCLHNELJJTJTPWJYBJJBXJJTJTEEKHWSLJPLPSFYZPQQBDLQJJTYYQLYZKDKSQJYYQZLDQTGJQYZJSUCMRYQTHTEJMFCTYHYPKMHYZWJDQFHYYXWSHCTXRLJHQXHCCYYYJLTKTTYTMXGTCJTZAYYOCZLYLBSZYWJYTSJYHBYSHFJLYGJXXTMZYYLTXXYPZLXYJZYZYYPNHMYMDYYLBLHLSYYQQLLNJJYMSOYQBZGDLYXYLCQYXTSZEGXHZGLHWBLJHEYXTWQMAKBPQCGYSHHEGQCMWYYWLJYJHYYZLLJJYLHZYHMGSLJLJXCJJYCLYCJPCPZJZJMMYLCQLNQLJQJSXYJMLSZLJQLYCMMHCFMMFPQQMFYLQMCFFQMMMMHMZNFHHJGTTHHKHSLNCHHYQDXTMMQDCYZYXYQMYQYLTDCYYYZAZZCYMZYDLZFFFMMYCQZWZZMABTBYZTDMNZZGGDFTYPCGQYTTSSFFWFDTZQSSYSTWXJHXYTSXXYLBYQHWWKXHZXWZNNZZJZJJQJCCCHYYXBZXZCYZTLLCQXYNJYCYYCYNZZQYYYEWYCZDCJYCCHYJLBTZYYCQWMPWPYMLGKDLDLGKQQBGYCHJXY";
-
-    // 此处收录了375个多音字,数据来自于http://www.51windows.net/pages/pinyin.asp
-    var oMultiDiff = {
-        19969: "DZ",
-        19975: "WM",
-        19988: "QJ",
-        20048: "YL",
-        20056: "SC",
-        20060: "NM",
-        20094: "QG",
-        20127: "QJ",
-        20167: "QC",
-        20193: "YG",
-        20250: "KH",
-        20256: "ZC",
-        20282: "SC",
-        20285: "QJG",
-        20291: "TD",
-        20314: "YD",
-        20315: "BF",
-        20340: "NE",
-        20375: "TD",
-        20389: "YJ",
-        20391: "CZ",
-        20415: "PB",
-        20446: "YS",
-        20447: "SQ",
-        20504: "TC",
-        20608: "KG",
-        20854: "QJ",
-        20857: "ZC",
-        20911: "PF",
-        20985: "AW",
-        21032: "PB",
-        21048: "XQ",
-        21049: "SC",
-        21089: "YS",
-        21119: "JC",
-        21242: "SB",
-        21273: "SC",
-        21305: "YP",
-        21306: "QO",
-        21330: "ZC",
-        21333: "SDC",
-        21345: "QK",
-        21378: "CA",
-        21397: "SC",
-        21414: "XS",
-        21442: "SC",
-        21477: "JG",
-        21480: "TD",
-        21484: "ZS",
-        21494: "YX",
-        21505: "YX",
-        21512: "HG",
-        21523: "XH",
-        21537: "PB",
-        21542: "PF",
-        21549: "KH",
-        21571: "E",
-        21574: "DA",
-        21588: "TD",
-        21589: "O",
-        21618: "ZC",
-        21621: "KHA",
-        21632: "ZJ",
-        21654: "KG",
-        21679: "LKG",
-        21683: "KH",
-        21710: "A",
-        21719: "YH",
-        21734: "WOE",
-        21769: "A",
-        21780: "WN",
-        21804: "XH",
-        21834: "A",
-        21899: "ZD",
-        21903: "RN",
-        21908: "WO",
-        21939: "ZC",
-        21956: "SA",
-        21964: "YA",
-        21970: "TD",
-        22003: "A",
-        22031: "JG",
-        22040: "XS",
-        22060: "ZC",
-        22066: "ZC",
-        22079: "MH",
-        22129: "XJ",
-        22179: "XA",
-        22237: "NJ",
-        22244: "TD",
-        22280: "JQ",
-        22300: "YH",
-        22313: "XW",
-        22331: "YQ",
-        22343: "YJ",
-        22351: "PH",
-        22395: "DC",
-        22412: "TD",
-        22484: "PB",
-        22500: "PB",
-        22534: "ZD",
-        22549: "DH",
-        22561: "PB",
-        22612: "TD",
-        22771: "KQ",
-        22831: "HB",
-        22841: "JG",
-        22855: "QJ",
-        22865: "XQ",
-        23013: "ML",
-        23081: "WM",
-        23487: "SX",
-        23558: "QJ",
-        23561: "YW",
-        23586: "YW",
-        23614: "YW",
-        23615: "SN",
-        23631: "PB",
-        23646: "ZS",
-        23663: "ZT",
-        23673: "YG",
-        23762: "TD",
-        23769: "ZS",
-        23780: "QJ",
-        23884: "QK",
-        24055: "XH",
-        24113: "DC",
-        24162: "ZC",
-        24191: "GA",
-        24273: "QJ",
-        24324: "NL",
-        24377: "TD",
-        24378: "QJ",
-        24439: "PF",
-        24554: "ZS",
-        24683: "TD",
-        24694: "WE",
-        24733: "LK",
-        24925: "TN",
-        25094: "ZG",
-        25100: "XQ",
-        25103: "XH",
-        25153: "PB",
-        25170: "PB",
-        25179: "KG",
-        25203: "PB",
-        25240: "ZS",
-        25282: "FB",
-        25303: "NA",
-        25324: "KG",
-        25341: "ZY",
-        25373: "WZ",
-        25375: "XJ",
-        25384: "A",
-        25457: "A",
-        25528: "SD",
-        25530: "SC",
-        25552: "TD",
-        25774: "ZC",
-        25874: "ZC",
-        26044: "YW",
-        26080: "WM",
-        26292: "PB",
-        26333: "PB",
-        26355: "ZY",
-        26366: "CZ",
-        26397: "ZC",
-        26399: "QJ",
-        26415: "ZS",
-        26451: "SB",
-        26526: "ZC",
-        26552: "JG",
-        26561: "TD",
-        26588: "JG",
-        26597: "CZ",
-        26629: "ZS",
-        26638: "YL",
-        26646: "XQ",
-        26653: "KG",
-        26657: "XJ",
-        26727: "HG",
-        26894: "ZC",
-        26937: "ZS",
-        26946: "ZC",
-        26999: "KJ",
-        27099: "KJ",
-        27449: "YQ",
-        27481: "XS",
-        27542: "ZS",
-        27663: "ZS",
-        27748: "TS",
-        27784: "SC",
-        27788: "ZD",
-        27795: "TD",
-        27812: "O",
-        27850: "PB",
-        27852: "MB",
-        27895: "SL",
-        27898: "PL",
-        27973: "QJ",
-        27981: "KH",
-        27986: "HX",
-        27994: "XJ",
-        28044: "YC",
-        28065: "WG",
-        28177: "SM",
-        28267: "QJ",
-        28291: "KH",
-        28337: "ZQ",
-        28463: "TL",
-        28548: "DC",
-        28601: "TD",
-        28689: "PB",
-        28805: "JG",
-        28820: "QG",
-        28846: "PB",
-        28952: "TD",
-        28975: "ZC",
-        29100: "A",
-        29325: "QJ",
-        29575: "SL",
-        29602: "FB",
-        30010: "TD",
-        30044: "CX",
-        30058: "PF",
-        30091: "YSP",
-        30111: "YN",
-        30229: "XJ",
-        30427: "SC",
-        30465: "SX",
-        30631: "YQ",
-        30655: "QJ",
-        30684: "QJG",
-        30707: "SD",
-        30729: "XH",
-        30796: "LG",
-        30917: "PB",
-        31074: "NM",
-        31085: "JZ",
-        31109: "SC",
-        31181: "ZC",
-        31192: "MLB",
-        31293: "JQ",
-        31400: "YX",
-        31584: "YJ",
-        31896: "ZN",
-        31909: "ZY",
-        31995: "XJ",
-        32321: "PF",
-        32327: "ZY",
-        32418: "HG",
-        32420: "XQ",
-        32421: "HG",
-        32438: "LG",
-        32473: "GJ",
-        32488: "TD",
-        32521: "QJ",
-        32527: "PB",
-        32562: "ZSQ",
-        32564: "JZ",
-        32735: "ZD",
-        32793: "PB",
-        33071: "PF",
-        33098: "XL",
-        33100: "YA",
-        33152: "PB",
-        33261: "CX",
-        33324: "BP",
-        33333: "TD",
-        33406: "YA",
-        33426: "WM",
-        33432: "PB",
-        33445: "JG",
-        33486: "ZN",
-        33493: "TS",
-        33507: "QJ",
-        33540: "QJ",
-        33544: "ZC",
-        33564: "XQ",
-        33617: "YT",
-        33632: "QJ",
-        33636: "XH",
-        33637: "YX",
-        33694: "WG",
-        33705: "PF",
-        33728: "YW",
-        33882: "SR",
-        34067: "WM",
-        34074: "YW",
-        34121: "QJ",
-        34255: "ZC",
-        34259: "XL",
-        34425: "JH",
-        34430: "XH",
-        34485: "KH",
-        34503: "YS",
-        34532: "HG",
-        34552: "XS",
-        34558: "YE",
-        34593: "ZL",
-        34660: "YQ",
-        34892: "XH",
-        34928: "SC",
-        34999: "QJ",
-        35048: "PB",
-        35059: "SC",
-        35098: "ZC",
-        35203: "TQ",
-        35265: "JX",
-        35299: "JX",
-        35782: "SZ",
-        35828: "YS",
-        35830: "E",
-        35843: "TD",
-        35895: "YG",
-        35977: "MH",
-        36158: "JG",
-        36228: "QJ",
-        36426: "XQ",
-        36466: "DC",
-        36710: "CJ",
-        36711: "ZYG",
-        36767: "PB",
-        36866: "SK",
-        36951: "YW",
-        37034: "YX",
-        37063: "XH",
-        37218: "ZC",
-        37325: "ZC",
-        38063: "PB",
-        38079: "TD",
-        38085: "QY",
-        38107: "DC",
-        38116: "TD",
-        38123: "YD",
-        38224: "HG",
-        38241: "XTC",
-        38271: "ZC",
-        38415: "YE",
-        38426: "KH",
-        38461: "YD",
-        38463: "AE",
-        38466: "PB",
-        38477: "XJ",
-        38518: "YT",
-        38551: "WK",
-        38585: "ZC",
-        38704: "XS",
-        38739: "LJ",
-        38761: "GJ",
-        38808: "SQ",
-        39048: "JG",
-        39049: "XJ",
-        39052: "HG",
-        39076: "CZ",
-        39271: "XT",
-        39534: "TD",
-        39552: "TD",
-        39584: "PB",
-        39647: "SB",
-        39730: "LG",
-        39748: "TPB",
-        40109: "ZQ",
-        40479: "ND",
-        40516: "HG",
-        40536: "HG",
-        40583: "QJ",
-        40765: "YQ",
-        40784: "QJ",
-        40840: "YK",
-        40863: "QJG"
-    };
-
-    var _checkPYCh = function (ch) {
-        var uni = ch.charCodeAt(0);
-        // 如果不在汉字处理范围之内,返回原字符,也可以调用自己的处理函数
-        if (uni > 40869 || uni < 19968) {return ch;} // dealWithOthers(ch);
-        return (oMultiDiff[uni] ? oMultiDiff[uni] : (_ChineseFirstPY.charAt(uni - 19968)));
-    };
-
-    var _mkPYRslt = function (arr, options) {
-        var ignoreMulti = options.ignoreMulti;
-        var splitChar = options.splitChar;
-        var arrRslt = [""], k, multiLen = 0;
-        for (var i = 0, len = arr.length; i < len; i++) {
-            var str = arr[i];
-            var strlen = str.length;
-            // 多音字过多的情况下，指数增长会造成浏览器卡死，超过20完全卡死，18勉强能用，考虑到不同性能最好是16或者14
-            // 超过14个多音字之后，后面的都用第一个拼音
-            if (strlen == 1 || multiLen > 14 || ignoreMulti) {
-                var tmpStr = str.substring(0, 1);
-                for (k = 0; k < arrRslt.length; k++) {
-                    arrRslt[k] += tmpStr;
-                }
-            } else {
-                var tmpArr = arrRslt.slice(0);
-                arrRslt = [];
-                multiLen ++;
-                for (k = 0; k < strlen; k++) {
-                    // 复制一个相同的arrRslt
-                    var tmp = tmpArr.slice(0);
-                    // 把当前字符str[k]添加到每个元素末尾
-                    for (var j = 0; j < tmp.length; j++) {
-                        tmp[j] += str.charAt(k);
-                    }
-                    // 把复制并修改后的数组连接到arrRslt上
-                    arrRslt = arrRslt.concat(tmp);
-                }
-            }
-        }
-        // BI-56386 这边直接将所有多音字组合拼接是有风险的，因为丢失了每一组的起始索引信息, 外部使用indexOf等方法会造成错位
-        // 一旦错位就可能认为不符合条件， 但实际上还是有可能符合条件的，故此处以一个无法搜索的不可见字符作为连接
-        return arrRslt.join(splitChar || "").toLowerCase();
-    };
-
-    _.extend(BI, {
-        makeFirstPY: function (str, options) {
-            options = options || {};
-            if (typeof (str) !== "string") {return "" + str;}
-            var arrResult = []; // 保存中间结果的数组
-            for (var i = 0, len = str.length; i < len; i++) {
-                // 获得unicode码
-                var ch = str.charAt(i);
-                // 检查该unicode码是否在处理范围之内,在则返回该码对映汉字的拼音首字母,不在则调用其它函数处理
-                arrResult.push(_checkPYCh(ch));
-            }
-            // 处理arrResult,返回所有可能的拼音首字母串数组
-            return _mkPYRslt(arrResult, options);
-        }
-    });
-})();
-
-/***/ }),
-/* 136 */
+/* 343 */
 /***/ (function(module, exports) {
 
 
@@ -5969,7 +11867,7 @@ BI.ScalingCellSizeAndPositionManager.prototype = {
 
 
 /***/ }),
-/* 137 */
+/* 344 */
 /***/ (function(module, exports) {
 
 
@@ -6046,7 +11944,7 @@ BI.ScalingCellSizeAndPositionManager.prototype = {
 })();
 
 /***/ }),
-/* 138 */
+/* 345 */
 /***/ (function(module, exports) {
 
 
@@ -6137,7 +12035,7 @@ BI.ScalingCellSizeAndPositionManager.prototype = {
 })();
 
 /***/ }),
-/* 139 */
+/* 346 */
 /***/ (function(module, exports) {
 
 // 线段树
@@ -6323,7 +12221,7 @@ BI.ScalingCellSizeAndPositionManager.prototype = {
 
 
 /***/ }),
-/* 140 */
+/* 347 */
 /***/ (function(module, exports) {
 
 
@@ -6417,7 +12315,7 @@ BI.ScalingCellSizeAndPositionManager.prototype = {
 })();
 
 /***/ }),
-/* 141 */
+/* 348 */
 /***/ (function(module, exports) {
 
 !(function () {
@@ -6510,7 +12408,7 @@ BI.ScalingCellSizeAndPositionManager.prototype = {
 })();
 
 /***/ }),
-/* 142 */
+/* 349 */
 /***/ (function(module, exports) {
 
 (function () {
@@ -7032,7 +12930,7 @@ BI.ScalingCellSizeAndPositionManager.prototype = {
 
 
 /***/ }),
-/* 143 */
+/* 350 */
 /***/ (function(module, exports) {
 
 // 向量操作
@@ -7100,3569 +12998,49 @@ BI.Region.prototype = {
 };
 
 /***/ }),
-/* 144 */
-/***/ (function(module, exports, __webpack_require__) {
-
-/* WEBPACK VAR INJECTION */(function(global) {(function () {
-    var _global;
-    if (typeof window !== "undefined") {
-        _global = window;
-    } else if (typeof global !== "undefined") {
-        _global = global;
-    } else if (typeof self !== "undefined") {
-        _global = self;
-    } else {
-        _global = this;
-    }
-    if (!_global.BI) {
-        _global.BI = {};
-    }
-
-    function isEmpty (value) {
-        // 判断是否为空值
-        var result = value === "" || value === null || value === undefined;
-        return result;
-    }
-
-    // 判断是否是无效的日期
-    function isInvalidDate (date) {
-        return date == "Invalid Date" || date == "NaN";
-    }
-
-    /**
-     * CHART-1400
-     * 使用数值计算的方式来获取任意数值的科学技术表示值。
-     * 科学计数格式
-     */
-    function _eFormat (text, fmt) {
-        text = +text;
-
-        return eFormat(text, fmt);
-
-        /**
-         * 科学计数格式具体计算过程
-         * @param num
-         * @param format {String}有两种形式，
-         *      1、"0.00E00"这样的字符串表示正常的科学计数表示，只不过规定了数值精确到百分位，
-         *         而数量级的绝对值如果是10以下的时候在前面补零。
-         *      2、 "##0.0E0"这样的字符串则规定用科学计数法表示之后的数值的整数部分是三位，精确到十分位，
-         *         数量级没有规定，因为没见过实数里有用科学计数法表示之后E的后面会小于一位的情况（0无所谓）。
-         * @returns {*}
-         */
-        function eFormat (num, format) {
-            var neg = num < 0 ? (num *= -1, "-") : "",
-                magnitudeNeg = "";
-
-            var funcName = num > 0 && num < 1 ? "floor" : "ceil";  // -0.9999->-1
-            // 数量级
-            var magnitude = Math[funcName](Math.log(num) / Math.log(10));
-
-            if (!isFinite(magnitude)) {
-                return format.replace(/#/ig, "").replace(/\.e/ig, "E");
-            }
-
-            num = num / Math.pow(10, magnitude);
-
-            // 让num转化成[1, 10)区间上的数
-            if (num > 0 && num < 1) {
-                num *= 10;
-                magnitude -= 1;
-            }
-
-            // 计算出format中需要显示的整数部分的位数，然后更新这个数值，也更新数量级
-            var integerLen = getInteger(magnitude, format);
-            integerLen > 1 && (magnitude -= integerLen - 1, num *= Math.pow(10, integerLen - 1));
-
-            magnitude < 0 && (magnitudeNeg = "-", magnitude *= -1);
-
-            // 获取科学计数法精确到的位数
-            var precision = getPrecision(format);
-            // 判断num经过四舍五入之后是否有进位
-            var isValueCarry = isValueCarried(num);
-
-            num *= Math.pow(10, precision);
-            num = Math.round(num);
-            // 如果出现进位的情况，将num除以10
-            isValueCarry && (num /= 10, magnitude += magnitudeNeg === "-" ? -1 : 1);
-            num /= Math.pow(10, precision);
-
-            // 小数部分保留precision位
-            num = num.toFixed(precision);
-            // 格式化指数的部分
-            magnitude = formatExponential(format, magnitude, magnitudeNeg);
-
-            return neg + num + "E" + magnitude;
-        }
-
-        // 获取format格式规定的数量级的形式
-        function formatExponential (format, num, magnitudeNeg) {
-            num += "";
-            if (!/e/ig.test(format)) {
-                return num;
-            }
-            format = format.split(/e/ig)[1];
-
-            while (num.length < format.length) {
-                num = "0" + num;
-            }
-
-            // 如果magnitudeNeg是一个"-"，而且num正好全是0，那么就别显示负号了
-            var isAllZero = true;
-            for (var i = 0, len = num.length; i < len; i++) {
-                if (!isAllZero) {
-                    continue;
-                }
-                isAllZero = num.charAt(i) === "0";
-            }
-            magnitudeNeg = isAllZero ? "" : magnitudeNeg;
-
-            return magnitudeNeg + num;
-        }
-
-        // 获取format规定的科学计数法精确到的位数
-        function getPrecision (format) {
-            if (!/e/ig.test(format)) {
-                return 0;
-            }
-            var arr = format.split(/e/ig)[0].split(".");
-
-            return arr.length > 1 ? arr[1].length : 0;
-        }
-
-        // 获取数值科学计数法表示之后整数的位数
-        // 这边我们还需要考虑#和0的问题
-        function getInteger (magnitude, format) {
-            if (!/e/ig.test(format)) {
-                return 0;
-            }
-            // return format.split(/e/ig)[0].split(".")[0].length;
-
-            var formatLeft = format.split(/e/ig)[0].split(".")[0], i, f, len = formatLeft.length;
-            var valueLeftLen = 0;
-
-            for (i = 0; i < len; i++) {
-                f = formatLeft.charAt(i);
-                // "#"所在的位置到末尾长度小于等于值的整数部分长度，那么这个#才可以占位
-                if (f == 0 || (f == "#" && (len - i <= magnitude + 1))) {
-                    valueLeftLen++;
-                }
-            }
-
-            return valueLeftLen;
-        }
-
-        // 判断num通过round函数之后是否有进位
-        function isValueCarried (num) {
-            var roundNum = Math.round(num);
-            num = (num + "").split(".")[0];
-            roundNum = (roundNum + "").split(".")[0];
-            return num.length !== roundNum.length;
-        }
-    }
-
-    //'#.##'之类的格式处理 1.324e-18 这种的科学数字
-    function _dealNumberPrecision (text, fright) {
-        if (/[eE]/.test(text)) {
-            var precision = 0, i = 0, ch;
-
-            if (/[%‰]$/.test(fright)) {
-                precision = /[%]$/.test(fright) ? 2 : 3;
-            }
-
-            for (var len = fright.length; i < len; i++) {
-                if ((ch = fright.charAt(i)) == "0" || ch == "#") {
-                    precision++;
-                }
-            }
-            return Number(text).toFixed(precision);
-        }
-
-        return text;
-    }
-
-    /**
-     * 数字格式
-     */
-    function _numberFormat (text, format) {
-        var text = text + "";
-
-        //在调用数字格式的时候如果text里没有任何数字则不处理
-        if (!(/[0-9]/.test(text)) || !format) {
-            return text;
-        }
-
-        // 数字格式，区分正负数
-        var numMod = format.indexOf(";");
-        if (numMod > -1) {
-            if (text >= 0) {
-                return _numberFormat(text + "", format.substring(0, numMod));
-            }
-            return _numberFormat((-text) + "", format.substr(numMod + 1));
-
-        } else {
-            // 兼容格式处理负数的情况(copy:fr-jquery.format.js)
-            if (+text < 0 && format.charAt(0) !== "-") {
-                return _numberFormat((-text) + "", "-" + format);
-            }
-        }
-
-        var fp = format.split("."), fleft = fp[0] || "", fright = fp[1] || "";
-        text = _dealNumberPrecision(text, fright);
-        var tp = text.split("."), tleft = tp[0] || "", tright = tp[1] || "";
-
-        // 百分比,千分比的小数点移位处理
-        if (/[%‰]$/.test(format)) {
-            var paddingZero = /[%]$/.test(format) ? "00" : "000";
-            tright += paddingZero;
-            tleft += tright.substr(0, paddingZero.length);
-            tleft = tleft.replace(/^0+/gi, "");
-            tright = tright.substr(paddingZero.length).replace(/0+$/gi, "");
-        }
-        var right = _dealWithRight(tright, fright);
-        if (right.leftPlus) {
-            // 小数点后有进位
-            tleft = parseInt(tleft) + 1 + "";
-
-            tleft = isNaN(tleft) ? "1" : tleft;
-        }
-        right = right.num;
-        var left = _dealWithLeft(tleft, fleft);
-        if (!(/[0-9]/.test(left))) {
-            left = left + "0";
-        }
-        if (!(/[0-9]/.test(right))) {
-            return left + right;
-        } else {
-            return left + "." + right;
-        }
-    }
-
-    /**
-     * 处理小数点右边小数部分
-     * @param tright 右边内容
-     * @param fright 右边格式
-     * @returns {JSON} 返回处理结果和整数部分是否需要进位
-     * @private
-     */
-    function _dealWithRight (tright, fright) {
-        var right = "", j = 0, i = 0;
-        for (var len = fright.length; i < len; i++) {
-            var ch = fright.charAt(i);
-            var c = tright.charAt(j);
-            switch (ch) {
-                case "0":
-                    if (isEmpty(c)) {
-                        c = "0";
-                    }
-                    right += c;
-                    j++;
-                    break;
-                case "#":
-                    right += c;
-                    j++;
-                    break;
-                default :
-                    right += ch;
-                    break;
-            }
-        }
-        var rll = tright.substr(j);
-        var result = {};
-        if (!isEmpty(rll) && rll.charAt(0) > 4) {
-            // 有多余字符，需要四舍五入
-            result.leftPlus = true;
-            var numReg = right.match(/^[0-9]+/);
-            if (numReg) {
-                var num = numReg[0];
-                var orilen = num.length;
-                var newnum = parseInt(num) + 1 + "";
-                // 进位到整数部分
-                if (newnum.length > orilen) {
-                    newnum = newnum.substr(1);
-                } else {
-                    newnum = BI.leftPad(newnum, orilen, "0");
-                    result.leftPlus = false;
-                }
-                right = right.replace(/^[0-9]+/, newnum);
-            }
-        }
-        result.num = right;
-        return result;
-    }
-
-    /**
-     * 处理小数点左边整数部分
-     * @param tleft 左边内容
-     * @param fleft 左边格式
-     * @returns {string} 返回处理结果
-     * @private
-     */
-    function _dealWithLeft (tleft, fleft) {
-        var left = "";
-        var j = tleft.length - 1;
-        var combo = -1, last = -1;
-        var i = fleft.length - 1;
-        for (; i >= 0; i--) {
-            var ch = fleft.charAt(i);
-            var c = tleft.charAt(j);
-            switch (ch) {
-                case "0":
-                    if (isEmpty(c)) {
-                        c = "0";
-                    }
-                    last = -1;
-                    left = c + left;
-                    j--;
-                    break;
-                case "#":
-                    last = i;
-                    left = c + left;
-                    j--;
-                    break;
-                case ",":
-                    if (!isEmpty(c)) {
-                        // 计算一个,分隔区间的长度
-                        var com = fleft.match(/,[#0]+/);
-                        if (com) {
-                            combo = com[0].length - 1;
-                        }
-                        left = "," + left;
-                    }
-                    break;
-                default :
-                    left = ch + left;
-                    break;
-            }
-        }
-        if (last > -1) {
-            // 处理剩余字符
-            var tll = tleft.substr(0, j + 1);
-            left = left.substr(0, last) + tll + left.substr(last);
-        }
-        if (combo > 0) {
-            // 处理,分隔区间
-            var res = left.match(/[0-9]+,/);
-            if (res) {
-                res = res[0];
-                var newstr = "", n = res.length - 1 - combo;
-                for (; n >= 0; n = n - combo) {
-                    newstr = res.substr(n, combo) + "," + newstr;
-                }
-                var lres = res.substr(0, n + combo);
-                if (!isEmpty(lres)) {
-                    newstr = lres + "," + newstr;
-                }
-            }
-            left = left.replace(/[0-9]+,/, newstr);
-        }
-        return left;
-    }
-
-
-    BI.cjkEncode = function (text) {
-        // alex:如果非字符串,返回其本身(cjkEncode(234) 返回 ""是不对的)
-        if (typeof text !== "string") {
-            return text;
-        }
-
-        var newText = "";
-        for (var i = 0; i < text.length; i++) {
-            var code = text.charCodeAt(i);
-            if (code >= 128 || code === 91 || code === 93) {// 91 is "[", 93 is "]".
-                newText += "[" + code.toString(16) + "]";
-            } else {
-                newText += text.charAt(i);
-            }
-        }
-
-        return newText;
-    };
-
-    /**
-     * 将cjkEncode处理过的字符串转化为原始字符串
-     *
-     * @static
-     * @param text 需要做解码的字符串
-     * @return {String} 解码后的字符串
-     */
-    BI.cjkDecode = function (text) {
-        if (text == null) {
-            return "";
-        }
-        // 查找没有 "[", 直接返回.  kunsnat:数字的时候, 不支持indexOf方法, 也是直接返回.
-        if (!isNaN(text) || text.indexOf("[") == -1) {
-            return text;
-        }
-
-        var newText = "";
-        for (var i = 0; i < text.length; i++) {
-            var ch = text.charAt(i);
-            if (ch == "[") {
-                var rightIdx = text.indexOf("]", i + 1);
-                if (rightIdx > i + 1) {
-                    var subText = text.substring(i + 1, rightIdx);
-                    // james：主要是考虑[CDATA[]]这样的值的出现
-                    if (subText.length > 0) {
-                        ch = String.fromCharCode(eval("0x" + subText));
-                    }
-
-                    i = rightIdx;
-                }
-            }
-
-            newText += ch;
-        }
-
-        return newText;
-    };
-
-    // replace the html special tags
-    var SPECIAL_TAGS = {
-        "&": "&amp;",
-        "\"": "&quot;",
-        "<": "&lt;",
-        ">": "&gt;",
-        " ": "&nbsp;"
-    };
-    BI.htmlEncode = function (text) {
-        return BI.isNull(text) ? "" : BI.replaceAll(text + "", "&|\"|<|>|\\s", function (v) {
-            return SPECIAL_TAGS[v] ? SPECIAL_TAGS[v] : "&nbsp;";
-        });
-    };
-    // html decode
-    BI.htmlDecode = function (text) {
-        return BI.isNull(text) ? "" : BI.replaceAll(text + "", "&amp;|&quot;|&lt;|&gt;|&nbsp;", function (v) {
-            switch (v) {
-                case "&amp;":
-                    return "&";
-                case "&quot;":
-                    return "\"";
-                case "&lt;":
-                    return "<";
-                case "&gt;":
-                    return ">";
-                case "&nbsp;":
-                default:
-                    return " ";
-            }
-        });
-    };
-
-    BI.cjkEncodeDO = function (o) {
-        if (BI.isPlainObject(o)) {
-            var result = {};
-            _.each(o, function (v, k) {
-                if (!(typeof v === "string")) {
-                    v = BI.jsonEncode(v);
-                }
-                // wei:bug 43338，如果key是中文，cjkencode后o的长度就加了1，ie9以下版本死循环，所以新建对象result。
-                k = BI.cjkEncode(k);
-                result[k] = BI.cjkEncode(v);
-            });
-            return result;
-        }
-        return o;
-    };
-
-    BI.jsonEncode = function (o) {
-        // james:这个Encode是抄的EXT的
-        var useHasOwn = !!{}.hasOwnProperty;
-
-        // crashes Safari in some instances
-        // var validRE = /^("(\\.|[^"\\\n\r])*?"|[,:{}\[\]0-9.\-+Eaeflnr-u \n\r\t])+?$/;
-
-        var m = {
-            "\b": "\\b",
-            "\t": "\\t",
-            "\n": "\\n",
-            "\f": "\\f",
-            "\r": "\\r",
-            "\"": "\\\"",
-            "\\": "\\\\"
-        };
-
-        var encodeString = function (s) {
-            if (/["\\\x00-\x1f]/.test(s)) {
-                return "\"" + s.replace(/([\x00-\x1f\\"])/g, function (a, b) {
-                    var c = m[b];
-                    if (c) {
-                        return c;
-                    }
-                    c = b.charCodeAt();
-                    return "\\u00" +
-                        Math.floor(c / 16).toString(16) +
-                        (c % 16).toString(16);
-                }) + "\"";
-            }
-            return "\"" + s + "\"";
-        };
-
-        var encodeArray = function (o) {
-            var a = ["["], b, i, l = o.length, v;
-            for (i = 0; i < l; i += 1) {
-                v = o[i];
-                switch (typeof v) {
-                    case "undefined":
-                    case "function":
-                    case "unknown":
-                        break;
-                    default:
-                        if (b) {
-                            a.push(",");
-                        }
-                        a.push(v === null ? "null" : BI.jsonEncode(v));
-                        b = true;
-                }
-            }
-            a.push("]");
-            return a.join("");
-        };
-
-        if (typeof o === "undefined" || o === null) {
-            return "null";
-        } else if (BI.isArray(o)) {
-            return encodeArray(o);
-        } else if (o instanceof Date) {
-            /*
-             * alex:原来只是把年月日时分秒简单地拼成一个String,无法decode
-             * 现在这么处理就可以decode了,但是JS.jsonDecode和Java.JSONObject也要跟着改一下
-             */
-            return BI.jsonEncode({
-                __time__: o.getTime()
-            });
-        } else if (typeof o === "string") {
-            return encodeString(o);
-        } else if (typeof o === "number") {
-            return isFinite(o) ? String(o) : "null";
-        } else if (typeof o === "boolean") {
-            return String(o);
-        } else if (BI.isFunction(o)) {
-            return String(o);
-        }
-        var a = ["{"], b, i, v;
-        for (i in o) {
-            if (!useHasOwn || o.hasOwnProperty(i)) {
-                v = o[i];
-                switch (typeof v) {
-                    case "undefined":
-                    case "unknown":
-                        break;
-                    default:
-                        if (b) {
-                            a.push(",");
-                        }
-                        a.push(BI.jsonEncode(i), ":",
-                            v === null ? "null" : BI.jsonEncode(v));
-                        b = true;
-                }
-            }
-        }
-        a.push("}");
-        return a.join("");
-
-    };
-
-    BI.jsonDecode = function (text) {
-
-        try {
-            // 注意0啊
-            // var jo = $.parseJSON(text) || {};
-            var jo = BI.$ ? BI.$.parseJSON(text) : _global.JSON.parse(text);
-            if (jo == null) {
-                jo = {};
-            }
-        } catch (e) {
-            /*
-             * richie:浏览器只支持标准的JSON字符串转换，而jQuery会默认调用浏览器的window.JSON.parse()函数进行解析
-             * 比如：var str = "{'a':'b'}",这种形式的字符串转换为JSON就会抛异常
-             */
-            try {
-                jo = new Function("return " + text)() || {};
-            } catch (e) {
-                // do nothing
-            }
-            if (jo == null) {
-                jo = [];
-            }
-        }
-        if (!_hasDateInJson(text)) {
-            return jo;
-        }
-
-        function _hasDateInJson (json) {
-            if (!json || typeof json !== "string") {
-                return false;
-            }
-            return json.indexOf("__time__") != -1;
-        }
-
-        return (function (o) {
-            if (typeof o === "string") {
-                return o;
-            }
-            if (o && o.__time__ != null) {
-                return new Date(o.__time__);
-            }
-            for (var a in o) {
-                if (o[a] == o || typeof o[a] === "object" || _.isFunction(o[a])) {
-                    break;
-                }
-                o[a] = arguments.callee(o[a]);
-            }
-
-            return o;
-        })(jo);
-    };
-
-    /**
-     * 获取编码后的url
-     * @param urlTemplate url模板
-     * @param param 参数
-     * @returns {*|String}
-     * @example
-     * BI.getEncodeURL("design/{tableName}/{fieldName}",{tableName: "A", fieldName: "a"}) //  design/A/a
-     */
-    BI.getEncodeURL = function (urlTemplate, param) {
-        return BI.replaceAll(urlTemplate, "\\{(.*?)\\}", function (ori, str) {
-            return BI.encodeURIComponent(BI.isObject(param) ? param[str] : param);
-        });
-    };
-
-    BI.encodeURIComponent = function (url) {
-        BI.specialCharsMap = BI.specialCharsMap || {};
-        url = url || "";
-        url = BI.replaceAll(url + "", BI.keys(BI.specialCharsMap || []).join("|"), function (str) {
-            switch (str) {
-                case "\\":
-                    return BI.specialCharsMap["\\\\"] || str;
-                default:
-                    return BI.specialCharsMap[str] || str;
-            }
-        });
-        return _global.encodeURIComponent(url);
-    };
-
-    BI.decodeURIComponent = function (url) {
-        var reserveSpecialCharsMap = {};
-        BI.each(BI.specialCharsMap, function (initialChar, encodeChar) {
-            reserveSpecialCharsMap[encodeChar] = initialChar === "\\\\" ? "\\" : initialChar;
-        });
-        url = url || "";
-        url = BI.replaceAll(url + "", BI.keys(reserveSpecialCharsMap || []).join("|"), function (str) {
-            return reserveSpecialCharsMap[str] || str;
-        });
-        return _global.decodeURIComponent(url);
-    };
-
-    BI.contentFormat = function (cv, fmt) {
-        if (isEmpty(cv)) {
-            // 原值为空，返回空字符
-            return "";
-        }
-        var text = cv.toString();
-        if (isEmpty(fmt)) {
-            // 格式为空，返回原字符
-            return text;
-        }
-        if (fmt.match(/^T/)) {
-            // T - 文本格式
-            return text;
-        } else if (fmt.match(/^D/)) {
-            // D - 日期(时间)格式
-            if (!(cv instanceof Date)) {
-                if (typeof cv === "number") {
-                    // 毫秒数类型
-                    cv = new Date(cv);
-                } else {
-                    //字符串类型转化为date类型
-                    cv = new Date(Date.parse(("" + cv).replace(/-|\./g, "/")));
-                }
-            }
-            if (!isInvalidDate(cv) && !BI.isNull(cv)) {
-                var needTrim = fmt.match(/^DT/);
-                text = BI.date2Str(cv, fmt.substring(needTrim ? 2 : 1));
-            }
-        } else if (fmt.match(/E/)) {
-            // 科学计数格式
-            text = _eFormat(text, fmt);
-        } else {
-            // 数字格式
-            text = _numberFormat(text, fmt);
-        }
-        // ¤ - 货币格式
-        text = text.replace(/¤/g, "￥");
-        return text;
-    };
-
-    /**
-     * 将Java提供的日期格式字符串装换为JS识别的日期格式字符串
-     * @class FR.parseFmt
-     * @param fmt 日期格式
-     * @returns {String}
-     */
-    BI.parseFmt = function (fmt) {
-        if (!fmt) {
-            return "";
-        }
-        //日期
-        fmt = String(fmt)
-        //年
-            .replace(/y{4,}/g, "%Y")//yyyy的时候替换为Y
-            .replace(/y{2}/g, "%y")//yy的时候替换为y
-            //月
-            .replace(/M{4,}/g, "%b")//MMMM的时候替换为b，八
-            .replace(/M{3}/g, "%B")//MMM的时候替换为M，八月
-            .replace(/M{2}/g, "%X")//MM的时候替换为X，08
-            .replace(/M{1}/g, "%x")//M的时候替换为x，8
-            .replace(/a{1}/g, "%p");
-        //天
-        if (new RegExp("d{2,}", "g").test(fmt)) {
-            fmt = fmt.replace(/d{2,}/g, "%d");//dd的时候替换为d
-        } else {
-            fmt = fmt.replace(/d{1}/g, "%e");//d的时候替换为j
-        }
-        //时
-        if (new RegExp("h{2,}", "g").test(fmt)) {//12小时制
-            fmt = fmt.replace(/h{2,}/g, "%I");
-        } else {
-            fmt = fmt.replace(/h{1}/g, "%I");
-        }
-        if (new RegExp("H{2,}", "g").test(fmt)) {//24小时制
-            fmt = fmt.replace(/H{2,}/g, "%H");
-        } else {
-            fmt = fmt.replace(/H{1}/g, "%H");
-        }
-        fmt = fmt.replace(/m{2,}/g, "%M")//分
-        //秒
-            .replace(/s{2,}/g, "%S");
-
-        return fmt;
-    };
-
-    /**
-     * 把字符串按照对应的格式转化成日期对象
-     *
-     *      @example
-     *      var result = BI.str2Date('2013-12-12', 'yyyy-MM-dd');//Thu Dec 12 2013 00:00:00 GMT+0800
-     *
-     * @class BI.str2Date
-     * @param str 字符串
-     * @param format 日期格式
-     * @returns {*}
-     */
-    BI.str2Date = function (str, format) {
-        if (typeof str != "string" || typeof format != "string") {
-            return null;
-        }
-        var fmt = BI.parseFmt(format);
-        return BI.parseDateTime(str, fmt);
-    };
-
-    /**
-     * 把日期对象按照指定格式转化成字符串
-     *
-     *      @example
-     *      var date = new Date('Thu Dec 12 2013 00:00:00 GMT+0800');
-     *      var result = BI.date2Str(date, 'yyyy-MM-dd');//2013-12-12
-     *
-     * @class BI.date2Str
-     * @param date 日期
-     * @param format 日期格式
-     * @returns {String}
-     */
-    BI.date2Str = function (date, format) {
-        if (!date) {
-            return "";
-        }
-        // O(len(format))
-        var len = format.length, result = "";
-        if (len > 0) {
-            var flagch = format.charAt(0), start = 0, str = flagch;
-            for (var i = 1; i < len; i++) {
-                var ch = format.charAt(i);
-                if (flagch !== ch) {
-                    result += compileJFmt({
-                        char: flagch,
-                        str: str,
-                        len: i - start
-                    }, date);
-                    flagch = ch;
-                    start = i;
-                    str = flagch;
-                } else {
-                    str += ch;
-                }
-            }
-            result += compileJFmt({
-                char: flagch,
-                str: str,
-                len: len - start
-            }, date);
-        }
-        return result;
-
-        function compileJFmt (jfmt, date) {
-            var str = jfmt.str, len = jfmt.len, ch = jfmt["char"];
-            switch (ch) {
-                case "E": // 星期
-                    str = BI.Date._DN[date.getDay()];
-                    break;
-                case "y": // 年
-                    if (len <= 3) {
-                        str = (date.getFullYear() + "").slice(2, 4);
-                    } else {
-                        str = date.getFullYear();
-                    }
-                    break;
-                case "M": // 月
-                    if (len > 2) {
-                        str = BI.Date._MN[date.getMonth()];
-                    } else if (len < 2) {
-                        str = date.getMonth() + 1;
-                    } else {
-                        str = BI.leftPad(date.getMonth() + 1 + "", 2, "0");
-                    }
-                    break;
-                case "d": // 日
-                    if (len > 1) {
-                        str = BI.leftPad(date.getDate() + "", 2, "0");
-                    } else {
-                        str = date.getDate();
-                    }
-                    break;
-                case "h": // 时(12)
-                    var hour = date.getHours() % 12;
-                    if (hour === 0) {
-                        hour = 12;
-                    }
-                    if (len > 1) {
-                        str = BI.leftPad(hour + "", 2, "0");
-                    } else {
-                        str = hour;
-                    }
-                    break;
-                case "H": // 时(24)
-                    if (len > 1) {
-                        str = BI.leftPad(date.getHours() + "", 2, "0");
-                    } else {
-                        str = date.getHours();
-                    }
-                    break;
-                case "m":
-                    if (len > 1) {
-                        str = BI.leftPad(date.getMinutes() + "", 2, "0");
-                    } else {
-                        str = date.getMinutes();
-                    }
-                    break;
-                case "s":
-                    if (len > 1) {
-                        str = BI.leftPad(date.getSeconds() + "", 2, "0");
-                    } else {
-                        str = date.getSeconds();
-                    }
-                    break;
-                case "a":
-                    str = date.getHours() < 12 ? "am" : "pm";
-                    break;
-                case "z":
-                    str = BI.getTimezone(date);
-                    break;
-                default:
-                    str = jfmt.str;
-                    break;
-            }
-            return str;
-        }
-    };
-
-    BI.object2Number = function (value) {
-        if (value == null) {
-            return 0;
-        }
-        if (typeof value === "number") {
-            return value;
-        }
-        var str = value + "";
-        if (str.indexOf(".") === -1) {
-            return parseInt(str);
-        }
-        return parseFloat(str);
-    };
-
-    BI.object2Date = function (obj) {
-        if (obj == null) {
-            return new Date();
-        }
-        if (obj instanceof Date) {
-            return obj;
-        } else if (typeof obj === "number") {
-            return new Date(obj);
-        }
-        var str = obj + "";
-        str = str.replace(/-/g, "/");
-        var dt = new Date(str);
-        if (!isInvalidDate(dt)) {
-            return dt;
-        }
-
-        return new Date();
-
-    };
-
-    BI.object2Time = function (obj) {
-        if (obj == null) {
-            return new Date();
-        }
-        if (obj instanceof Date) {
-            return obj;
-        }
-        var str = obj + "";
-        str = str.replace(/-/g, "/");
-        var dt = new Date(str);
-        if (!isInvalidDate(dt)) {
-            return dt;
-        }
-        if (str.indexOf("/") === -1 && str.indexOf(":") !== -1) {
-            dt = new Date("1970/01/01 " + str);
-            if (!isInvalidDate(dt)) {
-                return dt;
-            }
-        }
-        dt = BI.parseDateTime(str, "HH:mm:ss");
-        if (!isInvalidDate(dt)) {
-            return dt;
-        }
-        return new Date();
-
-    };
-})();
-
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(17)))
-
-/***/ }),
-/* 145 */
+/* 351 */
 /***/ (function(module, exports) {
 
-/**
- * 对数组对象的扩展
- * @class Array
- */
-_.extend(BI, {
-
-    pushArray: function (sArray, array) {
-        for (var i = 0; i < array.length; i++) {
-            sArray.push(array[i]);
-        }
-    },
-    pushDistinct: function (sArray, obj) {
-        if (!BI.contains(sArray, obj)) {
-            sArray.push(obj);
-        }
-    },
-    pushDistinctArray: function (sArray, array) {
-        for (var i = 0, len = array.length; i < len; i++) {
-            BI.pushDistinct(sArray, array[i]);
-        }
-    }
-});
-
-
-/***/ }),
-/* 146 */
-/***/ (function(module, exports) {
-
-/** Constants used for time computations */
-BI.Date = BI.Date || {};
-BI.Date.SECOND = 1000;
-BI.Date.MINUTE = 60 * BI.Date.SECOND;
-BI.Date.HOUR = 60 * BI.Date.MINUTE;
-BI.Date.DAY = 24 * BI.Date.HOUR;
-BI.Date.WEEK = 7 * BI.Date.DAY;
-
-_.extend(BI, {
-    /**
-     * 获取时区
-     * @returns {String}
-     */
-    getTimezone: function (date) {
-        return date.toString().replace(/^.* (?:\((.*)\)|([A-Z]{1,4})(?:[\-+][0-9]{4})?(?: -?\d+)?)$/, "$1$2").replace(/[^A-Z]/g, "");
-    },
-
-    /** Returns the number of days in the current month */
-    getMonthDays: function (date, month) {
-        var year = date.getFullYear();
-        if (typeof month === "undefined") {
-            month = date.getMonth();
-        }
-        if (((0 == (year % 4)) && ((0 != (year % 100)) || (0 == (year % 400)))) && month == 1) {
-            return 29;
-        }
-        return BI.Date._MD[month];
-
-    },
-
-    /**
-     * 获取每月的最后一天
-     * @returns {Date}
-     */
-    getLastDateOfMonth: function (date) {
-        return BI.getDate(date.getFullYear(), date.getMonth(), BI.getMonthDays(date));
-    },
-
-    /** Returns the number of day in the year. */
-    getDayOfYear: function (date) {
-        var now = BI.getDate(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0);
-        var then = BI.getDate(date.getFullYear(), 0, 0, 0, 0, 0);
-        var time = now - then;
-        return Math.floor(time / BI.Date.DAY);
-    },
-
-    /** Returns the number of the week in year, as defined in ISO 8601. */
-    getWeekNumber: function (date) {
-        var d = BI.getDate(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0);
-        var week = d.getDay();
-        var startOfWeek = BI.StartOfWeek % 7;
-        var middleDay = (startOfWeek + 3) % 7;
-        middleDay = middleDay || 7;
-        // 偏移到周周首之前需要多少天
-        var offsetWeekStartCount = week < startOfWeek ? (7 + week - startOfWeek) : (week - startOfWeek);
-        var offsetWeekMiddleCount = middleDay < startOfWeek ? (7 + middleDay - startOfWeek) : (middleDay - startOfWeek);
-        d.setDate(d.getDate() - offsetWeekStartCount + offsetWeekMiddleCount);
-        var ms = d.valueOf();
-        d.setMonth(0);
-        d.setDate(1);
-        return Math.floor((ms - d.valueOf()) / (7 * 864e5)) + 1;
-    },
-
-    getQuarter: function (date) {
-        return Math.floor(date.getMonth() / 3) + 1;
-    },
-
-    // 离当前时间多少天的时间
-    getOffsetDate: function (date, offset) {
-        return BI.getDate(BI.getTime(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds()) + offset * 864e5);
-    },
-
-    getOffsetQuarter: function (date, n) {
-        var dt = BI.getDate(BI.getTime(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds()));
-        var day = dt.getDate();
-        var monthDay = BI.getMonthDays(BI.getDate(dt.getFullYear(), dt.getMonth() + BI.parseInt(n) * 3, 1));
-        if (day > monthDay) {
-            day = monthDay;
-        }
-        dt.setDate(day);
-        dt.setMonth(dt.getMonth() + parseInt(n) * 3);
-        return dt;
-    },
-
-    // 得到本季度的起始月份
-    getQuarterStartMonth: function (date) {
-        var quarterStartMonth = 0;
-        var nowMonth = date.getMonth();
-        if (nowMonth < 3) {
-            quarterStartMonth = 0;
-        }
-        if (2 < nowMonth && nowMonth < 6) {
-            quarterStartMonth = 3;
-        }
-        if (5 < nowMonth && nowMonth < 9) {
-            quarterStartMonth = 6;
-        }
-        if (nowMonth > 8) {
-            quarterStartMonth = 9;
-        }
-        return quarterStartMonth;
-    },
-    // 获得本季度的起始日期
-    getQuarterStartDate: function (date) {
-        return BI.getDate(date.getFullYear(), BI.getQuarterStartMonth(date), 1);
-    },
-    // 得到本季度的结束日期
-    getQuarterEndDate: function (date) {
-        var quarterEndMonth = BI.getQuarterStartMonth(date) + 2;
-        return BI.getDate(date.getFullYear(), quarterEndMonth, BI.getMonthDays(date, quarterEndMonth));
-    },
-
-    // 指定日期n个月之前或之后的日期
-    getOffsetMonth: function (date, n) {
-        var dt = BI.getDate(BI.getTime(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds()));
-        var day = dt.getDate();
-        var monthDay = BI.getMonthDays(BI.getDate(dt.getFullYear(), dt.getMonth() + parseInt(n), 1));
-        if (day > monthDay) {
-            day = monthDay;
-        }
-        dt.setDate(day);
-        dt.setMonth(dt.getMonth() + parseInt(n));
-        return dt;
-    },
-
-    // 获得本周的起始日期
-    getWeekStartDate: function (date) {
-        var w = date.getDay();
-        var startOfWeek = BI.StartOfWeek % 7;
-        return BI.getOffsetDate(date, BI.Date._OFFSET[w < startOfWeek ? (7 + w - startOfWeek) : (w - startOfWeek)]);
-    },
-    // 得到本周的结束日期
-    getWeekEndDate: function (date) {
-        var w = date.getDay();
-        var startOfWeek = BI.StartOfWeek % 7;
-        return BI.getOffsetDate(date, BI.Date._OFFSET[w < startOfWeek ? (7 + w - startOfWeek) : (w - startOfWeek)] + 6);
-    },
-
-    // 格式化打印日期
-    print: function (date, str) {
-        var m = date.getMonth();
-        var d = date.getDate();
-        var y = date.getFullYear();
-        var yWith4number = y + "";
-        while (yWith4number.length < 4) {
-            yWith4number = "0" + yWith4number;
-        }
-        var wn = BI.getWeekNumber(date);
-        var qr = BI.getQuarter(date);
-        var w = date.getDay();
-        var s = {};
-        var hr = date.getHours();
-        var pm = (hr >= 12);
-        var ir = (pm) ? (hr - 12) : hr;
-        var dy = BI.getDayOfYear(date);
-        if (ir == 0) {
-            ir = 12;
-        }
-        var min = date.getMinutes();
-        var sec = date.getSeconds();
-        s["%a"] = BI.Date._SDN[w]; // abbreviated weekday name [FIXME: I18N]
-        s["%A"] = BI.Date._DN[w]; // full weekday name
-        s["%b"] = BI.Date._SMN[m]; // abbreviated month name [FIXME: I18N]
-        s["%B"] = BI.Date._MN[m]; // full month name
-        // FIXME: %c : preferred date and time representation for the current locale
-        s["%C"] = 1 + Math.floor(y / 100); // the century number
-        s["%d"] = (d < 10) ? ("0" + d) : d; // the day of the month (range 01 to 31)
-        s["%e"] = d; // the day of the month (range 1 to 31)
-        // FIXME: %D : american date style: %m/%d/%y
-        // FIXME: %E, %F, %G, %g, %h (man strftime)
-        s["%H"] = (hr < 10) ? ("0" + hr) : hr; // hour, range 00 to 23 (24h format)
-        s["%I"] = (ir < 10) ? ("0" + ir) : ir; // hour, range 01 to 12 (12h format)
-        s["%j"] = (dy < 100) ? ((dy < 10) ? ("00" + dy) : ("0" + dy)) : dy; // day of the year (range 001 to 366)
-        s["%k"] = hr + "";		// hour, range 0 to 23 (24h format)
-        s["%l"] = ir + "";		// hour, range 1 to 12 (12h format)
-        s["%X"] = (m < 9) ? ("0" + (1 + m)) : (1 + m); // month, range 01 to 12
-        s["%x"] = m + 1; // month, range 1 to 12
-        s["%M"] = (min < 10) ? ("0" + min) : min; // minute, range 00 to 59
-        s["%n"] = "\n";		// a newline character
-        s["%p"] = pm ? "PM" : "AM";
-        s["%P"] = pm ? "pm" : "am";
-        // FIXME: %r : the time in am/pm notation %I:%M:%S %p
-        // FIXME: %R : the time in 24-hour notation %H:%M
-        s["%s"] = Math.floor(date.getTime() / 1000);
-        s["%S"] = (sec < 10) ? ("0" + sec) : sec; // seconds, range 00 to 59
-        s["%t"] = "\t";		// a tab character
-        // FIXME: %T : the time in 24-hour notation (%H:%M:%S)
-        s["%U"] = s["%W"] = s["%V"] = (wn < 10) ? ("0" + wn) : wn;
-        s["%u"] = w + 1;	// the day of the week (range 1 to 7, 1 = MON)
-        s["%w"] = w;		// the day of the week (range 0 to 6, 0 = SUN)
-        // FIXME: %x : preferred date representation for the current locale without the time
-        // FIXME: %X : preferred time representation for the current locale without the date
-        s["%y"] = yWith4number.substr(2, 2); // year without the century (range 00 to 99)
-        s["%Y"] = yWith4number;		// year with the century
-        s["%%"] = "%";		// a literal '%' character
-        s["%q"] = "0" + qr;
-        s["%Q"] = qr;
-
-        var re = /%./g;
-        BI.isKhtml = BI.isKhtml || function () {
-            if(!_global.navigator) {
-                return false;
-            }
-            return /Konqueror|Safari|KHTML/i.test(navigator.userAgent);
-        };
-
-        // 包含年周的格式化，ISO8601标准周的计数会影响年
-        if ((str.indexOf("%Y") !== -1 || str.indexOf("%y") !== -1) && (str.indexOf("%W") !== -1 || str.indexOf("%U") !== -1 || str.indexOf("%V") !== -1)) {
-            switch (wn) {
-                // 如果周数是1，但是当前却在12月，表示此周数为下一年的
-                case 1:
-                    if (m === 11) {
-                        s["%y"] = parseInt(s["%y"]) + 1;
-                        s["%Y"] = parseInt(s["%Y"]) + 1;
-                    }
-                    break;
-                // 如果周数是53，但是当前却在1月，表示此周数为上一年的
-                case 53:
-                    if (m === 0) {
-                        s["%y"] = parseInt(s["%y"]) - 1;
-                        s["%Y"] = parseInt(s["%Y"]) - 1;
-                    }
-                    break;
-                default:
-                    break;
-            }
-        }
-
-        if (!BI.isKhtml()) {
-            return str.replace(re, function (par) {
-                return s[par] || par;
-            });
-        }
-        var a = str.match(re);
-        for (var i = 0; i < a.length; i++) {
-            var tmp = s[a[i]];
-            if (tmp) {
-                re = new RegExp(a[i], "g");
-                str = str.replace(re, tmp);
-            }
-        }
-
-        return str;
-    }
-});
-
-
-/***/ }),
-/* 147 */
-/***/ (function(module, exports) {
-
-/**
- * 基本的函数
- * Created by GUY on 2015/6/24.
- */
-BI.Func = BI.Func || {};
-_.extend(BI.Func, {
-    /**
-     * 创建唯一的名字
-     * @param array
-     * @param name
-     * @returns {*}
-     */
-    createDistinctName: function (array, name) {
-        var src = name, idx = 1;
-        name = name || "";
-        while (true) {
-            if (BI.every(array, function (i, item) {
-                return BI.isKey(item) ? item !== name : item.name !== name;
-            })) {
-                break;
-            }
-            name = src + (idx++);
-        }
-        return name;
-    },
-
-    /**
-     * 获取字符宽度
-     * @param str
-     * @return {number}
-     */
-    getGBWidth: function (str) {
-        str = str + "";
-        str = str.replace(/[^\x00-\xff]/g, "xx");
-        return Math.ceil(str.length / 2);
-    },
-
-    /**
-     * 获取搜索结果
-     * @param items
-     * @param keyword
-     * @param param  搜索哪个属性
-     * @param clone  是否需要deepClone
-     */
-    getSearchResult: function (items, keyword, param, clone) {
-        var isArray = BI.isArray(items);
-        items = isArray ? BI.flatten(items) : items;
-        param || (param = "text");
-        BI.isNull(clone) && (clone = true);
-        if (!BI.isKey(keyword)) {
+BI.EventListener = {
+    listen: function listen (target, eventType, callback) {
+        if (target.addEventListener) {
+            target.addEventListener(eventType, callback, false);
             return {
-                find: clone ? BI.deepClone(items) : items,
-                match: isArray ? [] : {}
+                remove: function remove () {
+                    target.removeEventListener(eventType, callback, false);
+                }
+            };
+        } else if (target.attachEvent) {
+            target.attachEvent("on" + eventType, callback);
+            return {
+                remove: function remove () {
+                    target.detachEvent("on" + eventType, callback);
+                }
             };
         }
-        var t, text, py;
-        keyword = BI.toUpperCase(keyword);
-        var matched = isArray ? [] : {}, find = isArray ? [] : {};
-        BI.each(items, function (i, item) {
-            // 兼容item为null的处理
-            if (BI.isNull(item)) {
-                return;
-            }
-            clone && (item = BI.deepClone(item));
-            t = BI.stripEL(item);
-            text = BI.find([t[param], t.text, t.value, t.name, t], function (index, val) {
-                return BI.isNotNull(val);
-            });
+    },
 
-            if (BI.isNull(text) || BI.isObject(text)) return;
-
-            py = BI.makeFirstPY(text, {
-                splitChar: "\u200b"
-            });
-            text = BI.toUpperCase(text);
-            py = BI.toUpperCase(py);
-            var pidx;
-            if (text.indexOf(keyword) > -1) {
-                if (text === keyword) {
-                    isArray ? matched.push(item) : (matched[i] = item);
-                } else {
-                    isArray ? find.push(item) : (find[i] = item);
+    capture: function capture (target, eventType, callback) {
+        if (target.addEventListener) {
+            target.addEventListener(eventType, callback, true);
+            return {
+                remove: function remove () {
+                    target.removeEventListener(eventType, callback, true);
                 }
-                // BI-56386 这边两个pid / text.length是为了防止截取的首字符串不是完整的，但光这样做还不够，即时错位了，也不能说明就不符合条件
-            } else if (pidx = py.indexOf(keyword), (pidx > -1)) {
-                if (text === keyword || keyword.length === text.length) {
-                    isArray ? matched.push(item) : (matched[i] = item);
-                } else {
-                    isArray ? find.push(item) : (find[i] = item);
-                }
-            }
-        });
+            };
+        }
         return {
-            match: matched,
-            find: find
+            remove: BI.emptyFn
         };
+        
     },
 
-    /**
-     * 获取按GB2312排序的结果
-     * @param items
-     * @param key
-     * @return {any[]}
-     */
-    getSortedResult: function (items, key) {
-        var getTextOfItem = BI.isFunction(key) ? key :
-            function (item, key) {
-                if (BI.isNotNull(key)) {
-                    return item[key];
-                }
-                if (BI.isNotNull(item.text)) {
-                    return item.text;
-                }
-                if (BI.isNotNull(item.value)) {
-                    return item.value;
-                }
-                return item;
-            };
-
-        return items.sort(function (item1, item2) {
-            var str1 = getTextOfItem(item1, key);
-            var str2 = getTextOfItem(item2, key);
-            if (BI.isNull(str1) && BI.isNull(str2)) {
-                return 0;
-            }
-            if (BI.isNull(str1)) {
-                return -1;
-            }
-            if (BI.isNull(str2)) {
-                return 1;
-            }
-            if (str1 === str2) {
-                return 0;
-            }
-            var len1 = str1.length, len2 = str2.length;
-            for (var i = 0; i < len1 && i < len2; i++) {
-                var char1 = str1[i];
-                var char2 = str2[i];
-                if (char1 !== char2) {
-                    // 找不到的字符都往后面放
-                    return (BI.isNull(BI.CODE_INDEX[char1]) ? BI.MAX : BI.CODE_INDEX[char1]) - (BI.isNull(BI.CODE_INDEX[char2]) ? BI.MAX : BI.CODE_INDEX[char2]);
-                }
-            }
-            return len1 - len2;
-        });
+    registerDefault: function registerDefault () {
     }
-});
-
-_.extend(BI, {
-    beforeFunc: function (sFunc, func) {
-        var __self = sFunc;
-        return function () {
-            if (func.apply(sFunc, arguments) === false) {
-                return false;
-            }
-            return __self.apply(sFunc, arguments);
-        };
-    },
-
-    afterFunc: function (sFunc, func) {
-        var __self = sFunc;
-        return function () {
-            var ret = __self.apply(sFunc, arguments);
-            if (ret === false) {
-                return false;
-            }
-            func.apply(sFunc, arguments);
-            return ret;
-        };
-    }
-});
-
-
-/***/ }),
-/* 148 */
-/***/ (function(module, exports) {
-
-_.extend(BI, {
-    // 给Number类型增加一个add方法，调用起来更加方便。
-    add: function (num, arg) {
-        return accAdd(arg, num);
-
-        /**
-         ** 加法函数，用来得到精确的加法结果
-         ** 说明：javascript的加法结果会有误差，在两个浮点数相加的时候会比较明显。这个函数返回较为精确的加法结果。
-         ** 调用：accAdd(arg1,arg2)
-         ** 返回值：arg1加上arg2的精确结果
-         **/
-        function accAdd (arg1, arg2) {
-            var r1, r2, m, c;
-            try {
-                r1 = arg1.toString().split(".")[1].length;
-            } catch (e) {
-                r1 = 0;
-            }
-            try {
-                r2 = arg2.toString().split(".")[1].length;
-            } catch (e) {
-                r2 = 0;
-            }
-            c = Math.abs(r1 - r2);
-            m = Math.pow(10, Math.max(r1, r2));
-            if (c > 0) {
-                var cm = Math.pow(10, c);
-                if (r1 > r2) {
-                    arg1 = Number(arg1.toString().replace(".", ""));
-                    arg2 = Number(arg2.toString().replace(".", "")) * cm;
-                } else {
-                    arg1 = Number(arg1.toString().replace(".", "")) * cm;
-                    arg2 = Number(arg2.toString().replace(".", ""));
-                }
-            } else {
-                arg1 = Number(arg1.toString().replace(".", ""));
-                arg2 = Number(arg2.toString().replace(".", ""));
-            }
-            return (arg1 + arg2) / m;
-        }
-    },
-
-    // 给Number类型增加一个sub方法，调用起来更加方便。
-    sub: function (num, arg) {
-        return accSub(num, arg);
-
-        /**
-         ** 减法函数，用来得到精确的减法结果
-         ** 说明：javascript的减法结果会有误差，在两个浮点数相减的时候会比较明显。这个函数返回较为精确的减法结果。
-         ** 调用：accSub(arg1,arg2)
-         ** 返回值：arg1加上arg2的精确结果
-         **/
-        function accSub (arg1, arg2) {
-            var r1, r2, m, n;
-            try {
-                r1 = arg1.toString().split(".")[1].length;
-            } catch (e) {
-                r1 = 0;
-            }
-            try {
-                r2 = arg2.toString().split(".")[1].length;
-            } catch (e) {
-                r2 = 0;
-            }
-            m = Math.pow(10, Math.max(r1, r2)); // last modify by deeka //动态控制精度长度
-            n = (r1 >= r2) ? r1 : r2;
-            return ((arg1 * m - arg2 * m) / m).toFixed(n);
-        }
-    },
-
-    // 给Number类型增加一个mul方法，调用起来更加方便。
-    mul: function (num, arg) {
-        return accMul(arg, num);
-
-        /**
-         ** 乘法函数，用来得到精确的乘法结果
-         ** 说明：javascript的乘法结果会有误差，在两个浮点数相乘的时候会比较明显。这个函数返回较为精确的乘法结果。
-         ** 调用：accMul(arg1,arg2)
-         ** 返回值：arg1乘以 arg2的精确结果
-         **/
-        function accMul (arg1, arg2) {
-            var m = 0, s1 = arg1.toString(), s2 = arg2.toString();
-            try {
-                m += s1.split(".")[1].length;
-            } catch (e) {
-            }
-            try {
-                m += s2.split(".")[1].length;
-            } catch (e) {
-            }
-            return Number(s1.replace(".", "")) * Number(s2.replace(".", "")) / Math.pow(10, m);
-        }
-    },
-    
-    // 给Number类型增加一个div方法，调用起来更加方便。
-    div: function (num, arg) {
-        return accDivide(num, arg);
-
-        /**
-         * Return digits length of a number
-         * @param {*number} num Input number
-         */
-        function digitLength (num) {
-            // Get digit length of e
-            var eSplit = num.toString().split(/[eE]/);
-            var len = (eSplit[0].split(".")[1] || "").length - (+(eSplit[1] || 0));
-            return len > 0 ? len : 0;
-        }
-        /**
-         * 把小数转成整数，支持科学计数法。如果是小数则放大成整数
-         * @param {*number} num 输入数
-         */
-        function float2Fixed (num) {
-            if (num.toString().indexOf("e") === -1) {
-                return Number(num.toString().replace(".", ""));
-            }
-            var dLen = digitLength(num);
-            return dLen > 0 ? num * Math.pow(10, dLen) : num;
-        }
-
-        /**
-         * 精确乘法
-         */
-        function times (num1, num2) {
-            var others = [];
-            for (var _i = 2; _i < arguments.length; _i++) {
-                others[_i - 2] = arguments[_i];
-            }
-            if (others.length > 0) {
-                return times.apply(void 0, [times(num1, num2), others[0]].concat(others.slice(1)));
-            }
-            var num1Changed = float2Fixed(num1);
-            var num2Changed = float2Fixed(num2);
-            var baseNum = digitLength(num1) + digitLength(num2);
-            var leftValue = num1Changed * num2Changed;
-            return leftValue / Math.pow(10, baseNum);
-        }
-
-        /**
-         * 精确除法
-         */
-        function accDivide (num1, num2) {
-            var others = [];
-            for (var _i = 2; _i < arguments.length; _i++) {
-                others[_i - 2] = arguments[_i];
-            }
-            if (others.length > 0) {
-                return accDivide.apply(void 0, [accDivide(num1, num2), others[0]].concat(others.slice(1)));
-            }
-            var num1Changed = float2Fixed(num1);
-            var num2Changed = float2Fixed(num2);
-            return times((num1Changed / num2Changed), Math.pow(10, digitLength(num2) - digitLength(num1)));
-        }
-    }
-
-});
-
-/***/ }),
-/* 149 */
-/***/ (function(module, exports) {
-
-/**
- * 对字符串对象的扩展
- * @class String
- */
-_.extend(BI, {
-
-    /**
-     * 判断字符串是否已指定的字符串开始
-     * @param str source字符串
-     * @param {String} startTag   指定的开始字符串
-     * @return {Boolean}  如果字符串以指定字符串开始则返回true，否则返回false
-     */
-    startWith: function (str, startTag) {
-        str = str || "";
-        if (startTag == null || startTag == "" || str.length === 0 || startTag.length > str.length) {
-            return false;
-        }
-        return str.substr(0, startTag.length) == startTag;
-    },
-    /**
-     * 判断字符串是否以指定的字符串结束
-     * @param str source字符串
-     * @param {String} endTag 指定的字符串
-     * @return {Boolean}  如果字符串以指定字符串结束则返回true，否则返回false
-     */
-    endWith: function (str, endTag) {
-        if (endTag == null || endTag == "" || str.length === 0 || endTag.length > str.length) {
-            return false;
-        }
-        return str.substring(str.length - endTag.length) == endTag;
-    },
-
-    /**
-     * 获取url中指定名字的参数
-     * @param str source字符串
-     * @param {String} name 参数的名字
-     * @return {String} 参数的值
-     */
-    getQuery: function (str, name) {
-        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
-        var r = str.substr(str.indexOf("?") + 1).match(reg);
-        if (r) {
-            return unescape(r[2]);
-        }
-        return null;
-    },
-
-    /**
-     * 给url加上给定的参数
-     * @param str source字符串
-     * @param {Object} paras 参数对象，是一个键值对对象
-     * @return {String} 添加了给定参数的url
-     */
-    appendQuery: function (str, paras) {
-        if (!paras) {
-            return str;
-        }
-        var src = str;
-        // 没有问号说明还没有参数
-        if (src.indexOf("?") === -1) {
-            src += "?";
-        }
-        // 如果以问号结尾，说明没有其他参数
-        if (BI.endWith(src, "?") !== false) {
-        } else {
-            src += "&";
-        }
-        _.each(paras, function (value, name) {
-            if (typeof(name) === "string") {
-                src += name + "=" + value + "&";
-            }
-        });
-        src = src.substr(0, src.length - 1);
-        return src;
-    },
-    /**
-     * 将所有符合第一个字符串所表示的字符串替换成为第二个字符串
-     * @param str source字符串
-     * @param {String} s1 要替换的字符串的正则表达式
-     * @param {String} s2 替换的结果字符串
-     * @returns {String} 替换后的字符串
-     */
-    replaceAll: function (str, s1, s2) {
-        return BI.isString(str) ? str.replace(new RegExp(s1, "gm"), s2) : str;
-    },
-    /**
-     * 总是让字符串以指定的字符开头
-     * @param str source字符串
-     * @param {String} start 指定的字符
-     * @returns {String} 以指定字符开头的字符串
-     */
-    perfectStart: function (str, start) {
-        if (BI.startWith(str, start)) {
-            return str;
-        }
-        return start + str;
-
-    },
-
-    /**
-     * 获取字符串中某字符串的所有项位置数组
-     * @param str source字符串
-     * @param {String} sub 子字符串
-     * @return {Number[]} 子字符串在父字符串中出现的所有位置组成的数组
-     */
-    allIndexOf: function (str, sub) {
-        if (typeof sub !== "string") {
-            return [];
-        }
-        var location = [];
-        var offset = 0;
-        while (str.length > 0) {
-            var loc = str.indexOf(sub);
-            if (loc === -1) {
-                break;
-            }
-            location.push(offset + loc);
-            str = str.substring(loc + sub.length, str.length);
-            offset += loc + sub.length;
-        }
-        return location;
-    }
-});
-
-/***/ }),
-/* 150 */
-/***/ (function(module, exports) {
-
-!(function () {
-    var i18nStore = {};
-    _.extend(BI, {
-        addI18n: function (i18n) {
-            BI.extend(i18nStore, i18n);
-        },
-        i18nText: function (key) {
-            var localeText = i18nStore[key] || (BI.i18n && BI.i18n[key]) || "";
-            if (!localeText) {
-                localeText = key;
-            }
-            var len = arguments.length;
-            if (len > 1) {
-                if (localeText.indexOf("{R1}") > -1) {
-                    for (var i = 1; i < len; i++) {
-                        var key = "{R" + i + "}";
-                        localeText = BI.replaceAll(localeText, key, arguments[i] + "");
-                    }
-                } else {
-                    var args = Array.prototype.slice.call(arguments);
-                    var count = 1;
-                    return BI.replaceAll(localeText, "\\{\\s*\\}", function () {
-                        return args[count++] + "";
-                    });
-                }
-            }
-            return localeText;
-        }
-    });
-})();
-
-/***/ }),
-/* 151 */
-/***/ (function(module, exports) {
-
-(function () {
-    var moduleInjection = {};
-    BI.module = BI.module || function (xtype, cls) {
-        if (moduleInjection[xtype] != null) {
-            _global.console && console.error("module:[" + xtype + "] has been registed");
-        }
-        moduleInjection[xtype] = cls;
-    };
-
-    var constantInjection = {};
-    BI.constant = BI.constant || function (xtype, cls) {
-        if (constantInjection[xtype] != null) {
-            _global.console && console.error("constant:[" + xtype + "] has been registed");
-        }
-        constantInjection[xtype] = cls;
-    };
-
-    var modelInjection = {};
-    BI.model = BI.model || function (xtype, cls) {
-        if (modelInjection[xtype] != null) {
-            _global.console && console.error("model:[" + xtype + "] has been registed");
-        }
-        modelInjection[xtype] = cls;
-    };
-
-    var storeInjection = {};
-    BI.store = BI.store || function (xtype, cls) {
-        if (storeInjection[xtype] != null) {
-            _global.console && console.error("store:[" + xtype + "] has been registed");
-        }
-        storeInjection[xtype] = cls;
-    };
-
-    var serviceInjection = {};
-    BI.service = BI.service || function (xtype, cls) {
-        if (serviceInjection[xtype] != null) {
-            _global.console && console.error("service:[" + xtype + "] has been registed");
-        }
-        serviceInjection[xtype] = cls;
-    };
-
-    var providerInjection = {};
-    BI.provider = BI.provider || function (xtype, cls) {
-        if (providerInjection[xtype] != null) {
-            _global.console && console.error("provider:[" + xtype + "] has been registed");
-        }
-        providerInjection[xtype] = cls;
-    };
-
-    var configFunctions = {};
-    BI.config = BI.config || function (type, configFn, opt) {
-        if (BI.initialized) {
-            if (constantInjection[type]) {
-                return (constantInjection[type] = configFn(constantInjection[type]));
-            }
-            if (providerInjection[type]) {
-                if (!providers[type]) {
-                    providers[type] = new providerInjection[type]();
-                }
-                // 如果config被重新配置的话，需要删除掉之前的实例
-                if (providerInstance[type]) {
-                    delete providerInstance[type];
-                }
-                return configFn(providers[type]);
-            }
-            return BI.Plugin.configWidget(type, configFn, opt);
-        }
-        if (!configFunctions[type]) {
-            configFunctions[type] = [];
-            BI.prepares.push(function () {
-                var queue = configFunctions[type];
-                for (var i = 0; i < queue.length; i++) {
-                    if (constantInjection[type]) {
-                        constantInjection[type] = queue[i](constantInjection[type]);
-                        continue;
-                    }
-                    if (providerInjection[type]) {
-                        if (!providers[type]) {
-                            providers[type] = new providerInjection[type]();
-                        }
-                        if (providerInstance[type]) {
-                            delete providerInstance[type];
-                        }
-                        queue[i](providers[type]);
-                        continue;
-                    }
-                    BI.Plugin.configWidget(type, queue[i]);
-                }
-                configFunctions[type] = null;
-            });
-        }
-        configFunctions[type].push(configFn);
-    };
-
-    BI.getReference = BI.getReference || function (type, fn) {
-        return BI.Plugin.registerObject(type, fn);
-    };
-
-    var actions = {};
-    var globalAction = [];
-    BI.action = BI.action || function (type, actionFn) {
-        if (BI.isFunction(type)) {
-            globalAction.push(type);
-            return function () {
-                BI.remove(globalAction, function (idx) {
-                    return globalAction.indexOf(actionFn) === idx;
-                });
-            };
-        }
-        if (!actions[type]) {
-            actions[type] = [];
-        }
-        actions[type].push(actionFn);
-        return function () {
-            BI.remove(actions[type], function (idx) {
-                return actions[type].indexOf(actionFn) === idx;
-            });
-            if (actions[type].length === 0) {
-                delete actions[type];
-            }
-        };
-    };
-
-    var points = {};
-    BI.point = BI.point || function (type, action, pointFn, after) {
-        if (!points[type]) {
-            points[type] = {};
-        }
-        if (!points[type][action]) {
-            points[type][action] = {};
-        }
-        if (!points[type][action][after ? "after" : "before"]) {
-            points[type][action][after ? "after" : "before"] = [];
-        }
-        points[type][action][after ? "after" : "before"].push(pointFn);
-    };
-
-    BI.Modules = BI.Modules || {
-        getModule: function (type) {
-            if (!moduleInjection[type]) {
-                _global.console && console.error("module:[" + type + "] does not exists");
-                return false;
-            }
-            return moduleInjection[type];
-        },
-        getAllModules: function () {
-            return moduleInjection;
-        }
-    };
-
-    BI.Constants = BI.Constants || {
-        getConstant: function (type) {
-            return constantInjection[type];
-        }
-    };
-
-    var callPoint = function (inst, types) {
-        types = BI.isArray(types) ? types : [types];
-        BI.each(types, function (idx, type) {
-            if (points[type]) {
-                for (var action in points[type]) {
-                    var bfns = points[type][action].before;
-                    if (bfns) {
-                        BI.aspect.before(inst, action, function (bfns) {
-                            return function () {
-                                for (var i = 0, len = bfns.length; i < len; i++) {
-                                    try {
-                                        bfns[i].apply(inst, arguments);
-                                    } catch (e) {
-                                        _global.console && console.error(e);
-                                    }
-                                }
-                            };
-                        }(bfns));
-                    }
-                    var afns = points[type][action].after;
-                    if (afns) {
-                        BI.aspect.after(inst, action, function (afns) {
-                            return function () {
-                                for (var i = 0, len = afns.length; i < len; i++) {
-                                    try {
-                                        afns[i].apply(inst, arguments);
-                                    } catch (e) {
-                                        _global.console && console.error(e);
-                                    }
-                                }
-                            };
-                        }(afns));
-                    }
-                }
-            }
-        });
-    };
-
-    BI.Models = BI.Models || {
-        getModel: function (type, config) {
-            var inst = new modelInjection[type](config);
-            inst._constructor && inst._constructor(config);
-            inst.mixins && callPoint(inst, inst.mixins);
-            callPoint(inst, type);
-            return inst;
-        }
-    };
-
-    var stores = {};
-
-    BI.Stores = BI.Stores || {
-        getStore: function (type, config) {
-            if (stores[type]) {
-                return stores[type];
-            }
-            var inst = stores[type] = new storeInjection[type](config);
-            inst._constructor && inst._constructor(config, function () {
-                delete stores[type];
-            });
-            callPoint(inst, type);
-            return inst;
-        }
-    };
-
-    var services = {};
-
-    BI.Services = BI.Services || {
-        getService: function (type, config) {
-            if (services[type]) {
-                return services[type];
-            }
-            services[type] = new serviceInjection[type](config);
-            callPoint(services[type], type);
-            return services[type];
-        }
-    };
-
-    var providers = {},
-        providerInstance = {};
-
-    BI.Providers = BI.Providers || {
-        getProvider: function (type, config) {
-            if (!providers[type]) {
-                providers[type] = new providerInjection[type]();
-            }
-            if (!providerInstance[type]) {
-                providerInstance[type] = new (providers[type].$get())(config);
-            }
-            return providerInstance[type];
-        }
-    };
-
-    BI.Actions = BI.Actions || {
-        runAction: function (type, event, config) {
-            BI.each(actions[type], function (i, act) {
-                try {
-                    act(event, config);
-                } catch (e) {
-                    _global.console && console.error(e);
-                }
-            });
-        },
-        runGlobalAction: function () {
-            var args = [].slice.call(arguments);
-            BI.each(globalAction, function (i, act) {
-                try {
-                    act.apply(null, args);
-                } catch (e) {
-                    _global.console && console.error(e);
-                }
-            });
-        }
-    };
-
-    BI.getResource = BI.getResource || function (type, config) {
-        if (constantInjection[type]) {
-            return BI.Constants.getConstant(type);
-        }
-        if (modelInjection[type]) {
-            return BI.Models.getModel(type, config);
-        }
-        if (storeInjection[type]) {
-            return BI.Stores.getStore(type, config);
-        }
-        if (serviceInjection[type]) {
-            return BI.Services.getService(type, config);
-        }
-        if (providerInjection[type]) {
-            return BI.Providers.getProvider(type, config);
-        }
-    };
-})();
-
-
-/***/ }),
-/* 152 */
-/***/ (function(module, exports) {
-
-/**
- * 常量
- */
-
-_.extend(BI, {
-    MAX: 0xfffffffffffffff,
-    MIN: -0xfffffffffffffff,
-    EVENT_RESPONSE_TIME: 200,
-    zIndex_layer: 1e5,
-    zIndex_popover: 1e6,
-    zIndex_popup: 1e7,
-    zIndex_masker: 1e8,
-    zIndex_tip: 1e9,
-    emptyStr: "",
-    pixUnit: "px",
-    pixRatio: 1,
-    emptyFn: function () {
-    },
-    empty: null,
-    Key: {
-        48: "0",
-        49: "1",
-        50: "2",
-        51: "3",
-        52: "4",
-        53: "5",
-        54: "6",
-        55: "7",
-        56: "8",
-        57: "9",
-        65: "a",
-        66: "b",
-        67: "c",
-        68: "d",
-        69: "e",
-        70: "f",
-        71: "g",
-        72: "h",
-        73: "i",
-        74: "j",
-        75: "k",
-        76: "l",
-        77: "m",
-        78: "n",
-        79: "o",
-        80: "p",
-        81: "q",
-        82: "r",
-        83: "s",
-        84: "t",
-        85: "u",
-        86: "v",
-        87: "w",
-        88: "x",
-        89: "y",
-        90: "z",
-        96: "0",
-        97: "1",
-        98: "2",
-        99: "3",
-        100: "4",
-        101: "5",
-        102: "6",
-        103: "7",
-        104: "8",
-        105: "9",
-        106: "*",
-        107: "+",
-        109: "-",
-        110: ".",
-        111: "/"
-    },
-    KeyCode: {
-        BACKSPACE: 8,
-        COMMA: 188,
-        DELETE: 46,
-        DOWN: 40,
-        END: 35,
-        ENTER: 13,
-        ESCAPE: 27,
-        HOME: 36,
-        LEFT: 37,
-        NUMPAD_ADD: 107,
-        NUMPAD_DECIMAL: 110,
-        NUMPAD_DIVIDE: 111,
-        NUMPAD_ENTER: 108,
-        NUMPAD_MULTIPLY: 106,
-        NUMPAD_SUBTRACT: 109,
-        PAGE_DOWN: 34,
-        PAGE_UP: 33,
-        PERIOD: 190,
-        RIGHT: 39,
-        SPACE: 32,
-        TAB: 9,
-        UP: 38
-    },
-    Status: {
-        SUCCESS: 1,
-        WRONG: 2,
-        START: 3,
-        END: 4,
-        WAITING: 5,
-        READY: 6,
-        RUNNING: 7,
-        OUTOFBOUNDS: 8,
-        NULL: -1
-    },
-    Direction: {
-        Top: "top",
-        Bottom: "bottom",
-        Left: "left",
-        Right: "right",
-        Custom: "custom"
-    },
-    Axis: {
-        Vertical: "vertical",
-        Horizontal: "horizontal"
-    },
-    Selection: {
-        Default: -2,
-        None: -1,
-        Single: 0,
-        Multi: 1,
-        All: 2
-    },
-    HorizontalAlign: {
-        Left: "left",
-        Right: "right",
-        Center: "center",
-        Stretch: "stretch"
-    },
-    VerticalAlign: {
-        Middle: "middle",
-        Top: "top",
-        Bottom: "bottom",
-        Stretch: "stretch"
-    },
-    StartOfWeek: 1
-});
-
-
-/***/ }),
-/* 153 */
-/***/ (function(module, exports) {
-
-/**
- * 缓冲池
- * @type {{Buffer: {}}}
- */
-
-(function () {
-    var Buffer = {};
-    var MODE = false;// 设置缓存模式为关闭
-
-    BI.BufferPool = {
-        put: function (name, cache) {
-            if (BI.isNotNull(Buffer[name])) {
-                throw new Error("Buffer Pool has the key already!");
-            }
-            Buffer[name] = cache;
-        },
-
-        get: function (name) {
-            return Buffer[name];
-        }
-    };
-})();
-
-/***/ }),
-/* 154 */
-/***/ (function(module, exports) {
-
-/**
- * 共享池
- * @type {{Shared: {}}}
- */
-
-(function () {
-    var _Shared = {};
-    BI.SharingPool = {
-        _Shared: _Shared,
-        put: function (name, shared) {
-            _Shared[name] = shared;
-        },
-
-        cat: function () {
-            var args = Array.prototype.slice.call(arguments, 0),
-                copy = _Shared;
-            for (var i = 0; i < args.length; i++) {
-                copy = copy && copy[args[i]];
-            }
-            return copy;
-        },
-
-        get: function () {
-            return BI.deepClone(this.cat.apply(this, arguments));
-        },
-
-        remove: function (key) {
-            delete _Shared[key];
-        }
-    };
-})();
-
-/***/ }),
-/* 155 */
-/***/ (function(module, exports) {
-
-BI.Req = {
-
 };
 
-
 /***/ }),
-/* 156 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
-
-/***/ }),
-/* 157 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
-
-/***/ }),
-/* 158 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
-
-/***/ }),
-/* 159 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
-
-/***/ }),
-/* 160 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
-
-/***/ }),
-/* 161 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
-
-/***/ }),
-/* 162 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
-
-/***/ }),
-/* 163 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
-
-/***/ }),
-/* 164 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
-
-/***/ }),
-/* 165 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
-
-/***/ }),
-/* 166 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
-
-/***/ }),
-/* 167 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
-
-/***/ }),
-/* 168 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
-
-/***/ }),
-/* 169 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
-
-/***/ }),
-/* 170 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
-
-/***/ }),
-/* 171 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
-
-/***/ }),
-/* 172 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
-
-/***/ }),
-/* 173 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
-
-/***/ }),
-/* 174 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
-
-/***/ }),
-/* 175 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
-
-/***/ }),
-/* 176 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
-
-/***/ }),
-/* 177 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
-
-/***/ }),
-/* 178 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
-
-/***/ }),
-/* 179 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
-
-/***/ }),
-/* 180 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
-
-/***/ }),
-/* 181 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
-
-/***/ }),
-/* 182 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
-
-/***/ }),
-/* 183 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
-
-/***/ }),
-/* 184 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
-
-/***/ }),
-/* 185 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
-
-/***/ }),
-/* 186 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
-
-/***/ }),
-/* 187 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
-
-/***/ }),
-/* 188 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
-
-/***/ }),
-/* 189 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
-
-/***/ }),
-/* 190 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
-
-/***/ }),
-/* 191 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
-
-/***/ }),
-/* 192 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
-
-/***/ }),
-/* 193 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
-
-/***/ }),
-/* 194 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
-
-/***/ }),
-/* 195 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
-
-/***/ }),
-/* 196 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
-
-/***/ }),
-/* 197 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
-
-/***/ }),
-/* 198 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
-
-/***/ }),
-/* 199 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
-
-/***/ }),
-/* 200 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
-
-/***/ }),
-/* 201 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
-
-/***/ }),
-/* 202 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
-
-/***/ }),
-/* 203 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
-
-/***/ }),
-/* 204 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
-
-/***/ }),
-/* 205 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
-
-/***/ }),
-/* 206 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
-
-/***/ }),
-/* 207 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
-
-/***/ }),
-/* 208 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
-
-/***/ }),
-/* 209 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
-
-/***/ }),
-/* 210 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
-
-/***/ }),
-/* 211 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
-
-/***/ }),
-/* 212 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
-
-/***/ }),
-/* 213 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
-
-/***/ }),
-/* 214 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
-
-/***/ }),
-/* 215 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
-
-/***/ }),
-/* 216 */,
-/* 217 */,
-/* 218 */,
-/* 219 */,
-/* 220 */,
-/* 221 */,
-/* 222 */,
-/* 223 */,
-/* 224 */,
-/* 225 */,
-/* 226 */,
-/* 227 */,
-/* 228 */,
-/* 229 */,
-/* 230 */,
-/* 231 */,
-/* 232 */,
-/* 233 */,
-/* 234 */,
-/* 235 */,
-/* 236 */,
-/* 237 */,
-/* 238 */,
-/* 239 */,
-/* 240 */,
-/* 241 */,
-/* 242 */,
-/* 243 */,
-/* 244 */,
-/* 245 */,
-/* 246 */,
-/* 247 */,
-/* 248 */,
-/* 249 */,
-/* 250 */,
-/* 251 */,
-/* 252 */,
-/* 253 */,
-/* 254 */,
-/* 255 */,
-/* 256 */,
-/* 257 */,
-/* 258 */,
-/* 259 */,
-/* 260 */,
-/* 261 */,
-/* 262 */,
-/* 263 */,
-/* 264 */,
-/* 265 */,
-/* 266 */,
-/* 267 */,
-/* 268 */,
-/* 269 */,
-/* 270 */,
-/* 271 */,
-/* 272 */,
-/* 273 */,
-/* 274 */,
-/* 275 */,
-/* 276 */,
-/* 277 */,
-/* 278 */,
-/* 279 */,
-/* 280 */,
-/* 281 */,
-/* 282 */,
-/* 283 */,
-/* 284 */,
-/* 285 */,
-/* 286 */,
-/* 287 */,
-/* 288 */,
-/* 289 */,
-/* 290 */,
-/* 291 */,
-/* 292 */,
-/* 293 */,
-/* 294 */,
-/* 295 */,
-/* 296 */,
-/* 297 */,
-/* 298 */,
-/* 299 */,
-/* 300 */,
-/* 301 */,
-/* 302 */,
-/* 303 */,
-/* 304 */,
-/* 305 */,
-/* 306 */,
-/* 307 */,
-/* 308 */,
-/* 309 */,
-/* 310 */,
-/* 311 */,
-/* 312 */,
-/* 313 */,
-/* 314 */,
-/* 315 */,
-/* 316 */,
-/* 317 */,
-/* 318 */,
-/* 319 */,
-/* 320 */,
-/* 321 */,
-/* 322 */,
-/* 323 */,
-/* 324 */,
-/* 325 */,
-/* 326 */,
-/* 327 */,
-/* 328 */
-/***/ (function(module, exports) {
-
-/**
- * Widget超类
- * @class BI.Widget
- * @extends BI.OB
- *
- * @cfg {JSON} options 配置属性
- */
-
-!(function () {
-    function callLifeHook(self, life) {
-        var hook = self.options[life] || self[life];
-        if (hook) {
-            var hooks = BI.isArray(hook) ? hook : [hook];
-            BI.each(hooks, function (i, hook) {
-                hook.call(self);
-            });
-        }
-    }
-
-    BI.Widget = BI.Widget || BI.inherit(BI.OB, {
-        _defaultConfig: function () {
-            return BI.extend(BI.Widget.superclass._defaultConfig.apply(this), {
-                root: false,
-                tagName: "div",
-                attributes: null,
-                data: null,
-
-                tag: null,
-                disabled: false,
-                invisible: false,
-                invalid: false,
-                baseCls: "",
-                extraCls: "",
-                cls: "",
-                css: null,
-                updateMode: "manual" // manual / auto
-            });
-        },
-
-        _constructor: function () {
-
-        },
-
-        // 覆盖父类的_constructor方法，widget不走ob的生命周期
-        _constructed: function () {
-            if (this.setup) {
-                pushTarget(this);
-                this.service = this.setup(this.options);
-                this.render = BI.isPlainObject(this.service) ? this.service.render : this.service;
-                popTarget();
-            }
-        },
-
-        _lazyConstructor: function () {
-            if (!this.__constructed) {
-                this.__constructed = true;
-                this._init();
-                this._initRef();
-            }
-        },
-
-        // 生命周期函数
-        beforeInit: null,
-
-        beforeRender: null,
-
-        beforeCreate: null,
-
-        created: null,
-
-        render: null,
-
-        beforeMount: null,
-
-        mounted: null,
-
-        shouldUpdate: null,
-
-        update: null,
-
-        beforeUpdate: null,
-
-        updated: null,
-
-        beforeDestroy: null,
-
-        destroyed: null,
-
-        _init: function () {
-            BI.Widget.superclass._init.apply(this, arguments);
-            this._initElementWidth();
-            this._initElementHeight();
-            this._initVisual();
-            this._initState();
-            this._initRender();
-        },
-
-        _initRender: function () {
-            var self = this;
-
-            function render() {
-                if (self.options.beforeRender || self.beforeRender) {
-                    (self.options.beforeRender || self.beforeRender).call(self, BI.bind(self._render, self));
-                } else {
-                    self._render();
-                }
-            }
-
-            if (this.options.beforeInit || this.beforeInit) {
-                this.__asking = true;
-                (this.options.beforeInit || this.beforeInit).call(this, render);
-                if (this.__asking === true) {
-                    this.__async = true;
-                }
-            } else {
-                render();
-            }
-        },
-
-        _render: function () {
-            this.__asking = false;
-            callLifeHook(this, "beforeCreate");
-            this._initElement();
-            this._initEffects();
-            callLifeHook(this, "created");
-        },
-
-        _initCurrent: function () {
-            var o = this.options;
-            if (o._baseCls || o.baseCls || o.extraCls || o.cls) {
-                this.element.addClass((o._baseCls || "") + " " + (o.baseCls || "") + " " + (o.extraCls || "") + " " + (o.cls || ""));
-            }
-            if (o.attributes) {
-                this.element.attr(o.attributes);
-            }
-            if (o.data) {
-                this.element.data(o.data);
-            }
-            if (o.css) {
-                this.element.css(o.css);
-            }
-        },
-
-        /**
-         * 初始化根节点
-         * @private
-         */
-        _initRoot: function () {
-            var o = this.options;
-            this.widgetName = o.widgetName || BI.uniqueId("widget");
-            this._isRoot = o.root;
-            this._children = {};
-            if (BI.isWidget(o.element)) {
-                this.element = this.options.element.element;
-                this._parent = o.element;
-                this._parent.addWidget(this.widgetName, this);
-            } else if (o.element) {
-                this.element = BI.Widget._renderEngine.createElement(this);
-                this._isRoot = true;
-            } else {
-                this.element = BI.Widget._renderEngine.createElement(this);
-            }
-            this.element._isWidget = true;
-            this._initCurrent();
-        },
-
-        _initElementWidth: function () {
-            var o = this.options;
-            if (BI.isWidthOrHeight(o.width)) {
-                this.element.css("width", BI.isNumber(o.width) ? o.width / BI.pixRatio + BI.pixUnit : o.width);
-            }
-        },
-
-        _initElementHeight: function () {
-            var o = this.options;
-            if (BI.isWidthOrHeight(o.height)) {
-                this.element.css("height", BI.isNumber(o.height) ? o.height / BI.pixRatio + BI.pixUnit : o.height);
-            }
-        },
-
-        _initVisual: function () {
-            var o = this.options;
-            if (o.invisible) {
-                // 用display属性做显示和隐藏，否则jquery会在显示时将display设为block会覆盖掉display:flex属性
-                this.element.css("display", "none");
-            }
-        },
-
-        _initEffects: function () {
-            var o = this.options;
-            if (o.disabled || o.invalid) {
-                if (this.options.disabled) {
-                    this.setEnable(false);
-                }
-                if (this.options.invalid) {
-                    this.setValid(false);
-                }
-            }
-        },
-
-        _initState: function () {
-            this._isMounted = false;
-        },
-
-        _initElement: function () {
-            var self = this;
-            var render = BI.isFunction(this.options.render) ? this.options.render : this.render;
-            var els = render && render.call(this);
-            if (BI.isPlainObject(els)) {
-                els = [els];
-            }
-            if (BI.isArray(els)) {
-                BI.each(els, function (i, el) {
-                    if (el) {
-                        BI._lazyCreateWidget(el, {
-                            element: self
-                        });
-                    }
-                });
-            }
-            // if (this._isRoot === true || !(this instanceof BI.Layout)) {
-            this._mount();
-            // }
-        },
-
-        _setParent: function (parent) {
-            this._parent = parent;
-        },
-
-        /**
-         *
-         * @param force 是否强制挂载子节点
-         * @param deep 子节点是否也是按照当前force处理
-         * @param lifeHook 生命周期钩子触不触发，默认触发
-         * @param predicate 递归每个widget的回调
-         * @returns {boolean}
-         * @private
-         */
-        _mount: function (force, deep, lifeHook, predicate, layer) {
-            var self = this;
-            if (!force && (this._isMounted || !this.isVisible() || this.__asking === true || !(this._isRoot === true || (this._parent && this._parent._isMounted === true)))) {
-                return false;
-            }
-            layer = layer || 0;
-            lifeHook !== false && callLifeHook(this, "beforeMount");
-            this._isMounted = true;
-            for (var key in this._children) {
-                var child = this._children[key];
-                !self.isEnabled() && child._setEnable(false);
-                !self.isValid() && child._setValid(false);
-                child._mount && child._mount(deep ? force : false, deep, lifeHook, predicate, layer + 1);
-            }
-            this._mountChildren && this._mountChildren();
-            if (layer === 0) {
-                // mounted里面会执行scrollTo之类的方法，如果放宏任务里会闪
-                // setTimeout(function () {
-                self.__afterMount(lifeHook, predicate);
-                // }, 0);
-            }
-            return true;
-        },
-
-        __afterMount: function (lifeHook, predicate) {
-            if (this._isMounted) {
-                for (var key in this._children) {
-                    var child = this._children[key];
-                    child.__afterMount && child.__afterMount(lifeHook, predicate);
-                }
-                lifeHook !== false && callLifeHook(this, "mounted");
-                this.fireEvent(BI.Events.MOUNT);
-                predicate && predicate(this);
-            }
-        },
-
-        _mountChildren: null,
-
-        _update: function (nextProps, shouldUpdate) {
-            var o = this.options;
-            callLifeHook(this, "beforeUpdate");
-            if (shouldUpdate) {
-                var res = this.update && this.update(nextProps, shouldUpdate);
-            } else if (BI.isNull(shouldUpdate)) {
-                // 默认使用shallowCompare的方式进行更新
-                var nextChange = {};
-                BI.each(nextProps, function (key, value) {
-                    if (o[key] !== value) {
-                        nextChange[key] = value;
-                    }
-                });
-                var res = this.update && BI.isNotEmptyObject(nextChange) && this.update(nextChange);
-            }
-            callLifeHook(this, "updated");
-            return res;
-        },
-
-        isMounted: function () {
-            return this._isMounted;
-        },
-
-        setWidth: function (w) {
-            this.options.width = w;
-            this._initElementWidth();
-        },
-
-        setHeight: function (h) {
-            this.options.height = h;
-            this._initElementHeight();
-        },
-
-        _setEnable: function (enable) {
-            if (enable === true) {
-                this.options.disabled = false;
-            } else if (enable === false) {
-                this.options.disabled = true;
-            }
-            // 递归将所有子组件使能
-            BI.each(this._children, function (i, child) {
-                !child._manualSetEnable && child._setEnable && child._setEnable(enable);
-            });
-        },
-
-        _setValid: function (valid) {
-            if (valid === true) {
-                this.options.invalid = false;
-            } else if (valid === false) {
-                this.options.invalid = true;
-            }
-            // 递归将所有子组件使有效
-            BI.each(this._children, function (i, child) {
-                !child._manualSetValid && child._setValid && child._setValid(valid);
-            });
-        },
-
-        _setVisible: function (visible) {
-            if (visible === true) {
-                this.options.invisible = false;
-            } else if (visible === false) {
-                this.options.invisible = true;
-            }
-        },
-
-        setEnable: function (enable) {
-            this._manualSetEnable = true;
-            this._setEnable(enable);
-            if (enable === true) {
-                this.element.removeClass("base-disabled disabled");
-            } else if (enable === false) {
-                this.element.addClass("base-disabled disabled");
-            }
-        },
-
-        setVisible: function (visible) {
-            this._setVisible(visible);
-            if (visible === true) {
-                // 用this.element.show()会把display属性改成block
-                this.element.css("display", "");
-                this._mount();
-            } else if (visible === false) {
-                this.element.css("display", "none");
-            }
-            this.fireEvent(BI.Events.VIEW, visible);
-        },
-
-        setValid: function (valid) {
-            this._manualSetValid = true;
-            this._setValid(valid);
-            if (valid === true) {
-                this.element.removeClass("base-invalid invalid");
-            } else if (valid === false) {
-                this.element.addClass("base-invalid invalid");
-            }
-        },
-
-        doBehavior: function () {
-            var args = arguments;
-            // 递归将所有子组件使有效
-            BI.each(this._children, function (i, child) {
-                child.doBehavior && child.doBehavior.apply(child, args);
-            });
-        },
-
-        getWidth: function () {
-            return this.options.width;
-        },
-
-        getHeight: function () {
-            return this.options.height;
-        },
-
-        isValid: function () {
-            return !this.options.invalid;
-        },
-
-        addWidget: function (name, widget) {
-            var self = this;
-            if (name instanceof BI.Widget) {
-                widget = name;
-                name = widget.getName();
-            }
-            if (BI.isKey(name)) {
-                name = name + "";
-            }
-            name = name || widget.getName() || BI.uniqueId("widget");
-            if (this._children[name]) {
-                throw new Error("name has already been existed");
-            }
-            widget._setParent && widget._setParent(this);
-            widget.on(BI.Events.DESTROY, function () {
-                BI.remove(self._children, this);
-            });
-            return (this._children[name] = widget);
-        },
-
-        getWidgetByName: function (name) {
-            if (!BI.isKey(name) || name === this.getName()) {
-                return this;
-            }
-            name = name + "";
-            var widget = void 0, other = {};
-            BI.any(this._children, function (i, wi) {
-                if (i === name) {
-                    widget = wi;
-                    return true;
-                }
-                other[i] = wi;
-            });
-            if (!widget) {
-                BI.any(other, function (i, wi) {
-                    return (widget = wi.getWidgetByName(i));
-                });
-            }
-            return widget;
-        },
-
-        removeWidget: function (nameOrWidget) {
-            var self = this;
-            if (BI.isWidget(nameOrWidget)) {
-                BI.remove(this._children, nameOrWidget);
-            } else {
-                delete this._children[nameOrWidget];
-            }
-        },
-
-        hasWidget: function (name) {
-            return this._children[name] != null;
-        },
-
-        getName: function () {
-            return this.widgetName;
-        },
-
-        setTag: function (tag) {
-            this.options.tag = tag;
-        },
-
-        getTag: function () {
-            return this.options.tag;
-        },
-
-        attr: function (key, value) {
-            var self = this;
-            if (BI.isPlainObject(key)) {
-                BI.each(key, function (k, v) {
-                    self.attr(k, v);
-                });
-                return;
-            }
-            if (BI.isNotNull(value)) {
-                return this.options[key] = value;
-            }
-            return this.options[key];
-        },
-
-        css: function (name, value) {
-            return this.element.css(name, value);
-        },
-
-        getText: function () {
-
-        },
-
-        setText: function (text) {
-
-        },
-
-        getValue: function () {
-
-        },
-
-        setValue: function (value) {
-
-        },
-
-        isEnabled: function () {
-            return !this.options.disabled;
-        },
-
-        isVisible: function () {
-            return !this.options.invisible;
-        },
-
-        disable: function () {
-            this.setEnable(false);
-        },
-
-        enable: function () {
-            this.setEnable(true);
-        },
-
-        valid: function () {
-            this.setValid(true);
-        },
-
-        invalid: function () {
-            this.setValid(false);
-        },
-
-        invisible: function () {
-            this.setVisible(false);
-        },
-
-        visible: function () {
-            this.setVisible(true);
-        },
-
-        __d: function () {
-            callLifeHook(this, "beforeDestroy");
-            this.beforeDestroy = null;
-            BI.each(this._children, function (i, widget) {
-                widget && widget._unMount && widget._unMount();
-            });
-            this._children = {};
-            this._parent = null;
-            this._isMounted = false;
-            callLifeHook(this, "destroyed");
-            this.destroyed = null;
-        },
-
-        _unMount: function () {
-            this.__d();
-            this.fireEvent(BI.Events.UNMOUNT);
-            this.purgeListeners();
-        },
-
-        isolate: function () {
-            if (this._parent) {
-                this._parent.removeWidget(this);
-            }
-            BI.DOM.hang([this]);
-        },
-
-        empty: function () {
-            BI.each(this._children, function (i, widget) {
-                widget && widget._unMount && widget._unMount();
-            });
-            this._children = {};
-            this.element.empty();
-        },
-
-        // 默认的populate方法就是干掉重来
-        reset: function () {
-            this.purgeListeners();
-            this.empty();
-            this._initCurrent();
-            this._init();
-            this._initRef();
-        },
-
-        _destroy: function () {
-            this.__d();
-            this.element.destroy();
-            this.purgeListeners();
-        },
-
-        destroy: function () {
-            this.__d();
-            this.element.destroy();
-            this.fireEvent(BI.Events.UNMOUNT);
-            this.fireEvent(BI.Events.DESTROY);
-            this._purgeRef();
-            this.purgeListeners();
-        }
-    });
-    var context = null, current = null;
-    var contextStack = [], currentStack = [];
-
-    BI.Widget.pushContext = function (_context) {
-        if (context) contextStack.push(context);
-        BI.Widget.context = context = _context;
-    };
-
-    BI.Widget.popContext = function () {
-        BI.Widget.context = context = contextStack.pop();
-    };
-
-    function pushTarget(_current) {
-        if (current) currentStack.push(current);
-        BI.Widget.current = current = _current;
-    }
-
-    function popTarget() {
-        BI.Widget.current = current = currentStack.pop();
-    }
-
-    BI.useStore = function (_store) {
-        if (current && current.store) {
-            return current.store;
-        }
-        if (current && current.$storeDelegate) {
-            return current.$storeDelegate;
-        }
-        if (current) {
-            var delegate = {}, origin;
-            if (_global.Proxy) {
-                var proxy = new Proxy(delegate, {
-                    get: function (target, key) {
-                        return Reflect.get(origin, key);
-                    },
-                    set: function (target, key, value) {
-                        return Reflect.set(origin, key, value);
-                    }
-                });
-                current._store = function () {
-                    origin = _store.apply(this, arguments);
-                    return origin;
-                };
-                return current.$storeDelegate = proxy;
-            }
-            current._store = function () {
-                var st = _store.apply(this, arguments);
-                BI.extend(delegate, st);
-                return st;
-            };
-            return current.$storeDelegate = delegate;
-        }
-    };
-
-    BI.watch = function (watch, handler) {
-        if (BI.Widget.current) {
-            BI.Widget.current.$watchDelayCallbacks || (BI.Widget.current.$watchDelayCallbacks = []);
-            BI.Widget.current.$watchDelayCallbacks.push([watch, handler]);
-        }
-    };
-
-    BI.onBeforeMount = function (beforeMount) {
-        if (current) {
-            if (!current.beforeMount) {
-                current.beforeMount = [];
-            } else if (!BI.isArray(current.beforeMount)) {
-                current.beforeMount = [current.beforeMount];
-            }
-            current.beforeMount.push(beforeMount);
-        }
-    };
-    BI.onMounted = function (mounted) {
-        if (current) {
-            if (!current.mounted) {
-                current.mounted = [];
-            } else if (!BI.isArray(current.mounted)) {
-                current.mounted = [current.mounted];
-            }
-            current.mounted.push(mounted);
-        }
-    };
-    BI.onBeforeUnmount = function (beforeDestroy) {
-        if (current) {
-            if (!current.beforeDestroy) {
-                current.beforeDestroy = [];
-            } else if (!BI.isArray(current.beforeDestroy)) {
-                current.beforeDestroy = [current.beforeDestroy];
-            }
-            current.beforeDestroy.push(beforeDestroy);
-        }
-    };
-    BI.onUnmounted = function (destroyed) {
-        if (current) {
-            if (!current.destroyed) {
-                current.destroyed = [];
-            } else if (!BI.isArray(current.destroyed)) {
-                current.destroyed = [current.destroyed];
-            }
-            current.destroyed.push(destroyed);
-        }
-    };
-
-    BI.Widget.registerRenderEngine = function (engine) {
-        BI.Widget._renderEngine = engine;
-    };
-    BI.Widget.registerRenderEngine({
-        createElement: function (widget) {
-            if (BI.isWidget(widget)) {
-                var o = widget.options;
-                if (o.element) {
-                    return BI.$(o.element);
-                }
-                if (o.tagName) {
-                    return BI.$(document.createElement(o.tagName));
-                }
-                return BI.$(document.createDocumentFragment());
-            }
-            return BI.$(widget);
-        },
-        createFragment: function () {
-            return document.createDocumentFragment();
-        }
-    });
-
-    BI.mount = function (widget, container, predicate, hydrate) {
-        if (hydrate === true) {
-            // 将widget的element元素都挂载好，并建立相互关系
-            widget.element.data("__widgets", [widget]);
-            var res = widget._mount(true, false, false, function (w) {
-                BI.each(w._children, function (i, child) {
-                    var ws = child.element.data("__widgets");
-                    if (!ws) {
-                        ws = [];
-                    }
-                    ws.push(child);
-                    child.element.data("__widgets", ws);
-                });
-                predicate && predicate.apply(this, arguments);
-            });
-            // 将新的dom树属性（事件等）patch到已存在的dom上
-            var c = BI.Widget._renderEngine.createElement;
-            BI.DOM.patchProps(widget.element, c(c(container).children()[0]));
-
-            var triggerLifeHook = function (w) {
-                w.beforeMount && w.beforeMount();
-                w.mounted && w.mounted();
-                BI.each(w._children, function (i, child) {
-                    triggerLifeHook(child);
-                });
-            };
-            // 最后触发组件树生命周期函数
-            triggerLifeHook(widget);
-            return res;
-        }
-        if (container) {
-            BI.Widget._renderEngine.createElement(container).append(widget.element);
-        }
-        return widget._mount(true, false, false, predicate);
-    };
-})();
-
-
-/***/ }),
-/* 329 */
-/***/ (function(module, exports) {
-
-(function () {
-    var kv = {};
-    BI.shortcut = BI.component = BI.shortcut || function (xtype, cls) {
-        if (kv[xtype] != null) {
-            _global.console && console.error("shortcut:[" + xtype + "] has been registed");
-        }
-        if (cls) {
-            cls["xtype"] = xtype;
-        }
-        kv[xtype] = cls;
-    };
-
-    // 根据配置属性生成widget
-    var createWidget = function (config, context, lazy) {
-        var cls = kv[config.type];
-
-        if (!cls) {
-            throw new Error("组件" + config.type + "未定义");
-        }
-        var pushed = false;
-        var widget = new cls();
-        widget._context = BI.Widget.context || context;
-        if (!BI.Widget.context && context) {
-            pushed = true;
-            BI.Widget.pushContext(context);
-        }
-        widget._initProps(config);
-        widget._constructed();
-        widget._initRoot();
-        // if (!lazy || config.element || config.root) {
-        widget._lazyConstructor();
-        // }
-        pushed && BI.Widget.popContext();
-        return widget;
-    };
-
-    BI.createWidget = BI.createWidget || function (item, options, context, lazy) {
-        // 先把准备环境准备好
-        BI.init();
-        var el, w;
-        item || (item = {});
-        if (BI.isWidget(options)) {
-            context = options;
-            options = {};
-        } else {
-            options || (options = {});
-        }
-        if (BI.isEmpty(item) && BI.isEmpty(options)) {
-            return BI.createWidget({
-                type: "bi.layout"
-            });
-        }
-        if (BI.isWidget(item)) {
-            return item;
-        }
-        if (item.type || options.type) {
-            el = BI.extend({}, options, item);
-            w = BI.Plugin.getWidget(el.type, el);
-            if (w.type === el.type) {
-                if (BI.Plugin.hasObject(el.type)) {
-                    w.listeners = (w.listeners || []).concat([{
-                        eventName: BI.Events.MOUNT,
-                        action: function () {
-                            BI.Plugin.getObject(el.type, this);
-                        }
-                    }]);
-                }
-                return createWidget(w, context, lazy);
-            }
-            return BI.createWidget(w, options, context, lazy);
-        }
-        if (item.el && (item.el.type || options.type)) {
-            el = BI.extend({}, options, item.el);
-            w = BI.Plugin.getWidget(el.type, el);
-            if (w.type === el.type) {
-                if (BI.Plugin.hasObject(el.type)) {
-                    w.listeners = (w.listeners || []).concat([{
-                        eventName: BI.Events.MOUNT,
-                        action: function () {
-                            BI.Plugin.getObject(el.type, this);
-                        }
-                    }]);
-                }
-                return createWidget(w, context, lazy);
-            }
-            return BI.createWidget(w, options, context, lazy);
-        }
-        if (BI.isWidget(item.el)) {
-            return item.el;
-        }
-        throw new Error("无法根据item创建组件");
-    };
-
-    BI._lazyCreateWidget = BI._lazyCreateWidget || function (item, options, context) {
-        return BI.createWidget(item, options, context, true);
-    };
-
-    BI.createElement = BI.createElement || function () {
-        var widget = BI.createWidget.apply(this, arguments);
-        return widget.element;
-    };
-
-})();
-
-
-/***/ }),
-/* 330 */
+/* 352 */
 /***/ (function(module, exports) {
 
 !(function () {
@@ -10774,7 +13152,7 @@ BI.Req = {
 })();
 
 /***/ }),
-/* 331 */
+/* 353 */
 /***/ (function(module, exports) {
 
 !(function () {
@@ -10928,49 +13306,66 @@ BI.Req = {
 })();
 
 /***/ }),
-/* 332 */
+/* 354 */
 /***/ (function(module, exports) {
 
-BI.BehaviorFactory = {
-    createBehavior: function (key, options) {
-        var behavior;
-        switch (key) {
-            case "highlight":
-                behavior = BI.HighlightBehavior;
-                break;
-            case "redmark":
-                behavior = BI.RedMarkBehavior;
-                break;
-        }
-        return new behavior(options);
-    }
-};
-
-/**
- * guy
- * 行为控件
- * @class BI.Behavior
- * @extends BI.OB
- */
-BI.Behavior = BI.inherit(BI.OB, {
-    _defaultConfig: function () {
-        return BI.extend(BI.Behavior.superclass._defaultConfig.apply(this, arguments), {
-            rule: function () {return true;}
-        });
-    },
-
-    _init: function () {
-        BI.Behavior.superclass._init.apply(this, arguments);
-
-    },
-
-    doBehavior: function () {
-
-    }
-});
+BI.version = "2.0";
 
 /***/ }),
-/* 333 */
+/* 355 */
+/***/ (function(module, exports) {
+
+!(function () {
+    BI.initWorker = function () {
+        function createWatcher (model, keyOrFn, cb, options) {
+            options = options || {};
+            return Fix.watch(model, keyOrFn, cb, BI.extend(options, {
+                store: model
+            }));
+        }
+
+        var models = {}, watches = {};
+        addEventListener("message", function (e) {
+            var data = e.data;
+            switch (data.eventType) {
+                case "action":
+                    models[data.name][data.action].apply(models[data.name], data.args);
+                    break;
+                case "destroy":
+                    BI.each(watches[data.name], function (i, unwatches) {
+                        unwatches = BI.isArray(unwatches) ? unwatches : [unwatches];
+                        BI.each(unwatches, function (j, unwatch) {
+                            unwatch();
+                        });
+                    });
+                    delete models[data.name];
+                    delete watches[data.name];
+                    break;
+                case "create":
+                    var store = models[data.name] = BI.Models.getModel(data.type, data.options);
+                    watches[data.name] = [];
+                    BI.each(data.watches, function (i, key) {
+                        watches[data.name].push(createWatcher(store.model, key, function (newValue, oldValue) {
+                            postMessage(BI.extend({}, data, {
+                                eventType: "watch",
+                                currentWatchType: key
+                            }, {args: [newValue, oldValue]}));
+                        }));
+                    });
+                    postMessage(BI.extend({}, data, {
+                        eventType: "create"
+                    }, {msg: store.model}));
+                    break;
+                default:
+                    break;
+            }
+        }, false);
+    };
+}());
+
+
+/***/ }),
+/* 356 */
 /***/ (function(module, exports) {
 
 /**
@@ -11585,2360 +13980,7 @@ BI.shortcut("bi.layout", BI.Layout);
 
 
 /***/ }),
-/* 334 */
-/***/ (function(module, exports) {
-
-BI.Plugin = BI.Plugin || {};
-!(function () {
-    var _WidgetsPlugin = {};
-    var _ObjectPlugin = {};
-    var _ConfigPlugin = {};
-    var _GlobalWidgetConfigFns = [];
-    var __GlobalObjectConfigFns = [];
-    BI.defaults(BI.Plugin, {
-
-        getWidget: function (type, options) {
-            if (_GlobalWidgetConfigFns.length > 0) {
-                var fns = _GlobalWidgetConfigFns.slice(0);
-                for (var i = fns.length - 1; i >= 0; i--) {
-                    fns[i](type, options);
-                }
-            }
-
-            var res;
-            if (_ConfigPlugin[type]) {
-                for (var i = _ConfigPlugin[type].length - 1; i >= 0; i--) {
-                    if (res = _ConfigPlugin[type][i](options)) {
-                        options = res;
-                    }
-                }
-            }
-            // Deprecated
-            if (_WidgetsPlugin[type]) {
-                for (var i = _WidgetsPlugin[type].length - 1; i >= 0; i--) {
-                    if (res = _WidgetsPlugin[type][i](options)) {
-                        return res;
-                    }
-                }
-            }
-            return options;
-        },
-
-        config: function (widgetConfigFn, objectConfigFn) {
-            _GlobalWidgetConfigFns = _GlobalWidgetConfigFns.concat(_.isArray(widgetConfigFn) ? widgetConfigFn : [widgetConfigFn]);
-            __GlobalObjectConfigFns = __GlobalObjectConfigFns.concat(_.isArray(objectConfigFn) ? objectConfigFn : [objectConfigFn]);
-        },
-
-        configWidget: function (type, fn, opt) {
-            // opt.single: true 最后一次注册有效
-            if (!_ConfigPlugin[type] || (opt && opt.single)) {
-                _ConfigPlugin[type] = [];
-            }
-            _ConfigPlugin[type].push(fn);
-        },
-
-        // Deprecated
-        registerWidget: function (type, fn) {
-            if (!_WidgetsPlugin[type]) {
-                _WidgetsPlugin[type] = [];
-            }
-            if (_WidgetsPlugin[type].length > 0) {
-                console.log("组件已经注册过了!");
-            }
-            _WidgetsPlugin[type].push(fn);
-        },
-
-        relieveWidget: function (type) {
-            delete _WidgetsPlugin[type];
-        },
-
-        getObject: function (type, object) {
-            if (__GlobalObjectConfigFns.length > 0) {
-                var fns = __GlobalObjectConfigFns.slice(0);
-                for (var i = fns.length - 1; i >= 0; i--) {
-                    fns[i](type, object);
-                }
-            }
-
-            if (_ObjectPlugin[type]) {
-                var res;
-                for (var i = 0, len = _ObjectPlugin[type].length; i < len; i++) {
-                    if (res = _ObjectPlugin[type][i](object)) {
-                        object = res;
-                    }
-                }
-            }
-            return res || object;
-        },
-
-        hasObject: function (type) {
-            return __GlobalObjectConfigFns.length > 0 || !!_ObjectPlugin[type];
-        },
-
-        registerObject: function (type, fn) {
-            if (!_ObjectPlugin[type]) {
-                _ObjectPlugin[type] = [];
-            }
-            if (_ObjectPlugin[type].length > 0) {
-                console.log("对象已经注册过了!");
-            }
-            _ObjectPlugin[type].push(fn);
-        },
-
-        relieveObject: function (type) {
-            delete _ObjectPlugin[type];
-        }
-    });
-})();
-
-
-/***/ }),
-/* 335 */
-/***/ (function(module, exports) {
-
-/**
- * guy
- * 由一个元素切换到另一个元素的行为
- * @class BI.Action
- * @extends BI.OB
- * @abstract
- */
-BI.Action = BI.inherit(BI.OB, {
-    _defaultConfig: function () {
-        return BI.extend(BI.Action.superclass._defaultConfig.apply(this, arguments), {
-            src: null,
-            tar: null
-        });
-    },
-
-    _init: function () {
-        BI.Action.superclass._init.apply(this, arguments);
-    },
-
-    actionPerformed: function (src, tar, callback) {
-
-    },
-
-    actionBack: function (tar, src, callback) {
-
-    }
-});
-
-BI.ActionFactory = {
-    createAction: function (key, options) {
-        var action;
-        switch (key) {
-            case "show":
-                action = BI.ShowAction;
-                break;
-        }
-        return new action(options);
-    }
-};
-
-/***/ }),
-/* 336 */
-/***/ (function(module, exports) {
-
-/**
- * guy
- * 由一个元素切换到另一个元素的行为
- * @class BI.ShowAction
- * @extends BI.Action
- */
-BI.ShowAction = BI.inherit(BI.Action, {
-    _defaultConfig: function () {
-        return BI.extend(BI.ShowAction.superclass._defaultConfig.apply(this, arguments), {});
-    },
-
-    actionPerformed: function (src, tar, callback) {
-        tar = tar || this.options.tar;
-        tar.setVisible(true);
-        callback && callback();
-    },
-
-    actionBack: function (tar, src, callback) {
-        tar = tar || this.options.tar;
-        tar.setVisible(false);
-        callback && callback();
-    }
-});
-
-
-/***/ }),
-/* 337 */
-/***/ (function(module, exports) {
-
-/**
- * guy
- *
- * @class BI.HighlightBehavior
- * @extends BI.Behavior
- */
-BI.HighlightBehavior = BI.inherit(BI.Behavior, {
-    _defaultConfig: function () {
-        return BI.extend(BI.HighlightBehavior.superclass._defaultConfig.apply(this, arguments), {});
-    },
-
-    _init: function () {
-        BI.HighlightBehavior.superclass._init.apply(this, arguments);
-
-    },
-
-    doBehavior: function (items) {
-        var args = Array.prototype.slice.call(arguments, 1),
-            o = this.options;
-        BI.each(items, function (i, item) {
-            if (item instanceof BI.Single) {
-                var rule = o.rule(item.getValue(), item);
-
-                function doBe (run) {
-                    if (run === true) {
-                        item.doHighLight && item.doHighLight.apply(item, args);
-                    } else {
-                        item.unHighLight && item.unHighLight.apply(item, args);
-                    }
-                }
-
-                if (BI.isFunction(rule)) {
-                    rule(doBe);
-                } else {
-                    doBe(rule);
-                }
-            } else {
-                item.doBehavior && item.doBehavior.apply(item, args);
-            }
-        });
-    }
-});
-
-/***/ }),
-/* 338 */
-/***/ (function(module, exports) {
-
-/**
- * guy
- * 标红行为
- * @class BI.RedMarkBehavior
- * @extends BI.Behavior
- */
-BI.RedMarkBehavior = BI.inherit(BI.Behavior, {
-    _defaultConfig: function () {
-        return BI.extend(BI.RedMarkBehavior.superclass._defaultConfig.apply(this, arguments), {
-
-        });
-    },
-
-    _init: function () {
-        BI.RedMarkBehavior.superclass._init.apply(this, arguments);
-
-    },
-
-    doBehavior: function (items) {
-        var args  = Array.prototype.slice.call(arguments, 1),
-            o     = this.options;
-        BI.each(items, function (i, item) {
-            if(item instanceof BI.Single) {
-                if (o.rule(item.getValue(), item)) {
-                    item.doRedMark && item.doRedMark.apply(item, args);
-                } else {
-                    item.doRedMark && item.unRedMark.apply(item, args);
-                }
-            } else {
-                item.doBehavior && item.doBehavior.apply(item, args);
-            }
-        });
-    }
-});
-
-/***/ }),
-/* 339 */
-/***/ (function(module, exports) {
-
-/**
- * guy
- * 控制器
- * Controller层超类
- * @class BI.Controller
- * @extends BI.OB
- * @abstract
- */
-BI.Controller = BI.inherit(BI.OB, {
-    _defaultConfig: function () {
-        return BI.extend(BI.Controller.superclass._defaultConfig.apply(this, arguments), {
-
-        });
-    }
-});
-BI.Controller.EVENT_CHANGE = "__EVENT_CHANGE__";
-
-
-/***/ }),
-/* 340 */
-/***/ (function(module, exports) {
-
-/**
- * 广播
- *
- * Created by GUY on 2015/12/23.
- * @class
- */
-BI.BroadcastController = BI.inherit(BI.Controller, {
-    _defaultConfig: function () {
-        return BI.extend(BI.BroadcastController.superclass._defaultConfig.apply(this, arguments), {});
-    },
-
-    _init: function () {
-        BI.BroadcastController.superclass._init.apply(this, arguments);
-        this._broadcasts = {};
-    },
-
-    on: function (name, fn) {
-        var self = this;
-        if (!this._broadcasts[name]) {
-            this._broadcasts[name] = [];
-        }
-        this._broadcasts[name].push(fn);
-        return function () {
-            self.remove(name, fn);
-        };
-    },
-
-    send: function (name) {
-        var args = [].slice.call(arguments, 1);
-        BI.each(this._broadcasts[name], function (i, fn) {
-            fn.apply(null, args);
-        });
-    },
-
-    remove: function (name, fn) {
-        var self = this;
-        if (fn) {
-            BI.remove(this._broadcasts[name], function (idx) {
-                return self._broadcasts[name].indexOf(fn) === idx;
-            });
-            this._broadcasts[name].remove(fn);
-            if (this._broadcasts[name].length === 0) {
-                delete this._broadcasts[name];
-            }
-        } else {
-            delete this._broadcasts[name];
-        }
-        return this;
-    }
-});
-
-/***/ }),
-/* 341 */
-/***/ (function(module, exports) {
-
-/**
- * 气泡图控制器
- * 控制气泡图的显示方向
- *
- * Created by GUY on 2015/8/21.
- * @class
- */
-BI.BubblesController = BI.inherit(BI.Controller, {
-    _defaultConfig: function () {
-        return BI.extend(BI.BubblesController.superclass._defaultConfig.apply(this, arguments), {});
-    },
-
-    _const: {
-        bubbleHeight: 18
-    },
-
-    _init: function () {
-        BI.BubblesController.superclass._init.apply(this, arguments);
-        var self = this;
-        this.fixedBubblesManager = {};
-        this.fixedStoreBubbles = {};
-        this.bubblesManager = {};
-        this.storeBubbles = {};
-        BI.Resizers.add("bubbleController" + BI.uniqueId(), function () {
-            BI.each(self.fixedBubblesManager, function (name) {
-                self.remove(name);
-            });
-            self.fixedBubblesManager = {};
-            self.fixedStoreBubbles = {};
-        });
-    },
-
-    _createBubble: function (direct, text, level, height, fixed) {
-        return BI.createWidget({
-            type: fixed === false ? "bi.bubble_view" : "bi.bubble",
-            text: text,
-            level: level,
-            height: height || 18,
-            direction: direct
-        });
-    },
-
-    _getOffsetLeft: function (name, context, offsetStyle) {
-        var left = 0;
-        if ("center" === offsetStyle) {
-            left = context.element.offset().left + (context.element.bounds().width - this.get(name).element.bounds().width) / 2;
-            if (left < 0) {
-                left = 0;
-            }
-            return left;
-        }
-        if ("right" === offsetStyle) {
-            left = context.element.offset().left + context.element.bounds().width - this.get(name).element.bounds().width;
-            if (left < 0) {
-                left = 0;
-            }
-            return left;
-        }
-        return context.element.offset().left;
-    },
-
-    _getOffsetTop: function (name, context, offsetStyle) {
-        var top = 0;
-        if ("center" === offsetStyle) {
-            top = context.element.offset().top + (context.element.bounds().height - this.get(name).element.bounds().height) / 2;
-            if (top < 0) {
-                top = 0;
-            }
-            return top;
-        } else if ("right" === offsetStyle) {
-            top = context.element.offset().top + context.element.bounds().height - this.get(name).element.bounds().height;
-            if (top < 0) {
-                top = 0;
-            }
-            return top;
-        }
-        return context.element.offset().top;
-    },
-
-    _getLeftPosition: function (name, context, offsetStyle) {
-        var position = BI.DOM.getLeftPosition(context, this.get(name));
-        position.top = this._getOffsetTop(name, context, offsetStyle);
-        return position;
-    },
-
-    _getBottomPosition: function (name, context, offsetStyle) {
-        var position = BI.DOM.getBottomPosition(context, this.get(name));
-        position.left = this._getOffsetLeft(name, context, offsetStyle);
-        return position;
-    },
-
-    _getTopPosition: function (name, context, offsetStyle) {
-        var position = BI.DOM.getTopPosition(context, this.get(name));
-        position.left = this._getOffsetLeft(name, context, offsetStyle);
-        return position;
-    },
-
-    _getRightPosition: function (name, context, offsetStyle) {
-        var position = BI.DOM.getRightPosition(context, this.get(name));
-        position.top = this._getOffsetTop(name, context, offsetStyle);
-        return position;
-    },
-
-    /**
-     *
-     * @param name
-     * @param text
-     * @param context
-     * @param offsetStyle center, left, right三种类型， 默认left
-     * @returns {BI.BubblesController}
-     */
-    show: function (name, text, context, opt) {
-        opt || (opt = {});
-        var container = opt.container || context;
-        var offsetStyle = opt.offsetStyle || "left";
-        var level = opt.level || "error";
-        var adjustYOffset = opt.adjustYOffset || 0;
-        var adjustXOffset = opt.adjustXOffset || 0;
-        var fixed = opt.fixed !== false;
-        // 如果是非固定位置（fixed）的bubble
-        if (fixed === false) {
-            if (!this.storeBubbles[name]) {
-                this.storeBubbles[name] = {};
-            }
-            if (!this.storeBubbles[name]["top"]) {
-                this.storeBubbles[name]["top"] = this._createBubble("top", text, level, null, fixed);
-            }
-            BI.createWidget({
-                type: "bi.absolute",
-                element: container,
-                items: [{
-                    el: this.storeBubbles[name]["top"]
-                }]
-            });
-            this.set(name, this.storeBubbles[name]["top"]);
-            var bubble = this.storeBubbles[name]["top"];
-            var bounds = bubble.element.bounds();
-            if (BI.DOM.isTopSpaceEnough(context, this.get(name), adjustYOffset)) {
-                var top = -(bounds.height + adjustYOffset);
-                switch (offsetStyle) {
-                    case "center":
-                        bubble.element.css({
-                            left: (context.element.bounds().width - bounds.width) / 2 + adjustXOffset,
-                            top: top
-                        });
-                        break;
-                    case "right":
-                        bubble.element.css({
-                            right: adjustXOffset,
-                            top: top
-                        });
-                        break;
-                    default:
-                        bubble.element.css({
-                            left: adjustXOffset,
-                            top: top
-                        });
-                        break;
-                }
-            } else {
-                var bottom = -(bounds.height + adjustYOffset);
-                switch (offsetStyle) {
-                    case "center":
-                        bubble.element.css({
-                            left: (context.element.bounds().width - bounds.width) / 2 + adjustXOffset,
-                            bottom: bottom
-                        });
-                        break;
-                    case "right":
-                        bubble.element.css({
-                            right: adjustXOffset,
-                            bottom: bottom
-                        });
-                        break;
-                    default:
-                        bubble.element.css({
-                            left: adjustXOffset,
-                            bottom: bottom
-                        });
-                        break;
-                }
-            }
-        } else {
-            if (!this.fixedStoreBubbles[name]) {
-                this.fixedStoreBubbles[name] = {};
-            }
-            if (!this.fixedStoreBubbles[name]["top"]) {
-                this.fixedStoreBubbles[name]["top"] = this._createBubble("top", text, level, null, fixed);
-            }
-            BI.createWidget({
-                type: "bi.absolute",
-                element: container,
-                items: [{
-                    el: this.fixedStoreBubbles[name]["top"]
-                }]
-            });
-            this.set(name, this.fixedStoreBubbles[name]["top"]);
-            var position = this._getTopPosition(name, context, offsetStyle);
-            this.get(name).element.css({left: position.left + adjustXOffset, top: position.top - adjustYOffset});
-            if (!BI.DOM.isTopSpaceEnough(context, this.get(name), adjustYOffset)) {
-                this.get(name).invisible();
-                if (!this.fixedStoreBubbles[name]["bottom"]) {
-                    this.fixedStoreBubbles[name]["bottom"] = this._createBubble("bottom", text, level);
-                }
-                BI.createWidget({
-                    type: "bi.absolute",
-                    element: container,
-                    items: [{
-                        el: this.fixedStoreBubbles[name]["bottom"]
-                    }]
-                });
-                this.set(name, this.fixedStoreBubbles[name]["bottom"]);
-                var position = this._getBottomPosition(name, context, offsetStyle);
-                this.get(name).element.css({left: position.left + adjustXOffset, top: position.top + adjustYOffset});
-                if (!BI.DOM.isBottomSpaceEnough(context, this.get(name), adjustYOffset)) {
-                    this.get(name).invisible();
-                    if (!this.fixedStoreBubbles[name]["right"]) {
-                        this.fixedStoreBubbles[name]["right"] = this._createBubble("right", text, level);
-                    }
-                    BI.createWidget({
-                        type: "bi.absolute",
-                        element: container,
-                        items: [{
-                            el: this.fixedStoreBubbles[name]["right"]
-                        }]
-                    });
-                    this.set(name, this.fixedStoreBubbles[name]["right"]);
-                    var position = this._getRightPosition(name, context, offsetStyle);
-                    this.get(name).element.css({
-                        left: position.left + adjustXOffset,
-                        top: position.top - adjustYOffset
-                    });
-                    if (!BI.DOM.isRightSpaceEnough(context, this.get(name), adjustXOffset)) {
-                        this.get(name).invisible();
-                        if (!this.fixedStoreBubbles[name]["left"]) {
-                            this.fixedStoreBubbles[name]["left"] = this._createBubble("left", text, level, 30);
-                        }
-                        BI.createWidget({
-                            type: "bi.absolute",
-                            element: container,
-                            items: [{
-                                el: this.fixedStoreBubbles[name]["left"]
-                            }]
-                        });
-                        this.set(name, this.fixedStoreBubbles[name]["left"]);
-                        var position = this._getLeftPosition(name, context, offsetStyle);
-                        this.get(name).element.css({
-                            left: position.left - adjustXOffset,
-                            top: position.top - adjustYOffset
-                        });
-                    }
-                }
-            }
-        }
-        this.get(name).setText(text);
-        this.get(name).visible();
-        return this;
-    },
-
-    hide: function (name) {
-        if (!this.has(name)) {
-            return this;
-        }
-        this.get(name).invisible();
-        return this;
-    },
-
-    add: function (name, bubble) {
-        if (this.has(name)) {
-            return this;
-        }
-        this.set(name, bubble);
-        return this;
-    },
-
-    get: function (name) {
-        return this.fixedBubblesManager[name] || this.bubblesManager[name];
-    },
-
-    set: function (name, bubble, fixed) {
-        fixed === false ? (this.bubblesManager[name] = bubble) : (this.fixedBubblesManager[name] = bubble);
-    },
-
-    has: function (name) {
-        return this.fixedBubblesManager[name] != null || this.bubblesManager[name] != null;
-    },
-
-    remove: function (name) {
-        if (!this.has(name)) {
-            return this;
-        }
-        BI.each(this.fixedStoreBubbles[name], function (dir, bubble) {
-            bubble.destroy();
-        });
-        delete this.fixedStoreBubbles[name];
-        delete this.fixedBubblesManager[name];
-        BI.each(this.storeBubbles[name], function (dir, bubble) {
-            bubble.destroy();
-        });
-        delete this.storeBubbles[name];
-        delete this.bubblesManager[name];
-        return this;
-    }
-});
-
-
-/***/ }),
-/* 342 */
-/***/ (function(module, exports) {
-
-/**
- * 弹出层面板控制器, z-index在10w层级
- *
- * Created by GUY on 2015/6/24.
- * @class
- */
-BI.LayerController = BI.inherit(BI.Controller, {
-    _defaultConfig: function () {
-        return BI.extend(BI.LayerController.superclass._defaultConfig.apply(this, arguments), {
-            render: "body"
-        });
-    },
-
-    _init: function () {
-        BI.LayerController.superclass._init.apply(this, arguments);
-        this.layerManager = {};
-        this.layouts = {};
-        this.zindex = BI.zIndex_layer;
-        BI.Resizers.add("layerController" + BI.uniqueId(), BI.bind(this._resize, this));
-    },
-
-    _resize: function () {
-        BI.each(this.layouts, function (i, layer) {
-            if (layer.element.is(":visible")) {
-                layer.element.trigger("__resize__");
-            }
-        });
-    },
-
-    make: function (name, container, op, context) {
-        if (BI.isWidget(container)) {
-            op = op || {};
-            op.container = container;
-        } else {
-            context = op;
-            op = container;
-        }
-        return this.create(name, null, op, context);
-    },
-
-    create: function (name, from, op, context) {
-        if (this.has(name)) {
-            return this.get(name);
-        }
-        op || (op = {});
-        var offset = op.offset || {};
-        var w = from;
-        if (BI.isWidget(from)) {
-            w = from.element;
-        }
-        if (BI.isNotEmptyString(w)) {
-            w = BI.Widget._renderEngine.createElement(w);
-        }
-        if (this.has(name)) {
-            return this.get(name);
-        }
-        var widget = BI.createWidget((op.render || {}), BI.extend({
-            type: "bi.layout"
-        }, op), context);
-        var layout = BI.createWidget({
-            type: "bi.absolute",
-            invisible: true,
-            items: [{
-                el: widget,
-                left: 0,
-                right: 0,
-                top: 0,
-                bottom: 0
-            }]
-        }, context);
-        BI.createWidget({
-            type: "bi.absolute",
-            element: op.container || this.options.render,
-            items: [{
-                el: layout,
-                left: offset.left || 0,
-                right: offset.right || 0,
-                top: offset.top || 0,
-                bottom: offset.bottom || 0
-            }]
-        });
-        if (w) {
-            layout.element.addClass("bi-popup-view");
-            layout.element.css({
-                left: w.offset().left + (offset.left || 0),
-                top: w.offset().top + (offset.top || 0),
-                width: offset.width || (w.outerWidth() - (offset.left || 0) - (offset.right || 0)) || "",
-                height: offset.height || (w.outerHeight() - (offset.top || 0) - (offset.bottom || 0)) || ""
-            });
-            layout.element.on("__resize__", function () {
-                w.is(":visible") &&
-                layout.element.css({
-                    left: w.offset().left + (offset.left || 0),
-                    top: w.offset().top + (offset.top || 0),
-                    width: offset.width || (w.outerWidth() - (offset.left || 0) - (offset.right || 0)) || "",
-                    height: offset.height || (w.outerHeight() - (offset.top || 0) - (offset.bottom || 0)) || ""
-                });
-            });
-        }
-        this.add(name, widget, layout);
-        return widget;
-    },
-
-    hide: function (name, callback) {
-        if (!this.has(name)) {
-            return this;
-        }
-        this._getLayout(name).invisible();
-        this._getLayout(name).element.hide(0, callback);
-        return this;
-    },
-
-    show: function (name, callback) {
-        if (!this.has(name)) {
-            return this;
-        }
-        this._getLayout(name).visible();
-        this._getLayout(name).element.css("z-index", this.zindex++).show(0, callback).trigger("__resize__");
-        return this;
-    },
-
-    isVisible: function (name) {
-        return this.has(name) && this._getLayout(name).isVisible();
-    },
-
-    add: function (name, layer, layout) {
-        if (this.has(name)) {
-            throw new Error("name is already exist");
-        }
-        layout.setVisible(false);
-        this.layerManager[name] = layer;
-        this.layouts[name] = layout;
-        layout.element.css("z-index", this.zindex++);
-        return this;
-    },
-
-    _getLayout: function (name) {
-        return this.layouts[name];
-    },
-
-    get: function (name) {
-        return this.layerManager[name];
-    },
-
-    has: function (name) {
-        return this.layerManager[name] != null;
-    },
-
-    remove: function (name) {
-        if (!this.has(name)) {
-            return this;
-        }
-        this.layerManager[name].destroy();
-        this.layouts[name].destroy();
-        delete this.layerManager[name];
-        delete this.layouts[name];
-        return this;
-    },
-
-    removeAll: function () {
-        var self = this;
-        BI.each(BI.keys(this.layerManager), function (index, name) {
-            self.layerManager[name].destroy();
-            self.layouts[name].destroy();
-        });
-        this.layerManager = {};
-        this.layouts = {};
-        return this;
-    }
-});
-
-/***/ }),
-/* 343 */
-/***/ (function(module, exports) {
-
-/**
- * 遮罩面板, z-index在1亿层级
- *
- * Created by GUY on 2015/6/24.
- * @class
- */
-BI.MaskersController = BI.inherit(BI.LayerController, {
-    _defaultConfig: function () {
-        return BI.extend(BI.MaskersController.superclass._defaultConfig.apply(this, arguments), {});
-    },
-
-    _init: function () {
-        BI.MaskersController.superclass._init.apply(this, arguments);
-        this.zindex = BI.zIndex_masker;
-    }
-});
-
-/***/ }),
-/* 344 */
-/***/ (function(module, exports) {
-
-/**
- * guy
- * popover弹出层控制器, z-index在100w层级
- * @class BI.popoverController
- * @extends BI.Controller
- */
-BI.PopoverController = BI.inherit(BI.Controller, {
-    _defaultConfig: function () {
-        return BI.extend(BI.PopoverController.superclass._defaultConfig.apply(this, arguments), {
-            modal: true, // 模态窗口
-            render: "body"
-        });
-    },
-
-    _init: function () {
-        BI.PopoverController.superclass._init.apply(this, arguments);
-        this.modal = this.options.modal;
-        this.floatManager = {};
-        this.floatLayer = {};
-        this.floatContainer = {};
-        this.floatOpened = {};
-        this.zindex = BI.zIndex_popover;
-        this.zindexMap = {};
-    },
-
-    _check: function (name) {
-        return BI.isNotNull(this.floatManager[name]);
-    },
-
-    create: function (name, options, context) {
-        if (this._check(name)) {
-            return this;
-        }
-        var popover = BI.createWidget(options || {}, {
-            type: "bi.popover"
-        }, context);
-        this.add(name, popover, options, context);
-        return this;
-    },
-
-    add: function (name, popover, options, context) {
-        var self = this;
-        options || (options = {});
-        if (this._check(name)) {
-            return this;
-        }
-        this.floatContainer[name] = BI.createWidget({
-            type: "bi.absolute",
-            cls: "bi-popup-view",
-            items: [{
-                el: (this.floatLayer[name] = BI.createWidget({
-                    type: "bi.absolute",
-                    items: [popover]
-                }, context)),
-                left: 0,
-                right: 0,
-                top: 0,
-                bottom: 0
-            }]
-        });
-        this.floatManager[name] = popover;
-        (function (key) {
-            popover.on(BI.Popover.EVENT_CLOSE, function () {
-                self.close(key);
-            });
-        })(name);
-        BI.createWidget({
-            type: "bi.absolute",
-            element: options.container || this.options.render,
-            items: [{
-                el: this.floatContainer[name],
-                left: 0,
-                right: 0,
-                top: 0,
-                bottom: 0
-            }]
-        });
-        return this;
-    },
-
-    open: function (name) {
-        if (!this._check(name)) {
-            return this;
-        }
-        if (!this.floatOpened[name]) {
-            this.floatOpened[name] = true;
-            var container = this.floatContainer[name];
-            container.element.css("zIndex", this.zindex++);
-            this.modal && container.element.__hasZIndexMask__(this.zindexMap[name]) && container.element.__releaseZIndexMask__(this.zindexMap[name]);
-            this.zindexMap[name] = this.zindex;
-            this.modal && container.element.__buildZIndexMask__(this.zindex++);
-            this.get(name).setZindex(this.zindex++);
-            this.floatContainer[name].visible();
-            var popover = this.get(name);
-            popover.show && popover.show();
-            var W = BI.Widget._renderEngine.createElement(this.options.render).width(), H = BI.Widget._renderEngine.createElement(this.options.render).height();
-            var w = popover.element.width(), h = popover.element.height();
-            var left = (W - w) / 2, top = (H - h) / 2;
-            if (left < 0) {
-                left = 0;
-            }
-            if (top < 0) {
-                top = 0;
-            }
-            popover.element.css({
-                left: left / BI.pixRatio + BI.pixUnit,
-                top: top / BI.pixRatio + BI.pixUnit
-            });
-        }
-        return this;
-    },
-
-    close: function (name) {
-        if (!this._check(name)) {
-            return this;
-        }
-        if (this.floatOpened[name]) {
-            delete this.floatOpened[name];
-            this.floatContainer[name].invisible();
-            this.modal && this.floatContainer[name].element.__releaseZIndexMask__(this.zindexMap[name]);
-        }
-        return this;
-    },
-
-    get: function (name) {
-        return this.floatManager[name];
-    },
-
-    remove: function (name) {
-        if (!this._check(name)) {
-            return this;
-        }
-        this.floatContainer[name].destroy();
-        this.modal && this.floatContainer[name].element.__releaseZIndexMask__(this.zindexMap[name]);
-        delete this.floatManager[name];
-        delete this.floatLayer[name];
-        delete this.zindexMap[name];
-        delete this.floatContainer[name];
-        delete this.floatOpened[name];
-        return this;
-    },
-
-    removeAll: function () {
-        var self = this;
-        BI.each(this.floatContainer, function (name, container) {
-            container.destroy();
-            self.modal && self.floatContainer[name].element.__releaseZIndexMask__(self.zindexMap[name]);
-        });
-        this.floatManager = {};
-        this.floatLayer = {};
-        this.floatContainer = {};
-        this.floatOpened = {};
-        this.zindexMap = {};
-        return this;
-    }
-});
-
-
-/***/ }),
-/* 345 */
-/***/ (function(module, exports) {
-
-/**
- * window.resize 控制器
- *
- * Created by GUY on 2015/6/24.
- * @class
- */
-BI.ResizeController = BI.inherit(BI.Controller, {
-    _defaultConfig: function () {
-        return BI.extend(BI.ResizeController.superclass._defaultConfig.apply(this, arguments), {});
-    },
-
-    _init: function () {
-        BI.ResizeController.superclass._init.apply(this, arguments);
-        var self = this;
-        this.resizerManger = {};
-        var fn = BI.debounce(function (ev) {
-            // if (BI.isWindow(ev.target)) {
-            self._resize(ev);
-            // }
-        }, 30);
-        if ("onorientationchange" in _global) {
-            _global.onorientationchange = fn;
-        } else {
-            BI.Widget._renderEngine.createElement(_global).resize(fn);
-        }
-    },
-
-    _resize: function (ev) {
-        BI.each(this.resizerManger, function (key, resizer) {
-            if (resizer instanceof BI.$) {
-                if (resizer.is(":visible")) {
-                    resizer.trigger("__resize__");
-                }
-                return;
-            }
-            if (resizer instanceof BI.Layout) {
-                resizer.resize();
-                return;
-            }
-            if (BI.isFunction(resizer)) {
-                resizer(ev);
-                return;
-            }
-        });
-    },
-
-    add: function (name, resizer) {
-        var self = this;
-        if (this.has(name)) {
-            return this;
-        }
-        this.resizerManger[name] = resizer;
-        return function () {
-            self.remove(name);
-        };
-    },
-
-    get: function (name) {
-        return this.resizerManger[name];
-    },
-
-    has: function (name) {
-        return this.resizerManger[name] != null;
-    },
-
-    remove: function (name) {
-        if (!this.has(name)) {
-            return this;
-        }
-        delete this.resizerManger[name];
-        return this;
-    }
-});
-
-/***/ }),
-/* 346 */
-/***/ (function(module, exports) {
-
-/**
- * tooltip控制器
- * 控制tooltip的显示,  且页面中只有一个tooltip显示
- *
- * Created by GUY on 2015/9/8.
- * @class BI.TooltipsController
- * @extends BI.Controller
- */
-BI.TooltipsController = BI.inherit(BI.Controller, {
-    _defaultConfig: function () {
-        return BI.extend(BI.TooltipsController.superclass._defaultConfig.apply(this, arguments), {});
-    },
-
-    _const: {
-        height: 18
-    },
-
-    _init: function () {
-        BI.TooltipsController.superclass._init.apply(this, arguments);
-        this.tooltipsManager = {};
-        this.showingTips = {};// 存储正在显示的tooltip
-    },
-
-    _createTooltip: function (text, level) {
-        return BI.createWidget({
-            type: "bi.tooltip",
-            text: text,
-            level: level,
-            stopEvent: true
-        });
-    },
-
-    hide: function (name, callback) {
-        if (!this.has(name)) {
-            return this;
-        }
-        delete this.showingTips[name];
-        this.get(name).element.hide(0, callback);
-        this.get(name).invisible();
-        return this;
-    },
-
-    create: function (name, text, level, context) {
-        if (!this.has(name)) {
-            var tooltip = this._createTooltip(text, level);
-            this.add(name, tooltip);
-            BI.createWidget({
-                type: "bi.absolute",
-                element: context || "body",
-                items: [{
-                    el: tooltip
-                }]
-            });
-            tooltip.invisible();
-        }
-        return this.get(name);
-    },
-
-    // opt: {container: '', belowMouse: false}
-    show: function (e, name, text, level, context, opt) {
-        opt || (opt = {});
-        var self = this;
-        BI.each(this.showingTips, function (i, tip) {
-            self.hide(i);
-        });
-        this.showingTips = {};
-        if (!this.has(name)) {
-            this.create(name, text, level, opt.container || "body");
-        }
-        if (!opt.belowMouse) {
-            var offset = context.element.offset();
-            var bounds = context.element.bounds();
-            if (bounds.height === 0 || bounds.width === 0) {
-                return;
-            }
-            var top = offset.top + bounds.height + 5;
-        }
-        var tooltip = this.get(name);
-        tooltip.setText(text);
-        tooltip.element.css({
-            left: "0px",
-            top: "0px"
-        });
-        tooltip.visible();
-        tooltip.element.height(tooltip.element[0].scrollHeight);
-        this.showingTips[name] = true;
-        // scale影响要计算在内
-        // var scale = context.element.offset().left / context.element.get(0).getBoundingClientRect().left;
-        // var x = (e.pageX || e.clientX) * scale + 15, y = (e.pageY || e.clientY) * scale + 15;
-        var x = (e.pageX || e.clientX) + 15, y = (e.pageY || e.clientY) + 15;
-        if (x + tooltip.element.outerWidth() > BI.Widget._renderEngine.createElement("body").outerWidth()) {
-            x -= tooltip.element.outerWidth() + 15;
-        }
-        var bodyHeight = BI.Widget._renderEngine.createElement("body").outerHeight();
-        if (y + tooltip.element.outerHeight() > bodyHeight || top + tooltip.element.outerHeight() > bodyHeight) {
-            y -= tooltip.element.outerHeight() + 15;
-            !opt.belowMouse && (y = Math.min(y, offset.top - tooltip.element.outerHeight() - 5));
-        } else {
-            !opt.belowMouse && (y = Math.max(y, top));
-        }
-        tooltip.element.css({
-            left: x < 0 ? 0 : x / BI.pixRatio + BI.pixUnit,
-            top: y < 0 ? 0 : y / BI.pixRatio + BI.pixUnit
-        });
-        tooltip.element.hover(function () {
-            self.remove(name);
-            context.element.trigger("mouseleave.title" + context.getName());
-        });
-        return this;
-    },
-
-    add: function (name, bubble) {
-        if (this.has(name)) {
-            return this;
-        }
-        this.set(name, bubble);
-        return this;
-    },
-
-    get: function (name) {
-        return this.tooltipsManager[name];
-    },
-
-    set: function (name, bubble) {
-        this.tooltipsManager[name] = bubble;
-    },
-
-    has: function (name) {
-        return this.tooltipsManager[name] != null;
-    },
-
-    remove: function (name) {
-        if (!this.has(name)) {
-            return this;
-        }
-        this.tooltipsManager[name].destroy();
-        delete this.tooltipsManager[name];
-        return this;
-    }
-});
-
-
-/***/ }),
-/* 347 */
-/***/ (function(module, exports) {
-
-/**
- * 事件集合
- * @class BI.Events
- */
-_.extend(BI, {
-    Events: {
-
-        /**
-         * @static
-         * @property keydown事件
-         */
-        KEYDOWN: "_KEYDOWN",
-
-        /**
-         * @static
-         * @property 回撤事件
-         */
-        BACKSPACE: "_BACKSPACE",
-
-        /**
-         * @static
-         * @property 空格事件
-         */
-        SPACE: "_SPACE",
-
-        /**
-         * @static
-         * @property 回车事件
-         */
-        ENTER: "_ENTER",
-
-        /**
-         * @static
-         * @property 确定事件
-         */
-        CONFIRM: "_CONFIRM",
-
-        /**
-         * @static
-         * @property 错误事件
-         */
-        ERROR: "_ERROR",
-
-        /**
-         * @static
-         * @property 暂停事件
-         */
-        PAUSE: "_PAUSE",
-
-        /**
-         * @static
-         * @property destroy事件
-         */
-        DESTROY: "_DESTROY",
-
-        /**
-         * @static
-         * @property 挂载事件
-         */
-        MOUNT: "_MOUNT",
-
-        /**
-         * @static
-         * @property 取消挂载事件
-         */
-        UNMOUNT: "_UNMOUNT",
-
-        /**
-         * @static
-         * @property 清除选择
-         */
-        CLEAR: "_CLEAR",
-
-        /**
-         * @static
-         * @property 添加数据
-         */
-        ADD: "_ADD",
-
-        /**
-         * @static
-         * @property 正在编辑状态事件
-         */
-        EDITING: "_EDITING",
-
-        /**
-         * @static
-         * @property 空状态事件
-         */
-        EMPTY: "_EMPTY",
-
-        /**
-         * @static
-         * @property 显示隐藏事件
-         */
-        VIEW: "_VIEW",
-
-        /**
-         * @static
-         * @property 窗体改变大小
-         */
-        RESIZE: "_RESIZE",
-
-        /**
-         * @static
-         * @property 编辑前事件
-         */
-        BEFOREEDIT: "_BEFOREEDIT",
-
-        /**
-         * @static
-         * @property 编辑后事件
-         */
-        AFTEREDIT: "_AFTEREDIT",
-
-        /**
-         * @static
-         * @property 开始编辑事件
-         */
-        STARTEDIT: "_STARTEDIT",
-
-        /**
-         * @static
-         * @property 停止编辑事件
-         */
-        STOPEDIT: "_STOPEDIT",
-
-        /**
-         * @static
-         * @property 值改变事件
-         */
-        CHANGE: "_CHANGE",
-
-        /**
-         * @static
-         * @property 下拉弹出菜单事件
-         */
-        EXPAND: "_EXPAND",
-
-        /**
-         * @static
-         * @property 关闭下拉菜单事件
-         */
-        COLLAPSE: "_COLLAPSE",
-
-        /**
-         * @static
-         * @property 回调事件
-         */
-        CALLBACK: "_CALLBACK",
-
-        /**
-         * @static
-         * @property 点击事件
-         */
-        CLICK: "_CLICK",
-
-        /**
-         * @static
-         * @property 状态改变事件，一般是用在复选按钮和单选按钮
-         */
-        STATECHANGE: "_STATECHANGE",
-
-        /**
-         * @static
-         * @property 状态改变前事件
-         */
-        BEFORESTATECHANGE: "_BEFORESTATECHANGE",
-
-
-        /**
-         * @static
-         * @property 初始化事件
-         */
-        INIT: "_INIT",
-
-        /**
-         * @static
-         * @property 初始化后事件
-         */
-        AFTERINIT: "_AFTERINIT",
-
-        /**
-         * @static
-         * @property 滚动条滚动事件
-         */
-        SCROLL: "_SCROLL",
-
-
-        /**
-         * @static
-         * @property 开始加载事件
-         */
-        STARTLOAD: "_STARTLOAD",
-
-        /**
-         * @static
-         * @property 加载后事件
-         */
-        AFTERLOAD: "_AFTERLOAD",
-
-
-        /**
-         * @static
-         * @property 提交前事件
-         */
-        BS: "beforesubmit",
-
-        /**
-         * @static
-         * @property 提交后事件
-         */
-        AS: "aftersubmit",
-
-        /**
-         * @static
-         * @property 提交完成事件
-         */
-        SC: "submitcomplete",
-
-        /**
-         * @static
-         * @property 提交失败事件
-         */
-        SF: "submitfailure",
-
-        /**
-         * @static
-         * @property 提交成功事件
-         */
-        SS: "submitsuccess",
-
-        /**
-         * @static
-         * @property 校验提交前事件
-         */
-        BVW: "beforeverifywrite",
-
-        /**
-         * @static
-         * @property 校验提交后事件
-         */
-        AVW: "afterverifywrite",
-
-        /**
-         * @static
-         * @property 校验后事件
-         */
-        AV: "afterverify",
-
-        /**
-         * @static
-         * @property 填报前事件
-         */
-        BW: "beforewrite",
-
-        /**
-         * @static
-         * @property 填报后事件
-         */
-        AW: "afterwrite",
-
-        /**
-         * @static
-         * @property 填报成功事件
-         */
-        WS: "writesuccess",
-
-        /**
-         * @static
-         * @property 填报失败事件
-         */
-        WF: "writefailure",
-
-        /**
-         * @static
-         * @property 添加行前事件
-         */
-        BA: "beforeappend",
-
-        /**
-         * @static
-         * @property 添加行后事件
-         */
-        AA: "afterappend",
-
-        /**
-         * @static
-         * @property 删除行前事件
-         */
-        BD: "beforedelete",
-
-        /**
-         * @static
-         * @property 删除行后事件
-         */
-        AD: "beforedelete",
-
-        /**
-         * @static
-         * @property 未提交离开事件
-         */
-        UC: "unloadcheck",
-
-
-        /**
-         * @static
-         * @property PDF导出前事件
-         */
-        BTOPDF: "beforetopdf",
-
-        /**
-         * @static
-         * @property PDF导出后事件
-         */
-        ATOPDF: "aftertopdf",
-
-        /**
-         * @static
-         * @property Excel导出前事件
-         */
-        BTOEXCEL: "beforetoexcel",
-
-        /**
-         * @static
-         * @property Excel导出后事件
-         */
-        ATOEXCEL: "aftertoexcel",
-
-        /**
-         * @static
-         * @property Word导出前事件
-         */
-        BTOWORD: "beforetoword",
-
-        /**
-         * @static
-         * @property Word导出后事件
-         */
-        ATOWORD: "aftertoword",
-
-        /**
-         * @static
-         * @property 图片导出前事件
-         */
-        BTOIMAGE: "beforetoimage",
-
-        /**
-         * @static
-         * @property 图片导出后事件
-         */
-        ATOIMAGE: "aftertoimage",
-
-        /**
-         * @static
-         * @property HTML导出前事件
-         */
-        BTOHTML: "beforetohtml",
-
-        /**
-         * @static
-         * @property HTML导出后事件
-         */
-        ATOHTML: "aftertohtml",
-
-        /**
-         * @static
-         * @property Excel导入前事件
-         */
-        BIMEXCEL: "beforeimportexcel",
-
-        /**
-         * @static
-         * @property Excel导出后事件
-         */
-        AIMEXCEL: "afterimportexcel",
-
-        /**
-         * @static
-         * @property PDF打印前事件
-         */
-        BPDFPRINT: "beforepdfprint",
-
-        /**
-         * @static
-         * @property PDF打印后事件
-         */
-        APDFPRINT: "afterpdfprint",
-
-        /**
-         * @static
-         * @property Flash打印前事件
-         */
-        BFLASHPRINT: "beforeflashprint",
-
-        /**
-         * @static
-         * @property Flash打印后事件
-         */
-        AFLASHPRINT: "afterflashprint",
-
-        /**
-         * @static
-         * @property Applet打印前事件
-         */
-        BAPPLETPRINT: "beforeappletprint",
-
-        /**
-         * @static
-         * @property Applet打印后事件
-         */
-        AAPPLETPRINT: "afterappletprint",
-
-        /**
-         * @static
-         * @property 服务器打印前事件
-         */
-        BSEVERPRINT: "beforeserverprint",
-
-        /**
-         * @static
-         * @property 服务器打印后事件
-         */
-        ASERVERPRINT: "afterserverprint",
-
-        /**
-         * @static
-         * @property 邮件发送前事件
-         */
-        BEMAIL: "beforeemail",
-
-        /**
-         * @static
-         * @property 邮件发送后事件
-         */
-        AEMAIL: "afteremail"
-    }
-});
-
-/***/ }),
-/* 348 */
-/***/ (function(module, exports) {
-
-BI.prepares.push(function () {
-    BI.Date = BI.Date || {};
-    // 牵扯到国际化这些常量在页面加载后再生效
-    // full day names
-    BI.Date._DN = [BI.i18nText("BI-Basic_Sunday"),
-        BI.i18nText("BI-Basic_Monday"),
-        BI.i18nText("BI-Basic_Tuesday"),
-        BI.i18nText("BI-Basic_Wednesday"),
-        BI.i18nText("BI-Basic_Thursday"),
-        BI.i18nText("BI-Basic_Friday"),
-        BI.i18nText("BI-Basic_Saturday"),
-        BI.i18nText("BI-Basic_Sunday")];
-
-    // short day names
-    BI.Date._SDN = [BI.i18nText("BI-Basic_Simple_Sunday"),
-        BI.i18nText("BI-Basic_Simple_Monday"),
-        BI.i18nText("BI-Basic_Simple_Tuesday"),
-        BI.i18nText("BI-Basic_Simple_Wednesday"),
-        BI.i18nText("BI-Basic_Simple_Thursday"),
-        BI.i18nText("BI-Basic_Simple_Friday"),
-        BI.i18nText("BI-Basic_Simple_Saturday"),
-        BI.i18nText("BI-Basic_Simple_Sunday")];
-
-    // Monday first, etc.
-    BI.Date._FD = 1;
-
-    // full month namesdat
-    BI.Date._MN = [
-        BI.i18nText("BI-Basic_January"),
-        BI.i18nText("BI-Basic_February"),
-        BI.i18nText("BI-Basic_March"),
-        BI.i18nText("BI-Basic_April"),
-        BI.i18nText("BI-Basic_May"),
-        BI.i18nText("BI-Basic_June"),
-        BI.i18nText("BI-Basic_July"),
-        BI.i18nText("BI-Basic_August"),
-        BI.i18nText("BI-Basic_September"),
-        BI.i18nText("BI-Basic_October"),
-        BI.i18nText("BI-Basic_November"),
-        BI.i18nText("BI-Basic_December")];
-
-    // short month names
-    BI.Date._SMN = [0,
-        1,
-        2,
-        3,
-        4,
-        5,
-        6,
-        7,
-        8,
-        9,
-        10,
-        11];
-
-    BI.Date._QN = ["", BI.i18nText("BI-Quarter_1"),
-        BI.i18nText("BI-Quarter_2"),
-        BI.i18nText("BI-Quarter_3"),
-        BI.i18nText("BI-Quarter_4")];
-
-    /** Adds the number of days array to the Date object. */
-    BI.Date._MD = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-
-    // 实际上无论周几作为一周的第一天，周初周末都是在-6-0间做偏移，用一个数组就可以
-    BI.Date._OFFSET = [0, -1, -2, -3, -4, -5, -6];
-});
-
-/***/ }),
-/* 349 */
-/***/ (function(module, exports) {
-
-/**
- * guy
- * 检测某个Widget的EventChange事件然后去show某个card
- * @type {*|void|Object}
- * @class BI.ShowListener
- * @extends BI.OB
- */
-BI.ShowListener = BI.inherit(BI.OB, {
-    _defaultConfig: function () {
-        return BI.extend(BI.ShowListener.superclass._defaultConfig.apply(this, arguments), {
-            eventObj: BI.createWidget(),
-            cardLayout: null,
-            cardNameCreator: function (v) {
-                return v;
-            },
-            cardCreator: BI.emptyFn,
-            afterCardCreated: BI.emptyFn,
-            afterCardShow: BI.emptyFn
-        });
-    },
-
-    _init: function () {
-        BI.ShowListener.superclass._init.apply(this, arguments);
-        var self = this, o = this.options;
-        if (o.eventObj) {
-            o.eventObj.on(BI.Controller.EVENT_CHANGE, function (type, v, ob) {
-                if (type === BI.Events.CLICK) {
-                    v = v || o.eventObj.getValue();
-                    v = BI.isArray(v) ? (v.length > 1 ? v.toString() : v[0]) : v;
-                    if (BI.isNull(v)) {
-                        throw new Error("value cannot be null");
-                    }
-                    var cardName = o.cardNameCreator(v);
-                    if (!o.cardLayout.isCardExisted(cardName)) {
-                        var card = o.cardCreator(cardName);
-                        o.cardLayout.addCardByName(cardName, card);
-                        o.afterCardCreated(cardName);
-                    }
-                    o.cardLayout.showCardByName(cardName);
-                    BI.nextTick(function () {
-                        o.afterCardShow(cardName);
-                        self.fireEvent(BI.ShowListener.EVENT_CHANGE, cardName);
-                    });
-                }
-            });
-        }
-    }
-});
-BI.ShowListener.EVENT_CHANGE = "EVENT_CHANGE";
-
-/***/ }),
-/* 350 */
-/***/ (function(module, exports) {
-
-/**
- * style加载管理器
- *
- * Created by GUY on 2015/9/7.
- * @class
- */
-BI.StyleLoaderManager = BI.inherit(BI.OB, {
-    _defaultConfig: function () {
-        return BI.extend(BI.StyleLoaderManager.superclass._defaultConfig.apply(this, arguments), {});
-    },
-
-    _init: function () {
-        BI.StyleLoaderManager.superclass._init.apply(this, arguments);
-        this.stylesManager = {};
-    },
-
-    loadStyle: function (name, styleString) {
-        if(!_global.document) {
-            return;
-        }
-        var d = document, styles = d.createElement("style");
-        d.getElementsByTagName("head")[0].appendChild(styles);
-        styles.setAttribute("type", "text/css");
-        if (styles.styleSheet) {
-            styles.styleSheet.cssText = styleString;
-        } else {
-            styles.appendChild(document.createTextNode(styleString));
-        }
-        this.stylesManager[name] = styles;
-
-        return this;
-    },
-
-    get: function (name) {
-        return this.stylesManager[name];
-    },
-
-    has: function (name) {
-        return this.stylesManager[name] != null;
-    },
-
-    removeStyle: function (name) {
-        if (!this.has(name)) {
-            return this;
-        }
-        this.stylesManager[name].parentNode.removeChild(this.stylesManager[name]);
-        delete this.stylesManager[name];
-        return this;
-    }
-});
-
-/***/ }),
-/* 351 */
-/***/ (function(module, exports) {
-
-/**
- * @class BI.Logic
- * @extends BI.OB
- */
-BI.Logic = BI.inherit(BI.OB, {
-    createLogic: function () {
-        return this.options || {};
-    }
-});
-
-BI.LogicFactory = {
-    Type: {
-        Vertical: "vertical",
-        Horizontal: "horizontal",
-        Table: "table",
-        HorizontalFill: "horizontal_fill"
-    },
-    createLogic: function (key, options) {
-        var logic;
-        switch (key) {
-            case BI.LogicFactory.Type.Vertical:
-                logic = BI.VerticalLayoutLogic;
-                break;
-            case BI.LogicFactory.Type.Horizontal:
-                logic = BI.HorizontalLayoutLogic;
-                break;
-            case BI.LogicFactory.Type.Table:
-                logic = BI.TableLayoutLogic;
-                break;
-            case BI.LogicFactory.Type.HorizontalFill:
-                logic = BI.HorizontalFillLayoutLogic;
-                break;
-            default :
-                logic = BI.Logic;
-                break;
-        }
-        return new logic(options).createLogic();
-    },
-
-    createLogicTypeByDirection: function (direction) {
-        switch (direction) {
-            case BI.Direction.Top:
-            case BI.Direction.Bottom:
-            case BI.Direction.Custom:
-                return BI.LogicFactory.Type.Vertical;
-                break;
-            case BI.Direction.Left:
-            case BI.Direction.Right:
-                return BI.LogicFactory.Type.Horizontal;
-        }
-    },
-
-    createLogicItemsByDirection: function (direction) {
-        var layout;
-        var items = Array.prototype.slice.call(arguments, 1);
-        items = BI.map(items, function (i, item) {
-            if (BI.isWidget(item)) {
-                return {
-                    el: item,
-                    width: item.options.width,
-                    height: item.options.height
-                };
-            }
-            return item;
-        });
-        switch (direction) {
-            case BI.Direction.Bottom:
-                layout = BI.LogicFactory.Type.Vertical;
-                items.reverse();
-                break;
-            case BI.Direction.Right:
-                layout = BI.LogicFactory.Type.Horizontal;
-                items.reverse();
-                break;
-            case BI.Direction.Custom:
-                items = items.slice(1);
-                break;
-        }
-        return items;
-    }
-};
-
-/***/ }),
-/* 352 */
-/***/ (function(module, exports) {
-
-/**
- * guy
- * 上下布局逻辑
- * 上下布局的时候要考虑到是动态布局还是静态布局
- *
- * @class BI.VerticalLayoutLogic
- * @extends BI.Logic
- */
-BI.VerticalLayoutLogic = BI.inherit(BI.Logic, {
-    _defaultConfig: function () {
-        return BI.extend(BI.VerticalLayoutLogic.superclass._defaultConfig.apply(this, arguments), {
-            dynamic: false,
-            scrollable: null,
-            scrolly: false,
-            scrollx: false,
-            items: [],
-            hgap: 0,
-            vgap: 0,
-            lgap: 0,
-            rgap: 0,
-            tgap: 0,
-            bgap: 0
-        });
-    },
-
-    createLogic: function () {
-        var layout, o = this.options;
-        if (o.dynamic) {
-            layout = "bi.vertical";
-        } else {
-            layout = "bi.vtape";
-        }
-        return {
-            type: layout,
-            scrollable: o.scrollable,
-            scrolly: o.scrolly,
-            scrollx: o.scrollx,
-            hgap: o.hgap,
-            vgap: o.vgap,
-            lgap: o.lgap,
-            rgap: o.rgap,
-            tgap: o.tgap,
-            bgap: o.bgap,
-            items: o.items
-        };
-    }
-});
-
-
-/**
- * guy
- * 左右布局逻辑
- * 左右布局的时候要考虑到是动态布局还是静态布局
- *
- * @class BI.HorizontalLayoutLogic
- * @extends BI.Logic
- */
-BI.HorizontalLayoutLogic = BI.inherit(BI.Logic, {
-    _defaultConfig: function () {
-        return BI.extend(BI.HorizontalLayoutLogic.superclass._defaultConfig.apply(this, arguments), {
-            dynamic: false,
-            scrollable: null,
-            scrolly: false,
-            scrollx: false,
-            items: [],
-            hgap: 0,
-            vgap: 0,
-            lgap: 0,
-            rgap: 0,
-            tgap: 0,
-            bgap: 0
-        });
-    },
-
-    createLogic: function () {
-        var layout, o = this.options;
-        if (o.dynamic) {
-            layout = "bi.vertical_adapt";
-        } else {
-            layout = "bi.htape";
-        }
-        return {
-            type: layout,
-            scrollable: o.scrollable,
-            scrolly: o.scrolly,
-            scrollx: o.scrollx,
-            hgap: o.hgap,
-            vgap: o.vgap,
-            lgap: o.lgap,
-            rgap: o.rgap,
-            tgap: o.tgap,
-            bgap: o.bgap,
-            items: o.items
-        };
-    }
-});
-
-/**
- * guy
- * 表格布局逻辑
- * 表格布局的时候要考虑到是动态布局还是静态布局
- *
- * @class BI.TableLayoutLogic
- * @extends BI.OB
- */
-BI.TableLayoutLogic = BI.inherit(BI.Logic, {
-    _defaultConfig: function () {
-        return BI.extend(BI.TableLayoutLogic.superclass._defaultConfig.apply(this, arguments), {
-            dynamic: false,
-            scrollable: null,
-            scrolly: false,
-            scrollx: false,
-            columns: 0,
-            rows: 0,
-            columnSize: [],
-            rowSize: [],
-            hgap: 0,
-            vgap: 0,
-            items: []
-        });
-    },
-
-    createLogic: function () {
-        var layout, o = this.options;
-        if (o.dynamic) {
-            layout = "bi.table";
-        } else {
-            layout = "bi.window";
-        }
-        return {
-            type: layout,
-            scrollable: o.scrollable,
-            scrolly: o.scrolly,
-            scrollx: o.scrollx,
-            columns: o.columns,
-            rows: o.rows,
-            columnSize: o.columnSize,
-            rowSize: o.rowSize,
-            hgap: o.hgap,
-            vgap: o.vgap,
-            items: o.items
-        };
-    }
-});
-
-/**
- * guy
- * 左右充满布局逻辑
- *
- * @class BI.HorizontalFillLayoutLogic
- * @extends BI.Logic
- */
-BI.HorizontalFillLayoutLogic = BI.inherit(BI.Logic, {
-    _defaultConfig: function () {
-        return BI.extend(BI.HorizontalFillLayoutLogic.superclass._defaultConfig.apply(this, arguments), {
-            dynamic: false,
-            scrollable: null,
-            scrolly: false,
-            scrollx: false,
-            items: [],
-            hgap: 0,
-            vgap: 0,
-            lgap: 0,
-            rgap: 0,
-            tgap: 0,
-            bgap: 0
-        });
-    },
-
-    createLogic: function () {
-        var layout, o = this.options;
-        var columnSize = [];
-        BI.each(o.items, function (i, item) {
-            columnSize.push(item.width || 0);
-        });
-        if (o.dynamic) {
-            layout = "bi.horizontal_adapt";
-        } else {
-            layout = "bi.htape";
-        }
-        return {
-            type: layout,
-            columnSize: columnSize,
-            scrollable: o.scrollable,
-            scrolly: o.scrolly,
-            scrollx: o.scrollx,
-            hgap: o.hgap,
-            vgap: o.vgap,
-            lgap: o.lgap,
-            rgap: o.rgap,
-            tgap: o.tgap,
-            bgap: o.bgap,
-            items: o.items
-        };
-    }
-});
-
-
-/***/ }),
-/* 353 */
-/***/ (function(module, exports) {
-
-if (!Number.prototype.toFixed || (0.00008).toFixed(3) !== "0.000" ||
-    (0.9).toFixed(0) === "0" || (1.255).toFixed(2) !== "1.25" ||
-    (1000000000000000128).toFixed(0) !== "1000000000000000128") {
-    (function () {
-        var base, size, data, i;
-        base = 1e7;
-        size = 6;
-        data = [0, 0, 0, 0, 0, 0];
-        function multiply (n, c) {
-            var i = -1;
-            while (++i < size) {
-                c += n * data[i];
-                data[i] = c % base;
-                c = Math.floor(c / base);
-            }
-        }
-
-        function divide (n) {
-            var i = size, c = 0;
-            while (--i >= 0) {
-                c += data[i];
-                data[i] = Math.floor(c / n);
-                c = (c % n) * base;
-            }
-        }
-
-        function toString () {
-            var i = size;
-            var s = "";
-            while (--i >= 0) {
-                if (s !== "" || i === 0 || data[i] !== 0) {
-                    var t = String(data[i]);
-                    if (s === "") {
-                        s = t;
-                    } else {
-                        s += "0000000".slice(0, 7 - t.length) + t;
-                    }
-                }
-            }
-            return s;
-        }
-
-        function pow (x, n, acc) {
-            return (n === 0 ? acc : (n % 2 === 1 ? pow(x, n - 1, acc * x)
-                : pow(x * x, n / 2, acc)));
-        }
-
-        function log (x) {
-            var n = 0;
-            while (x >= 4096) {
-                n += 12;
-                x /= 4096;
-            }
-            while (x >= 2) {
-                n += 1;
-                x /= 2;
-            }
-            return n;
-        }
-
-        Number.prototype.toFixed = function (fractionDigits) {
-            var f, x, s, m, e, z, j, k;
-            f = Number(fractionDigits);
-            f = f !== f ? 0 : Math.floor(f);
-
-            if (f < 0 || f > 20) {
-                throw new RangeError("Number.toFixed called with invalid number of decimals");
-            }
-
-            x = Number(this);
-
-            if (x !== x) {
-                return "NaN";
-            }
-
-            if (x <= -1e21 || x > 1e21) {
-                return String(x);
-            }
-
-            s = "";
-
-            if (x < 0) {
-                s = "-";
-                x = -x;
-            }
-
-            m = "0";
-
-            if (x > 1e-21) {
-                // 1e-21<x<1e21
-                // -70<log2(x)<70
-                e = log(x * pow(2, 69, 1)) - 69;
-                z = (e < 0 ? x * pow(2, -e, 1) : x / pow(2, e, 1));
-                z *= 0x10000000000000;// Math.pow(2,52);
-                e = 52 - e;
-
-                // -18<e<122
-                // x=z/2^e
-                if (e > 0) {
-                    multiply(0, z);
-                    j = f;
-
-                    while (j >= 7) {
-                        multiply(1e7, 0);
-                        j -= 7;
-                    }
-
-                    multiply(pow(10, j, 1), 0);
-                    j = e - 1;
-
-                    while (j >= 23) {
-                        divide(1 << 23);
-                        j -= 23;
-                    }
-                    divide(1 << j);
-                    multiply(1, 1);
-                    divide(2);
-                    m = toString();
-                } else {
-                    multiply(0, z);
-                    multiply(1 << (-e), 0);
-                    m = toString() + "0.00000000000000000000".slice(2, 2 + f);
-                }
-            }
-
-            if (f > 0) {
-                k = m.length;
-
-                if (k <= f) {
-                    m = s + "0.0000000000000000000".slice(0, f - k + 2) + m;
-                } else {
-                    m = s + m.slice(0, k - f) + "." + m.slice(k - f);
-                }
-            } else {
-                m = s + m;
-            }
-
-            return m;
-        };
-
-    })();
-}
-
-/***/ }),
-/* 354 */
-/***/ (function(module, exports) {
-
-BI.version = "2.0";
-
-/***/ }),
-/* 355 */
-/***/ (function(module, exports) {
-
-!(function () {
-    BI.initWorker = function () {
-        function createWatcher (model, keyOrFn, cb, options) {
-            options = options || {};
-            return Fix.watch(model, keyOrFn, cb, BI.extend(options, {
-                store: model
-            }));
-        }
-
-        var models = {}, watches = {};
-        addEventListener("message", function (e) {
-            var data = e.data;
-            switch (data.eventType) {
-                case "action":
-                    models[data.name][data.action].apply(models[data.name], data.args);
-                    break;
-                case "destroy":
-                    BI.each(watches[data.name], function (i, unwatches) {
-                        unwatches = BI.isArray(unwatches) ? unwatches : [unwatches];
-                        BI.each(unwatches, function (j, unwatch) {
-                            unwatch();
-                        });
-                    });
-                    delete models[data.name];
-                    delete watches[data.name];
-                    break;
-                case "create":
-                    var store = models[data.name] = BI.Models.getModel(data.type, data.options);
-                    watches[data.name] = [];
-                    BI.each(data.watches, function (i, key) {
-                        watches[data.name].push(createWatcher(store.model, key, function (newValue, oldValue) {
-                            postMessage(BI.extend({}, data, {
-                                eventType: "watch",
-                                currentWatchType: key
-                            }, {args: [newValue, oldValue]}));
-                        }));
-                    });
-                    postMessage(BI.extend({}, data, {
-                        eventType: "create"
-                    }, {msg: store.model}));
-                    break;
-                default:
-                    break;
-            }
-        }, false);
-    };
-}());
-
-
-/***/ }),
-/* 356 */
+/* 357 */
 /***/ (function(module, exports) {
 
 /**
@@ -13991,7 +14033,7 @@ BI.shortcut("bi.absolute_center_adapt", BI.AbsoluteCenterLayout);
 
 
 /***/ }),
-/* 357 */
+/* 358 */
 /***/ (function(module, exports) {
 
 /**
@@ -14048,7 +14090,7 @@ BI.shortcut("bi.absolute_horizontal_adapt", BI.AbsoluteHorizontalLayout);
 
 
 /***/ }),
-/* 358 */
+/* 359 */
 /***/ (function(module, exports) {
 
 /**
@@ -14107,7 +14149,7 @@ BI.shortcut("bi.absolute_vertical_adapt", BI.AbsoluteVerticalLayout);
 
 
 /***/ }),
-/* 359 */
+/* 360 */
 /***/ (function(module, exports) {
 
 /**
@@ -14166,7 +14208,7 @@ BI.shortcut("bi.center_adapt", BI.CenterAdaptLayout);
 
 
 /***/ }),
-/* 360 */
+/* 361 */
 /***/ (function(module, exports) {
 
 /**
@@ -14179,6 +14221,7 @@ BI.HorizontalAdaptLayout = BI.inherit(BI.Layout, {
         return BI.extend(BI.HorizontalAdaptLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-h-a",
             verticalAlign: BI.VerticalAlign.Top,
+            horizontalAlign: BI.HorizontalAlign.Center,
             columnSize: [],
             scrollx: false,
             hgap: 0,
@@ -14195,7 +14238,7 @@ BI.HorizontalAdaptLayout = BI.inherit(BI.Layout, {
         return {
             type: "bi.horizontal",
             verticalAlign: o.verticalAlign,
-            horizontalAlign: BI.HorizontalAlign.Center,
+            horizontalAlign: o.horizontalAlign,
             columnSize: o.columnSize,
             items: o.items,
             scrollx: o.scrollx,
@@ -14225,7 +14268,7 @@ BI.shortcut("bi.horizontal_adapt", BI.HorizontalAdaptLayout);
 
 
 /***/ }),
-/* 361 */
+/* 362 */
 /***/ (function(module, exports) {
 
 /**
@@ -14423,7 +14466,7 @@ BI.shortcut("bi.right_vertical_adapt", BI.RightVerticalAdaptLayout);
 
 
 /***/ }),
-/* 362 */
+/* 363 */
 /***/ (function(module, exports) {
 
 /**
@@ -14454,7 +14497,7 @@ BI.TableAdaptLayout = BI.inherit(BI.Layout, {
             position: "relative",
             display: "table",
             width: (o.horizontalAlign === BI.HorizontalAlign.Center || o.horizontalAlign === BI.HorizontalAlign.Stretch) ? "100%" : "auto",
-            height: (o.verticalAlign === BI.VerticalAlign.Middle || o.verticalAlign === BI.VerticalAlign.Stretch) ? "100%" : "auto",
+            height: (o.verticalAlign !== BI.VerticalAlign.Top) ? "100%" : "auto",
             "white-space": "nowrap"
         });
         this.populate(this.options.items);
@@ -14489,8 +14532,6 @@ BI.TableAdaptLayout = BI.inherit(BI.Layout, {
             position: "relative",
             display: "table-cell",
             "vertical-align": o.verticalAlign,
-            margin: "0",
-            padding: "0",
             height: "100%"
         });
         if (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
@@ -14534,7 +14575,7 @@ BI.shortcut("bi.table_adapt", BI.TableAdaptLayout);
 
 
 /***/ }),
-/* 363 */
+/* 364 */
 /***/ (function(module, exports) {
 
 /**
@@ -14546,6 +14587,7 @@ BI.VerticalAdaptLayout = BI.inherit(BI.Layout, {
     props: {
         baseCls: "bi-v-a",
         horizontalAlign: BI.HorizontalAlign.Left,
+        verticalAlign: BI.VerticalAlign.Middle,
         columnSize: [],
         scrollx: false,
         hgap: 0,
@@ -14561,8 +14603,8 @@ BI.VerticalAdaptLayout = BI.inherit(BI.Layout, {
         BI.VerticalAdaptLayout.superclass.render.apply(this, arguments);
         return {
             type: "bi.horizontal",
-            verticalAlign: BI.VerticalAlign.Middle,
             horizontalAlign: o.horizontalAlign,
+            verticalAlign: o.verticalAlign,
             columnSize: o.columnSize,
             items: o.items,
             scrollx: o.scrollx,
@@ -14592,7 +14634,7 @@ BI.shortcut("bi.vertical_adapt", BI.VerticalAdaptLayout);
 
 
 /***/ }),
-/* 364 */
+/* 365 */
 /***/ (function(module, exports) {
 
 /**
@@ -14661,7 +14703,7 @@ BI.shortcut("bi.horizontal_auto", BI.HorizontalAutoLayout);
 
 
 /***/ }),
-/* 365 */
+/* 366 */
 /***/ (function(module, exports) {
 
 /**
@@ -14672,7 +14714,7 @@ BI.shortcut("bi.horizontal_float", BI.FloatHorizontalLayout);
 
 
 /***/ }),
-/* 366 */
+/* 367 */
 /***/ (function(module, exports) {
 
 /**
@@ -14729,7 +14771,7 @@ BI.shortcut("bi.inline_center_adapt", BI.InlineCenterAdaptLayout);
 
 
 /***/ }),
-/* 367 */
+/* 368 */
 /***/ (function(module, exports) {
 
 /**
@@ -14786,7 +14828,7 @@ BI.shortcut("bi.inline_horizontal_adapt", BI.InlineHorizontalAdaptLayout);
 
 
 /***/ }),
-/* 368 */
+/* 369 */
 /***/ (function(module, exports) {
 
 /**
@@ -14843,7 +14885,7 @@ BI.shortcut("bi.inline_vertical_adapt", BI.InlineVerticalAdaptLayout);
 
 
 /***/ }),
-/* 369 */
+/* 370 */
 /***/ (function(module, exports) {
 
 /**
@@ -14905,7 +14947,7 @@ BI.shortcut("bi.flex_center_adapt", BI.FlexCenterLayout);
 
 
 /***/ }),
-/* 370 */
+/* 371 */
 /***/ (function(module, exports) {
 
 /**
@@ -14918,6 +14960,7 @@ BI.FlexHorizontalCenter = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.FlexHorizontalCenter.superclass.props.apply(this, arguments), {
             baseCls: "bi-f-h-c",
+            horizontalAlign: BI.HorizontalAlign.Center,
             verticalAlign: BI.VerticalAlign.Top,
             rowSize: [],
             scrolly: false,
@@ -14936,7 +14979,7 @@ BI.FlexHorizontalCenter = BI.inherit(BI.Layout, {
             ref: function (_ref) {
                 self.wrapper = _ref;
             },
-            horizontalAlign: BI.HorizontalAlign.Center,
+            horizontalAlign: o.horizontalAlign,
             verticalAlign: o.verticalAlign,
             columnSize: o.columnSize,
             rowSize: o.rowSize,
@@ -14968,7 +15011,7 @@ BI.shortcut("bi.flex_horizontal_center_adapt", BI.FlexHorizontalCenter);
 
 
 /***/ }),
-/* 371 */
+/* 372 */
 /***/ (function(module, exports) {
 
 /**
@@ -15069,7 +15112,7 @@ BI.shortcut("bi.flex_horizontal", BI.FlexHorizontalLayout);
 
 
 /***/ }),
-/* 372 */
+/* 373 */
 /***/ (function(module, exports) {
 
 BI.FlexLeftRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
@@ -15171,7 +15214,7 @@ BI.shortcut("bi.flex_left_right_vertical_adapt", BI.FlexLeftRightVerticalAdaptLa
 
 
 /***/ }),
-/* 373 */
+/* 374 */
 /***/ (function(module, exports) {
 
 /**
@@ -15186,6 +15229,7 @@ BI.FlexVerticalCenter = BI.inherit(BI.Layout, {
         return BI.extend(BI.FlexVerticalCenter.superclass.props.apply(this, arguments), {
             baseCls: "bi-f-v-c",
             horizontalAlign: BI.HorizontalAlign.Left,
+            verticalAlign: BI.VerticalAlign.Middle,
             columnSize: [],
             scrollx: false,
             hgap: 0,
@@ -15203,7 +15247,7 @@ BI.FlexVerticalCenter = BI.inherit(BI.Layout, {
             ref: function (_ref) {
                 self.wrapper = _ref;
             },
-            verticalAlign: BI.VerticalAlign.Middle,
+            verticalAlign: o.verticalAlign,
             horizontalAlign: o.horizontalAlign,
             columnSize: o.columnSize,
             rowSize: o.rowSize,
@@ -15235,7 +15279,7 @@ BI.shortcut("bi.flex_vertical_center_adapt", BI.FlexVerticalCenter);
 
 
 /***/ }),
-/* 374 */
+/* 375 */
 /***/ (function(module, exports) {
 
 /**
@@ -15335,7 +15379,7 @@ BI.shortcut("bi.flex_vertical", BI.FlexVerticalLayout);
 
 
 /***/ }),
-/* 375 */
+/* 376 */
 /***/ (function(module, exports) {
 
 /**
@@ -15396,7 +15440,7 @@ BI.shortcut("bi.flex_scrollable_center_adapt", BI.FlexWrapperCenterLayout);
 
 
 /***/ }),
-/* 376 */
+/* 377 */
 /***/ (function(module, exports) {
 
 /**
@@ -15410,6 +15454,7 @@ BI.FlexWrapperHorizontalCenter = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.FlexWrapperHorizontalCenter.superclass.props.apply(this, arguments), {
             baseCls: "bi-f-s-v-c clearfix",
+            horizontalAlign: BI.HorizontalAlign.Center,
             verticalAlign: BI.VerticalAlign.Top,
             rowSize: [],
             scrollable: true,
@@ -15429,7 +15474,7 @@ BI.FlexWrapperHorizontalCenter = BI.inherit(BI.Layout, {
             ref: function (_ref) {
                 self.wrapper = _ref;
             },
-            horizontalAlign: BI.HorizontalAlign.Center,
+            horizontalAlign: o.horizontalAlign,
             verticalAlign: o.verticalAlign,
             columnSize: o.columnSize,
             rowSize: o.rowSize,
@@ -15457,7 +15502,7 @@ BI.shortcut("bi.flex_scrollable_horizontal_center_adapt", BI.FlexWrapperHorizont
 
 
 /***/ }),
-/* 377 */
+/* 378 */
 /***/ (function(module, exports) {
 
 /**
@@ -15563,7 +15608,7 @@ BI.shortcut("bi.flex_scrollable_horizontal", BI.FlexWrapperHorizontalLayout);
 
 
 /***/ }),
-/* 378 */
+/* 379 */
 /***/ (function(module, exports) {
 
 /**
@@ -15578,6 +15623,7 @@ BI.FlexWrapperVerticalCenter = BI.inherit(BI.Layout, {
         return BI.extend(BI.FlexWrapperVerticalCenter.superclass.props.apply(this, arguments), {
             baseCls: "bi-f-s-v-c clearfix",
             horizontalAlign: BI.HorizontalAlign.Left,
+            verticalAlign: BI.VerticalAlign.Middle,
             columnSize: [],
             scrollx: false,
             scrollable: true,
@@ -15596,7 +15642,7 @@ BI.FlexWrapperVerticalCenter = BI.inherit(BI.Layout, {
             ref: function (_ref) {
                 self.wrapper = _ref;
             },
-            verticalAlign: BI.VerticalAlign.Middle,
+            verticalAlign: o.verticalAlign,
             horizontalAlign: o.horizontalAlign,
             columnSize: o.columnSize,
             rowSize: o.rowSize,
@@ -15624,7 +15670,7 @@ BI.shortcut("bi.flex_scrollable_vertical_center_adapt", BI.FlexWrapperVerticalCe
 
 
 /***/ }),
-/* 379 */
+/* 380 */
 /***/ (function(module, exports) {
 
 /**
@@ -15730,7 +15776,7 @@ BI.shortcut("bi.flex_scrollable_vertical", BI.FlexWrapperVerticalLayout);
 
 
 /***/ }),
-/* 380 */
+/* 381 */
 /***/ (function(module, exports) {
 
 /**
@@ -15842,7 +15888,7 @@ BI.shortcut("bi.absolute", BI.AbsoluteLayout);
 
 
 /***/ }),
-/* 381 */
+/* 382 */
 /***/ (function(module, exports) {
 
 BI.AdaptiveLayout = BI.inherit(BI.Layout, {
@@ -15940,7 +15986,7 @@ BI.shortcut("bi.adaptive", BI.AdaptiveLayout);
 
 
 /***/ }),
-/* 382 */
+/* 383 */
 /***/ (function(module, exports) {
 
 /**
@@ -16087,7 +16133,7 @@ BI.shortcut("bi.border", BI.BorderLayout);
 
 
 /***/ }),
-/* 383 */
+/* 384 */
 /***/ (function(module, exports) {
 
 /**
@@ -16303,7 +16349,7 @@ BI.shortcut("bi.card", BI.CardLayout);
 
 
 /***/ }),
-/* 384 */
+/* 385 */
 /***/ (function(module, exports) {
 
 /**
@@ -16368,7 +16414,7 @@ BI.shortcut("bi.default", BI.DefaultLayout);
 
 
 /***/ }),
-/* 385 */
+/* 386 */
 /***/ (function(module, exports) {
 
 /**
@@ -16536,7 +16582,7 @@ BI.shortcut("bi.division", BI.DivisionLayout);
 
 
 /***/ }),
-/* 386 */
+/* 387 */
 /***/ (function(module, exports) {
 
 /**
@@ -16719,7 +16765,7 @@ BI.shortcut("bi.right", BI.FloatRightLayout);
 
 
 /***/ }),
-/* 387 */
+/* 388 */
 /***/ (function(module, exports) {
 
 /**
@@ -16855,7 +16901,7 @@ BI.shortcut("bi.grid", BI.GridLayout);
 
 
 /***/ }),
-/* 388 */
+/* 389 */
 /***/ (function(module, exports) {
 
 /**
@@ -16863,183 +16909,12 @@ BI.shortcut("bi.grid", BI.GridLayout);
  * @class BI.HorizontalLayout
  * @extends BI.Layout
  */
-BI.HorizontalLayout = BI.inherit(BI.Layout, {
-    props: function () {
-        return BI.extend(BI.HorizontalLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-h",
-            verticalAlign: BI.VerticalAlign.Top,
-            horizontalAlign: BI.HorizontalAlign.Left,
-            columnSize: [],
-            scrollx: true,
-            hgap: 0,
-            vgap: 0,
-            lgap: 0,
-            rgap: 0,
-            tgap: 0,
-            bgap: 0
-        });
-    },
-    render: function () {
-        var o = this.options;
-        BI.HorizontalLayout.superclass.render.apply(this, arguments);
-        this.$table = BI.Widget._renderEngine.createElement("<table>").attr({cellspacing: 0, cellpadding: 0}).css({
-            position: "relative",
-            "white-space": "nowrap",
-            width: (o.horizontalAlign === BI.HorizontalAlign.Center || o.horizontalAlign === BI.HorizontalAlign.Stretch) ? "100%" : "auto",
-            height: (o.verticalAlign === BI.VerticalAlign.Middle || o.verticalAlign === BI.VerticalAlign.Stretch) ? "100%" : "auto",
-            "border-spacing": "0px",
-            border: "none",
-            "border-collapse": "separate"
-        });
-        this.$tr = BI.Widget._renderEngine.createElement("<tr>");
-        this.$tr.appendTo(this.$table);
-        this.populate(this.options.items);
-    },
-
-    _addElement: function (i, item) {
-        var o = this.options;
-        var td;
-        var width = o.columnSize[i] === "" ? "" : (o.columnSize[i] <= 1 ? ((o.columnSize[i] * 100).toFixed(1) + "%") : (i === 0 ? o.hgap : 0) + o.hgap + o.lgap + o.rgap + o.columnSize[i]);
-        if (!this.hasWidget(this._getChildName(i))) {
-            var w = BI._lazyCreateWidget(item);
-            w.element.css({position: "relative", margin: "0px auto"});
-            td = BI._lazyCreateWidget({
-                type: "bi.default",
-                tagName: "td",
-                attributes: {
-                    width: width
-                },
-                items: [w]
-            });
-            this.addWidget(this._getChildName(i), td);
-        } else {
-            td = this.getWidgetByName(this._getChildName(i));
-            td.element.attr("width", width);
-        }
-        // 对于表现为td的元素设置最大宽度，有几点需要注意
-        // 1、由于直接对td设置最大宽度是在规范中未定义的, 所以要使用类似td:firstChild来迂回实现
-        // 2、不能给多个td设置最大宽度，这样只会平分宽度
-        // 3、多百分比宽度就算了
-        td.element.css({"max-width": BI.isNumber(o.columnSize[i]) ? (o.columnSize[i] <= 1 ? width : width / BI.pixRatio + BI.pixUnit) : width});
-        if (i === 0) {
-            td.element.addClass("first-element");
-        }
-        td.element.css({
-            position: "relative",
-            "vertical-align": o.verticalAlign,
-            margin: "0",
-            padding: "0",
-            border: "none"
-        });
-
-        if (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
-            w.element.css({
-                "margin-top": (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0)) / BI.pixRatio + BI.pixUnit
-            });
-        }
-        if (o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0) !== 0) {
-            w.element.css({
-                "margin-left": ((i === 0 ? o.hgap : 0) + o.lgap + (item.lgap || 0) + (item.hgap || 0)) / BI.pixRatio + BI.pixUnit
-            });
-        }
-        if (o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0) !== 0) {
-            w.element.css({
-                "margin-right": (o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0)) / BI.pixRatio + BI.pixUnit
-            });
-        }
-        if (o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0) !== 0) {
-            w.element.css({
-                "margin-bottom": (o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0)) / BI.pixRatio + BI.pixUnit
-            });
-        }
-        return td;
-    },
-
-    appendFragment: function (frag) {
-        this.$tr.append(frag);
-        this.element.append(this.$table);
-    },
-
-    resize: function () {
-        // console.log("horizontal layout do not need to resize");
-    },
-
-    _getWrapper: function () {
-        return this.$tr;
-    },
-
-    populate: function (items) {
-        BI.HorizontalLayout.superclass.populate.apply(this, arguments);
-        this._mount();
-    }
-});
+BI.HorizontalLayout = BI.Layout;
 BI.shortcut("bi.horizontal", BI.HorizontalLayout);
-
-/**
- * 水平布局
- * @class BI.HorizontalCellLayout
- * @extends BI.Layout
- */
-BI.HorizontalCellLayout = BI.inherit(BI.Layout, {
-    props: function () {
-        return BI.extend(BI.HorizontalCellLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-horizontal-cell-layout",
-            scrollable: true,
-            hgap: 0,
-            vgap: 0,
-            lgap: 0,
-            rgap: 0,
-            tgap: 0,
-            bgap: 0
-        });
-    },
-    render: function () {
-        BI.HorizontalCellLayout.superclass.render.apply(this, arguments);
-        this.element.css({display: "table", "vertical-align": "top"});
-        this.populate(this.options.items);
-    },
-
-    _addElement: function (i, item) {
-        var o = this.options;
-        var w = BI.HorizontalCellLayout.superclass._addElement.apply(this, arguments);
-        w.element.css({position: "relative", display: "table-cell", "vertical-align": "middle"});
-        if (o.hgap + o.lgap > 0) {
-            w.element.css({
-                "margin-left": (o.hgap + o.lgap) / BI.pixRatio + BI.pixUnit
-            });
-        }
-        if (o.hgap + o.rgap > 0) {
-            w.element.css({
-                "margin-right": (o.hgap + o.rgap) / BI.pixRatio + BI.pixUnit
-            });
-        }
-        if (o.vgap + o.tgap > 0) {
-            w.element.css({
-                "margin-top": (o.vgap + o.tgap) / BI.pixRatio + BI.pixUnit
-            });
-        }
-        if (o.vgap + o.bgap > 0) {
-            w.element.css({
-                "margin-bottom": (o.vgap + o.bgap) / BI.pixRatio + BI.pixUnit
-            });
-        }
-        return w;
-    },
-
-    resize: function () {
-        // console.log("horizontal do not need to resize");
-    },
-
-    populate: function (items) {
-        BI.HorizontalCellLayout.superclass.populate.apply(this, arguments);
-        this._mount();
-    }
-});
-BI.shortcut("bi.horizontal_cell", BI.HorizontalCellLayout);
 
 
 /***/ }),
-/* 389 */
+/* 390 */
 /***/ (function(module, exports) {
 
 /**
@@ -17149,7 +17024,7 @@ BI.shortcut("bi.inline", BI.InlineLayout);
 
 
 /***/ }),
-/* 390 */
+/* 391 */
 /***/ (function(module, exports) {
 
 /**
@@ -17210,7 +17085,7 @@ BI.shortcut("bi.lattice", BI.LatticeLayout);
 
 
 /***/ }),
-/* 391 */
+/* 392 */
 /***/ (function(module, exports) {
 
 /**
@@ -17355,7 +17230,7 @@ BI.shortcut("bi.table", BI.TableLayout);
 
 
 /***/ }),
-/* 392 */
+/* 393 */
 /***/ (function(module, exports) {
 
 /**
@@ -17373,20 +17248,7 @@ BI.HTapeLayout = BI.inherit(BI.Layout, {
             rgap: 0,
             tgap: 0,
             bgap: 0,
-            items: [
-                {
-                    width: 100,
-                    el: {type: "bi.button", text: "button1"}
-                },
-                {
-                    width: "fill",
-                    el: {type: "bi.button", text: "button2"}
-                },
-                {
-                    width: 200,
-                    el: {type: "bi.button", text: "button3"}
-                }
-            ]
+            items: []
         });
     },
     render: function () {
@@ -17489,20 +17351,7 @@ BI.VTapeLayout = BI.inherit(BI.Layout, {
             rgap: 0,
             tgap: 0,
             bgap: 0,
-            items: [
-                {
-                    height: 100,
-                    el: {type: "bi.button", text: "button1"}
-                },
-                {
-                    height: "fill",
-                    el: {type: "bi.button", text: "button2"}
-                },
-                {
-                    height: 200,
-                    el: {type: "bi.button", text: "button3"}
-                }
-            ]
+            items: []
         });
     },
     render: function () {
@@ -17588,7 +17437,7 @@ BI.shortcut("bi.vtape", BI.VTapeLayout);
 
 
 /***/ }),
-/* 393 */
+/* 394 */
 /***/ (function(module, exports) {
 
 /**
@@ -17748,7 +17597,7 @@ BI.shortcut("bi.td", BI.TdLayout);
 
 
 /***/ }),
-/* 394 */
+/* 395 */
 /***/ (function(module, exports) {
 
 /**
@@ -17816,7 +17665,7 @@ BI.shortcut("bi.vertical", BI.VerticalLayout);
 
 
 /***/ }),
-/* 395 */
+/* 396 */
 /***/ (function(module, exports) {
 
 /**
@@ -17836,19 +17685,9 @@ BI.WindowLayout = BI.inherit(BI.Layout, {
             rgap: 0,
             tgap: 0,
             bgap: 0,
-            columnSize: [100, "fill", 200],
-            rowSize: [100, "fill"],
-            items: [[
-                {
-                    el: {type: "bi.button", text: "button1"}
-                },
-                {
-                    el: {type: "bi.button", text: "button2"}
-                },
-                {
-                    el: {type: "bi.button", text: "button3"}
-                }
-            ]]
+            columnSize: [],
+            rowSize: [],
+            items: []
         });
     },
     render: function () {
@@ -18014,7 +17853,7 @@ BI.shortcut("bi.window", BI.WindowLayout);
 
 
 /***/ }),
-/* 396 */
+/* 397 */
 /***/ (function(module, exports) {
 
 /**
@@ -18096,7 +17935,7 @@ BI.shortcut("bi.center", BI.CenterLayout);
 
 
 /***/ }),
-/* 397 */
+/* 398 */
 /***/ (function(module, exports) {
 
 /**
@@ -18177,7 +18016,7 @@ BI.shortcut("bi.float_center", BI.FloatCenterLayout);
 
 
 /***/ }),
-/* 398 */
+/* 399 */
 /***/ (function(module, exports) {
 
 /**
@@ -18257,7 +18096,7 @@ BI.shortcut("bi.horizontal_center", BI.HorizontalCenterLayout);
 
 
 /***/ }),
-/* 399 */
+/* 400 */
 /***/ (function(module, exports) {
 
 /**
@@ -18338,7 +18177,23 @@ BI.shortcut("bi.vertical_center", BI.VerticalCenterLayout);
 
 
 /***/ }),
-/* 400 */
+/* 401 */
+/***/ (function(module, exports) {
+
+BI.prepares.push(function () {
+    BI.Resizers = new BI.ResizeController();
+    BI.Layers = new BI.LayerController();
+    BI.Maskers = new BI.MaskersController();
+    BI.Bubbles = new BI.BubblesController();
+    BI.Tooltips = new BI.TooltipsController();
+    BI.Popovers = new BI.PopoverController();
+    BI.Broadcasts = new BI.BroadcastController();
+    BI.StyleLoaders = new BI.StyleLoaderManager();
+});
+
+
+/***/ }),
+/* 402 */
 /***/ (function(module, exports) {
 
 /**
@@ -18491,1441 +18346,7 @@ BI.Pane.EVENT_LOADED = "EVENT_LOADED";
 BI.Pane.EVENT_LOADING = "EVENT_LOADING";
 
 /***/ }),
-/* 401 */
-/***/ (function(module, exports) {
-
-/**
- * guy
- * 这仅仅只是一个超类, 所有简单控件的基类
- * 1、类的控制，
- * 2、title的控制
- * 3、文字超过边界显示3个点
- * 4、cursor默认pointor
- * @class BI.Single
- * @extends BI.Widget
- * @abstract
- */
-BI.Single = BI.inherit(BI.Widget, {
-    _defaultConfig: function () {
-        var conf = BI.Single.superclass._defaultConfig.apply(this, arguments);
-        return BI.extend(conf, {
-            readonly: false,
-            title: null,
-            warningTitle: null,
-            tipType: null, // success或warning
-            value: null,
-            belowMouse: false   // title是否跟随鼠标
-        });
-    },
-
-    _showToolTip: function (e, opt) {
-        opt || (opt = {});
-        var self = this, o = this.options;
-        var type = this.getTipType() || (this.isEnabled() ? "success" : "warning");
-        var title = type === "success" ? this.getTitle() : (this.getWarningTitle() || this.getTitle());
-        if (BI.isKey(title)) {
-            BI.Tooltips.show(e, this.getName(), title, type, this, opt);
-            if (o.action) {
-                BI.Actions.runAction(o.action, "hover", o, this);
-            }
-            BI.Actions.runGlobalAction("hover", o, this);
-        }
-    },
-
-    _hideTooltip: function () {
-        var self = this;
-        var tooltip = BI.Tooltips.get(this.getName());
-        if (BI.isNotNull(tooltip)) {
-            tooltip.element.fadeOut(200, function () {
-                BI.Tooltips.remove(self.getName());
-            });
-        }
-    },
-
-    _init: function () {
-        BI.Single.superclass._init.apply(this, arguments);
-        var self = this, o = this.options;
-        if (BI.isKey(o.title) || BI.isKey(o.warningTitle)
-            || BI.isFunction(o.title) || BI.isFunction(o.warningTitle)) {
-            this.enableHover({
-                belowMouse: o.belowMouse,
-                container: o.container
-            });
-        }
-    },
-
-    _clearTimeOut: function () {
-        if (BI.isNotNull(this.showTimeout)) {
-            clearTimeout(this.showTimeout);
-            this.showTimeout = null;
-        }
-        if (BI.isNotNull(this.hideTimeout)) {
-            clearTimeout(this.hideTimeout);
-            this.hideTimeout = null;
-        }
-    },
-
-    enableHover: function (opt) {
-        opt || (opt = {});
-        var self = this;
-        if (!this._hoverBinded) {
-            this.element.on("mouseenter.title" + this.getName(), function (e) {
-                self._e = e;
-                if (self.getTipType() === "warning" || (BI.isKey(self.getWarningTitle()) && !self.isEnabled())) {
-                    self.showTimeout = BI.delay(function () {
-                        if (BI.isNotNull(self.showTimeout)) {
-                            self._showToolTip(self._e || e, opt);
-                        }
-                    }, 200);
-                } else if (self.getTipType() === "success" || self.isEnabled()) {
-                    self.showTimeout = BI.delay(function () {
-                        if (BI.isNotNull(self.showTimeout)) {
-                            self._showToolTip(self._e || e, opt);
-                        }
-                    }, 500);
-                }
-            });
-            this.element.on("mousemove.title" + this.getName(), function (e) {
-                self._e = e;
-                if (BI.isNotNull(self.showTimeout)) {
-                    clearTimeout(self.showTimeout);
-                    self.showTimeout = null;
-                }
-                if (BI.isNull(self.hideTimeout)) {
-                    self.hideTimeout = BI.delay(function () {
-                        if (BI.isNotNull(self.hideTimeout)) {
-                            self._hideTooltip();
-                        }
-                    }, 500);
-                }
-
-                self.showTimeout = BI.delay(function () {
-                    // DEC-5321 IE下如果回调已经进入事件队列，clearTimeout将不会起作用
-                    if (BI.isNotNull(self.showTimeout)) {
-                        if (BI.isNotNull(self.hideTimeout)) {
-                            clearTimeout(self.hideTimeout);
-                            self.hideTimeout = null;
-                        }
-                        // CHART-10611 在拖拽的情况下, 鼠标拖拽着元素离开了拖拽元素的容器，但是子元素在dom结构上仍然属于容器
-                        // 这样会认为鼠标仍然在容器中, 500ms内放开的话，会在容器之外显示鼠标停留处显示容器的title
-                        if (self.element.__isMouseInBounds__(self._e || e)) {
-                            self._showToolTip(self._e || e, opt);
-                        }
-                    }
-                }, 500);
-
-            });
-            this.element.on("mouseleave.title" + this.getName(), function (e) {
-                self._e = null;
-                self._clearTimeOut();
-                self._hideTooltip();
-            });
-            this._hoverBinded = true;
-        }
-    },
-
-    disabledHover: function () {
-        // 取消hover事件
-        this._clearTimeOut();
-        this._hideTooltip();
-        this.element.unbind("mouseenter.title" + this.getName())
-            .unbind("mousemove.title" + this.getName())
-            .unbind("mouseleave.title" + this.getName());
-        this._hoverBinded = false;
-    },
-
-    // opt: {container: '', belowMouse: false}
-    setTitle: function (title, opt) {
-        this.options.title = title;
-        if (BI.isKey(title) || BI.isFunction(title)) {
-            this.enableHover(opt);
-        } else {
-            this.disabledHover();
-        }
-    },
-
-    setWarningTitle: function (title, opt) {
-        this.options.warningTitle = title;
-        if (BI.isKey(title) || BI.isFunction(title)) {
-            this.enableHover(opt);
-        } else {
-            this.disabledHover();
-        }
-    },
-
-    setTipType: function (type) {
-        this.options.tipType = type;
-    },
-
-    getTipType: function () {
-        return this.options.tipType;
-    },
-
-    isReadOnly: function () {
-        return !!this.options.readonly;
-    },
-
-    getTitle: function () {
-        var title = this.options.title;
-        if (BI.isFunction(title)) {
-            return title();
-        }
-        return title;
-    },
-
-    getWarningTitle: function () {
-        var title = this.options.warningTitle;
-        if (BI.isFunction(title)) {
-            return title();
-        }
-        return title;
-    },
-
-    setValue: function (val) {
-        if (!this.options.readonly) {
-            this.options.value = val;
-            this.options.setValue && this.options.setValue(val);
-        }
-    },
-
-    getValue: function () {
-        return this.options.value;
-    },
-
-    destroyed: function () {
-        if (BI.isNotNull(this.showTimeout)) {
-            clearTimeout(this.showTimeout);
-            this.showTimeout = null;
-        }
-        BI.Tooltips.remove(this.getName());
-    }
-});
-BI.shortcut("bi.single", BI.Single);
-
-
-/***/ }),
-/* 402 */
-/***/ (function(module, exports) {
-
-/**
- * guy 表示一行数据，通过position来定位位置的数据
- * @class BI.Text
- * @extends BI.Single
- */
-!(function () {
-    BI.Text = BI.inherit(BI.Single, {
-
-        props: {
-            baseCls: "bi-text",
-            textAlign: "left",
-            whiteSpace: "normal",
-            lineHeight: null,
-            handler: null, // 如果传入handler,表示处理文字的点击事件，不是区域的
-            hgap: 0,
-            vgap: 0,
-            lgap: 0,
-            rgap: 0,
-            tgap: 0,
-            bgap: 0,
-            py: "",
-            highLight: false
-        },
-
-        render: function () {
-            var self = this, o = this.options;
-            if (o.hgap + o.lgap > 0) {
-                this.element.css({
-                    "padding-left": (o.hgap + o.lgap) / BI.pixRatio + BI.pixUnit
-                });
-            }
-            if (o.hgap + o.rgap > 0) {
-                this.element.css({
-                    "padding-right": (o.hgap + o.rgap) / BI.pixRatio + BI.pixUnit
-                });
-            }
-            if (o.vgap + o.tgap > 0) {
-                this.element.css({
-                    "padding-top": (o.vgap + o.tgap) / BI.pixRatio + BI.pixUnit
-                });
-            }
-            if (o.vgap + o.bgap > 0) {
-                this.element.css({
-                    "padding-bottom": (o.vgap + o.bgap) / BI.pixRatio + BI.pixUnit
-                });
-            }
-            if (BI.isWidthOrHeight(o.height)) {
-                this.element.css({ lineHeight: BI.isNumber(o.height) ? (o.height / BI.pixRatio + BI.pixUnit) : o.height });
-            }
-            if (BI.isWidthOrHeight(o.lineHeight)) {
-                this.element.css({ lineHeight: BI.isNumber(o.lineHeight) ? (o.lineHeight / BI.pixRatio + BI.pixUnit) : o.lineHeight });
-            }
-            if (BI.isWidthOrHeight(o.maxWidth)) {
-                this.element.css({ maxWidth: BI.isNumber(o.maxWidth) ? (o.maxWidth / BI.pixRatio + BI.pixUnit) : o.maxWidth });
-            }
-            this.element.css({
-                textAlign: o.textAlign,
-                whiteSpace: this._getTextWrap(),
-                textOverflow: o.whiteSpace === "nowrap" ? "ellipsis" : "",
-                overflow: o.whiteSpace === "nowrap" ? "" : (BI.isWidthOrHeight(o.height) ? "auto" : "")
-            });
-            if (o.handler && o.handler !== BI.emptyFn) {
-                this.text = BI.createWidget({
-                    type: "bi.layout",
-                    tagName: "span"
-                });
-                this.text.element.click(function () {
-                    o.handler(self.getValue());
-                });
-                BI.createWidget({
-                    type: "bi.default",
-                    element: this,
-                    items: [this.text]
-                });
-            } else {
-                this.text = this;
-            }
-
-            var text = this._getShowText();
-            if (!BI.isUndefined(text)) {
-                this.setText(text);
-            } else if (BI.isKey(o.value)) {
-                this.setText(o.value);
-            }
-            if (BI.isKey(o.keyword)) {
-                this.doRedMark(o.keyword);
-            }
-            if (o.highLight) {
-                this.doHighLight();
-            }
-        },
-
-        _getTextWrap: function () {
-            var o = this.options;
-            switch (o.whiteSpace) {
-                case "nowrap":
-                    return "pre";
-                case "normal":
-                    return "pre-wrap";
-                default:
-                    return o.whiteSpace;
-            }
-        },
-
-        _getShowText: function () {
-            var o = this.options;
-            var text = BI.isFunction(o.text) ? o.text() : o.text;
-
-            return BI.isKey(text) ? BI.Text.formatText(text + "") : text;
-        },
-
-        _doRedMark: function (keyword) {
-            var o = this.options;
-            // render之后做的doredmark,这个时候虽然标红了，但是之后text mounted执行的时候并没有keyword
-            o.keyword = keyword;
-            this.text.element.__textKeywordMarked__(this._getShowText(), keyword, o.py);
-        },
-
-        doRedMark: function (keyword) {
-            if (BI.isKey(keyword)) {
-                this._doRedMark(keyword);
-            }
-        },
-
-        unRedMark: function () {
-            var o = this.options;
-            o.keyword = "";
-            this.text.element.__textKeywordMarked__(this._getShowText(), "", o.py);
-        },
-
-        doHighLight: function () {
-            this.text.element.addClass("bi-high-light");
-        },
-
-        unHighLight: function () {
-            this.text.element.removeClass("bi-high-light");
-        },
-
-        setValue: function (text) {
-            BI.Text.superclass.setValue.apply(this, arguments);
-            if (!this.isReadOnly()) {
-                this.setText(text);
-            }
-        },
-
-        setStyle: function (css) {
-            this.text.element.css(css);
-        },
-
-        setText: function (text) {
-            BI.Text.superclass.setText.apply(this, arguments);
-            //  为textContext赋值为undefined时在ie和edge下会真的显示undefined
-            this.options.text = BI.isNotNull(text) ? text : "";
-            this._doRedMark(this.options.keyword);
-        }
-    });
-    var formatters = [];
-    BI.Text.addTextFormatter = function (formatter) {
-        formatters.push(formatter);
-    };
-    BI.Text.formatText = function (text) {
-        if (formatters.length > 0) {
-            for (var i = 0, len = formatters.length; i < len; i++) {
-                text = formatters[i](text);
-            }
-        }
-        return text;
-    };
-    BI.shortcut("bi.text", BI.Text);
-}());
-
-
-
-/***/ }),
 /* 403 */
-/***/ (function(module, exports) {
-
-/**
- * guy
- * @class BI.BasicButton
- * @extends BI.Single
- *
- * 一般的button父级
- */
-BI.BasicButton = BI.inherit(BI.Single, {
-    _defaultConfig: function () {
-        var conf = BI.BasicButton.superclass._defaultConfig.apply(this, arguments);
-        return BI.extend(conf, {
-            _baseCls: (conf._baseCls || "") + " bi-basic-button" + (conf.invalid ? "" : " cursor-pointer") + ((BI.isIE() && BI.getIEVersion() < 10) ? " hack" : ""),
-            value: "",
-            stopEvent: false,
-            stopPropagation: false,
-            selected: false,
-            once: false, // 点击一次选中有效,再点无效
-            forceSelected: false, // 点击即选中, 选中了就不会被取消,与once的区别是forceSelected不影响事件的触发
-            forceNotSelected: false, // 无论怎么点击都不会被选中
-            disableSelected: false, // 使能选中
-
-            shadow: false,
-            isShadowShowingOnSelected: false,  // 选中状态下是否显示阴影
-            trigger: null,
-            handler: BI.emptyFn,
-            bubble: null
-        });
-    },
-    _init: function () {
-        BI.BasicButton.superclass._init.apply(this, arguments);
-        var opts = this.options;
-        if (opts.selected === true) {
-            BI.nextTick(BI.bind(function () {
-                this.setSelected(opts.selected);
-            }, this));
-        }
-        BI.nextTick(BI.bind(this.bindEvent, this));
-
-        if (opts.shadow) {
-            this._createShadow();
-        }
-        if (opts.level) {
-            this.element.addClass("button-" + opts.level);
-        }
-    },
-
-    _createShadow: function () {
-        var self = this, o = this.options;
-
-        var assertMask = function () {
-            if (!self.$mask) {
-                self.$mask = BI.createWidget(BI.isObject(o.shadow) ? o.shadow : {}, {
-                    type: "bi.layout",
-                    cls: "bi-button-mask"
-                });
-                self.$mask.invisible();
-                BI.createWidget({
-                    type: "bi.absolute",
-                    element: self,
-                    items: [{
-                        el: self.$mask,
-                        left: 0,
-                        right: 0,
-                        top: 0,
-                        bottom: 0
-                    }]
-                });
-            }
-        };
-
-        this.element.mouseup(function () {
-            if (!self._hover && !o.isShadowShowingOnSelected) {
-                assertMask();
-                self.$mask.invisible();
-            }
-        });
-        this.element.on("mouseenter." + this.getName(), function (e) {
-            if (self.element.__isMouseInBounds__(e)) {
-                if (self.isEnabled() && !self._hover && (o.isShadowShowingOnSelected || !self.isSelected())) {
-                    assertMask();
-                    self.$mask.visible();
-                }
-            }
-        });
-        this.element.on("mousemove." + this.getName(), function (e) {
-            if (!self.element.__isMouseInBounds__(e)) {
-                if (self.isEnabled() && !self._hover) {
-                    assertMask();
-                    self.$mask.invisible();
-                }
-            }
-        });
-        this.element.on("mouseleave." + this.getName(), function () {
-            if (self.isEnabled() && !self._hover) {
-                assertMask();
-                self.$mask.invisible();
-            }
-        });
-    },
-
-    bindEvent: function () {
-        var self = this;
-        var o = this.options, hand = this.handle();
-        if (!hand) {
-            return;
-        }
-        hand = hand.element;
-        var triggerArr = (o.trigger || "").split(",");
-        BI.each(triggerArr, function (idx, trigger) {
-            switch (trigger) {
-                case "mouseup":
-                    var mouseDown = false;
-                    hand.mousedown(function () {
-                        mouseDown = true;
-                    });
-                    hand.mouseup(function (e) {
-                        if (mouseDown === true) {
-                            clk(e);
-                        }
-                        mouseDown = false;
-                        ev(e);
-                    });
-                    break;
-                case "mousedown":
-                    var mouseDown = false;
-                    var selected = false;
-                    hand.mousedown(function (e) {
-                        // if (e.button === 0) {
-                        BI.Widget._renderEngine.createElement(document).bind("mouseup." + self.getName(), function (e) {
-                            // if (e.button === 0) {
-                            if (BI.DOM.isExist(self) && !hand.__isMouseInBounds__(e) && mouseDown === true && !selected) {
-                                // self.setSelected(!self.isSelected());
-                                self._trigger();
-                            }
-                            mouseDown = false;
-                            BI.Widget._renderEngine.createElement(document).unbind("mouseup." + self.getName());
-                            // }
-                        });
-                        if (mouseDown === true) {
-                            return;
-                        }
-                        if (self.isSelected()) {
-                            selected = true;
-                        } else {
-                            clk(e);
-                        }
-                        mouseDown = true;
-                        ev(e);
-                        // }
-                    });
-                    hand.mouseup(function (e) {
-                        // if (e.button === 0) {
-                        if (BI.DOM.isExist(self) && mouseDown === true && selected === true) {
-                            clk(e);
-                        }
-                        mouseDown = false;
-                        selected = false;
-                        BI.Widget._renderEngine.createElement(document).unbind("mouseup." + self.getName());
-                        // }
-                    });
-                    break;
-                case "dblclick":
-                    hand.dblclick(clk);
-                    break;
-                case "lclick":
-                    var mouseDown = false;
-                    var interval;
-                    hand.mousedown(function (e) {
-                        BI.Widget._renderEngine.createElement(document).bind("mouseup." + self.getName(), function (e) {
-                            interval && clearInterval(interval);
-                            interval = null;
-                            mouseDown = false;
-                            BI.Widget._renderEngine.createElement(document).unbind("mouseup." + self.getName());
-                        });
-                        if (mouseDown === true) {
-                            return;
-                        }
-                        if (!self.isEnabled() || (self.isOnce() && self.isSelected())) {
-                            return;
-                        }
-                        interval = setInterval(function () {
-                            if (self.isEnabled()) {
-                                self.doClick();
-                            }
-                        }, 180);
-                        mouseDown = true;
-                        ev(e);
-                    });
-                    break;
-                default:
-                    if (o.stopEvent || o.stopPropagation) {
-                        hand.mousedown(function (e) {
-                            ev(e);
-                        });
-                    }
-                    hand.click(clk);
-                    break;
-            }
-        });
-
-        // 之后的300ms点击无效
-        var onClick = BI.debounce(this._doClick, BI.EVENT_RESPONSE_TIME, {
-            "leading": true,
-            "trailing": false
-        });
-
-        function ev (e) {
-            if (o.stopEvent) {
-                e.stopEvent();
-            }
-            if (o.stopPropagation) {
-                e.stopPropagation();
-            }
-        }
-
-        function clk (e) {
-            ev(e);
-            if (!self.isEnabled() || (self.isOnce() && self.isSelected())) {
-                return;
-            }
-            if (BI.isKey(o.bubble) || BI.isFunction(o.bubble)) {
-                if (BI.isNull(self.combo)) {
-                    var popup;
-                    BI.createWidget({
-                        type: "bi.absolute",
-                        element: self,
-                        items: [{
-                            el: {
-                                type: "bi.bubble_combo",
-                                trigger: "",
-                                // bubble的提示不需要一直存在在界面上
-                                destroyWhenHide: true,
-                                ref: function () {
-                                    self.combo = this;
-                                },
-                                el: {
-                                    type: "bi.layout",
-                                    height: "100%"
-                                },
-                                popup: {
-                                    type: "bi.text_bubble_bar_popup_view",
-                                    text: getBubble(),
-                                    ref: function () {
-                                        popup = this;
-                                    },
-                                    listeners: [{
-                                        eventName: BI.BubblePopupBarView.EVENT_CLICK_TOOLBAR_BUTTON,
-                                        action: function (v) {
-                                            self.combo.hideView();
-                                            if (v) {
-                                                onClick.apply(self, arguments);
-                                            }
-                                        }
-                                    }]
-                                },
-                                listeners: [{
-                                    eventName: BI.BubbleCombo.EVENT_BEFORE_POPUPVIEW,
-                                    action: function () {
-                                        popup.populate(getBubble());
-                                    }
-                                }]
-                            },
-                            left: 0,
-                            right: 0,
-                            bottom: 0,
-                            top: 0
-                        }]
-                    });
-                }
-                if (self.combo.isViewVisible()) {
-                    self.combo.hideView();
-                } else {
-                    self.combo.showView();
-                }
-                return;
-            }
-            onClick.apply(self, arguments);
-        }
-
-        function getBubble () {
-            var bubble = self.options.bubble;
-            if (BI.isFunction(bubble)) {
-                return bubble();
-            }
-            return bubble;
-        }
-    },
-
-    _trigger: function (e) {
-        var o = this.options;
-        if (!this.isEnabled()) {
-            return;
-        }
-        if (!this.isDisableSelected()) {
-            this.isForceSelected() ? this.setSelected(true) :
-                (this.isForceNotSelected() ? this.setSelected(false) :
-                    this.setSelected(!this.isSelected()));
-        }
-        if (this.isValid()) {
-            var v = this.getValue();
-            o.handler.call(this, v, this, e);
-            this.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.CLICK, v, this, e);
-            this.fireEvent(BI.BasicButton.EVENT_CHANGE, v, this);
-            if (o.action) {
-                BI.Actions.runAction(o.action, "click", o, this);
-            }
-            BI.Actions.runGlobalAction("click", o, this);
-        }
-    },
-
-    _doClick: function (e) {
-        if (this.isValid()) {
-            this.beforeClick(e);
-        }
-        this._trigger(e);
-        if (this.isValid()) {
-            this.doClick(e);
-        }
-    },
-
-    beforeClick: function () {
-
-    },
-
-    doClick: function () {
-
-    },
-
-    handle: function () {
-        return this;
-    },
-
-    hover: function () {
-        this._hover = true;
-        this.handle().element.addClass("hover");
-        if (this.options.shadow) {
-            this.$mask && this.$mask.setVisible(true);
-        }
-    },
-
-    dishover: function () {
-        this._hover = false;
-        this.handle().element.removeClass("hover");
-        if (this.options.shadow) {
-            this.$mask && this.$mask.setVisible(false);
-        }
-    },
-
-    setSelected: function (b) {
-        var o = this.options;
-        o.selected = b;
-        if (b) {
-            this.handle().element.addClass("active");
-        } else {
-            this.handle().element.removeClass("active");
-        }
-        if (o.shadow && !o.isShadowShowingOnSelected) {
-            this.$mask && this.$mask.setVisible(false);
-        }
-        this.options.setSelected && this.options.setSelected.call(this, b);
-    },
-
-    isSelected: function () {
-        return this.options.selected;
-    },
-
-    isOnce: function () {
-        return this.options.once;
-    },
-
-    isForceSelected: function () {
-        return this.options.forceSelected;
-    },
-
-    isForceNotSelected: function () {
-        return this.options.forceNotSelected;
-    },
-
-    isDisableSelected: function () {
-        return this.options.disableSelected;
-    },
-
-    setText: function (text) {
-        this.options.text = text;
-        this.options.setText && this.options.setText.call(this, text);
-    },
-
-    getText: function () {
-        return this.options.text;
-    },
-
-    _setEnable: function (enable) {
-        BI.BasicButton.superclass._setEnable.apply(this, arguments);
-        if (enable === true) {
-            this.element.removeClass("base-disabled disabled");
-        } else if (enable === false) {
-            this.element.addClass("base-disabled disabled");
-        }
-        if (!enable) {
-            if (this.options.shadow) {
-                this.$mask && this.$mask.setVisible(false);
-            }
-        }
-    },
-
-    empty: function () {
-        BI.Widget._renderEngine.createElement(document).unbind("mouseup." + this.getName());
-        BI.BasicButton.superclass.empty.apply(this, arguments);
-    }
-});
-BI.BasicButton.EVENT_CHANGE = "BasicButton.EVENT_CHANGE";
-BI.shortcut("bi.basic_button", BI.BasicButton);
-
-
-/***/ }),
-/* 404 */
-/***/ (function(module, exports) {
-
-/**
- * 表示一个可以展开的节点, 不仅有选中状态而且有展开状态
- *
- * Created by GUY on 2015/9/9.
- * @class BI.NodeButton
- * @extends BI.BasicButton
- * @abstract
- */
-BI.NodeButton = BI.inherit(BI.BasicButton, {
-    _defaultConfig: function () {
-        var conf = BI.NodeButton.superclass._defaultConfig.apply(this, arguments);
-        return BI.extend( conf, {
-            _baseCls: (conf._baseCls || "") + " bi-node",
-            open: false
-        });
-    },
-
-    _init: function () {
-        BI.NodeButton.superclass._init.apply(this, arguments);
-        var self = this;
-        BI.nextTick(function () {
-            self.setOpened(self.isOpened());
-        });
-    },
-
-    doClick: function () {
-        BI.NodeButton.superclass.doClick.apply(this, arguments);
-        this.setOpened(!this.isOpened());
-    },
-
-    isOnce: function () {
-        return false;
-    },
-
-    isOpened: function () {
-        return !!this.options.open;
-    },
-
-    setOpened: function (b) {
-        this.options.open = !!b;
-    },
-
-    triggerCollapse: function () {
-        if(this.isOpened()) {
-            this.setOpened(false);
-            this.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.COLLAPSE, this.getValue(), this);
-        }
-    },
-
-    triggerExpand: function () {
-        if(!this.isOpened()) {
-            this.setOpened(true);
-            this.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.EXPAND, this.getValue(), this);
-        }
-    }
-});
-
-/***/ }),
-/* 405 */
-/***/ (function(module, exports) {
-
-/**
- * guy
- * tip提示
- * zIndex在10亿级别
- * @class BI.Tip
- * @extends BI.Single
- * @abstract
- */
-BI.Tip = BI.inherit(BI.Single, {
-    _defaultConfig: function () {
-        var conf = BI.Tip.superclass._defaultConfig.apply(this, arguments);
-        return BI.extend(conf, {
-            _baseCls: (conf._baseCls || "") + " bi-tip",
-            zIndex: BI.zIndex_tip
-        });
-    },
-
-    _init: function () {
-        BI.Tip.superclass._init.apply(this, arguments);
-        this.element.css({zIndex: this.options.zIndex});
-    }
-});
-
-/***/ }),
-/* 406 */
-/***/ (function(module, exports) {
-
-/**
- * Created by GUY on 2015/6/26.
- * @class BI.ButtonGroup
- * @extends BI.Widget
- */
-
-BI.ButtonGroup = BI.inherit(BI.Widget, {
-    _defaultConfig: function () {
-        return BI.extend(BI.ButtonGroup.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-button-group",
-            behaviors: {},
-            items: [],
-            value: "",
-            chooseType: BI.Selection.Single,
-            layouts: [{
-                type: "bi.center",
-                hgap: 0,
-                vgap: 0
-            }]
-        });
-    },
-
-    _init: function () {
-        BI.ButtonGroup.superclass._init.apply(this, arguments);
-        var o = this.options;
-        var behaviors = {};
-        BI.each(o.behaviors, function (key, rule) {
-            behaviors[key] = BI.BehaviorFactory.createBehavior(key, {
-                rule: rule
-            });
-        });
-        this.behaviors = behaviors;
-        this.populate(o.items);
-        if(BI.isKey(o.value) || BI.isNotEmptyArray(o.value)){
-            this.setValue(o.value);
-        }
-    },
-
-    _createBtns: function (items) {
-        var o = this.options;
-        return BI.createWidgets(BI.createItems(items, {
-            type: "bi.text_button"
-        }));
-    },
-
-    _btnsCreator: function (items) {
-        var self = this, args = Array.prototype.slice.call(arguments), o = this.options;
-        var buttons = this._createBtns(items);
-        args[0] = buttons;
-
-        BI.each(this.behaviors, function (i, behavior) {
-            behavior.doBehavior.apply(behavior, args);
-        });
-        BI.each(buttons, function (i, btn) {
-            btn.on(BI.Controller.EVENT_CHANGE, function (type, value, obj) {
-                if (type === BI.Events.CLICK) {
-                    switch (o.chooseType) {
-                        case BI.ButtonGroup.CHOOSE_TYPE_SINGLE:
-                            self.setValue(btn.getValue());
-                            break;
-                        case BI.ButtonGroup.CHOOSE_TYPE_NONE:
-                            self.setValue([]);
-                            break;
-                    }
-                    self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
-                    self.fireEvent(BI.ButtonGroup.EVENT_CHANGE, value, obj);
-                } else {
-                    self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
-                }
-            });
-            btn.on(BI.Events.DESTROY, function () {
-                BI.remove(self.buttons, btn);
-            });
-        });
-
-        return buttons;
-    },
-
-    _packageBtns: function (btns) {
-        var o = this.options;
-        for (var i = o.layouts.length - 1; i > 0; i--) {
-            btns = BI.map(btns, function (k, it) {
-                return BI.extend({}, o.layouts[i], {
-                    items: [
-                        BI.extend({}, o.layouts[i].el, {
-                            el: it
-                        })
-                    ]
-                });
-            });
-        }
-        return btns;
-    },
-
-    _packageSimpleItems: function (btns) {
-        var o = this.options;
-        return BI.map(o.items, function (i, item) {
-            if (BI.stripEL(item) === item) {
-                return btns[i];
-            }
-            return BI.extend({}, item, {
-                el: btns[i]
-            });
-        });
-    },
-
-    _packageItems: function (items, packBtns) {
-        return BI.createItems(BI.makeArrayByArray(items, {}), BI.clone(packBtns));
-    },
-
-    _packageLayout: function (items) {
-        var o = this.options, layout = BI.deepClone(o.layouts[0]);
-
-        var lay = BI.formatEL(layout).el;
-        while (lay && lay.items && !BI.isEmpty(lay.items)) {
-            lay = BI.formatEL(lay.items[0]).el;
-        }
-        lay.items = items;
-        return layout;
-    },
-
-    // 如果是一个简单的layout
-    _isSimpleLayout: function () {
-        var o = this.options;
-        return o.layouts.length === 1 && !BI.isArray(o.items[0]);
-    },
-
-    doBehavior: function () {
-        var args = Array.prototype.slice.call(arguments);
-        args.unshift(this.buttons);
-        BI.each(this.behaviors, function (i, behavior) {
-            behavior.doBehavior.apply(behavior, args);
-        });
-    },
-
-    prependItems: function (items) {
-        var o = this.options;
-        var btns = this._btnsCreator.apply(this, arguments);
-        this.buttons = BI.concat(btns, this.buttons);
-
-        if (this._isSimpleLayout() && this.layouts && this.layouts.prependItems) {
-            this.layouts.prependItems(btns);
-            return;
-        }
-
-        items = this._packageItems(items, this._packageBtns(btns));
-        this.layouts.prependItems(this._packageLayout(items).items);
-    },
-
-    addItems: function (items) {
-        var o = this.options;
-        var btns = this._btnsCreator.apply(this, arguments);
-        this.buttons = BI.concat(this.buttons, btns);
-
-        // 如果是一个简单的layout
-        if (this._isSimpleLayout() && this.layouts && this.layouts.addItems) {
-            this.layouts.addItems(btns);
-            return;
-        }
-
-        items = this._packageItems(items, this._packageBtns(btns));
-        this.layouts.addItems(this._packageLayout(items).items);
-    },
-
-    removeItemAt: function (indexes) {
-        BI.removeAt(this.buttons, indexes);
-        this.layouts.removeItemAt(indexes);
-    },
-
-    removeItems: function (values) {
-        values = BI.isArray(values) ? values : [values];
-        var deleted = [];
-        BI.each(this.buttons, function (i, button) {
-            if (BI.deepContains(values, button.getValue())) {
-                deleted.push(i);
-            }
-        });
-        BI.removeAt(this.buttons, deleted);
-        this.layouts.removeItemAt(deleted);
-    },
-
-    populate: function (items) {
-        items = items || [];
-        this.empty();
-        this.options.items = items;
-
-        this.buttons = this._btnsCreator.apply(this, arguments);
-        if (this._isSimpleLayout()) {
-            items = this._packageSimpleItems(this.buttons);
-        } else {
-            items = this._packageItems(items, this._packageBtns(this.buttons));
-        }
-
-        this.layouts = BI.createWidget(BI.extend({element: this}, this._packageLayout(items)));
-    },
-
-    setNotSelectedValue: function (v) {
-        v = BI.isArray(v) ? v : [v];
-        BI.each(this.buttons, function (i, item) {
-            if (BI.deepContains(v, item.getValue())) {
-                item.setSelected && item.setSelected(false);
-            } else {
-                item.setSelected && item.setSelected(true);
-            }
-        });
-    },
-
-    setEnabledValue: function (v) {
-        v = BI.isArray(v) ? v : [v];
-        BI.each(this.buttons, function (i, item) {
-            if (BI.deepContains(v, item.getValue())) {
-                item.setEnable(true);
-            } else {
-                item.setEnable(false);
-            }
-        });
-    },
-
-    setValue: function (v) {
-        v = BI.isArray(v) ? v : [v];
-        BI.each(this.buttons, function (i, item) {
-            if (BI.deepContains(v, item.getValue())) {
-                item.setSelected && item.setSelected(true);
-            } else {
-                item.setSelected && item.setSelected(false);
-            }
-        });
-    },
-
-    getNotSelectedValue: function () {
-        var v = [];
-        BI.each(this.buttons, function (i, item) {
-            if (item.isEnabled() && !(item.isSelected && item.isSelected())) {
-                v.push(item.getValue());
-            }
-        });
-        return v;
-    },
-
-    getValue: function () {
-        var v = [];
-        BI.each(this.buttons, function (i, item) {
-            if (item.isEnabled() && item.isSelected && item.isSelected()) {
-                v.push(item.getValue());
-            }
-        });
-        return v;
-    },
-
-    getAllButtons: function () {
-        return this.buttons;
-    },
-
-    getAllLeaves: function () {
-        return this.buttons;
-    },
-
-    getSelectedButtons: function () {
-        var btns = [];
-        BI.each(this.buttons, function (i, item) {
-            if (item.isSelected && item.isSelected()) {
-                btns.push(item);
-            }
-        });
-        return btns;
-    },
-
-    getNotSelectedButtons: function () {
-        var btns = [];
-        BI.each(this.buttons, function (i, item) {
-            if (item.isSelected && !item.isSelected()) {
-                btns.push(item);
-            }
-        });
-        return btns;
-    },
-
-    getIndexByValue: function (value) {
-        var index = -1;
-        BI.any(this.buttons, function (i, item) {
-            if (item.isEnabled() && item.getValue() === value) {
-                index = i;
-                return true;
-            }
-        });
-        return index;
-    },
-
-    getNodeById: function (id) {
-        var node;
-        BI.any(this.buttons, function (i, item) {
-            if (item.isEnabled() && item.options.id === id) {
-                node = item;
-                return true;
-            }
-        });
-        return node;
-    },
-
-    getNodeByValue: function (value) {
-        var node;
-        BI.any(this.buttons, function (i, item) {
-            if (item.isEnabled() && item.getValue() === value) {
-                node = item;
-                return true;
-            }
-        });
-        return node;
-    },
-
-    empty: function () {
-        BI.ButtonGroup.superclass.empty.apply(this, arguments);
-        this.options.items = [];
-    },
-
-    destroy: function () {
-        BI.ButtonGroup.superclass.destroy.apply(this, arguments);
-        this.options.items = [];
-    }
-});
-BI.extend(BI.ButtonGroup, {
-    CHOOSE_TYPE_SINGLE: BI.Selection.Single,
-    CHOOSE_TYPE_MULTI: BI.Selection.Multi,
-    CHOOSE_TYPE_ALL: BI.Selection.All,
-    CHOOSE_TYPE_NONE: BI.Selection.None,
-    CHOOSE_TYPE_DEFAULT: BI.Selection.Default
-});
-BI.ButtonGroup.EVENT_CHANGE = "EVENT_CHANGE";
-
-BI.shortcut("bi.button_group", BI.ButtonGroup);
-
-/***/ }),
-/* 407 */
-/***/ (function(module, exports) {
-
-/**
- * Created by GUY on 2015/8/10.
- * @class BI.ButtonTree
- * @extends BI.ButtonGroup
- */
-
-BI.ButtonTree = BI.inherit(BI.ButtonGroup, {
-    _defaultConfig: function () {
-        return BI.extend(BI.ButtonTree.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-button-tree"
-        });
-    },
-
-    _init: function () {
-        BI.ButtonTree.superclass._init.apply(this, arguments);
-    },
-
-    setNotSelectedValue: function (v) {
-        v = BI.isArray(v) ? v : [v];
-        BI.each(this.buttons, function (i, item) {
-            if (!BI.isFunction(item.setSelected)) {
-                item.setNotSelectedValue(v);
-                return;
-            }
-            if (BI.deepContains(v, item.getValue())) {
-                item.setSelected(false);
-            } else {
-                item.setSelected(true);
-            }
-        });
-    },
-
-    setEnabledValue: function (v) {
-        v = BI.isArray(v) ? v : [v];
-        BI.each(this.buttons, function (i, item) {
-            if (BI.isFunction(item.setEnabledValue)) {
-                item.setEnabledValue(v);
-                return;
-            }
-            if (BI.deepContains(v, item.getValue())) {
-                item.setEnable(true);
-            } else {
-                item.setEnable(false);
-            }
-        });
-    },
-
-    setValue: function (v) {
-        v = BI.isArray(v) ? v : [v];
-        BI.each(this.buttons, function (i, item) {
-            if (!BI.isFunction(item.setSelected)) {
-                item.setValue(v);
-                return;
-            }
-            if (BI.deepContains(v, item.getValue())) {
-                item.setSelected(true);
-            } else {
-                item.setSelected(false);
-            }
-        });
-    },
-
-    getNotSelectedValue: function () {
-        var v = [];
-        BI.each(this.buttons, function (i, item) {
-            if (item.isEnabled() && !BI.isFunction(item.setSelected)) {
-                v = BI.concat(v, item.getNotSelectedValue());
-                return;
-            }
-            if (item.isEnabled() && item.isSelected && !item.isSelected()) {
-                v.push(item.getValue());
-            }
-        });
-        return v;
-    },
-
-    getValue: function () {
-        var v = [];
-        BI.each(this.buttons, function (i, item) {
-            if (item.isEnabled() && !BI.isFunction(item.setSelected)) {
-                v = BI.concat(v, item.getValue());
-                return;
-            }
-            if (item.isEnabled() && item.isSelected && item.isSelected()) {
-                v.push(item.getValue());
-            }
-        });
-        return v;
-    },
-
-    getSelectedButtons: function () {
-        var btns = [];
-        BI.each(this.buttons, function (i, item) {
-            if (item.isEnabled() && !BI.isFunction(item.setSelected)) {
-                btns = btns.concat(item.getSelectedButtons());
-                return;
-            }
-            if (item.isSelected && item.isSelected()) {
-                btns.push(item);
-            }
-        });
-        return btns;
-    },
-
-    getNotSelectedButtons: function () {
-        var btns = [];
-        BI.each(this.buttons, function (i, item) {
-            if (item.isEnabled() && !BI.isFunction(item.setSelected)) {
-                btns = btns.concat(item.getNotSelectedButtons());
-                return;
-            }
-            if (item.isSelected && !item.isSelected()) {
-                btns.push(item);
-            }
-        });
-        return btns;
-    },
-
-    // 获取所有的叶子节点
-    getAllLeaves: function () {
-        var leaves = [];
-        BI.each(this.buttons, function (i, item) {
-            if (item.isEnabled() && !BI.isFunction(item.setSelected)) {
-                leaves = leaves.concat(item.getAllLeaves());
-                return;
-            }
-            if (item.isEnabled()) {
-                leaves.push(item);
-            }
-        });
-        return leaves;
-    },
-
-    getIndexByValue: function (value) {
-        var index = -1;
-        BI.any(this.buttons, function (i, item) {
-            var vs = item.getValue();
-            if (item.isEnabled() && (vs === value || BI.contains(vs, value))) {
-                index = i;
-                return true;
-            }
-        });
-        return index;
-    },
-
-    getNodeById: function (id) {
-        var node;
-        BI.any(this.buttons, function (i, item) {
-            if (item.isEnabled()) {
-                if (item.attr("id") === id) {
-                    node = item;
-                    return true;
-                } else if (BI.isFunction(item.getNodeById)) {
-                    if (node = item.getNodeById(id)) {
-                        return true;
-                    }
-                }
-            }
-        });
-        return node;
-    },
-
-    getNodeByValue: function (value) {
-        var node;
-        BI.any(this.buttons, function (i, item) {
-            if (item.isEnabled()) {
-                if (BI.isFunction(item.getNodeByValue)) {
-                    if (node = item.getNodeByValue(value)) {
-                        return true;
-                    }
-                } else if (item.attr("value") === value) {
-                    node = item;
-                    return true;
-                }
-            }
-        });
-        return node;
-    }
-});
-BI.ButtonTree.EVENT_CHANGE = "EVENT_CHANGE";
-
-BI.shortcut("bi.button_tree", BI.ButtonTree);
-
-/***/ }),
-/* 408 */
-/***/ (function(module, exports) {
-
-BI.prepares.push(function () {
-    BI.Resizers = new BI.ResizeController();
-    BI.Layers = new BI.LayerController();
-    BI.Maskers = new BI.MaskersController();
-    BI.Bubbles = new BI.BubblesController();
-    BI.Tooltips = new BI.TooltipsController();
-    BI.Popovers = new BI.PopoverController();
-    BI.Broadcasts = new BI.BroadcastController();
-    BI.StyleLoaders = new BI.StyleLoaderManager();
-});
-
-
-/***/ }),
-/* 409 */
 /***/ (function(module, exports) {
 
 /**
@@ -20312,7 +18733,7 @@ BI.shortcut("bi.collection_view", BI.CollectionView);
 
 
 /***/ }),
-/* 410 */
+/* 404 */
 /***/ (function(module, exports) {
 
 !(function () {
@@ -20921,7 +19342,7 @@ BI.shortcut("bi.collection_view", BI.CollectionView);
 
 
 /***/ }),
-/* 411 */
+/* 405 */
 /***/ (function(module, exports) {
 
 /**
@@ -21208,7 +19629,342 @@ BI.Expander.EVENT_AFTER_HIDEVIEW = "EVENT_AFTER_HIDEVIEW";
 BI.shortcut("bi.expander", BI.Expander);
 
 /***/ }),
-/* 412 */
+/* 406 */
+/***/ (function(module, exports) {
+
+/**
+ * Created by GUY on 2015/6/26.
+ * @class BI.ButtonGroup
+ * @extends BI.Widget
+ */
+
+BI.ButtonGroup = BI.inherit(BI.Widget, {
+    _defaultConfig: function () {
+        return BI.extend(BI.ButtonGroup.superclass._defaultConfig.apply(this, arguments), {
+            baseCls: "bi-button-group",
+            behaviors: {},
+            items: [],
+            value: "",
+            chooseType: BI.Selection.Single,
+            layouts: [{
+                type: "bi.center",
+                hgap: 0,
+                vgap: 0
+            }]
+        });
+    },
+
+    _init: function () {
+        BI.ButtonGroup.superclass._init.apply(this, arguments);
+        var o = this.options;
+        var behaviors = {};
+        BI.each(o.behaviors, function (key, rule) {
+            behaviors[key] = BI.BehaviorFactory.createBehavior(key, {
+                rule: rule
+            });
+        });
+        this.behaviors = behaviors;
+        this.populate(o.items);
+        if(BI.isKey(o.value) || BI.isNotEmptyArray(o.value)){
+            this.setValue(o.value);
+        }
+    },
+
+    _createBtns: function (items) {
+        var o = this.options;
+        return BI.createWidgets(BI.createItems(items, {
+            type: "bi.text_button"
+        }));
+    },
+
+    _btnsCreator: function (items) {
+        var self = this, args = Array.prototype.slice.call(arguments), o = this.options;
+        var buttons = this._createBtns(items);
+        args[0] = buttons;
+
+        BI.each(this.behaviors, function (i, behavior) {
+            behavior.doBehavior.apply(behavior, args);
+        });
+        BI.each(buttons, function (i, btn) {
+            btn.on(BI.Controller.EVENT_CHANGE, function (type, value, obj) {
+                if (type === BI.Events.CLICK) {
+                    switch (o.chooseType) {
+                        case BI.ButtonGroup.CHOOSE_TYPE_SINGLE:
+                            self.setValue(btn.getValue());
+                            break;
+                        case BI.ButtonGroup.CHOOSE_TYPE_NONE:
+                            self.setValue([]);
+                            break;
+                    }
+                    self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
+                    self.fireEvent(BI.ButtonGroup.EVENT_CHANGE, value, obj);
+                } else {
+                    self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
+                }
+            });
+            btn.on(BI.Events.DESTROY, function () {
+                BI.remove(self.buttons, btn);
+            });
+        });
+
+        return buttons;
+    },
+
+    _packageBtns: function (btns) {
+        var o = this.options;
+        for (var i = o.layouts.length - 1; i > 0; i--) {
+            btns = BI.map(btns, function (k, it) {
+                return BI.extend({}, o.layouts[i], {
+                    items: [
+                        BI.extend({}, o.layouts[i].el, {
+                            el: it
+                        })
+                    ]
+                });
+            });
+        }
+        return btns;
+    },
+
+    _packageSimpleItems: function (btns) {
+        var o = this.options;
+        return BI.map(o.items, function (i, item) {
+            if (BI.stripEL(item) === item) {
+                return btns[i];
+            }
+            return BI.extend({}, item, {
+                el: btns[i]
+            });
+        });
+    },
+
+    _packageItems: function (items, packBtns) {
+        return BI.createItems(BI.makeArrayByArray(items, {}), BI.clone(packBtns));
+    },
+
+    _packageLayout: function (items) {
+        var o = this.options, layout = BI.deepClone(o.layouts[0]);
+
+        var lay = BI.formatEL(layout).el;
+        while (lay && lay.items && !BI.isEmpty(lay.items)) {
+            lay = BI.formatEL(lay.items[0]).el;
+        }
+        lay.items = items;
+        return layout;
+    },
+
+    // 如果是一个简单的layout
+    _isSimpleLayout: function () {
+        var o = this.options;
+        return o.layouts.length === 1 && !BI.isArray(o.items[0]);
+    },
+
+    doBehavior: function () {
+        var args = Array.prototype.slice.call(arguments);
+        args.unshift(this.buttons);
+        BI.each(this.behaviors, function (i, behavior) {
+            behavior.doBehavior.apply(behavior, args);
+        });
+    },
+
+    prependItems: function (items) {
+        var o = this.options;
+        var btns = this._btnsCreator.apply(this, arguments);
+        this.buttons = BI.concat(btns, this.buttons);
+
+        if (this._isSimpleLayout() && this.layouts && this.layouts.prependItems) {
+            this.layouts.prependItems(btns);
+            return;
+        }
+
+        items = this._packageItems(items, this._packageBtns(btns));
+        this.layouts.prependItems(this._packageLayout(items).items);
+    },
+
+    addItems: function (items) {
+        var o = this.options;
+        var btns = this._btnsCreator.apply(this, arguments);
+        this.buttons = BI.concat(this.buttons, btns);
+
+        // 如果是一个简单的layout
+        if (this._isSimpleLayout() && this.layouts && this.layouts.addItems) {
+            this.layouts.addItems(btns);
+            return;
+        }
+
+        items = this._packageItems(items, this._packageBtns(btns));
+        this.layouts.addItems(this._packageLayout(items).items);
+    },
+
+    removeItemAt: function (indexes) {
+        BI.removeAt(this.buttons, indexes);
+        this.layouts.removeItemAt(indexes);
+    },
+
+    removeItems: function (values) {
+        values = BI.isArray(values) ? values : [values];
+        var deleted = [];
+        BI.each(this.buttons, function (i, button) {
+            if (BI.deepContains(values, button.getValue())) {
+                deleted.push(i);
+            }
+        });
+        BI.removeAt(this.buttons, deleted);
+        this.layouts.removeItemAt(deleted);
+    },
+
+    populate: function (items) {
+        items = items || [];
+        this.empty();
+        this.options.items = items;
+
+        this.buttons = this._btnsCreator.apply(this, arguments);
+        if (this._isSimpleLayout()) {
+            items = this._packageSimpleItems(this.buttons);
+        } else {
+            items = this._packageItems(items, this._packageBtns(this.buttons));
+        }
+
+        this.layouts = BI.createWidget(BI.extend({element: this}, this._packageLayout(items)));
+    },
+
+    setNotSelectedValue: function (v) {
+        v = BI.isArray(v) ? v : [v];
+        BI.each(this.buttons, function (i, item) {
+            if (BI.deepContains(v, item.getValue())) {
+                item.setSelected && item.setSelected(false);
+            } else {
+                item.setSelected && item.setSelected(true);
+            }
+        });
+    },
+
+    setEnabledValue: function (v) {
+        v = BI.isArray(v) ? v : [v];
+        BI.each(this.buttons, function (i, item) {
+            if (BI.deepContains(v, item.getValue())) {
+                item.setEnable(true);
+            } else {
+                item.setEnable(false);
+            }
+        });
+    },
+
+    setValue: function (v) {
+        v = BI.isArray(v) ? v : [v];
+        BI.each(this.buttons, function (i, item) {
+            if (BI.deepContains(v, item.getValue())) {
+                item.setSelected && item.setSelected(true);
+            } else {
+                item.setSelected && item.setSelected(false);
+            }
+        });
+    },
+
+    getNotSelectedValue: function () {
+        var v = [];
+        BI.each(this.buttons, function (i, item) {
+            if (item.isEnabled() && !(item.isSelected && item.isSelected())) {
+                v.push(item.getValue());
+            }
+        });
+        return v;
+    },
+
+    getValue: function () {
+        var v = [];
+        BI.each(this.buttons, function (i, item) {
+            if (item.isEnabled() && item.isSelected && item.isSelected()) {
+                v.push(item.getValue());
+            }
+        });
+        return v;
+    },
+
+    getAllButtons: function () {
+        return this.buttons;
+    },
+
+    getAllLeaves: function () {
+        return this.buttons;
+    },
+
+    getSelectedButtons: function () {
+        var btns = [];
+        BI.each(this.buttons, function (i, item) {
+            if (item.isSelected && item.isSelected()) {
+                btns.push(item);
+            }
+        });
+        return btns;
+    },
+
+    getNotSelectedButtons: function () {
+        var btns = [];
+        BI.each(this.buttons, function (i, item) {
+            if (item.isSelected && !item.isSelected()) {
+                btns.push(item);
+            }
+        });
+        return btns;
+    },
+
+    getIndexByValue: function (value) {
+        var index = -1;
+        BI.any(this.buttons, function (i, item) {
+            if (item.isEnabled() && item.getValue() === value) {
+                index = i;
+                return true;
+            }
+        });
+        return index;
+    },
+
+    getNodeById: function (id) {
+        var node;
+        BI.any(this.buttons, function (i, item) {
+            if (item.isEnabled() && item.options.id === id) {
+                node = item;
+                return true;
+            }
+        });
+        return node;
+    },
+
+    getNodeByValue: function (value) {
+        var node;
+        BI.any(this.buttons, function (i, item) {
+            if (item.isEnabled() && item.getValue() === value) {
+                node = item;
+                return true;
+            }
+        });
+        return node;
+    },
+
+    empty: function () {
+        BI.ButtonGroup.superclass.empty.apply(this, arguments);
+        this.options.items = [];
+    },
+
+    destroy: function () {
+        BI.ButtonGroup.superclass.destroy.apply(this, arguments);
+        this.options.items = [];
+    }
+});
+BI.extend(BI.ButtonGroup, {
+    CHOOSE_TYPE_SINGLE: BI.Selection.Single,
+    CHOOSE_TYPE_MULTI: BI.Selection.Multi,
+    CHOOSE_TYPE_ALL: BI.Selection.All,
+    CHOOSE_TYPE_NONE: BI.Selection.None,
+    CHOOSE_TYPE_DEFAULT: BI.Selection.Default
+});
+BI.ButtonGroup.EVENT_CHANGE = "EVENT_CHANGE";
+
+BI.shortcut("bi.button_group", BI.ButtonGroup);
+
+/***/ }),
+/* 407 */
 /***/ (function(module, exports) {
 
 /**
@@ -21310,7 +20066,7 @@ BI.ComboGroup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.combo_group", BI.ComboGroup);
 
 /***/ }),
-/* 413 */
+/* 408 */
 /***/ (function(module, exports) {
 
 BI.VirtualGroup = BI.inherit(BI.Widget, {
@@ -21431,7 +20187,7 @@ BI.VirtualGroup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.virtual_group", BI.VirtualGroup);
 
 /***/ }),
-/* 414 */
+/* 409 */
 /***/ (function(module, exports) {
 
 /**
@@ -21696,7 +20452,7 @@ BI.Loader.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.loader", BI.Loader);
 
 /***/ }),
-/* 415 */
+/* 410 */
 /***/ (function(module, exports) {
 
 /**
@@ -21864,7 +20620,7 @@ BI.shortcut("bi.navigation", BI.Navigation);
 
 
 /***/ }),
-/* 416 */
+/* 411 */
 /***/ (function(module, exports) {
 
 /**
@@ -22188,7 +20944,7 @@ BI.Searcher.EVENT_AFTER_INIT = "EVENT_AFTER_INIT";
 BI.shortcut("bi.searcher", BI.Searcher);
 
 /***/ }),
-/* 417 */
+/* 412 */
 /***/ (function(module, exports) {
 
 /**
@@ -22481,7 +21237,7 @@ BI.Switcher.EVENT_AFTER_HIDEVIEW = "EVENT_AFTER_HIDEVIEW";
 BI.shortcut("bi.switcher", BI.Switcher);
 
 /***/ }),
-/* 418 */
+/* 413 */
 /***/ (function(module, exports) {
 
 /**
@@ -22640,7 +21396,194 @@ BI.shortcut("bi.tab", BI.Tab);
 
 
 /***/ }),
-/* 419 */
+/* 414 */
+/***/ (function(module, exports) {
+
+/**
+ * Created by GUY on 2015/8/10.
+ * @class BI.ButtonTree
+ * @extends BI.ButtonGroup
+ */
+
+BI.ButtonTree = BI.inherit(BI.ButtonGroup, {
+    _defaultConfig: function () {
+        return BI.extend(BI.ButtonTree.superclass._defaultConfig.apply(this, arguments), {
+            baseCls: "bi-button-tree"
+        });
+    },
+
+    _init: function () {
+        BI.ButtonTree.superclass._init.apply(this, arguments);
+    },
+
+    setNotSelectedValue: function (v) {
+        v = BI.isArray(v) ? v : [v];
+        BI.each(this.buttons, function (i, item) {
+            if (!BI.isFunction(item.setSelected)) {
+                item.setNotSelectedValue(v);
+                return;
+            }
+            if (BI.deepContains(v, item.getValue())) {
+                item.setSelected(false);
+            } else {
+                item.setSelected(true);
+            }
+        });
+    },
+
+    setEnabledValue: function (v) {
+        v = BI.isArray(v) ? v : [v];
+        BI.each(this.buttons, function (i, item) {
+            if (BI.isFunction(item.setEnabledValue)) {
+                item.setEnabledValue(v);
+                return;
+            }
+            if (BI.deepContains(v, item.getValue())) {
+                item.setEnable(true);
+            } else {
+                item.setEnable(false);
+            }
+        });
+    },
+
+    setValue: function (v) {
+        v = BI.isArray(v) ? v : [v];
+        BI.each(this.buttons, function (i, item) {
+            if (!BI.isFunction(item.setSelected)) {
+                item.setValue(v);
+                return;
+            }
+            if (BI.deepContains(v, item.getValue())) {
+                item.setSelected(true);
+            } else {
+                item.setSelected(false);
+            }
+        });
+    },
+
+    getNotSelectedValue: function () {
+        var v = [];
+        BI.each(this.buttons, function (i, item) {
+            if (item.isEnabled() && !BI.isFunction(item.setSelected)) {
+                v = BI.concat(v, item.getNotSelectedValue());
+                return;
+            }
+            if (item.isEnabled() && item.isSelected && !item.isSelected()) {
+                v.push(item.getValue());
+            }
+        });
+        return v;
+    },
+
+    getValue: function () {
+        var v = [];
+        BI.each(this.buttons, function (i, item) {
+            if (item.isEnabled() && !BI.isFunction(item.setSelected)) {
+                v = BI.concat(v, item.getValue());
+                return;
+            }
+            if (item.isEnabled() && item.isSelected && item.isSelected()) {
+                v.push(item.getValue());
+            }
+        });
+        return v;
+    },
+
+    getSelectedButtons: function () {
+        var btns = [];
+        BI.each(this.buttons, function (i, item) {
+            if (item.isEnabled() && !BI.isFunction(item.setSelected)) {
+                btns = btns.concat(item.getSelectedButtons());
+                return;
+            }
+            if (item.isSelected && item.isSelected()) {
+                btns.push(item);
+            }
+        });
+        return btns;
+    },
+
+    getNotSelectedButtons: function () {
+        var btns = [];
+        BI.each(this.buttons, function (i, item) {
+            if (item.isEnabled() && !BI.isFunction(item.setSelected)) {
+                btns = btns.concat(item.getNotSelectedButtons());
+                return;
+            }
+            if (item.isSelected && !item.isSelected()) {
+                btns.push(item);
+            }
+        });
+        return btns;
+    },
+
+    // 获取所有的叶子节点
+    getAllLeaves: function () {
+        var leaves = [];
+        BI.each(this.buttons, function (i, item) {
+            if (item.isEnabled() && !BI.isFunction(item.setSelected)) {
+                leaves = leaves.concat(item.getAllLeaves());
+                return;
+            }
+            if (item.isEnabled()) {
+                leaves.push(item);
+            }
+        });
+        return leaves;
+    },
+
+    getIndexByValue: function (value) {
+        var index = -1;
+        BI.any(this.buttons, function (i, item) {
+            var vs = item.getValue();
+            if (item.isEnabled() && (vs === value || BI.contains(vs, value))) {
+                index = i;
+                return true;
+            }
+        });
+        return index;
+    },
+
+    getNodeById: function (id) {
+        var node;
+        BI.any(this.buttons, function (i, item) {
+            if (item.isEnabled()) {
+                if (item.attr("id") === id) {
+                    node = item;
+                    return true;
+                } else if (BI.isFunction(item.getNodeById)) {
+                    if (node = item.getNodeById(id)) {
+                        return true;
+                    }
+                }
+            }
+        });
+        return node;
+    },
+
+    getNodeByValue: function (value) {
+        var node;
+        BI.any(this.buttons, function (i, item) {
+            if (item.isEnabled()) {
+                if (BI.isFunction(item.getNodeByValue)) {
+                    if (node = item.getNodeByValue(value)) {
+                        return true;
+                    }
+                } else if (item.attr("value") === value) {
+                    node = item;
+                    return true;
+                }
+            }
+        });
+        return node;
+    }
+});
+BI.ButtonTree.EVENT_CHANGE = "EVENT_CHANGE";
+
+BI.shortcut("bi.button_tree", BI.ButtonTree);
+
+/***/ }),
+/* 415 */
 /***/ (function(module, exports) {
 
 /**
@@ -22687,7 +21630,7 @@ BI.EL = BI.inherit(BI.Widget, {
 BI.shortcut("bi.el", BI.EL);
 
 /***/ }),
-/* 420 */
+/* 416 */
 /***/ (function(module, exports) {
 
 /**
@@ -22896,7 +21839,7 @@ BI.Msg = function () {
 
 
 /***/ }),
-/* 421 */
+/* 417 */
 /***/ (function(module, exports) {
 
 /**
@@ -23284,7 +22227,7 @@ BI.shortcut("bi.grid_view", BI.GridView);
 
 
 /***/ }),
-/* 422 */
+/* 418 */
 /***/ (function(module, exports) {
 
 /**
@@ -23562,7 +22505,7 @@ BI.Popover.EVENT_CONFIRM = "EVENT_CONFIRM";
 
 
 /***/ }),
-/* 423 */
+/* 419 */
 /***/ (function(module, exports) {
 
 /**
@@ -23749,7 +22692,7 @@ BI.shortcut("bi.popup_view", BI.PopupView);
 
 
 /***/ }),
-/* 424 */
+/* 420 */
 /***/ (function(module, exports) {
 
 /**
@@ -23895,7 +22838,7 @@ BI.SearcherView.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.searcher_view", BI.SearcherView);
 
 /***/ }),
-/* 425 */
+/* 421 */
 /***/ (function(module, exports) {
 
 /**
@@ -24020,7 +22963,7 @@ BI.shortcut("bi.list_view", BI.ListView);
 
 
 /***/ }),
-/* 426 */
+/* 422 */
 /***/ (function(module, exports) {
 
 /**
@@ -24212,7 +23155,7 @@ BI.shortcut("bi.virtual_list", BI.VirtualList);
 
 
 /***/ }),
-/* 427 */
+/* 423 */
 /***/ (function(module, exports) {
 
 /**
@@ -24506,7 +23449,397 @@ BI.Pager.EVENT_AFTER_POPULATE = "EVENT_AFTER_POPULATE";
 BI.shortcut("bi.pager", BI.Pager);
 
 /***/ }),
-/* 428 */
+/* 424 */
+/***/ (function(module, exports) {
+
+/**
+ * guy
+ * 这仅仅只是一个超类, 所有简单控件的基类
+ * 1、类的控制，
+ * 2、title的控制
+ * 3、文字超过边界显示3个点
+ * 4、cursor默认pointor
+ * @class BI.Single
+ * @extends BI.Widget
+ * @abstract
+ */
+BI.Single = BI.inherit(BI.Widget, {
+    _defaultConfig: function () {
+        var conf = BI.Single.superclass._defaultConfig.apply(this, arguments);
+        return BI.extend(conf, {
+            readonly: false,
+            title: null,
+            warningTitle: null,
+            tipType: null, // success或warning
+            value: null,
+            belowMouse: false   // title是否跟随鼠标
+        });
+    },
+
+    _showToolTip: function (e, opt) {
+        opt || (opt = {});
+        var self = this, o = this.options;
+        var type = this.getTipType() || (this.isEnabled() ? "success" : "warning");
+        var title = type === "success" ? this.getTitle() : (this.getWarningTitle() || this.getTitle());
+        if (BI.isKey(title)) {
+            BI.Tooltips.show(e, this.getName(), title, type, this, opt);
+            if (o.action) {
+                BI.Actions.runAction(o.action, "hover", o, this);
+            }
+            BI.Actions.runGlobalAction("hover", o, this);
+        }
+    },
+
+    _hideTooltip: function () {
+        var self = this;
+        var tooltip = BI.Tooltips.get(this.getName());
+        if (BI.isNotNull(tooltip)) {
+            tooltip.element.fadeOut(200, function () {
+                BI.Tooltips.remove(self.getName());
+            });
+        }
+    },
+
+    _init: function () {
+        BI.Single.superclass._init.apply(this, arguments);
+        var self = this, o = this.options;
+        if (BI.isKey(o.title) || BI.isKey(o.warningTitle)
+            || BI.isFunction(o.title) || BI.isFunction(o.warningTitle)) {
+            this.enableHover({
+                belowMouse: o.belowMouse,
+                container: o.container
+            });
+        }
+    },
+
+    _clearTimeOut: function () {
+        if (BI.isNotNull(this.showTimeout)) {
+            clearTimeout(this.showTimeout);
+            this.showTimeout = null;
+        }
+        if (BI.isNotNull(this.hideTimeout)) {
+            clearTimeout(this.hideTimeout);
+            this.hideTimeout = null;
+        }
+    },
+
+    enableHover: function (opt) {
+        opt || (opt = {});
+        var self = this;
+        if (!this._hoverBinded) {
+            this.element.on("mouseenter.title" + this.getName(), function (e) {
+                self._e = e;
+                if (self.getTipType() === "warning" || (BI.isKey(self.getWarningTitle()) && !self.isEnabled())) {
+                    self.showTimeout = BI.delay(function () {
+                        if (BI.isNotNull(self.showTimeout)) {
+                            self._showToolTip(self._e || e, opt);
+                        }
+                    }, 200);
+                } else if (self.getTipType() === "success" || self.isEnabled()) {
+                    self.showTimeout = BI.delay(function () {
+                        if (BI.isNotNull(self.showTimeout)) {
+                            self._showToolTip(self._e || e, opt);
+                        }
+                    }, 500);
+                }
+            });
+            this.element.on("mousemove.title" + this.getName(), function (e) {
+                self._e = e;
+                if (BI.isNotNull(self.showTimeout)) {
+                    clearTimeout(self.showTimeout);
+                    self.showTimeout = null;
+                }
+                if (BI.isNull(self.hideTimeout)) {
+                    self.hideTimeout = BI.delay(function () {
+                        if (BI.isNotNull(self.hideTimeout)) {
+                            self._hideTooltip();
+                        }
+                    }, 500);
+                }
+
+                self.showTimeout = BI.delay(function () {
+                    // DEC-5321 IE下如果回调已经进入事件队列，clearTimeout将不会起作用
+                    if (BI.isNotNull(self.showTimeout)) {
+                        if (BI.isNotNull(self.hideTimeout)) {
+                            clearTimeout(self.hideTimeout);
+                            self.hideTimeout = null;
+                        }
+                        // CHART-10611 在拖拽的情况下, 鼠标拖拽着元素离开了拖拽元素的容器，但是子元素在dom结构上仍然属于容器
+                        // 这样会认为鼠标仍然在容器中, 500ms内放开的话，会在容器之外显示鼠标停留处显示容器的title
+                        if (self.element.__isMouseInBounds__(self._e || e)) {
+                            self._showToolTip(self._e || e, opt);
+                        }
+                    }
+                }, 500);
+
+            });
+            this.element.on("mouseleave.title" + this.getName(), function (e) {
+                self._e = null;
+                self._clearTimeOut();
+                self._hideTooltip();
+            });
+            this._hoverBinded = true;
+        }
+    },
+
+    disabledHover: function () {
+        // 取消hover事件
+        this._clearTimeOut();
+        this._hideTooltip();
+        this.element.unbind("mouseenter.title" + this.getName())
+            .unbind("mousemove.title" + this.getName())
+            .unbind("mouseleave.title" + this.getName());
+        this._hoverBinded = false;
+    },
+
+    // opt: {container: '', belowMouse: false}
+    setTitle: function (title, opt) {
+        this.options.title = title;
+        if (BI.isKey(title) || BI.isFunction(title)) {
+            this.enableHover(opt);
+        } else {
+            this.disabledHover();
+        }
+    },
+
+    setWarningTitle: function (title, opt) {
+        this.options.warningTitle = title;
+        if (BI.isKey(title) || BI.isFunction(title)) {
+            this.enableHover(opt);
+        } else {
+            this.disabledHover();
+        }
+    },
+
+    setTipType: function (type) {
+        this.options.tipType = type;
+    },
+
+    getTipType: function () {
+        return this.options.tipType;
+    },
+
+    isReadOnly: function () {
+        return !!this.options.readonly;
+    },
+
+    getTitle: function () {
+        var title = this.options.title;
+        if (BI.isFunction(title)) {
+            return title();
+        }
+        return title;
+    },
+
+    getWarningTitle: function () {
+        var title = this.options.warningTitle;
+        if (BI.isFunction(title)) {
+            return title();
+        }
+        return title;
+    },
+
+    setValue: function (val) {
+        if (!this.options.readonly) {
+            this.options.value = val;
+            this.options.setValue && this.options.setValue(val);
+        }
+    },
+
+    getValue: function () {
+        return this.options.value;
+    },
+
+    destroyed: function () {
+        if (BI.isNotNull(this.showTimeout)) {
+            clearTimeout(this.showTimeout);
+            this.showTimeout = null;
+        }
+        BI.Tooltips.remove(this.getName());
+    }
+});
+BI.shortcut("bi.single", BI.Single);
+
+
+/***/ }),
+/* 425 */
+/***/ (function(module, exports) {
+
+/**
+ * guy 表示一行数据，通过position来定位位置的数据
+ * @class BI.Text
+ * @extends BI.Single
+ */
+!(function () {
+    BI.Text = BI.inherit(BI.Single, {
+
+        props: {
+            baseCls: "bi-text",
+            textAlign: "left",
+            whiteSpace: "normal",
+            lineHeight: null,
+            handler: null, // 如果传入handler,表示处理文字的点击事件，不是区域的
+            hgap: 0,
+            vgap: 0,
+            lgap: 0,
+            rgap: 0,
+            tgap: 0,
+            bgap: 0,
+            py: "",
+            highLight: false
+        },
+
+        render: function () {
+            var self = this, o = this.options;
+            if (o.hgap + o.lgap > 0) {
+                this.element.css({
+                    "padding-left": (o.hgap + o.lgap) / BI.pixRatio + BI.pixUnit
+                });
+            }
+            if (o.hgap + o.rgap > 0) {
+                this.element.css({
+                    "padding-right": (o.hgap + o.rgap) / BI.pixRatio + BI.pixUnit
+                });
+            }
+            if (o.vgap + o.tgap > 0) {
+                this.element.css({
+                    "padding-top": (o.vgap + o.tgap) / BI.pixRatio + BI.pixUnit
+                });
+            }
+            if (o.vgap + o.bgap > 0) {
+                this.element.css({
+                    "padding-bottom": (o.vgap + o.bgap) / BI.pixRatio + BI.pixUnit
+                });
+            }
+            if (BI.isWidthOrHeight(o.height)) {
+                this.element.css({ lineHeight: BI.isNumber(o.height) ? (o.height / BI.pixRatio + BI.pixUnit) : o.height });
+            }
+            if (BI.isWidthOrHeight(o.lineHeight)) {
+                this.element.css({ lineHeight: BI.isNumber(o.lineHeight) ? (o.lineHeight / BI.pixRatio + BI.pixUnit) : o.lineHeight });
+            }
+            if (BI.isWidthOrHeight(o.maxWidth)) {
+                this.element.css({ maxWidth: BI.isNumber(o.maxWidth) ? (o.maxWidth / BI.pixRatio + BI.pixUnit) : o.maxWidth });
+            }
+            this.element.css({
+                textAlign: o.textAlign,
+                whiteSpace: this._getTextWrap(),
+                textOverflow: o.whiteSpace === "nowrap" ? "ellipsis" : "",
+                overflow: o.whiteSpace === "nowrap" ? "" : (BI.isWidthOrHeight(o.height) ? "auto" : "")
+            });
+            if (o.handler && o.handler !== BI.emptyFn) {
+                this.text = BI.createWidget({
+                    type: "bi.layout",
+                    tagName: "span"
+                });
+                this.text.element.click(function () {
+                    o.handler(self.getValue());
+                });
+                BI.createWidget({
+                    type: "bi.default",
+                    element: this,
+                    items: [this.text]
+                });
+            } else {
+                this.text = this;
+            }
+
+            var text = this._getShowText();
+            if (!BI.isUndefined(text)) {
+                this.setText(text);
+            } else if (BI.isKey(o.value)) {
+                this.setText(o.value);
+            }
+            if (BI.isKey(o.keyword)) {
+                this.doRedMark(o.keyword);
+            }
+            if (o.highLight) {
+                this.doHighLight();
+            }
+        },
+
+        _getTextWrap: function () {
+            var o = this.options;
+            switch (o.whiteSpace) {
+                case "nowrap":
+                    return "pre";
+                case "normal":
+                    return "pre-wrap";
+                default:
+                    return o.whiteSpace;
+            }
+        },
+
+        _getShowText: function () {
+            var o = this.options;
+            var text = BI.isFunction(o.text) ? o.text() : o.text;
+
+            return BI.isKey(text) ? BI.Text.formatText(text + "") : text;
+        },
+
+        _doRedMark: function (keyword) {
+            var o = this.options;
+            // render之后做的doredmark,这个时候虽然标红了，但是之后text mounted执行的时候并没有keyword
+            o.keyword = keyword;
+            this.text.element.__textKeywordMarked__(this._getShowText(), keyword, o.py);
+        },
+
+        doRedMark: function (keyword) {
+            if (BI.isKey(keyword)) {
+                this._doRedMark(keyword);
+            }
+        },
+
+        unRedMark: function () {
+            var o = this.options;
+            o.keyword = "";
+            this.text.element.__textKeywordMarked__(this._getShowText(), "", o.py);
+        },
+
+        doHighLight: function () {
+            this.text.element.addClass("bi-high-light");
+        },
+
+        unHighLight: function () {
+            this.text.element.removeClass("bi-high-light");
+        },
+
+        setValue: function (text) {
+            BI.Text.superclass.setValue.apply(this, arguments);
+            if (!this.isReadOnly()) {
+                this.setText(text);
+            }
+        },
+
+        setStyle: function (css) {
+            this.text.element.css(css);
+        },
+
+        setText: function (text) {
+            BI.Text.superclass.setText.apply(this, arguments);
+            //  为textContext赋值为undefined时在ie和edge下会真的显示undefined
+            this.options.text = BI.isNotNull(text) ? text : "";
+            this._doRedMark(this.options.keyword);
+        }
+    });
+    var formatters = [];
+    BI.Text.addTextFormatter = function (formatter) {
+        formatters.push(formatter);
+    };
+    BI.Text.formatText = function (text) {
+        if (formatters.length > 0) {
+            for (var i = 0, len = formatters.length; i < len; i++) {
+                text = formatters[i](text);
+            }
+        }
+        return text;
+    };
+    BI.shortcut("bi.text", BI.Text);
+}());
+
+
+
+/***/ }),
+/* 426 */
 /***/ (function(module, exports) {
 
 /**
@@ -24543,7 +23876,7 @@ BI.A = BI.inherit(BI.Text, {
 BI.shortcut("bi.a", BI.A);
 
 /***/ }),
-/* 429 */
+/* 427 */
 /***/ (function(module, exports) {
 
 /**
@@ -24626,6 +23959,485 @@ BI.LoadingBar = BI.inherit(BI.Single, {
 });
 
 BI.shortcut("bi.loading_bar", BI.LoadingBar);
+
+/***/ }),
+/* 428 */
+/***/ (function(module, exports) {
+
+/**
+ * guy
+ * @class BI.BasicButton
+ * @extends BI.Single
+ *
+ * 一般的button父级
+ */
+BI.BasicButton = BI.inherit(BI.Single, {
+    _defaultConfig: function () {
+        var conf = BI.BasicButton.superclass._defaultConfig.apply(this, arguments);
+        return BI.extend(conf, {
+            _baseCls: (conf._baseCls || "") + " bi-basic-button" + (conf.invalid ? "" : " cursor-pointer") + ((BI.isIE() && BI.getIEVersion() < 10) ? " hack" : ""),
+            value: "",
+            stopEvent: false,
+            stopPropagation: false,
+            selected: false,
+            once: false, // 点击一次选中有效,再点无效
+            forceSelected: false, // 点击即选中, 选中了就不会被取消,与once的区别是forceSelected不影响事件的触发
+            forceNotSelected: false, // 无论怎么点击都不会被选中
+            disableSelected: false, // 使能选中
+
+            shadow: false,
+            isShadowShowingOnSelected: false,  // 选中状态下是否显示阴影
+            trigger: null,
+            handler: BI.emptyFn,
+            bubble: null
+        });
+    },
+    _init: function () {
+        BI.BasicButton.superclass._init.apply(this, arguments);
+        var opts = this.options;
+        if (opts.selected === true) {
+            BI.nextTick(BI.bind(function () {
+                this.setSelected(opts.selected);
+            }, this));
+        }
+        BI.nextTick(BI.bind(this.bindEvent, this));
+
+        if (opts.shadow) {
+            this._createShadow();
+        }
+        if (opts.level) {
+            this.element.addClass("button-" + opts.level);
+        }
+    },
+
+    _createShadow: function () {
+        var self = this, o = this.options;
+
+        var assertMask = function () {
+            if (!self.$mask) {
+                self.$mask = BI.createWidget(BI.isObject(o.shadow) ? o.shadow : {}, {
+                    type: "bi.layout",
+                    cls: "bi-button-mask"
+                });
+                self.$mask.invisible();
+                BI.createWidget({
+                    type: "bi.absolute",
+                    element: self,
+                    items: [{
+                        el: self.$mask,
+                        left: 0,
+                        right: 0,
+                        top: 0,
+                        bottom: 0
+                    }]
+                });
+            }
+        };
+
+        this.element.mouseup(function () {
+            if (!self._hover && !o.isShadowShowingOnSelected) {
+                assertMask();
+                self.$mask.invisible();
+            }
+        });
+        this.element.on("mouseenter." + this.getName(), function (e) {
+            if (self.element.__isMouseInBounds__(e)) {
+                if (self.isEnabled() && !self._hover && (o.isShadowShowingOnSelected || !self.isSelected())) {
+                    assertMask();
+                    self.$mask.visible();
+                }
+            }
+        });
+        this.element.on("mousemove." + this.getName(), function (e) {
+            if (!self.element.__isMouseInBounds__(e)) {
+                if (self.isEnabled() && !self._hover) {
+                    assertMask();
+                    self.$mask.invisible();
+                }
+            }
+        });
+        this.element.on("mouseleave." + this.getName(), function () {
+            if (self.isEnabled() && !self._hover) {
+                assertMask();
+                self.$mask.invisible();
+            }
+        });
+    },
+
+    bindEvent: function () {
+        var self = this;
+        var o = this.options, hand = this.handle();
+        if (!hand) {
+            return;
+        }
+        hand = hand.element;
+        var triggerArr = (o.trigger || "").split(",");
+        BI.each(triggerArr, function (idx, trigger) {
+            switch (trigger) {
+                case "mouseup":
+                    var mouseDown = false;
+                    hand.mousedown(function () {
+                        mouseDown = true;
+                    });
+                    hand.mouseup(function (e) {
+                        if (mouseDown === true) {
+                            clk(e);
+                        }
+                        mouseDown = false;
+                        ev(e);
+                    });
+                    break;
+                case "mousedown":
+                    var mouseDown = false;
+                    var selected = false;
+                    hand.mousedown(function (e) {
+                        // if (e.button === 0) {
+                        BI.Widget._renderEngine.createElement(document).bind("mouseup." + self.getName(), function (e) {
+                            // if (e.button === 0) {
+                            if (BI.DOM.isExist(self) && !hand.__isMouseInBounds__(e) && mouseDown === true && !selected) {
+                                // self.setSelected(!self.isSelected());
+                                self._trigger();
+                            }
+                            mouseDown = false;
+                            BI.Widget._renderEngine.createElement(document).unbind("mouseup." + self.getName());
+                            // }
+                        });
+                        if (mouseDown === true) {
+                            return;
+                        }
+                        if (self.isSelected()) {
+                            selected = true;
+                        } else {
+                            clk(e);
+                        }
+                        mouseDown = true;
+                        ev(e);
+                        // }
+                    });
+                    hand.mouseup(function (e) {
+                        // if (e.button === 0) {
+                        if (BI.DOM.isExist(self) && mouseDown === true && selected === true) {
+                            clk(e);
+                        }
+                        mouseDown = false;
+                        selected = false;
+                        BI.Widget._renderEngine.createElement(document).unbind("mouseup." + self.getName());
+                        // }
+                    });
+                    break;
+                case "dblclick":
+                    hand.dblclick(clk);
+                    break;
+                case "lclick":
+                    var mouseDown = false;
+                    var interval;
+                    hand.mousedown(function (e) {
+                        BI.Widget._renderEngine.createElement(document).bind("mouseup." + self.getName(), function (e) {
+                            interval && clearInterval(interval);
+                            interval = null;
+                            mouseDown = false;
+                            BI.Widget._renderEngine.createElement(document).unbind("mouseup." + self.getName());
+                        });
+                        if (mouseDown === true) {
+                            return;
+                        }
+                        if (!self.isEnabled() || (self.isOnce() && self.isSelected())) {
+                            return;
+                        }
+                        interval = setInterval(function () {
+                            if (self.isEnabled()) {
+                                self.doClick();
+                            }
+                        }, 180);
+                        mouseDown = true;
+                        ev(e);
+                    });
+                    break;
+                default:
+                    if (o.stopEvent || o.stopPropagation) {
+                        hand.mousedown(function (e) {
+                            ev(e);
+                        });
+                    }
+                    hand.click(clk);
+                    break;
+            }
+        });
+
+        // 之后的300ms点击无效
+        var onClick = BI.debounce(this._doClick, BI.EVENT_RESPONSE_TIME, {
+            "leading": true,
+            "trailing": false
+        });
+
+        function ev (e) {
+            if (o.stopEvent) {
+                e.stopEvent();
+            }
+            if (o.stopPropagation) {
+                e.stopPropagation();
+            }
+        }
+
+        function clk (e) {
+            ev(e);
+            if (!self.isEnabled() || (self.isOnce() && self.isSelected())) {
+                return;
+            }
+            if (BI.isKey(o.bubble) || BI.isFunction(o.bubble)) {
+                if (BI.isNull(self.combo)) {
+                    var popup;
+                    BI.createWidget({
+                        type: "bi.absolute",
+                        element: self,
+                        items: [{
+                            el: {
+                                type: "bi.bubble_combo",
+                                trigger: "",
+                                // bubble的提示不需要一直存在在界面上
+                                destroyWhenHide: true,
+                                ref: function () {
+                                    self.combo = this;
+                                },
+                                el: {
+                                    type: "bi.layout",
+                                    height: "100%"
+                                },
+                                popup: {
+                                    type: "bi.text_bubble_bar_popup_view",
+                                    text: getBubble(),
+                                    ref: function () {
+                                        popup = this;
+                                    },
+                                    listeners: [{
+                                        eventName: BI.BubblePopupBarView.EVENT_CLICK_TOOLBAR_BUTTON,
+                                        action: function (v) {
+                                            self.combo.hideView();
+                                            if (v) {
+                                                onClick.apply(self, arguments);
+                                            }
+                                        }
+                                    }]
+                                },
+                                listeners: [{
+                                    eventName: BI.BubbleCombo.EVENT_BEFORE_POPUPVIEW,
+                                    action: function () {
+                                        popup.populate(getBubble());
+                                    }
+                                }]
+                            },
+                            left: 0,
+                            right: 0,
+                            bottom: 0,
+                            top: 0
+                        }]
+                    });
+                }
+                if (self.combo.isViewVisible()) {
+                    self.combo.hideView();
+                } else {
+                    self.combo.showView();
+                }
+                return;
+            }
+            onClick.apply(self, arguments);
+        }
+
+        function getBubble () {
+            var bubble = self.options.bubble;
+            if (BI.isFunction(bubble)) {
+                return bubble();
+            }
+            return bubble;
+        }
+    },
+
+    _trigger: function (e) {
+        var o = this.options;
+        if (!this.isEnabled()) {
+            return;
+        }
+        if (!this.isDisableSelected()) {
+            this.isForceSelected() ? this.setSelected(true) :
+                (this.isForceNotSelected() ? this.setSelected(false) :
+                    this.setSelected(!this.isSelected()));
+        }
+        if (this.isValid()) {
+            var v = this.getValue();
+            o.handler.call(this, v, this, e);
+            this.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.CLICK, v, this, e);
+            this.fireEvent(BI.BasicButton.EVENT_CHANGE, v, this);
+            if (o.action) {
+                BI.Actions.runAction(o.action, "click", o, this);
+            }
+            BI.Actions.runGlobalAction("click", o, this);
+        }
+    },
+
+    _doClick: function (e) {
+        if (this.isValid()) {
+            this.beforeClick(e);
+        }
+        this._trigger(e);
+        if (this.isValid()) {
+            this.doClick(e);
+        }
+    },
+
+    beforeClick: function () {
+
+    },
+
+    doClick: function () {
+
+    },
+
+    handle: function () {
+        return this;
+    },
+
+    hover: function () {
+        this._hover = true;
+        this.handle().element.addClass("hover");
+        if (this.options.shadow) {
+            this.$mask && this.$mask.setVisible(true);
+        }
+    },
+
+    dishover: function () {
+        this._hover = false;
+        this.handle().element.removeClass("hover");
+        if (this.options.shadow) {
+            this.$mask && this.$mask.setVisible(false);
+        }
+    },
+
+    setSelected: function (b) {
+        var o = this.options;
+        o.selected = b;
+        if (b) {
+            this.handle().element.addClass("active");
+        } else {
+            this.handle().element.removeClass("active");
+        }
+        if (o.shadow && !o.isShadowShowingOnSelected) {
+            this.$mask && this.$mask.setVisible(false);
+        }
+        this.options.setSelected && this.options.setSelected.call(this, b);
+    },
+
+    isSelected: function () {
+        return this.options.selected;
+    },
+
+    isOnce: function () {
+        return this.options.once;
+    },
+
+    isForceSelected: function () {
+        return this.options.forceSelected;
+    },
+
+    isForceNotSelected: function () {
+        return this.options.forceNotSelected;
+    },
+
+    isDisableSelected: function () {
+        return this.options.disableSelected;
+    },
+
+    setText: function (text) {
+        this.options.text = text;
+        this.options.setText && this.options.setText.call(this, text);
+    },
+
+    getText: function () {
+        return this.options.text;
+    },
+
+    _setEnable: function (enable) {
+        BI.BasicButton.superclass._setEnable.apply(this, arguments);
+        if (enable === true) {
+            this.element.removeClass("base-disabled disabled");
+        } else if (enable === false) {
+            this.element.addClass("base-disabled disabled");
+        }
+        if (!enable) {
+            if (this.options.shadow) {
+                this.$mask && this.$mask.setVisible(false);
+            }
+        }
+    },
+
+    empty: function () {
+        BI.Widget._renderEngine.createElement(document).unbind("mouseup." + this.getName());
+        BI.BasicButton.superclass.empty.apply(this, arguments);
+    }
+});
+BI.BasicButton.EVENT_CHANGE = "BasicButton.EVENT_CHANGE";
+BI.shortcut("bi.basic_button", BI.BasicButton);
+
+
+/***/ }),
+/* 429 */
+/***/ (function(module, exports) {
+
+/**
+ * 表示一个可以展开的节点, 不仅有选中状态而且有展开状态
+ *
+ * Created by GUY on 2015/9/9.
+ * @class BI.NodeButton
+ * @extends BI.BasicButton
+ * @abstract
+ */
+BI.NodeButton = BI.inherit(BI.BasicButton, {
+    _defaultConfig: function () {
+        var conf = BI.NodeButton.superclass._defaultConfig.apply(this, arguments);
+        return BI.extend( conf, {
+            _baseCls: (conf._baseCls || "") + " bi-node",
+            open: false
+        });
+    },
+
+    _init: function () {
+        BI.NodeButton.superclass._init.apply(this, arguments);
+        var self = this;
+        BI.nextTick(function () {
+            self.setOpened(self.isOpened());
+        });
+    },
+
+    doClick: function () {
+        BI.NodeButton.superclass.doClick.apply(this, arguments);
+        this.setOpened(!this.isOpened());
+    },
+
+    isOnce: function () {
+        return false;
+    },
+
+    isOpened: function () {
+        return !!this.options.open;
+    },
+
+    setOpened: function (b) {
+        this.options.open = !!b;
+    },
+
+    triggerCollapse: function () {
+        if(this.isOpened()) {
+            this.setOpened(false);
+            this.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.COLLAPSE, this.getValue(), this);
+        }
+    },
+
+    triggerExpand: function () {
+        if(!this.isOpened()) {
+            this.setOpened(true);
+            this.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.EXPAND, this.getValue(), this);
+        }
+    }
+});
 
 /***/ }),
 /* 430 */
@@ -28272,6 +28084,33 @@ BI.shortcut("bi.link", BI.Link);
 
 /**
  * guy
+ * tip提示
+ * zIndex在10亿级别
+ * @class BI.Tip
+ * @extends BI.Single
+ * @abstract
+ */
+BI.Tip = BI.inherit(BI.Single, {
+    _defaultConfig: function () {
+        var conf = BI.Tip.superclass._defaultConfig.apply(this, arguments);
+        return BI.extend(conf, {
+            _baseCls: (conf._baseCls || "") + " bi-tip",
+            zIndex: BI.zIndex_tip
+        });
+    },
+
+    _init: function () {
+        BI.Tip.superclass._init.apply(this, arguments);
+        this.element.css({zIndex: this.options.zIndex});
+    }
+});
+
+/***/ }),
+/* 464 */
+/***/ (function(module, exports) {
+
+/**
+ * guy
  * 气泡提示
  * @class BI.Bubble
  * @extends BI.Tip
@@ -28485,7 +28324,7 @@ BI.shortcut("bi.bubble_view", BI.BubbleView);
 
 
 /***/ }),
-/* 464 */
+/* 465 */
 /***/ (function(module, exports) {
 
 /**
@@ -28589,7 +28428,7 @@ BI.shortcut("bi.toast", BI.Toast);
 
 
 /***/ }),
-/* 465 */
+/* 466 */
 /***/ (function(module, exports) {
 
 /**
@@ -28678,7 +28517,7 @@ BI.Tooltip = BI.inherit(BI.Tip, {
 BI.shortcut("bi.tooltip", BI.Tooltip);
 
 /***/ }),
-/* 466 */
+/* 467 */
 /***/ (function(module, exports) {
 
 /**
@@ -28710,7 +28549,7 @@ BI.Trigger = BI.inherit(BI.Single, {
 });
 
 /***/ }),
-/* 467 */
+/* 468 */
 /***/ (function(module, exports) {
 
 /**
@@ -28863,7 +28702,7 @@ BI.CustomTree.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.custom_tree", BI.CustomTree);
 
 /***/ }),
-/* 468 */
+/* 469 */
 /***/ (function(module, exports) {
 
 /**
@@ -28951,7 +28790,7 @@ BI.IconChangeButton.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.icon_change_button", BI.IconChangeButton);
 
 /***/ }),
-/* 469 */
+/* 470 */
 /***/ (function(module, exports) {
 
 /**
@@ -28976,7 +28815,7 @@ BI.shortcut("bi.trigger_icon_button", BI.TriggerIconButton);
 
 
 /***/ }),
-/* 470 */
+/* 471 */
 /***/ (function(module, exports) {
 
 /**
@@ -29002,7 +28841,7 @@ BI.HalfIconButton.EVENT_CHANGE = BI.IconButton.EVENT_CHANGE;
 BI.shortcut("bi.half_icon_button", BI.HalfIconButton);
 
 /***/ }),
-/* 471 */
+/* 472 */
 /***/ (function(module, exports) {
 
 /**
@@ -29047,7 +28886,7 @@ BI.HalfButton.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.half_button", BI.HalfButton);
 
 /***/ }),
-/* 472 */
+/* 473 */
 /***/ (function(module, exports) {
 
 /**
@@ -29133,7 +28972,7 @@ BI.shortcut("bi.multi_select_item", BI.MultiSelectItem);
 
 
 /***/ }),
-/* 473 */
+/* 474 */
 /***/ (function(module, exports) {
 
 /**
@@ -29197,7 +29036,7 @@ BI.SingleSelectIconTextItem = BI.inherit(BI.Single, {
 BI.shortcut("bi.single_select_icon_text_item", BI.SingleSelectIconTextItem);
 
 /***/ }),
-/* 474 */
+/* 475 */
 /***/ (function(module, exports) {
 
 BI.SingleSelectItem = BI.inherit(BI.BasicButton, {
@@ -29253,7 +29092,7 @@ BI.SingleSelectItem.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.single_select_item", BI.SingleSelectItem);
 
 /***/ }),
-/* 475 */
+/* 476 */
 /***/ (function(module, exports) {
 
 /**
@@ -29337,7 +29176,7 @@ BI.shortcut("bi.single_select_radio_item", BI.SingleSelectRadioItem);
 
 
 /***/ }),
-/* 476 */
+/* 477 */
 /***/ (function(module, exports) {
 
 /**
@@ -29425,7 +29264,7 @@ BI.shortcut("bi.arrow_group_node", BI.ArrowNode);
 
 
 /***/ }),
-/* 477 */
+/* 478 */
 /***/ (function(module, exports) {
 
 /**
@@ -29513,7 +29352,7 @@ BI.shortcut("bi.first_plus_group_node", BI.FirstPlusGroupNode);
 
 
 /***/ }),
-/* 478 */
+/* 479 */
 /***/ (function(module, exports) {
 
 /**
@@ -29621,7 +29460,7 @@ BI.shortcut("bi.icon_arrow_node", BI.IconArrowNode);
 
 
 /***/ }),
-/* 479 */
+/* 480 */
 /***/ (function(module, exports) {
 
 /**
@@ -29708,7 +29547,7 @@ BI.LastPlusGroupNode = BI.inherit(BI.NodeButton, {
 BI.shortcut("bi.last_plus_group_node", BI.LastPlusGroupNode);
 
 /***/ }),
-/* 480 */
+/* 481 */
 /***/ (function(module, exports) {
 
 /**
@@ -29795,7 +29634,7 @@ BI.MidPlusGroupNode = BI.inherit(BI.NodeButton, {
 BI.shortcut("bi.mid_plus_group_node", BI.MidPlusGroupNode);
 
 /***/ }),
-/* 481 */
+/* 482 */
 /***/ (function(module, exports) {
 
 BI.MultiLayerIconArrowNode = BI.inherit(BI.NodeButton, {
@@ -29890,7 +29729,7 @@ BI.shortcut("bi.multilayer_icon_arrow_node", BI.MultiLayerIconArrowNode);
 
 
 /***/ }),
-/* 482 */
+/* 483 */
 /***/ (function(module, exports) {
 
 /**
@@ -29973,7 +29812,7 @@ BI.PlusGroupNode = BI.inherit(BI.NodeButton, {
 BI.shortcut("bi.plus_group_node", BI.PlusGroupNode);
 
 /***/ }),
-/* 483 */
+/* 484 */
 /***/ (function(module, exports) {
 
 /**
@@ -30025,7 +29864,7 @@ BI.Switch.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.switch", BI.Switch);
 
 /***/ }),
-/* 484 */
+/* 485 */
 /***/ (function(module, exports) {
 
 BI.FirstTreeLeafItem = BI.inherit(BI.BasicButton, {
@@ -30111,7 +29950,7 @@ BI.FirstTreeLeafItem = BI.inherit(BI.BasicButton, {
 BI.shortcut("bi.first_tree_leaf_item", BI.FirstTreeLeafItem);
 
 /***/ }),
-/* 485 */
+/* 486 */
 /***/ (function(module, exports) {
 
 BI.IconTreeLeafItem = BI.inherit(BI.BasicButton, {
@@ -30198,7 +30037,7 @@ BI.IconTreeLeafItem = BI.inherit(BI.BasicButton, {
 BI.shortcut("bi.icon_tree_leaf_item", BI.IconTreeLeafItem);
 
 /***/ }),
-/* 486 */
+/* 487 */
 /***/ (function(module, exports) {
 
 BI.LastTreeLeafItem = BI.inherit(BI.BasicButton, {
@@ -30284,7 +30123,7 @@ BI.LastTreeLeafItem = BI.inherit(BI.BasicButton, {
 BI.shortcut("bi.last_tree_leaf_item", BI.LastTreeLeafItem);
 
 /***/ }),
-/* 487 */
+/* 488 */
 /***/ (function(module, exports) {
 
 BI.MidTreeLeafItem = BI.inherit(BI.BasicButton, {
@@ -30370,7 +30209,7 @@ BI.MidTreeLeafItem = BI.inherit(BI.BasicButton, {
 BI.shortcut("bi.mid_tree_leaf_item", BI.MidTreeLeafItem);
 
 /***/ }),
-/* 488 */
+/* 489 */
 /***/ (function(module, exports) {
 
 /**
@@ -30474,7 +30313,7 @@ BI.shortcut("bi.multilayer_icon_tree_leaf_item", BI.MultiLayerIconTreeLeafItem);
 
 
 /***/ }),
-/* 489 */
+/* 490 */
 /***/ (function(module, exports) {
 
 BI.RootTreeLeafItem = BI.inherit(BI.BasicButton, {
@@ -30554,7 +30393,7 @@ BI.shortcut("bi.root_tree_leaf_item", BI.RootTreeLeafItem);
 
 
 /***/ }),
-/* 490 */
+/* 491 */
 /***/ (function(module, exports) {
 
 /**
@@ -30630,7 +30469,7 @@ BI.shortcut("bi.tree_text_leaf_item", BI.TreeTextLeafItem);
 
 
 /***/ }),
-/* 491 */
+/* 492 */
 /***/ (function(module, exports) {
 
 /**
@@ -30688,7 +30527,7 @@ BI.CalendarDateItem = BI.inherit(BI.BasicButton, {
 BI.shortcut("bi.calendar_date_item", BI.CalendarDateItem);
 
 /***/ }),
-/* 492 */
+/* 493 */
 /***/ (function(module, exports) {
 
 /**
@@ -30927,7 +30766,7 @@ BI.extend(BI.Calendar, {
 BI.shortcut("bi.calendar", BI.Calendar);
 
 /***/ }),
-/* 493 */
+/* 494 */
 /***/ (function(module, exports) {
 
 /**
@@ -31103,7 +30942,7 @@ BI.extend(BI.YearCalendar, {
 BI.shortcut("bi.year_calendar", BI.YearCalendar);
 
 /***/ }),
-/* 494 */
+/* 495 */
 /***/ (function(module, exports) {
 
 /**
@@ -31129,7 +30968,7 @@ BI.ArrowTreeGroupNodeCheckbox = BI.inherit(BI.IconButton, {
 BI.shortcut("bi.arrow_group_node_checkbox", BI.ArrowTreeGroupNodeCheckbox);
 
 /***/ }),
-/* 495 */
+/* 496 */
 /***/ (function(module, exports) {
 
 /**
@@ -31160,7 +30999,7 @@ BI.CheckingMarkNode = BI.inherit(BI.IconButton, {
 BI.shortcut("bi.checking_mark_node", BI.CheckingMarkNode);
 
 /***/ }),
-/* 496 */
+/* 497 */
 /***/ (function(module, exports) {
 
 /**
@@ -31189,7 +31028,7 @@ BI.FirstTreeNodeCheckbox = BI.inherit(BI.IconButton, {
 BI.shortcut("bi.first_tree_node_checkbox", BI.FirstTreeNodeCheckbox);
 
 /***/ }),
-/* 497 */
+/* 498 */
 /***/ (function(module, exports) {
 
 /**
@@ -31218,7 +31057,7 @@ BI.LastTreeNodeCheckbox = BI.inherit(BI.IconButton, {
 BI.shortcut("bi.last_tree_node_checkbox", BI.LastTreeNodeCheckbox);
 
 /***/ }),
-/* 498 */
+/* 499 */
 /***/ (function(module, exports) {
 
 /**
@@ -31247,7 +31086,7 @@ BI.MidTreeNodeCheckbox = BI.inherit(BI.IconButton, {
 BI.shortcut("bi.mid_tree_node_checkbox", BI.MidTreeNodeCheckbox);
 
 /***/ }),
-/* 499 */
+/* 500 */
 /***/ (function(module, exports) {
 
 /**
@@ -31276,7 +31115,2489 @@ BI.TreeNodeCheckbox = BI.inherit(BI.IconButton, {
 BI.shortcut("bi.tree_node_checkbox", BI.TreeNodeCheckbox);
 
 /***/ }),
-/* 500 */
+/* 501 */
+/***/ (function(module, exports) {
+
+/**
+ * 自定义选色
+ *
+ * Created by GUY on 2015/11/17.
+ * @class BI.CustomColorChooser
+ * @extends BI.Widget
+ */
+BI.CustomColorChooser = BI.inherit(BI.Widget, {
+
+    _defaultConfig: function () {
+        return BI.extend(BI.CustomColorChooser.superclass._defaultConfig.apply(this, arguments), {
+            baseCls: "bi-custom-color-chooser",
+            width: 292,
+            height: 265
+        });
+    },
+
+    _init: function () {
+        BI.CustomColorChooser.superclass._init.apply(this, arguments);
+        var self = this, o = this.options;
+        this.editor = BI.createWidget(o.editor, {
+            type: "bi.simple_hex_color_picker_editor"
+        });
+        this.editor.on(BI.ColorPickerEditor.EVENT_CHANGE, function () {
+            self.setValue(this.getValue());
+        });
+        this.farbtastic = BI.createWidget({
+            type: "bi.farbtastic"
+        });
+        this.farbtastic.on(BI.Farbtastic.EVENT_CHANGE, function () {
+            self.setValue(this.getValue());
+        });
+
+        BI.createWidget({
+            type: "bi.vtape",
+            element: this,
+            items: [{
+                type: "bi.absolute",
+                items: [{
+                    el: this.editor,
+                    left: 0,
+                    top: 0,
+                    right: 0
+                }],
+                height: 50
+            }, {
+                type: "bi.absolute",
+                items: [{
+                    el: this.farbtastic,
+                    left: 46,
+                    right: 46,
+                    top: 7
+                }],
+                height: 215
+            }]
+        });
+    },
+
+    setValue: function (color) {
+        this.editor.setValue(color);
+        this.farbtastic.setValue(color);
+    },
+
+    getValue: function () {
+        return this.editor.getValue();
+    }
+});
+BI.CustomColorChooser.EVENT_CHANGE = "EVENT_CHANGE";
+BI.shortcut("bi.custom_color_chooser", BI.CustomColorChooser);
+
+/***/ }),
+/* 502 */
+/***/ (function(module, exports) {
+
+/**
+ * 选色控件
+ *
+ * Created by GUY on 2015/11/17.
+ * @class BI.ColorChooser
+ * @extends BI.Widget
+ */
+BI.ColorChooser = BI.inherit(BI.Widget, {
+
+    _defaultConfig: function () {
+        return BI.extend(BI.ColorChooser.superclass._defaultConfig.apply(this, arguments), {
+            baseCls: "bi-color-chooser",
+            value: "",
+            height: 24,
+            el: {},
+        });
+    },
+
+    _init: function () {
+        var self = this, o = this.options;
+        BI.ColorChooser.superclass._init.apply(this, arguments);
+        o.value = o.value || "";
+        this.combo = BI.createWidget({
+            type: "bi.combo",
+            element: this,
+            container: o.container,
+            adjustLength: 1,
+            isNeedAdjustWidth: false,
+            isNeedAdjustHeight: false,
+            el: BI.extend({
+                type: o.width <= 24 ? "bi.color_chooser_trigger" : "bi.long_color_chooser_trigger",
+                ref: function (_ref) {
+                    self.trigger = _ref;
+                },
+                width: o.el.type ? o.width : o.width - 2,
+                height: o.el.type ? o.height : o.height - 2
+            }, o.el),
+            popup: {
+                el: BI.extend({
+                    type: "bi.hex_color_chooser_popup",
+                    ref: function (_ref) {
+                        self.colorPicker = _ref;
+                    },
+                    listeners: [{
+                        eventName: BI.ColorChooserPopup.EVENT_VALUE_CHANGE,
+                        action: function () {
+                            fn();
+                            if (!self._isRGBColor(self.colorPicker.getValue())) {
+                                self.combo.hideView();
+                            }
+                        }
+                    }, {
+                        eventName: BI.ColorChooserPopup.EVENT_CHANGE,
+                        action: function () {
+                            fn();
+                            self.combo.hideView();
+                        }
+                    }]
+                }, o.popup),
+                value: o.value,
+                width: 292
+            },
+            value: o.value
+        });
+
+        var fn = function () {
+            var color = self.colorPicker.getValue();
+            self.trigger.setValue(color);
+        };
+
+        this.combo.on(BI.Combo.EVENT_AFTER_HIDEVIEW, function () {
+            self.fireEvent(BI.ColorChooser.EVENT_CHANGE, arguments);
+        });
+    },
+
+    _isRGBColor: function (color) {
+        return BI.isNotEmptyString(color) && color !== "transparent";
+    },
+
+    isViewVisible: function () {
+        return this.combo.isViewVisible();
+    },
+
+    hideView: function () {
+        this.combo.hideView();
+    },
+
+    showView: function () {
+        this.combo.showView();
+    },
+
+    setValue: function (color) {
+        this.combo.setValue(color || "");
+    },
+
+    getValue: function () {
+        return this.combo.getValue();
+    }
+});
+BI.ColorChooser.EVENT_CHANGE = "EVENT_CHANGE";
+BI.shortcut("bi.color_chooser", BI.ColorChooser);
+
+
+/***/ }),
+/* 503 */
+/***/ (function(module, exports) {
+
+/**
+ * @author windy
+ * @version 2.0
+ * Created by windy on 2020/11/10
+ */
+BI.HexColorChooserPopup = BI.inherit(BI.Widget, {
+
+    props: {
+        baseCls: "bi-color-chooser-popup",
+        width: 292,
+        height: 195,
+        simple: false // 简单模式, popup中没有自动和透明
+    },
+
+    render: function () {
+        var self = this, o = this.options;
+
+        return {
+            type: "bi.absolute",
+            items: [{
+                el: {
+                    type: "bi.vtape",
+                    items: [{
+                        el: BI.extend({
+                            type: o.simple ? "bi.simple_hex_color_picker_editor" : "bi.hex_color_picker_editor",
+                            value: o.value,
+                            height: 30,
+                            listeners: [{
+                                eventName: BI.ColorPickerEditor.EVENT_CHANGE,
+                                action: function () {
+                                    self.setValue(this.getValue());
+                                    self._dealStoreColors();
+                                    self.fireEvent(BI.ColorChooserPopup.EVENT_VALUE_CHANGE, arguments);
+                                }
+                            }],
+                            ref: function (_ref) {
+                                self.colorEditor = _ref;
+                            }
+                        }, o.editor),
+                        height: 50
+                    }, {
+                        el: {
+                            type: "bi.absolute",
+                            items: [{
+                                el: {
+                                    type: "bi.color_picker",
+                                    cls: "bi-border-bottom bi-border-right",
+                                    items: [this._digestStoreColors(this._getStoreColors())],
+                                    height: 34,
+                                    value: o.value,
+                                    listeners: [{
+                                        eventName: BI.ColorPicker.EVENT_CHANGE,
+                                        action: function () {
+                                            self.setValue(this.getValue()[0]);
+                                            self._dealStoreColors();
+                                            self.fireEvent(BI.ColorChooserPopup.EVENT_CHANGE, arguments);
+                                        }
+                                    }],
+                                    ref: function (_ref) {
+                                        self.storeColors = _ref;
+                                    }
+                                },
+                                left: 10,
+                                right: 10,
+                                top: 5
+                            }]
+                        },
+                        height: 38
+                    }, {
+                        el: {
+                            type: "bi.absolute",
+                            items: [{
+                                el: {
+                                    type: "bi.color_picker",
+                                    value: o.value,
+                                    listeners: [{
+                                        eventName: BI.ColorPicker.EVENT_CHANGE,
+                                        action: function () {
+                                            self.setValue(this.getValue()[0]);
+                                            self._dealStoreColors();
+                                            self.fireEvent(BI.ColorChooserPopup.EVENT_CHANGE, arguments);
+                                        }
+                                    }],
+                                    ref: function (_ref) {
+                                        self.colorPicker = _ref;
+                                    }
+                                },
+                                left: 10,
+                                right: 10,
+                                top: 5,
+                                bottom: 10
+                            }]
+                        }
+                    }, {
+                        el: {
+                            type: "bi.combo",
+                            cls: "bi-border-top",
+                            container: null,
+                            direction: "right,top",
+                            isNeedAdjustHeight: false,
+                            el: {
+                                type: "bi.text_item",
+                                cls: "color-chooser-popup-more bi-list-item",
+                                textAlign: "center",
+                                height: 24,
+                                textLgap: 10,
+                                text: BI.i18nText("BI-Basic_More") + "..."
+                            },
+                            popup: {
+                                type: "bi.popup_panel",
+                                buttons: [BI.i18nText("BI-Basic_Cancel"), BI.i18nText("BI-Basic_Save")],
+                                title: BI.i18nText("BI-Custom_Color"),
+                                el: {
+                                    type: "bi.custom_color_chooser",
+                                    editor: o.editor,
+                                    ref: function (_ref) {
+                                        self.customColorChooser = _ref;
+                                    }
+                                },
+                                stopPropagation: false,
+                                bgap: -1,
+                                rgap: 1,
+                                lgap: 1,
+                                minWidth: 227,
+                                listeners: [{
+                                    eventName: BI.PopupPanel.EVENT_CLICK_TOOLBAR_BUTTON,
+                                    action: function (index) {
+                                        switch (index) {
+                                            case 0:
+                                                self.more.hideView();
+                                                break;
+                                            case 1:
+                                                var color = self.customColorChooser.getValue();
+                                                // farbtastic选择器没有透明和自动选项，点击保存不应该设置透明
+                                                if (BI.isNotEmptyString(color)) {
+                                                    self.setValue(color);
+                                                    self._dealStoreColors();
+                                                }
+                                                self.more.hideView();
+                                                self.fireEvent(BI.ColorChooserPopup.EVENT_CHANGE, arguments);
+                                                break;
+                                        }
+                                    }
+                                }]
+                            },
+                            listeners: [{
+                                eventName: BI.Combo.EVENT_AFTER_POPUPVIEW,
+                                action: function () {
+                                    self.customColorChooser.setValue(self.getValue());
+                                }
+                            }],
+                            ref: function (_ref) {
+                                self.more = _ref;
+                            }
+                        },
+                        height: 24
+                    }]
+                },
+                left: 0,
+                right: 0,
+                top: 0,
+                bottom: 0
+            }, {
+                el: {
+                    type: "bi.layout",
+                    cls: "disable-mask",
+                    invisible: !o.disabled,
+                    ref: function () {
+                        self.mask = this;
+                    }
+                },
+                left: 0,
+                right: 0,
+                top: 0,
+                bottom: 0
+            }]
+        };
+    },
+
+    // 这里就实现的不好了，setValue里面有个editor，editor的setValue会检测错误然后出bubble提示
+    mounted: function () {
+        var self = this;
+        var o = this.options;
+        if (BI.isNotNull(o.value)) {
+            this.setValue(o.value);
+        }
+    },
+
+    _setEnable: function (enable) {
+        BI.ColorChooserPopup.superclass._setEnable.apply(this, arguments);
+        this.mask.setVisible(!enable);
+    },
+
+    _dealStoreColors: function () {
+        var color = this.getValue();
+        var colors = this._getStoreColors();
+        var que = new BI.Queue(8);
+        que.fromArray(colors);
+        que.remove(color);
+        que.unshift(color);
+        var array = que.toArray();
+        BI.Cache.setItem("colors", BI.array2String(array));
+        this.setStoreColors(array);
+    },
+
+    _digestStoreColors: function (colors) {
+        var items = BI.map(colors, function (i, color) {
+            return {
+                value: color
+            };
+        });
+        BI.count(colors.length, 8, function (i) {
+            items.push({
+                value: "",
+                disabled: true
+            });
+        });
+        return items;
+    },
+
+    _getStoreColors: function() {
+        var self = this, o = this.options;
+        var colorsArray = BI.string2Array(BI.Cache.getItem("colors") || "");
+        return BI.filter(colorsArray, function (idx, color) {
+            return o.simple ? self._isRGBColor(color) : true;
+        });
+    },
+
+    _isRGBColor: function (color) {
+        return BI.isNotEmptyString(color) && color !== "transparent";
+    },
+
+    setStoreColors: function (colors) {
+        if (BI.isArray(colors)) {
+            this.storeColors.populate([this._digestStoreColors(colors)]);
+            // BI-66973 选中颜色的同时选中历史
+            this.storeColors.setValue(this.getValue());
+        }
+    },
+
+    setValue: function (color) {
+        this.colorEditor.setValue(color);
+        this.colorPicker.setValue(color);
+        this.storeColors.setValue(color);
+    },
+
+    getValue: function () {
+        return this.colorEditor.getValue();
+    }
+});
+BI.HexColorChooserPopup.EVENT_VALUE_CHANGE = "EVENT_VALUE_CHANGE";
+BI.HexColorChooserPopup.EVENT_CHANGE = "EVENT_CHANGE";
+BI.shortcut("bi.hex_color_chooser_popup", BI.HexColorChooserPopup);
+
+
+/***/ }),
+/* 504 */
+/***/ (function(module, exports) {
+
+/**
+ * @author windy
+ * @version 2.0
+ * Created by windy on 2020/11/10
+ */
+BI.SimpleHexColorChooserPopup = BI.inherit(BI.Widget, {
+
+    props: {
+        baseCls: "bi-color-chooser-popup",
+    },
+
+    render: function () {
+        var self = this, o = this.options;
+        return {
+            type: "bi.hex_color_chooser_popup",
+            value: o.value,
+            simple: true, // 是否有自动
+            listeners: [{
+                eventName: BI.ColorChooserPopup.EVENT_CHANGE,
+                action: function () {
+                    self.fireEvent(BI.SimpleColorChooserPopup.EVENT_CHANGE, arguments);
+                }
+            }, {
+                eventName: BI.ColorChooserPopup.EVENT_VALUE_CHANGE,
+                action: function () {
+                    self.fireEvent(BI.SimpleColorChooserPopup.EVENT_VALUE_CHANGE, arguments);
+                }
+            }],
+            ref: function (_ref) {
+                self.popup = _ref;
+            }
+        }
+    },
+
+    setStoreColors: function (colors) {
+        this.popup.setStoreColors(colors);
+    },
+
+    setValue: function (color) {
+        this.popup.setValue(color);
+    },
+
+    getValue: function () {
+        return this.popup.getValue();
+    }
+});
+BI.SimpleHexColorChooserPopup.EVENT_VALUE_CHANGE = "EVENT_VALUE_CHANGE";
+BI.SimpleHexColorChooserPopup.EVENT_CHANGE = "EVENT_CHANGE";
+BI.shortcut("bi.simple_hex_color_chooser_popup", BI.SimpleHexColorChooserPopup);
+
+/***/ }),
+/* 505 */
+/***/ (function(module, exports) {
+
+/**
+ * 选色控件
+ *
+ * Created by GUY on 2015/11/17.
+ * @class BI.ColorChooserPopup
+ * @extends BI.Widget
+ */
+BI.ColorChooserPopup = BI.inherit(BI.Widget, {
+
+    props: {
+        baseCls: "bi-color-chooser-popup",
+        width: 230,
+        height: 145,
+        simple: false // 简单模式, popup中没有自动和透明
+    },
+
+    render: function () {
+        var self = this, o = this.options;
+        this.colorEditor = BI.createWidget(o.editor, {
+            type: o.simple ? "bi.simple_color_picker_editor" : "bi.color_picker_editor",
+            value: o.value,
+            cls: "bi-header-background bi-border-bottom",
+            height: 30
+        });
+
+        this.colorEditor.on(BI.ColorPickerEditor.EVENT_CHANGE, function () {
+            self.setValue(this.getValue());
+            self._dealStoreColors();
+            self.fireEvent(BI.ColorChooserPopup.EVENT_VALUE_CHANGE, arguments);
+        });
+
+        this.storeColors = BI.createWidget({
+            type: "bi.color_picker",
+            cls: "bi-border-bottom bi-border-right",
+            items: [this._digestStoreColors(this._getStoreColors())],
+            width: 210,
+            height: 24,
+            value: o.value
+        });
+        this.storeColors.on(BI.ColorPicker.EVENT_CHANGE, function () {
+            self.setValue(this.getValue()[0]);
+            self._dealStoreColors();
+            self.fireEvent(BI.ColorChooserPopup.EVENT_CHANGE, arguments);
+        });
+
+        this.colorPicker = BI.createWidget({
+            type: "bi.color_picker",
+            width: 210,
+            height: 50,
+            value: o.value
+        });
+
+        this.colorPicker.on(BI.ColorPicker.EVENT_CHANGE, function () {
+            self.setValue(this.getValue()[0]);
+            self._dealStoreColors();
+            self.fireEvent(BI.ColorChooserPopup.EVENT_CHANGE, arguments);
+        });
+
+        this.customColorChooser = BI.createWidget({
+            type: "bi.custom_color_chooser",
+            editor: o.editor
+        });
+
+        var panel = BI.createWidget({
+            type: "bi.popup_panel",
+            buttons: [BI.i18nText("BI-Basic_Cancel"), BI.i18nText("BI-Basic_Save")],
+            title: BI.i18nText("BI-Custom_Color"),
+            el: this.customColorChooser,
+            stopPropagation: false,
+            bgap: -1,
+            rgap: 1,
+            lgap: 1,
+            minWidth: 227
+        });
+
+        this.more = BI.createWidget({
+            type: "bi.combo",
+            cls: "bi-border-top",
+            container: null,
+            direction: "right,top",
+            isNeedAdjustHeight: false,
+            el: {
+                type: "bi.text_item",
+                cls: "color-chooser-popup-more bi-list-item",
+                textAlign: "center",
+                height: 24,
+                textLgap: 10,
+                text: BI.i18nText("BI-Basic_More") + "..."
+            },
+            popup: panel
+        });
+
+        this.more.on(BI.Combo.EVENT_AFTER_POPUPVIEW, function () {
+            self.customColorChooser.setValue(self.getValue());
+        });
+        panel.on(BI.PopupPanel.EVENT_CLICK_TOOLBAR_BUTTON, function (index) {
+            switch (index) {
+                case 0:
+                    self.more.hideView();
+                    break;
+                case 1:
+                    self.setValue(self.customColorChooser.getValue());
+                    self._dealStoreColors();
+                    self.more.hideView();
+                    self.fireEvent(BI.ColorChooserPopup.EVENT_CHANGE, arguments);
+                    break;
+            }
+        });
+
+        return {
+            type: "bi.absolute",
+            items: [{
+                el: {
+                    type: "bi.vtape",
+                    items: [this.colorEditor, {
+                        el: {
+                            type: "bi.absolute",
+                            items: [{
+                                el: this.storeColors,
+                                left: 10,
+                                right: 10,
+                                top: 5
+                            }]
+                        },
+                        height: 29
+                    }, {
+                        el: {
+                            type: "bi.absolute",
+                            items: [{
+                                el: this.colorPicker,
+                                left: 10,
+                                right: 10,
+                                top: 5,
+                                bottom: 5
+                            }]
+                        },
+                        height: 60
+                    }, {
+                        el: this.more,
+                        height: 24
+                    }]
+                },
+                left: 0,
+                right: 0,
+                top: 0,
+                bottom: 0
+            }, {
+                el: {
+                    type: "bi.layout",
+                    cls: "disable-mask",
+                    invisible: !o.disabled,
+                    ref: function () {
+                        self.mask = this;
+                    }
+                },
+                left: 0,
+                right: 0,
+                top: 0,
+                bottom: 0
+            }]
+        };
+    },
+
+    // 这里就实现的不好了，setValue里面有个editor，editor的setValue会检测错误然后出bubble提示
+    mounted: function () {
+        var self = this;
+        var o = this.options;
+        if (BI.isNotNull(o.value)) {
+            this.setValue(o.value);
+        }
+    },
+
+    _setEnable: function (enable) {
+        BI.ColorChooserPopup.superclass._setEnable.apply(this, arguments);
+        this.mask.setVisible(!enable);
+    },
+
+    _dealStoreColors: function () {
+        var color = this.getValue();
+        var colors = this._getStoreColors();
+        var que = new BI.Queue(8);
+        que.fromArray(colors);
+        que.remove(color);
+        que.unshift(color);
+        var array = que.toArray();
+        BI.Cache.setItem("colors", BI.array2String(array));
+        this.setStoreColors(array);
+    },
+
+    _digestStoreColors: function (colors) {
+        var items = BI.map(colors, function (i, color) {
+            return {
+                value: color
+            };
+        });
+        BI.count(colors.length, 8, function (i) {
+            items.push({
+                value: "",
+                disabled: true
+            });
+        });
+        return items;
+    },
+
+    _getStoreColors: function() {
+        var self = this, o = this.options;
+        var colorsArray = BI.string2Array(BI.Cache.getItem("colors") || "");
+        return BI.filter(colorsArray, function (idx, color) {
+            return o.simple ? self._isRGBColor(color) : true;
+        });
+    },
+
+    _isRGBColor: function (color) {
+        return BI.isNotEmptyString(color) && color !== "transparent";
+    },
+
+    setStoreColors: function (colors) {
+        if (BI.isArray(colors)) {
+            this.storeColors.populate([this._digestStoreColors(colors)]);
+            // BI-66973 选中颜色的同时选中历史
+            this.storeColors.setValue(this.getValue());
+        }
+    },
+
+    setValue: function (color) {
+        this.colorEditor.setValue(color);
+        this.colorPicker.setValue(color);
+        this.storeColors.setValue(color);
+    },
+
+    getValue: function () {
+        return this.colorEditor.getValue();
+    }
+});
+BI.ColorChooserPopup.EVENT_VALUE_CHANGE = "EVENT_VALUE_CHANGE";
+BI.ColorChooserPopup.EVENT_CHANGE = "EVENT_CHANGE";
+BI.shortcut("bi.color_chooser_popup", BI.ColorChooserPopup);
+
+
+/***/ }),
+/* 506 */
+/***/ (function(module, exports) {
+
+/**
+ * 选色控件
+ *
+ * Created by GUY on 2015/11/17.
+ * @class BI.SimpleColorChooserPopup
+ * @extends BI.Widget
+ */
+BI.SimpleColorChooserPopup = BI.inherit(BI.Widget, {
+
+    _defaultConfig: function () {
+        return BI.extend(BI.SimpleColorChooserPopup.superclass._defaultConfig.apply(this, arguments), {
+            baseCls: "bi-color-chooser-popup"
+        });
+    },
+
+    _init: function () {
+        BI.SimpleColorChooserPopup.superclass._init.apply(this, arguments);
+        var self = this, o = this.options;
+        this.popup = BI.createWidget({
+            type: o.hex ? "bi.hex_color_chooser_popup" : "bi.color_chooser_popup",
+            value: o.value,
+            element: this,
+            simple: true // 是否有自动
+        });
+        this.popup.on(BI.ColorChooserPopup.EVENT_CHANGE, function () {
+            self.fireEvent(BI.SimpleColorChooserPopup.EVENT_CHANGE, arguments);
+        });
+        this.popup.on(BI.ColorChooserPopup.EVENT_VALUE_CHANGE, function () {
+            self.fireEvent(BI.SimpleColorChooserPopup.EVENT_VALUE_CHANGE, arguments);
+        });
+    },
+
+    setStoreColors: function (colors) {
+        this.popup.setStoreColors(colors);
+    },
+
+    setValue: function (color) {
+        this.popup.setValue(color);
+    },
+
+    getValue: function () {
+        return this.popup.getValue();
+    }
+});
+BI.SimpleColorChooserPopup.EVENT_VALUE_CHANGE = "EVENT_VALUE_CHANGE";
+BI.SimpleColorChooserPopup.EVENT_CHANGE = "EVENT_CHANGE";
+BI.shortcut("bi.simple_color_chooser_popup", BI.SimpleColorChooserPopup);
+
+/***/ }),
+/* 507 */
+/***/ (function(module, exports) {
+
+/**
+ * 简单选色控件，没有自动和透明
+ *
+ * Created by GUY on 2015/11/17.
+ * @class BI.SimpleColorChooser
+ * @extends BI.Widget
+ */
+BI.SimpleColorChooser = BI.inherit(BI.Widget, {
+
+    _defaultConfig: function () {
+        return BI.extend(BI.SimpleColorChooser.superclass._defaultConfig.apply(this, arguments), {
+            baseCls: "bi-simple-color-chooser",
+            value: "#ffffff"
+        });
+    },
+
+    _init: function () {
+        BI.SimpleColorChooser.superclass._init.apply(this, arguments);
+        var self = this, o = this.options;
+
+        this.combo = BI.createWidget({
+            type: "bi.color_chooser",
+            element: this,
+            container: o.container,
+            value: o.value,
+            width: o.width,
+            height: o.height,
+            popup: {
+                type: "bi.simple_hex_color_chooser_popup"
+            }
+        });
+        this.combo.on(BI.ColorChooser.EVENT_CHANGE, function () {
+            self.fireEvent(BI.SimpleColorChooser.EVENT_CHANGE, arguments);
+        });
+    },
+
+    isViewVisible: function () {
+        return this.combo.isViewVisible();
+    },
+
+    hideView: function () {
+        this.combo.hideView();
+    },
+
+    showView: function () {
+        this.combo.showView();
+    },
+
+    setValue: function (color) {
+        this.combo.setValue(color);
+    },
+
+    getValue: function () {
+        return this.combo.getValue();
+    }
+});
+BI.SimpleColorChooser.EVENT_CHANGE = "EVENT_CHANGE";
+BI.shortcut("bi.simple_color_chooser", BI.SimpleColorChooser);
+
+/***/ }),
+/* 508 */
+/***/ (function(module, exports) {
+
+/**
+ * 选色控件
+ *
+ * Created by GUY on 2015/11/17.
+ * @class BI.ColorChooserTrigger
+ * @extends BI.Trigger
+ */
+BI.ColorChooserTrigger = BI.inherit(BI.Trigger, {
+
+    _defaultConfig: function () {
+        var conf = BI.ColorChooserTrigger.superclass._defaultConfig.apply(this, arguments);
+        return BI.extend(conf, {
+            baseCls: (conf.baseCls || "") + " bi-color-chooser-trigger bi-border bi-focus-shadow",
+            height: 22
+        });
+    },
+
+    _init: function () {
+        BI.ColorChooserTrigger.superclass._init.apply(this, arguments);
+        this.colorContainer = BI.createWidget({
+            type: "bi.layout",
+            cls: "color-chooser-trigger-content" + (BI.isIE9Below && BI.isIE9Below() ? " hack" : "")
+        });
+
+        var down = BI.createWidget({
+            type: "bi.icon_button",
+            disableSelected: true,
+            cls: "icon-combo-down-icon trigger-triangle-font icon-size-12",
+            width: 12,
+            height: 8
+        });
+
+        BI.createWidget({
+            type: "bi.absolute",
+            element: this,
+            items: [{
+                el: this.colorContainer,
+                left: 2,
+                right: 2,
+                top: 2,
+                bottom: 2
+            }, {
+                el: down,
+                right: -1,
+                bottom: 1
+            }]
+        });
+        if (BI.isNotNull(this.options.value)) {
+            this.setValue(this.options.value);
+        }
+    },
+
+    setValue: function (color) {
+        BI.ColorChooserTrigger.superclass.setValue.apply(this, arguments);
+        if (color === "") {
+            this.colorContainer.element.css("background-color", "").removeClass("trans-color-background").addClass("auto-color-background");
+        } else if (color === "transparent") {
+            this.colorContainer.element.css("background-color", "").removeClass("auto-color-background").addClass("trans-color-background");
+        } else {
+            this.colorContainer.element.css({"background-color": color}).removeClass("auto-color-background").removeClass("trans-color-background");
+        }
+    }
+});
+BI.ColorChooserTrigger.EVENT_CHANGE = "EVENT_CHANGE";
+BI.shortcut("bi.color_chooser_trigger", BI.ColorChooserTrigger);
+
+
+/***/ }),
+/* 509 */
+/***/ (function(module, exports) {
+
+/**
+ * 选色控件
+ *
+ * Created by GUY on 2015/11/17.
+ * @class BI.LongColorChooserTrigger
+ * @extends BI.Trigger
+ */
+BI.LongColorChooserTrigger = BI.inherit(BI.Trigger, {
+
+    _defaultConfig: function () {
+        var conf = BI.LongColorChooserTrigger.superclass._defaultConfig.apply(this, arguments);
+        return BI.extend(conf, {
+            baseCls: (conf.baseCls || "") + " bi-color-chooser-trigger bi-border bi-focus-shadow",
+            height: 24
+        });
+    },
+
+    _init: function () {
+        BI.LongColorChooserTrigger.superclass._init.apply(this, arguments);
+        var self = this, o = this.options;
+        this.colorContainer = BI.createWidget({
+            type: "bi.htape",
+            cls: "color-chooser-trigger-content",
+            items: [{
+                type: "bi.icon_change_button",
+                ref: function (_ref) {
+                    self.changeIcon = _ref;
+                },
+                disableSelected: true,
+                iconCls: "auto-color-icon",
+                width: 24,
+                iconWidth: 16,
+                iconHeight: 16
+            }, {
+                el: {
+                    type: "bi.label",
+                    ref: function (_ref) {
+                        self.label = _ref;
+                    },
+                    textAlign: "left",
+                    hgap: 5,
+                    height: 18,
+                    text: BI.i18nText("BI-Basic_Auto")
+                }
+            }]
+        });
+
+        var down = BI.createWidget({
+            type: "bi.icon_button",
+            disableSelected: true,
+            cls: "icon-combo-down-icon trigger-triangle-font icon-size-12",
+            width: 12,
+            height: 8
+        });
+
+        BI.createWidget({
+            type: "bi.absolute",
+            element: this,
+            items: [{
+                el: this.colorContainer,
+                left: 2,
+                right: 2,
+                top: 2,
+                bottom: 2
+            }, {
+                el: down,
+                right: 3,
+                bottom: 3
+            }]
+        });
+        if (this.options.value) {
+            this.setValue(this.options.value);
+        }
+    },
+
+    setValue: function (color) {
+        BI.LongColorChooserTrigger.superclass.setValue.apply(this, arguments);
+        if (color === "") {
+            this.colorContainer.element.css("background-color", "");
+            this.changeIcon.setVisible(true);
+            this.label.setVisible(true);
+            this.changeIcon.setIcon("auto-color-icon");
+            this.label.setText(BI.i18nText("BI-Basic_Auto"));
+        } else if (color === "transparent") {
+            this.colorContainer.element.css("background-color", "");
+            this.changeIcon.setVisible(true);
+            this.label.setVisible(true);
+            this.changeIcon.setIcon("trans-color-icon");
+            this.label.setText(BI.i18nText("BI-Transparent_Color"));
+        } else {
+            this.colorContainer.element.css({"background-color": color});
+            this.changeIcon.setVisible(false);
+            this.label.setVisible(false);
+        }
+    }
+});
+BI.LongColorChooserTrigger.EVENT_CHANGE = "EVENT_CHANGE";
+BI.shortcut("bi.long_color_chooser_trigger", BI.LongColorChooserTrigger);
+
+
+/***/ }),
+/* 510 */
+/***/ (function(module, exports) {
+
+/**
+ * 简单选色控件按钮
+ *
+ * Created by GUY on 2015/11/16.
+ * @class BI.ColorPickerButton
+ * @extends BI.BasicButton
+ */
+BI.ColorPickerButton = BI.inherit(BI.BasicButton, {
+
+    _defaultConfig: function () {
+        var conf = BI.ColorPickerButton.superclass._defaultConfig.apply(this, arguments);
+        return BI.extend(conf, {
+            baseCls: (conf.baseCls || "") + " bi-color-picker-button bi-background bi-border-top bi-border-left"
+        });
+    },
+
+    _init: function () {
+        BI.ColorPickerButton.superclass._init.apply(this, arguments);
+        var self = this, o = this.options;
+        if (o.value) {
+            this.element.css("background-color", o.value);
+            var name = this.getName();
+            this.element.hover(function () {
+                self._createMask();
+                if (self.isEnabled()) {
+                    BI.Maskers.show(name);
+                }
+            }, function () {
+                if (!self.isSelected()) {
+                    BI.Maskers.hide(name);
+                }
+            });
+        }
+    },
+
+    _createMask: function () {
+        var o = this.options, name = this.getName();
+        if (this.isEnabled() && !BI.Maskers.has(name)) {
+            var w = BI.Maskers.make(name, this, {
+                offset: {
+                    left: -1,
+                    top: -1,
+                    right: -1,
+                    bottom: -1
+                }
+            });
+            w.element.addClass("color-picker-button-mask").css("background-color", o.value);
+        }
+    },
+
+    setSelected: function (b) {
+        BI.ColorPickerButton.superclass.setSelected.apply(this, arguments);
+        if (b) {
+            this._createMask();
+        }
+        BI.Maskers[b ? "show" : "hide"](this.getName());
+    }
+});
+BI.ColorPickerButton.EVENT_CHANGE = "EVENT_CHANGE";
+BI.shortcut("bi.color_picker_button", BI.ColorPickerButton);
+
+/***/ }),
+/* 511 */
+/***/ (function(module, exports) {
+
+/**
+ * 简单选色控件
+ *
+ * Created by GUY on 2015/11/16.
+ * @class BI.ColorPicker
+ * @extends BI.Widget
+ */
+BI.ColorPicker = BI.inherit(BI.Widget, {
+
+    _defaultConfig: function () {
+        return BI.extend(BI.ColorPicker.superclass._defaultConfig.apply(this, arguments), {
+            baseCls: "bi-color-picker",
+            items: null
+        });
+    },
+
+    _items: [
+        [{
+            value: "#ffffff"
+        }, {
+            value: "#f2f2f2"
+        }, {
+            value: "#e5e5e5"
+        }, {
+            value: "#d9d9d9"
+        }, {
+            value: "#cccccc"
+        }, {
+            value: "#bfbfbf"
+        }, {
+            value: "#b2b2b2"
+        }, {
+            value: "#a6a6a6"
+        }, {
+            value: "#999999"
+        }, {
+            value: "#8c8c8c"
+        }, {
+            value: "#808080"
+        }, {
+            value: "#737373"
+        }, {
+            value: "#666666"
+        }, {
+            value: "#4d4d4d"
+        }, {
+            value: "#333333"
+        }, {
+            value: "#000000"
+        }],
+        [{
+            value: "#d8b5a6"
+        }, {
+            value: "#ff9e9a"
+        }, {
+            value: "#ffc17d"
+        }, {
+            value: "#f5e56b"
+        }, {
+            value: "#d8e698"
+        }, {
+            value: "#e0ebaf"
+        }, {
+            value: "#c3d825"
+        }, {
+            value: "#bbe2e7"
+        }, {
+            value: "#85d3cd"
+        }, {
+            value: "#bde1e6"
+        }, {
+            value: "#a0d8ef"
+        }, {
+            value: "#89c3eb"
+        }, {
+            value: "#bbc8e6"
+        }, {
+            value: "#bbbcde"
+        }, {
+            value: "#d6b4cc"
+        }, {
+            value: "#fbc0d3"
+        }],
+        [{
+            value: "#bb9581"
+        }, {
+            value: "#f37d79"
+        }, {
+            value: "#fba74f"
+        }, {
+            value: "#ffdb4f"
+        }, {
+            value: "#c7dc68"
+        }, {
+            value: "#b0ca71"
+        }, {
+            value: "#99ab4e"
+        }, {
+            value: "#84b9cb"
+        }, {
+            value: "#00a3af"
+        }, {
+            value: "#2ca9e1"
+        }, {
+            value: "#0095d9"
+        }, {
+            value: "#4c6cb3"
+        }, {
+            value: "#8491c3"
+        }, {
+            value: "#a59aca"
+        }, {
+            value: "#cc7eb1"
+        }, {
+            value: "#e89bb4"
+        }],
+        [{
+            value: "#9d775f"
+        }, {
+            value: "#dd4b4b"
+        }, {
+            value: "#ef8b07"
+        }, {
+            value: "#fcc800"
+        }, {
+            value: "#aacf53"
+        }, {
+            value: "#82ae46"
+        }, {
+            value: "#69821b"
+        }, {
+            value: "#59b9c6"
+        }, {
+            value: "#2a83a2"
+        }, {
+            value: "#007bbb"
+        }, {
+            value: "#19448e"
+        }, {
+            value: "#274a78"
+        }, {
+            value: "#4a488e"
+        }, {
+            value: "#7058a3"
+        }, {
+            value: "#884898"
+        }, {
+            value: "#d47596"
+        }]
+    ],
+
+    _init: function () {
+        BI.ColorPicker.superclass._init.apply(this, arguments);
+        var self = this, o = this.options;
+        this.colors = BI.createWidget({
+            type: "bi.button_group",
+            element: this,
+            items: BI.createItems(o.items || this._items, {
+                type: "bi.color_picker_button",
+                once: false
+            }),
+            layouts: [{
+                type: "bi.grid"
+            }],
+            value: o.value
+        });
+        this.colors.on(BI.ButtonGroup.EVENT_CHANGE, function () {
+            self.fireEvent(BI.ColorPicker.EVENT_CHANGE, arguments);
+        });
+    },
+
+    populate: function (items) {
+        var args  = [].slice.call(arguments);
+        args[0] = BI.createItems(items, {
+            type: "bi.color_picker_button",
+            once: false
+        });
+        this.colors.populate.apply(this.colors, args);
+    },
+
+    setValue: function (color) {
+        this.colors.setValue(color);
+    },
+
+    getValue: function () {
+        return this.colors.getValue();
+    }
+});
+BI.ColorPicker.EVENT_CHANGE = "EVENT_CHANGE";
+BI.shortcut("bi.color_picker", BI.ColorPicker);
+
+/***/ }),
+/* 512 */
+/***/ (function(module, exports) {
+
+/**
+ * 简单选色控件
+ *
+ * Created by GUY on 2015/11/16.
+ * @class BI.ColorPickerEditor
+ * @extends BI.Widget
+ */
+BI.HexColorPickerEditor = BI.inherit(BI.Widget, {
+
+    constants: {
+        RGB_WIDTH: 32,
+        HEX_WIDTH: 70,
+        HEX_PREFIX_POSITION: 1
+    },
+
+    props: {
+        baseCls: "bi-color-picker-editor",
+        // width: 200,
+        height: 50
+    },
+
+    render: function () {
+        var self = this, o = this.options, c = this.constants;
+        this.storeValue = {};
+        var RGB = BI.createItems([{text: "R"}, {text: "G"}, {text: "B"}], {
+            type: "bi.label",
+            cls: "color-picker-editor-label",
+            height: 20
+        });
+
+        var checker = function (v) {
+            return BI.isNumeric(v) && (v | 0) >= 0 && (v | 0) <= 255;
+        };
+        var Ws = BI.map(BI.range(0, 3), function () {
+            return {
+                type: "bi.small_text_editor",
+                cls: "color-picker-editor-input",
+                validationChecker: checker,
+                errorText: BI.i18nText("BI-Color_Picker_Error_Text"),
+                allowBlank: true,
+                value: 255,
+                width: c.RGB_WIDTH,
+                height: 20,
+                listeners: [{
+                    eventName: BI.TextEditor.EVENT_CHANGE,
+                    action: function () {
+                        self._checkEditors();
+                        if (checker(self.storeValue.r) && checker(self.storeValue.g) && checker(self.storeValue.b)) {
+                            self.colorShow.element.css("background-color", self.getValue());
+                            self.fireEvent(BI.ColorPickerEditor.EVENT_CHANGE);
+                        }
+                    }
+                }]
+            };
+        });
+
+        return {
+            type: "bi.absolute",
+            items: [{
+                el: {
+                    type: "bi.vertical",
+                    tgap: 5,
+                    items: [{
+                        type: "bi.vertical_adapt",
+                        rgap: 5,
+                        items: [{
+                            el: {
+                                type: "bi.layout",
+                                cls: "color-picker-editor-display bi-card bi-border",
+                                height: 16,
+                                width: 16,
+                                ref: function (_ref) {
+                                    self.colorShow = _ref;
+                                }
+                            },
+                            width: 16
+                        }, {
+                            type: "bi.label",
+                            text: "#",
+                            width: 10
+                        }, {
+                            type: "bi.small_text_editor",
+                            ref: function (_ref) {
+                                self.hexEditor = _ref;
+                            },
+                            cls: "color-picker-editor-input",
+                            validationChecker: this._hexChecker,
+                            allowBlank: true,
+                            errorText: BI.i18nText("BI-Color_Picker_Error_Text_Hex"),
+                            width: c.HEX_WIDTH,
+                            height: 20,
+                            listeners: [{
+                                eventName: "EVENT_CHANGE",
+                                action: function () {
+                                    self._checkHexEditor();
+                                    if (checker(self.storeValue.r) && checker(self.storeValue.g) && checker(self.storeValue.b)) {
+                                        self.colorShow.element.css("background-color", self.getValue());
+                                        self.fireEvent(BI.ColorPickerEditor.EVENT_CHANGE);
+                                    }
+
+                                }
+                            }]
+                        }, {
+                            el: BI.extend(Ws[0], {
+                                ref: function (_ref) {
+                                    self.R = _ref
+                                }
+                            }),
+                            width: c.RGB_WIDTH
+                        }, {
+                            el: BI.extend(Ws[1], {
+                                ref: function (_ref) {
+                                    self.G = _ref
+                                }
+                            }),
+                            width: c.RGB_WIDTH
+                        }, {
+                            el: BI.extend(Ws[2], {
+                                ref: function (_ref) {
+                                    self.B = _ref
+                                }
+                            }),
+                            width: c.RGB_WIDTH
+                        }, {
+                            el: {
+                                type: "bi.icon_button",
+                                cls: "trans-color-icon",
+                                width: 16,
+                                height: 16,
+                                iconWidth: 16,
+                                iconHeight: 16,
+                                title: BI.i18nText("BI-Transparent_Color"),
+                                listeners: [{
+                                    eventName: BI.IconButton.EVENT_CHANGE,
+                                    action: function () {
+                                        if (this.isSelected()) {
+                                            self.lastColor = self.getValue();
+                                            self.setValue("transparent");
+                                        } else {
+                                            if (self.lastColor === "transparent") {
+                                                self.lastColor = "";
+                                            }
+                                            self.setValue(self.lastColor || "#ffffff");
+                                        }
+                                        if ((self.R.isValid() && self.G.isValid() && self.B.isValid()) ||
+                                            self._isEmptyRGB()) {
+                                            self.colorShow.element.css("background-color", self.getValue());
+                                            self.fireEvent(BI.ColorPickerEditor.EVENT_CHANGE);
+                                        }
+                                    }
+                                }],
+                                ref: function (_ref) {
+                                    self.transparent = _ref;
+                                }
+                            },
+                            width: 16,
+                            lgap: 5
+                        }, {
+                            el: {
+                                type: "bi.icon_button",
+                                cls: "auto-color-icon",
+                                width: 16,
+                                height: 16,
+                                iconWidth: 16,
+                                iconHeight: 16,
+                                title: BI.i18nText("BI-Basic_Auto"),
+                                listeners: [{
+                                    eventName: BI.IconButton.EVENT_CHANGE,
+                                    action: function () {
+                                        if (this.isSelected()) {
+                                            self.lastColor = self.getValue();
+                                            self.setValue("");
+                                        } else {
+                                            self.setValue(self.lastColor || "#ffffff");
+                                        }
+                                        if ((self.R.isValid() && self.G.isValid() && self.B.isValid()) || self._isEmptyRGB()) {
+                                            self.colorShow.element.css("background-color", self.getValue());
+                                            self.fireEvent(BI.ColorPickerEditor.EVENT_CHANGE);
+                                        }
+                                    }
+                                }],
+                                ref: function (_ref) {
+                                    self.none = _ref;
+                                }
+                            },
+                            width: 16,
+                            lgap: 5
+                        }]
+                    }, {
+                        type: "bi.vertical_adapt",
+                        items: [{
+                            el: {
+                                type: "bi.label",
+                                cls: "color-picker-editor-label",
+                                height: 20,
+                                text: "HEX"
+                            },
+                            lgap: 60
+                        },{
+                            el: RGB[0].el,
+                            lgap: 44
+                        }, {
+                            el: RGB[1].el,
+                            lgap: 28
+                        }, {
+                            el: RGB[2].el,
+                            lgap: 28
+                        }]
+                    }]
+                },
+                left: 10,
+                right: 10,
+                top: 0,
+                bottom: 0
+            }]
+        };
+    },
+
+    _hexChecker: function (v) {
+        return /^[0-9a-fA-F]{6}$/.test(v);
+    },
+
+    _checkEditors: function () {
+        if(BI.isEmptyString(this.R.getValue())) {
+            this.R.setValue(0);
+        }
+        if(BI.isEmptyString(this.G.getValue())) {
+            this.G.setValue(0);
+        }
+        if(BI.isEmptyString(this.B.getValue())) {
+            this.B.setValue(0);
+        }
+        this.storeValue = {
+            r: this.R.getValue() || 0,
+            g: this.G.getValue() || 0,
+            b: this.B.getValue() || 0
+        };
+        this.hexEditor.setValue(this.getValue().slice(this.constants.HEX_PREFIX_POSITION));
+    },
+
+    _isEmptyRGB: function () {
+        return BI.isEmptyString(this.storeValue.r) && BI.isEmptyString(this.storeValue.g) && BI.isEmptyString(this.storeValue.b);
+    },
+
+    _checkHexEditor: function () {
+        if (BI.isEmptyString(this.hexEditor.getValue())) {
+            this.hexEditor.setValue("000000");
+        }
+        var json = BI.DOM.rgb2json(BI.DOM.hex2rgb("#" + this.hexEditor.getValue()));
+        this.storeValue = {
+            r: json.r || 0,
+            g: json.g || 0,
+            b: json.b || 0,
+        };
+        this.R.setValue(this.storeValue.r);
+        this.G.setValue(this.storeValue.g);
+        this.B.setValue(this.storeValue.b);
+    },
+
+    _showPreColor: function (color) {
+        if (color === "") {
+            this.colorShow.element.css("background-color", "").removeClass("trans-color-background").addClass("auto-color-normal-background");
+        } else if (color === "transparent") {
+            this.colorShow.element.css("background-color", "").removeClass("auto-color-normal-background").addClass("trans-color-background");
+        } else {
+            this.colorShow.element.css({"background-color": color}).removeClass("auto-color-normal-background").removeClass("trans-color-background");
+        }
+    },
+
+    _setEnable: function (enable) {
+        BI.ColorPickerEditor.superclass._setEnable.apply(this, arguments);
+        if (enable === true) {
+            this.element.removeClass("base-disabled disabled");
+        } else if (enable === false) {
+            this.element.addClass("base-disabled disabled");
+        }
+    },
+
+    setValue: function (color) {
+        if (color === "transparent") {
+            this.transparent.setSelected(true);
+            this.none.setSelected(false);
+            this._showPreColor("transparent");
+            this.R.setValue("");
+            this.G.setValue("");
+            this.B.setValue("");
+            this.hexEditor.setValue("");
+            this.storeValue = {
+                r: "",
+                g: "",
+                b: ""
+            };
+            return;
+        }
+        if (!color) {
+            color = "";
+            this.none.setSelected(true);
+        } else {
+            this.none.setSelected(false);
+        }
+        this.transparent.setSelected(false);
+        this._showPreColor(color);
+        var json = BI.DOM.rgb2json(BI.DOM.hex2rgb(color));
+        this.storeValue = {
+            r: BI.isNull(json.r) ? "" : json.r,
+            g: BI.isNull(json.g) ? "" : json.g,
+            b: BI.isNull(json.b) ? "" : json.b
+        };
+        this.R.setValue(this.storeValue.r);
+        this.G.setValue(this.storeValue.g);
+        this.B.setValue(this.storeValue.b);
+        this.hexEditor.setValue(color.slice(this.constants.HEX_PREFIX_POSITION));
+    },
+
+    getValue: function () {
+        if (this._isEmptyRGB() && this.transparent.isSelected()) {
+            return "transparent";
+        }
+        return BI.DOM.rgb2hex(BI.DOM.json2rgb({
+            r: this.storeValue.r,
+            g: this.storeValue.g,
+            b: this.storeValue.b
+        }));
+    }
+});
+BI.HexColorPickerEditor.EVENT_CHANGE = "EVENT_CHANGE";
+BI.shortcut("bi.hex_color_picker_editor", BI.HexColorPickerEditor);
+
+/***/ }),
+/* 513 */
+/***/ (function(module, exports) {
+
+/**
+ * @author windy
+ * @version 2.0
+ * Created by windy on 2020/11/10
+ */
+BI.SimpleHexColorPickerEditor = BI.inherit(BI.Widget, {
+
+    constants: {
+        RGB_WIDTH: 40,
+        HEX_WIDTH: 70,
+        HEX_PREFIX_POSITION: 1
+    },
+
+    props: {
+        baseCls: "bi-color-picker-editor",
+        // width: 200,
+        height: 50
+    },
+
+    render: function () {
+        var self = this, o = this.options, c = this.constants;
+
+        var RGB = BI.createItems([{text: "R"}, {text: "G"}, {text: "B"}], {
+            type: "bi.label",
+            cls: "color-picker-editor-label",
+            height: 20
+        });
+
+        var checker = function (v) {
+            return BI.isNumeric(v) && (v | 0) >= 0 && (v | 0) <= 255;
+        };
+        var Ws = BI.map(BI.range(0, 3), function () {
+            return {
+                type: "bi.small_text_editor",
+                cls: "color-picker-editor-input",
+                validationChecker: checker,
+                errorText: BI.i18nText("BI-Color_Picker_Error_Text"),
+                allowBlank: true,
+                value: 255,
+                width: c.RGB_WIDTH,
+                height: 20,
+                listeners: [{
+                    eventName: BI.TextEditor.EVENT_CHANGE,
+                    action: function () {
+                        self._checkEditors();
+                        if (self.R.isValid() && self.G.isValid() && self.B.isValid()) {
+                            self.colorShow.element.css("background-color", self.getValue());
+                            self.fireEvent(BI.SimpleColorPickerEditor.EVENT_CHANGE);
+                        }
+                    }
+                }]
+            }
+        });
+
+        return {
+            type: "bi.vertical",
+            tgap: 5,
+            items: [{
+                type: "bi.vertical_adapt",
+                rgap: 10,
+                items: [{
+                    el: {
+                        type: "bi.layout",
+                        cls: "color-picker-editor-display bi-card bi-border",
+                        height: 16,
+                        width: 16,
+                        ref: function (_ref) {
+                            self.colorShow = _ref;
+                        }
+                    },
+                    width: 16,
+                    lgap: 10,
+                    rgap: 5
+                }, {
+                    type: "bi.label",
+                    text: "#",
+                    width: 10
+                }, {
+                    type: "bi.small_text_editor",
+                    ref: function (_ref) {
+                        self.hexEditor = _ref;
+                    },
+                    cls: "color-picker-editor-input",
+                    validationChecker: this._hexChecker,
+                    allowBlank: true,
+                    errorText: BI.i18nText("BI-Color_Picker_Error_Text_Hex"),
+                    width: c.HEX_WIDTH,
+                    height: 20,
+                    listeners: [{
+                        eventName: "EVENT_CHANGE",
+                        action: function () {
+                            self._checkHexEditor();
+                            if (checker(self.storeValue.r) && checker(self.storeValue.g) && checker(self.storeValue.b)) {
+                                self.colorShow.element.css("background-color", self.getValue());
+                                self.fireEvent(BI.ColorPickerEditor.EVENT_CHANGE);
+                            }
+                        }
+                    }]
+                }, {
+                    el: BI.extend(Ws[0], {
+                        ref: function (_ref) {
+                            self.R = _ref
+                        }
+                    }),
+                    width: c.RGB_WIDTH
+                }, {
+                    el: BI.extend(Ws[1], {
+                        ref: function (_ref) {
+                            self.G = _ref
+                        }
+                    }),
+                    width: c.RGB_WIDTH
+                }, {
+                    el: BI.extend(Ws[2], {
+                        ref: function (_ref) {
+                            self.B = _ref
+                        }
+                    }),
+                    width: c.RGB_WIDTH
+                }]
+            }, {
+                type: "bi.vertical_adapt",
+                items: [{
+                    el: {
+                        type: "bi.label",
+                        cls: "color-picker-editor-label",
+                        height: 20,
+                        text: "HEX"
+                    },
+                    lgap: 86
+                },{
+                    el: RGB[0].el,
+                    lgap: 50
+                }, {
+                    el: RGB[1].el,
+                    lgap: 40
+                }, {
+                    el: RGB[2].el,
+                    lgap: 40
+                }]
+            }]
+
+        }
+    },
+
+    _hexChecker: function (v) {
+        return /^[0-9a-fA-F]{6}$/.test(v);
+    },
+
+    _checkEditors: function () {
+        if(BI.isEmptyString(this.R.getValue())) {
+            this.R.setValue(0);
+        }
+        if(BI.isEmptyString(this.G.getValue())) {
+            this.G.setValue(0);
+        }
+        if(BI.isEmptyString(this.B.getValue())) {
+            this.B.setValue(0);
+        }
+        this.hexEditor.setValue(this.getValue().slice(this.constants.HEX_PREFIX_POSITION));
+    },
+
+    _checkHexEditor: function () {
+        if (BI.isEmptyString(this.hexEditor.getValue())) {
+            this.hexEditor.setValue("000000");
+        }
+        var json = BI.DOM.rgb2json(BI.DOM.hex2rgb("#" + this.hexEditor.getValue()));
+        this.storeValue = {
+            r: json.r || 0,
+            g: json.g || 0,
+            b: json.b || 0,
+        };
+        this.R.setValue(this.storeValue.r);
+        this.G.setValue(this.storeValue.g);
+        this.B.setValue(this.storeValue.b);
+    },
+
+    setValue: function (color) {
+        this.colorShow.element.css({"background-color": color});
+        var json = BI.DOM.rgb2json(BI.DOM.hex2rgb(color));
+        this.R.setValue(BI.isNull(json.r) ? "" : json.r);
+        this.G.setValue(BI.isNull(json.g) ? "" : json.g);
+        this.B.setValue(BI.isNull(json.b) ? "" : json.b);
+        this.hexEditor.setValue(BI.isEmptyObject(json) ? "" : color.slice(this.constants.HEX_PREFIX_POSITION));
+    },
+
+    getValue: function () {
+        return BI.DOM.rgb2hex(BI.DOM.json2rgb({
+            r: this.R.getValue(),
+            g: this.G.getValue(),
+            b: this.B.getValue()
+        }));
+    }
+});
+BI.SimpleHexColorPickerEditor.EVENT_CHANGE = "EVENT_CHANGE";
+BI.shortcut("bi.simple_hex_color_picker_editor", BI.SimpleHexColorPickerEditor);
+
+/***/ }),
+/* 514 */
+/***/ (function(module, exports) {
+
+/**
+ * 简单选色控件
+ *
+ * Created by GUY on 2015/11/16.
+ * @class BI.ColorPickerEditor
+ * @extends BI.Widget
+ */
+BI.ColorPickerEditor = BI.inherit(BI.Widget, {
+
+    constants: {
+        RGB_WIDTH: 32
+    },
+
+    _defaultConfig: function () {
+        return BI.extend(BI.ColorPickerEditor.superclass._defaultConfig.apply(this, arguments), {
+            baseCls: "bi-color-picker-editor",
+            // width: 200,
+            height: 30
+        });
+    },
+
+    _init: function () {
+        BI.ColorPickerEditor.superclass._init.apply(this, arguments);
+        var self = this, o = this.options, c = this.constants;
+        this.storeValue = {};
+        this.colorShow = BI.createWidget({
+            type: "bi.layout",
+            cls: "color-picker-editor-display bi-card bi-border",
+            height: 16,
+            width: 16
+        });
+        var RGB = BI.createWidgets(BI.createItems([{text: "R"}, {text: "G"}, {text: "B"}], {
+            type: "bi.label",
+            cls: "color-picker-editor-label",
+            width: 20,
+            height: 20
+        }));
+
+        var checker = function (v) {
+            return BI.isNumeric(v) && (v | 0) >= 0 && (v | 0) <= 255;
+        };
+        var Ws = BI.createWidgets([{}, {}, {}], {
+            type: "bi.small_text_editor",
+            cls: "color-picker-editor-input",
+            validationChecker: checker,
+            errorText: BI.i18nText("BI-Color_Picker_Error_Text"),
+            allowBlank: true,
+            value: 255,
+            width: c.RGB_WIDTH,
+            height: 20
+        });
+        BI.each(Ws, function (i, w) {
+            w.on(BI.TextEditor.EVENT_CHANGE, function () {
+                self._checkEditors();
+                if (checker(self.storeValue.r) && checker(self.storeValue.g) && checker(self.storeValue.b)) {
+                    self.colorShow.element.css("background-color", self.getValue());
+                    self.fireEvent(BI.ColorPickerEditor.EVENT_CHANGE);
+                }
+            });
+        });
+        this.R = Ws[0];
+        this.G = Ws[1];
+        this.B = Ws[2];
+
+        this.none = BI.createWidget({
+            type: "bi.icon_button",
+            cls: "auto-color-icon",
+            width: 16,
+            height: 16,
+            iconWidth: 16,
+            iconHeight: 16,
+            title: BI.i18nText("BI-Basic_Auto")
+        });
+        this.none.on(BI.IconButton.EVENT_CHANGE, function () {
+            if (this.isSelected()) {
+                self.lastColor = self.getValue();
+                self.setValue("");
+            } else {
+                self.setValue(self.lastColor || "#ffffff");
+            }
+            if ((self.R.isValid() && self.G.isValid() && self.B.isValid()) || self._isEmptyRGB()) {
+                self.colorShow.element.css("background-color", self.getValue());
+                self.fireEvent(BI.ColorPickerEditor.EVENT_CHANGE);
+            }
+        });
+
+        this.transparent = BI.createWidget({
+            type: "bi.icon_button",
+            cls: "trans-color-icon",
+            width: 16,
+            height: 16,
+            iconWidth: 16,
+            iconHeight: 16,
+            title: BI.i18nText("BI-Transparent_Color")
+        });
+        this.transparent.on(BI.IconButton.EVENT_CHANGE, function () {
+            if (this.isSelected()) {
+                self.lastColor = self.getValue();
+                self.setValue("transparent");
+            } else {
+                if (self.lastColor === "transparent") {
+                    self.lastColor = "";
+                }
+                self.setValue(self.lastColor || "#ffffff");
+            }
+            if ((self.R.isValid() && self.G.isValid() && self.B.isValid()) ||
+                self._isEmptyRGB()) {
+                self.colorShow.element.css("background-color", self.getValue());
+                self.fireEvent(BI.ColorPickerEditor.EVENT_CHANGE);
+            }
+        });
+
+        BI.createWidget({
+            type: "bi.absolute",
+            element: this,
+            items: [{
+                el: {
+                    type: "bi.vertical_adapt",
+                    items: [{
+                        el: this.colorShow,
+                        width: 16
+                    }, {
+                        el: RGB[0],
+                        width: 20
+                    }, {
+                        el: this.R,
+                        width: c.RGB_WIDTH
+                    }, {
+                        el: RGB[1],
+                        width: 20
+                    }, {
+                        el: this.G,
+                        width: c.RGB_WIDTH
+                    }, {
+                        el: RGB[2],
+                        width: 20
+                    }, {
+                        el: this.B,
+                        width: c.RGB_WIDTH
+                    }, {
+                        el: this.transparent,
+                        width: 16,
+                        lgap: 5
+                    }, {
+                        el: this.none,
+                        width: 16,
+                        lgap: 5
+                    }]
+                },
+                left: 10,
+                right: 10,
+                top: 0,
+                bottom: 0
+            }]
+        });
+    },
+
+    _checkEditors: function () {
+        if(BI.isEmptyString(this.R.getValue())) {
+            this.R.setValue(0);
+        }
+        if(BI.isEmptyString(this.G.getValue())) {
+            this.G.setValue(0);
+        }
+        if(BI.isEmptyString(this.B.getValue())) {
+            this.B.setValue(0);
+        }
+        this.storeValue = {
+            r: this.R.getValue() || 0,
+            g: this.G.getValue() || 0,
+            b: this.B.getValue() || 0
+        };
+    },
+
+    _isEmptyRGB: function () {
+        return BI.isEmptyString(this.storeValue.r) && BI.isEmptyString(this.storeValue.g) && BI.isEmptyString(this.storeValue.b);
+    },
+
+    _showPreColor: function (color) {
+        if (color === "") {
+            this.colorShow.element.css("background-color", "").removeClass("trans-color-background").addClass("auto-color-normal-background");
+        } else if (color === "transparent") {
+            this.colorShow.element.css("background-color", "").removeClass("auto-color-normal-background").addClass("trans-color-background");
+        } else {
+            this.colorShow.element.css({"background-color": color}).removeClass("auto-color-normal-background").removeClass("trans-color-background");
+        }
+    },
+
+    _setEnable: function (enable) {
+        BI.ColorPickerEditor.superclass._setEnable.apply(this, arguments);
+        if (enable === true) {
+            this.element.removeClass("base-disabled disabled");
+        } else if (enable === false) {
+            this.element.addClass("base-disabled disabled");
+        }
+    },
+
+    setValue: function (color) {
+        if (color === "transparent") {
+            this.transparent.setSelected(true);
+            this.none.setSelected(false);
+            this._showPreColor("transparent");
+            this.R.setValue("");
+            this.G.setValue("");
+            this.B.setValue("");
+            this.storeValue = {
+                r: "",
+                g: "",
+                b: ""
+            };
+            return;
+        }
+        if (!color) {
+            color = "";
+            this.none.setSelected(true);
+        } else {
+            this.none.setSelected(false);
+        }
+        this.transparent.setSelected(false);
+        this._showPreColor(color);
+        var json = BI.DOM.rgb2json(BI.DOM.hex2rgb(color));
+        this.storeValue = {
+            r: BI.isNull(json.r) ? "" : json.r,
+            g: BI.isNull(json.g) ? "" : json.g,
+            b: BI.isNull(json.b) ? "" : json.b
+        };
+        this.R.setValue(this.storeValue.r);
+        this.G.setValue(this.storeValue.g);
+        this.B.setValue(this.storeValue.b);
+    },
+
+    getValue: function () {
+        if (this._isEmptyRGB() && this.transparent.isSelected()) {
+            return "transparent";
+        }
+        return BI.DOM.rgb2hex(BI.DOM.json2rgb({
+            r: this.storeValue.r,
+            g: this.storeValue.g,
+            b: this.storeValue.b
+        }));
+    }
+});
+BI.ColorPickerEditor.EVENT_CHANGE = "EVENT_CHANGE";
+BI.shortcut("bi.color_picker_editor", BI.ColorPickerEditor);
+
+/***/ }),
+/* 515 */
+/***/ (function(module, exports) {
+
+/**
+ * 简单选色控件
+ *
+ * Created by GUY on 2015/11/16.
+ * @class BI.SimpleColorPickerEditor
+ * @extends BI.Widget
+ */
+BI.SimpleColorPickerEditor = BI.inherit(BI.Widget, {
+
+    constants: {
+        RGB_WIDTH: 32
+    },
+
+    _defaultConfig: function () {
+        return BI.extend(BI.SimpleColorPickerEditor.superclass._defaultConfig.apply(this, arguments), {
+            baseCls: "bi-color-picker-editor",
+            // width: 200,
+            height: 30
+        });
+    },
+
+    _init: function () {
+        BI.SimpleColorPickerEditor.superclass._init.apply(this, arguments);
+        var self = this, o = this.options, c = this.constants;
+        this.colorShow = BI.createWidget({
+            type: "bi.layout",
+            cls: "color-picker-editor-display bi-card bi-border",
+            height: 16,
+            width: 16
+        });
+        var RGB = BI.createWidgets(BI.createItems([{text: "R"}, {text: "G"}, {text: "B"}], {
+            type: "bi.label",
+            cls: "color-picker-editor-label",
+            width: 20,
+            height: 20
+        }));
+
+        var checker = function (v) {
+            return BI.isNumeric(v) && (v | 0) >= 0 && (v | 0) <= 255;
+        };
+        var Ws = BI.createWidgets([{}, {}, {}], {
+            type: "bi.small_text_editor",
+            cls: "color-picker-editor-input",
+            validationChecker: checker,
+            errorText: BI.i18nText("BI-Color_Picker_Error_Text"),
+            allowBlank: true,
+            value: 255,
+            width: c.RGB_WIDTH,
+            height: 20
+        });
+        BI.each(Ws, function (i, w) {
+            w.on(BI.TextEditor.EVENT_CHANGE, function () {
+                self._checkEditors();
+                if (self.R.isValid() && self.G.isValid() && self.B.isValid()) {
+                    self.colorShow.element.css("background-color", self.getValue());
+                    self.fireEvent(BI.SimpleColorPickerEditor.EVENT_CHANGE);
+                }
+            });
+        });
+        this.R = Ws[0];
+        this.G = Ws[1];
+        this.B = Ws[2];
+
+        BI.createWidget({
+            type: "bi.vertical_adapt",
+            element: this,
+            items: [{
+                el: this.colorShow,
+                width: 16,
+                lgap: 20,
+                rgap: 15
+            }, {
+                el: RGB[0],
+                width: 20
+            }, {
+                el: this.R,
+                width: c.RGB_WIDTH
+            }, {
+                el: RGB[1],
+                width: 20
+            }, {
+                el: this.G,
+                width: c.RGB_WIDTH
+            }, {
+                el: RGB[2],
+                width: 20
+            }, {
+                el: this.B,
+                width: c.RGB_WIDTH
+            }]
+        });
+    },
+
+    _checkEditors: function () {
+        if(BI.isEmptyString(this.R.getValue())) {
+            this.R.setValue(0);
+        }
+        if(BI.isEmptyString(this.G.getValue())) {
+            this.G.setValue(0);
+        }
+        if(BI.isEmptyString(this.B.getValue())) {
+            this.B.setValue(0);
+        }
+    },
+
+    setValue: function (color) {
+        this.colorShow.element.css({"background-color": color});
+        var json = BI.DOM.rgb2json(BI.DOM.hex2rgb(color));
+        this.R.setValue(BI.isNull(json.r) ? "" : json.r);
+        this.G.setValue(BI.isNull(json.g) ? "" : json.g);
+        this.B.setValue(BI.isNull(json.b) ? "" : json.b);
+    },
+
+    getValue: function () {
+        return BI.DOM.rgb2hex(BI.DOM.json2rgb({
+            r: this.R.getValue(),
+            g: this.G.getValue(),
+            b: this.B.getValue()
+        }));
+    }
+});
+BI.SimpleColorPickerEditor.EVENT_CHANGE = "EVENT_CHANGE";
+BI.shortcut("bi.simple_color_picker_editor", BI.SimpleColorPickerEditor);
+
+/***/ }),
+/* 516 */
+/***/ (function(module, exports) {
+
+BI.Farbtastic = BI.inherit(BI.BasicButton, {
+
+    constants: {
+        RADIUS: 84,
+        SQUARE: 100,
+        WIDTH: 194
+    },
+
+    props: {
+        baseCls: "bi-farbtastic",
+        width: 195,
+        height: 195,
+        stopPropagation: true,
+        value: "#000000"
+    },
+
+    render: function () {
+        var self = this;
+        return {
+            type: "bi.absolute",
+            items: [{
+                el: {
+                    type: "bi.layout",
+                    cls: "",
+                    ref: function (_ref) {
+                        self.colorWrapper = _ref;
+                    }
+                },
+                top: 47,
+                left: 47,
+                width: 101,
+                height: 101
+            }, {
+                el: {
+                    type: "bi.layout",
+                    cls: "wheel",
+                    ref: function (_ref) {
+                        self.wheel = _ref;
+                    }
+                },
+                left: 0,
+                right: 0,
+                top: 0,
+                bottom: 0
+            }, {
+                el: {
+                    type: "bi.layout",
+                    cls: "overlay",
+                    ref: function (_ref) {
+                        self.overlay = _ref;
+                    }
+                },
+                top: 47,
+                left: 47,
+                width: 101,
+                height: 101
+            }, {
+                el: {
+                    type: "bi.layout",
+                    cls: "marker",
+                    ref: function (_ref) {
+                        self.hMarker = _ref;
+                    },
+                    scrollable: false,
+                    width: 17,
+                    height: 17
+                }
+            }, {
+                el: {
+                    type: "bi.layout",
+                    cls: "marker",
+                    ref: function (_ref) {
+                        self.slMarker = _ref;
+                    },
+                    scrollable: false,
+                    width: 17,
+                    height: 17
+                }
+            }]
+        };
+    },
+
+    created: function () {
+        var o = this.options;
+        if (BI.isKey(o.value)) {
+            this.setValue(o.value);
+        }
+    },
+
+    _unpack: function (color) {
+        if (color.length === 7) {
+            return [parseInt("0x" + color.substring(1, 3)) / 255,
+                parseInt("0x" + color.substring(3, 5)) / 255,
+                parseInt("0x" + color.substring(5, 7)) / 255];
+        } else if (color.length === 4) {
+            return [parseInt("0x" + color.substring(1, 2)) / 15,
+                parseInt("0x" + color.substring(2, 3)) / 15,
+                parseInt("0x" + color.substring(3, 4)) / 15];
+        }
+    },
+
+    _pack: function (rgb) {
+        var r = Math.round(rgb[0] * 255);
+        var g = Math.round(rgb[1] * 255);
+        var b = Math.round(rgb[2] * 255);
+        return "#" + (r < 16 ? "0" : "") + r.toString(16) +
+            (g < 16 ? "0" : "") + g.toString(16) +
+            (b < 16 ? "0" : "") + b.toString(16);
+    },
+
+    _setColor: function (color) {
+        var unpack = this._unpack(color);
+        if (this.value !== color && unpack) {
+            this.value = color;
+            this.rgb = unpack;
+            this.hsl = this._RGBToHSL(this.rgb);
+            this._updateDisplay();
+        }
+    },
+
+    _setHSL: function (hsl) {
+        this.hsl = hsl;
+        this.rgb = this._HSLToRGB(hsl);
+        this.value = this._pack(this.rgb);
+        this._updateDisplay();
+        return this;
+    },
+
+    _HSLToRGB: function (hsl) {
+        var m1, m2, r, g, b;
+        var h = hsl[0], s = hsl[1], l = hsl[2];
+        m2 = (l <= 0.5) ? l * (s + 1) : l + s - l * s;
+        m1 = l * 2 - m2;
+        return [this._hueToRGB(m1, m2, h + 0.33333),
+            this._hueToRGB(m1, m2, h),
+            this._hueToRGB(m1, m2, h - 0.33333)];
+    },
+
+    _hueToRGB: function (m1, m2, h) {
+        h = (h < 0) ? h + 1 : ((h > 1) ? h - 1 : h);
+        if (h * 6 < 1) return m1 + (m2 - m1) * h * 6;
+        if (h * 2 < 1) return m2;
+        if (h * 3 < 2) return m1 + (m2 - m1) * (0.66666 - h) * 6;
+        return m1;
+    },
+
+    _RGBToHSL: function (rgb) {
+        var min, max, delta, h, s, l;
+        var r = rgb[0], g = rgb[1], b = rgb[2];
+        min = Math.min(r, Math.min(g, b));
+        max = Math.max(r, Math.max(g, b));
+        delta = max - min;
+        l = (min + max) / 2;
+        s = 0;
+        if (l > 0 && l < 1) {
+            s = delta / (l < 0.5 ? (2 * l) : (2 - 2 * l));
+        }
+        h = 0;
+        if (delta > 0) {
+            if (max == r && max != g) h += (g - b) / delta;
+            if (max == g && max != b) h += (2 + (b - r) / delta);
+            if (max == b && max != r) h += (4 + (r - g) / delta);
+            h /= 6;
+        }
+        return [h, s, l];
+    },
+
+    _updateDisplay: function () {
+        var angle = this.hsl[0] * 6.28;
+        this.hMarker.element.css({
+            left: Math.round(Math.sin(angle) * this.constants.RADIUS + this.constants.WIDTH / 2) + "px",
+            top: Math.round(-Math.cos(angle) * this.constants.RADIUS + this.constants.WIDTH / 2) + "px"
+        });
+
+        this.slMarker.element.css({
+            left: Math.round(this.constants.SQUARE * (.5 - this.hsl[1]) + this.constants.WIDTH / 2) + "px",
+            top: Math.round(this.constants.SQUARE * (.5 - this.hsl[2]) + this.constants.WIDTH / 2) + "px"
+        });
+
+        // Saturation/Luminance gradient
+        this.colorWrapper.element.css("backgroundColor", this._pack(this._HSLToRGB([this.hsl[0], 1, 0.5])));
+    },
+
+    _absolutePosition: function (el) {
+        var r = {x: el.offsetLeft, y: el.offsetTop};
+        // Resolve relative to offsetParent
+        if (el.offsetParent) {
+            var tmp = this._absolutePosition(el.offsetParent);
+            r.x += tmp.x;
+            r.y += tmp.y;
+        }
+        return r;
+    },
+
+    _widgetCoords: function (event) {
+        var x, y;
+        var el = event.target || event.srcElement;
+        var reference = this.wheel.element[0];
+
+        if (typeof event.offsetX !== "undefined") {
+            // Use offset coordinates and find common offsetParent
+            var pos = {x: event.offsetX, y: event.offsetY};
+
+            // Send the coordinates upwards through the offsetParent chain.
+            var e = el;
+            while (e) {
+                e.mouseX = pos.x;
+                e.mouseY = pos.y;
+                pos.x += e.offsetLeft;
+                pos.y += e.offsetTop;
+                e = e.offsetParent;
+            }
+
+            // Look for the coordinates starting from the wheel widget.
+            var e = reference;
+            var offset = {x: 0, y: 0};
+            while (e) {
+                if (typeof e.mouseX !== "undefined") {
+                    x = e.mouseX - offset.x;
+                    y = e.mouseY - offset.y;
+                    break;
+                }
+                offset.x += e.offsetLeft;
+                offset.y += e.offsetTop;
+                e = e.offsetParent;
+            }
+
+            // Reset stored coordinates
+            e = el;
+            while (e) {
+                e.mouseX = undefined;
+                e.mouseY = undefined;
+                e = e.offsetParent;
+            }
+        } else {
+            // Use absolute coordinates
+            var pos = this._absolutePosition(reference);
+            x = (event.pageX || 0) - pos.x;
+            y = (event.pageY || 0) - pos.y;
+        }
+        // Subtract distance to middle
+        return {x: x - this.constants.WIDTH / 2, y: y - this.constants.WIDTH / 2};
+    },
+
+    _doMouseMove: function (event) {
+        var pos = this._widgetCoords(event);
+
+        // Set new HSL parameters
+        if (this.circleDrag) {
+            var hue = Math.atan2(pos.x, -pos.y) / 6.28;
+            if (hue < 0) hue += 1;
+            this._setHSL([hue, this.hsl[1], this.hsl[2]]);
+        } else {
+            var sat = Math.max(0, Math.min(1, -(pos.x / this.constants.SQUARE) + .5));
+            var lum = Math.max(0, Math.min(1, -(pos.y / this.constants.SQUARE) + .5));
+            this._setHSL([this.hsl[0], sat, lum]);
+        }
+        this.fireEvent(BI.Farbtastic.EVENT_CHANGE, this.getValue(), this);
+    },
+
+    doClick: function (event) {
+        var pos = this._widgetCoords(event);
+        this.circleDrag = Math.max(Math.abs(pos.x), Math.abs(pos.y)) * 2 > this.constants.SQUARE;
+
+        // Process
+        this._doMouseMove(event);
+        return false;
+    },
+
+    setValue: function (color) {
+        this._setColor(color);
+    },
+
+    getValue: function () {
+        return this.value;
+    }
+});
+BI.Farbtastic.EVENT_CHANGE = "EVENT_CHANGE";
+BI.shortcut("bi.farbtastic", BI.Farbtastic);
+
+
+/***/ }),
+/* 517 */
 /***/ (function(module, exports) {
 
 /**
@@ -31501,7 +33822,7 @@ BI.shortcut("bi.bubble_combo", BI.BubbleCombo);
 
 
 /***/ }),
-/* 501 */
+/* 518 */
 /***/ (function(module, exports) {
 
 /**
@@ -31671,7 +33992,7 @@ BI.shortcut("bi.text_bubble_bar_popup_view", BI.TextBubblePopupBarView);
 
 
 /***/ }),
-/* 502 */
+/* 519 */
 /***/ (function(module, exports) {
 
 /**
@@ -31772,7 +34093,7 @@ BI.shortcut("bi.editor_icon_check_combo", BI.EditorIconCheckCombo);
 
 
 /***/ }),
-/* 503 */
+/* 520 */
 /***/ (function(module, exports) {
 
 /**
@@ -31876,7 +34197,7 @@ BI.IconCombo.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.icon_combo", BI.IconCombo);
 
 /***/ }),
-/* 504 */
+/* 521 */
 /***/ (function(module, exports) {
 
 /**
@@ -31946,7 +34267,7 @@ BI.IconComboPopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.icon_combo_popup", BI.IconComboPopup);
 
 /***/ }),
-/* 505 */
+/* 522 */
 /***/ (function(module, exports) {
 
 /**
@@ -32053,7 +34374,7 @@ BI.IconComboTrigger.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.icon_combo_trigger", BI.IconComboTrigger);
 
 /***/ }),
-/* 506 */
+/* 523 */
 /***/ (function(module, exports) {
 
 /**
@@ -32163,7 +34484,7 @@ BI.shortcut("bi.icon_text_value_combo", BI.IconTextValueCombo);
 
 
 /***/ }),
-/* 507 */
+/* 524 */
 /***/ (function(module, exports) {
 
 /**
@@ -32245,7 +34566,7 @@ BI.shortcut("bi.icon_text_value_combo_popup", BI.IconTextValueComboPopup);
 
 
 /***/ }),
-/* 508 */
+/* 525 */
 /***/ (function(module, exports) {
 
 /**
@@ -32412,7 +34733,7 @@ BI.shortcut("bi.search_text_value_combo", BI.SearchTextValueCombo);
 
 
 /***/ }),
-/* 509 */
+/* 526 */
 /***/ (function(module, exports) {
 
 /**
@@ -32491,7 +34812,7 @@ BI.shortcut("bi.search_text_value_combo_popup", BI.SearchTextValueComboPopup);
 
 
 /***/ }),
-/* 510 */
+/* 527 */
 /***/ (function(module, exports) {
 
 /**
@@ -32610,7 +34931,7 @@ BI.SearchTextValueTrigger.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.search_text_value_trigger", BI.SearchTextValueTrigger);
 
 /***/ }),
-/* 511 */
+/* 528 */
 /***/ (function(module, exports) {
 
 /**
@@ -32700,7 +35021,7 @@ BI.TextValueCheckCombo.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.text_value_check_combo", BI.TextValueCheckCombo);
 
 /***/ }),
-/* 512 */
+/* 529 */
 /***/ (function(module, exports) {
 
 BI.TextValueCheckComboPopup = BI.inherit(BI.Pane, {
@@ -32768,7 +35089,7 @@ BI.shortcut("bi.text_value_check_combo_popup", BI.TextValueCheckComboPopup);
 
 
 /***/ }),
-/* 513 */
+/* 530 */
 /***/ (function(module, exports) {
 
 /**
@@ -32873,7 +35194,7 @@ BI.shortcut("bi.text_value_combo", BI.TextValueCombo);
 
 
 /***/ }),
-/* 514 */
+/* 531 */
 /***/ (function(module, exports) {
 
 /**
@@ -32947,7 +35268,7 @@ BI.SmallTextValueCombo.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.small_text_value_combo", BI.SmallTextValueCombo);
 
 /***/ }),
-/* 515 */
+/* 532 */
 /***/ (function(module, exports) {
 
 BI.TextValueComboPopup = BI.inherit(BI.Pane, {
@@ -33013,7 +35334,7 @@ BI.TextValueComboPopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.text_value_combo_popup", BI.TextValueComboPopup);
 
 /***/ }),
-/* 516 */
+/* 533 */
 /***/ (function(module, exports) {
 
 /**
@@ -33200,7 +35521,7 @@ BI.ClearEditor.EVENT_EMPTY = "EVENT_EMPTY";
 BI.shortcut("bi.clear_editor", BI.ClearEditor);
 
 /***/ }),
-/* 517 */
+/* 534 */
 /***/ (function(module, exports) {
 
 /**
@@ -33482,7 +35803,7 @@ BI.shortcut("bi.shelter_editor", BI.ShelterEditor);
 
 
 /***/ }),
-/* 518 */
+/* 535 */
 /***/ (function(module, exports) {
 
 /**
@@ -33763,7 +36084,7 @@ BI.SignEditor.EVENT_EMPTY = "EVENT_EMPTY";
 BI.shortcut("bi.sign_editor", BI.SignEditor);
 
 /***/ }),
-/* 519 */
+/* 536 */
 /***/ (function(module, exports) {
 
 /**
@@ -34079,7 +36400,7 @@ BI.shortcut("bi.state_editor", BI.StateEditor);
 
 
 /***/ }),
-/* 520 */
+/* 537 */
 /***/ (function(module, exports) {
 
 /**
@@ -34366,7 +36687,7 @@ BI.SimpleStateEditor.EVENT_EMPTY = "EVENT_EMPTY";
 BI.shortcut("bi.simple_state_editor", BI.SimpleStateEditor);
 
 /***/ }),
-/* 521 */
+/* 538 */
 /***/ (function(module, exports) {
 
 /**
@@ -34432,7 +36753,7 @@ BI.shortcut("bi.multi_popup_view", BI.MultiPopupView);
 
 
 /***/ }),
-/* 522 */
+/* 539 */
 /***/ (function(module, exports) {
 
 /**
@@ -34491,7 +36812,7 @@ BI.shortcut("bi.popup_panel", BI.PopupPanel);
 
 
 /***/ }),
-/* 523 */
+/* 540 */
 /***/ (function(module, exports) {
 
 /**
@@ -34673,7 +36994,7 @@ BI.ListPane.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.list_pane", BI.ListPane);
 
 /***/ }),
-/* 524 */
+/* 541 */
 /***/ (function(module, exports) {
 
 /**
@@ -34758,7 +37079,7 @@ BI.shortcut("bi.panel", BI.Panel);
 
 
 /***/ }),
-/* 525 */
+/* 542 */
 /***/ (function(module, exports) {
 
 BI.LinearSegmentButton = BI.inherit(BI.BasicButton, {
@@ -34817,7 +37138,7 @@ BI.LinearSegmentButton = BI.inherit(BI.BasicButton, {
 BI.shortcut("bi.linear_segment_button", BI.LinearSegmentButton);
 
 /***/ }),
-/* 526 */
+/* 543 */
 /***/ (function(module, exports) {
 
 BI.LinearSegment = BI.inherit(BI.Widget, {
@@ -34873,7 +37194,7 @@ BI.LinearSegment = BI.inherit(BI.Widget, {
 BI.shortcut("bi.linear_segment", BI.LinearSegment);
 
 /***/ }),
-/* 527 */
+/* 544 */
 /***/ (function(module, exports) {
 
 /**
@@ -35096,7 +37417,7 @@ BI.shortcut("bi.select_list", BI.SelectList);
 
 
 /***/ }),
-/* 528 */
+/* 545 */
 /***/ (function(module, exports) {
 
 /**
@@ -35204,7 +37525,7 @@ BI.LazyLoader.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.lazy_loader", BI.LazyLoader);
 
 /***/ }),
-/* 529 */
+/* 546 */
 /***/ (function(module, exports) {
 
 /**
@@ -35405,7 +37726,7 @@ BI.ListLoader.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.list_loader", BI.ListLoader);
 
 /***/ }),
-/* 530 */
+/* 547 */
 /***/ (function(module, exports) {
 
 /**
@@ -35587,7 +37908,7 @@ BI.shortcut("bi.sort_list", BI.SortList);
 
 
 /***/ }),
-/* 531 */
+/* 548 */
 /***/ (function(module, exports) {
 
 /**
@@ -35623,7 +37944,7 @@ BI.LoadingPane = BI.inherit(BI.Pane, {
 });
 
 /***/ }),
-/* 532 */
+/* 549 */
 /***/ (function(module, exports) {
 
 /**
@@ -35837,7 +38158,7 @@ BI.AllCountPager.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.all_count_pager", BI.AllCountPager);
 
 /***/ }),
-/* 533 */
+/* 550 */
 /***/ (function(module, exports) {
 
 /**
@@ -36118,7 +38439,7 @@ BI.DirectionPager.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.direction_pager", BI.DirectionPager);
 
 /***/ }),
-/* 534 */
+/* 551 */
 /***/ (function(module, exports) {
 
 /**
@@ -36411,7 +38732,7 @@ BI.DetailPager.EVENT_AFTER_POPULATE = "EVENT_AFTER_POPULATE";
 BI.shortcut("bi.detail_pager", BI.DetailPager);
 
 /***/ }),
-/* 535 */
+/* 552 */
 /***/ (function(module, exports) {
 
 /**
@@ -36463,7 +38784,7 @@ BI.shortcut("bi.segment_button", BI.SegmentButton);
 
 
 /***/ }),
-/* 536 */
+/* 553 */
 /***/ (function(module, exports) {
 
 /**
@@ -36532,7 +38853,7 @@ BI.Segment.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.segment", BI.Segment);
 
 /***/ }),
-/* 537 */
+/* 554 */
 /***/ (function(module, exports) {
 
 /**
@@ -36677,7 +38998,7 @@ BI.shortcut("bi.multi_select_bar", BI.MultiSelectBar);
 
 
 /***/ }),
-/* 538 */
+/* 555 */
 /***/ (function(module, exports) {
 
 /**
@@ -36819,7 +39140,7 @@ BI.shortcut("bi.level_tree", BI.LevelTree);
 
 
 /***/ }),
-/* 539 */
+/* 556 */
 /***/ (function(module, exports) {
 
 !(function () {
@@ -36902,7 +39223,7 @@ BI.shortcut("bi.level_tree", BI.LevelTree);
 
 
 /***/ }),
-/* 540 */
+/* 557 */
 /***/ (function(module, exports) {
 
 !(function () {
@@ -36961,7 +39282,7 @@ BI.shortcut("bi.level_tree", BI.LevelTree);
 
 
 /***/ }),
-/* 541 */
+/* 558 */
 /***/ (function(module, exports) {
 
 /**
@@ -37063,7 +39384,7 @@ BI.shortcut("bi.editor_trigger", BI.EditorTrigger);
 
 
 /***/ }),
-/* 542 */
+/* 559 */
 /***/ (function(module, exports) {
 
 /**
@@ -37098,7 +39419,7 @@ BI.IconTrigger = BI.inherit(BI.Trigger, {
 BI.shortcut("bi.icon_trigger", BI.IconTrigger);
 
 /***/ }),
-/* 543 */
+/* 560 */
 /***/ (function(module, exports) {
 
 /**
@@ -37208,7 +39529,7 @@ BI.IconTextTrigger = BI.inherit(BI.Trigger, {
 BI.shortcut("bi.icon_text_trigger", BI.IconTextTrigger);
 
 /***/ }),
-/* 544 */
+/* 561 */
 /***/ (function(module, exports) {
 
 /**
@@ -37287,7 +39608,7 @@ BI.SelectIconTextTrigger = BI.inherit(BI.Trigger, {
 BI.shortcut("bi.select_icon_text_trigger", BI.SelectIconTextTrigger);
 
 /***/ }),
-/* 545 */
+/* 562 */
 /***/ (function(module, exports) {
 
 /**
@@ -37366,7 +39687,7 @@ BI.shortcut("bi.text_trigger", BI.TextTrigger);
 
 
 /***/ }),
-/* 546 */
+/* 563 */
 /***/ (function(module, exports) {
 
 /**
@@ -37443,7 +39764,7 @@ BI.shortcut("bi.select_text_trigger", BI.SelectTextTrigger);
 
 
 /***/ }),
-/* 547 */
+/* 564 */
 /***/ (function(module, exports) {
 
 /**
@@ -37512,7 +39833,7 @@ BI.SmallSelectTextTrigger = BI.inherit(BI.Trigger, {
 BI.shortcut("bi.small_select_text_trigger", BI.SmallSelectTextTrigger);
 
 /***/ }),
-/* 548 */
+/* 565 */
 /***/ (function(module, exports) {
 
 /**
@@ -37574,7 +39895,7 @@ BI.SmallTextTrigger = BI.inherit(BI.Trigger, {
 BI.shortcut("bi.small_text_trigger", BI.SmallTextTrigger);
 
 /***/ }),
-/* 549 */
+/* 566 */
 /***/ (function(module, exports) {
 
 /**
@@ -37652,7 +39973,7 @@ BI.MonthDateCombo.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.month_date_combo", BI.MonthDateCombo);
 
 /***/ }),
-/* 550 */
+/* 567 */
 /***/ (function(module, exports) {
 
 /**
@@ -37742,7 +40063,7 @@ BI.shortcut("bi.year_date_combo", BI.YearDateCombo);
 
 
 /***/ }),
-/* 551 */
+/* 568 */
 /***/ (function(module, exports) {
 
 /**
@@ -37976,7 +40297,7 @@ BI.shortcut("bi.date_picker", BI.DatePicker);
 
 
 /***/ }),
-/* 552 */
+/* 569 */
 /***/ (function(module, exports) {
 
 /**
@@ -38113,7 +40434,7 @@ BI.shortcut("bi.year_picker", BI.YearPicker);
 
 
 /***/ }),
-/* 553 */
+/* 570 */
 /***/ (function(module, exports) {
 
 /**
@@ -38269,7 +40590,7 @@ BI.DateCalendarPopup.EVENT_BEFORE_YEAR_MONTH_POPUPVIEW = "EVENT_BEFORE_YEAR_MONT
 BI.shortcut("bi.date_calendar_popup", BI.DateCalendarPopup);
 
 /***/ }),
-/* 554 */
+/* 571 */
 /***/ (function(module, exports) {
 
 /**
@@ -38372,7 +40693,7 @@ BI.MonthPopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.month_popup", BI.MonthPopup);
 
 /***/ }),
-/* 555 */
+/* 572 */
 /***/ (function(module, exports) {
 
 /**
@@ -38513,7 +40834,7 @@ BI.YearPopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.year_popup", BI.YearPopup);
 
 /***/ }),
-/* 556 */
+/* 573 */
 /***/ (function(module, exports) {
 
 /**
@@ -38584,7 +40905,7 @@ BI.DateTriangleTrigger = BI.inherit(BI.Trigger, {
 BI.shortcut("bi.date_triangle_trigger", BI.DateTriangleTrigger);
 
 /***/ }),
-/* 557 */
+/* 574 */
 /***/ (function(module, exports) {
 
 /**
@@ -38774,7 +41095,7 @@ BI.StaticDatePaneCard.EVENT_BEFORE_YEAR_MONTH_POPUPVIEW = "EVENT_BEFORE_YEAR_MON
 BI.shortcut("bi.static_date_pane_card", BI.StaticDatePaneCard);
 
 /***/ }),
-/* 558 */
+/* 575 */
 /***/ (function(module, exports) {
 
 BI.DynamicDatePane = BI.inherit(BI.Widget, {
@@ -38997,7 +41318,7 @@ BI.extend(BI.DynamicDatePane, {
 
 
 /***/ }),
-/* 559 */
+/* 576 */
 /***/ (function(module, exports) {
 
 /**
@@ -39137,7 +41458,7 @@ BI.shortcut("bi.date_time_combo", BI.DateTimeCombo);
 
 
 /***/ }),
-/* 560 */
+/* 577 */
 /***/ (function(module, exports) {
 
 /**
@@ -39256,7 +41577,7 @@ BI.shortcut("bi.date_time_popup", BI.DateTimePopup);
 
 
 /***/ }),
-/* 561 */
+/* 578 */
 /***/ (function(module, exports) {
 
 /**
@@ -39324,7 +41645,7 @@ BI.shortcut("bi.date_time_trigger", BI.DateTimeTrigger);
 
 
 /***/ }),
-/* 562 */
+/* 579 */
 /***/ (function(module, exports) {
 
 BI.StaticDateTimePaneCard = BI.inherit(BI.Widget, {
@@ -39534,7 +41855,7 @@ BI.StaticDateTimePaneCard.EVENT_BEFORE_YEAR_MONTH_POPUPVIEW = "EVENT_BEFORE_YEAR
 BI.shortcut("bi.static_date_time_pane_card", BI.StaticDateTimePaneCard);
 
 /***/ }),
-/* 563 */
+/* 580 */
 /***/ (function(module, exports) {
 
 BI.DynamicDateTimePane = BI.inherit(BI.Widget, {
@@ -39753,7 +42074,7 @@ BI.extend(BI.DynamicDateTimePane, {
 
 
 /***/ }),
-/* 564 */
+/* 581 */
 /***/ (function(module, exports) {
 
 /**
@@ -39850,7 +42171,7 @@ BI.DownListCombo.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
 BI.shortcut("bi.down_list_combo", BI.DownListCombo);
 
 /***/ }),
-/* 565 */
+/* 582 */
 /***/ (function(module, exports) {
 
 /**
@@ -39906,7 +42227,7 @@ BI.DownListGroup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.down_list_group", BI.DownListGroup);
 
 /***/ }),
-/* 566 */
+/* 583 */
 /***/ (function(module, exports) {
 
 BI.DownListItem = BI.inherit(BI.BasicButton, {
@@ -40009,7 +42330,7 @@ BI.DownListItem.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.down_list_item", BI.DownListItem);
 
 /***/ }),
-/* 567 */
+/* 584 */
 /***/ (function(module, exports) {
 
 BI.DownListGroupItem = BI.inherit(BI.BasicButton, {
@@ -40135,7 +42456,7 @@ BI.DownListGroupItem.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.down_list_group_item", BI.DownListGroupItem);
 
 /***/ }),
-/* 568 */
+/* 585 */
 /***/ (function(module, exports) {
 
 /**
@@ -40427,7 +42748,7 @@ BI.DownListPopup.EVENT_SON_VALUE_CHANGE = "EVENT_SON_VALUE_CHANGE";
 BI.shortcut("bi.down_list_popup", BI.DownListPopup);
 
 /***/ }),
-/* 569 */
+/* 586 */
 /***/ (function(module, exports) {
 
 !(function () {
@@ -40499,7 +42820,7 @@ BI.shortcut("bi.down_list_popup", BI.DownListPopup);
 
 
 /***/ }),
-/* 570 */
+/* 587 */
 /***/ (function(module, exports) {
 
 BI.DynamicDateCard = BI.inherit(BI.Widget, {
@@ -40935,7 +43256,7 @@ BI.extend(BI.DynamicDateCard, {
 });
 
 /***/ }),
-/* 571 */
+/* 588 */
 /***/ (function(module, exports) {
 
 BI.DynamicDateCombo = BI.inherit(BI.Single, {
@@ -41276,7 +43597,7 @@ BI.extend(BI.DynamicDateCombo, {
 
 
 /***/ }),
-/* 572 */
+/* 589 */
 /***/ (function(module, exports) {
 
 BI.DynamicDateParamItem = BI.inherit(BI.Widget, {
@@ -41413,7 +43734,7 @@ BI.shortcut("bi.dynamic_date_param_item", BI.DynamicDateParamItem);
 
 
 /***/ }),
-/* 573 */
+/* 590 */
 /***/ (function(module, exports) {
 
 BI.DynamicDatePopup = BI.inherit(BI.Widget, {
@@ -41676,7 +43997,7 @@ BI.DynamicDatePopup.EVENT_BEFORE_YEAR_MONTH_POPUPVIEW = "EVENT_BEFORE_YEAR_MONTH
 BI.shortcut("bi.dynamic_date_popup", BI.DynamicDatePopup);
 
 /***/ }),
-/* 574 */
+/* 591 */
 /***/ (function(module, exports) {
 
 BI.DynamicDateTrigger = BI.inherit(BI.Trigger, {
@@ -42034,7 +44355,7 @@ BI.shortcut("bi.dynamic_date_trigger", BI.DynamicDateTrigger);
 
 
 /***/ }),
-/* 575 */
+/* 592 */
 /***/ (function(module, exports) {
 
 BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
@@ -42383,7 +44704,7 @@ BI.extend(BI.DynamicDateTimeCombo, {
 
 
 /***/ }),
-/* 576 */
+/* 593 */
 /***/ (function(module, exports) {
 
 BI.DynamicDateTimePopup = BI.inherit(BI.Widget, {
@@ -42654,7 +44975,7 @@ BI.DynamicDateTimePopup.EVENT_BEFORE_YEAR_MONTH_POPUPVIEW = "EVENT_BEFORE_YEAR_M
 BI.shortcut("bi.dynamic_date_time_popup", BI.DynamicDateTimePopup);
 
 /***/ }),
-/* 577 */
+/* 594 */
 /***/ (function(module, exports) {
 
 BI.DynamicDateTimeSelect = BI.inherit(BI.Widget, {
@@ -42871,7 +45192,7 @@ BI.extend(BI.DynamicDateTimeSelect, {
 });
 
 /***/ }),
-/* 578 */
+/* 595 */
 /***/ (function(module, exports) {
 
 BI.DynamicDateTimeTrigger = BI.inherit(BI.Trigger, {
@@ -43253,7 +45574,7 @@ BI.DynamicDateTimeTrigger.EVENT_KEY_DOWN = "EVENT_KEY_DOWN";
 BI.shortcut("bi.dynamic_date_time_trigger", BI.DynamicDateTimeTrigger);
 
 /***/ }),
-/* 579 */
+/* 596 */
 /***/ (function(module, exports) {
 
 /**
@@ -43474,7 +45795,7 @@ BI.SearchEditor.EVENT_EMPTY = "EVENT_EMPTY";
 BI.shortcut("bi.search_editor", BI.SearchEditor);
 
 /***/ }),
-/* 580 */
+/* 597 */
 /***/ (function(module, exports) {
 
 /**
@@ -43499,7 +45820,7 @@ BI.SmallSearchEditor = BI.inherit(BI.SearchEditor, {
 BI.shortcut("bi.small_search_editor", BI.SmallSearchEditor);
 
 /***/ }),
-/* 581 */
+/* 598 */
 /***/ (function(module, exports) {
 
 /**
@@ -43678,7 +45999,7 @@ BI.TextEditor.EVENT_EMPTY = "EVENT_EMPTY";
 BI.shortcut("bi.text_editor", BI.TextEditor);
 
 /***/ }),
-/* 582 */
+/* 599 */
 /***/ (function(module, exports) {
 
 /**
@@ -43703,7 +46024,7 @@ BI.SmallTextEditor = BI.inherit(BI.TextEditor, {
 BI.shortcut("bi.small_text_editor", BI.SmallTextEditor);
 
 /***/ }),
-/* 583 */
+/* 600 */
 /***/ (function(module, exports) {
 
 /**
@@ -44248,7 +46569,7 @@ BI.IntervalSlider.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.interval_slider", BI.IntervalSlider);
 
 /***/ }),
-/* 584 */
+/* 601 */
 /***/ (function(module, exports) {
 
 /**
@@ -44475,7 +46796,7 @@ BI.AccurateCalculationModel = BI.inherit(BI.Widget, {
 });
 
 /***/ }),
-/* 585 */
+/* 602 */
 /***/ (function(module, exports) {
 
 /**
@@ -44570,7 +46891,7 @@ BI.MultiLayerDownListCombo.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
 BI.shortcut("bi.multi_layer_down_list_combo", BI.MultiLayerDownListCombo);
 
 /***/ }),
-/* 586 */
+/* 603 */
 /***/ (function(module, exports) {
 
 /**
@@ -44897,7 +47218,7 @@ BI.MultiLayerDownListPopup.EVENT_SON_VALUE_CHANGE = "EVENT_SON_VALUE_CHANGE";
 BI.shortcut("bi.multi_layer_down_list_popup", BI.MultiLayerDownListPopup);
 
 /***/ }),
-/* 587 */
+/* 604 */
 /***/ (function(module, exports) {
 
 /**
@@ -45141,7 +47462,7 @@ BI.MultiLayerSelectTreeCombo.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
 BI.shortcut("bi.multilayer_select_tree_combo", BI.MultiLayerSelectTreeCombo);
 
 /***/ }),
-/* 588 */
+/* 605 */
 /***/ (function(module, exports) {
 
 /**
@@ -45238,7 +47559,7 @@ BI.MultiLayerSelectTreeInsertSearchPane.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multilayer_select_tree_insert_search_pane", BI.MultiLayerSelectTreeInsertSearchPane);
 
 /***/ }),
-/* 589 */
+/* 606 */
 /***/ (function(module, exports) {
 
 /**
@@ -45433,7 +47754,7 @@ BI.shortcut("bi.multilayer_select_level_tree", BI.MultiLayerSelectLevelTree);
 
 
 /***/ }),
-/* 590 */
+/* 607 */
 /***/ (function(module, exports) {
 
 /**
@@ -45515,7 +47836,7 @@ BI.MultiLayerSelectTreePopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multilayer_select_tree_popup", BI.MultiLayerSelectTreePopup);
 
 /***/ }),
-/* 591 */
+/* 608 */
 /***/ (function(module, exports) {
 
 /**
@@ -45770,7 +48091,7 @@ BI.MultiLayerSelectTreeTrigger.EVENT_ADD_ITEM = "EVENT_ADD_ITEM";
 BI.shortcut("bi.multilayer_select_tree_trigger", BI.MultiLayerSelectTreeTrigger);
 
 /***/ }),
-/* 592 */
+/* 609 */
 /***/ (function(module, exports) {
 
 /**
@@ -45875,7 +48196,7 @@ BI.shortcut("bi.multilayer_select_tree_first_plus_group_node", BI.MultiLayerSele
 
 
 /***/ }),
-/* 593 */
+/* 610 */
 /***/ (function(module, exports) {
 
 /**
@@ -45969,7 +48290,7 @@ BI.shortcut("bi.multilayer_select_tree_last_plus_group_node", BI.MultiLayerSelec
 
 
 /***/ }),
-/* 594 */
+/* 611 */
 /***/ (function(module, exports) {
 
 /**
@@ -46063,7 +48384,7 @@ BI.shortcut("bi.multilayer_select_tree_mid_plus_group_node", BI.MultiLayerSelect
 
 
 /***/ }),
-/* 595 */
+/* 612 */
 /***/ (function(module, exports) {
 
 /**
@@ -46161,7 +48482,7 @@ BI.shortcut("bi.multilayer_select_tree_plus_group_node", BI.MultiLayerSelectTree
 
 
 /***/ }),
-/* 596 */
+/* 613 */
 /***/ (function(module, exports) {
 
 /**
@@ -46408,7 +48729,7 @@ BI.MultiLayerSingleTreeCombo.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
 BI.shortcut("bi.multilayer_single_tree_combo", BI.MultiLayerSingleTreeCombo);
 
 /***/ }),
-/* 597 */
+/* 614 */
 /***/ (function(module, exports) {
 
 /**
@@ -46505,7 +48826,7 @@ BI.MultiLayerSingleTreeInsertSearchPane.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multilayer_single_tree_insert_search_pane", BI.MultiLayerSingleTreeInsertSearchPane);
 
 /***/ }),
-/* 598 */
+/* 615 */
 /***/ (function(module, exports) {
 
 /**
@@ -46699,7 +49020,7 @@ BI.shortcut("bi.multilayer_single_level_tree", BI.MultiLayerSingleLevelTree);
 
 
 /***/ }),
-/* 599 */
+/* 616 */
 /***/ (function(module, exports) {
 
 /**
@@ -46780,7 +49101,7 @@ BI.MultiLayerSingleTreePopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multilayer_single_tree_popup", BI.MultiLayerSingleTreePopup);
 
 /***/ }),
-/* 600 */
+/* 617 */
 /***/ (function(module, exports) {
 
 /**
@@ -47036,7 +49357,7 @@ BI.MultiLayerSingleTreeTrigger.EVENT_ADD_ITEM = "EVENT_ADD_ITEM";
 BI.shortcut("bi.multilayer_single_tree_trigger", BI.MultiLayerSingleTreeTrigger);
 
 /***/ }),
-/* 601 */
+/* 618 */
 /***/ (function(module, exports) {
 
 /**
@@ -47133,7 +49454,7 @@ BI.shortcut("bi.multilayer_single_tree_first_plus_group_node", BI.MultiLayerSing
 
 
 /***/ }),
-/* 602 */
+/* 619 */
 /***/ (function(module, exports) {
 
 /**
@@ -47229,7 +49550,7 @@ BI.shortcut("bi.multilayer_single_tree_last_plus_group_node", BI.MultiLayerSingl
 
 
 /***/ }),
-/* 603 */
+/* 620 */
 /***/ (function(module, exports) {
 
 /**
@@ -47325,7 +49646,7 @@ BI.shortcut("bi.multilayer_single_tree_mid_plus_group_node", BI.MultiLayerSingle
 
 
 /***/ }),
-/* 604 */
+/* 621 */
 /***/ (function(module, exports) {
 
 /**
@@ -47432,7 +49753,7 @@ BI.MultiLayerSingleTreePlusGroupNode = BI.inherit(BI.NodeButton, {
 BI.shortcut("bi.multilayer_single_tree_plus_group_node", BI.MultiLayerSingleTreePlusGroupNode);
 
 /***/ }),
-/* 605 */
+/* 622 */
 /***/ (function(module, exports) {
 
 /**
@@ -47524,7 +49845,7 @@ BI.shortcut("bi.multilayer_single_tree_first_tree_leaf_item", BI.MultiLayerSingl
 
 
 /***/ }),
-/* 606 */
+/* 623 */
 /***/ (function(module, exports) {
 
 /**
@@ -47616,7 +49937,7 @@ BI.shortcut("bi.multilayer_single_tree_last_tree_leaf_item", BI.MultiLayerSingle
 
 
 /***/ }),
-/* 607 */
+/* 624 */
 /***/ (function(module, exports) {
 
 /**
@@ -47708,7 +50029,7 @@ BI.shortcut("bi.multilayer_single_tree_mid_tree_leaf_item", BI.MultiLayerSingleT
 
 
 /***/ }),
-/* 608 */
+/* 625 */
 /***/ (function(module, exports) {
 
 /**
@@ -47821,7 +50142,7 @@ BI.MultiSelectCheckPane = BI.inherit(BI.Widget, {
 BI.shortcut("bi.multi_select_check_pane", BI.MultiSelectCheckPane);
 
 /***/ }),
-/* 609 */
+/* 626 */
 /***/ (function(module, exports) {
 
 /**
@@ -47913,7 +50234,7 @@ BI.DisplaySelectedList = BI.inherit(BI.Pane, {
 BI.shortcut("bi.display_selected_list", BI.DisplaySelectedList);
 
 /***/ }),
-/* 610 */
+/* 627 */
 /***/ (function(module, exports) {
 
 /**
@@ -48399,7 +50720,7 @@ BI.shortcut("bi.multi_select_combo", BI.MultiSelectCombo);
 
 
 /***/ }),
-/* 611 */
+/* 628 */
 /***/ (function(module, exports) {
 
 /**
@@ -48903,7 +51224,7 @@ BI.shortcut("bi.multi_select_no_bar_combo", BI.MultiSelectNoBarCombo);
 
 
 /***/ }),
-/* 612 */
+/* 629 */
 /***/ (function(module, exports) {
 
 /**
@@ -49405,7 +51726,7 @@ BI.shortcut("bi.multi_select_insert_combo", BI.MultiSelectInsertCombo);
 
 
 /***/ }),
-/* 613 */
+/* 630 */
 /***/ (function(module, exports) {
 
 /**
@@ -49901,7 +52222,7 @@ BI.shortcut("bi.multi_select_insert_no_bar_combo", BI.MultiSelectInsertNoBarComb
 
 
 /***/ }),
-/* 614 */
+/* 631 */
 /***/ (function(module, exports) {
 
 /**
@@ -50063,7 +52384,7 @@ BI.MultiSelectInsertTrigger.EVENT_BLUR = "EVENT_BLUR";
 BI.shortcut("bi.multi_select_insert_trigger", BI.MultiSelectInsertTrigger);
 
 /***/ }),
-/* 615 */
+/* 632 */
 /***/ (function(module, exports) {
 
 /**
@@ -50257,7 +52578,7 @@ BI.MultiSelectLoader.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multi_select_loader", BI.MultiSelectLoader);
 
 /***/ }),
-/* 616 */
+/* 633 */
 /***/ (function(module, exports) {
 
 /**
@@ -50441,7 +52762,7 @@ BI.shortcut("bi.multi_select_no_bar_loader", BI.MultiSelectNoBarLoader);
 
 
 /***/ }),
-/* 617 */
+/* 634 */
 /***/ (function(module, exports) {
 
 /**
@@ -50541,7 +52862,7 @@ BI.MultiSelectPopupView.EVENT_CLICK_CLEAR = "EVENT_CLICK_CLEAR";
 BI.shortcut("bi.multi_select_popup_view", BI.MultiSelectPopupView);
 
 /***/ }),
-/* 618 */
+/* 635 */
 /***/ (function(module, exports) {
 
 /**
@@ -50637,7 +52958,7 @@ BI.MultiSelectNoBarPopupView.EVENT_CLICK_CLEAR = "EVENT_CLICK_CLEAR";
 BI.shortcut("bi.multi_select_no_bar_popup_view", BI.MultiSelectNoBarPopupView);
 
 /***/ }),
-/* 619 */
+/* 636 */
 /***/ (function(module, exports) {
 
 /**
@@ -50795,7 +53116,7 @@ BI.MultiSelectTrigger.EVENT_FOCUS = "EVENT_FOCUS";
 BI.shortcut("bi.multi_select_trigger", BI.MultiSelectTrigger);
 
 /***/ }),
-/* 620 */
+/* 637 */
 /***/ (function(module, exports) {
 
 /**
@@ -50933,7 +53254,7 @@ BI.MultiSelectSearchInsertPane.EVENT_ADD_ITEM = "EVENT_ADD_ITEM";
 BI.shortcut("bi.multi_select_search_insert_pane", BI.MultiSelectSearchInsertPane);
 
 /***/ }),
-/* 621 */
+/* 638 */
 /***/ (function(module, exports) {
 
 /**
@@ -51100,7 +53421,7 @@ BI.MultiSelectSearchLoader.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multi_select_search_loader", BI.MultiSelectSearchLoader);
 
 /***/ }),
-/* 622 */
+/* 639 */
 /***/ (function(module, exports) {
 
 /**
@@ -51224,7 +53545,7 @@ BI.MultiSelectSearchPane.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multi_select_search_pane", BI.MultiSelectSearchPane);
 
 /***/ }),
-/* 623 */
+/* 640 */
 /***/ (function(module, exports) {
 
 /**
@@ -51329,7 +53650,7 @@ BI.shortcut("bi.multi_select_check_selected_button", BI.MultiSelectCheckSelected
 
 
 /***/ }),
-/* 624 */
+/* 641 */
 /***/ (function(module, exports) {
 
 /**
@@ -51433,7 +53754,7 @@ BI.shortcut("bi.multi_select_editor", BI.MultiSelectEditor);
 
 
 /***/ }),
-/* 625 */
+/* 642 */
 /***/ (function(module, exports) {
 
 /**
@@ -51645,7 +53966,7 @@ BI.MultiSelectInsertSearcher.EVENT_BLUR = "EVENT_BLUR";
 BI.shortcut("bi.multi_select_insert_searcher", BI.MultiSelectInsertSearcher);
 
 /***/ }),
-/* 626 */
+/* 643 */
 /***/ (function(module, exports) {
 
 /**
@@ -51850,7 +54171,7 @@ BI.MultiSelectSearcher.EVENT_BLUR = "EVENT_BLUR";
 BI.shortcut("bi.multi_select_searcher", BI.MultiSelectSearcher);
 
 /***/ }),
-/* 627 */
+/* 644 */
 /***/ (function(module, exports) {
 
 /**
@@ -51967,7 +54288,7 @@ BI.MultiSelectCheckSelectedSwitcher.EVENT_AFTER_HIDEVIEW = "EVENT_AFTER_HIDEVIEW
 BI.shortcut("bi.multi_select_check_selected_switcher", BI.MultiSelectCheckSelectedSwitcher);
 
 /***/ }),
-/* 628 */
+/* 645 */
 /***/ (function(module, exports) {
 
 /**
@@ -52318,7 +54639,7 @@ BI.shortcut("bi.multi_select_insert_list", BI.MultiSelectInsertList);
 
 
 /***/ }),
-/* 629 */
+/* 646 */
 /***/ (function(module, exports) {
 
 /**
@@ -52675,7 +54996,7 @@ BI.MultiSelectInsertNoBarList.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multi_select_insert_no_bar_list", BI.MultiSelectInsertNoBarList);
 
 /***/ }),
-/* 630 */
+/* 647 */
 /***/ (function(module, exports) {
 
 /**
@@ -53033,7 +55354,7 @@ BI.MultiSelectList.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multi_select_list", BI.MultiSelectList);
 
 /***/ }),
-/* 631 */
+/* 648 */
 /***/ (function(module, exports) {
 
 /**
@@ -53211,7 +55532,7 @@ BI.shortcut("bi.multi_select_tree", BI.MultiSelectTree);
 
 
 /***/ }),
-/* 632 */
+/* 649 */
 /***/ (function(module, exports) {
 
 /**
@@ -53274,7 +55595,7 @@ BI.MultiSelectTreePopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multi_select_tree_popup", BI.MultiSelectTreePopup);
 
 /***/ }),
-/* 633 */
+/* 650 */
 /***/ (function(module, exports) {
 
 /**
@@ -53398,7 +55719,7 @@ BI.MultiTreeCheckPane.EVENT_CONTINUE_CLICK = "EVENT_CONTINUE_CLICK";
 BI.shortcut("bi.multi_tree_check_pane", BI.MultiTreeCheckPane);
 
 /***/ }),
-/* 634 */
+/* 651 */
 /***/ (function(module, exports) {
 
 /**
@@ -53758,7 +56079,7 @@ BI.shortcut("bi.multi_tree_combo", BI.MultiTreeCombo);
 
 
 /***/ }),
-/* 635 */
+/* 652 */
 /***/ (function(module, exports) {
 
 /**
@@ -54133,7 +56454,7 @@ BI.shortcut("bi.multi_tree_insert_combo", BI.MultiTreeInsertCombo);
 
 
 /***/ }),
-/* 636 */
+/* 653 */
 /***/ (function(module, exports) {
 
 /**
@@ -54532,7 +56853,7 @@ BI.shortcut("bi.multi_tree_list_combo", BI.MultiTreeListCombo);
 
 
 /***/ }),
-/* 637 */
+/* 654 */
 /***/ (function(module, exports) {
 
 /**
@@ -54639,7 +56960,7 @@ BI.MultiTreePopup.EVENT_AFTERINIT = "EVENT_AFTERINIT";
 BI.shortcut("bi.multi_tree_popup_view", BI.MultiTreePopup);
 
 /***/ }),
-/* 638 */
+/* 655 */
 /***/ (function(module, exports) {
 
 /**
@@ -54712,7 +57033,7 @@ BI.MultiTreeCheckSelectedButton.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multi_tree_check_selected_button", BI.MultiTreeCheckSelectedButton);
 
 /***/ }),
-/* 639 */
+/* 656 */
 /***/ (function(module, exports) {
 
 /**
@@ -54836,7 +57157,7 @@ BI.MultiTreeSearchInsertPane.EVENT_ADD_ITEM = "EVENT_ADD_ITEM";
 BI.shortcut("bi.multi_tree_search_insert_pane", BI.MultiTreeSearchInsertPane);
 
 /***/ }),
-/* 640 */
+/* 657 */
 /***/ (function(module, exports) {
 
 /**
@@ -54917,7 +57238,7 @@ BI.MultiTreeSearchPane.EVENT_CLICK_CLEAR = "EVENT_CLICK_CLEAR";
 BI.shortcut("bi.multi_tree_search_pane", BI.MultiTreeSearchPane);
 
 /***/ }),
-/* 641 */
+/* 658 */
 /***/ (function(module, exports) {
 
 /**
@@ -55086,7 +57407,7 @@ BI.MultiListTreeSearcher.EVENT_PAUSE = "EVENT_PAUSE";
 BI.shortcut("bi.multi_list_tree_searcher", BI.MultiListTreeSearcher);
 
 /***/ }),
-/* 642 */
+/* 659 */
 /***/ (function(module, exports) {
 
 /**
@@ -55287,7 +57608,7 @@ BI.MultiTreeSearcher.EVENT_PAUSE = "EVENT_PAUSE";
 BI.shortcut("bi.multi_tree_searcher", BI.MultiTreeSearcher);
 
 /***/ }),
-/* 643 */
+/* 660 */
 /***/ (function(module, exports) {
 
 /**
@@ -55446,7 +57767,7 @@ BI.NumberEditor.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.number_editor", BI.NumberEditor);
 
 /***/ }),
-/* 644 */
+/* 661 */
 /***/ (function(module, exports) {
 
 // 小于号的值为：0，小于等于号的值为:1
@@ -55994,7 +58315,7 @@ BI.NumberInterval.EVENT_ERROR = "EVENT_ERROR";
 BI.shortcut("bi.number_interval", BI.NumberInterval);
 
 /***/ }),
-/* 645 */
+/* 662 */
 /***/ (function(module, exports) {
 
 BI.NumberIntervalSingleEidtor = BI.inherit(BI.Single, {
@@ -56083,7 +58404,7 @@ BI.NumberIntervalSingleEidtor.EVENT_CONFIRM = "EVENT_CONFIRM";
 BI.shortcut("bi.number_interval_single_editor", BI.NumberIntervalSingleEidtor);
 
 /***/ }),
-/* 646 */
+/* 663 */
 /***/ (function(module, exports) {
 
 /**
@@ -56586,7 +58907,7 @@ BI.shortcut("bi.search_multi_text_value_combo", BI.SearchMultiTextValueCombo);
 
 
 /***/ }),
-/* 647 */
+/* 664 */
 /***/ (function(module, exports) {
 
 BI.SearchMultiSelectTrigger = BI.inherit(BI.Trigger, {
@@ -56746,7 +59067,7 @@ BI.shortcut("bi.search_multi_select_trigger", BI.SearchMultiSelectTrigger);
 
 
 /***/ }),
-/* 648 */
+/* 665 */
 /***/ (function(module, exports) {
 
 /**
@@ -56926,7 +59247,7 @@ BI.SearchMultiSelectLoader.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.search_multi_select_loader", BI.SearchMultiSelectLoader);
 
 /***/ }),
-/* 649 */
+/* 666 */
 /***/ (function(module, exports) {
 
 BI.SearchMultiSelectPopupView = BI.inherit(BI.Widget, {
@@ -57019,7 +59340,7 @@ BI.SearchMultiSelectPopupView.EVENT_CLICK_CLEAR = "EVENT_CLICK_CLEAR";
 BI.shortcut("bi.search_multi_select_popup_view", BI.SearchMultiSelectPopupView);
 
 /***/ }),
-/* 650 */
+/* 667 */
 /***/ (function(module, exports) {
 
 BI.SearchMultiSelectSearcher = BI.inherit(BI.Widget, {
@@ -57202,7 +59523,7 @@ BI.shortcut("bi.search_multi_select_searcher", BI.SearchMultiSelectSearcher);
 
 
 /***/ }),
-/* 651 */
+/* 668 */
 /***/ (function(module, exports) {
 
 /**
@@ -57293,7 +59614,7 @@ BI.SelectTreeFirstPlusGroupNode = BI.inherit(BI.NodeButton, {
 BI.shortcut("bi.select_tree_first_plus_group_node", BI.SelectTreeFirstPlusGroupNode);
 
 /***/ }),
-/* 652 */
+/* 669 */
 /***/ (function(module, exports) {
 
 /**
@@ -57384,7 +59705,7 @@ BI.SelectTreeLastPlusGroupNode = BI.inherit(BI.NodeButton, {
 BI.shortcut("bi.select_tree_last_plus_group_node", BI.SelectTreeLastPlusGroupNode);
 
 /***/ }),
-/* 653 */
+/* 670 */
 /***/ (function(module, exports) {
 
 /**
@@ -57475,7 +59796,7 @@ BI.SelectTreeMidPlusGroupNode = BI.inherit(BI.NodeButton, {
 BI.shortcut("bi.select_tree_mid_plus_group_node", BI.SelectTreeMidPlusGroupNode);
 
 /***/ }),
-/* 654 */
+/* 671 */
 /***/ (function(module, exports) {
 
 /**
@@ -57566,7 +59887,7 @@ BI.SelectTreePlusGroupNode = BI.inherit(BI.NodeButton, {
 BI.shortcut("bi.select_tree_plus_group_node", BI.SelectTreePlusGroupNode);
 
 /***/ }),
-/* 655 */
+/* 672 */
 /***/ (function(module, exports) {
 
 /**
@@ -57645,7 +59966,7 @@ BI.SelectTreeCombo = BI.inherit(BI.Widget, {
 BI.shortcut("bi.select_tree_combo", BI.SelectTreeCombo);
 
 /***/ }),
-/* 656 */
+/* 673 */
 /***/ (function(module, exports) {
 
 /**
@@ -57727,7 +60048,7 @@ BI.SelectTreeExpander = BI.inherit(BI.Widget, {
 BI.shortcut("bi.select_tree_expander", BI.SelectTreeExpander);
 
 /***/ }),
-/* 657 */
+/* 674 */
 /***/ (function(module, exports) {
 
 /**
@@ -57833,7 +60154,7 @@ BI.SelectTreePopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.select_level_tree", BI.SelectTreePopup);
 
 /***/ }),
-/* 658 */
+/* 675 */
 /***/ (function(module, exports) {
 
 /**
@@ -57994,7 +60315,7 @@ BI.shortcut("bi.single_select_search_loader", BI.SingleSelectSearchLoader);
 
 
 /***/ }),
-/* 659 */
+/* 676 */
 /***/ (function(module, exports) {
 
 /**
@@ -58128,7 +60449,7 @@ BI.SingleSelectSearchInsertPane.EVENT_ADD_ITEM = "EVENT_ADD_ITEM";
 BI.shortcut("bi.single_select_search_insert_pane", BI.SingleSelectSearchInsertPane);
 
 /***/ }),
-/* 660 */
+/* 677 */
 /***/ (function(module, exports) {
 
 /**
@@ -58248,7 +60569,7 @@ BI.SingleSelectSearchPane.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.single_select_search_pane", BI.SingleSelectSearchPane);
 
 /***/ }),
-/* 661 */
+/* 678 */
 /***/ (function(module, exports) {
 
 /**
@@ -58542,7 +60863,7 @@ BI.shortcut("bi.single_select_combo", BI.SingleSelectCombo);
 
 
 /***/ }),
-/* 662 */
+/* 679 */
 /***/ (function(module, exports) {
 
 /**
@@ -58839,7 +61160,7 @@ BI.SingleSelectInsertCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
 BI.shortcut("bi.single_select_insert_combo", BI.SingleSelectInsertCombo);
 
 /***/ }),
-/* 663 */
+/* 680 */
 /***/ (function(module, exports) {
 
 /**
@@ -59004,7 +61325,7 @@ BI.shortcut("bi.single_select_list", BI.SingleSelectList);
 
 
 /***/ }),
-/* 664 */
+/* 681 */
 /***/ (function(module, exports) {
 
 /**
@@ -59173,7 +61494,7 @@ BI.shortcut("bi.single_select_loader", BI.SingleSelectLoader);
 
 
 /***/ }),
-/* 665 */
+/* 682 */
 /***/ (function(module, exports) {
 
 /**
@@ -59256,7 +61577,7 @@ BI.SingleSelectPopupView.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.single_select_popup_view", BI.SingleSelectPopupView);
 
 /***/ }),
-/* 666 */
+/* 683 */
 /***/ (function(module, exports) {
 
 /**
@@ -59398,7 +61719,7 @@ BI.SingleSelectTrigger.EVENT_BLUR = "EVENT_BLUR";
 BI.shortcut("bi.single_select_trigger", BI.SingleSelectTrigger);
 
 /***/ }),
-/* 667 */
+/* 684 */
 /***/ (function(module, exports) {
 
 /**
@@ -59660,7 +61981,7 @@ BI.shortcut("bi.single_select_insert_list", BI.SingleSelectInsertList);
 
 
 /***/ }),
-/* 668 */
+/* 685 */
 /***/ (function(module, exports) {
 
 /**
@@ -59753,7 +62074,7 @@ BI.SingleSelectEditor.EVENT_PAUSE = "EVENT_PAUSE";
 BI.shortcut("bi.single_select_editor", BI.SingleSelectEditor);
 
 /***/ }),
-/* 669 */
+/* 686 */
 /***/ (function(module, exports) {
 
 /**
@@ -59924,7 +62245,7 @@ BI.shortcut("bi.single_select_searcher", BI.SingleSelectSearcher);
 
 
 /***/ }),
-/* 670 */
+/* 687 */
 /***/ (function(module, exports) {
 
 BI.SignTextEditor = BI.inherit(BI.Widget, {
@@ -60124,7 +62445,7 @@ BI.SignTextEditor.EVENT_CLICK_LABEL = "EVENT_CLICK_LABEL";
 BI.shortcut("bi.sign_text_editor", BI.SignTextEditor);
 
 /***/ }),
-/* 671 */
+/* 688 */
 /***/ (function(module, exports) {
 
 /**
@@ -60165,7 +62486,7 @@ BI.SliderIconButton = BI.inherit(BI.Widget, {
 BI.shortcut("bi.single_slider_button", BI.SliderIconButton);
 
 /***/ }),
-/* 672 */
+/* 689 */
 /***/ (function(module, exports) {
 
 /**
@@ -60512,7 +62833,7 @@ BI.SingleSlider.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.single_slider", BI.SingleSlider);
 
 /***/ }),
-/* 673 */
+/* 690 */
 /***/ (function(module, exports) {
 
 /**
@@ -60828,7 +63149,7 @@ BI.SingleSliderLabel.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.single_slider_label", BI.SingleSliderLabel);
 
 /***/ }),
-/* 674 */
+/* 691 */
 /***/ (function(module, exports) {
 
 /**
@@ -61118,7 +63439,7 @@ BI.SingleSliderNormal.EVENT_DRAG = "EVENT_DRAG";
 BI.shortcut("bi.single_slider_normal", BI.SingleSliderNormal);
 
 /***/ }),
-/* 675 */
+/* 692 */
 /***/ (function(module, exports) {
 
 /**
@@ -61203,7 +63524,7 @@ BI.SingleTreeCombo.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
 BI.shortcut("bi.single_tree_combo", BI.SingleTreeCombo);
 
 /***/ }),
-/* 676 */
+/* 693 */
 /***/ (function(module, exports) {
 
 /**
@@ -61274,7 +63595,7 @@ BI.SingleTreePopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.single_level_tree", BI.SingleTreePopup);
 
 /***/ }),
-/* 677 */
+/* 694 */
 /***/ (function(module, exports) {
 
 /**
@@ -61340,7 +63661,7 @@ BI.shortcut("bi.single_tree_trigger", BI.SingleTreeTrigger);
 
 
 /***/ }),
-/* 678 */
+/* 695 */
 /***/ (function(module, exports) {
 
 /**
@@ -61443,7 +63764,7 @@ BI.TextValueDownListCombo.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.text_value_down_list_combo", BI.TextValueDownListCombo);
 
 /***/ }),
-/* 679 */
+/* 696 */
 /***/ (function(module, exports) {
 
 /**
@@ -61503,7 +63824,7 @@ BI.DownListSelectTextTrigger = BI.inherit(BI.Trigger, {
 BI.shortcut("bi.down_list_select_text_trigger", BI.DownListSelectTextTrigger);
 
 /***/ }),
-/* 680 */
+/* 697 */
 /***/ (function(module, exports) {
 
 !(function () {
@@ -61602,7 +63923,7 @@ BI.shortcut("bi.down_list_select_text_trigger", BI.DownListSelectTextTrigger);
 })();
 
 /***/ }),
-/* 681 */
+/* 698 */
 /***/ (function(module, exports) {
 
 /**
@@ -61840,7 +64161,7 @@ BI.shortcut("bi.down_list_select_text_trigger", BI.DownListSelectTextTrigger);
 })();
 
 /***/ }),
-/* 682 */
+/* 699 */
 /***/ (function(module, exports) {
 
 !(function () {
@@ -62032,7 +64353,7 @@ BI.shortcut("bi.down_list_select_text_trigger", BI.DownListSelectTextTrigger);
 })();
 
 /***/ }),
-/* 683 */
+/* 700 */
 /***/ (function(module, exports) {
 
 /**
@@ -62247,7 +64568,7 @@ BI.shortcut("bi.date_interval", BI.DateInterval);
 
 
 /***/ }),
-/* 684 */
+/* 701 */
 /***/ (function(module, exports) {
 
 /**
@@ -62455,7 +64776,7 @@ BI.TimeInterval.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.time_interval", BI.TimeInterval);
 
 /***/ }),
-/* 685 */
+/* 702 */
 /***/ (function(module, exports) {
 
 /**
@@ -62580,7 +64901,7 @@ BI.shortcut("bi.time_interval", BI.TimeInterval);
 })();
 
 /***/ }),
-/* 686 */
+/* 703 */
 /***/ (function(module, exports) {
 
 /**
@@ -62704,7 +65025,7 @@ BI.DynamicYearCard.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.dynamic_year_card", BI.DynamicYearCard);
 
 /***/ }),
-/* 687 */
+/* 704 */
 /***/ (function(module, exports) {
 
 /**
@@ -62903,7 +65224,7 @@ BI.StaticYearCard.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.static_year_card", BI.StaticYearCard);
 
 /***/ }),
-/* 688 */
+/* 705 */
 /***/ (function(module, exports) {
 
 BI.DynamicYearCombo = BI.inherit(BI.Widget, {
@@ -63120,7 +65441,7 @@ BI.extend(BI.DynamicYearCombo, {
 
 
 /***/ }),
-/* 689 */
+/* 706 */
 /***/ (function(module, exports) {
 
 /**
@@ -63372,7 +65693,7 @@ BI.DynamicYearPopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.dynamic_year_popup", BI.DynamicYearPopup);
 
 /***/ }),
-/* 690 */
+/* 707 */
 /***/ (function(module, exports) {
 
 BI.DynamicYearTrigger = BI.inherit(BI.Trigger, {
@@ -63567,7 +65888,7 @@ BI.DynamicYearTrigger.EVENT_VALID = "EVENT_VALID";
 BI.shortcut("bi.dynamic_year_trigger", BI.DynamicYearTrigger);
 
 /***/ }),
-/* 691 */
+/* 708 */
 /***/ (function(module, exports) {
 
 /**
@@ -63780,7 +66101,7 @@ BI.YearInterval.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
 BI.shortcut("bi.year_interval", BI.YearInterval);
 
 /***/ }),
-/* 692 */
+/* 709 */
 /***/ (function(module, exports) {
 
 /**
@@ -63951,7 +66272,7 @@ BI.DynamicYearMonthCard.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.dynamic_year_month_card", BI.DynamicYearMonthCard);
 
 /***/ }),
-/* 693 */
+/* 710 */
 /***/ (function(module, exports) {
 
 BI.StaticYearMonthCard = BI.inherit(BI.Widget, {
@@ -64120,7 +66441,7 @@ BI.shortcut("bi.static_year_month_card", BI.StaticYearMonthCard);
 
 
 /***/ }),
-/* 694 */
+/* 711 */
 /***/ (function(module, exports) {
 
 BI.DynamicYearMonthCombo = BI.inherit(BI.Single, {
@@ -64351,7 +66672,7 @@ BI.extend(BI.DynamicYearMonthCombo, {
 
 
 /***/ }),
-/* 695 */
+/* 712 */
 /***/ (function(module, exports) {
 
 /**
@@ -64598,7 +66919,7 @@ BI.DynamicYearMonthPopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.dynamic_year_month_popup", BI.DynamicYearMonthPopup);
 
 /***/ }),
-/* 696 */
+/* 713 */
 /***/ (function(module, exports) {
 
 BI.DynamicYearMonthTrigger = BI.inherit(BI.Trigger, {
@@ -64876,7 +67197,7 @@ BI.DynamicYearMonthTrigger.EVENT_KEY_DOWN = "EVENT_KEY_DOWN";
 BI.shortcut("bi.dynamic_year_month_trigger", BI.DynamicYearMonthTrigger);
 
 /***/ }),
-/* 697 */
+/* 714 */
 /***/ (function(module, exports) {
 
 BI.YearMonthInterval = BI.inherit(BI.Single, {
@@ -65088,7 +67409,7 @@ BI.shortcut("bi.year_month_interval", BI.YearMonthInterval);
 
 
 /***/ }),
-/* 698 */
+/* 715 */
 /***/ (function(module, exports) {
 
 /**
@@ -65259,7 +67580,7 @@ BI.DynamicYearQuarterCard.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.dynamic_year_quarter_card", BI.DynamicYearQuarterCard);
 
 /***/ }),
-/* 699 */
+/* 716 */
 /***/ (function(module, exports) {
 
 BI.StaticYearQuarterCard = BI.inherit(BI.Widget, {
@@ -65416,7 +67737,7 @@ BI.shortcut("bi.static_year_quarter_card", BI.StaticYearQuarterCard);
 
 
 /***/ }),
-/* 700 */
+/* 717 */
 /***/ (function(module, exports) {
 
 BI.DynamicYearQuarterCombo = BI.inherit(BI.Widget, {
@@ -65647,7 +67968,7 @@ BI.extend(BI.DynamicYearQuarterCombo, {
 
 
 /***/ }),
-/* 701 */
+/* 718 */
 /***/ (function(module, exports) {
 
 BI.DynamicYearQuarterPopup = BI.inherit(BI.Widget, {
@@ -65887,7 +68208,7 @@ BI.DynamicYearQuarterPopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.dynamic_year_quarter_popup", BI.DynamicYearQuarterPopup);
 
 /***/ }),
-/* 702 */
+/* 719 */
 /***/ (function(module, exports) {
 
 BI.DynamicYearQuarterTrigger = BI.inherit(BI.Trigger, {
@@ -66149,7 +68470,7 @@ BI.DynamicYearQuarterTrigger.EVENT_VALID = "EVENT_VALID";
 BI.shortcut("bi.dynamic_year_quarter_trigger", BI.DynamicYearQuarterTrigger);
 
 /***/ }),
-/* 703 */
+/* 720 */
 /***/ (function(module, exports) {
 
 /**
@@ -66360,7 +68681,7 @@ BI.YearQuarterInterval.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
 BI.shortcut("bi.year_quarter_interval", BI.YearQuarterInterval);
 
 /***/ }),
-/* 704 */
+/* 721 */
 /***/ (function(module, exports) {
 
 /**
@@ -66466,7 +68787,7 @@ BI.AbstractAllValueChooser = BI.inherit(BI.Widget, {
 });
 
 /***/ }),
-/* 705 */
+/* 722 */
 /***/ (function(module, exports) {
 
 /**
@@ -66548,7 +68869,7 @@ BI.shortcut("bi.all_value_chooser_combo", BI.AllValueChooserCombo);
 
 
 /***/ }),
-/* 706 */
+/* 723 */
 /***/ (function(module, exports) {
 
 /**
@@ -66622,7 +68943,7 @@ BI.shortcut("bi.all_value_chooser_pane", BI.AllValueChooserPane);
 
 
 /***/ }),
-/* 707 */
+/* 724 */
 /***/ (function(module, exports) {
 
 BI.AllValueMultiTextValueCombo = BI.inherit(BI.Widget, {
@@ -66693,7 +69014,7 @@ BI.shortcut("bi.all_value_multi_text_value_combo", BI.AllValueMultiTextValueComb
 
 
 /***/ }),
-/* 708 */
+/* 725 */
 /***/ (function(module, exports) {
 
 BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
@@ -67553,7 +69874,7 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
 
 
 /***/ }),
-/* 709 */
+/* 726 */
 /***/ (function(module, exports) {
 
 BI.AbstractListTreeValueChooser = BI.inherit(BI.AbstractTreeValueChooser, {
@@ -67845,7 +70166,7 @@ BI.AbstractListTreeValueChooser = BI.inherit(BI.AbstractTreeValueChooser, {
 });
 
 /***/ }),
-/* 710 */
+/* 727 */
 /***/ (function(module, exports) {
 
 /**
@@ -67961,7 +70282,7 @@ BI.shortcut("bi.list_tree_value_chooser_insert_combo", BI.ListTreeValueChooserIn
 
 
 /***/ }),
-/* 711 */
+/* 728 */
 /***/ (function(module, exports) {
 
 /**
@@ -68076,7 +70397,7 @@ BI.shortcut("bi.tree_value_chooser_insert_combo", BI.TreeValueChooserInsertCombo
 
 
 /***/ }),
-/* 712 */
+/* 729 */
 /***/ (function(module, exports) {
 
 /**
@@ -68195,7 +70516,7 @@ BI.shortcut("bi.tree_value_chooser_combo", BI.TreeValueChooserCombo);
 
 
 /***/ }),
-/* 713 */
+/* 730 */
 /***/ (function(module, exports) {
 
 /**
@@ -68263,7 +70584,7 @@ BI.shortcut("bi.tree_value_chooser_pane", BI.TreeValueChooserPane);
 
 
 /***/ }),
-/* 714 */
+/* 731 */
 /***/ (function(module, exports) {
 
 /**
@@ -68375,7 +70696,7 @@ BI.AbstractValueChooser = BI.inherit(BI.Widget, {
 });
 
 /***/ }),
-/* 715 */
+/* 732 */
 /***/ (function(module, exports) {
 
 /**
@@ -68485,7 +70806,7 @@ BI.shortcut("bi.value_chooser_insert_combo", BI.ValueChooserInsertCombo);
 
 
 /***/ }),
-/* 716 */
+/* 733 */
 /***/ (function(module, exports) {
 
 /**
@@ -68599,7 +70920,7 @@ BI.shortcut("bi.value_chooser_combo", BI.ValueChooserCombo);
 
 
 /***/ }),
-/* 717 */
+/* 734 */
 /***/ (function(module, exports) {
 
 /**
@@ -68701,7 +71022,7 @@ BI.shortcut("bi.value_chooser_no_bar_combo", BI.ValueChooserNoBarCombo);
 
 
 /***/ }),
-/* 718 */
+/* 735 */
 /***/ (function(module, exports) {
 
 /**
@@ -68777,20 +71098,20 @@ BI.shortcut("bi.value_chooser_pane", BI.ValueChooserPane);
 
 
 /***/ }),
-/* 719 */
+/* 736 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var _index = _interopRequireDefault(__webpack_require__(720));
+var _index = _interopRequireDefault(__webpack_require__(737));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 BI.extend(BI, _index["default"]);
 
 /***/ }),
-/* 720 */
+/* 737 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -69739,11 +72060,11 @@ Object.defineProperty(exports, "DateTimeCombo", {
 });
 exports["default"] = void 0;
 
-var _combo = __webpack_require__(721);
+var _combo = __webpack_require__(738);
 
 var _group = __webpack_require__(80);
 
-var _tab = __webpack_require__(722);
+var _tab = __webpack_require__(739);
 
 var _pane = __webpack_require__(22);
 
@@ -69751,23 +72072,23 @@ var _button = __webpack_require__(8);
 
 var _button2 = __webpack_require__(57);
 
-var _button3 = __webpack_require__(723);
+var _button3 = __webpack_require__(740);
 
-var _button4 = __webpack_require__(724);
+var _button4 = __webpack_require__(741);
 
-var _icontextitem = __webpack_require__(725);
+var _icontextitem = __webpack_require__(742);
 
-var _editor = __webpack_require__(726);
+var _editor = __webpack_require__(743);
 
-var _iframe = __webpack_require__(727);
+var _iframe = __webpack_require__(744);
 
-var _checkbox = __webpack_require__(728);
+var _checkbox = __webpack_require__(745);
 
-var _input = __webpack_require__(729);
+var _input = __webpack_require__(746);
 
 var _abstract = __webpack_require__(81);
 
-var _label = __webpack_require__(730);
+var _label = __webpack_require__(747);
 
 var _single = __webpack_require__(2);
 
@@ -69775,21 +72096,21 @@ var _text = __webpack_require__(82);
 
 var _trigger = __webpack_require__(83);
 
-var _icon = __webpack_require__(731);
+var _icon = __webpack_require__(748);
 
-var _item = __webpack_require__(732);
+var _item = __webpack_require__(749);
 
-var _combo2 = __webpack_require__(733);
+var _combo2 = __webpack_require__(750);
 
-var _combo3 = __webpack_require__(734);
+var _combo3 = __webpack_require__(751);
 
-var _combo4 = __webpack_require__(735);
+var _combo4 = __webpack_require__(752);
 
-var _editor2 = __webpack_require__(736);
+var _editor2 = __webpack_require__(753);
 
-var _loading_pane = __webpack_require__(737);
+var _loading_pane = __webpack_require__(754);
 
-var _allvalueMultitextvalue = __webpack_require__(738);
+var _allvalueMultitextvalue = __webpack_require__(755);
 
 var _abstract2 = __webpack_require__(45);
 
@@ -69797,15 +72118,15 @@ var _abstractTreevaluechooser = __webpack_require__(84);
 
 var _action = __webpack_require__(85);
 
-var _action2 = __webpack_require__(739);
+var _action2 = __webpack_require__(756);
 
 var _behavior = __webpack_require__(58);
 
-var _behavior2 = __webpack_require__(740);
+var _behavior2 = __webpack_require__(757);
 
-var _behavior3 = __webpack_require__(741);
+var _behavior3 = __webpack_require__(758);
 
-var decorator = _interopRequireWildcard(__webpack_require__(742));
+var decorator = _interopRequireWildcard(__webpack_require__(759));
 
 var _ob = __webpack_require__(34);
 
@@ -69813,225 +72134,225 @@ var _widget = __webpack_require__(1);
 
 var _layout = __webpack_require__(3);
 
-var _layout2 = __webpack_require__(743);
+var _layout2 = __webpack_require__(760);
 
-var _layout3 = __webpack_require__(744);
+var _layout3 = __webpack_require__(761);
 
-var _layout4 = __webpack_require__(745);
+var _layout4 = __webpack_require__(762);
 
-var _layout5 = __webpack_require__(746);
+var _layout5 = __webpack_require__(763);
 
-var _combo5 = __webpack_require__(747);
+var _combo5 = __webpack_require__(764);
 
-var _icon2 = __webpack_require__(748);
+var _icon2 = __webpack_require__(765);
 
-var _adapt = __webpack_require__(749);
+var _adapt = __webpack_require__(766);
 
-var _adapt2 = __webpack_require__(750);
+var _adapt2 = __webpack_require__(767);
 
-var _icontexticonitem = __webpack_require__(751);
+var _icontexticonitem = __webpack_require__(768);
 
-var _auto = __webpack_require__(752);
+var _auto = __webpack_require__(769);
 
-var _inline = __webpack_require__(753);
+var _inline = __webpack_require__(770);
 
-var _adapt3 = __webpack_require__(754);
+var _adapt3 = __webpack_require__(771);
 
 var _button5 = __webpack_require__(59);
 
 var _editor3 = __webpack_require__(86);
 
-var _icon3 = __webpack_require__(755);
+var _icon3 = __webpack_require__(772);
 
-var _layer = __webpack_require__(756);
+var _layer = __webpack_require__(773);
 
-var _combo6 = __webpack_require__(757);
+var _combo6 = __webpack_require__(774);
 
-var _dynamicdate = __webpack_require__(758);
+var _dynamicdate = __webpack_require__(775);
 
-var _customtree = __webpack_require__(759);
+var _customtree = __webpack_require__(776);
 
-var _tree = __webpack_require__(760);
+var _tree = __webpack_require__(777);
 
-var _nodeIcon = __webpack_require__(761);
+var _nodeIcon = __webpack_require__(778);
 
-var _itemMid = __webpack_require__(762);
+var _itemMid = __webpack_require__(779);
 
-var _itemFirst = __webpack_require__(763);
+var _itemFirst = __webpack_require__(780);
 
-var _itemLast = __webpack_require__(764);
+var _itemLast = __webpack_require__(781);
 
-var _editorText = __webpack_require__(765);
+var _editorText = __webpack_require__(782);
 
-var _editor4 = __webpack_require__(766);
+var _editor4 = __webpack_require__(783);
 
-var _absolute = __webpack_require__(767);
+var _absolute = __webpack_require__(784);
 
-var _adapt4 = __webpack_require__(768);
+var _adapt4 = __webpack_require__(785);
 
-var _layout6 = __webpack_require__(769);
+var _layout6 = __webpack_require__(786);
 
-var _adapt5 = __webpack_require__(770);
+var _adapt5 = __webpack_require__(787);
 
-var _adapt6 = __webpack_require__(771);
+var _adapt6 = __webpack_require__(788);
 
-var _multiselectInsert = __webpack_require__(772);
+var _multiselectInsert = __webpack_require__(789);
 
-var _multiselect = __webpack_require__(773);
+var _multiselect = __webpack_require__(790);
 
-var _editor5 = __webpack_require__(774);
+var _editor5 = __webpack_require__(791);
 
-var _multilayersingletree = __webpack_require__(775);
+var _multilayersingletree = __webpack_require__(792);
 
-var _colorchooser = __webpack_require__(776);
+var _colorchooser = __webpack_require__(793);
 
-var _a = __webpack_require__(777);
+var _a = __webpack_require__(794);
 
-var _html = __webpack_require__(778);
+var _html = __webpack_require__(795);
 
-var _switcher = __webpack_require__(779);
+var _switcher = __webpack_require__(796);
 
-var _loader = __webpack_require__(780);
+var _loader = __webpack_require__(797);
 
-var _pane2 = __webpack_require__(781);
+var _pane2 = __webpack_require__(798);
 
-var _toolbar = __webpack_require__(782);
+var _toolbar = __webpack_require__(799);
 
-var _list = __webpack_require__(783);
+var _list = __webpack_require__(800);
 
 var _abstract3 = __webpack_require__(87);
 
-var _combo7 = __webpack_require__(784);
+var _combo7 = __webpack_require__(801);
 
-var _editor6 = __webpack_require__(785);
+var _editor6 = __webpack_require__(802);
 
-var _item2 = __webpack_require__(786);
+var _item2 = __webpack_require__(803);
 
-var _dynamicdatetime = __webpack_require__(787);
+var _dynamicdatetime = __webpack_require__(804);
 
-var _multiTree = __webpack_require__(788);
+var _multiTree = __webpack_require__(805);
 
-var _middle = __webpack_require__(789);
+var _middle = __webpack_require__(806);
 
-var _group2 = __webpack_require__(790);
+var _group2 = __webpack_require__(807);
 
-var _layout7 = __webpack_require__(791);
+var _layout7 = __webpack_require__(808);
 
-var _icon4 = __webpack_require__(792);
+var _icon4 = __webpack_require__(809);
 
-var _searcher = __webpack_require__(793);
+var _searcher = __webpack_require__(810);
 
-var _combo8 = __webpack_require__(794);
+var _combo8 = __webpack_require__(811);
 
-var _combo9 = __webpack_require__(795);
+var _combo9 = __webpack_require__(812);
 
-var _comboTreevaluechooser = __webpack_require__(796);
+var _comboTreevaluechooser = __webpack_require__(813);
 
-var _radio = __webpack_require__(797);
+var _radio = __webpack_require__(814);
 
-var _multilayerselecttree = __webpack_require__(798);
+var _multilayerselecttree = __webpack_require__(815);
 
-var _multilayersingletree2 = __webpack_require__(799);
+var _multilayersingletree2 = __webpack_require__(816);
 
 var _treeview = __webpack_require__(60);
 
-var _multiTree2 = __webpack_require__(800);
+var _multiTree2 = __webpack_require__(817);
 
-var _itemSingleselect = __webpack_require__(801);
+var _itemSingleselect = __webpack_require__(818);
 
-var _singleselectInsert = __webpack_require__(802);
+var _singleselectInsert = __webpack_require__(819);
 
-var _singleselect = __webpack_require__(803);
+var _singleselect = __webpack_require__(820);
 
-var _layout8 = __webpack_require__(804);
+var _layout8 = __webpack_require__(821);
 
-var _combo10 = __webpack_require__(805);
+var _combo10 = __webpack_require__(822);
 
-var _time = __webpack_require__(806);
+var _time = __webpack_require__(823);
 
 var _listtreeview = __webpack_require__(88);
 
-var _listasynctree = __webpack_require__(807);
+var _listasynctree = __webpack_require__(824);
 
-var _asynctree = __webpack_require__(808);
+var _asynctree = __webpack_require__(825);
 
-var _multilayersingletree3 = __webpack_require__(809);
+var _multilayersingletree3 = __webpack_require__(826);
 
-var _multilayerselecttree2 = __webpack_require__(810);
+var _multilayerselecttree2 = __webpack_require__(827);
 
-var _multiTreeList = __webpack_require__(811);
+var _multiTreeList = __webpack_require__(828);
 
-var _multiTreeInsert = __webpack_require__(812);
+var _multiTreeInsert = __webpack_require__(829);
 
-var _combo11 = __webpack_require__(813);
+var _combo11 = __webpack_require__(830);
 
-var _switch = __webpack_require__(814);
+var _switch = __webpack_require__(831);
 
-var _layout9 = __webpack_require__(815);
+var _layout9 = __webpack_require__(832);
 
-var _editor7 = __webpack_require__(816);
+var _editor7 = __webpack_require__(833);
 
-var _triggerText = __webpack_require__(817);
+var _triggerText = __webpack_require__(834);
 
-var _dateinterval = __webpack_require__(818);
+var _dateinterval = __webpack_require__(835);
 
-var _datepane = __webpack_require__(819);
+var _datepane = __webpack_require__(836);
 
-var _pagerAll = __webpack_require__(820);
+var _pagerAll = __webpack_require__(837);
 
 var _layer2 = __webpack_require__(89);
 
-var _popup = __webpack_require__(821);
+var _popup = __webpack_require__(838);
 
-var _check = __webpack_require__(822);
+var _check = __webpack_require__(839);
 
-var _numberinterval = __webpack_require__(823);
+var _numberinterval = __webpack_require__(840);
 
-var _combo12 = __webpack_require__(824);
+var _combo12 = __webpack_require__(841);
 
-var _combo13 = __webpack_require__(825);
+var _combo13 = __webpack_require__(842);
 
-var _intervalslider = __webpack_require__(826);
+var _intervalslider = __webpack_require__(843);
 
-var _multiselectlist = __webpack_require__(827);
+var _multiselectlist = __webpack_require__(844);
 
-var _yearmonthinterval = __webpack_require__(828);
+var _yearmonthinterval = __webpack_require__(845);
 
-var _numbereditor = __webpack_require__(829);
+var _numbereditor = __webpack_require__(846);
 
-var _combo14 = __webpack_require__(830);
+var _combo14 = __webpack_require__(847);
 
-var _linear = __webpack_require__(831);
+var _linear = __webpack_require__(848);
 
-var _img = __webpack_require__(832);
+var _img = __webpack_require__(849);
 
-var _combo15 = __webpack_require__(833);
+var _combo15 = __webpack_require__(850);
 
-var _combo16 = __webpack_require__(834);
+var _combo16 = __webpack_require__(851);
 
-var _listview = __webpack_require__(835);
+var _listview = __webpack_require__(852);
 
-var _middleFloat = __webpack_require__(836);
+var _middleFloat = __webpack_require__(853);
 
-var _popup2 = __webpack_require__(837);
+var _popup2 = __webpack_require__(854);
 
 var _controller = __webpack_require__(90);
 
-var _controller2 = __webpack_require__(838);
+var _controller2 = __webpack_require__(855);
 
-var _popupCalendar = __webpack_require__(839);
+var _popupCalendar = __webpack_require__(856);
 
-var _tree2 = __webpack_require__(840);
+var _tree2 = __webpack_require__(857);
 
-var _textnode = __webpack_require__(841);
+var _textnode = __webpack_require__(858);
 
-var _popup3 = __webpack_require__(842);
+var _popup3 = __webpack_require__(859);
 
-var _button6 = __webpack_require__(843);
+var _button6 = __webpack_require__(860);
 
-var _router = __webpack_require__(844);
+var _router = __webpack_require__(861);
 
-var _datetime = __webpack_require__(845);
+var _datetime = __webpack_require__(862);
 
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
@@ -70041,159 +72362,6 @@ var _default = {
   Decorators: decorator
 };
 exports["default"] = _default;
-
-/***/ }),
-/* 721 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _widget = __webpack_require__(1);
-
-/***/ }),
-/* 722 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _widget = __webpack_require__(1);
-
-/***/ }),
-/* 723 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _button = __webpack_require__(8);
-
-/***/ }),
-/* 724 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _button = __webpack_require__(8);
-
-/***/ }),
-/* 725 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _button = __webpack_require__(8);
-
-/***/ }),
-/* 726 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _single = __webpack_require__(2);
-
-/***/ }),
-/* 727 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _single = __webpack_require__(2);
-
-/***/ }),
-/* 728 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _button = __webpack_require__(8);
-
-/***/ }),
-/* 729 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _single = __webpack_require__(2);
-
-/***/ }),
-/* 730 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _abstract = __webpack_require__(81);
-
-/***/ }),
-/* 731 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _single = __webpack_require__(2);
-
-/***/ }),
-/* 732 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _button = __webpack_require__(8);
-
-/***/ }),
-/* 733 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _widget = __webpack_require__(1);
-
-/***/ }),
-/* 734 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _widget = __webpack_require__(1);
-
-/***/ }),
-/* 735 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _widget = __webpack_require__(1);
-
-/***/ }),
-/* 736 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _widget = __webpack_require__(1);
-
-/***/ }),
-/* 737 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _pane = __webpack_require__(22);
 
 /***/ }),
 /* 738 */
@@ -70211,7 +72379,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _action = __webpack_require__(85);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 740 */
@@ -70220,7 +72388,7 @@ var _action = __webpack_require__(85);
 "use strict";
 
 
-var _behavior = __webpack_require__(58);
+var _button = __webpack_require__(8);
 
 /***/ }),
 /* 741 */
@@ -70229,10 +72397,163 @@ var _behavior = __webpack_require__(58);
 "use strict";
 
 
-var _behavior = __webpack_require__(58);
+var _button = __webpack_require__(8);
 
 /***/ }),
 /* 742 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _button = __webpack_require__(8);
+
+/***/ }),
+/* 743 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _single = __webpack_require__(2);
+
+/***/ }),
+/* 744 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _single = __webpack_require__(2);
+
+/***/ }),
+/* 745 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _button = __webpack_require__(8);
+
+/***/ }),
+/* 746 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _single = __webpack_require__(2);
+
+/***/ }),
+/* 747 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _abstract = __webpack_require__(81);
+
+/***/ }),
+/* 748 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _single = __webpack_require__(2);
+
+/***/ }),
+/* 749 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _button = __webpack_require__(8);
+
+/***/ }),
+/* 750 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _widget = __webpack_require__(1);
+
+/***/ }),
+/* 751 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _widget = __webpack_require__(1);
+
+/***/ }),
+/* 752 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _widget = __webpack_require__(1);
+
+/***/ }),
+/* 753 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _widget = __webpack_require__(1);
+
+/***/ }),
+/* 754 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _pane = __webpack_require__(22);
+
+/***/ }),
+/* 755 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _widget = __webpack_require__(1);
+
+/***/ }),
+/* 756 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _action = __webpack_require__(85);
+
+/***/ }),
+/* 757 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _behavior = __webpack_require__(58);
+
+/***/ }),
+/* 758 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _behavior = __webpack_require__(58);
+
+/***/ }),
+/* 759 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -70443,166 +72764,13 @@ type UnionToTuple<U> = UnionToTupleRecursively<U, []>;
 exports.Model = Model;
 
 /***/ }),
-/* 743 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _layout = __webpack_require__(3);
-
-/***/ }),
-/* 744 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _layout = __webpack_require__(3);
-
-/***/ }),
-/* 745 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _layout = __webpack_require__(3);
-
-/***/ }),
-/* 746 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _layout = __webpack_require__(3);
-
-/***/ }),
-/* 747 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _widget = __webpack_require__(1);
-
-/***/ }),
-/* 748 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _single = __webpack_require__(2);
-
-/***/ }),
-/* 749 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _layout = __webpack_require__(3);
-
-/***/ }),
-/* 750 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _layout = __webpack_require__(3);
-
-/***/ }),
-/* 751 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _button = __webpack_require__(8);
-
-/***/ }),
-/* 752 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _layout = __webpack_require__(3);
-
-/***/ }),
-/* 753 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _layout = __webpack_require__(3);
-
-/***/ }),
-/* 754 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _layout = __webpack_require__(3);
-
-/***/ }),
-/* 755 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _single = __webpack_require__(2);
-
-/***/ }),
-/* 756 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _widget = __webpack_require__(1);
-
-/***/ }),
-/* 757 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _widget = __webpack_require__(1);
-
-/***/ }),
-/* 758 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _single = __webpack_require__(2);
-
-/***/ }),
-/* 759 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _widget = __webpack_require__(1);
-
-/***/ }),
 /* 760 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var _group = __webpack_require__(80);
+var _layout = __webpack_require__(3);
 
 /***/ }),
 /* 761 */
@@ -70611,7 +72779,7 @@ var _group = __webpack_require__(80);
 "use strict";
 
 
-var _button = __webpack_require__(57);
+var _layout = __webpack_require__(3);
 
 /***/ }),
 /* 762 */
@@ -70620,7 +72788,7 @@ var _button = __webpack_require__(57);
 "use strict";
 
 
-var _button = __webpack_require__(8);
+var _layout = __webpack_require__(3);
 
 /***/ }),
 /* 763 */
@@ -70629,7 +72797,7 @@ var _button = __webpack_require__(8);
 "use strict";
 
 
-var _button = __webpack_require__(8);
+var _layout = __webpack_require__(3);
 
 /***/ }),
 /* 764 */
@@ -70638,7 +72806,7 @@ var _button = __webpack_require__(8);
 "use strict";
 
 
-var _button = __webpack_require__(8);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 765 */
@@ -70647,7 +72815,7 @@ var _button = __webpack_require__(8);
 "use strict";
 
 
-var _editor = __webpack_require__(86);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 766 */
@@ -70656,7 +72824,7 @@ var _editor = __webpack_require__(86);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _layout = __webpack_require__(3);
 
 /***/ }),
 /* 767 */
@@ -70674,7 +72842,7 @@ var _layout = __webpack_require__(3);
 "use strict";
 
 
-var _layout = __webpack_require__(3);
+var _button = __webpack_require__(8);
 
 /***/ }),
 /* 769 */
@@ -70719,7 +72887,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 774 */
@@ -70737,7 +72905,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _pane = __webpack_require__(22);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 776 */
@@ -70755,7 +72923,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _text = __webpack_require__(82);
+var _group = __webpack_require__(80);
 
 /***/ }),
 /* 778 */
@@ -70764,7 +72932,7 @@ var _text = __webpack_require__(82);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _button = __webpack_require__(57);
 
 /***/ }),
 /* 779 */
@@ -70773,7 +72941,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _button = __webpack_require__(8);
 
 /***/ }),
 /* 780 */
@@ -70782,7 +72950,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _button = __webpack_require__(8);
 
 /***/ }),
 /* 781 */
@@ -70791,7 +72959,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _pane = __webpack_require__(22);
+var _button = __webpack_require__(8);
 
 /***/ }),
 /* 782 */
@@ -70800,7 +72968,7 @@ var _pane = __webpack_require__(22);
 "use strict";
 
 
-var _button = __webpack_require__(8);
+var _editor = __webpack_require__(86);
 
 /***/ }),
 /* 783 */
@@ -70818,7 +72986,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _abstract = __webpack_require__(87);
+var _layout = __webpack_require__(3);
 
 /***/ }),
 /* 785 */
@@ -70827,7 +72995,7 @@ var _abstract = __webpack_require__(87);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _layout = __webpack_require__(3);
 
 /***/ }),
 /* 786 */
@@ -70836,7 +73004,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _button = __webpack_require__(8);
+var _layout = __webpack_require__(3);
 
 /***/ }),
 /* 787 */
@@ -70845,7 +73013,7 @@ var _button = __webpack_require__(8);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _layout = __webpack_require__(3);
 
 /***/ }),
 /* 788 */
@@ -70854,7 +73022,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _layout = __webpack_require__(3);
 
 /***/ }),
 /* 789 */
@@ -70863,7 +73031,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _layout = __webpack_require__(3);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 790 */
@@ -70872,7 +73040,7 @@ var _layout = __webpack_require__(3);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 791 */
@@ -70881,7 +73049,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _layout = __webpack_require__(3);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 792 */
@@ -70890,7 +73058,7 @@ var _layout = __webpack_require__(3);
 "use strict";
 
 
-var _button = __webpack_require__(59);
+var _pane = __webpack_require__(22);
 
 /***/ }),
 /* 793 */
@@ -70908,7 +73076,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _abstractTreevaluechooser = __webpack_require__(84);
+var _text = __webpack_require__(82);
 
 /***/ }),
 /* 795 */
@@ -70917,7 +73085,7 @@ var _abstractTreevaluechooser = __webpack_require__(84);
 "use strict";
 
 
-var _abstract = __webpack_require__(45);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 796 */
@@ -70926,7 +73094,7 @@ var _abstract = __webpack_require__(45);
 "use strict";
 
 
-var _abstract = __webpack_require__(45);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 797 */
@@ -70935,7 +73103,7 @@ var _abstract = __webpack_require__(45);
 "use strict";
 
 
-var _button = __webpack_require__(8);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 798 */
@@ -70944,7 +73112,7 @@ var _button = __webpack_require__(8);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _pane = __webpack_require__(22);
 
 /***/ }),
 /* 799 */
@@ -70953,7 +73121,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _button = __webpack_require__(8);
 
 /***/ }),
 /* 800 */
@@ -70962,7 +73130,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _pane = __webpack_require__(22);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 801 */
@@ -70971,7 +73139,7 @@ var _pane = __webpack_require__(22);
 "use strict";
 
 
-var _button = __webpack_require__(8);
+var _abstract = __webpack_require__(87);
 
 /***/ }),
 /* 802 */
@@ -70989,7 +73157,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _button = __webpack_require__(8);
 
 /***/ }),
 /* 804 */
@@ -70998,7 +73166,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _layout = __webpack_require__(3);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 805 */
@@ -71016,7 +73184,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _layout = __webpack_require__(3);
 
 /***/ }),
 /* 807 */
@@ -71025,7 +73193,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _listtreeview = __webpack_require__(88);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 808 */
@@ -71034,7 +73202,7 @@ var _listtreeview = __webpack_require__(88);
 "use strict";
 
 
-var _treeview = __webpack_require__(60);
+var _layout = __webpack_require__(3);
 
 /***/ }),
 /* 809 */
@@ -71043,7 +73211,7 @@ var _treeview = __webpack_require__(60);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _button = __webpack_require__(59);
 
 /***/ }),
 /* 810 */
@@ -71061,7 +73229,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _abstractTreevaluechooser = __webpack_require__(84);
 
 /***/ }),
 /* 812 */
@@ -71070,7 +73238,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _abstract = __webpack_require__(45);
 
 /***/ }),
 /* 813 */
@@ -71079,7 +73247,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _abstract = __webpack_require__(45);
 
 /***/ }),
 /* 814 */
@@ -71097,7 +73265,7 @@ var _button = __webpack_require__(8);
 "use strict";
 
 
-var _layout = __webpack_require__(3);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 816 */
@@ -71115,7 +73283,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _trigger = __webpack_require__(83);
+var _pane = __webpack_require__(22);
 
 /***/ }),
 /* 818 */
@@ -71124,7 +73292,7 @@ var _trigger = __webpack_require__(83);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _button = __webpack_require__(8);
 
 /***/ }),
 /* 819 */
@@ -71133,7 +73301,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 820 */
@@ -71142,7 +73310,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 821 */
@@ -71151,9 +73319,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _layer = __webpack_require__(89);
-
-var _widget = __webpack_require__(1);
+var _layout = __webpack_require__(3);
 
 /***/ }),
 /* 822 */
@@ -71162,7 +73328,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _button = __webpack_require__(59);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 823 */
@@ -71180,7 +73346,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _listtreeview = __webpack_require__(88);
 
 /***/ }),
 /* 825 */
@@ -71189,7 +73355,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _treeview = __webpack_require__(60);
 
 /***/ }),
 /* 826 */
@@ -71198,7 +73364,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 827 */
@@ -71207,7 +73373,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 828 */
@@ -71225,7 +73391,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 830 */
@@ -71243,7 +73409,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _button = __webpack_require__(8);
 
 /***/ }),
 /* 832 */
@@ -71252,7 +73418,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _layout = __webpack_require__(3);
 
 /***/ }),
 /* 833 */
@@ -71270,7 +73436,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _trigger = __webpack_require__(83);
 
 /***/ }),
 /* 835 */
@@ -71279,7 +73445,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 836 */
@@ -71288,7 +73454,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _layout = __webpack_require__(3);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 837 */
@@ -71306,7 +73472,9 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _controller = __webpack_require__(90);
+var _layer = __webpack_require__(89);
+
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 839 */
@@ -71315,7 +73483,7 @@ var _controller = __webpack_require__(90);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _button = __webpack_require__(59);
 
 /***/ }),
 /* 840 */
@@ -71324,6 +73492,8 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
+var _single = __webpack_require__(2);
+
 /***/ }),
 /* 841 */
 /***/ (function(module, exports, __webpack_require__) {
@@ -71331,7 +73501,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _button = __webpack_require__(57);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 842 */
@@ -71340,7 +73510,7 @@ var _button = __webpack_require__(57);
 "use strict";
 
 
-var _pane = __webpack_require__(22);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 843 */
@@ -71349,7 +73519,7 @@ var _pane = __webpack_require__(22);
 "use strict";
 
 
-var _button = __webpack_require__(8);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 844 */
@@ -71357,6 +73527,8 @@ var _button = __webpack_require__(8);
 
 "use strict";
 
+
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 845 */
@@ -71368,23 +73540,155 @@ var _button = __webpack_require__(8);
 var _single = __webpack_require__(2);
 
 /***/ }),
-/* 846 */,
-/* 847 */,
-/* 848 */,
-/* 849 */,
-/* 850 */,
-/* 851 */,
-/* 852 */,
-/* 853 */,
-/* 854 */,
-/* 855 */,
-/* 856 */,
-/* 857 */,
-/* 858 */,
-/* 859 */,
-/* 860 */,
-/* 861 */,
-/* 862 */,
+/* 846 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _widget = __webpack_require__(1);
+
+/***/ }),
+/* 847 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _widget = __webpack_require__(1);
+
+/***/ }),
+/* 848 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _widget = __webpack_require__(1);
+
+/***/ }),
+/* 849 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _single = __webpack_require__(2);
+
+/***/ }),
+/* 850 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _widget = __webpack_require__(1);
+
+/***/ }),
+/* 851 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _widget = __webpack_require__(1);
+
+/***/ }),
+/* 852 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _widget = __webpack_require__(1);
+
+/***/ }),
+/* 853 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _layout = __webpack_require__(3);
+
+/***/ }),
+/* 854 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _widget = __webpack_require__(1);
+
+/***/ }),
+/* 855 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _controller = __webpack_require__(90);
+
+/***/ }),
+/* 856 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _widget = __webpack_require__(1);
+
+/***/ }),
+/* 857 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+/***/ }),
+/* 858 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _button = __webpack_require__(57);
+
+/***/ }),
+/* 859 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _pane = __webpack_require__(22);
+
+/***/ }),
+/* 860 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _button = __webpack_require__(8);
+
+/***/ }),
+/* 861 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+/***/ }),
+/* 862 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _single = __webpack_require__(2);
+
+/***/ }),
 /* 863 */,
 /* 864 */,
 /* 865 */,
@@ -73996,32 +76300,40 @@ var _single = __webpack_require__(2);
 /* 1420 */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(123);
 __webpack_require__(124);
+__webpack_require__(123);
 __webpack_require__(127);
 __webpack_require__(129);
-__webpack_require__(328);
-__webpack_require__(329);
+__webpack_require__(317);
+__webpack_require__(318);
 __webpack_require__(130);
+__webpack_require__(319);
+__webpack_require__(320);
+__webpack_require__(321);
+__webpack_require__(322);
+__webpack_require__(323);
+__webpack_require__(324);
 __webpack_require__(131);
 __webpack_require__(132);
 __webpack_require__(133);
+__webpack_require__(325);
+__webpack_require__(326);
+__webpack_require__(327);
+__webpack_require__(328);
+__webpack_require__(329);
+__webpack_require__(330);
+__webpack_require__(331);
+__webpack_require__(332);
 __webpack_require__(134);
 __webpack_require__(135);
 __webpack_require__(136);
 __webpack_require__(137);
 __webpack_require__(138);
 __webpack_require__(139);
-__webpack_require__(140);
-__webpack_require__(141);
-__webpack_require__(142);
-__webpack_require__(143);
-__webpack_require__(332);
 __webpack_require__(333);
 __webpack_require__(334);
 __webpack_require__(335);
 __webpack_require__(336);
-__webpack_require__(144);
 __webpack_require__(337);
 __webpack_require__(338);
 __webpack_require__(339);
@@ -74033,22 +76345,14 @@ __webpack_require__(344);
 __webpack_require__(345);
 __webpack_require__(346);
 __webpack_require__(347);
-__webpack_require__(145);
 __webpack_require__(348);
-__webpack_require__(146);
-__webpack_require__(147);
-__webpack_require__(148);
-__webpack_require__(149);
-__webpack_require__(150);
-__webpack_require__(151);
 __webpack_require__(349);
 __webpack_require__(350);
+__webpack_require__(140);
 __webpack_require__(351);
 __webpack_require__(352);
 __webpack_require__(353);
-__webpack_require__(330);
-__webpack_require__(331);
-__webpack_require__(152);
+__webpack_require__(141);
 __webpack_require__(354);
 __webpack_require__(355);
 __webpack_require__(356);
@@ -74095,11 +76399,11 @@ __webpack_require__(396);
 __webpack_require__(397);
 __webpack_require__(398);
 __webpack_require__(399);
-__webpack_require__(153);
-__webpack_require__(154);
-__webpack_require__(155);
-__webpack_require__(900);
 __webpack_require__(400);
+__webpack_require__(142);
+__webpack_require__(143);
+__webpack_require__(144);
+__webpack_require__(900);
 __webpack_require__(401);
 __webpack_require__(402);
 __webpack_require__(403);
@@ -74248,6 +76552,34 @@ __webpack_require__(545);
 __webpack_require__(546);
 __webpack_require__(547);
 __webpack_require__(548);
+__webpack_require__(549);
+__webpack_require__(550);
+__webpack_require__(551);
+__webpack_require__(552);
+__webpack_require__(553);
+__webpack_require__(554);
+__webpack_require__(555);
+__webpack_require__(556);
+__webpack_require__(557);
+__webpack_require__(558);
+__webpack_require__(559);
+__webpack_require__(560);
+__webpack_require__(561);
+__webpack_require__(562);
+__webpack_require__(563);
+__webpack_require__(564);
+__webpack_require__(565);
+__webpack_require__(145);
+__webpack_require__(146);
+__webpack_require__(147);
+__webpack_require__(148);
+__webpack_require__(149);
+__webpack_require__(150);
+__webpack_require__(151);
+__webpack_require__(152);
+__webpack_require__(153);
+__webpack_require__(154);
+__webpack_require__(155);
 __webpack_require__(156);
 __webpack_require__(157);
 __webpack_require__(158);
@@ -74297,34 +76629,6 @@ __webpack_require__(201);
 __webpack_require__(202);
 __webpack_require__(203);
 __webpack_require__(204);
-__webpack_require__(205);
-__webpack_require__(206);
-__webpack_require__(207);
-__webpack_require__(208);
-__webpack_require__(209);
-__webpack_require__(210);
-__webpack_require__(211);
-__webpack_require__(212);
-__webpack_require__(213);
-__webpack_require__(214);
-__webpack_require__(215);
-__webpack_require__(549);
-__webpack_require__(550);
-__webpack_require__(551);
-__webpack_require__(552);
-__webpack_require__(553);
-__webpack_require__(554);
-__webpack_require__(555);
-__webpack_require__(556);
-__webpack_require__(557);
-__webpack_require__(558);
-__webpack_require__(559);
-__webpack_require__(560);
-__webpack_require__(561);
-__webpack_require__(562);
-__webpack_require__(563);
-__webpack_require__(564);
-__webpack_require__(565);
 __webpack_require__(566);
 __webpack_require__(567);
 __webpack_require__(568);
@@ -74478,10 +76782,27 @@ __webpack_require__(715);
 __webpack_require__(716);
 __webpack_require__(717);
 __webpack_require__(718);
+__webpack_require__(719);
+__webpack_require__(720);
+__webpack_require__(721);
+__webpack_require__(722);
+__webpack_require__(723);
+__webpack_require__(724);
+__webpack_require__(725);
+__webpack_require__(726);
+__webpack_require__(727);
+__webpack_require__(728);
+__webpack_require__(729);
+__webpack_require__(730);
+__webpack_require__(731);
+__webpack_require__(732);
+__webpack_require__(733);
+__webpack_require__(734);
+__webpack_require__(735);
 __webpack_require__(903);
 __webpack_require__(896);
 __webpack_require__(1121);
-module.exports = __webpack_require__(719);
+module.exports = __webpack_require__(736);
 
 
 /***/ })
