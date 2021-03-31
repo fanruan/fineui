@@ -1,4 +1,4 @@
-/*! time: 2021-3-31 16:10:29 */
+/*! time: 2021-3-31 23:40:33 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -332,18 +332,6 @@ __webpack_require__(125)(__webpack_require__(126))
 
 __webpack_require__(123);
 __webpack_require__(124);
-__webpack_require__(152);
-__webpack_require__(145);
-__webpack_require__(148);
-__webpack_require__(149);
-__webpack_require__(146);
-__webpack_require__(147);
-__webpack_require__(127);
-__webpack_require__(129);
-__webpack_require__(144);
-__webpack_require__(151);
-__webpack_require__(150);
-__webpack_require__(130);
 __webpack_require__(131);
 __webpack_require__(132);
 __webpack_require__(133);
@@ -353,15 +341,16 @@ __webpack_require__(136);
 __webpack_require__(137);
 __webpack_require__(138);
 __webpack_require__(139);
+__webpack_require__(127);
+__webpack_require__(129);
+__webpack_require__(130);
 __webpack_require__(140);
 __webpack_require__(141);
-__webpack_require__(142);
-__webpack_require__(143);
 __webpack_require__(1104);
 __webpack_require__(1244);
-__webpack_require__(153);
-__webpack_require__(154);
-module.exports = __webpack_require__(155);
+__webpack_require__(142);
+__webpack_require__(143);
+module.exports = __webpack_require__(144);
 
 
 /***/ }),
@@ -2214,4627 +2203,961 @@ if (!_global.BI) {
 /***/ 130:
 /***/ (function(module, exports) {
 
-!(function () {
-    /*
-    CryptoJS v3.1.2
-    code.google.com/p/crypto-js
-    (c) 2009-2013 by Jeff Mott. All rights reserved.
-    code.google.com/p/crypto-js/wiki/License
-    */
-    /**
-     * CryptoJS core components.
-     */
-    BI.CRYPT_TYPE = BI.CRYPT_TYPE || {};
-    BI.CRYPT_TYPE.AES = "aes";
+(function () {
+    var moduleInjection = {};
+    BI.module = BI.module || function (xtype, cls) {
+        if (moduleInjection[xtype] != null) {
+            _global.console && console.error("module:[" + xtype + "] has been registed");
+        }
+        moduleInjection[xtype] = cls;
+    };
 
-    var CryptoJS = CryptoJS || (function (Math, undefined) {
-        /**
-         * CryptoJS namespace.
-         */
-        var C = {};
+    var constantInjection = {};
+    BI.constant = BI.constant || function (xtype, cls) {
+        if (constantInjection[xtype] != null) {
+            _global.console && console.error("constant:[" + xtype + "] has been registed");
+        }
+        constantInjection[xtype] = cls;
+    };
 
-        /**
-         * Library namespace.
-         */
-        var C_lib = C.lib = {};
+    var modelInjection = {};
+    BI.model = BI.model || function (xtype, cls) {
+        if (modelInjection[xtype] != null) {
+            _global.console && console.error("model:[" + xtype + "] has been registed");
+        }
+        modelInjection[xtype] = cls;
+    };
 
-        /**
-         * Base object for prototypal inheritance.
-         */
-        var Base = C_lib.Base = (function () {
-            function F () {
+    var storeInjection = {};
+    BI.store = BI.store || function (xtype, cls) {
+        if (storeInjection[xtype] != null) {
+            _global.console && console.error("store:[" + xtype + "] has been registed");
+        }
+        storeInjection[xtype] = cls;
+    };
+
+    var serviceInjection = {};
+    BI.service = BI.service || function (xtype, cls) {
+        if (serviceInjection[xtype] != null) {
+            _global.console && console.error("service:[" + xtype + "] has been registed");
+        }
+        serviceInjection[xtype] = cls;
+    };
+
+    var providerInjection = {};
+    BI.provider = BI.provider || function (xtype, cls) {
+        if (providerInjection[xtype] != null) {
+            _global.console && console.error("provider:[" + xtype + "] has been registed");
+        }
+        providerInjection[xtype] = cls;
+    };
+
+    var configFunctions = {};
+    BI.config = BI.config || function (type, configFn, opt) {
+        if (BI.initialized) {
+            if (constantInjection[type]) {
+                return (constantInjection[type] = configFn(constantInjection[type]));
             }
-
-            return {
-                /**
-                 * Creates a new object that inherits from this object.
-                 *
-                 * @param {Object} overrides Properties to copy into the new object.
-                 *
-                 * @return {Object} The new object.
-                 *
-                 * @static
-                 *
-                 * @example
-                 *
-                 *     var MyType = CryptoJS.lib.Base.extend({
-                 *         field: 'value',
-                 *
-                 *         method: function () {
-                 *         }
-                 *     });
-                 */
-                extend: function (overrides) {
-                    // Spawn
-                    F.prototype = this;
-                    var subtype = new F();
-
-                    // Augment
-                    if (overrides) {
-                        subtype.mixIn(overrides);
+            if (providerInjection[type]) {
+                if (!providers[type]) {
+                    providers[type] = new providerInjection[type]();
+                }
+                // 如果config被重新配置的话，需要删除掉之前的实例
+                if (providerInstance[type]) {
+                    delete providerInstance[type];
+                }
+                return configFn(providers[type]);
+            }
+            return BI.Plugin.configWidget(type, configFn, opt);
+        }
+        if (!configFunctions[type]) {
+            configFunctions[type] = [];
+            BI.prepares.push(function () {
+                var queue = configFunctions[type];
+                for (var i = 0; i < queue.length; i++) {
+                    if (constantInjection[type]) {
+                        constantInjection[type] = queue[i](constantInjection[type]);
+                        continue;
                     }
-
-                    // Create default initializer
-                    if (!subtype.hasOwnProperty('init')) {
-                        subtype.init = function () {
-                            subtype.$super.init.apply(this, arguments);
-                        };
-                    }
-
-                    // Initializer's prototype is the subtype object
-                    subtype.init.prototype = subtype;
-
-                    // Reference supertype
-                    subtype.$super = this;
-
-                    return subtype;
-                },
-
-                /**
-                 * Extends this object and runs the init method.
-                 * Arguments to create() will be passed to init().
-                 *
-                 * @return {Object} The new object.
-                 *
-                 * @static
-                 *
-                 * @example
-                 *
-                 *     var instance = MyType.create();
-                 */
-                create: function () {
-                    var instance = this.extend();
-                    instance.init.apply(instance, arguments);
-
-                    return instance;
-                },
-
-                /**
-                 * Initializes a newly created object.
-                 * Override this method to add some logic when your objects are created.
-                 *
-                 * @example
-                 *
-                 *     var MyType = CryptoJS.lib.Base.extend({
-                 *         init: function () {
-                 *             // ...
-                 *         }
-                 *     });
-                 */
-                init: function () {
-                },
-
-                /**
-                 * Copies properties into this object.
-                 *
-                 * @param {Object} properties The properties to mix in.
-                 *
-                 * @example
-                 *
-                 *     MyType.mixIn({
-                 *         field: 'value'
-                 *     });
-                 */
-                mixIn: function (properties) {
-                    for (var propertyName in properties) {
-                        if (properties.hasOwnProperty(propertyName)) {
-                            this[propertyName] = properties[propertyName];
+                    if (providerInjection[type]) {
+                        if (!providers[type]) {
+                            providers[type] = new providerInjection[type]();
                         }
-                    }
-
-                    // IE won't copy toString using the loop above
-                    if (properties.hasOwnProperty('toString')) {
-                        this.toString = properties.toString;
-                    }
-                },
-
-                /**
-                 * Creates a copy of this object.
-                 *
-                 * @return {Object} The clone.
-                 *
-                 * @example
-                 *
-                 *     var clone = instance.clone();
-                 */
-                clone: function () {
-                    return this.init.prototype.extend(this);
-                }
-            };
-        }());
-
-        /**
-         * An array of 32-bit words.
-         *
-         * @property {Array} words The array of 32-bit words.
-         * @property {number} sigBytes The number of significant bytes in this word array.
-         */
-        var WordArray = C_lib.WordArray = Base.extend({
-            /**
-             * Initializes a newly created word array.
-             *
-             * @param {Array} words (Optional) An array of 32-bit words.
-             * @param {number} sigBytes (Optional) The number of significant bytes in the words.
-             *
-             * @example
-             *
-             *     var wordArray = CryptoJS.lib.WordArray.create();
-             *     var wordArray = CryptoJS.lib.WordArray.create([0x00010203, 0x04050607]);
-             *     var wordArray = CryptoJS.lib.WordArray.create([0x00010203, 0x04050607], 6);
-             */
-            init: function (words, sigBytes) {
-                words = this.words = words || [];
-
-                if (sigBytes != undefined) {
-                    this.sigBytes = sigBytes;
-                } else {
-                    this.sigBytes = words.length * 4;
-                }
-            },
-
-            /**
-             * Converts this word array to a string.
-             *
-             * @param {Encoder} encoder (Optional) The encoding strategy to use. Default: CryptoJS.enc.Hex
-             *
-             * @return {string} The stringified word array.
-             *
-             * @example
-             *
-             *     var string = wordArray + '';
-             *     var string = wordArray.toString();
-             *     var string = wordArray.toString(CryptoJS.enc.Utf8);
-             */
-            toString: function (encoder) {
-                return (encoder || Hex).stringify(this);
-            },
-
-            /**
-             * Concatenates a word array to this word array.
-             *
-             * @param {WordArray} wordArray The word array to append.
-             *
-             * @return {WordArray} This word array.
-             *
-             * @example
-             *
-             *     wordArray1.concat(wordArray2);
-             */
-            concat: function (wordArray) {
-                // Shortcuts
-                var thisWords = this.words;
-                var thatWords = wordArray.words;
-                var thisSigBytes = this.sigBytes;
-                var thatSigBytes = wordArray.sigBytes;
-
-                // Clamp excess bits
-                this.clamp();
-
-                // Concat
-                if (thisSigBytes % 4) {
-                    // Copy one byte at a time
-                    for (var i = 0; i < thatSigBytes; i++) {
-                        var thatByte = (thatWords[i >>> 2] >>> (24 - (i % 4) * 8)) & 0xff;
-                        thisWords[(thisSigBytes + i) >>> 2] |= thatByte << (24 - ((thisSigBytes + i) % 4) * 8);
-                    }
-                } else if (thatWords.length > 0xffff) {
-                    // Copy one word at a time
-                    for (var i = 0; i < thatSigBytes; i += 4) {
-                        thisWords[(thisSigBytes + i) >>> 2] = thatWords[i >>> 2];
-                    }
-                } else {
-                    // Copy all words at once
-                    thisWords.push.apply(thisWords, thatWords);
-                }
-                this.sigBytes += thatSigBytes;
-
-                // Chainable
-                return this;
-            },
-
-            /**
-             * Removes insignificant bits.
-             *
-             * @example
-             *
-             *     wordArray.clamp();
-             */
-            clamp: function () {
-                // Shortcuts
-                var words = this.words;
-                var sigBytes = this.sigBytes;
-
-                // Clamp
-                words[sigBytes >>> 2] &= 0xffffffff << (32 - (sigBytes % 4) * 8);
-                words.length = Math.ceil(sigBytes / 4);
-            },
-
-            /**
-             * Creates a copy of this word array.
-             *
-             * @return {WordArray} The clone.
-             *
-             * @example
-             *
-             *     var clone = wordArray.clone();
-             */
-            clone: function () {
-                var clone = Base.clone.call(this);
-                clone.words = this.words.slice(0);
-
-                return clone;
-            },
-
-            /**
-             * Creates a word array filled with random bytes.
-             *
-             * @param {number} nBytes The number of random bytes to generate.
-             *
-             * @return {WordArray} The random word array.
-             *
-             * @static
-             *
-             * @example
-             *
-             *     var wordArray = CryptoJS.lib.WordArray.random(16);
-             */
-            random: function (nBytes) {
-                var words = [];
-                for (var i = 0; i < nBytes; i += 4) {
-                    words.push((Math.random() * 0x100000000) | 0);
-                }
-
-                return new WordArray.init(words, nBytes);
-            }
-        });
-
-        /**
-         * Encoder namespace.
-         */
-        var C_enc = C.enc = {};
-
-        /**
-         * Hex encoding strategy.
-         */
-        var Hex = C_enc.Hex = {
-            /**
-             * Converts a word array to a hex string.
-             *
-             * @param {WordArray} wordArray The word array.
-             *
-             * @return {string} The hex string.
-             *
-             * @static
-             *
-             * @example
-             *
-             *     var hexString = CryptoJS.enc.Hex.stringify(wordArray);
-             */
-            stringify: function (wordArray) {
-                // Shortcuts
-                var words = wordArray.words;
-                var sigBytes = wordArray.sigBytes;
-
-                // Convert
-                var hexChars = [];
-                for (var i = 0; i < sigBytes; i++) {
-                    var bite = (words[i >>> 2] >>> (24 - (i % 4) * 8)) & 0xff;
-                    hexChars.push((bite >>> 4).toString(16));
-                    hexChars.push((bite & 0x0f).toString(16));
-                }
-
-                return hexChars.join('');
-            },
-
-            /**
-             * Converts a hex string to a word array.
-             *
-             * @param {string} hexStr The hex string.
-             *
-             * @return {WordArray} The word array.
-             *
-             * @static
-             *
-             * @example
-             *
-             *     var wordArray = CryptoJS.enc.Hex.parse(hexString);
-             */
-            parse: function (hexStr) {
-                // Shortcut
-                var hexStrLength = hexStr.length;
-
-                // Convert
-                var words = [];
-                for (var i = 0; i < hexStrLength; i += 2) {
-                    words[i >>> 3] |= parseInt(hexStr.substr(i, 2), 16) << (24 - (i % 8) * 4);
-                }
-
-                return new WordArray.init(words, hexStrLength / 2);
-            }
-        };
-
-        /**
-         * Latin1 encoding strategy.
-         */
-        var Latin1 = C_enc.Latin1 = {
-            /**
-             * Converts a word array to a Latin1 string.
-             *
-             * @param {WordArray} wordArray The word array.
-             *
-             * @return {string} The Latin1 string.
-             *
-             * @static
-             *
-             * @example
-             *
-             *     var latin1String = CryptoJS.enc.Latin1.stringify(wordArray);
-             */
-            stringify: function (wordArray) {
-                // Shortcuts
-                var words = wordArray.words;
-                var sigBytes = wordArray.sigBytes;
-
-                // Convert
-                var latin1Chars = [];
-                for (var i = 0; i < sigBytes; i++) {
-                    var bite = (words[i >>> 2] >>> (24 - (i % 4) * 8)) & 0xff;
-                    latin1Chars.push(String.fromCharCode(bite));
-                }
-
-                return latin1Chars.join('');
-            },
-
-            /**
-             * Converts a Latin1 string to a word array.
-             *
-             * @param {string} latin1Str The Latin1 string.
-             *
-             * @return {WordArray} The word array.
-             *
-             * @static
-             *
-             * @example
-             *
-             *     var wordArray = CryptoJS.enc.Latin1.parse(latin1String);
-             */
-            parse: function (latin1Str) {
-                // Shortcut
-                var latin1StrLength = latin1Str.length;
-
-                // Convert
-                var words = [];
-                for (var i = 0; i < latin1StrLength; i++) {
-                    words[i >>> 2] |= (latin1Str.charCodeAt(i) & 0xff) << (24 - (i % 4) * 8);
-                }
-
-                return new WordArray.init(words, latin1StrLength);
-            }
-        };
-
-        /**
-         * UTF-8 encoding strategy.
-         */
-        var Utf8 = C_enc.Utf8 = {
-            /**
-             * Converts a word array to a UTF-8 string.
-             *
-             * @param {WordArray} wordArray The word array.
-             *
-             * @return {string} The UTF-8 string.
-             *
-             * @static
-             *
-             * @example
-             *
-             *     var utf8String = CryptoJS.enc.Utf8.stringify(wordArray);
-             */
-            stringify: function (wordArray) {
-                try {
-                    return decodeURIComponent(escape(Latin1.stringify(wordArray)));
-                } catch (e) {
-                    throw new Error('Malformed UTF-8 data');
-                }
-            },
-
-            /**
-             * Converts a UTF-8 string to a word array.
-             *
-             * @param {string} utf8Str The UTF-8 string.
-             *
-             * @return {WordArray} The word array.
-             *
-             * @static
-             *
-             * @example
-             *
-             *     var wordArray = CryptoJS.enc.Utf8.parse(utf8String);
-             */
-            parse: function (utf8Str) {
-                return Latin1.parse(unescape(encodeURIComponent(utf8Str)));
-            }
-        };
-
-        /**
-         * Abstract buffered block algorithm template.
-         *
-         * The property blockSize must be implemented in a concrete subtype.
-         *
-         * @property {number} _minBufferSize The number of blocks that should be kept unprocessed in the buffer. Default: 0
-         */
-        var BufferedBlockAlgorithm = C_lib.BufferedBlockAlgorithm = Base.extend({
-            /**
-             * Resets this block algorithm's data buffer to its initial state.
-             *
-             * @example
-             *
-             *     bufferedBlockAlgorithm.reset();
-             */
-            reset: function () {
-                // Initial values
-                this._data = new WordArray.init();
-                this._nDataBytes = 0;
-            },
-
-            /**
-             * Adds new data to this block algorithm's buffer.
-             *
-             * @param {WordArray|string} data The data to append. Strings are converted to a WordArray using UTF-8.
-             *
-             * @example
-             *
-             *     bufferedBlockAlgorithm._append('data');
-             *     bufferedBlockAlgorithm._append(wordArray);
-             */
-            _append: function (data) {
-                // Convert string to WordArray, else assume WordArray already
-                if (typeof data == 'string') {
-                    data = Utf8.parse(data);
-                }
-
-                // Append
-                this._data.concat(data);
-                this._nDataBytes += data.sigBytes;
-            },
-
-            /**
-             * Processes available data blocks.
-             *
-             * This method invokes _doProcessBlock(offset), which must be implemented by a concrete subtype.
-             *
-             * @param {boolean} doFlush Whether all blocks and partial blocks should be processed.
-             *
-             * @return {WordArray} The processed data.
-             *
-             * @example
-             *
-             *     var processedData = bufferedBlockAlgorithm._process();
-             *     var processedData = bufferedBlockAlgorithm._process(!!'flush');
-             */
-            _process: function (doFlush) {
-                // Shortcuts
-                var data = this._data;
-                var dataWords = data.words;
-                var dataSigBytes = data.sigBytes;
-                var blockSize = this.blockSize;
-                var blockSizeBytes = blockSize * 4;
-
-                // Count blocks ready
-                var nBlocksReady = dataSigBytes / blockSizeBytes;
-                if (doFlush) {
-                    // Round up to include partial blocks
-                    nBlocksReady = Math.ceil(nBlocksReady);
-                } else {
-                    // Round down to include only full blocks,
-                    // less the number of blocks that must remain in the buffer
-                    nBlocksReady = Math.max((nBlocksReady | 0) - this._minBufferSize, 0);
-                }
-
-                // Count words ready
-                var nWordsReady = nBlocksReady * blockSize;
-
-                // Count bytes ready
-                var nBytesReady = Math.min(nWordsReady * 4, dataSigBytes);
-
-                // Process blocks
-                if (nWordsReady) {
-                    for (var offset = 0; offset < nWordsReady; offset += blockSize) {
-                        // Perform concrete-algorithm logic
-                        this._doProcessBlock(dataWords, offset);
-                    }
-
-                    // Remove processed words
-                    var processedWords = dataWords.splice(0, nWordsReady);
-                    data.sigBytes -= nBytesReady;
-                }
-
-                // Return processed words
-                return new WordArray.init(processedWords, nBytesReady);
-            },
-
-            /**
-             * Creates a copy of this object.
-             *
-             * @return {Object} The clone.
-             *
-             * @example
-             *
-             *     var clone = bufferedBlockAlgorithm.clone();
-             */
-            clone: function () {
-                var clone = Base.clone.call(this);
-                clone._data = this._data.clone();
-
-                return clone;
-            },
-
-            _minBufferSize: 0
-        });
-
-        /**
-         * Abstract hasher template.
-         *
-         * @property {number} blockSize The number of 32-bit words this hasher operates on. Default: 16 (512 bits)
-         */
-        var Hasher = C_lib.Hasher = BufferedBlockAlgorithm.extend({
-            /**
-             * Configuration options.
-             */
-            cfg: Base.extend(),
-
-            /**
-             * Initializes a newly created hasher.
-             *
-             * @param {Object} cfg (Optional) The configuration options to use for this hash computation.
-             *
-             * @example
-             *
-             *     var hasher = CryptoJS.algo.SHA256.create();
-             */
-            init: function (cfg) {
-                // Apply config defaults
-                this.cfg = this.cfg.extend(cfg);
-
-                // Set initial values
-                this.reset();
-            },
-
-            /**
-             * Resets this hasher to its initial state.
-             *
-             * @example
-             *
-             *     hasher.reset();
-             */
-            reset: function () {
-                // Reset data buffer
-                BufferedBlockAlgorithm.reset.call(this);
-
-                // Perform concrete-hasher logic
-                this._doReset();
-            },
-
-            /**
-             * Updates this hasher with a message.
-             *
-             * @param {WordArray|string} messageUpdate The message to append.
-             *
-             * @return {Hasher} This hasher.
-             *
-             * @example
-             *
-             *     hasher.update('message');
-             *     hasher.update(wordArray);
-             */
-            update: function (messageUpdate) {
-                // Append
-                this._append(messageUpdate);
-
-                // Update the hash
-                this._process();
-
-                // Chainable
-                return this;
-            },
-
-            /**
-             * Finalizes the hash computation.
-             * Note that the finalize operation is effectively a destructive, read-once operation.
-             *
-             * @param {WordArray|string} messageUpdate (Optional) A final message update.
-             *
-             * @return {WordArray} The hash.
-             *
-             * @example
-             *
-             *     var hash = hasher.finalize();
-             *     var hash = hasher.finalize('message');
-             *     var hash = hasher.finalize(wordArray);
-             */
-            finalize: function (messageUpdate) {
-                // Final message update
-                if (messageUpdate) {
-                    this._append(messageUpdate);
-                }
-
-                // Perform concrete-hasher logic
-                var hash = this._doFinalize();
-
-                return hash;
-            },
-
-            blockSize: 512 / 32,
-
-            /**
-             * Creates a shortcut function to a hasher's object interface.
-             *
-             * @param {Hasher} hasher The hasher to create a helper for.
-             *
-             * @return {Function} The shortcut function.
-             *
-             * @static
-             *
-             * @example
-             *
-             *     var SHA256 = CryptoJS.lib.Hasher._createHelper(CryptoJS.algo.SHA256);
-             */
-            _createHelper: function (hasher) {
-                return function (message, cfg) {
-                    return new hasher.init(cfg).finalize(message);
-                };
-            },
-
-            /**
-             * Creates a shortcut function to the HMAC's object interface.
-             *
-             * @param {Hasher} hasher The hasher to use in this HMAC helper.
-             *
-             * @return {Function} The shortcut function.
-             *
-             * @static
-             *
-             * @example
-             *
-             *     var HmacSHA256 = CryptoJS.lib.Hasher._createHmacHelper(CryptoJS.algo.SHA256);
-             */
-            _createHmacHelper: function (hasher) {
-                return function (message, key) {
-                    return new C_algo.HMAC.init(hasher, key).finalize(message);
-                };
-            }
-        });
-
-        /**
-         * Algorithm namespace.
-         */
-        var C_algo = C.algo = {};
-
-        return C;
-    }(Math));
-
-    /*
-    CryptoJS v3.1.2
-    code.google.com/p/crypto-js
-    (c) 2009-2013 by Jeff Mott. All rights reserved.
-    code.google.com/p/crypto-js/wiki/License
-    */
-    (function () {
-        // Shortcuts
-        var C = CryptoJS;
-        var C_lib = C.lib;
-        var WordArray = C_lib.WordArray;
-        var C_enc = C.enc;
-
-        /**
-         * Base64 encoding strategy.
-         */
-        var Base64 = C_enc.Base64 = {
-            /**
-             * Converts a word array to a Base64 string.
-             *
-             * @param {WordArray} wordArray The word array.
-             *
-             * @return {string} The Base64 string.
-             *
-             * @static
-             *
-             * @example
-             *
-             *     var base64String = CryptoJS.enc.Base64.stringify(wordArray);
-             */
-            stringify: function (wordArray) {
-                // Shortcuts
-                var words = wordArray.words;
-                var sigBytes = wordArray.sigBytes;
-                var map = this._map;
-
-                // Clamp excess bits
-                wordArray.clamp();
-
-                // Convert
-                var base64Chars = [];
-                for (var i = 0; i < sigBytes; i += 3) {
-                    var byte1 = (words[i >>> 2] >>> (24 - (i % 4) * 8)) & 0xff;
-                    var byte2 = (words[(i + 1) >>> 2] >>> (24 - ((i + 1) % 4) * 8)) & 0xff;
-                    var byte3 = (words[(i + 2) >>> 2] >>> (24 - ((i + 2) % 4) * 8)) & 0xff;
-
-                    var triplet = (byte1 << 16) | (byte2 << 8) | byte3;
-
-                    for (var j = 0; (j < 4) && (i + j * 0.75 < sigBytes); j++) {
-                        base64Chars.push(map.charAt((triplet >>> (6 * (3 - j))) & 0x3f));
-                    }
-                }
-
-                // Add padding
-                var paddingChar = map.charAt(64);
-                if (paddingChar) {
-                    while (base64Chars.length % 4) {
-                        base64Chars.push(paddingChar);
-                    }
-                }
-
-                return base64Chars.join('');
-            },
-
-            /**
-             * Converts a Base64 string to a word array.
-             *
-             * @param {string} base64Str The Base64 string.
-             *
-             * @return {WordArray} The word array.
-             *
-             * @static
-             *
-             * @example
-             *
-             *     var wordArray = CryptoJS.enc.Base64.parse(base64String);
-             */
-            parse: function (base64Str) {
-                // Shortcuts
-                var base64StrLength = base64Str.length;
-                var map = this._map;
-
-                // Ignore padding
-                var paddingChar = map.charAt(64);
-                if (paddingChar) {
-                    var paddingIndex = base64Str.indexOf(paddingChar);
-                    if (paddingIndex != -1) {
-                        base64StrLength = paddingIndex;
-                    }
-                }
-
-                // Convert
-                var words = [];
-                var nBytes = 0;
-                for (var i = 0; i < base64StrLength; i++) {
-                    if (i % 4) {
-                        var bits1 = map.indexOf(base64Str.charAt(i - 1)) << ((i % 4) * 2);
-                        var bits2 = map.indexOf(base64Str.charAt(i)) >>> (6 - (i % 4) * 2);
-                        words[nBytes >>> 2] |= (bits1 | bits2) << (24 - (nBytes % 4) * 8);
-                        nBytes++;
-                    }
-                }
-
-                return WordArray.create(words, nBytes);
-            },
-
-            _map: 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/='
-        };
-    }());
-
-    /*
-    CryptoJS v3.1.2
-    code.google.com/p/crypto-js
-    (c) 2009-2013 by Jeff Mott. All rights reserved.
-    code.google.com/p/crypto-js/wiki/License
-    */
-    (function (Math) {
-        // Shortcuts
-        var C = CryptoJS;
-        var C_lib = C.lib;
-        var WordArray = C_lib.WordArray;
-        var Hasher = C_lib.Hasher;
-        var C_algo = C.algo;
-
-        // Constants table
-        var T = [];
-
-        // Compute constants
-        (function () {
-            for (var i = 0; i < 64; i++) {
-                T[i] = (Math.abs(Math.sin(i + 1)) * 0x100000000) | 0;
-            }
-        }());
-
-        /**
-         * MD5 hash algorithm.
-         */
-        var MD5 = C_algo.MD5 = Hasher.extend({
-            _doReset: function () {
-                this._hash = new WordArray.init([
-                    0x67452301, 0xefcdab89,
-                    0x98badcfe, 0x10325476
-                ]);
-            },
-
-            _doProcessBlock: function (M, offset) {
-                // Swap endian
-                for (var i = 0; i < 16; i++) {
-                    // Shortcuts
-                    var offset_i = offset + i;
-                    var M_offset_i = M[offset_i];
-
-                    M[offset_i] = (
-                        (((M_offset_i << 8) | (M_offset_i >>> 24)) & 0x00ff00ff) |
-                        (((M_offset_i << 24) | (M_offset_i >>> 8)) & 0xff00ff00)
-                    );
-                }
-
-                // Shortcuts
-                var H = this._hash.words;
-
-                var M_offset_0 = M[offset + 0];
-                var M_offset_1 = M[offset + 1];
-                var M_offset_2 = M[offset + 2];
-                var M_offset_3 = M[offset + 3];
-                var M_offset_4 = M[offset + 4];
-                var M_offset_5 = M[offset + 5];
-                var M_offset_6 = M[offset + 6];
-                var M_offset_7 = M[offset + 7];
-                var M_offset_8 = M[offset + 8];
-                var M_offset_9 = M[offset + 9];
-                var M_offset_10 = M[offset + 10];
-                var M_offset_11 = M[offset + 11];
-                var M_offset_12 = M[offset + 12];
-                var M_offset_13 = M[offset + 13];
-                var M_offset_14 = M[offset + 14];
-                var M_offset_15 = M[offset + 15];
-
-                // Working varialbes
-                var a = H[0];
-                var b = H[1];
-                var c = H[2];
-                var d = H[3];
-
-                // Computation
-                a = FF(a, b, c, d, M_offset_0, 7, T[0]);
-                d = FF(d, a, b, c, M_offset_1, 12, T[1]);
-                c = FF(c, d, a, b, M_offset_2, 17, T[2]);
-                b = FF(b, c, d, a, M_offset_3, 22, T[3]);
-                a = FF(a, b, c, d, M_offset_4, 7, T[4]);
-                d = FF(d, a, b, c, M_offset_5, 12, T[5]);
-                c = FF(c, d, a, b, M_offset_6, 17, T[6]);
-                b = FF(b, c, d, a, M_offset_7, 22, T[7]);
-                a = FF(a, b, c, d, M_offset_8, 7, T[8]);
-                d = FF(d, a, b, c, M_offset_9, 12, T[9]);
-                c = FF(c, d, a, b, M_offset_10, 17, T[10]);
-                b = FF(b, c, d, a, M_offset_11, 22, T[11]);
-                a = FF(a, b, c, d, M_offset_12, 7, T[12]);
-                d = FF(d, a, b, c, M_offset_13, 12, T[13]);
-                c = FF(c, d, a, b, M_offset_14, 17, T[14]);
-                b = FF(b, c, d, a, M_offset_15, 22, T[15]);
-
-                a = GG(a, b, c, d, M_offset_1, 5, T[16]);
-                d = GG(d, a, b, c, M_offset_6, 9, T[17]);
-                c = GG(c, d, a, b, M_offset_11, 14, T[18]);
-                b = GG(b, c, d, a, M_offset_0, 20, T[19]);
-                a = GG(a, b, c, d, M_offset_5, 5, T[20]);
-                d = GG(d, a, b, c, M_offset_10, 9, T[21]);
-                c = GG(c, d, a, b, M_offset_15, 14, T[22]);
-                b = GG(b, c, d, a, M_offset_4, 20, T[23]);
-                a = GG(a, b, c, d, M_offset_9, 5, T[24]);
-                d = GG(d, a, b, c, M_offset_14, 9, T[25]);
-                c = GG(c, d, a, b, M_offset_3, 14, T[26]);
-                b = GG(b, c, d, a, M_offset_8, 20, T[27]);
-                a = GG(a, b, c, d, M_offset_13, 5, T[28]);
-                d = GG(d, a, b, c, M_offset_2, 9, T[29]);
-                c = GG(c, d, a, b, M_offset_7, 14, T[30]);
-                b = GG(b, c, d, a, M_offset_12, 20, T[31]);
-
-                a = HH(a, b, c, d, M_offset_5, 4, T[32]);
-                d = HH(d, a, b, c, M_offset_8, 11, T[33]);
-                c = HH(c, d, a, b, M_offset_11, 16, T[34]);
-                b = HH(b, c, d, a, M_offset_14, 23, T[35]);
-                a = HH(a, b, c, d, M_offset_1, 4, T[36]);
-                d = HH(d, a, b, c, M_offset_4, 11, T[37]);
-                c = HH(c, d, a, b, M_offset_7, 16, T[38]);
-                b = HH(b, c, d, a, M_offset_10, 23, T[39]);
-                a = HH(a, b, c, d, M_offset_13, 4, T[40]);
-                d = HH(d, a, b, c, M_offset_0, 11, T[41]);
-                c = HH(c, d, a, b, M_offset_3, 16, T[42]);
-                b = HH(b, c, d, a, M_offset_6, 23, T[43]);
-                a = HH(a, b, c, d, M_offset_9, 4, T[44]);
-                d = HH(d, a, b, c, M_offset_12, 11, T[45]);
-                c = HH(c, d, a, b, M_offset_15, 16, T[46]);
-                b = HH(b, c, d, a, M_offset_2, 23, T[47]);
-
-                a = II(a, b, c, d, M_offset_0, 6, T[48]);
-                d = II(d, a, b, c, M_offset_7, 10, T[49]);
-                c = II(c, d, a, b, M_offset_14, 15, T[50]);
-                b = II(b, c, d, a, M_offset_5, 21, T[51]);
-                a = II(a, b, c, d, M_offset_12, 6, T[52]);
-                d = II(d, a, b, c, M_offset_3, 10, T[53]);
-                c = II(c, d, a, b, M_offset_10, 15, T[54]);
-                b = II(b, c, d, a, M_offset_1, 21, T[55]);
-                a = II(a, b, c, d, M_offset_8, 6, T[56]);
-                d = II(d, a, b, c, M_offset_15, 10, T[57]);
-                c = II(c, d, a, b, M_offset_6, 15, T[58]);
-                b = II(b, c, d, a, M_offset_13, 21, T[59]);
-                a = II(a, b, c, d, M_offset_4, 6, T[60]);
-                d = II(d, a, b, c, M_offset_11, 10, T[61]);
-                c = II(c, d, a, b, M_offset_2, 15, T[62]);
-                b = II(b, c, d, a, M_offset_9, 21, T[63]);
-
-                // Intermediate hash value
-                H[0] = (H[0] + a) | 0;
-                H[1] = (H[1] + b) | 0;
-                H[2] = (H[2] + c) | 0;
-                H[3] = (H[3] + d) | 0;
-            },
-
-            _doFinalize: function () {
-                // Shortcuts
-                var data = this._data;
-                var dataWords = data.words;
-
-                var nBitsTotal = this._nDataBytes * 8;
-                var nBitsLeft = data.sigBytes * 8;
-
-                // Add padding
-                dataWords[nBitsLeft >>> 5] |= 0x80 << (24 - nBitsLeft % 32);
-
-                var nBitsTotalH = Math.floor(nBitsTotal / 0x100000000);
-                var nBitsTotalL = nBitsTotal;
-                dataWords[(((nBitsLeft + 64) >>> 9) << 4) + 15] = (
-                    (((nBitsTotalH << 8) | (nBitsTotalH >>> 24)) & 0x00ff00ff) |
-                    (((nBitsTotalH << 24) | (nBitsTotalH >>> 8)) & 0xff00ff00)
-                );
-                dataWords[(((nBitsLeft + 64) >>> 9) << 4) + 14] = (
-                    (((nBitsTotalL << 8) | (nBitsTotalL >>> 24)) & 0x00ff00ff) |
-                    (((nBitsTotalL << 24) | (nBitsTotalL >>> 8)) & 0xff00ff00)
-                );
-
-                data.sigBytes = (dataWords.length + 1) * 4;
-
-                // Hash final blocks
-                this._process();
-
-                // Shortcuts
-                var hash = this._hash;
-                var H = hash.words;
-
-                // Swap endian
-                for (var i = 0; i < 4; i++) {
-                    // Shortcut
-                    var H_i = H[i];
-
-                    H[i] = (((H_i << 8) | (H_i >>> 24)) & 0x00ff00ff) |
-                        (((H_i << 24) | (H_i >>> 8)) & 0xff00ff00);
-                }
-
-                // Return final computed hash
-                return hash;
-            },
-
-            clone: function () {
-                var clone = Hasher.clone.call(this);
-                clone._hash = this._hash.clone();
-
-                return clone;
-            }
-        });
-
-        function FF (a, b, c, d, x, s, t) {
-            var n = a + ((b & c) | (~b & d)) + x + t;
-            return ((n << s) | (n >>> (32 - s))) + b;
-        }
-
-        function GG (a, b, c, d, x, s, t) {
-            var n = a + ((b & d) | (c & ~d)) + x + t;
-            return ((n << s) | (n >>> (32 - s))) + b;
-        }
-
-        function HH (a, b, c, d, x, s, t) {
-            var n = a + (b ^ c ^ d) + x + t;
-            return ((n << s) | (n >>> (32 - s))) + b;
-        }
-
-        function II (a, b, c, d, x, s, t) {
-            var n = a + (c ^ (b | ~d)) + x + t;
-            return ((n << s) | (n >>> (32 - s))) + b;
-        }
-
-        /**
-         * Shortcut function to the hasher's object interface.
-         *
-         * @param {WordArray|string} message The message to hash.
-         *
-         * @return {WordArray} The hash.
-         *
-         * @static
-         *
-         * @example
-         *
-         *     var hash = CryptoJS.MD5('message');
-         *     var hash = CryptoJS.MD5(wordArray);
-         */
-        C.MD5 = Hasher._createHelper(MD5);
-
-        /**
-         * Shortcut function to the HMAC's object interface.
-         *
-         * @param {WordArray|string} message The message to hash.
-         * @param {WordArray|string} key The secret key.
-         *
-         * @return {WordArray} The HMAC.
-         *
-         * @static
-         *
-         * @example
-         *
-         *     var hmac = CryptoJS.HmacMD5(message, key);
-         */
-        C.HmacMD5 = Hasher._createHmacHelper(MD5);
-    }(Math));
-
-    /*
-    CryptoJS v3.1.2
-    code.google.com/p/crypto-js
-    (c) 2009-2013 by Jeff Mott. All rights reserved.
-    code.google.com/p/crypto-js/wiki/License
-    */
-    (function () {
-        // Shortcuts
-        var C = CryptoJS;
-        var C_lib = C.lib;
-        var Base = C_lib.Base;
-        var WordArray = C_lib.WordArray;
-        var C_algo = C.algo;
-        var MD5 = C_algo.MD5;
-
-        /**
-         * This key derivation function is meant to conform with EVP_BytesToKey.
-         * www.openssl.org/docs/crypto/EVP_BytesToKey.html
-         */
-        var EvpKDF = C_algo.EvpKDF = Base.extend({
-            /**
-             * Configuration options.
-             *
-             * @property {number} keySize The key size in words to generate. Default: 4 (128 bits)
-             * @property {Hasher} hasher The hash algorithm to use. Default: MD5
-             * @property {number} iterations The number of iterations to perform. Default: 1
-             */
-            cfg: Base.extend({
-                keySize: 128 / 32,
-                hasher: MD5,
-                iterations: 1
-            }),
-
-            /**
-             * Initializes a newly created key derivation function.
-             *
-             * @param {Object} cfg (Optional) The configuration options to use for the derivation.
-             *
-             * @example
-             *
-             *     var kdf = CryptoJS.algo.EvpKDF.create();
-             *     var kdf = CryptoJS.algo.EvpKDF.create({ keySize: 8 });
-             *     var kdf = CryptoJS.algo.EvpKDF.create({ keySize: 8, iterations: 1000 });
-             */
-            init: function (cfg) {
-                this.cfg = this.cfg.extend(cfg);
-            },
-
-            /**
-             * Derives a key from a password.
-             *
-             * @param {WordArray|string} password The password.
-             * @param {WordArray|string} salt A salt.
-             *
-             * @return {WordArray} The derived key.
-             *
-             * @example
-             *
-             *     var key = kdf.compute(password, salt);
-             */
-            compute: function (password, salt) {
-                // Shortcut
-                var cfg = this.cfg;
-
-                // Init hasher
-                var hasher = cfg.hasher.create();
-
-                // Initial values
-                var derivedKey = WordArray.create();
-
-                // Shortcuts
-                var derivedKeyWords = derivedKey.words;
-                var keySize = cfg.keySize;
-                var iterations = cfg.iterations;
-
-                // Generate key
-                while (derivedKeyWords.length < keySize) {
-                    if (block) {
-                        hasher.update(block);
-                    }
-                    var block = hasher.update(password).finalize(salt);
-                    hasher.reset();
-
-                    // Iterations
-                    for (var i = 1; i < iterations; i++) {
-                        block = hasher.finalize(block);
-                        hasher.reset();
-                    }
-
-                    derivedKey.concat(block);
-                }
-                derivedKey.sigBytes = keySize * 4;
-
-                return derivedKey;
-            }
-        });
-
-        /**
-         * Derives a key from a password.
-         *
-         * @param {WordArray|string} password The password.
-         * @param {WordArray|string} salt A salt.
-         * @param {Object} cfg (Optional) The configuration options to use for this computation.
-         *
-         * @return {WordArray} The derived key.
-         *
-         * @static
-         *
-         * @example
-         *
-         *     var key = CryptoJS.EvpKDF(password, salt);
-         *     var key = CryptoJS.EvpKDF(password, salt, { keySize: 8 });
-         *     var key = CryptoJS.EvpKDF(password, salt, { keySize: 8, iterations: 1000 });
-         */
-        C.EvpKDF = function (password, salt, cfg) {
-            return EvpKDF.create(cfg).compute(password, salt);
-        };
-    }());
-
-
-    /*
-    CryptoJS v3.1.2
-    code.google.com/p/crypto-js
-    (c) 2009-2013 by Jeff Mott. All rights reserved.
-    code.google.com/p/crypto-js/wiki/License
-    */
-    /**
-     * Cipher core components.
-     */
-    CryptoJS.lib.Cipher || (function (undefined) {
-        // Shortcuts
-        var C = CryptoJS;
-        var C_lib = C.lib;
-        var Base = C_lib.Base;
-        var WordArray = C_lib.WordArray;
-        var BufferedBlockAlgorithm = C_lib.BufferedBlockAlgorithm;
-        var C_enc = C.enc;
-        var Utf8 = C_enc.Utf8;
-        var Base64 = C_enc.Base64;
-        var C_algo = C.algo;
-        var EvpKDF = C_algo.EvpKDF;
-
-        /**
-         * Abstract base cipher template.
-         *
-         * @property {number} keySize This cipher's key size. Default: 4 (128 bits)
-         * @property {number} ivSize This cipher's IV size. Default: 4 (128 bits)
-         * @property {number} _ENC_XFORM_MODE A constant representing encryption mode.
-         * @property {number} _DEC_XFORM_MODE A constant representing decryption mode.
-         */
-        var Cipher = C_lib.Cipher = BufferedBlockAlgorithm.extend({
-            /**
-             * Configuration options.
-             *
-             * @property {WordArray} iv The IV to use for this operation.
-             */
-            cfg: Base.extend(),
-
-            /**
-             * Creates this cipher in encryption mode.
-             *
-             * @param {WordArray} key The key.
-             * @param {Object} cfg (Optional) The configuration options to use for this operation.
-             *
-             * @return {Cipher} A cipher instance.
-             *
-             * @static
-             *
-             * @example
-             *
-             *     var cipher = CryptoJS.algo.AES.createEncryptor(keyWordArray, { iv: ivWordArray });
-             */
-            createEncryptor: function (key, cfg) {
-                return this.create(this._ENC_XFORM_MODE, key, cfg);
-            },
-
-            /**
-             * Creates this cipher in decryption mode.
-             *
-             * @param {WordArray} key The key.
-             * @param {Object} cfg (Optional) The configuration options to use for this operation.
-             *
-             * @return {Cipher} A cipher instance.
-             *
-             * @static
-             *
-             * @example
-             *
-             *     var cipher = CryptoJS.algo.AES.createDecryptor(keyWordArray, { iv: ivWordArray });
-             */
-            createDecryptor: function (key, cfg) {
-                return this.create(this._DEC_XFORM_MODE, key, cfg);
-            },
-
-            /**
-             * Initializes a newly created cipher.
-             *
-             * @param {number} xformMode Either the encryption or decryption transormation mode constant.
-             * @param {WordArray} key The key.
-             * @param {Object} cfg (Optional) The configuration options to use for this operation.
-             *
-             * @example
-             *
-             *     var cipher = CryptoJS.algo.AES.create(CryptoJS.algo.AES._ENC_XFORM_MODE, keyWordArray, { iv: ivWordArray });
-             */
-            init: function (xformMode, key, cfg) {
-                // Apply config defaults
-                this.cfg = this.cfg.extend(cfg);
-
-                // Store transform mode and key
-                this._xformMode = xformMode;
-                this._key = key;
-
-                // Set initial values
-                this.reset();
-            },
-
-            /**
-             * Resets this cipher to its initial state.
-             *
-             * @example
-             *
-             *     cipher.reset();
-             */
-            reset: function () {
-                // Reset data buffer
-                BufferedBlockAlgorithm.reset.call(this);
-
-                // Perform concrete-cipher logic
-                this._doReset();
-            },
-
-            /**
-             * Adds data to be encrypted or decrypted.
-             *
-             * @param {WordArray|string} dataUpdate The data to encrypt or decrypt.
-             *
-             * @return {WordArray} The data after processing.
-             *
-             * @example
-             *
-             *     var encrypted = cipher.process('data');
-             *     var encrypted = cipher.process(wordArray);
-             */
-            process: function (dataUpdate) {
-                // Append
-                this._append(dataUpdate);
-
-                // Process available blocks
-                return this._process();
-            },
-
-            /**
-             * Finalizes the encryption or decryption process.
-             * Note that the finalize operation is effectively a destructive, read-once operation.
-             *
-             * @param {WordArray|string} dataUpdate The final data to encrypt or decrypt.
-             *
-             * @return {WordArray} The data after final processing.
-             *
-             * @example
-             *
-             *     var encrypted = cipher.finalize();
-             *     var encrypted = cipher.finalize('data');
-             *     var encrypted = cipher.finalize(wordArray);
-             */
-            finalize: function (dataUpdate) {
-                // Final data update
-                if (dataUpdate) {
-                    this._append(dataUpdate);
-                }
-
-                // Perform concrete-cipher logic
-                var finalProcessedData = this._doFinalize();
-
-                return finalProcessedData;
-            },
-
-            keySize: 128 / 32,
-
-            ivSize: 128 / 32,
-
-            _ENC_XFORM_MODE: 1,
-
-            _DEC_XFORM_MODE: 2,
-
-            /**
-             * Creates shortcut functions to a cipher's object interface.
-             *
-             * @param {Cipher} cipher The cipher to create a helper for.
-             *
-             * @return {Object} An object with encrypt and decrypt shortcut functions.
-             *
-             * @static
-             *
-             * @example
-             *
-             *     var AES = CryptoJS.lib.Cipher._createHelper(CryptoJS.algo.AES);
-             */
-            _createHelper: (function () {
-                function selectCipherStrategy (key) {
-                    if (typeof key == 'string') {
-                        return PasswordBasedCipher;
-                    } else {
-                        return SerializableCipher;
-                    }
-                }
-
-                return function (cipher) {
-                    return {
-                        encrypt: function (message, key, cfg) {
-                            return selectCipherStrategy(key).encrypt(cipher, message, key, cfg);
-                        },
-
-                        decrypt: function (ciphertext, key, cfg) {
-                            return selectCipherStrategy(key).decrypt(cipher, ciphertext, key, cfg);
+                        if (providerInstance[type]) {
+                            delete providerInstance[type];
                         }
-                    };
-                };
-            }())
-        });
-
-        /**
-         * Abstract base stream cipher template.
-         *
-         * @property {number} blockSize The number of 32-bit words this cipher operates on. Default: 1 (32 bits)
-         */
-        var StreamCipher = C_lib.StreamCipher = Cipher.extend({
-            _doFinalize: function () {
-                // Process partial blocks
-                var finalProcessedBlocks = this._process(!!'flush');
-
-                return finalProcessedBlocks;
-            },
-
-            blockSize: 1
-        });
-
-        /**
-         * Mode namespace.
-         */
-        var C_mode = C.mode = {};
-
-        /**
-         * Abstract base block cipher mode template.
-         */
-        var BlockCipherMode = C_lib.BlockCipherMode = Base.extend({
-            /**
-             * Creates this mode for encryption.
-             *
-             * @param {Cipher} cipher A block cipher instance.
-             * @param {Array} iv The IV words.
-             *
-             * @static
-             *
-             * @example
-             *
-             *     var mode = CryptoJS.mode.CBC.createEncryptor(cipher, iv.words);
-             */
-            createEncryptor: function (cipher, iv) {
-                return this.Encryptor.create(cipher, iv);
-            },
-
-            /**
-             * Creates this mode for decryption.
-             *
-             * @param {Cipher} cipher A block cipher instance.
-             * @param {Array} iv The IV words.
-             *
-             * @static
-             *
-             * @example
-             *
-             *     var mode = CryptoJS.mode.CBC.createDecryptor(cipher, iv.words);
-             */
-            createDecryptor: function (cipher, iv) {
-                return this.Decryptor.create(cipher, iv);
-            },
-
-            /**
-             * Initializes a newly created mode.
-             *
-             * @param {Cipher} cipher A block cipher instance.
-             * @param {Array} iv The IV words.
-             *
-             * @example
-             *
-             *     var mode = CryptoJS.mode.CBC.Encryptor.create(cipher, iv.words);
-             */
-            init: function (cipher, iv) {
-                this._cipher = cipher;
-                this._iv = iv;
-            }
-        });
-
-        /**
-         * Cipher Block Chaining mode.
-         */
-        var CBC = C_mode.CBC = (function () {
-            /**
-             * Abstract base CBC mode.
-             */
-            var CBC = BlockCipherMode.extend();
-
-            /**
-             * CBC encryptor.
-             */
-            CBC.Encryptor = CBC.extend({
-                /**
-                 * Processes the data block at offset.
-                 *
-                 * @param {Array} words The data words to operate on.
-                 * @param {number} offset The offset where the block starts.
-                 *
-                 * @example
-                 *
-                 *     mode.processBlock(data.words, offset);
-                 */
-                processBlock: function (words, offset) {
-                    // Shortcuts
-                    var cipher = this._cipher;
-                    var blockSize = cipher.blockSize;
-
-                    // XOR and encrypt
-                    xorBlock.call(this, words, offset, blockSize);
-                    cipher.encryptBlock(words, offset);
-
-                    // Remember this block to use with next block
-                    this._prevBlock = words.slice(offset, offset + blockSize);
+                        queue[i](providers[type]);
+                        continue;
+                    }
+                    BI.Plugin.configWidget(type, queue[i]);
                 }
+                configFunctions[type] = null;
             });
+        }
+        configFunctions[type].push(configFn);
+    };
 
-            /**
-             * CBC decryptor.
-             */
-            CBC.Decryptor = CBC.extend({
-                /**
-                 * Processes the data block at offset.
-                 *
-                 * @param {Array} words The data words to operate on.
-                 * @param {number} offset The offset where the block starts.
-                 *
-                 * @example
-                 *
-                 *     mode.processBlock(data.words, offset);
-                 */
-                processBlock: function (words, offset) {
-                    // Shortcuts
-                    var cipher = this._cipher;
-                    var blockSize = cipher.blockSize;
+    BI.getReference = BI.getReference || function (type, fn) {
+        return BI.Plugin.registerObject(type, fn);
+    };
 
-                    // Remember this block to use with next block
-                    var thisBlock = words.slice(offset, offset + blockSize);
-
-                    // Decrypt and XOR
-                    cipher.decryptBlock(words, offset);
-                    xorBlock.call(this, words, offset, blockSize);
-
-                    // This block becomes the previous block
-                    this._prevBlock = thisBlock;
-                }
-            });
-
-            function xorBlock (words, offset, blockSize) {
-                // Shortcut
-                var iv = this._iv;
-
-                // Choose mixing block
-                if (iv) {
-                    var block = iv;
-
-                    // Remove IV for subsequent blocks
-                    this._iv = undefined;
-                } else {
-                    var block = this._prevBlock;
-                }
-
-                // XOR blocks
-                for (var i = 0; i < blockSize; i++) {
-                    words[offset + i] ^= block[i];
-                }
-            }
-
-            return CBC;
-        }());
-
-        /**
-         * Padding namespace.
-         */
-        var C_pad = C.pad = {};
-
-        /**
-         * PKCS #5/7 padding strategy.
-         */
-        var Pkcs7 = C_pad.Pkcs7 = {
-            /**
-             * Pads data using the algorithm defined in PKCS #5/7.
-             *
-             * @param {WordArray} data The data to pad.
-             * @param {number} blockSize The multiple that the data should be padded to.
-             *
-             * @static
-             *
-             * @example
-             *
-             *     CryptoJS.pad.Pkcs7.pad(wordArray, 4);
-             */
-            pad: function (data, blockSize) {
-                // Shortcut
-                var blockSizeBytes = blockSize * 4;
-
-                // Count padding bytes
-                var nPaddingBytes = blockSizeBytes - data.sigBytes % blockSizeBytes;
-
-                // Create padding word
-                var paddingWord = (nPaddingBytes << 24) | (nPaddingBytes << 16) | (nPaddingBytes << 8) | nPaddingBytes;
-
-                // Create padding
-                var paddingWords = [];
-                for (var i = 0; i < nPaddingBytes; i += 4) {
-                    paddingWords.push(paddingWord);
-                }
-                var padding = WordArray.create(paddingWords, nPaddingBytes);
-
-                // Add padding
-                data.concat(padding);
-            },
-
-            /**
-             * Unpads data that had been padded using the algorithm defined in PKCS #5/7.
-             *
-             * @param {WordArray} data The data to unpad.
-             *
-             * @static
-             *
-             * @example
-             *
-             *     CryptoJS.pad.Pkcs7.unpad(wordArray);
-             */
-            unpad: function (data) {
-                // Get number of padding bytes from last byte
-                var nPaddingBytes = data.words[(data.sigBytes - 1) >>> 2] & 0xff;
-
-                // Remove padding
-                data.sigBytes -= nPaddingBytes;
-            }
-        };
-
-        /**
-         * Abstract base block cipher template.
-         *
-         * @property {number} blockSize The number of 32-bit words this cipher operates on. Default: 4 (128 bits)
-         */
-        var BlockCipher = C_lib.BlockCipher = Cipher.extend({
-            /**
-             * Configuration options.
-             *
-             * @property {Mode} mode The block mode to use. Default: CBC
-             * @property {Padding} padding The padding strategy to use. Default: Pkcs7
-             */
-            cfg: Cipher.cfg.extend({
-                mode: CBC,
-                padding: Pkcs7
-            }),
-
-            reset: function () {
-                // Reset cipher
-                Cipher.reset.call(this);
-
-                // Shortcuts
-                var cfg = this.cfg;
-                var iv = cfg.iv;
-                var mode = cfg.mode;
-
-                // Reset block mode
-                if (this._xformMode == this._ENC_XFORM_MODE) {
-                    var modeCreator = mode.createEncryptor;
-                } else /* if (this._xformMode == this._DEC_XFORM_MODE) */ {
-                    var modeCreator = mode.createDecryptor;
-
-                    // Keep at least one block in the buffer for unpadding
-                    this._minBufferSize = 1;
-                }
-                this._mode = modeCreator.call(mode, this, iv && iv.words);
-            },
-
-            _doProcessBlock: function (words, offset) {
-                this._mode.processBlock(words, offset);
-            },
-
-            _doFinalize: function () {
-                // Shortcut
-                var padding = this.cfg.padding;
-
-                // Finalize
-                if (this._xformMode == this._ENC_XFORM_MODE) {
-                    // Pad data
-                    padding.pad(this._data, this.blockSize);
-
-                    // Process final blocks
-                    var finalProcessedBlocks = this._process(!!'flush');
-                } else /* if (this._xformMode == this._DEC_XFORM_MODE) */ {
-                    // Process final blocks
-                    var finalProcessedBlocks = this._process(!!'flush');
-
-                    // Unpad data
-                    padding.unpad(finalProcessedBlocks);
-                }
-
-                return finalProcessedBlocks;
-            },
-
-            blockSize: 128 / 32
-        });
-
-        /**
-         * A collection of cipher parameters.
-         *
-         * @property {WordArray} ciphertext The raw ciphertext.
-         * @property {WordArray} key The key to this ciphertext.
-         * @property {WordArray} iv The IV used in the ciphering operation.
-         * @property {WordArray} salt The salt used with a key derivation function.
-         * @property {Cipher} algorithm The cipher algorithm.
-         * @property {Mode} mode The block mode used in the ciphering operation.
-         * @property {Padding} padding The padding scheme used in the ciphering operation.
-         * @property {number} blockSize The block size of the cipher.
-         * @property {Format} formatter The default formatting strategy to convert this cipher params object to a string.
-         */
-        var CipherParams = C_lib.CipherParams = Base.extend({
-            /**
-             * Initializes a newly created cipher params object.
-             *
-             * @param {Object} cipherParams An object with any of the possible cipher parameters.
-             *
-             * @example
-             *
-             *     var cipherParams = CryptoJS.lib.CipherParams.create({
-             *         ciphertext: ciphertextWordArray,
-             *         key: keyWordArray,
-             *         iv: ivWordArray,
-             *         salt: saltWordArray,
-             *         algorithm: CryptoJS.algo.AES,
-             *         mode: CryptoJS.mode.CBC,
-             *         padding: CryptoJS.pad.PKCS7,
-             *         blockSize: 4,
-             *         formatter: CryptoJS.format.OpenSSL
-             *     });
-             */
-            init: function (cipherParams) {
-                this.mixIn(cipherParams);
-            },
-
-            /**
-             * Converts this cipher params object to a string.
-             *
-             * @param {Format} formatter (Optional) The formatting strategy to use.
-             *
-             * @return {string} The stringified cipher params.
-             *
-             * @throws Error If neither the formatter nor the default formatter is set.
-             *
-             * @example
-             *
-             *     var string = cipherParams + '';
-             *     var string = cipherParams.toString();
-             *     var string = cipherParams.toString(CryptoJS.format.OpenSSL);
-             */
-            toString: function (formatter) {
-                return (formatter || this.formatter).stringify(this);
-            }
-        });
-
-        /**
-         * Format namespace.
-         */
-        var C_format = C.format = {};
-
-        /**
-         * OpenSSL formatting strategy.
-         */
-        var OpenSSLFormatter = C_format.OpenSSL = {
-            /**
-             * Converts a cipher params object to an OpenSSL-compatible string.
-             *
-             * @param {CipherParams} cipherParams The cipher params object.
-             *
-             * @return {string} The OpenSSL-compatible string.
-             *
-             * @static
-             *
-             * @example
-             *
-             *     var openSSLString = CryptoJS.format.OpenSSL.stringify(cipherParams);
-             */
-            stringify: function (cipherParams) {
-                // Shortcuts
-                var ciphertext = cipherParams.ciphertext;
-                var salt = cipherParams.salt;
-
-                // Format
-                if (salt) {
-                    var wordArray = WordArray.create([0x53616c74, 0x65645f5f]).concat(salt).concat(ciphertext);
-                } else {
-                    var wordArray = ciphertext;
-                }
-
-                return wordArray.toString(Base64);
-            },
-
-            /**
-             * Converts an OpenSSL-compatible string to a cipher params object.
-             *
-             * @param {string} openSSLStr The OpenSSL-compatible string.
-             *
-             * @return {CipherParams} The cipher params object.
-             *
-             * @static
-             *
-             * @example
-             *
-             *     var cipherParams = CryptoJS.format.OpenSSL.parse(openSSLString);
-             */
-            parse: function (openSSLStr) {
-                // Parse base64
-                var ciphertext = Base64.parse(openSSLStr);
-
-                // Shortcut
-                var ciphertextWords = ciphertext.words;
-
-                // Test for salt
-                if (ciphertextWords[0] == 0x53616c74 && ciphertextWords[1] == 0x65645f5f) {
-                    // Extract salt
-                    var salt = WordArray.create(ciphertextWords.slice(2, 4));
-
-                    // Remove salt from ciphertext
-                    ciphertextWords.splice(0, 4);
-                    ciphertext.sigBytes -= 16;
-                }
-
-                return CipherParams.create({ciphertext: ciphertext, salt: salt});
-            }
-        };
-
-        /**
-         * A cipher wrapper that returns ciphertext as a serializable cipher params object.
-         */
-        var SerializableCipher = C_lib.SerializableCipher = Base.extend({
-            /**
-             * Configuration options.
-             *
-             * @property {Formatter} format The formatting strategy to convert cipher param objects to and from a string. Default: OpenSSL
-             */
-            cfg: Base.extend({
-                format: OpenSSLFormatter
-            }),
-
-            /**
-             * Encrypts a message.
-             *
-             * @param {Cipher} cipher The cipher algorithm to use.
-             * @param {WordArray|string} message The message to encrypt.
-             * @param {WordArray} key The key.
-             * @param {Object} cfg (Optional) The configuration options to use for this operation.
-             *
-             * @return {CipherParams} A cipher params object.
-             *
-             * @static
-             *
-             * @example
-             *
-             *     var ciphertextParams = CryptoJS.lib.SerializableCipher.encrypt(CryptoJS.algo.AES, message, key);
-             *     var ciphertextParams = CryptoJS.lib.SerializableCipher.encrypt(CryptoJS.algo.AES, message, key, { iv: iv });
-             *     var ciphertextParams = CryptoJS.lib.SerializableCipher.encrypt(CryptoJS.algo.AES, message, key, { iv: iv, format: CryptoJS.format.OpenSSL });
-             */
-            encrypt: function (cipher, message, key, cfg) {
-                // Apply config defaults
-                cfg = this.cfg.extend(cfg);
-
-                // Encrypt
-                var encryptor = cipher.createEncryptor(key, cfg);
-                var ciphertext = encryptor.finalize(message);
-
-                // Shortcut
-                var cipherCfg = encryptor.cfg;
-
-                // Create and return serializable cipher params
-                return CipherParams.create({
-                    ciphertext: ciphertext,
-                    key: key,
-                    iv: cipherCfg.iv,
-                    algorithm: cipher,
-                    mode: cipherCfg.mode,
-                    padding: cipherCfg.padding,
-                    blockSize: cipher.blockSize,
-                    formatter: cfg.format
+    var actions = {};
+    var globalAction = [];
+    BI.action = BI.action || function (type, actionFn) {
+        if (BI.isFunction(type)) {
+            globalAction.push(type);
+            return function () {
+                BI.remove(globalAction, function (idx) {
+                    return globalAction.indexOf(actionFn) === idx;
                 });
-            },
-
-            /**
-             * Decrypts serialized ciphertext.
-             *
-             * @param {Cipher} cipher The cipher algorithm to use.
-             * @param {CipherParams|string} ciphertext The ciphertext to decrypt.
-             * @param {WordArray} key The key.
-             * @param {Object} cfg (Optional) The configuration options to use for this operation.
-             *
-             * @return {WordArray} The plaintext.
-             *
-             * @static
-             *
-             * @example
-             *
-             *     var plaintext = CryptoJS.lib.SerializableCipher.decrypt(CryptoJS.algo.AES, formattedCiphertext, key, { iv: iv, format: CryptoJS.format.OpenSSL });
-             *     var plaintext = CryptoJS.lib.SerializableCipher.decrypt(CryptoJS.algo.AES, ciphertextParams, key, { iv: iv, format: CryptoJS.format.OpenSSL });
-             */
-            decrypt: function (cipher, ciphertext, key, cfg) {
-                // Apply config defaults
-                cfg = this.cfg.extend(cfg);
-
-                // Convert string to CipherParams
-                ciphertext = this._parse(ciphertext, cfg.format);
-
-                // Decrypt
-                var plaintext = cipher.createDecryptor(key, cfg).finalize(ciphertext.ciphertext);
-
-                return plaintext;
-            },
-
-            /**
-             * Converts serialized ciphertext to CipherParams,
-             * else assumed CipherParams already and returns ciphertext unchanged.
-             *
-             * @param {CipherParams|string} ciphertext The ciphertext.
-             * @param {Formatter} format The formatting strategy to use to parse serialized ciphertext.
-             *
-             * @return {CipherParams} The unserialized ciphertext.
-             *
-             * @static
-             *
-             * @example
-             *
-             *     var ciphertextParams = CryptoJS.lib.SerializableCipher._parse(ciphertextStringOrParams, format);
-             */
-            _parse: function (ciphertext, format) {
-                if (typeof ciphertext == 'string') {
-                    return format.parse(ciphertext, this);
-                } else {
-                    return ciphertext;
-                }
-            }
-        });
-
-        /**
-         * Key derivation function namespace.
-         */
-        var C_kdf = C.kdf = {};
-
-        /**
-         * OpenSSL key derivation function.
-         */
-        var OpenSSLKdf = C_kdf.OpenSSL = {
-            /**
-             * Derives a key and IV from a password.
-             *
-             * @param {string} password The password to derive from.
-             * @param {number} keySize The size in words of the key to generate.
-             * @param {number} ivSize The size in words of the IV to generate.
-             * @param {WordArray|string} salt (Optional) A 64-bit salt to use. If omitted, a salt will be generated randomly.
-             *
-             * @return {CipherParams} A cipher params object with the key, IV, and salt.
-             *
-             * @static
-             *
-             * @example
-             *
-             *     var derivedParams = CryptoJS.kdf.OpenSSL.execute('Password', 256/32, 128/32);
-             *     var derivedParams = CryptoJS.kdf.OpenSSL.execute('Password', 256/32, 128/32, 'saltsalt');
-             */
-            execute: function (password, keySize, ivSize, salt) {
-                // Generate random salt
-                if (!salt) {
-                    salt = WordArray.random(64 / 8);
-                }
-
-                // Derive key and IV
-                var key = EvpKDF.create({keySize: keySize + ivSize}).compute(password, salt);
-
-                // Separate key and IV
-                var iv = WordArray.create(key.words.slice(keySize), ivSize * 4);
-                key.sigBytes = keySize * 4;
-
-                // Return params
-                return CipherParams.create({key: key, iv: iv, salt: salt});
+            };
+        }
+        if (!actions[type]) {
+            actions[type] = [];
+        }
+        actions[type].push(actionFn);
+        return function () {
+            BI.remove(actions[type], function (idx) {
+                return actions[type].indexOf(actionFn) === idx;
+            });
+            if (actions[type].length === 0) {
+                delete actions[type];
             }
         };
+    };
 
-        /**
-         * A serializable cipher wrapper that derives the key from a password,
-         * and returns ciphertext as a serializable cipher params object.
-         */
-        var PasswordBasedCipher = C_lib.PasswordBasedCipher = SerializableCipher.extend({
-            /**
-             * Configuration options.
-             *
-             * @property {KDF} kdf The key derivation function to use to generate a key and IV from a password. Default: OpenSSL
-             */
-            cfg: SerializableCipher.cfg.extend({
-                kdf: OpenSSLKdf
-            }),
-
-            /**
-             * Encrypts a message using a password.
-             *
-             * @param {Cipher} cipher The cipher algorithm to use.
-             * @param {WordArray|string} message The message to encrypt.
-             * @param {string} password The password.
-             * @param {Object} cfg (Optional) The configuration options to use for this operation.
-             *
-             * @return {CipherParams} A cipher params object.
-             *
-             * @static
-             *
-             * @example
-             *
-             *     var ciphertextParams = CryptoJS.lib.PasswordBasedCipher.encrypt(CryptoJS.algo.AES, message, 'password');
-             *     var ciphertextParams = CryptoJS.lib.PasswordBasedCipher.encrypt(CryptoJS.algo.AES, message, 'password', { format: CryptoJS.format.OpenSSL });
-             */
-            encrypt: function (cipher, message, password, cfg) {
-                // Apply config defaults
-                cfg = this.cfg.extend(cfg);
-
-                // Derive key and other params
-                var derivedParams = cfg.kdf.execute(password, cipher.keySize, cipher.ivSize);
-
-                // Add IV to config
-                cfg.iv = derivedParams.iv;
-
-                // Encrypt
-                var ciphertext = SerializableCipher.encrypt.call(this, cipher, message, derivedParams.key, cfg);
-
-                // Mix in derived params
-                ciphertext.mixIn(derivedParams);
-
-                return ciphertext;
-            },
-
-            /**
-             * Decrypts serialized ciphertext using a password.
-             *
-             * @param {Cipher} cipher The cipher algorithm to use.
-             * @param {CipherParams|string} ciphertext The ciphertext to decrypt.
-             * @param {string} password The password.
-             * @param {Object} cfg (Optional) The configuration options to use for this operation.
-             *
-             * @return {WordArray} The plaintext.
-             *
-             * @static
-             *
-             * @example
-             *
-             *     var plaintext = CryptoJS.lib.PasswordBasedCipher.decrypt(CryptoJS.algo.AES, formattedCiphertext, 'password', { format: CryptoJS.format.OpenSSL });
-             *     var plaintext = CryptoJS.lib.PasswordBasedCipher.decrypt(CryptoJS.algo.AES, ciphertextParams, 'password', { format: CryptoJS.format.OpenSSL });
-             */
-            decrypt: function (cipher, ciphertext, password, cfg) {
-                // Apply config defaults
-                cfg = this.cfg.extend(cfg);
-
-                // Convert string to CipherParams
-                ciphertext = this._parse(ciphertext, cfg.format);
-
-                // Derive key and other params
-                var derivedParams = cfg.kdf.execute(password, cipher.keySize, cipher.ivSize, ciphertext.salt);
-
-                // Add IV to config
-                cfg.iv = derivedParams.iv;
-
-                // Decrypt
-                var plaintext = SerializableCipher.decrypt.call(this, cipher, ciphertext, derivedParams.key, cfg);
-
-                return plaintext;
-            }
-        });
-    }());
-
-    /*
-    CryptoJS v3.1.2
-    code.google.com/p/crypto-js
-    (c) 2009-2013 by Jeff Mott. All rights reserved.
-    code.google.com/p/crypto-js/wiki/License
-    */
-    /**
-     * Electronic Codebook block mode.
-     */
-    CryptoJS.mode.ECB = (function () {
-        var ECB = CryptoJS.lib.BlockCipherMode.extend();
-
-        ECB.Encryptor = ECB.extend({
-            processBlock: function (words, offset) {
-                this._cipher.encryptBlock(words, offset);
-            }
-        });
-
-        ECB.Decryptor = ECB.extend({
-            processBlock: function (words, offset) {
-                this._cipher.decryptBlock(words, offset);
-            }
-        });
-
-        return ECB;
-    }());
-
-
-    /*
-    CryptoJS v3.1.2
-    code.google.com/p/crypto-js
-    (c) 2009-2013 by Jeff Mott. All rights reserved.
-    code.google.com/p/crypto-js/wiki/License
-    */
-    (function () {
-        // Shortcuts
-        var C = CryptoJS;
-        var C_lib = C.lib;
-        var BlockCipher = C_lib.BlockCipher;
-        var C_algo = C.algo;
-
-        // Lookup tables
-        var SBOX = [];
-        var INV_SBOX = [];
-        var SUB_MIX_0 = [];
-        var SUB_MIX_1 = [];
-        var SUB_MIX_2 = [];
-        var SUB_MIX_3 = [];
-        var INV_SUB_MIX_0 = [];
-        var INV_SUB_MIX_1 = [];
-        var INV_SUB_MIX_2 = [];
-        var INV_SUB_MIX_3 = [];
-
-        // Compute lookup tables
-        (function () {
-            // Compute double table
-            var d = [];
-            for (var i = 0; i < 256; i++) {
-                if (i < 128) {
-                    d[i] = i << 1;
-                } else {
-                    d[i] = (i << 1) ^ 0x11b;
-                }
-            }
-
-            // Walk GF(2^8)
-            var x = 0;
-            var xi = 0;
-            for (var i = 0; i < 256; i++) {
-                // Compute sbox
-                var sx = xi ^ (xi << 1) ^ (xi << 2) ^ (xi << 3) ^ (xi << 4);
-                sx = (sx >>> 8) ^ (sx & 0xff) ^ 0x63;
-                SBOX[x] = sx;
-                INV_SBOX[sx] = x;
-
-                // Compute multiplication
-                var x2 = d[x];
-                var x4 = d[x2];
-                var x8 = d[x4];
-
-                // Compute sub bytes, mix columns tables
-                var t = (d[sx] * 0x101) ^ (sx * 0x1010100);
-                SUB_MIX_0[x] = (t << 24) | (t >>> 8);
-                SUB_MIX_1[x] = (t << 16) | (t >>> 16);
-                SUB_MIX_2[x] = (t << 8) | (t >>> 24);
-                SUB_MIX_3[x] = t;
-
-                // Compute inv sub bytes, inv mix columns tables
-                var t = (x8 * 0x1010101) ^ (x4 * 0x10001) ^ (x2 * 0x101) ^ (x * 0x1010100);
-                INV_SUB_MIX_0[sx] = (t << 24) | (t >>> 8);
-                INV_SUB_MIX_1[sx] = (t << 16) | (t >>> 16);
-                INV_SUB_MIX_2[sx] = (t << 8) | (t >>> 24);
-                INV_SUB_MIX_3[sx] = t;
-
-                // Compute next counter
-                if (!x) {
-                    x = xi = 1;
-                } else {
-                    x = x2 ^ d[d[d[x8 ^ x2]]];
-                    xi ^= d[d[xi]];
-                }
-            }
-        }());
-
-        // Precomputed Rcon lookup
-        var RCON = [0x00, 0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80, 0x1b, 0x36];
-
-        /**
-         * AES block cipher algorithm.
-         */
-        var AES = C_algo.AES = BlockCipher.extend({
-            _doReset: function () {
-                // Shortcuts
-                var key = this._key;
-                var keyWords = key.words;
-                var keySize = key.sigBytes / 4;
-
-                // Compute number of rounds
-                var nRounds = this._nRounds = keySize + 6;
-
-                // Compute number of key schedule rows
-                var ksRows = (nRounds + 1) * 4;
-
-                // Compute key schedule
-                var keySchedule = this._keySchedule = [];
-                for (var ksRow = 0; ksRow < ksRows; ksRow++) {
-                    if (ksRow < keySize) {
-                        keySchedule[ksRow] = keyWords[ksRow];
-                    } else {
-                        var t = keySchedule[ksRow - 1];
-
-                        if (!(ksRow % keySize)) {
-                            // Rot word
-                            t = (t << 8) | (t >>> 24);
-
-                            // Sub word
-                            t = (SBOX[t >>> 24] << 24) | (SBOX[(t >>> 16) & 0xff] << 16) | (SBOX[(t >>> 8) & 0xff] << 8) | SBOX[t & 0xff];
-
-                            // Mix Rcon
-                            t ^= RCON[(ksRow / keySize) | 0] << 24;
-                        } else if (keySize > 6 && ksRow % keySize == 4) {
-                            // Sub word
-                            t = (SBOX[t >>> 24] << 24) | (SBOX[(t >>> 16) & 0xff] << 16) | (SBOX[(t >>> 8) & 0xff] << 8) | SBOX[t & 0xff];
-                        }
-
-                        keySchedule[ksRow] = keySchedule[ksRow - keySize] ^ t;
-                    }
-                }
-
-                // Compute inv key schedule
-                var invKeySchedule = this._invKeySchedule = [];
-                for (var invKsRow = 0; invKsRow < ksRows; invKsRow++) {
-                    var ksRow = ksRows - invKsRow;
-
-                    if (invKsRow % 4) {
-                        var t = keySchedule[ksRow];
-                    } else {
-                        var t = keySchedule[ksRow - 4];
-                    }
-
-                    if (invKsRow < 4 || ksRow <= 4) {
-                        invKeySchedule[invKsRow] = t;
-                    } else {
-                        invKeySchedule[invKsRow] = INV_SUB_MIX_0[SBOX[t >>> 24]] ^ INV_SUB_MIX_1[SBOX[(t >>> 16) & 0xff]] ^
-                            INV_SUB_MIX_2[SBOX[(t >>> 8) & 0xff]] ^ INV_SUB_MIX_3[SBOX[t & 0xff]];
-                    }
-                }
-            },
-
-            encryptBlock: function (M, offset) {
-                this._doCryptBlock(M, offset, this._keySchedule, SUB_MIX_0, SUB_MIX_1, SUB_MIX_2, SUB_MIX_3, SBOX);
-            },
-
-            decryptBlock: function (M, offset) {
-                // Swap 2nd and 4th rows
-                var t = M[offset + 1];
-                M[offset + 1] = M[offset + 3];
-                M[offset + 3] = t;
-
-                this._doCryptBlock(M, offset, this._invKeySchedule, INV_SUB_MIX_0, INV_SUB_MIX_1, INV_SUB_MIX_2, INV_SUB_MIX_3, INV_SBOX);
-
-                // Inv swap 2nd and 4th rows
-                var t = M[offset + 1];
-                M[offset + 1] = M[offset + 3];
-                M[offset + 3] = t;
-            },
-
-            _doCryptBlock: function (M, offset, keySchedule, SUB_MIX_0, SUB_MIX_1, SUB_MIX_2, SUB_MIX_3, SBOX) {
-                // Shortcut
-                var nRounds = this._nRounds;
-
-                // Get input, add round key
-                var s0 = M[offset] ^ keySchedule[0];
-                var s1 = M[offset + 1] ^ keySchedule[1];
-                var s2 = M[offset + 2] ^ keySchedule[2];
-                var s3 = M[offset + 3] ^ keySchedule[3];
-
-                // Key schedule row counter
-                var ksRow = 4;
-
-                // Rounds
-                for (var round = 1; round < nRounds; round++) {
-                    // Shift rows, sub bytes, mix columns, add round key
-                    var t0 = SUB_MIX_0[s0 >>> 24] ^ SUB_MIX_1[(s1 >>> 16) & 0xff] ^ SUB_MIX_2[(s2 >>> 8) & 0xff] ^ SUB_MIX_3[s3 & 0xff] ^ keySchedule[ksRow++];
-                    var t1 = SUB_MIX_0[s1 >>> 24] ^ SUB_MIX_1[(s2 >>> 16) & 0xff] ^ SUB_MIX_2[(s3 >>> 8) & 0xff] ^ SUB_MIX_3[s0 & 0xff] ^ keySchedule[ksRow++];
-                    var t2 = SUB_MIX_0[s2 >>> 24] ^ SUB_MIX_1[(s3 >>> 16) & 0xff] ^ SUB_MIX_2[(s0 >>> 8) & 0xff] ^ SUB_MIX_3[s1 & 0xff] ^ keySchedule[ksRow++];
-                    var t3 = SUB_MIX_0[s3 >>> 24] ^ SUB_MIX_1[(s0 >>> 16) & 0xff] ^ SUB_MIX_2[(s1 >>> 8) & 0xff] ^ SUB_MIX_3[s2 & 0xff] ^ keySchedule[ksRow++];
-
-                    // Update state
-                    s0 = t0;
-                    s1 = t1;
-                    s2 = t2;
-                    s3 = t3;
-                }
-
-                // Shift rows, sub bytes, add round key
-                var t0 = ((SBOX[s0 >>> 24] << 24) | (SBOX[(s1 >>> 16) & 0xff] << 16) | (SBOX[(s2 >>> 8) & 0xff] << 8) | SBOX[s3 & 0xff]) ^ keySchedule[ksRow++];
-                var t1 = ((SBOX[s1 >>> 24] << 24) | (SBOX[(s2 >>> 16) & 0xff] << 16) | (SBOX[(s3 >>> 8) & 0xff] << 8) | SBOX[s0 & 0xff]) ^ keySchedule[ksRow++];
-                var t2 = ((SBOX[s2 >>> 24] << 24) | (SBOX[(s3 >>> 16) & 0xff] << 16) | (SBOX[(s0 >>> 8) & 0xff] << 8) | SBOX[s1 & 0xff]) ^ keySchedule[ksRow++];
-                var t3 = ((SBOX[s3 >>> 24] << 24) | (SBOX[(s0 >>> 16) & 0xff] << 16) | (SBOX[(s1 >>> 8) & 0xff] << 8) | SBOX[s2 & 0xff]) ^ keySchedule[ksRow++];
-
-                // Set output
-                M[offset] = t0;
-                M[offset + 1] = t1;
-                M[offset + 2] = t2;
-                M[offset + 3] = t3;
-            },
-
-            keySize: 256 / 32
-        });
-
-        /**
-         * Shortcut functions to the cipher's object interface.
-         *
-         * @example
-         *
-         *     var ciphertext = CryptoJS.AES.encrypt(message, key, cfg);
-         *     var plaintext  = CryptoJS.AES.decrypt(ciphertext, key, cfg);
-         */
-        C.AES = BlockCipher._createHelper(AES);
-    }());
-
-
-    _.extend(BI, {
-        /**
-         * aes加密方法
-         * aes-128-ecb
-         *
-         * @example
-         *
-         *     var ciphertext = BI.aesEncrypt(text, key);
-         */
-        aesEncrypt: function (text, key) {
-            key = CryptoJS.enc.Utf8.parse(key);
-            var cipher = CryptoJS.AES.encrypt(text, key, {
-                mode: CryptoJS.mode.ECB,
-                padding: CryptoJS.pad.Pkcs7
-            });
-
-            var base64Cipher = cipher.ciphertext.toString(CryptoJS.enc.Base64);
-            return base64Cipher;
-        },
-
-        /**
-         * aes解密方法
-         * @param {String} text 
-         * @param {String} key 
-         */
-        aesDecrypt: function (text, key) {
-            key = CryptoJS.enc.Utf8.parse(key);
-            var decipher = CryptoJS.AES.decrypt(text, key, {
-                mode: CryptoJS.mode.ECB,
-                padding: CryptoJS.pad.Pkcs7
-            });
-
-            return CryptoJS.enc.Utf8.stringify(decipher);
+    var points = {};
+    BI.point = BI.point || function (type, action, pointFn, after) {
+        if (!points[type]) {
+            points[type] = {};
         }
-    });
-}());
+        if (!points[type][action]) {
+            points[type][action] = {};
+        }
+        if (!points[type][action][after ? "after" : "before"]) {
+            points[type][action][after ? "after" : "before"] = [];
+        }
+        points[type][action][after ? "after" : "before"].push(pointFn);
+    };
+
+    BI.Modules = BI.Modules || {
+        getModule: function (type) {
+            if (!moduleInjection[type]) {
+                _global.console && console.error("module:[" + type + "] does not exists");
+                return false;
+            }
+            return moduleInjection[type];
+        },
+        getAllModules: function () {
+            return moduleInjection;
+        }
+    };
+
+    BI.Constants = BI.Constants || {
+        getConstant: function (type) {
+            return constantInjection[type];
+        }
+    };
+
+    var callPoint = function (inst, types) {
+        types = BI.isArray(types) ? types : [types];
+        BI.each(types, function (idx, type) {
+            if (points[type]) {
+                for (var action in points[type]) {
+                    var bfns = points[type][action].before;
+                    if (bfns) {
+                        BI.aspect.before(inst, action, function (bfns) {
+                            return function () {
+                                for (var i = 0, len = bfns.length; i < len; i++) {
+                                    try {
+                                        bfns[i].apply(inst, arguments);
+                                    } catch (e) {
+                                        _global.console && console.error(e);
+                                    }
+                                }
+                            };
+                        }(bfns));
+                    }
+                    var afns = points[type][action].after;
+                    if (afns) {
+                        BI.aspect.after(inst, action, function (afns) {
+                            return function () {
+                                for (var i = 0, len = afns.length; i < len; i++) {
+                                    try {
+                                        afns[i].apply(inst, arguments);
+                                    } catch (e) {
+                                        _global.console && console.error(e);
+                                    }
+                                }
+                            };
+                        }(afns));
+                    }
+                }
+            }
+        });
+    };
+
+    BI.Models = BI.Models || {
+        getModel: function (type, config) {
+            var inst = new modelInjection[type](config);
+            inst._constructor && inst._constructor(config);
+            inst.mixins && callPoint(inst, inst.mixins);
+            callPoint(inst, type);
+            return inst;
+        }
+    };
+
+    var stores = {};
+
+    BI.Stores = BI.Stores || {
+        getStore: function (type, config) {
+            if (stores[type]) {
+                return stores[type];
+            }
+            var inst = stores[type] = new storeInjection[type](config);
+            inst._constructor && inst._constructor(config, function () {
+                delete stores[type];
+            });
+            callPoint(inst, type);
+            return inst;
+        }
+    };
+
+    var services = {};
+
+    BI.Services = BI.Services || {
+        getService: function (type, config) {
+            if (services[type]) {
+                return services[type];
+            }
+            services[type] = new serviceInjection[type](config);
+            callPoint(services[type], type);
+            return services[type];
+        }
+    };
+
+    var providers = {},
+        providerInstance = {};
+
+    BI.Providers = BI.Providers || {
+        getProvider: function (type, config) {
+            if (!providers[type]) {
+                providers[type] = new providerInjection[type]();
+            }
+            if (!providerInstance[type]) {
+                providerInstance[type] = new (providers[type].$get())(config);
+            }
+            return providerInstance[type];
+        }
+    };
+
+    BI.Actions = BI.Actions || {
+        runAction: function (type, event, config) {
+            BI.each(actions[type], function (i, act) {
+                try {
+                    act(event, config);
+                } catch (e) {
+                    _global.console && console.error(e);
+                }
+            });
+        },
+        runGlobalAction: function () {
+            var args = [].slice.call(arguments);
+            BI.each(globalAction, function (i, act) {
+                try {
+                    act.apply(null, args);
+                } catch (e) {
+                    _global.console && console.error(e);
+                }
+            });
+        }
+    };
+
+    BI.getResource = BI.getResource || function (type, config) {
+        if (constantInjection[type]) {
+            return BI.Constants.getConstant(type);
+        }
+        if (modelInjection[type]) {
+            return BI.Models.getModel(type, config);
+        }
+        if (storeInjection[type]) {
+            return BI.Stores.getStore(type, config);
+        }
+        if (serviceInjection[type]) {
+            return BI.Services.getService(type, config);
+        }
+        if (providerInjection[type]) {
+            return BI.Providers.getProvider(type, config);
+        }
+    };
+})();
+
 
 /***/ }),
 
 /***/ 131:
 /***/ (function(module, exports) {
 
-!(function () {
-    function aspect (type) {
-        return function (target, methodName, advice) {
-            var exist = target[methodName],
-                dispatcher;
+BI.prepares.push(function () {
+    BI.Date = BI.Date || {};
+    // 牵扯到国际化这些常量在页面加载后再生效
+    // full day names
+    BI.Date._DN = [BI.i18nText("BI-Basic_Sunday"),
+        BI.i18nText("BI-Basic_Monday"),
+        BI.i18nText("BI-Basic_Tuesday"),
+        BI.i18nText("BI-Basic_Wednesday"),
+        BI.i18nText("BI-Basic_Thursday"),
+        BI.i18nText("BI-Basic_Friday"),
+        BI.i18nText("BI-Basic_Saturday"),
+        BI.i18nText("BI-Basic_Sunday")];
 
-            if (!exist || exist.target != target) {
-                dispatcher = target[methodName] = function () {
-                    // before methods
-                    var beforeArr = dispatcher.before;
-                    var args = arguments, next;
-                    for (var l = beforeArr.length; l--;) {
-                        next = beforeArr[l].advice.apply(this, args);
-                        if (next === false) {
-                            return false;
-                        }
-                        args = next || args;
-                    }
-                    // target method
-                    var rs = dispatcher.method.apply(this, args);
-                    // after methods
-                    var afterArr = dispatcher.after;
-                    for (var i = 0, ii = afterArr.length; i < ii; i++) {
-                        next = afterArr[i].advice.call(this, rs, args);
-                        if (rs === false) {
-                            return false;
-                        }
-                        args = next || args;
-                    }
-                    return rs;
-                };
+    // short day names
+    BI.Date._SDN = [BI.i18nText("BI-Basic_Simple_Sunday"),
+        BI.i18nText("BI-Basic_Simple_Monday"),
+        BI.i18nText("BI-Basic_Simple_Tuesday"),
+        BI.i18nText("BI-Basic_Simple_Wednesday"),
+        BI.i18nText("BI-Basic_Simple_Thursday"),
+        BI.i18nText("BI-Basic_Simple_Friday"),
+        BI.i18nText("BI-Basic_Simple_Saturday"),
+        BI.i18nText("BI-Basic_Simple_Sunday")];
 
-                dispatcher.before = [];
-                dispatcher.after = [];
+    // Monday first, etc.
+    BI.Date._FD = 1;
 
-                if (exist) {
-                    dispatcher.method = exist;
-                }
-                dispatcher.target = target;
-            }
+    // full month namesdat
+    BI.Date._MN = [
+        BI.i18nText("BI-Basic_January"),
+        BI.i18nText("BI-Basic_February"),
+        BI.i18nText("BI-Basic_March"),
+        BI.i18nText("BI-Basic_April"),
+        BI.i18nText("BI-Basic_May"),
+        BI.i18nText("BI-Basic_June"),
+        BI.i18nText("BI-Basic_July"),
+        BI.i18nText("BI-Basic_August"),
+        BI.i18nText("BI-Basic_September"),
+        BI.i18nText("BI-Basic_October"),
+        BI.i18nText("BI-Basic_November"),
+        BI.i18nText("BI-Basic_December")];
 
-            var aspectArr = (dispatcher || exist)[type];
-            var obj = {
-                advice: advice,
-                _index: aspectArr.length,
-                remove: function () {
-                    aspectArr.splice(this._index, 1);
-                }
-            };
-            aspectArr.push(obj);
+    // short month names
+    BI.Date._SMN = [0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11];
 
-            return obj;
-        };
-    }
+    BI.Date._QN = ["", BI.i18nText("BI-Quarter_1"),
+        BI.i18nText("BI-Quarter_2"),
+        BI.i18nText("BI-Quarter_3"),
+        BI.i18nText("BI-Quarter_4")];
 
-    BI.aspect = {
-        before: aspect("before"),
-        after: aspect("after")
-    };
+    /** Adds the number of days array to the Date object. */
+    BI.Date._MD = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 
-    return BI.aspect;
-
-})();
+    // 实际上无论周几作为一周的第一天，周初周末都是在-6-0间做偏移，用一个数组就可以
+    BI.Date._OFFSET = [0, -1, -2, -3, -4, -5, -6];
+});
 
 /***/ }),
 
 /***/ 132:
 /***/ (function(module, exports) {
 
+/**
+ * 事件集合
+ * @class BI.Events
+ */
+_.extend(BI, {
+    Events: {
 
-!(function () {
+        /**
+         * @static
+         * @property keydown事件
+         */
+        KEYDOWN: "_KEYDOWN",
 
-    var _keyStr = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
+        /**
+         * @static
+         * @property 回撤事件
+         */
+        BACKSPACE: "_BACKSPACE",
+
+        /**
+         * @static
+         * @property 空格事件
+         */
+        SPACE: "_SPACE",
+
+        /**
+         * @static
+         * @property 回车事件
+         */
+        ENTER: "_ENTER",
+
+        /**
+         * @static
+         * @property 确定事件
+         */
+        CONFIRM: "_CONFIRM",
+
+        /**
+         * @static
+         * @property 错误事件
+         */
+        ERROR: "_ERROR",
+
+        /**
+         * @static
+         * @property 暂停事件
+         */
+        PAUSE: "_PAUSE",
+
+        /**
+         * @static
+         * @property destroy事件
+         */
+        DESTROY: "_DESTROY",
+
+        /**
+         * @static
+         * @property 挂载事件
+         */
+        MOUNT: "_MOUNT",
+
+        /**
+         * @static
+         * @property 取消挂载事件
+         */
+        UNMOUNT: "_UNMOUNT",
+
+        /**
+         * @static
+         * @property 清除选择
+         */
+        CLEAR: "_CLEAR",
+
+        /**
+         * @static
+         * @property 添加数据
+         */
+        ADD: "_ADD",
+
+        /**
+         * @static
+         * @property 正在编辑状态事件
+         */
+        EDITING: "_EDITING",
+
+        /**
+         * @static
+         * @property 空状态事件
+         */
+        EMPTY: "_EMPTY",
+
+        /**
+         * @static
+         * @property 显示隐藏事件
+         */
+        VIEW: "_VIEW",
+
+        /**
+         * @static
+         * @property 窗体改变大小
+         */
+        RESIZE: "_RESIZE",
+
+        /**
+         * @static
+         * @property 编辑前事件
+         */
+        BEFOREEDIT: "_BEFOREEDIT",
+
+        /**
+         * @static
+         * @property 编辑后事件
+         */
+        AFTEREDIT: "_AFTEREDIT",
+
+        /**
+         * @static
+         * @property 开始编辑事件
+         */
+        STARTEDIT: "_STARTEDIT",
+
+        /**
+         * @static
+         * @property 停止编辑事件
+         */
+        STOPEDIT: "_STOPEDIT",
+
+        /**
+         * @static
+         * @property 值改变事件
+         */
+        CHANGE: "_CHANGE",
+
+        /**
+         * @static
+         * @property 下拉弹出菜单事件
+         */
+        EXPAND: "_EXPAND",
+
+        /**
+         * @static
+         * @property 关闭下拉菜单事件
+         */
+        COLLAPSE: "_COLLAPSE",
+
+        /**
+         * @static
+         * @property 回调事件
+         */
+        CALLBACK: "_CALLBACK",
+
+        /**
+         * @static
+         * @property 点击事件
+         */
+        CLICK: "_CLICK",
+
+        /**
+         * @static
+         * @property 状态改变事件，一般是用在复选按钮和单选按钮
+         */
+        STATECHANGE: "_STATECHANGE",
+
+        /**
+         * @static
+         * @property 状态改变前事件
+         */
+        BEFORESTATECHANGE: "_BEFORESTATECHANGE",
 
 
-    // private method for UTF-8 encoding
-    var _utf8_encode = function (string) {
-        string = string.replace(/\r\n/g, "\n");
-        var utftext = "";
+        /**
+         * @static
+         * @property 初始化事件
+         */
+        INIT: "_INIT",
 
-        for (var n = 0; n < string.length; n++) {
+        /**
+         * @static
+         * @property 初始化后事件
+         */
+        AFTERINIT: "_AFTERINIT",
 
-            var c = string.charCodeAt(n);
+        /**
+         * @static
+         * @property 滚动条滚动事件
+         */
+        SCROLL: "_SCROLL",
 
-            if (c < 128) {
-                utftext += String.fromCharCode(c);
-            } else if ((c > 127) && (c < 2048)) {
-                utftext += String.fromCharCode((c >> 6) | 192);
-                utftext += String.fromCharCode((c & 63) | 128);
-            } else {
-                utftext += String.fromCharCode((c >> 12) | 224);
-                utftext += String.fromCharCode(((c >> 6) & 63) | 128);
-                utftext += String.fromCharCode((c & 63) | 128);
-            }
 
-        }
+        /**
+         * @static
+         * @property 开始加载事件
+         */
+        STARTLOAD: "_STARTLOAD",
 
-        return utftext;
-    };
+        /**
+         * @static
+         * @property 加载后事件
+         */
+        AFTERLOAD: "_AFTERLOAD",
 
-    // private method for UTF-8 decoding
-    var _utf8_decode = function (utftext) {
-        var string = "";
-        var i = 0;
-        var c = 0, c3 = 0, c2 = 0;
 
-        while (i < utftext.length) {
+        /**
+         * @static
+         * @property 提交前事件
+         */
+        BS: "beforesubmit",
 
-            c = utftext.charCodeAt(i);
+        /**
+         * @static
+         * @property 提交后事件
+         */
+        AS: "aftersubmit",
 
-            if (c < 128) {
-                string += String.fromCharCode(c);
-                i++;
-            } else if ((c > 191) && (c < 224)) {
-                c2 = utftext.charCodeAt(i + 1);
-                string += String.fromCharCode(((c & 31) << 6) | (c2 & 63));
-                i += 2;
-            } else {
-                c2 = utftext.charCodeAt(i + 1);
-                c3 = utftext.charCodeAt(i + 2);
-                string += String.fromCharCode(((c & 15) << 12) | ((c2 & 63) << 6) | (c3 & 63));
-                i += 3;
-            }
+        /**
+         * @static
+         * @property 提交完成事件
+         */
+        SC: "submitcomplete",
 
-        }
-        return string;
-    };
+        /**
+         * @static
+         * @property 提交失败事件
+         */
+        SF: "submitfailure",
 
-    _.extend(BI, {
+        /**
+         * @static
+         * @property 提交成功事件
+         */
+        SS: "submitsuccess",
 
-        encode: function (input) {
-            var output = "";
-            var chr1, chr2, chr3, enc1, enc2, enc3, enc4;
-            var i = 0;
+        /**
+         * @static
+         * @property 校验提交前事件
+         */
+        BVW: "beforeverifywrite",
 
-            input = _utf8_encode(input);
+        /**
+         * @static
+         * @property 校验提交后事件
+         */
+        AVW: "afterverifywrite",
 
-            while (i < input.length) {
+        /**
+         * @static
+         * @property 校验后事件
+         */
+        AV: "afterverify",
 
-                chr1 = input.charCodeAt(i++);
-                chr2 = input.charCodeAt(i++);
-                chr3 = input.charCodeAt(i++);
+        /**
+         * @static
+         * @property 填报前事件
+         */
+        BW: "beforewrite",
 
-                enc1 = chr1 >> 2;
-                enc2 = ((chr1 & 3) << 4) | (chr2 >> 4);
-                enc3 = ((chr2 & 15) << 2) | (chr3 >> 6);
-                enc4 = chr3 & 63;
+        /**
+         * @static
+         * @property 填报后事件
+         */
+        AW: "afterwrite",
 
-                if (isNaN(chr2)) {
-                    enc3 = enc4 = 64;
-                } else if (isNaN(chr3)) {
-                    enc4 = 64;
-                }
+        /**
+         * @static
+         * @property 填报成功事件
+         */
+        WS: "writesuccess",
 
-                output = output + _keyStr.charAt(enc1) + _keyStr.charAt(enc2) + _keyStr.charAt(enc3) + _keyStr.charAt(enc4);
+        /**
+         * @static
+         * @property 填报失败事件
+         */
+        WF: "writefailure",
 
-            }
+        /**
+         * @static
+         * @property 添加行前事件
+         */
+        BA: "beforeappend",
 
-            return output;
-        },
+        /**
+         * @static
+         * @property 添加行后事件
+         */
+        AA: "afterappend",
 
-        // public method for decoding
-        decode: function (input) {
-            var output = "";
-            var chr1, chr2, chr3;
-            var enc1, enc2, enc3, enc4;
-            var i = 0;
+        /**
+         * @static
+         * @property 删除行前事件
+         */
+        BD: "beforedelete",
 
-            input = input.replace(/[^A-Za-z0-9\+\/\=]/g, "");
+        /**
+         * @static
+         * @property 删除行后事件
+         */
+        AD: "beforedelete",
 
-            while (i < input.length) {
+        /**
+         * @static
+         * @property 未提交离开事件
+         */
+        UC: "unloadcheck",
 
-                enc1 = _keyStr.indexOf(input.charAt(i++));
-                enc2 = _keyStr.indexOf(input.charAt(i++));
-                enc3 = _keyStr.indexOf(input.charAt(i++));
-                enc4 = _keyStr.indexOf(input.charAt(i++));
 
-                chr1 = (enc1 << 2) | (enc2 >> 4);
-                chr2 = ((enc2 & 15) << 4) | (enc3 >> 2);
-                chr3 = ((enc3 & 3) << 6) | enc4;
+        /**
+         * @static
+         * @property PDF导出前事件
+         */
+        BTOPDF: "beforetopdf",
 
-                output = output + String.fromCharCode(chr1);
+        /**
+         * @static
+         * @property PDF导出后事件
+         */
+        ATOPDF: "aftertopdf",
 
-                if (enc3 != 64) {
-                    output = output + String.fromCharCode(chr2);
-                }
-                if (enc4 != 64) {
-                    output = output + String.fromCharCode(chr3);
-                }
+        /**
+         * @static
+         * @property Excel导出前事件
+         */
+        BTOEXCEL: "beforetoexcel",
 
-            }
+        /**
+         * @static
+         * @property Excel导出后事件
+         */
+        ATOEXCEL: "aftertoexcel",
 
-            output = _utf8_decode(output);
+        /**
+         * @static
+         * @property Word导出前事件
+         */
+        BTOWORD: "beforetoword",
 
-            return output;
+        /**
+         * @static
+         * @property Word导出后事件
+         */
+        ATOWORD: "aftertoword",
 
-        }
-    });
-})();
+        /**
+         * @static
+         * @property 图片导出前事件
+         */
+        BTOIMAGE: "beforetoimage",
+
+        /**
+         * @static
+         * @property 图片导出后事件
+         */
+        ATOIMAGE: "aftertoimage",
+
+        /**
+         * @static
+         * @property HTML导出前事件
+         */
+        BTOHTML: "beforetohtml",
+
+        /**
+         * @static
+         * @property HTML导出后事件
+         */
+        ATOHTML: "aftertohtml",
+
+        /**
+         * @static
+         * @property Excel导入前事件
+         */
+        BIMEXCEL: "beforeimportexcel",
+
+        /**
+         * @static
+         * @property Excel导出后事件
+         */
+        AIMEXCEL: "afterimportexcel",
+
+        /**
+         * @static
+         * @property PDF打印前事件
+         */
+        BPDFPRINT: "beforepdfprint",
+
+        /**
+         * @static
+         * @property PDF打印后事件
+         */
+        APDFPRINT: "afterpdfprint",
+
+        /**
+         * @static
+         * @property Flash打印前事件
+         */
+        BFLASHPRINT: "beforeflashprint",
+
+        /**
+         * @static
+         * @property Flash打印后事件
+         */
+        AFLASHPRINT: "afterflashprint",
+
+        /**
+         * @static
+         * @property Applet打印前事件
+         */
+        BAPPLETPRINT: "beforeappletprint",
+
+        /**
+         * @static
+         * @property Applet打印后事件
+         */
+        AAPPLETPRINT: "afterappletprint",
+
+        /**
+         * @static
+         * @property 服务器打印前事件
+         */
+        BSEVERPRINT: "beforeserverprint",
+
+        /**
+         * @static
+         * @property 服务器打印后事件
+         */
+        ASERVERPRINT: "afterserverprint",
+
+        /**
+         * @static
+         * @property 邮件发送前事件
+         */
+        BEMAIL: "beforeemail",
+
+        /**
+         * @static
+         * @property 邮件发送后事件
+         */
+        AEMAIL: "afteremail"
+    }
+});
 
 /***/ }),
 
 /***/ 133:
 /***/ (function(module, exports) {
 
+/**
+ * 常量
+ */
 
-BI.Cache = {
-    _prefix: "bi",
-    setUsername: function (username) {
-        localStorage.setItem(BI.Cache._prefix + ".username", (username + "" || "").toUpperCase());
+_.extend(BI, {
+    MAX: 0xfffffffffffffff,
+    MIN: -0xfffffffffffffff,
+    EVENT_RESPONSE_TIME: 200,
+    zIndex_layer: 1e5,
+    zIndex_popover: 1e6,
+    zIndex_popup: 1e7,
+    zIndex_masker: 1e8,
+    zIndex_tip: 1e9,
+    emptyStr: "",
+    pixUnit: "px",
+    pixRatio: 1,
+    emptyFn: function () {
     },
-    getUsername: function () {
-        return localStorage.getItem(BI.Cache._prefix + ".username") || "";
+    empty: null,
+    Key: {
+        48: "0",
+        49: "1",
+        50: "2",
+        51: "3",
+        52: "4",
+        53: "5",
+        54: "6",
+        55: "7",
+        56: "8",
+        57: "9",
+        65: "a",
+        66: "b",
+        67: "c",
+        68: "d",
+        69: "e",
+        70: "f",
+        71: "g",
+        72: "h",
+        73: "i",
+        74: "j",
+        75: "k",
+        76: "l",
+        77: "m",
+        78: "n",
+        79: "o",
+        80: "p",
+        81: "q",
+        82: "r",
+        83: "s",
+        84: "t",
+        85: "u",
+        86: "v",
+        87: "w",
+        88: "x",
+        89: "y",
+        90: "z",
+        96: "0",
+        97: "1",
+        98: "2",
+        99: "3",
+        100: "4",
+        101: "5",
+        102: "6",
+        103: "7",
+        104: "8",
+        105: "9",
+        106: "*",
+        107: "+",
+        109: "-",
+        110: ".",
+        111: "/"
     },
-    _getKeyPrefix: function () {
-        return BI.Cache.getUsername() + "." + BI.Cache._prefix + ".";
+    KeyCode: {
+        BACKSPACE: 8,
+        COMMA: 188,
+        DELETE: 46,
+        DOWN: 40,
+        END: 35,
+        ENTER: 13,
+        ESCAPE: 27,
+        HOME: 36,
+        LEFT: 37,
+        NUMPAD_ADD: 107,
+        NUMPAD_DECIMAL: 110,
+        NUMPAD_DIVIDE: 111,
+        NUMPAD_ENTER: 108,
+        NUMPAD_MULTIPLY: 106,
+        NUMPAD_SUBTRACT: 109,
+        PAGE_DOWN: 34,
+        PAGE_UP: 33,
+        PERIOD: 190,
+        RIGHT: 39,
+        SPACE: 32,
+        TAB: 9,
+        UP: 38
     },
-    _generateKey: function (key) {
-        return BI.Cache._getKeyPrefix() + (key || "");
+    Status: {
+        SUCCESS: 1,
+        WRONG: 2,
+        START: 3,
+        END: 4,
+        WAITING: 5,
+        READY: 6,
+        RUNNING: 7,
+        OUTOFBOUNDS: 8,
+        NULL: -1
     },
-    getItem: function (key) {
-        return localStorage.getItem(BI.Cache._generateKey(key));
+    Direction: {
+        Top: "top",
+        Bottom: "bottom",
+        Left: "left",
+        Right: "right",
+        Custom: "custom"
     },
-    setItem: function (key, value) {
-        localStorage.setItem(BI.Cache._generateKey(key), value);
+    Axis: {
+        Vertical: "vertical",
+        Horizontal: "horizontal"
     },
-    removeItem: function (key) {
-        localStorage.removeItem(BI.Cache._generateKey(key));
+    Selection: {
+        Default: -2,
+        None: -1,
+        Single: 0,
+        Multi: 1,
+        All: 2
     },
-    clear: function () {
-        for (var i = localStorage.length; i >= 0; i--) {
-            var key = localStorage.key(i);
-            if (key) {
-                if (key.indexOf(BI.Cache._getKeyPrefix()) === 0) {
-                    localStorage.removeItem(key);
-                }
-            }
-        }
+    HorizontalAlign: {
+        Left: "left",
+        Right: "right",
+        Center: "center",
+        Stretch: "stretch"
     },
-    keys: function () {
-        var result = [];
-        for (var i = localStorage.length; i >= 0; i--) {
-            var key = localStorage.key(i);
-            if (key) {
-                var prefix = BI.Cache._getKeyPrefix();
-                if (key.indexOf(prefix) === 0) {
-                    result[result.length] = key.substring(prefix.length);
-                }
-            }
-        }
-        return result;
+    VerticalAlign: {
+        Middle: "middle",
+        Top: "top",
+        Bottom: "bottom",
+        Stretch: "stretch"
     },
+    StartOfWeek: 1
+});
 
-    addCookie: function (name, value, path, expiresHours) {
-        var cookieString = name + "=" + escape(value);
-        // 判断是否设置过期时间
-        if (expiresHours && expiresHours > 0) {
-            var date = new Date();
-            // expires是标准GMT格式时间，应该使用时间戳作为起始时间
-            date.setTime(date.getTime() + expiresHours * 3600 * 1000);
-            cookieString = cookieString + "; expires=" + date.toUTCString();
-        }
-        if (path) {
-            cookieString = cookieString + "; path=" + path;
-        }
-        document.cookie = cookieString;
-    },
-    getCookie: function (name) {
-        var arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
-        if (arr = document.cookie.match(reg)) {return unescape(arr[2]);}
-        return null;
-    },
-    deleteCookie: function (name, path) {
-        var date = new Date();
-        date.setTime(date.getTime() - 10000);
-        var cookieString = name + "=v; expires=" + date.toUTCString();
-        if (path) {
-            cookieString = cookieString + "; path=" + path;
-        }
-        document.cookie = cookieString;
-    }
-};
 
 /***/ }),
 
 /***/ 134:
-/***/ (function(module, exports) {
-
-BI.CellSizeAndPositionManager = function (cellCount, cellSizeGetter, estimatedCellSize) {
-    this._cellSizeGetter = cellSizeGetter;
-    this._cellCount = cellCount;
-    this._estimatedCellSize = estimatedCellSize;
-    this._cellSizeAndPositionData = {};
-    this._lastMeasuredIndex = -1;
-};
-
-BI.CellSizeAndPositionManager.prototype = {
-    constructor: BI.CellSizeAndPositionManager,
-    configure: function (cellCount, estimatedCellSize) {
-        this._cellCount = cellCount;
-        this._estimatedCellSize = estimatedCellSize;
-    },
-
-    getCellCount: function () {
-        return this._cellCount;
-    },
-
-    getEstimatedCellSize: function () {
-        return this._estimatedCellSize;
-    },
-
-    getLastMeasuredIndex: function () {
-        return this._lastMeasuredIndex;
-    },
-
-    getSizeAndPositionOfCell: function (index) {
-        if (index < 0 || index >= this._cellCount) {
-            return;
-        }
-        if (index > this._lastMeasuredIndex) {
-            var lastMeasuredCellSizeAndPosition = this.getSizeAndPositionOfLastMeasuredCell();
-            var offset = lastMeasuredCellSizeAndPosition.offset + lastMeasuredCellSizeAndPosition.size;
-
-            for (var i = this._lastMeasuredIndex + 1; i <= index; i++) {
-                var size = this._cellSizeGetter(i);
-
-                if (size == null || isNaN(size)) {
-                    continue;
-                }
-
-                this._cellSizeAndPositionData[i] = {
-                    offset: offset,
-                    size: size
-                };
-
-                offset += size;
-            }
-
-            this._lastMeasuredIndex = index;
-        }
-        return this._cellSizeAndPositionData[index];
-    },
-
-    getSizeAndPositionOfLastMeasuredCell: function () {
-        return this._lastMeasuredIndex >= 0
-            ? this._cellSizeAndPositionData[this._lastMeasuredIndex]
-            : {
-                offset: 0,
-                size: 0
-            };
-    },
-
-    getTotalSize: function () {
-        var lastMeasuredCellSizeAndPosition = this.getSizeAndPositionOfLastMeasuredCell();
-        return lastMeasuredCellSizeAndPosition.offset + lastMeasuredCellSizeAndPosition.size + (this._cellCount - this._lastMeasuredIndex - 1) * this._estimatedCellSize;
-    },
-
-    getUpdatedOffsetForIndex: function (align, containerSize, currentOffset, targetIndex) {
-        var datum = this.getSizeAndPositionOfCell(targetIndex);
-        var maxOffset = datum.offset;
-        var minOffset = maxOffset - containerSize + datum.size;
-
-        var idealOffset;
-
-        switch (align) {
-            case "start":
-                idealOffset = maxOffset;
-                break;
-            case "end":
-                idealOffset = minOffset;
-                break;
-            case "center":
-                idealOffset = maxOffset - ((containerSize - datum.size) / 2);
-                break;
-            default:
-                idealOffset = Math.max(minOffset, Math.min(maxOffset, currentOffset));
-                break;
-        }
-
-        var totalSize = this.getTotalSize();
-
-        return Math.max(0, Math.min(totalSize - containerSize, idealOffset));
-    },
-
-    getVisibleCellRange: function (containerSize, offset) {
-        var totalSize = this.getTotalSize();
-
-        if (totalSize === 0) {
-            return {};
-        }
-
-        var maxOffset = offset + containerSize;
-        var start = this._findNearestCell(offset);
-
-        var datum = this.getSizeAndPositionOfCell(start);
-        offset = datum.offset + datum.size;
-
-        var stop = start;
-
-        while (offset < maxOffset && stop < this._cellCount - 1) {
-            stop++;
-            offset += this.getSizeAndPositionOfCell(stop).size;
-        }
-
-        return {
-            start: start,
-            stop: stop
-        };
-    },
-
-    resetCell: function (index) {
-        this._lastMeasuredIndex = Math.min(this._lastMeasuredIndex, index - 1);
-    },
-
-    _binarySearch: function (high, low, offset) {
-        var middle;
-        var currentOffset;
-
-        while (low <= high) {
-            middle = low + Math.floor((high - low) / 2);
-            currentOffset = this.getSizeAndPositionOfCell(middle).offset;
-
-            if (currentOffset === offset) {
-                return middle;
-            } else if (currentOffset < offset) {
-                low = middle + 1;
-            } else if (currentOffset > offset) {
-                high = middle - 1;
-            }
-        }
-
-        if (low > 0) {
-            return low - 1;
-        }
-    },
-
-    _exponentialSearch: function (index, offset) {
-        var interval = 1;
-
-        while (index < this._cellCount && this.getSizeAndPositionOfCell(index).offset < offset) {
-            index += interval;
-            interval *= 2;
-        }
-
-        return this._binarySearch(Math.min(index, this._cellCount - 1), Math.floor(index / 2), offset);
-    },
-
-    _findNearestCell: function (offset) {
-        if (isNaN(offset)) {
-            return;
-        }
-
-        offset = Math.max(0, offset);
-
-        var lastMeasuredCellSizeAndPosition = this.getSizeAndPositionOfLastMeasuredCell();
-        var lastMeasuredIndex = Math.max(0, this._lastMeasuredIndex);
-
-        if (lastMeasuredCellSizeAndPosition.offset >= offset) {
-            return this._binarySearch(lastMeasuredIndex, 0, offset);
-        }
-        return this._exponentialSearch(lastMeasuredIndex, offset);
-        
-    }
-};
-
-BI.ScalingCellSizeAndPositionManager = function (cellCount, cellSizeGetter, estimatedCellSize, maxScrollSize) {
-    this._cellSizeAndPositionManager = new BI.CellSizeAndPositionManager(cellCount, cellSizeGetter, estimatedCellSize);
-    this._maxScrollSize = maxScrollSize || 10000000;
-};
-
-BI.ScalingCellSizeAndPositionManager.prototype = {
-    constructor: BI.ScalingCellSizeAndPositionManager,
-
-    configure: function () {
-        this._cellSizeAndPositionManager.configure.apply(this._cellSizeAndPositionManager, arguments);
-    },
-
-    getCellCount: function () {
-        return this._cellSizeAndPositionManager.getCellCount();
-    },
-
-    getEstimatedCellSize: function () {
-        return this._cellSizeAndPositionManager.getEstimatedCellSize();
-    },
-
-    getLastMeasuredIndex: function () {
-        return this._cellSizeAndPositionManager.getLastMeasuredIndex();
-    },
-
-    getOffsetAdjustment: function (containerSize, offset) {
-        var totalSize = this._cellSizeAndPositionManager.getTotalSize();
-        var safeTotalSize = this.getTotalSize();
-        var offsetPercentage = this._getOffsetPercentage(containerSize, offset, safeTotalSize);
-
-        return Math.round(offsetPercentage * (safeTotalSize - totalSize));
-    },
-
-    getSizeAndPositionOfCell: function (index) {
-        return this._cellSizeAndPositionManager.getSizeAndPositionOfCell(index);
-    },
-
-    getSizeAndPositionOfLastMeasuredCell: function () {
-        return this._cellSizeAndPositionManager.getSizeAndPositionOfLastMeasuredCell();
-    },
-
-    getTotalSize: function () {
-        return Math.min(this._maxScrollSize, this._cellSizeAndPositionManager.getTotalSize());
-    },
-
-    getUpdatedOffsetForIndex: function (align, containerSize, currentOffset, targetIndex) {
-        currentOffset = this._safeOffsetToOffset(containerSize, currentOffset);
-
-        var offset = this._cellSizeAndPositionManager.getUpdatedOffsetForIndex(align, containerSize, currentOffset, targetIndex);
-
-        return this._offsetToSafeOffset(containerSize, offset);
-    },
-
-    getVisibleCellRange: function (containerSize, offset) {
-        offset = this._safeOffsetToOffset(containerSize, offset);
-
-        return this._cellSizeAndPositionManager.getVisibleCellRange(containerSize, offset);
-    },
-
-    resetCell: function (index) {
-        this._cellSizeAndPositionManager.resetCell(index);
-    },
-
-    _getOffsetPercentage: function (containerSize, offset, totalSize) {
-        return totalSize <= containerSize
-            ? 0
-            : offset / (totalSize - containerSize);
-    },
-
-    _offsetToSafeOffset: function (containerSize, offset) {
-        var totalSize = this._cellSizeAndPositionManager.getTotalSize();
-        var safeTotalSize = this.getTotalSize();
-
-        if (totalSize === safeTotalSize) {
-            return offset;
-        }
-        var offsetPercentage = this._getOffsetPercentage(containerSize, offset, totalSize);
-
-        return Math.round(offsetPercentage * (safeTotalSize - containerSize));
-        
-    },
-
-    _safeOffsetToOffset: function (containerSize, offset) {
-        var totalSize = this._cellSizeAndPositionManager.getTotalSize();
-        var safeTotalSize = this.getTotalSize();
-
-        if (totalSize === safeTotalSize) {
-            return offset;
-        }
-        var offsetPercentage = this._getOffsetPercentage(containerSize, offset, safeTotalSize);
-
-        return Math.round(offsetPercentage * (totalSize - containerSize));
-        
-    }
-};
-
-/***/ }),
-
-/***/ 135:
-/***/ (function(module, exports) {
-
-/**
- * 汉字拼音索引
- */
-
-!(function () {
-    var _ChineseFirstPY = "YDYQSXMWZSSXJBYMGCCZQPSSQBYCDSCDQLDYLYBSSJGYZZJJFKCCLZDHWDWZJLJPFYYNWJJTMYHZWZHFLZPPQHGSCYYYNJQYXXGJHHSDSJNKKTMOMLCRXYPSNQSECCQZGGLLYJLMYZZSECYKYYHQWJSSGGYXYZYJWWKDJHYCHMYXJTLXJYQBYXZLDWRDJRWYSRLDZJPCBZJJBRCFTLECZSTZFXXZHTRQHYBDLYCZSSYMMRFMYQZPWWJJYFCRWFDFZQPYDDWYXKYJAWJFFXYPSFTZYHHYZYSWCJYXSCLCXXWZZXNBGNNXBXLZSZSBSGPYSYZDHMDZBQBZCWDZZYYTZHBTSYYBZGNTNXQYWQSKBPHHLXGYBFMJEBJHHGQTJCYSXSTKZHLYCKGLYSMZXYALMELDCCXGZYRJXSDLTYZCQKCNNJWHJTZZCQLJSTSTBNXBTYXCEQXGKWJYFLZQLYHYXSPSFXLMPBYSXXXYDJCZYLLLSJXFHJXPJBTFFYABYXBHZZBJYZLWLCZGGBTSSMDTJZXPTHYQTGLJSCQFZKJZJQNLZWLSLHDZBWJNCJZYZSQQYCQYRZCJJWYBRTWPYFTWEXCSKDZCTBZHYZZYYJXZCFFZZMJYXXSDZZOTTBZLQWFCKSZSXFYRLNYJMBDTHJXSQQCCSBXYYTSYFBXDZTGBCNSLCYZZPSAZYZZSCJCSHZQYDXLBPJLLMQXTYDZXSQJTZPXLCGLQTZWJBHCTSYJSFXYEJJTLBGXSXJMYJQQPFZASYJNTYDJXKJCDJSZCBARTDCLYJQMWNQNCLLLKBYBZZSYHQQLTWLCCXTXLLZNTYLNEWYZYXCZXXGRKRMTCNDNJTSYYSSDQDGHSDBJGHRWRQLYBGLXHLGTGXBQJDZPYJSJYJCTMRNYMGRZJCZGJMZMGXMPRYXKJNYMSGMZJYMKMFXMLDTGFBHCJHKYLPFMDXLQJJSMTQGZSJLQDLDGJYCALCMZCSDJLLNXDJFFFFJCZFMZFFPFKHKGDPSXKTACJDHHZDDCRRCFQYJKQCCWJDXHWJLYLLZGCFCQDSMLZPBJJPLSBCJGGDCKKDEZSQCCKJGCGKDJTJDLZYCXKLQSCGJCLTFPCQCZGWPJDQYZJJBYJHSJDZWGFSJGZKQCCZLLPSPKJGQJHZZLJPLGJGJJTHJJYJZCZMLZLYQBGJWMLJKXZDZNJQSYZMLJLLJKYWXMKJLHSKJGBMCLYYMKXJQLBMLLKMDXXKWYXYSLMLPSJQQJQXYXFJTJDXMXXLLCXQBSYJBGWYMBGGBCYXPJYGPEPFGDJGBHBNSQJYZJKJKHXQFGQZKFHYGKHDKLLSDJQXPQYKYBNQSXQNSZSWHBSXWHXWBZZXDMNSJBSBKBBZKLYLXGWXDRWYQZMYWSJQLCJXXJXKJEQXSCYETLZHLYYYSDZPAQYZCMTLSHTZCFYZYXYLJSDCJQAGYSLCQLYYYSHMRQQKLDXZSCSSSYDYCJYSFSJBFRSSZQSBXXPXJYSDRCKGJLGDKZJZBDKTCSYQPYHSTCLDJDHMXMCGXYZHJDDTMHLTXZXYLYMOHYJCLTYFBQQXPFBDFHHTKSQHZYYWCNXXCRWHOWGYJLEGWDQCWGFJYCSNTMYTOLBYGWQWESJPWNMLRYDZSZTXYQPZGCWXHNGPYXSHMYQJXZTDPPBFYHZHTJYFDZWKGKZBLDNTSXHQEEGZZYLZMMZYJZGXZXKHKSTXNXXWYLYAPSTHXDWHZYMPXAGKYDXBHNHXKDPJNMYHYLPMGOCSLNZHKXXLPZZLBMLSFBHHGYGYYGGBHSCYAQTYWLXTZQCEZYDQDQMMHTKLLSZHLSJZWFYHQSWSCWLQAZYNYTLSXTHAZNKZZSZZLAXXZWWCTGQQTDDYZTCCHYQZFLXPSLZYGPZSZNGLNDQTBDLXGTCTAJDKYWNSYZLJHHZZCWNYYZYWMHYCHHYXHJKZWSXHZYXLYSKQYSPSLYZWMYPPKBYGLKZHTYXAXQSYSHXASMCHKDSCRSWJPWXSGZJLWWSCHSJHSQNHCSEGNDAQTBAALZZMSSTDQJCJKTSCJAXPLGGXHHGXXZCXPDMMHLDGTYBYSJMXHMRCPXXJZCKZXSHMLQXXTTHXWZFKHCCZDYTCJYXQHLXDHYPJQXYLSYYDZOZJNYXQEZYSQYAYXWYPDGXDDXSPPYZNDLTWRHXYDXZZJHTCXMCZLHPYYYYMHZLLHNXMYLLLMDCPPXHMXDKYCYRDLTXJCHHZZXZLCCLYLNZSHZJZZLNNRLWHYQSNJHXYNTTTKYJPYCHHYEGKCTTWLGQRLGGTGTYGYHPYHYLQYQGCWYQKPYYYTTTTLHYHLLTYTTSPLKYZXGZWGPYDSSZZDQXSKCQNMJJZZBXYQMJRTFFBTKHZKBXLJJKDXJTLBWFZPPTKQTZTGPDGNTPJYFALQMKGXBDCLZFHZCLLLLADPMXDJHLCCLGYHDZFGYDDGCYYFGYDXKSSEBDHYKDKDKHNAXXYBPBYYHXZQGAFFQYJXDMLJCSQZLLPCHBSXGJYNDYBYQSPZWJLZKSDDTACTBXZDYZYPJZQSJNKKTKNJDJGYYPGTLFYQKASDNTCYHBLWDZHBBYDWJRYGKZYHEYYFJMSDTYFZJJHGCXPLXHLDWXXJKYTCYKSSSMTWCTTQZLPBSZDZWZXGZAGYKTYWXLHLSPBCLLOQMMZSSLCMBJCSZZKYDCZJGQQDSMCYTZQQLWZQZXSSFPTTFQMDDZDSHDTDWFHTDYZJYQJQKYPBDJYYXTLJHDRQXXXHAYDHRJLKLYTWHLLRLLRCXYLBWSRSZZSYMKZZHHKYHXKSMDSYDYCJPBZBSQLFCXXXNXKXWYWSDZYQOGGQMMYHCDZTTFJYYBGSTTTYBYKJDHKYXBELHTYPJQNFXFDYKZHQKZBYJTZBXHFDXKDASWTAWAJLDYJSFHBLDNNTNQJTJNCHXFJSRFWHZFMDRYJYJWZPDJKZYJYMPCYZNYNXFBYTFYFWYGDBNZZZDNYTXZEMMQBSQEHXFZMBMFLZZSRXYMJGSXWZJSPRYDJSJGXHJJGLJJYNZZJXHGXKYMLPYYYCXYTWQZSWHWLYRJLPXSLSXMFSWWKLCTNXNYNPSJSZHDZEPTXMYYWXYYSYWLXJQZQXZDCLEEELMCPJPCLWBXSQHFWWTFFJTNQJHJQDXHWLBYZNFJLALKYYJLDXHHYCSTYYWNRJYXYWTRMDRQHWQCMFJDYZMHMYYXJWMYZQZXTLMRSPWWCHAQBXYGZYPXYYRRCLMPYMGKSJSZYSRMYJSNXTPLNBAPPYPYLXYYZKYNLDZYJZCZNNLMZHHARQMPGWQTZMXXMLLHGDZXYHXKYXYCJMFFYYHJFSBSSQLXXNDYCANNMTCJCYPRRNYTYQNYYMBMSXNDLYLYSLJRLXYSXQMLLYZLZJJJKYZZCSFBZXXMSTBJGNXYZHLXNMCWSCYZYFZLXBRNNNYLBNRTGZQYSATSWRYHYJZMZDHZGZDWYBSSCSKXSYHYTXXGCQGXZZSHYXJSCRHMKKBXCZJYJYMKQHZJFNBHMQHYSNJNZYBKNQMCLGQHWLZNZSWXKHLJHYYBQLBFCDSXDLDSPFZPSKJYZWZXZDDXJSMMEGJSCSSMGCLXXKYYYLNYPWWWGYDKZJGGGZGGSYCKNJWNJPCXBJJTQTJWDSSPJXZXNZXUMELPXFSXTLLXCLJXJJLJZXCTPSWXLYDHLYQRWHSYCSQYYBYAYWJJJQFWQCQQCJQGXALDBZZYJGKGXPLTZYFXJLTPADKYQHPMATLCPDCKBMTXYBHKLENXDLEEGQDYMSAWHZMLJTWYGXLYQZLJEEYYBQQFFNLYXRDSCTGJGXYYNKLLYQKCCTLHJLQMKKZGCYYGLLLJDZGYDHZWXPYSJBZKDZGYZZHYWYFQYTYZSZYEZZLYMHJJHTSMQWYZLKYYWZCSRKQYTLTDXWCTYJKLWSQZWBDCQYNCJSRSZJLKCDCDTLZZZACQQZZDDXYPLXZBQJYLZLLLQDDZQJYJYJZYXNYYYNYJXKXDAZWYRDLJYYYRJLXLLDYXJCYWYWNQCCLDDNYYYNYCKCZHXXCCLGZQJGKWPPCQQJYSBZZXYJSQPXJPZBSBDSFNSFPZXHDWZTDWPPTFLZZBZDMYYPQJRSDZSQZSQXBDGCPZSWDWCSQZGMDHZXMWWFYBPDGPHTMJTHZSMMBGZMBZJCFZWFZBBZMQCFMBDMCJXLGPNJBBXGYHYYJGPTZGZMQBQTCGYXJXLWZKYDPDYMGCFTPFXYZTZXDZXTGKMTYBBCLBJASKYTSSQYYMSZXFJEWLXLLSZBQJJJAKLYLXLYCCTSXMCWFKKKBSXLLLLJYXTYLTJYYTDPJHNHNNKBYQNFQYYZBYYESSESSGDYHFHWTCJBSDZZTFDMXHCNJZYMQWSRYJDZJQPDQBBSTJGGFBKJBXTGQHNGWJXJGDLLTHZHHYYYYYYSXWTYYYCCBDBPYPZYCCZYJPZYWCBDLFWZCWJDXXHYHLHWZZXJTCZLCDPXUJCZZZLYXJJTXPHFXWPYWXZPTDZZBDZCYHJHMLXBQXSBYLRDTGJRRCTTTHYTCZWMXFYTWWZCWJWXJYWCSKYBZSCCTZQNHXNWXXKHKFHTSWOCCJYBCMPZZYKBNNZPBZHHZDLSYDDYTYFJPXYNGFXBYQXCBHXCPSXTYZDMKYSNXSXLHKMZXLYHDHKWHXXSSKQYHHCJYXGLHZXCSNHEKDTGZXQYPKDHEXTYKCNYMYYYPKQYYYKXZLTHJQTBYQHXBMYHSQCKWWYLLHCYYLNNEQXQWMCFBDCCMLJGGXDQKTLXKGNQCDGZJWYJJLYHHQTTTNWCHMXCXWHWSZJYDJCCDBQCDGDNYXZTHCQRXCBHZTQCBXWGQWYYBXHMBYMYQTYEXMQKYAQYRGYZSLFYKKQHYSSQYSHJGJCNXKZYCXSBXYXHYYLSTYCXQTHYSMGSCPMMGCCCCCMTZTASMGQZJHKLOSQYLSWTMXSYQKDZLJQQYPLSYCZTCQQPBBQJZCLPKHQZYYXXDTDDTSJCXFFLLCHQXMJLWCJCXTSPYCXNDTJSHJWXDQQJSKXYAMYLSJHMLALYKXCYYDMNMDQMXMCZNNCYBZKKYFLMCHCMLHXRCJJHSYLNMTJZGZGYWJXSRXCWJGJQHQZDQJDCJJZKJKGDZQGJJYJYLXZXXCDQHHHEYTMHLFSBDJSYYSHFYSTCZQLPBDRFRZTZYKYWHSZYQKWDQZRKMSYNBCRXQBJYFAZPZZEDZCJYWBCJWHYJBQSZYWRYSZPTDKZPFPBNZTKLQYHBBZPNPPTYZZYBQNYDCPJMMCYCQMCYFZZDCMNLFPBPLNGQJTBTTNJZPZBBZNJKLJQYLNBZQHKSJZNGGQSZZKYXSHPZSNBCGZKDDZQANZHJKDRTLZLSWJLJZLYWTJNDJZJHXYAYNCBGTZCSSQMNJPJYTYSWXZFKWJQTKHTZPLBHSNJZSYZBWZZZZLSYLSBJHDWWQPSLMMFBJDWAQYZTCJTBNNWZXQXCDSLQGDSDPDZHJTQQPSWLYYJZLGYXYZLCTCBJTKTYCZJTQKBSJLGMGZDMCSGPYNJZYQYYKNXRPWSZXMTNCSZZYXYBYHYZAXYWQCJTLLCKJJTJHGDXDXYQYZZBYWDLWQCGLZGJGQRQZCZSSBCRPCSKYDZNXJSQGXSSJMYDNSTZTPBDLTKZWXQWQTZEXNQCZGWEZKSSBYBRTSSSLCCGBPSZQSZLCCGLLLZXHZQTHCZMQGYZQZNMCOCSZJMMZSQPJYGQLJYJPPLDXRGZYXCCSXHSHGTZNLZWZKJCXTCFCJXLBMQBCZZWPQDNHXLJCTHYZLGYLNLSZZPCXDSCQQHJQKSXZPBAJYEMSMJTZDXLCJYRYYNWJBNGZZTMJXLTBSLYRZPYLSSCNXPHLLHYLLQQZQLXYMRSYCXZLMMCZLTZSDWTJJLLNZGGQXPFSKYGYGHBFZPDKMWGHCXMSGDXJMCJZDYCABXJDLNBCDQYGSKYDQTXDJJYXMSZQAZDZFSLQXYJSJZYLBTXXWXQQZBJZUFBBLYLWDSLJHXJYZJWTDJCZFQZQZZDZSXZZQLZCDZFJHYSPYMPQZMLPPLFFXJJNZZYLSJEYQZFPFZKSYWJJJHRDJZZXTXXGLGHYDXCSKYSWMMZCWYBAZBJKSHFHJCXMHFQHYXXYZFTSJYZFXYXPZLCHMZMBXHZZSXYFYMNCWDABAZLXKTCSHHXKXJJZJSTHYGXSXYYHHHJWXKZXSSBZZWHHHCWTZZZPJXSNXQQJGZYZYWLLCWXZFXXYXYHXMKYYSWSQMNLNAYCYSPMJKHWCQHYLAJJMZXHMMCNZHBHXCLXTJPLTXYJHDYYLTTXFSZHYXXSJBJYAYRSMXYPLCKDUYHLXRLNLLSTYZYYQYGYHHSCCSMZCTZQXKYQFPYYRPFFLKQUNTSZLLZMWWTCQQYZWTLLMLMPWMBZSSTZRBPDDTLQJJBXZCSRZQQYGWCSXFWZLXCCRSZDZMCYGGDZQSGTJSWLJMYMMZYHFBJDGYXCCPSHXNZCSBSJYJGJMPPWAFFYFNXHYZXZYLREMZGZCYZSSZDLLJCSQFNXZKPTXZGXJJGFMYYYSNBTYLBNLHPFZDCYFBMGQRRSSSZXYSGTZRNYDZZCDGPJAFJFZKNZBLCZSZPSGCYCJSZLMLRSZBZZLDLSLLYSXSQZQLYXZLSKKBRXBRBZCYCXZZZEEYFGKLZLYYHGZSGZLFJHGTGWKRAAJYZKZQTSSHJJXDCYZUYJLZYRZDQQHGJZXSSZBYKJPBFRTJXLLFQWJHYLQTYMBLPZDXTZYGBDHZZRBGXHWNJTJXLKSCFSMWLSDQYSJTXKZSCFWJLBXFTZLLJZLLQBLSQMQQCGCZFPBPHZCZJLPYYGGDTGWDCFCZQYYYQYSSCLXZSKLZZZGFFCQNWGLHQYZJJCZLQZZYJPJZZBPDCCMHJGXDQDGDLZQMFGPSYTSDYFWWDJZJYSXYYCZCYHZWPBYKXRYLYBHKJKSFXTZJMMCKHLLTNYYMSYXYZPYJQYCSYCWMTJJKQYRHLLQXPSGTLYYCLJSCPXJYZFNMLRGJJTYZBXYZMSJYJHHFZQMSYXRSZCWTLRTQZSSTKXGQKGSPTGCZNJSJCQCXHMXGGZTQYDJKZDLBZSXJLHYQGGGTHQSZPYHJHHGYYGKGGCWJZZYLCZLXQSFTGZSLLLMLJSKCTBLLZZSZMMNYTPZSXQHJCJYQXYZXZQZCPSHKZZYSXCDFGMWQRLLQXRFZTLYSTCTMJCXJJXHJNXTNRZTZFQYHQGLLGCXSZSJDJLJCYDSJTLNYXHSZXCGJZYQPYLFHDJSBPCCZHJJJQZJQDYBSSLLCMYTTMQTBHJQNNYGKYRQYQMZGCJKPDCGMYZHQLLSLLCLMHOLZGDYYFZSLJCQZLYLZQJESHNYLLJXGJXLYSYYYXNBZLJSSZCQQCJYLLZLTJYLLZLLBNYLGQCHXYYXOXCXQKYJXXXYKLXSXXYQXCYKQXQCSGYXXYQXYGYTQOHXHXPYXXXULCYEYCHZZCBWQBBWJQZSCSZSSLZYLKDESJZWMYMCYTSDSXXSCJPQQSQYLYYZYCMDJDZYWCBTJSYDJKCYDDJLBDJJSODZYSYXQQYXDHHGQQYQHDYXWGMMMAJDYBBBPPBCMUUPLJZSMTXERXJMHQNUTPJDCBSSMSSSTKJTSSMMTRCPLZSZMLQDSDMJMQPNQDXCFYNBFSDQXYXHYAYKQYDDLQYYYSSZBYDSLNTFQTZQPZMCHDHCZCWFDXTMYQSPHQYYXSRGJCWTJTZZQMGWJJTJHTQJBBHWZPXXHYQFXXQYWYYHYSCDYDHHQMNMTMWCPBSZPPZZGLMZFOLLCFWHMMSJZTTDHZZYFFYTZZGZYSKYJXQYJZQBHMBZZLYGHGFMSHPZFZSNCLPBQSNJXZSLXXFPMTYJYGBXLLDLXPZJYZJYHHZCYWHJYLSJEXFSZZYWXKZJLUYDTMLYMQJPWXYHXSKTQJEZRPXXZHHMHWQPWQLYJJQJJZSZCPHJLCHHNXJLQWZJHBMZYXBDHHYPZLHLHLGFWLCHYYTLHJXCJMSCPXSTKPNHQXSRTYXXTESYJCTLSSLSTDLLLWWYHDHRJZSFGXTSYCZYNYHTDHWJSLHTZDQDJZXXQHGYLTZPHCSQFCLNJTCLZPFSTPDYNYLGMJLLYCQHYSSHCHYLHQYQTMZYPBYWRFQYKQSYSLZDQJMPXYYSSRHZJNYWTQDFZBWWTWWRXCWHGYHXMKMYYYQMSMZHNGCEPMLQQMTCWCTMMPXJPJJHFXYYZSXZHTYBMSTSYJTTQQQYYLHYNPYQZLCYZHZWSMYLKFJXLWGXYPJYTYSYXYMZCKTTWLKSMZSYLMPWLZWXWQZSSAQSYXYRHSSNTSRAPXCPWCMGDXHXZDZYFJHGZTTSBJHGYZSZYSMYCLLLXBTYXHBBZJKSSDMALXHYCFYGMQYPJYCQXJLLLJGSLZGQLYCJCCZOTYXMTMTTLLWTGPXYMZMKLPSZZZXHKQYSXCTYJZYHXSHYXZKXLZWPSQPYHJWPJPWXQQYLXSDHMRSLZZYZWTTCYXYSZZSHBSCCSTPLWSSCJCHNLCGCHSSPHYLHFHHXJSXYLLNYLSZDHZXYLSXLWZYKCLDYAXZCMDDYSPJTQJZLNWQPSSSWCTSTSZLBLNXSMNYYMJQBQHRZWTYYDCHQLXKPZWBGQYBKFCMZWPZLLYYLSZYDWHXPSBCMLJBSCGBHXLQHYRLJXYSWXWXZSLDFHLSLYNJLZYFLYJYCDRJLFSYZFSLLCQYQFGJYHYXZLYLMSTDJCYHBZLLNWLXXYGYYHSMGDHXXHHLZZJZXCZZZCYQZFNGWPYLCPKPYYPMCLQKDGXZGGWQBDXZZKZFBXXLZXJTPJPTTBYTSZZDWSLCHZHSLTYXHQLHYXXXYYZYSWTXZKHLXZXZPYHGCHKCFSYHUTJRLXFJXPTZTWHPLYXFCRHXSHXKYXXYHZQDXQWULHYHMJTBFLKHTXCWHJFWJCFPQRYQXCYYYQYGRPYWSGSUNGWCHKZDXYFLXXHJJBYZWTSXXNCYJJYMSWZJQRMHXZWFQSYLZJZGBHYNSLBGTTCSYBYXXWXYHXYYXNSQYXMQYWRGYQLXBBZLJSYLPSYTJZYHYZAWLRORJMKSCZJXXXYXCHDYXRYXXJDTSQFXLYLTSFFYXLMTYJMJUYYYXLTZCSXQZQHZXLYYXZHDNBRXXXJCTYHLBRLMBRLLAXKYLLLJLYXXLYCRYLCJTGJCMTLZLLCYZZPZPCYAWHJJFYBDYYZSMPCKZDQYQPBPCJPDCYZMDPBCYYDYCNNPLMTMLRMFMMGWYZBSJGYGSMZQQQZTXMKQWGXLLPJGZBQCDJJJFPKJKCXBLJMSWMDTQJXLDLPPBXCWRCQFBFQJCZAHZGMYKPHYYHZYKNDKZMBPJYXPXYHLFPNYYGXJDBKXNXHJMZJXSTRSTLDXSKZYSYBZXJLXYSLBZYSLHXJPFXPQNBYLLJQKYGZMCYZZYMCCSLCLHZFWFWYXZMWSXTYNXJHPYYMCYSPMHYSMYDYSHQYZCHMJJMZCAAGCFJBBHPLYZYLXXSDJGXDHKXXTXXNBHRMLYJSLTXMRHNLXQJXYZLLYSWQGDLBJHDCGJYQYCMHWFMJYBMBYJYJWYMDPWHXQLDYGPDFXXBCGJSPCKRSSYZJMSLBZZJFLJJJLGXZGYXYXLSZQYXBEXYXHGCXBPLDYHWETTWWCJMBTXCHXYQXLLXFLYXLLJLSSFWDPZSMYJCLMWYTCZPCHQEKCQBWLCQYDPLQPPQZQFJQDJHYMMCXTXDRMJWRHXCJZYLQXDYYNHYYHRSLSRSYWWZJYMTLTLLGTQCJZYABTCKZCJYCCQLJZQXALMZYHYWLWDXZXQDLLQSHGPJFJLJHJABCQZDJGTKHSSTCYJLPSWZLXZXRWGLDLZRLZXTGSLLLLZLYXXWGDZYGBDPHZPBRLWSXQBPFDWOFMWHLYPCBJCCLDMBZPBZZLCYQXLDOMZBLZWPDWYYGDSTTHCSQSCCRSSSYSLFYBFNTYJSZDFNDPDHDZZMBBLSLCMYFFGTJJQWFTMTPJWFNLBZCMMJTGBDZLQLPYFHYYMJYLSDCHDZJWJCCTLJCLDTLJJCPDDSQDSSZYBNDBJLGGJZXSXNLYCYBJXQYCBYLZCFZPPGKCXZDZFZTJJFJSJXZBNZYJQTTYJYHTYCZHYMDJXTTMPXSPLZCDWSLSHXYPZGTFMLCJTYCBPMGDKWYCYZCDSZZYHFLYCTYGWHKJYYLSJCXGYWJCBLLCSNDDBTZBSCLYZCZZSSQDLLMQYYHFSLQLLXFTYHABXGWNYWYYPLLSDLDLLBJCYXJZMLHLJDXYYQYTDLLLBUGBFDFBBQJZZMDPJHGCLGMJJPGAEHHBWCQXAXHHHZCHXYPHJAXHLPHJPGPZJQCQZGJJZZUZDMQYYBZZPHYHYBWHAZYJHYKFGDPFQSDLZMLJXKXGALXZDAGLMDGXMWZQYXXDXXPFDMMSSYMPFMDMMKXKSYZYSHDZKXSYSMMZZZMSYDNZZCZXFPLSTMZDNMXCKJMZTYYMZMZZMSXHHDCZJEMXXKLJSTLWLSQLYJZLLZJSSDPPMHNLZJCZYHMXXHGZCJMDHXTKGRMXFWMCGMWKDTKSXQMMMFZZYDKMSCLCMPCGMHSPXQPZDSSLCXKYXTWLWJYAHZJGZQMCSNXYYMMPMLKJXMHLMLQMXCTKZMJQYSZJSYSZHSYJZJCDAJZYBSDQJZGWZQQXFKDMSDJLFWEHKZQKJPEYPZYSZCDWYJFFMZZYLTTDZZEFMZLBNPPLPLPEPSZALLTYLKCKQZKGENQLWAGYXYDPXLHSXQQWQCQXQCLHYXXMLYCCWLYMQYSKGCHLCJNSZKPYZKCQZQLJPDMDZHLASXLBYDWQLWDNBQCRYDDZTJYBKBWSZDXDTNPJDTCTQDFXQQMGNXECLTTBKPWSLCTYQLPWYZZKLPYGZCQQPLLKCCYLPQMZCZQCLJSLQZDJXLDDHPZQDLJJXZQDXYZQKZLJCYQDYJPPYPQYKJYRMPCBYMCXKLLZLLFQPYLLLMBSGLCYSSLRSYSQTMXYXZQZFDZUYSYZTFFMZZSMZQHZSSCCMLYXWTPZGXZJGZGSJSGKDDHTQGGZLLBJDZLCBCHYXYZHZFYWXYZYMSDBZZYJGTSMTFXQYXQSTDGSLNXDLRYZZLRYYLXQHTXSRTZNGZXBNQQZFMYKMZJBZYMKBPNLYZPBLMCNQYZZZSJZHJCTZKHYZZJRDYZHNPXGLFZTLKGJTCTSSYLLGZRZBBQZZKLPKLCZYSSUYXBJFPNJZZXCDWXZYJXZZDJJKGGRSRJKMSMZJLSJYWQSKYHQJSXPJZZZLSNSHRNYPZTWCHKLPSRZLZXYJQXQKYSJYCZTLQZYBBYBWZPQDWWYZCYTJCJXCKCWDKKZXSGKDZXWWYYJQYYTCYTDLLXWKCZKKLCCLZCQQDZLQLCSFQCHQHSFSMQZZLNBJJZBSJHTSZDYSJQJPDLZCDCWJKJZZLPYCGMZWDJJBSJQZSYZYHHXJPBJYDSSXDZNCGLQMBTSFSBPDZDLZNFGFJGFSMPXJQLMBLGQCYYXBQKDJJQYRFKZTJDHCZKLBSDZCFJTPLLJGXHYXZCSSZZXSTJYGKGCKGYOQXJPLZPBPGTGYJZGHZQZZLBJLSQFZGKQQJZGYCZBZQTLDXRJXBSXXPZXHYZYCLWDXJJHXMFDZPFZHQHQMQGKSLYHTYCGFRZGNQXCLPDLBZCSCZQLLJBLHBZCYPZZPPDYMZZSGYHCKCPZJGSLJLNSCDSLDLXBMSTLDDFJMKDJDHZLZXLSZQPQPGJLLYBDSZGQLBZLSLKYYHZTTNTJYQTZZPSZQZTLLJTYYLLQLLQYZQLBDZLSLYYZYMDFSZSNHLXZNCZQZPBWSKRFBSYZMTHBLGJPMCZZLSTLXSHTCSYZLZBLFEQHLXFLCJLYLJQCBZLZJHHSSTBRMHXZHJZCLXFNBGXGTQJCZTMSFZKJMSSNXLJKBHSJXNTNLZDNTLMSJXGZJYJCZXYJYJWRWWQNZTNFJSZPZSHZJFYRDJSFSZJZBJFZQZZHZLXFYSBZQLZSGYFTZDCSZXZJBQMSZKJRHYJZCKMJKHCHGTXKXQGLXPXFXTRTYLXJXHDTSJXHJZJXZWZLCQSBTXWXGXTXXHXFTSDKFJHZYJFJXRZSDLLLTQSQQZQWZXSYQTWGWBZCGZLLYZBCLMQQTZHZXZXLJFRMYZFLXYSQXXJKXRMQDZDMMYYBSQBHGZMWFWXGMXLZPYYTGZYCCDXYZXYWGSYJYZNBHPZJSQSYXSXRTFYZGRHZTXSZZTHCBFCLSYXZLZQMZLMPLMXZJXSFLBYZMYQHXJSXRXSQZZZSSLYFRCZJRCRXHHZXQYDYHXSJJHZCXZBTYNSYSXJBQLPXZQPYMLXZKYXLXCJLCYSXXZZLXDLLLJJYHZXGYJWKJRWYHCPSGNRZLFZWFZZNSXGXFLZSXZZZBFCSYJDBRJKRDHHGXJLJJTGXJXXSTJTJXLYXQFCSGSWMSBCTLQZZWLZZKXJMLTMJYHSDDBXGZHDLBMYJFRZFSGCLYJBPMLYSMSXLSZJQQHJZFXGFQFQBPXZGYYQXGZTCQWYLTLGWSGWHRLFSFGZJMGMGBGTJFSYZZGZYZAFLSSPMLPFLCWBJZCLJJMZLPJJLYMQDMYYYFBGYGYZMLYZDXQYXRQQQHSYYYQXYLJTYXFSFSLLGNQCYHYCWFHCCCFXPYLYPLLZYXXXXXKQHHXSHJZCFZSCZJXCPZWHHHHHAPYLQALPQAFYHXDYLUKMZQGGGDDESRNNZLTZGCHYPPYSQJJHCLLJTOLNJPZLJLHYMHEYDYDSQYCDDHGZUNDZCLZYZLLZNTNYZGSLHSLPJJBDGWXPCDUTJCKLKCLWKLLCASSTKZZDNQNTTLYYZSSYSSZZRYLJQKCQDHHCRXRZYDGRGCWCGZQFFFPPJFZYNAKRGYWYQPQXXFKJTSZZXSWZDDFBBXTBGTZKZNPZZPZXZPJSZBMQHKCYXYLDKLJNYPKYGHGDZJXXEAHPNZKZTZCMXCXMMJXNKSZQNMNLWBWWXJKYHCPSTMCSQTZJYXTPCTPDTNNPGLLLZSJLSPBLPLQHDTNJNLYYRSZFFJFQWDPHZDWMRZCCLODAXNSSNYZRESTYJWJYJDBCFXNMWTTBYLWSTSZGYBLJPXGLBOCLHPCBJLTMXZLJYLZXCLTPNCLCKXTPZJSWCYXSFYSZDKNTLBYJCYJLLSTGQCBXRYZXBXKLYLHZLQZLNZCXWJZLJZJNCJHXMNZZGJZZXTZJXYCYYCXXJYYXJJXSSSJSTSSTTPPGQTCSXWZDCSYFPTFBFHFBBLZJCLZZDBXGCXLQPXKFZFLSYLTUWBMQJHSZBMDDBCYSCCLDXYCDDQLYJJWMQLLCSGLJJSYFPYYCCYLTJANTJJPWYCMMGQYYSXDXQMZHSZXPFTWWZQSWQRFKJLZJQQYFBRXJHHFWJJZYQAZMYFRHCYYBYQWLPEXCCZSTYRLTTDMQLYKMBBGMYYJPRKZNPBSXYXBHYZDJDNGHPMFSGMWFZMFQMMBCMZZCJJLCNUXYQLMLRYGQZCYXZLWJGCJCGGMCJNFYZZJHYCPRRCMTZQZXHFQGTJXCCJEAQCRJYHPLQLSZDJRBCQHQDYRHYLYXJSYMHZYDWLDFRYHBPYDTSSCNWBXGLPZMLZZTQSSCPJMXXYCSJYTYCGHYCJWYRXXLFEMWJNMKLLSWTXHYYYNCMMCWJDQDJZGLLJWJRKHPZGGFLCCSCZMCBLTBHBQJXQDSPDJZZGHGLFQYWBZYZJLTSTDHQHCTCBCHFLQMPWDSHYYTQWCNZZJTLBYMBPDYYYXSQKXWYYFLXXNCWCXYPMAELYKKJMZZZBRXYYQJFLJPFHHHYTZZXSGQQMHSPGDZQWBWPJHZJDYSCQWZKTXXSQLZYYMYSDZGRXCKKUJLWPYSYSCSYZLRMLQSYLJXBCXTLWDQZPCYCYKPPPNSXFYZJJRCEMHSZMSXLXGLRWGCSTLRSXBZGBZGZTCPLUJLSLYLYMTXMTZPALZXPXJTJWTCYYZLBLXBZLQMYLXPGHDSLSSDMXMBDZZSXWHAMLCZCPJMCNHJYSNSYGCHSKQMZZQDLLKABLWJXSFMOCDXJRRLYQZKJMYBYQLYHETFJZFRFKSRYXFJTWDSXXSYSQJYSLYXWJHSNLXYYXHBHAWHHJZXWMYLJCSSLKYDZTXBZSYFDXGXZJKHSXXYBSSXDPYNZWRPTQZCZENYGCXQFJYKJBZMLJCMQQXUOXSLYXXLYLLJDZBTYMHPFSTTQQWLHOKYBLZZALZXQLHZWRRQHLSTMYPYXJJXMQSJFNBXYXYJXXYQYLTHYLQYFMLKLJTMLLHSZWKZHLJMLHLJKLJSTLQXYLMBHHLNLZXQJHXCFXXLHYHJJGBYZZKBXSCQDJQDSUJZYYHZHHMGSXCSYMXFEBCQWWRBPYYJQTYZCYQYQQZYHMWFFHGZFRJFCDPXNTQYZPDYKHJLFRZXPPXZDBBGZQSTLGDGYLCQMLCHHMFYWLZYXKJLYPQHSYWMQQGQZMLZJNSQXJQSYJYCBEHSXFSZPXZWFLLBCYYJDYTDTHWZSFJMQQYJLMQXXLLDTTKHHYBFPWTYYSQQWNQWLGWDEBZWCMYGCULKJXTMXMYJSXHYBRWFYMWFRXYQMXYSZTZZTFYKMLDHQDXWYYNLCRYJBLPSXCXYWLSPRRJWXHQYPHTYDNXHHMMYWYTZCSQMTSSCCDALWZTCPQPYJLLQZYJSWXMZZMMYLMXCLMXCZMXMZSQTZPPQQBLPGXQZHFLJJHYTJSRXWZXSCCDLXTYJDCQJXSLQYCLZXLZZXMXQRJMHRHZJBHMFLJLMLCLQNLDXZLLLPYPSYJYSXCQQDCMQJZZXHNPNXZMEKMXHYKYQLXSXTXJYYHWDCWDZHQYYBGYBCYSCFGPSJNZDYZZJZXRZRQJJYMCANYRJTLDPPYZBSTJKXXZYPFDWFGZZRPYMTNGXZQBYXNBUFNQKRJQZMJEGRZGYCLKXZDSKKNSXKCLJSPJYYZLQQJYBZSSQLLLKJXTBKTYLCCDDBLSPPFYLGYDTZJYQGGKQTTFZXBDKTYYHYBBFYTYYBCLPDYTGDHRYRNJSPTCSNYJQHKLLLZSLYDXXWBCJQSPXBPJZJCJDZFFXXBRMLAZHCSNDLBJDSZBLPRZTSWSBXBCLLXXLZDJZSJPYLYXXYFTFFFBHJJXGBYXJPMMMPSSJZJMTLYZJXSWXTYLEDQPJMYGQZJGDJLQJWJQLLSJGJGYGMSCLJJXDTYGJQJQJCJZCJGDZZSXQGSJGGCXHQXSNQLZZBXHSGZXCXYLJXYXYYDFQQJHJFXDHCTXJYRXYSQTJXYEFYYSSYYJXNCYZXFXMSYSZXYYSCHSHXZZZGZZZGFJDLTYLNPZGYJYZYYQZPBXQBDZTZCZYXXYHHSQXSHDHGQHJHGYWSZTMZMLHYXGEBTYLZKQWYTJZRCLEKYSTDBCYKQQSAYXCJXWWGSBHJYZYDHCSJKQCXSWXFLTYNYZPZCCZJQTZWJQDZZZQZLJJXLSBHPYXXPSXSHHEZTXFPTLQYZZXHYTXNCFZYYHXGNXMYWXTZSJPTHHGYMXMXQZXTSBCZYJYXXTYYZYPCQLMMSZMJZZLLZXGXZAAJZYXJMZXWDXZSXZDZXLEYJJZQBHZWZZZQTZPSXZTDSXJJJZNYAZPHXYYSRNQDTHZHYYKYJHDZXZLSWCLYBZYECWCYCRYLCXNHZYDZYDYJDFRJJHTRSQTXYXJRJHOJYNXELXSFSFJZGHPZSXZSZDZCQZBYYKLSGSJHCZSHDGQGXYZGXCHXZJWYQWGYHKSSEQZZNDZFKWYSSTCLZSTSYMCDHJXXYWEYXCZAYDMPXMDSXYBSQMJMZJMTZQLPJYQZCGQHXJHHLXXHLHDLDJQCLDWBSXFZZYYSCHTYTYYBHECXHYKGJPXHHYZJFXHWHBDZFYZBCAPNPGNYDMSXHMMMMAMYNBYJTMPXYYMCTHJBZYFCGTYHWPHFTWZZEZSBZEGPFMTSKFTYCMHFLLHGPZJXZJGZJYXZSBBQSCZZLZCCSTPGXMJSFTCCZJZDJXCYBZLFCJSYZFGSZLYBCWZZBYZDZYPSWYJZXZBDSYUXLZZBZFYGCZXBZHZFTPBGZGEJBSTGKDMFHYZZJHZLLZZGJQZLSFDJSSCBZGPDLFZFZSZYZYZSYGCXSNXXCHCZXTZZLJFZGQSQYXZJQDCCZTQCDXZJYQJQCHXZTDLGSCXZSYQJQTZWLQDQZTQCHQQJZYEZZZPBWKDJFCJPZTYPQYQTTYNLMBDKTJZPQZQZZFPZSBNJLGYJDXJDZZKZGQKXDLPZJTCJDQBXDJQJSTCKNXBXZMSLYJCQMTJQWWCJQNJNLLLHJCWQTBZQYDZCZPZZDZYDDCYZZZCCJTTJFZDPRRTZTJDCQTQZDTJNPLZBCLLCTZSXKJZQZPZLBZRBTJDCXFCZDBCCJJLTQQPLDCGZDBBZJCQDCJWYNLLZYZCCDWLLXWZLXRXNTQQCZXKQLSGDFQTDDGLRLAJJTKUYMKQLLTZYTDYYCZGJWYXDXFRSKSTQTENQMRKQZHHQKDLDAZFKYPBGGPZREBZZYKZZSPEGJXGYKQZZZSLYSYYYZWFQZYLZZLZHWCHKYPQGNPGBLPLRRJYXCCSYYHSFZFYBZYYTGZXYLXCZWXXZJZBLFFLGSKHYJZEYJHLPLLLLCZGXDRZELRHGKLZZYHZLYQSZZJZQLJZFLNBHGWLCZCFJYSPYXZLZLXGCCPZBLLCYBBBBUBBCBPCRNNZCZYRBFSRLDCGQYYQXYGMQZWTZYTYJXYFWTEHZZJYWLCCNTZYJJZDEDPZDZTSYQJHDYMBJNYJZLXTSSTPHNDJXXBYXQTZQDDTJTDYYTGWSCSZQFLSHLGLBCZPHDLYZJYCKWTYTYLBNYTSDSYCCTYSZYYEBHEXHQDTWNYGYCLXTSZYSTQMYGZAZCCSZZDSLZCLZRQXYYELJSBYMXSXZTEMBBLLYYLLYTDQYSHYMRQWKFKBFXNXSBYCHXBWJYHTQBPBSBWDZYLKGZSKYHXQZJXHXJXGNLJKZLYYCDXLFYFGHLJGJYBXQLYBXQPQGZTZPLNCYPXDJYQYDYMRBESJYYHKXXSTMXRCZZYWXYQYBMCLLYZHQYZWQXDBXBZWZMSLPDMYSKFMZKLZCYQYCZLQXFZZYDQZPZYGYJYZMZXDZFYFYTTQTZHGSPCZMLCCYTZXJCYTJMKSLPZHYSNZLLYTPZCTZZCKTXDHXXTQCYFKSMQCCYYAZHTJPCYLZLYJBJXTPNYLJYYNRXSYLMMNXJSMYBCSYSYLZYLXJJQYLDZLPQBFZZBLFNDXQKCZFYWHGQMRDSXYCYTXNQQJZYYPFZXDYZFPRXEJDGYQBXRCNFYYQPGHYJDYZXGRHTKYLNWDZNTSMPKLBTHBPYSZBZTJZSZZJTYYXZPHSSZZBZCZPTQFZMYFLYPYBBJQXZMXXDJMTSYSKKBJZXHJCKLPSMKYJZCXTMLJYXRZZQSLXXQPYZXMKYXXXJCLJPRMYYGADYSKQLSNDHYZKQXZYZTCGHZTLMLWZYBWSYCTBHJHJFCWZTXWYTKZLXQSHLYJZJXTMPLPYCGLTBZZTLZJCYJGDTCLKLPLLQPJMZPAPXYZLKKTKDZCZZBNZDYDYQZJYJGMCTXLTGXSZLMLHBGLKFWNWZHDXUHLFMKYSLGXDTWWFRJEJZTZHYDXYKSHWFZCQSHKTMQQHTZHYMJDJSKHXZJZBZZXYMPAGQMSTPXLSKLZYNWRTSQLSZBPSPSGZWYHTLKSSSWHZZLYYTNXJGMJSZSUFWNLSOZTXGXLSAMMLBWLDSZYLAKQCQCTMYCFJBSLXCLZZCLXXKSBZQCLHJPSQPLSXXCKSLNHPSFQQYTXYJZLQLDXZQJZDYYDJNZPTUZDSKJFSLJHYLZSQZLBTXYDGTQFDBYAZXDZHZJNHHQBYKNXJJQCZMLLJZKSPLDYCLBBLXKLELXJLBQYCXJXGCNLCQPLZLZYJTZLJGYZDZPLTQCSXFDMNYCXGBTJDCZNBGBQYQJWGKFHTNPYQZQGBKPBBYZMTJDYTBLSQMPSXTBNPDXKLEMYYCJYNZCTLDYKZZXDDXHQSHDGMZSJYCCTAYRZLPYLTLKXSLZCGGEXCLFXLKJRTLQJAQZNCMBYDKKCXGLCZJZXJHPTDJJMZQYKQSECQZDSHHADMLZFMMZBGNTJNNLGBYJBRBTMLBYJDZXLCJLPLDLPCQDHLXZLYCBLCXZZJADJLNZMMSSSMYBHBSQKBHRSXXJMXSDZNZPXLGBRHWGGFCXGMSKLLTSJYYCQLTSKYWYYHYWXBXQYWPYWYKQLSQPTNTKHQCWDQKTWPXXHCPTHTWUMSSYHBWCRWXHJMKMZNGWTMLKFGHKJYLSYYCXWHYECLQHKQHTTQKHFZLDXQWYZYYDESBPKYRZPJFYYZJCEQDZZDLATZBBFJLLCXDLMJSSXEGYGSJQXCWBXSSZPDYZCXDNYXPPZYDLYJCZPLTXLSXYZYRXCYYYDYLWWNZSAHJSYQYHGYWWAXTJZDAXYSRLTDPSSYYFNEJDXYZHLXLLLZQZSJNYQYQQXYJGHZGZCYJCHZLYCDSHWSHJZYJXCLLNXZJJYYXNFXMWFPYLCYLLABWDDHWDXJMCXZTZPMLQZHSFHZYNZTLLDYWLSLXHYMMYLMBWWKYXYADTXYLLDJPYBPWUXJMWMLLSAFDLLYFLBHHHBQQLTZJCQJLDJTFFKMMMBYTHYGDCQRDDWRQJXNBYSNWZDBYYTBJHPYBYTTJXAAHGQDQTMYSTQXKBTZPKJLZRBEQQSSMJJBDJOTGTBXPGBKTLHQXJJJCTHXQDWJLWRFWQGWSHCKRYSWGFTGYGBXSDWDWRFHWYTJJXXXJYZYSLPYYYPAYXHYDQKXSHXYXGSKQHYWFDDDPPLCJLQQEEWXKSYYKDYPLTJTHKJLTCYYHHJTTPLTZZCDLTHQKZXQYSTEEYWYYZYXXYYSTTJKLLPZMCYHQGXYHSRMBXPLLNQYDQHXSXXWGDQBSHYLLPJJJTHYJKYPPTHYYKTYEZYENMDSHLCRPQFDGFXZPSFTLJXXJBSWYYSKSFLXLPPLBBBLBSFXFYZBSJSSYLPBBFFFFSSCJDSTZSXZRYYSYFFSYZYZBJTBCTSBSDHRTJJBYTCXYJEYLXCBNEBJDSYXYKGSJZBXBYTFZWGENYHHTHZHHXFWGCSTBGXKLSXYWMTMBYXJSTZSCDYQRCYTWXZFHMYMCXLZNSDJTTTXRYCFYJSBSDYERXJLJXBBDEYNJGHXGCKGSCYMBLXJMSZNSKGXFBNBPTHFJAAFXYXFPXMYPQDTZCXZZPXRSYWZDLYBBKTYQPQJPZYPZJZNJPZJLZZFYSBTTSLMPTZRTDXQSJEHBZYLZDHLJSQMLHTXTJECXSLZZSPKTLZKQQYFSYGYWPCPQFHQHYTQXZKRSGTTSQCZLPTXCDYYZXSQZSLXLZMYCPCQBZYXHBSXLZDLTCDXTYLZJYYZPZYZLTXJSJXHLPMYTXCQRBLZSSFJZZTNJYTXMYJHLHPPLCYXQJQQKZZSCPZKSWALQSBLCCZJSXGWWWYGYKTJBBZTDKHXHKGTGPBKQYSLPXPJCKBMLLXDZSTBKLGGQKQLSBKKTFXRMDKBFTPZFRTBBRFERQGXYJPZSSTLBZTPSZQZSJDHLJQLZBPMSMMSXLQQNHKNBLRDDNXXDHDDJCYYGYLXGZLXSYGMQQGKHBPMXYXLYTQWLWGCPBMQXCYZYDRJBHTDJYHQSHTMJSBYPLWHLZFFNYPMHXXHPLTBQPFBJWQDBYGPNZTPFZJGSDDTQSHZEAWZZYLLTYYBWJKXXGHLFKXDJTMSZSQYNZGGSWQSPHTLSSKMCLZXYSZQZXNCJDQGZDLFNYKLJCJLLZLMZZNHYDSSHTHZZLZZBBHQZWWYCRZHLYQQJBEYFXXXWHSRXWQHWPSLMSSKZTTYGYQQWRSLALHMJTQJSMXQBJJZJXZYZKXBYQXBJXSHZTSFJLXMXZXFGHKZSZGGYLCLSARJYHSLLLMZXELGLXYDJYTLFBHBPNLYZFBBHPTGJKWETZHKJJXZXXGLLJLSTGSHJJYQLQZFKCGNNDJSSZFDBCTWWSEQFHQJBSAQTGYPQLBXBMMYWXGSLZHGLZGQYFLZBYFZJFRYSFMBYZHQGFWZSYFYJJPHZBYYZFFWODGRLMFTWLBZGYCQXCDJYGZYYYYTYTYDWEGAZYHXJLZYYHLRMGRXXZCLHNELJJTJTPWJYBJJBXJJTJTEEKHWSLJPLPSFYZPQQBDLQJJTYYQLYZKDKSQJYYQZLDQTGJQYZJSUCMRYQTHTEJMFCTYHYPKMHYZWJDQFHYYXWSHCTXRLJHQXHCCYYYJLTKTTYTMXGTCJTZAYYOCZLYLBSZYWJYTSJYHBYSHFJLYGJXXTMZYYLTXXYPZLXYJZYZYYPNHMYMDYYLBLHLSYYQQLLNJJYMSOYQBZGDLYXYLCQYXTSZEGXHZGLHWBLJHEYXTWQMAKBPQCGYSHHEGQCMWYYWLJYJHYYZLLJJYLHZYHMGSLJLJXCJJYCLYCJPCPZJZJMMYLCQLNQLJQJSXYJMLSZLJQLYCMMHCFMMFPQQMFYLQMCFFQMMMMHMZNFHHJGTTHHKHSLNCHHYQDXTMMQDCYZYXYQMYQYLTDCYYYZAZZCYMZYDLZFFFMMYCQZWZZMABTBYZTDMNZZGGDFTYPCGQYTTSSFFWFDTZQSSYSTWXJHXYTSXXYLBYQHWWKXHZXWZNNZZJZJJQJCCCHYYXBZXZCYZTLLCQXYNJYCYYCYNZZQYYYEWYCZDCJYCCHYJLBTZYYCQWMPWPYMLGKDLDLGKQQBGYCHJXY";
-
-    // 此处收录了375个多音字,数据来自于http://www.51windows.net/pages/pinyin.asp
-    var oMultiDiff = {
-        19969: "DZ",
-        19975: "WM",
-        19988: "QJ",
-        20048: "YL",
-        20056: "SC",
-        20060: "NM",
-        20094: "QG",
-        20127: "QJ",
-        20167: "QC",
-        20193: "YG",
-        20250: "KH",
-        20256: "ZC",
-        20282: "SC",
-        20285: "QJG",
-        20291: "TD",
-        20314: "YD",
-        20315: "BF",
-        20340: "NE",
-        20375: "TD",
-        20389: "YJ",
-        20391: "CZ",
-        20415: "PB",
-        20446: "YS",
-        20447: "SQ",
-        20504: "TC",
-        20608: "KG",
-        20854: "QJ",
-        20857: "ZC",
-        20911: "PF",
-        20985: "AW",
-        21032: "PB",
-        21048: "XQ",
-        21049: "SC",
-        21089: "YS",
-        21119: "JC",
-        21242: "SB",
-        21273: "SC",
-        21305: "YP",
-        21306: "QO",
-        21330: "ZC",
-        21333: "SDC",
-        21345: "QK",
-        21378: "CA",
-        21397: "SC",
-        21414: "XS",
-        21442: "SC",
-        21477: "JG",
-        21480: "TD",
-        21484: "ZS",
-        21494: "YX",
-        21505: "YX",
-        21512: "HG",
-        21523: "XH",
-        21537: "PB",
-        21542: "PF",
-        21549: "KH",
-        21571: "E",
-        21574: "DA",
-        21588: "TD",
-        21589: "O",
-        21618: "ZC",
-        21621: "KHA",
-        21632: "ZJ",
-        21654: "KG",
-        21679: "LKG",
-        21683: "KH",
-        21710: "A",
-        21719: "YH",
-        21734: "WOE",
-        21769: "A",
-        21780: "WN",
-        21804: "XH",
-        21834: "A",
-        21899: "ZD",
-        21903: "RN",
-        21908: "WO",
-        21939: "ZC",
-        21956: "SA",
-        21964: "YA",
-        21970: "TD",
-        22003: "A",
-        22031: "JG",
-        22040: "XS",
-        22060: "ZC",
-        22066: "ZC",
-        22079: "MH",
-        22129: "XJ",
-        22179: "XA",
-        22237: "NJ",
-        22244: "TD",
-        22280: "JQ",
-        22300: "YH",
-        22313: "XW",
-        22331: "YQ",
-        22343: "YJ",
-        22351: "PH",
-        22395: "DC",
-        22412: "TD",
-        22484: "PB",
-        22500: "PB",
-        22534: "ZD",
-        22549: "DH",
-        22561: "PB",
-        22612: "TD",
-        22771: "KQ",
-        22831: "HB",
-        22841: "JG",
-        22855: "QJ",
-        22865: "XQ",
-        23013: "ML",
-        23081: "WM",
-        23487: "SX",
-        23558: "QJ",
-        23561: "YW",
-        23586: "YW",
-        23614: "YW",
-        23615: "SN",
-        23631: "PB",
-        23646: "ZS",
-        23663: "ZT",
-        23673: "YG",
-        23762: "TD",
-        23769: "ZS",
-        23780: "QJ",
-        23884: "QK",
-        24055: "XH",
-        24113: "DC",
-        24162: "ZC",
-        24191: "GA",
-        24273: "QJ",
-        24324: "NL",
-        24377: "TD",
-        24378: "QJ",
-        24439: "PF",
-        24554: "ZS",
-        24683: "TD",
-        24694: "WE",
-        24733: "LK",
-        24925: "TN",
-        25094: "ZG",
-        25100: "XQ",
-        25103: "XH",
-        25153: "PB",
-        25170: "PB",
-        25179: "KG",
-        25203: "PB",
-        25240: "ZS",
-        25282: "FB",
-        25303: "NA",
-        25324: "KG",
-        25341: "ZY",
-        25373: "WZ",
-        25375: "XJ",
-        25384: "A",
-        25457: "A",
-        25528: "SD",
-        25530: "SC",
-        25552: "TD",
-        25774: "ZC",
-        25874: "ZC",
-        26044: "YW",
-        26080: "WM",
-        26292: "PB",
-        26333: "PB",
-        26355: "ZY",
-        26366: "CZ",
-        26397: "ZC",
-        26399: "QJ",
-        26415: "ZS",
-        26451: "SB",
-        26526: "ZC",
-        26552: "JG",
-        26561: "TD",
-        26588: "JG",
-        26597: "CZ",
-        26629: "ZS",
-        26638: "YL",
-        26646: "XQ",
-        26653: "KG",
-        26657: "XJ",
-        26727: "HG",
-        26894: "ZC",
-        26937: "ZS",
-        26946: "ZC",
-        26999: "KJ",
-        27099: "KJ",
-        27449: "YQ",
-        27481: "XS",
-        27542: "ZS",
-        27663: "ZS",
-        27748: "TS",
-        27784: "SC",
-        27788: "ZD",
-        27795: "TD",
-        27812: "O",
-        27850: "PB",
-        27852: "MB",
-        27895: "SL",
-        27898: "PL",
-        27973: "QJ",
-        27981: "KH",
-        27986: "HX",
-        27994: "XJ",
-        28044: "YC",
-        28065: "WG",
-        28177: "SM",
-        28267: "QJ",
-        28291: "KH",
-        28337: "ZQ",
-        28463: "TL",
-        28548: "DC",
-        28601: "TD",
-        28689: "PB",
-        28805: "JG",
-        28820: "QG",
-        28846: "PB",
-        28952: "TD",
-        28975: "ZC",
-        29100: "A",
-        29325: "QJ",
-        29575: "SL",
-        29602: "FB",
-        30010: "TD",
-        30044: "CX",
-        30058: "PF",
-        30091: "YSP",
-        30111: "YN",
-        30229: "XJ",
-        30427: "SC",
-        30465: "SX",
-        30631: "YQ",
-        30655: "QJ",
-        30684: "QJG",
-        30707: "SD",
-        30729: "XH",
-        30796: "LG",
-        30917: "PB",
-        31074: "NM",
-        31085: "JZ",
-        31109: "SC",
-        31181: "ZC",
-        31192: "MLB",
-        31293: "JQ",
-        31400: "YX",
-        31584: "YJ",
-        31896: "ZN",
-        31909: "ZY",
-        31995: "XJ",
-        32321: "PF",
-        32327: "ZY",
-        32418: "HG",
-        32420: "XQ",
-        32421: "HG",
-        32438: "LG",
-        32473: "GJ",
-        32488: "TD",
-        32521: "QJ",
-        32527: "PB",
-        32562: "ZSQ",
-        32564: "JZ",
-        32735: "ZD",
-        32793: "PB",
-        33071: "PF",
-        33098: "XL",
-        33100: "YA",
-        33152: "PB",
-        33261: "CX",
-        33324: "BP",
-        33333: "TD",
-        33406: "YA",
-        33426: "WM",
-        33432: "PB",
-        33445: "JG",
-        33486: "ZN",
-        33493: "TS",
-        33507: "QJ",
-        33540: "QJ",
-        33544: "ZC",
-        33564: "XQ",
-        33617: "YT",
-        33632: "QJ",
-        33636: "XH",
-        33637: "YX",
-        33694: "WG",
-        33705: "PF",
-        33728: "YW",
-        33882: "SR",
-        34067: "WM",
-        34074: "YW",
-        34121: "QJ",
-        34255: "ZC",
-        34259: "XL",
-        34425: "JH",
-        34430: "XH",
-        34485: "KH",
-        34503: "YS",
-        34532: "HG",
-        34552: "XS",
-        34558: "YE",
-        34593: "ZL",
-        34660: "YQ",
-        34892: "XH",
-        34928: "SC",
-        34999: "QJ",
-        35048: "PB",
-        35059: "SC",
-        35098: "ZC",
-        35203: "TQ",
-        35265: "JX",
-        35299: "JX",
-        35782: "SZ",
-        35828: "YS",
-        35830: "E",
-        35843: "TD",
-        35895: "YG",
-        35977: "MH",
-        36158: "JG",
-        36228: "QJ",
-        36426: "XQ",
-        36466: "DC",
-        36710: "CJ",
-        36711: "ZYG",
-        36767: "PB",
-        36866: "SK",
-        36951: "YW",
-        37034: "YX",
-        37063: "XH",
-        37218: "ZC",
-        37325: "ZC",
-        38063: "PB",
-        38079: "TD",
-        38085: "QY",
-        38107: "DC",
-        38116: "TD",
-        38123: "YD",
-        38224: "HG",
-        38241: "XTC",
-        38271: "ZC",
-        38415: "YE",
-        38426: "KH",
-        38461: "YD",
-        38463: "AE",
-        38466: "PB",
-        38477: "XJ",
-        38518: "YT",
-        38551: "WK",
-        38585: "ZC",
-        38704: "XS",
-        38739: "LJ",
-        38761: "GJ",
-        38808: "SQ",
-        39048: "JG",
-        39049: "XJ",
-        39052: "HG",
-        39076: "CZ",
-        39271: "XT",
-        39534: "TD",
-        39552: "TD",
-        39584: "PB",
-        39647: "SB",
-        39730: "LG",
-        39748: "TPB",
-        40109: "ZQ",
-        40479: "ND",
-        40516: "HG",
-        40536: "HG",
-        40583: "QJ",
-        40765: "YQ",
-        40784: "QJ",
-        40840: "YK",
-        40863: "QJG"
-    };
-
-    var _checkPYCh = function (ch) {
-        var uni = ch.charCodeAt(0);
-        // 如果不在汉字处理范围之内,返回原字符,也可以调用自己的处理函数
-        if (uni > 40869 || uni < 19968) {return ch;} // dealWithOthers(ch);
-        return (oMultiDiff[uni] ? oMultiDiff[uni] : (_ChineseFirstPY.charAt(uni - 19968)));
-    };
-
-    var _mkPYRslt = function (arr, options) {
-        var ignoreMulti = options.ignoreMulti;
-        var splitChar = options.splitChar;
-        var arrRslt = [""], k, multiLen = 0;
-        for (var i = 0, len = arr.length; i < len; i++) {
-            var str = arr[i];
-            var strlen = str.length;
-            // 多音字过多的情况下，指数增长会造成浏览器卡死，超过20完全卡死，18勉强能用，考虑到不同性能最好是16或者14
-            // 超过14个多音字之后，后面的都用第一个拼音
-            if (strlen == 1 || multiLen > 14 || ignoreMulti) {
-                var tmpStr = str.substring(0, 1);
-                for (k = 0; k < arrRslt.length; k++) {
-                    arrRslt[k] += tmpStr;
-                }
-            } else {
-                var tmpArr = arrRslt.slice(0);
-                arrRslt = [];
-                multiLen ++;
-                for (k = 0; k < strlen; k++) {
-                    // 复制一个相同的arrRslt
-                    var tmp = tmpArr.slice(0);
-                    // 把当前字符str[k]添加到每个元素末尾
-                    for (var j = 0; j < tmp.length; j++) {
-                        tmp[j] += str.charAt(k);
-                    }
-                    // 把复制并修改后的数组连接到arrRslt上
-                    arrRslt = arrRslt.concat(tmp);
-                }
-            }
-        }
-        // BI-56386 这边直接将所有多音字组合拼接是有风险的，因为丢失了每一组的起始索引信息, 外部使用indexOf等方法会造成错位
-        // 一旦错位就可能认为不符合条件， 但实际上还是有可能符合条件的，故此处以一个无法搜索的不可见字符作为连接
-        return arrRslt.join(splitChar || "").toLowerCase();
-    };
-
-    _.extend(BI, {
-        makeFirstPY: function (str, options) {
-            options = options || {};
-            if (typeof (str) !== "string") {return "" + str;}
-            var arrResult = []; // 保存中间结果的数组
-            for (var i = 0, len = str.length; i < len; i++) {
-                // 获得unicode码
-                var ch = str.charAt(i);
-                // 检查该unicode码是否在处理范围之内,在则返回该码对映汉字的拼音首字母,不在则调用其它函数处理
-                arrResult.push(_checkPYCh(ch));
-            }
-            // 处理arrResult,返回所有可能的拼音首字母串数组
-            return _mkPYRslt(arrResult, options);
-        }
-    });
-})();
-
-/***/ }),
-
-/***/ 136:
-/***/ (function(module, exports) {
-
-
-(function () {
-    function defaultComparator (a, b) {
-        return a < b;
-    }
-
-    BI.Heap = function (items, comparator) {
-        this._items = items || [];
-        this._size = this._items.length;
-        this._comparator = comparator || defaultComparator;
-        this._heapify();
-    };
-
-    BI.Heap.prototype = {
-        constructor: BI.Heap,
-        empty: function () {
-            return this._size === 0;
-        },
-
-        pop: function () {
-            if (this._size === 0) {
-                return;
-            }
-
-            var elt = this._items[0];
-
-            var lastElt = this._items.pop();
-            this._size--;
-
-            if (this._size > 0) {
-                this._items[0] = lastElt;
-                this._sinkDown(0);
-            }
-
-            return elt;
-        },
-
-        push: function (item) {
-            this._items[this._size++] = item;
-            this._bubbleUp(this._size - 1);
-        },
-
-        size: function () {
-            return this._size;
-        },
-
-        peek: function () {
-            if (this._size === 0) {
-                return;
-            }
-
-            return this._items[0];
-        },
-
-        _heapify: function () {
-            for (var index = Math.floor((this._size + 1) / 2); index >= 0; index--) {
-                this._sinkDown(index);
-            }
-        },
-
-        _bubbleUp: function (index) {
-            var elt = this._items[index];
-            while (index > 0) {
-                var parentIndex = Math.floor((index + 1) / 2) - 1;
-                var parentElt = this._items[parentIndex];
-
-                // if parentElt < elt, stop
-                if (this._comparator(parentElt, elt)) {
-                    return;
-                }
-
-                // swap
-                this._items[parentIndex] = elt;
-                this._items[index] = parentElt;
-                index = parentIndex;
-            }
-        },
-
-        _sinkDown: function (index) {
-            var elt = this._items[index];
-
-            while (true) {
-                var leftChildIndex = 2 * (index + 1) - 1;
-                var rightChildIndex = 2 * (index + 1);
-                var swapIndex = -1;
-
-                if (leftChildIndex < this._size) {
-                    var leftChild = this._items[leftChildIndex];
-                    if (this._comparator(leftChild, elt)) {
-                        swapIndex = leftChildIndex;
-                    }
-                }
-
-                if (rightChildIndex < this._size) {
-                    var rightChild = this._items[rightChildIndex];
-                    if (this._comparator(rightChild, elt)) {
-                        if (swapIndex === -1 ||
-                            this._comparator(rightChild, this._items[swapIndex])) {
-                            swapIndex = rightChildIndex;
-                        }
-                    }
-                }
-
-                // if we don't have a swap, stop
-                if (swapIndex === -1) {
-                    return;
-                }
-
-                this._items[index] = this._items[swapIndex];
-                this._items[swapIndex] = elt;
-                index = swapIndex;
-            }
-        }
-    };
-})();
-
-
-/***/ }),
-
-/***/ 137:
-/***/ (function(module, exports) {
-
-
-!(function () {
-    BI.LinkHashMap = function () {
-        this.array = [];
-        this.map = {};
-    };
-    BI.LinkHashMap.prototype = {
-        constructor: BI.LinkHashMap,
-        has: function (key) {
-            if (key in this.map) {
-                return true;
-            }
-            return false;
-        },
-
-        add: function (key, value) {
-            if (typeof key === "undefined") {
-                return;
-            }
-            if (key in this.map) {
-                this.map[key] = value;
-            } else {
-                this.array.push(key);
-                this.map[key] = value;
-            }
-        },
-
-        remove: function (key) {
-            if (key in this.map) {
-                delete this.map[key];
-                for (var i = 0; i < this.array.length; i++) {
-                    if (this.array[i] == key) {
-                        this.array.splice(i, 1);
-                        break;
-                    }
-                }
-            }
-        },
-
-        size: function () {
-            return this.array.length;
-        },
-
-        each: function (fn, scope) {
-            var scope = scope || window;
-            var fn = fn || null;
-            if (fn == null || typeof (fn) !== "function") {
-                return;
-            }
-            for (var i = 0; i < this.array.length; i++) {
-                var key = this.array[i];
-                var value = this.map[key];
-                var re = fn.call(scope, key, value, i, this.array, this.map);
-                if (re == false) {
-                    break;
-                }
-            }
-        },
-
-        get: function (key) {
-            return this.map[key];
-        },
-
-        toArray: function () {
-            var array = [];
-            this.each(function (key, value) {
-                array.push(value);
-            });
-            return array;
-        }
-    };
-})();
-
-/***/ }),
-
-/***/ 138:
-/***/ (function(module, exports) {
-
-
-!(function () {
-    BI.LRU = function (limit) {
-        this.size = 0;
-        this.limit = limit;
-        this.head = this.tail = undefined;
-        this._keymap = {};
-    };
-
-    var p = BI.LRU.prototype;
-
-    p.put = function (key, value) {
-        var removed;
-        if (this.size === this.limit) {
-            removed = this.shift();
-        }
-
-        var entry = this.get(key, true);
-        if (!entry) {
-            entry = {
-                key: key
-            };
-            this._keymap[key] = entry;
-            if (this.tail) {
-                this.tail.newer = entry;
-                entry.older = this.tail;
-            } else {
-                this.head = entry;
-            }
-            this.tail = entry;
-            this.size++;
-        }
-        entry.value = value;
-
-        return removed;
-    };
-
-    p.shift = function () {
-        var entry = this.head;
-        if (entry) {
-            this.head = this.head.newer;
-            this.head.older = undefined;
-            entry.newer = entry.older = undefined;
-            this._keymap[entry.key] = undefined;
-            this.size--;
-        }
-        return entry;
-    };
-
-
-    p.get = function (key, returnEntry) {
-        var entry = this._keymap[key];
-        if (entry === undefined) return;
-        if (entry === this.tail) {
-            return returnEntry
-                ? entry
-                : entry.value;
-        }
-        // HEAD--------------TAIL
-        //   <.older   .newer>
-        //  <--- add direction --
-        //   A  B  C  <D>  E
-        if (entry.newer) {
-            if (entry === this.head) {
-                this.head = entry.newer;
-            }
-            entry.newer.older = entry.older; // C <-- E.
-        }
-        if (entry.older) {
-            entry.older.newer = entry.newer; // C. --> E
-        }
-        entry.newer = undefined; // D --x
-        entry.older = this.tail; // D. --> E
-        if (this.tail) {
-            this.tail.newer = entry; // E. <-- D
-        }
-        this.tail = entry;
-        return returnEntry
-            ? entry
-            : entry.value;
-    };
-
-    p.has = function (key) {
-        return this._keymap[key] != null;
-    };
-})();
-
-/***/ }),
-
-/***/ 139:
-/***/ (function(module, exports) {
-
-// 线段树
-(function () {
-    var parent = function (node) {
-        return Math.floor(node / 2);
-    };
-
-    var Int32Array = _global.Int32Array || function (size) {
-        var xs = [];
-        for (var i = size - 1; i >= 0; --i) {
-            xs[i] = 0;
-        }
-        return xs;
-    };
-
-    var ceilLog2 = function (x) {
-        var y = 1;
-        while (y < x) {
-            y *= 2;
-        }
-        return y;
-    };
-
-    BI.PrefixIntervalTree = function (xs) {
-        this._size = xs.length;
-        this._half = ceilLog2(this._size);
-        // _heap是一个_size两倍以上的堆
-        this._heap = new Int32Array(2 * this._half);
-
-        var i;
-        // 初始化 >= _size 的堆空间, 即叶子节点
-        for (i = 0; i < this._size; ++i) {
-            this._heap[this._half + i] = xs[i];
-        }
-        // 初始化 < _size 的堆空间, 即非叶子节点，根节点包含整个区间
-        for (i = this._half - 1; i > 0; --i) {
-            this._heap[i] = this._heap[2 * i] + this._heap[2 * i + 1];
-        }
-    };
-
-    BI.PrefixIntervalTree.prototype = {
-        constructor: BI.PrefixIntervalTree,
-        // 往_half之后的空间set值，需要更新其所有祖先节点的值
-        set: function (index, value) {
-            var node = this._half + index;
-            this._heap[node] = value;
-
-            node = parent(node);
-            for (; node !== 0; node = parent(node)) {
-                this._heap[node] =
-                    this._heap[2 * node] + this._heap[2 * node + 1];
-            }
-        },
-
-        get: function (index) {
-            var node = this._half + index;
-            return this._heap[node];
-        },
-
-        getSize: function () {
-            return this._size;
-        },
-
-        /**
-         * get(0) + get(1) + ... + get(end - 1).
-         */
-        sumUntil: function (end) {
-            if (end === 0) {
-                return 0;
-            }
-
-            var node = this._half + end - 1;
-            var sum = this._heap[node];
-            for (; node !== 1; node = parent(node)) {
-                if (node % 2 === 1) {
-                    sum += this._heap[node - 1];
-                }
-            }
-
-            return sum;
-        },
-
-        /**
-         * get(0) + get(1) + ... + get(inclusiveEnd).
-         */
-        sumTo: function (inclusiveEnd) {
-            return this.sumUntil(inclusiveEnd + 1);
-        },
-
-        /**
-         * sum get(begin) + get(begin + 1) + ... + get(end - 1).
-         */
-        sum: function (begin, end) {
-            return this.sumUntil(end) - this.sumUntil(begin);
-        },
-
-        /**
-         * Returns the smallest i such that 0 <= i <= size and sumUntil(i) <= t, or
-         * -1 if no such i exists.
-         */
-        greatestLowerBound: function (t) {
-            if (t < 0) {
-                return -1;
-            }
-
-            var node = 1;
-            if (this._heap[node] <= t) {
-                return this._size;
-            }
-
-            while (node < this._half) {
-                var leftSum = this._heap[2 * node];
-                if (t < leftSum) {
-                    node = 2 * node;
-                } else {
-                    node = 2 * node + 1;
-                    t -= leftSum;
-                }
-            }
-
-            return node - this._half;
-        },
-
-        /**
-         * Returns the smallest i such that 0 <= i <= size and sumUntil(i) < t, or
-         * -1 if no such i exists.
-         */
-        greatestStrictLowerBound: function (t) {
-            if (t <= 0) {
-                return -1;
-            }
-
-            var node = 1;
-            if (this._heap[node] < t) {
-                return this._size;
-            }
-
-            while (node < this._half) {
-                var leftSum = this._heap[2 * node];
-                if (t <= leftSum) {
-                    node = 2 * node;
-                } else {
-                    node = 2 * node + 1;
-                    t -= leftSum;
-                }
-            }
-
-            return node - this._half;
-        },
-
-        /**
-         * Returns the smallest i such that 0 <= i <= size and t <= sumUntil(i), or
-         * size + 1 if no such i exists.
-         */
-        leastUpperBound: function (t) {
-            return this.greatestStrictLowerBound(t) + 1;
-        },
-
-        /**
-         * Returns the smallest i such that 0 <= i <= size and t < sumUntil(i), or
-         * size + 1 if no such i exists.
-         */
-        leastStrictUpperBound: function (t) {
-            return this.greatestLowerBound(t) + 1;
-        }
-    };
-
-    BI.PrefixIntervalTree.uniform = function (size, initialValue) {
-        var xs = [];
-        for (var i = size - 1; i >= 0; --i) {
-            xs[i] = initialValue;
-        }
-
-        return new BI.PrefixIntervalTree(xs);
-    };
-
-    BI.PrefixIntervalTree.empty = function (size) {
-        return BI.PrefixIntervalTree.uniform(size, 0);
-    };
-
-})();
-
-
-/***/ }),
-
-/***/ 140:
-/***/ (function(module, exports) {
-
-
-!(function () {
-    BI.Queue = function (capacity) {
-        this.capacity = capacity;
-        this.array = [];
-    };
-    BI.Queue.prototype = {
-        constructor: BI.Queue,
-
-        contains: function (v) {
-            return BI.contains(this.array, v);
-        },
-
-        indexOf: function (v) {
-            return BI.contains(this.array, v);
-        },
-
-        getElementByIndex: function (index) {
-            return this.array[index];
-        },
-
-        push: function (v) {
-            this.array.push(v);
-            if (this.capacity && this.array.length > this.capacity) {
-                this.array.shift();
-            }
-        },
-
-        pop: function () {
-            this.array.pop();
-        },
-
-        shift: function () {
-            this.array.shift();
-        },
-
-        unshift: function (v) {
-            this.array.unshift(v);
-            if (this.capacity && this.array.length > this.capacity) {
-                this.array.pop();
-            }
-        },
-
-        remove: function (v) {
-            BI.remove(this.array, v);
-        },
-
-        splice: function () {
-            this.array.splice.apply(this.array, arguments);
-        },
-
-        slice: function () {
-            this.array.slice.apply(this.array, arguments);
-        },
-
-        size: function () {
-            return this.array.length;
-        },
-
-        each: function (fn, scope) {
-            var scope = scope || window;
-            var fn = fn || null;
-            if (fn == null || typeof (fn) !== "function") {
-                return;
-            }
-            for (var i = 0; i < this.array.length; i++) {
-                var re = fn.call(scope, i, this.array[i], this.array);
-                if (re == false) {
-                    break;
-                }
-            }
-        },
-
-        toArray: function () {
-            return this.array;
-        },
-
-        fromArray: function (array) {
-            var self = this;
-            BI.each(array, function (i, v) {
-                self.push(v);
-            });
-        },
-
-        clear: function () {
-            this.array.length = 0;
-        }
-    };
-})();
-
-/***/ }),
-
-/***/ 141:
-/***/ (function(module, exports) {
-
-!(function () {
-    var Section = function (height, width, x, y) {
-        this.height = height;
-        this.width = width;
-        this.x = x;
-        this.y = y;
-
-        this._indexMap = {};
-        this._indices = [];
-    };
-
-    Section.prototype = {
-        constructor: Section,
-        addCellIndex: function (index) {
-            if (!this._indexMap[index]) {
-                this._indexMap[index] = true;
-                this._indices.push(index);
-            }
-        },
-
-        getCellIndices: function () {
-            return this._indices;
-        }
-    };
-
-    var SECTION_SIZE = 100;
-    BI.SectionManager = function (sectionSize) {
-        this._sectionSize = sectionSize || SECTION_SIZE;
-        this._cellMetadata = [];
-        this._sections = {};
-    };
-
-    BI.SectionManager.prototype = {
-        constructor: BI.SectionManager,
-        getCellIndices: function (height, width, x, y) {
-            var indices = {};
-
-            BI.each(this.getSections(height, width, x, y), function (i, section) {
-                BI.each(section.getCellIndices(), function (j, index) {
-                    indices[index] = index;
-                });
-            });
-
-            return BI.map(BI.keys(indices), function (i, index) {
-                return indices[index];
-            });
-        },
-
-        getCellMetadata: function (index) {
-            return this._cellMetadata[index];
-        },
-
-        getSections: function (height, width, x, y) {
-            var sectionXStart = Math.floor(x / this._sectionSize);
-            var sectionXStop = Math.floor((x + width - 1) / this._sectionSize);
-            var sectionYStart = Math.floor(y / this._sectionSize);
-            var sectionYStop = Math.floor((y + height - 1) / this._sectionSize);
-
-            var sections = [];
-
-            for (var sectionX = sectionXStart; sectionX <= sectionXStop; sectionX++) {
-                for (var sectionY = sectionYStart; sectionY <= sectionYStop; sectionY++) {
-                    var key = sectionX + "." + sectionY;
-
-                    if (!this._sections[key]) {
-                        this._sections[key] = new Section(this._sectionSize, this._sectionSize, sectionX * this._sectionSize, sectionY * this._sectionSize);
-                    }
-
-                    sections.push(this._sections[key]);
-                }
-            }
-
-            return sections;
-        },
-
-        getTotalSectionCount: function () {
-            return BI.size(this._sections);
-        },
-
-        registerCell: function (cellMetadatum, index) {
-            this._cellMetadata[index] = cellMetadatum;
-
-            BI.each(this.getSections(cellMetadatum.height, cellMetadatum.width, cellMetadatum.x, cellMetadatum.y), function (i, section) {
-                section.addCellIndex(index);
-            });
-        }
-    };
-})();
-
-/***/ }),
-
-/***/ 142:
-/***/ (function(module, exports) {
-
-(function () {
-    BI.Tree = function () {
-        this.root = new BI.Node(BI.UUID());
-    };
-
-    BI.Tree.prototype = {
-        constructor: BI.Tree,
-        addNode: function (node, newNode, index) {
-            if (BI.isNull(newNode)) {
-                this.root.addChild(node, index);
-            } else if (BI.isNull(node)) {
-                this.root.addChild(newNode, index);
-            } else {
-                node.addChild(newNode, index);
-            }
-        },
-
-        isRoot: function (node) {
-            return node === this.root;
-        },
-
-        getRoot: function () {
-            return this.root;
-        },
-
-        clear: function () {
-            this.root.clear();
-        },
-
-        initTree: function (nodes) {
-            var self = this;
-            this.clear();
-            var queue = [];
-            BI.each(nodes, function (i, node) {
-                var n = new BI.Node(node);
-                n.set("data", node);
-                self.addNode(n);
-                queue.push(n);
-            });
-            while (!BI.isEmpty(queue)) {
-                var parent = queue.shift();
-                var node = parent.get("data");
-                BI.each(node.children, function (i, child) {
-                    var n = new BI.Node(child);
-                    n.set("data", child);
-                    queue.push(n);
-                    self.addNode(parent, n);
-                });
-            }
-        },
-
-        _toJSON: function (node) {
-            var self = this;
-            var children = [];
-            BI.each(node.getChildren(), function (i, child) {
-                children.push(self._toJSON(child));
-            });
-            return BI.extend({
-                id: node.id
-            }, BI.deepClone(node.get("data")), (children.length > 0 ? {
-                    children: children
-                } : {}));
-        },
-
-        toJSON: function (node) {
-            var self = this, result = [];
-            BI.each((node || this.root).getChildren(), function (i, child) {
-                result.push(self._toJSON(child));
-            });
-            return result;
-        },
-
-        _toJSONWithNode: function (node) {
-            var self = this;
-            var children = [];
-            BI.each(node.getChildren(), function (i, child) {
-                children.push(self._toJSONWithNode(child));
-            });
-            return BI.extend({
-                id: node.id
-            }, BI.deepClone(node.get("data")), {
-                node: node
-            }, (children.length > 0 ? {
-                    children: children
-                } : {}));
-        },
-
-        toJSONWithNode: function (node) {
-            var self = this, result = [];
-            BI.each((node || this.root).getChildren(), function (i, child) {
-                result.push(self._toJSONWithNode(child));
-            });
-            return result;
-        },
-
-        search: function (root, target, param) {
-            if (!(root instanceof BI.Node)) {
-                return arguments.callee.apply(this, [this.root, root, target]);
-            }
-            var self = this, next = null;
-
-            if (BI.isNull(target)) {
-                return null;
-            }
-            if (BI.isEqual(root[param || "id"], target)) {
-                return root;
-            }
-            BI.any(root.getChildren(), function (i, child) {
-                next = self.search(child, target, param);
-                if (null !== next) {
-                    return true;
-                }
-            });
-            return next;
-        },
-
-        _traverse: function (node, callback) {
-            var queue = [];
-            queue.push(node);
-            while (!BI.isEmpty(queue)) {
-                var temp = queue.shift();
-                var b = callback && callback(temp);
-                if (b === false) {
-                    break;
-                }
-                if (b === true) {
-                    continue;
-                }
-                if (temp != null) {
-                    queue = queue.concat(temp.getChildren());
-                }
-            }
-        },
-
-        traverse: function (callback) {
-            this._traverse(this.root, callback);
-        },
-
-        _recursion: function (node, route, callback) {
-            var self = this;
-            return BI.every(node.getChildren(), function (i, child) {
-                var next = BI.clone(route);
-                next.push(child.id);
-                var b = callback && callback(child, next);
-                if (b === false) {
-                    return false;
-                }
-                if (b === true) {
-                    return true;
-                }
-                return self._recursion(child, next, callback);
-            });
-        },
-
-        recursion: function (callback) {
-            this._recursion(this.root, [], callback);
-        },
-
-        inOrderTraverse: function (callback) {
-            this._inOrderTraverse(this.root, callback);
-        },
-
-        // 中序遍历(递归)
-        _inOrderTraverse: function (node, callback) {
-            if (node != null) {
-                this._inOrderTraverse(node.getLeft());
-                callback && callback(node);
-                this._inOrderTraverse(node.getRight());
-            }
-        },
-
-        // 中序遍历(非递归)
-        nrInOrderTraverse: function (callback) {
-
-            var stack = [];
-            var node = this.root;
-            while (node != null || !BI.isEmpty(stack)) {
-                while (node != null) {
-                    stack.push(node);
-                    node = node.getLeft();
-                }
-                node = stack.pop();
-                callback && callback(node);
-                node = node.getRight();
-            }
-        },
-
-        preOrderTraverse: function (callback) {
-            this._preOrderTraverse(this.root, callback);
-        },
-
-        // 先序遍历(递归)
-        _preOrderTraverse: function (node, callback) {
-            if (node != null) {
-                callback && callback(node);
-                this._preOrderTraverse(node.getLeft());
-                this._preOrderTraverse(node.getRight());
-            }
-        },
-
-        // 先序遍历（非递归）
-        nrPreOrderTraverse: function (callback) {
-
-            var stack = [];
-            var node = this.root;
-
-            while (node != null || !BI.isEmpty(stack)) {
-
-                while (node != null) {
-                    callback && callback(node);
-                    stack.push(node);
-                    node = node.getLeft();
-                }
-                node = stack.pop();
-                node = node.getRight();
-            }
-        },
-
-        postOrderTraverse: function (callback) {
-            this._postOrderTraverse(this.root, callback);
-        },
-
-        // 后序遍历(递归)
-        _postOrderTraverse: function (node, callback) {
-            if (node != null) {
-                this._postOrderTraverse(node.getLeft());
-                this._postOrderTraverse(node.getRight());
-                callback && callback(node);
-            }
-        },
-
-        // 后续遍历(非递归)
-        nrPostOrderTraverse: function (callback) {
-
-            var stack = [];
-            var node = this.root;
-            var preNode = null;// 表示最近一次访问的节点
-
-            while (node != null || !BI.isEmpty(stack)) {
-
-                while (node != null) {
-                    stack.push(node);
-                    node = node.getLeft();
-                }
-
-                node = BI.last(stack);
-
-                if (node.getRight() == null || node.getRight() == preNode) {
-                    callback && callback(node);
-                    node = stack.pop();
-                    preNode = node;
-                    node = null;
-                } else {
-                    node = node.getRight();
-                }
-            }
-        }
-    };
-
-    BI.Node = function (id) {
-        if (BI.isObject(id)) {
-            BI.extend(this, id);
-        } else {
-            this.id = id;
-        }
-        this.clear.apply(this, arguments);
-    };
-
-    BI.Node.prototype = {
-        constructor: BI.Node,
-
-        set: function (key, value) {
-            if (BI.isObject(key)) {
-                BI.extend(this, key);
-                return;
-            }
-            this[key] = value;
-        },
-
-        get: function (key) {
-            return this[key];
-        },
-
-        isLeaf: function () {
-            return BI.isEmpty(this.children);
-        },
-
-        getChildren: function () {
-            return this.children;
-        },
-
-        getChildrenLength: function () {
-            return this.children.length;
-        },
-
-        getFirstChild: function () {
-            return BI.first(this.children);
-        },
-
-        getLastChild: function () {
-            return BI.last(this.children);
-        },
-
-        setLeft: function (left) {
-            this.left = left;
-        },
-
-        getLeft: function () {
-            return this.left;
-        },
-
-        setRight: function (right) {
-            this.right = right;
-        },
-
-        getRight: function () {
-            return this.right;
-        },
-
-        setParent: function (parent) {
-            this.parent = parent;
-        },
-
-        getParent: function () {
-            return this.parent;
-        },
-
-        getChild: function (index) {
-            return this.children[index];
-        },
-
-        getChildIndex: function (id) {
-            return BI.findIndex(this.children, function (i, ch) {
-                return ch.get("id") === id;
-            });
-        },
-
-        removeChild: function (id) {
-            this.removeChildByIndex(this.getChildIndex(id));
-        },
-
-        removeChildByIndex: function (index) {
-            var before = this.getChild(index - 1);
-            var behind = this.getChild(index + 1);
-            if (before != null) {
-                before.setRight(behind || null);
-            }
-            if (behind != null) {
-                behind.setLeft(before || null);
-            }
-            this.children.splice(index, 1);
-        },
-
-        removeAllChilds: function () {
-            this.children = [];
-        },
-
-        addChild: function (child, index) {
-            var cur = null;
-            if (BI.isUndefined(index)) {
-                cur = this.children.length - 1;
-            } else {
-                cur = index - 1;
-            }
-            child.setParent(this);
-            if (cur >= 0) {
-                this.getChild(cur) && this.getChild(cur).setRight(child);
-                child.setLeft(this.getChild(cur));
-            }
-            if (BI.isUndefined(index)) {
-                this.children.push(child);
-            } else {
-                this.children.splice(index, 0, child);
-            }
-        },
-
-        equals: function (obj) {
-            return this === obj || this.id === obj.id;
-        },
-
-        clear: function () {
-            this.parent = null;
-            this.left = null;
-            this.right = null;
-            this.children = [];
-        }
-    };
-
-    BI.extend(BI.Tree, {
-        transformToArrayFormat: function (nodes, pId) {
-            if (!nodes) return [];
-            var r = [];
-            if (BI.isArray(nodes)) {
-                for (var i = 0, l = nodes.length; i < l; i++) {
-                    var node = BI.clone(nodes[i]);
-                    node.pId = node.pId == null ? pId : node.pId;
-                    delete node.children;
-                    r.push(node);
-                    if (nodes[i]["children"]) {
-                        r = r.concat(BI.Tree.transformToArrayFormat(nodes[i]["children"], node.id));
-                    }
-                }
-            } else {
-                var newNodes = BI.clone(nodes);
-                newNodes.pId = newNodes.pId == null ? pId : newNodes.pId;
-                delete newNodes.children;
-                r.push(newNodes);
-                if (nodes["children"]) {
-                    r = r.concat(BI.Tree.transformToArrayFormat(nodes["children"], newNodes.id));
-                }
-            }
-            return r;
-        },
-
-        arrayFormat: function (nodes, pId) {
-            if (!nodes) {
-                return [];
-            }
-            var r = [];
-            if (BI.isArray(nodes)) {
-                for (var i = 0, l = nodes.length; i < l; i++) {
-                    var node = nodes[i];
-                    node.pId = node.pId == null ? pId : node.pId;
-                    r.push(node);
-                    if (nodes[i]["children"]) {
-                        r = r.concat(BI.Tree.arrayFormat(nodes[i]["children"], node.id));
-                    }
-                }
-            } else {
-                var newNodes = nodes;
-                newNodes.pId = newNodes.pId == null ? pId : newNodes.pId;
-                r.push(newNodes);
-                if (nodes["children"]) {
-                    r = r.concat(BI.Tree.arrayFormat(nodes["children"], newNodes.id));
-                }
-            }
-            return r;
-        },
-
-        transformToTreeFormat: function (sNodes) {
-            var i, l;
-            if (!sNodes) {
-                return [];
-            }
-
-            if (BI.isArray(sNodes)) {
-                var r = [];
-                var tmpMap = {};
-                for (i = 0, l = sNodes.length; i < l; i++) {
-                    if (BI.isNull(sNodes[i].id)) {
-                        return sNodes;
-                    }
-                    tmpMap[sNodes[i].id] = BI.clone(sNodes[i]);
-                }
-                for (i = 0, l = sNodes.length; i < l; i++) {
-                    if (tmpMap[sNodes[i].pId] && sNodes[i].id !== sNodes[i].pId) {
-                        if (!tmpMap[sNodes[i].pId].children) {
-                            tmpMap[sNodes[i].pId].children = [];
-                        }
-                        tmpMap[sNodes[i].pId].children.push(tmpMap[sNodes[i].id]);
-                    } else {
-                        r.push(tmpMap[sNodes[i].id]);
-                    }
-                    delete tmpMap[sNodes[i].id].pId;
-                }
-                return r;
-            }
-            return [sNodes];
-            
-        },
-
-        treeFormat: function (sNodes) {
-            var i, l;
-            if (!sNodes) {
-                return [];
-            }
-
-            if (BI.isArray(sNodes)) {
-                var r = [];
-                var tmpMap = {};
-                for (i = 0, l = sNodes.length; i < l; i++) {
-                    if (BI.isNull(sNodes[i].id)) {
-                        return sNodes;
-                    }
-                    tmpMap[sNodes[i].id] = sNodes[i];
-                }
-                for (i = 0, l = sNodes.length; i < l; i++) {
-                    if (tmpMap[sNodes[i].pId] && sNodes[i].id !== sNodes[i].pId) {
-                        if (!tmpMap[sNodes[i].pId].children) {
-                            tmpMap[sNodes[i].pId].children = [];
-                        }
-                        tmpMap[sNodes[i].pId].children.push(tmpMap[sNodes[i].id]);
-                    } else {
-                        r.push(tmpMap[sNodes[i].id]);
-                    }
-                }
-                return r;
-            }
-            return [sNodes];
-            
-        },
-
-        traversal: function (array, callback, pNode) {
-            if (BI.isNull(array)) {
-                return;
-            }
-            var self = this;
-            BI.some(array, function (i, item) {
-                if (callback(i, item, pNode) === false) {
-                    return true;
-                }
-                self.traversal(item.children, callback, item);
-            });
-        }
-    });
-})();
-
-
-/***/ }),
-
-/***/ 143:
-/***/ (function(module, exports) {
-
-// 向量操作
-BI.Vector = function (x, y) {
-    this.x = x;
-    this.y = y;
-};
-BI.Vector.prototype = {
-    constructor: BI.Vector,
-    cross: function (v) {
-        return (this.x * v.y - this.y * v.x);
-    },
-    length: function (v) {
-        return (Math.sqrt(this.x * v.x + this.y * v.y));
-    }
-};
-BI.Region = function (x, y, w, h) {
-    this.x = x;
-    this.y = y;
-    this.w = w;
-    this.h = h;
-};
-BI.Region.prototype = {
-    constructor: BI.Region,
-    // 判断两个区域是否相交，若相交，则要么顶点互相包含，要么矩形边界（或对角线）相交
-    isIntersects: function (obj) {
-        if (this.isPointInside(obj.x, obj.y) ||
-            this.isPointInside(obj.x + obj.w, obj.y) ||
-            this.isPointInside(obj.x, obj.y + obj.h) ||
-            this.isPointInside(obj.x + obj.w, obj.y + obj.h)) {
-            return true;
-        } else if (obj.isPointInside(this.x, this.y) ||
-            obj.isPointInside(this.x + this.w, this.y) ||
-            obj.isPointInside(this.x, this.y + this.h) ||
-            obj.isPointInside(this.x + this.w, this.y + this.h)) {
-            return true;
-        } else if (obj.x != null && obj.y != null)// 判断矩形对角线相交 |v1 X v2||v1 X v3| < 0
-        {
-            var vector1 = new BI.Vector(this.w, this.h);// 矩形对角线向量
-            var vector2 = new BI.Vector(obj.x - this.x, obj.y - this.y);
-            var vector3 = new BI.Vector(vector2.x + obj.w, vector2.y + obj.h);
-            if ((vector1.cross(vector2) * vector1.cross(vector3)) < 0) {
-                return true;
-            }
-        }
-        return false;
-    },
-    // 判断一个点是否在这个区域内部
-    isPointInside: function (x, y) {
-        if (this.x == null || this.y == null) {
-            return false;
-        }
-        if (x >= this.x && x <= this.x + this.w && y >= this.y && y <= this.y + this.h) {
-            return true;
-        }
-        return false;
-    },
-    // 返回区域的重心，因为是矩形所以返回中点
-    getPosition: function () {
-        var pos = [];
-        pos.push(this.x + this.w / 2);
-        pos.push(this.y + this.h / 2);
-        return pos;
-    }
-};
-
-/***/ }),
-
-/***/ 144:
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {(function () {
@@ -7776,7 +4099,7 @@ BI.Region.prototype = {
 
 /***/ }),
 
-/***/ 145:
+/***/ 135:
 /***/ (function(module, exports) {
 
 /**
@@ -7805,7 +4128,7 @@ _.extend(BI, {
 
 /***/ }),
 
-/***/ 146:
+/***/ 136:
 /***/ (function(module, exports) {
 
 /** Constants used for time computations */
@@ -8057,7 +4380,7 @@ _.extend(BI, {
 
 /***/ }),
 
-/***/ 147:
+/***/ 137:
 /***/ (function(module, exports) {
 
 /**
@@ -8235,7 +4558,7 @@ _.extend(BI, {
 
 /***/ }),
 
-/***/ 148:
+/***/ 138:
 /***/ (function(module, exports) {
 
 _.extend(BI, {
@@ -8397,7 +4720,7 @@ _.extend(BI, {
 
 /***/ }),
 
-/***/ 149:
+/***/ 139:
 /***/ (function(module, exports) {
 
 /**
@@ -8526,7 +4849,453 @@ _.extend(BI, {
 
 /***/ }),
 
-/***/ 150:
+/***/ 140:
+/***/ (function(module, exports) {
+
+/**
+ * 汉字拼音索引
+ */
+
+!(function () {
+    var _ChineseFirstPY = "YDYQSXMWZSSXJBYMGCCZQPSSQBYCDSCDQLDYLYBSSJGYZZJJFKCCLZDHWDWZJLJPFYYNWJJTMYHZWZHFLZPPQHGSCYYYNJQYXXGJHHSDSJNKKTMOMLCRXYPSNQSECCQZGGLLYJLMYZZSECYKYYHQWJSSGGYXYZYJWWKDJHYCHMYXJTLXJYQBYXZLDWRDJRWYSRLDZJPCBZJJBRCFTLECZSTZFXXZHTRQHYBDLYCZSSYMMRFMYQZPWWJJYFCRWFDFZQPYDDWYXKYJAWJFFXYPSFTZYHHYZYSWCJYXSCLCXXWZZXNBGNNXBXLZSZSBSGPYSYZDHMDZBQBZCWDZZYYTZHBTSYYBZGNTNXQYWQSKBPHHLXGYBFMJEBJHHGQTJCYSXSTKZHLYCKGLYSMZXYALMELDCCXGZYRJXSDLTYZCQKCNNJWHJTZZCQLJSTSTBNXBTYXCEQXGKWJYFLZQLYHYXSPSFXLMPBYSXXXYDJCZYLLLSJXFHJXPJBTFFYABYXBHZZBJYZLWLCZGGBTSSMDTJZXPTHYQTGLJSCQFZKJZJQNLZWLSLHDZBWJNCJZYZSQQYCQYRZCJJWYBRTWPYFTWEXCSKDZCTBZHYZZYYJXZCFFZZMJYXXSDZZOTTBZLQWFCKSZSXFYRLNYJMBDTHJXSQQCCSBXYYTSYFBXDZTGBCNSLCYZZPSAZYZZSCJCSHZQYDXLBPJLLMQXTYDZXSQJTZPXLCGLQTZWJBHCTSYJSFXYEJJTLBGXSXJMYJQQPFZASYJNTYDJXKJCDJSZCBARTDCLYJQMWNQNCLLLKBYBZZSYHQQLTWLCCXTXLLZNTYLNEWYZYXCZXXGRKRMTCNDNJTSYYSSDQDGHSDBJGHRWRQLYBGLXHLGTGXBQJDZPYJSJYJCTMRNYMGRZJCZGJMZMGXMPRYXKJNYMSGMZJYMKMFXMLDTGFBHCJHKYLPFMDXLQJJSMTQGZSJLQDLDGJYCALCMZCSDJLLNXDJFFFFJCZFMZFFPFKHKGDPSXKTACJDHHZDDCRRCFQYJKQCCWJDXHWJLYLLZGCFCQDSMLZPBJJPLSBCJGGDCKKDEZSQCCKJGCGKDJTJDLZYCXKLQSCGJCLTFPCQCZGWPJDQYZJJBYJHSJDZWGFSJGZKQCCZLLPSPKJGQJHZZLJPLGJGJJTHJJYJZCZMLZLYQBGJWMLJKXZDZNJQSYZMLJLLJKYWXMKJLHSKJGBMCLYYMKXJQLBMLLKMDXXKWYXYSLMLPSJQQJQXYXFJTJDXMXXLLCXQBSYJBGWYMBGGBCYXPJYGPEPFGDJGBHBNSQJYZJKJKHXQFGQZKFHYGKHDKLLSDJQXPQYKYBNQSXQNSZSWHBSXWHXWBZZXDMNSJBSBKBBZKLYLXGWXDRWYQZMYWSJQLCJXXJXKJEQXSCYETLZHLYYYSDZPAQYZCMTLSHTZCFYZYXYLJSDCJQAGYSLCQLYYYSHMRQQKLDXZSCSSSYDYCJYSFSJBFRSSZQSBXXPXJYSDRCKGJLGDKZJZBDKTCSYQPYHSTCLDJDHMXMCGXYZHJDDTMHLTXZXYLYMOHYJCLTYFBQQXPFBDFHHTKSQHZYYWCNXXCRWHOWGYJLEGWDQCWGFJYCSNTMYTOLBYGWQWESJPWNMLRYDZSZTXYQPZGCWXHNGPYXSHMYQJXZTDPPBFYHZHTJYFDZWKGKZBLDNTSXHQEEGZZYLZMMZYJZGXZXKHKSTXNXXWYLYAPSTHXDWHZYMPXAGKYDXBHNHXKDPJNMYHYLPMGOCSLNZHKXXLPZZLBMLSFBHHGYGYYGGBHSCYAQTYWLXTZQCEZYDQDQMMHTKLLSZHLSJZWFYHQSWSCWLQAZYNYTLSXTHAZNKZZSZZLAXXZWWCTGQQTDDYZTCCHYQZFLXPSLZYGPZSZNGLNDQTBDLXGTCTAJDKYWNSYZLJHHZZCWNYYZYWMHYCHHYXHJKZWSXHZYXLYSKQYSPSLYZWMYPPKBYGLKZHTYXAXQSYSHXASMCHKDSCRSWJPWXSGZJLWWSCHSJHSQNHCSEGNDAQTBAALZZMSSTDQJCJKTSCJAXPLGGXHHGXXZCXPDMMHLDGTYBYSJMXHMRCPXXJZCKZXSHMLQXXTTHXWZFKHCCZDYTCJYXQHLXDHYPJQXYLSYYDZOZJNYXQEZYSQYAYXWYPDGXDDXSPPYZNDLTWRHXYDXZZJHTCXMCZLHPYYYYMHZLLHNXMYLLLMDCPPXHMXDKYCYRDLTXJCHHZZXZLCCLYLNZSHZJZZLNNRLWHYQSNJHXYNTTTKYJPYCHHYEGKCTTWLGQRLGGTGTYGYHPYHYLQYQGCWYQKPYYYTTTTLHYHLLTYTTSPLKYZXGZWGPYDSSZZDQXSKCQNMJJZZBXYQMJRTFFBTKHZKBXLJJKDXJTLBWFZPPTKQTZTGPDGNTPJYFALQMKGXBDCLZFHZCLLLLADPMXDJHLCCLGYHDZFGYDDGCYYFGYDXKSSEBDHYKDKDKHNAXXYBPBYYHXZQGAFFQYJXDMLJCSQZLLPCHBSXGJYNDYBYQSPZWJLZKSDDTACTBXZDYZYPJZQSJNKKTKNJDJGYYPGTLFYQKASDNTCYHBLWDZHBBYDWJRYGKZYHEYYFJMSDTYFZJJHGCXPLXHLDWXXJKYTCYKSSSMTWCTTQZLPBSZDZWZXGZAGYKTYWXLHLSPBCLLOQMMZSSLCMBJCSZZKYDCZJGQQDSMCYTZQQLWZQZXSSFPTTFQMDDZDSHDTDWFHTDYZJYQJQKYPBDJYYXTLJHDRQXXXHAYDHRJLKLYTWHLLRLLRCXYLBWSRSZZSYMKZZHHKYHXKSMDSYDYCJPBZBSQLFCXXXNXKXWYWSDZYQOGGQMMYHCDZTTFJYYBGSTTTYBYKJDHKYXBELHTYPJQNFXFDYKZHQKZBYJTZBXHFDXKDASWTAWAJLDYJSFHBLDNNTNQJTJNCHXFJSRFWHZFMDRYJYJWZPDJKZYJYMPCYZNYNXFBYTFYFWYGDBNZZZDNYTXZEMMQBSQEHXFZMBMFLZZSRXYMJGSXWZJSPRYDJSJGXHJJGLJJYNZZJXHGXKYMLPYYYCXYTWQZSWHWLYRJLPXSLSXMFSWWKLCTNXNYNPSJSZHDZEPTXMYYWXYYSYWLXJQZQXZDCLEEELMCPJPCLWBXSQHFWWTFFJTNQJHJQDXHWLBYZNFJLALKYYJLDXHHYCSTYYWNRJYXYWTRMDRQHWQCMFJDYZMHMYYXJWMYZQZXTLMRSPWWCHAQBXYGZYPXYYRRCLMPYMGKSJSZYSRMYJSNXTPLNBAPPYPYLXYYZKYNLDZYJZCZNNLMZHHARQMPGWQTZMXXMLLHGDZXYHXKYXYCJMFFYYHJFSBSSQLXXNDYCANNMTCJCYPRRNYTYQNYYMBMSXNDLYLYSLJRLXYSXQMLLYZLZJJJKYZZCSFBZXXMSTBJGNXYZHLXNMCWSCYZYFZLXBRNNNYLBNRTGZQYSATSWRYHYJZMZDHZGZDWYBSSCSKXSYHYTXXGCQGXZZSHYXJSCRHMKKBXCZJYJYMKQHZJFNBHMQHYSNJNZYBKNQMCLGQHWLZNZSWXKHLJHYYBQLBFCDSXDLDSPFZPSKJYZWZXZDDXJSMMEGJSCSSMGCLXXKYYYLNYPWWWGYDKZJGGGZGGSYCKNJWNJPCXBJJTQTJWDSSPJXZXNZXUMELPXFSXTLLXCLJXJJLJZXCTPSWXLYDHLYQRWHSYCSQYYBYAYWJJJQFWQCQQCJQGXALDBZZYJGKGXPLTZYFXJLTPADKYQHPMATLCPDCKBMTXYBHKLENXDLEEGQDYMSAWHZMLJTWYGXLYQZLJEEYYBQQFFNLYXRDSCTGJGXYYNKLLYQKCCTLHJLQMKKZGCYYGLLLJDZGYDHZWXPYSJBZKDZGYZZHYWYFQYTYZSZYEZZLYMHJJHTSMQWYZLKYYWZCSRKQYTLTDXWCTYJKLWSQZWBDCQYNCJSRSZJLKCDCDTLZZZACQQZZDDXYPLXZBQJYLZLLLQDDZQJYJYJZYXNYYYNYJXKXDAZWYRDLJYYYRJLXLLDYXJCYWYWNQCCLDDNYYYNYCKCZHXXCCLGZQJGKWPPCQQJYSBZZXYJSQPXJPZBSBDSFNSFPZXHDWZTDWPPTFLZZBZDMYYPQJRSDZSQZSQXBDGCPZSWDWCSQZGMDHZXMWWFYBPDGPHTMJTHZSMMBGZMBZJCFZWFZBBZMQCFMBDMCJXLGPNJBBXGYHYYJGPTZGZMQBQTCGYXJXLWZKYDPDYMGCFTPFXYZTZXDZXTGKMTYBBCLBJASKYTSSQYYMSZXFJEWLXLLSZBQJJJAKLYLXLYCCTSXMCWFKKKBSXLLLLJYXTYLTJYYTDPJHNHNNKBYQNFQYYZBYYESSESSGDYHFHWTCJBSDZZTFDMXHCNJZYMQWSRYJDZJQPDQBBSTJGGFBKJBXTGQHNGWJXJGDLLTHZHHYYYYYYSXWTYYYCCBDBPYPZYCCZYJPZYWCBDLFWZCWJDXXHYHLHWZZXJTCZLCDPXUJCZZZLYXJJTXPHFXWPYWXZPTDZZBDZCYHJHMLXBQXSBYLRDTGJRRCTTTHYTCZWMXFYTWWZCWJWXJYWCSKYBZSCCTZQNHXNWXXKHKFHTSWOCCJYBCMPZZYKBNNZPBZHHZDLSYDDYTYFJPXYNGFXBYQXCBHXCPSXTYZDMKYSNXSXLHKMZXLYHDHKWHXXSSKQYHHCJYXGLHZXCSNHEKDTGZXQYPKDHEXTYKCNYMYYYPKQYYYKXZLTHJQTBYQHXBMYHSQCKWWYLLHCYYLNNEQXQWMCFBDCCMLJGGXDQKTLXKGNQCDGZJWYJJLYHHQTTTNWCHMXCXWHWSZJYDJCCDBQCDGDNYXZTHCQRXCBHZTQCBXWGQWYYBXHMBYMYQTYEXMQKYAQYRGYZSLFYKKQHYSSQYSHJGJCNXKZYCXSBXYXHYYLSTYCXQTHYSMGSCPMMGCCCCCMTZTASMGQZJHKLOSQYLSWTMXSYQKDZLJQQYPLSYCZTCQQPBBQJZCLPKHQZYYXXDTDDTSJCXFFLLCHQXMJLWCJCXTSPYCXNDTJSHJWXDQQJSKXYAMYLSJHMLALYKXCYYDMNMDQMXMCZNNCYBZKKYFLMCHCMLHXRCJJHSYLNMTJZGZGYWJXSRXCWJGJQHQZDQJDCJJZKJKGDZQGJJYJYLXZXXCDQHHHEYTMHLFSBDJSYYSHFYSTCZQLPBDRFRZTZYKYWHSZYQKWDQZRKMSYNBCRXQBJYFAZPZZEDZCJYWBCJWHYJBQSZYWRYSZPTDKZPFPBNZTKLQYHBBZPNPPTYZZYBQNYDCPJMMCYCQMCYFZZDCMNLFPBPLNGQJTBTTNJZPZBBZNJKLJQYLNBZQHKSJZNGGQSZZKYXSHPZSNBCGZKDDZQANZHJKDRTLZLSWJLJZLYWTJNDJZJHXYAYNCBGTZCSSQMNJPJYTYSWXZFKWJQTKHTZPLBHSNJZSYZBWZZZZLSYLSBJHDWWQPSLMMFBJDWAQYZTCJTBNNWZXQXCDSLQGDSDPDZHJTQQPSWLYYJZLGYXYZLCTCBJTKTYCZJTQKBSJLGMGZDMCSGPYNJZYQYYKNXRPWSZXMTNCSZZYXYBYHYZAXYWQCJTLLCKJJTJHGDXDXYQYZZBYWDLWQCGLZGJGQRQZCZSSBCRPCSKYDZNXJSQGXSSJMYDNSTZTPBDLTKZWXQWQTZEXNQCZGWEZKSSBYBRTSSSLCCGBPSZQSZLCCGLLLZXHZQTHCZMQGYZQZNMCOCSZJMMZSQPJYGQLJYJPPLDXRGZYXCCSXHSHGTZNLZWZKJCXTCFCJXLBMQBCZZWPQDNHXLJCTHYZLGYLNLSZZPCXDSCQQHJQKSXZPBAJYEMSMJTZDXLCJYRYYNWJBNGZZTMJXLTBSLYRZPYLSSCNXPHLLHYLLQQZQLXYMRSYCXZLMMCZLTZSDWTJJLLNZGGQXPFSKYGYGHBFZPDKMWGHCXMSGDXJMCJZDYCABXJDLNBCDQYGSKYDQTXDJJYXMSZQAZDZFSLQXYJSJZYLBTXXWXQQZBJZUFBBLYLWDSLJHXJYZJWTDJCZFQZQZZDZSXZZQLZCDZFJHYSPYMPQZMLPPLFFXJJNZZYLSJEYQZFPFZKSYWJJJHRDJZZXTXXGLGHYDXCSKYSWMMZCWYBAZBJKSHFHJCXMHFQHYXXYZFTSJYZFXYXPZLCHMZMBXHZZSXYFYMNCWDABAZLXKTCSHHXKXJJZJSTHYGXSXYYHHHJWXKZXSSBZZWHHHCWTZZZPJXSNXQQJGZYZYWLLCWXZFXXYXYHXMKYYSWSQMNLNAYCYSPMJKHWCQHYLAJJMZXHMMCNZHBHXCLXTJPLTXYJHDYYLTTXFSZHYXXSJBJYAYRSMXYPLCKDUYHLXRLNLLSTYZYYQYGYHHSCCSMZCTZQXKYQFPYYRPFFLKQUNTSZLLZMWWTCQQYZWTLLMLMPWMBZSSTZRBPDDTLQJJBXZCSRZQQYGWCSXFWZLXCCRSZDZMCYGGDZQSGTJSWLJMYMMZYHFBJDGYXCCPSHXNZCSBSJYJGJMPPWAFFYFNXHYZXZYLREMZGZCYZSSZDLLJCSQFNXZKPTXZGXJJGFMYYYSNBTYLBNLHPFZDCYFBMGQRRSSSZXYSGTZRNYDZZCDGPJAFJFZKNZBLCZSZPSGCYCJSZLMLRSZBZZLDLSLLYSXSQZQLYXZLSKKBRXBRBZCYCXZZZEEYFGKLZLYYHGZSGZLFJHGTGWKRAAJYZKZQTSSHJJXDCYZUYJLZYRZDQQHGJZXSSZBYKJPBFRTJXLLFQWJHYLQTYMBLPZDXTZYGBDHZZRBGXHWNJTJXLKSCFSMWLSDQYSJTXKZSCFWJLBXFTZLLJZLLQBLSQMQQCGCZFPBPHZCZJLPYYGGDTGWDCFCZQYYYQYSSCLXZSKLZZZGFFCQNWGLHQYZJJCZLQZZYJPJZZBPDCCMHJGXDQDGDLZQMFGPSYTSDYFWWDJZJYSXYYCZCYHZWPBYKXRYLYBHKJKSFXTZJMMCKHLLTNYYMSYXYZPYJQYCSYCWMTJJKQYRHLLQXPSGTLYYCLJSCPXJYZFNMLRGJJTYZBXYZMSJYJHHFZQMSYXRSZCWTLRTQZSSTKXGQKGSPTGCZNJSJCQCXHMXGGZTQYDJKZDLBZSXJLHYQGGGTHQSZPYHJHHGYYGKGGCWJZZYLCZLXQSFTGZSLLLMLJSKCTBLLZZSZMMNYTPZSXQHJCJYQXYZXZQZCPSHKZZYSXCDFGMWQRLLQXRFZTLYSTCTMJCXJJXHJNXTNRZTZFQYHQGLLGCXSZSJDJLJCYDSJTLNYXHSZXCGJZYQPYLFHDJSBPCCZHJJJQZJQDYBSSLLCMYTTMQTBHJQNNYGKYRQYQMZGCJKPDCGMYZHQLLSLLCLMHOLZGDYYFZSLJCQZLYLZQJESHNYLLJXGJXLYSYYYXNBZLJSSZCQQCJYLLZLTJYLLZLLBNYLGQCHXYYXOXCXQKYJXXXYKLXSXXYQXCYKQXQCSGYXXYQXYGYTQOHXHXPYXXXULCYEYCHZZCBWQBBWJQZSCSZSSLZYLKDESJZWMYMCYTSDSXXSCJPQQSQYLYYZYCMDJDZYWCBTJSYDJKCYDDJLBDJJSODZYSYXQQYXDHHGQQYQHDYXWGMMMAJDYBBBPPBCMUUPLJZSMTXERXJMHQNUTPJDCBSSMSSSTKJTSSMMTRCPLZSZMLQDSDMJMQPNQDXCFYNBFSDQXYXHYAYKQYDDLQYYYSSZBYDSLNTFQTZQPZMCHDHCZCWFDXTMYQSPHQYYXSRGJCWTJTZZQMGWJJTJHTQJBBHWZPXXHYQFXXQYWYYHYSCDYDHHQMNMTMWCPBSZPPZZGLMZFOLLCFWHMMSJZTTDHZZYFFYTZZGZYSKYJXQYJZQBHMBZZLYGHGFMSHPZFZSNCLPBQSNJXZSLXXFPMTYJYGBXLLDLXPZJYZJYHHZCYWHJYLSJEXFSZZYWXKZJLUYDTMLYMQJPWXYHXSKTQJEZRPXXZHHMHWQPWQLYJJQJJZSZCPHJLCHHNXJLQWZJHBMZYXBDHHYPZLHLHLGFWLCHYYTLHJXCJMSCPXSTKPNHQXSRTYXXTESYJCTLSSLSTDLLLWWYHDHRJZSFGXTSYCZYNYHTDHWJSLHTZDQDJZXXQHGYLTZPHCSQFCLNJTCLZPFSTPDYNYLGMJLLYCQHYSSHCHYLHQYQTMZYPBYWRFQYKQSYSLZDQJMPXYYSSRHZJNYWTQDFZBWWTWWRXCWHGYHXMKMYYYQMSMZHNGCEPMLQQMTCWCTMMPXJPJJHFXYYZSXZHTYBMSTSYJTTQQQYYLHYNPYQZLCYZHZWSMYLKFJXLWGXYPJYTYSYXYMZCKTTWLKSMZSYLMPWLZWXWQZSSAQSYXYRHSSNTSRAPXCPWCMGDXHXZDZYFJHGZTTSBJHGYZSZYSMYCLLLXBTYXHBBZJKSSDMALXHYCFYGMQYPJYCQXJLLLJGSLZGQLYCJCCZOTYXMTMTTLLWTGPXYMZMKLPSZZZXHKQYSXCTYJZYHXSHYXZKXLZWPSQPYHJWPJPWXQQYLXSDHMRSLZZYZWTTCYXYSZZSHBSCCSTPLWSSCJCHNLCGCHSSPHYLHFHHXJSXYLLNYLSZDHZXYLSXLWZYKCLDYAXZCMDDYSPJTQJZLNWQPSSSWCTSTSZLBLNXSMNYYMJQBQHRZWTYYDCHQLXKPZWBGQYBKFCMZWPZLLYYLSZYDWHXPSBCMLJBSCGBHXLQHYRLJXYSWXWXZSLDFHLSLYNJLZYFLYJYCDRJLFSYZFSLLCQYQFGJYHYXZLYLMSTDJCYHBZLLNWLXXYGYYHSMGDHXXHHLZZJZXCZZZCYQZFNGWPYLCPKPYYPMCLQKDGXZGGWQBDXZZKZFBXXLZXJTPJPTTBYTSZZDWSLCHZHSLTYXHQLHYXXXYYZYSWTXZKHLXZXZPYHGCHKCFSYHUTJRLXFJXPTZTWHPLYXFCRHXSHXKYXXYHZQDXQWULHYHMJTBFLKHTXCWHJFWJCFPQRYQXCYYYQYGRPYWSGSUNGWCHKZDXYFLXXHJJBYZWTSXXNCYJJYMSWZJQRMHXZWFQSYLZJZGBHYNSLBGTTCSYBYXXWXYHXYYXNSQYXMQYWRGYQLXBBZLJSYLPSYTJZYHYZAWLRORJMKSCZJXXXYXCHDYXRYXXJDTSQFXLYLTSFFYXLMTYJMJUYYYXLTZCSXQZQHZXLYYXZHDNBRXXXJCTYHLBRLMBRLLAXKYLLLJLYXXLYCRYLCJTGJCMTLZLLCYZZPZPCYAWHJJFYBDYYZSMPCKZDQYQPBPCJPDCYZMDPBCYYDYCNNPLMTMLRMFMMGWYZBSJGYGSMZQQQZTXMKQWGXLLPJGZBQCDJJJFPKJKCXBLJMSWMDTQJXLDLPPBXCWRCQFBFQJCZAHZGMYKPHYYHZYKNDKZMBPJYXPXYHLFPNYYGXJDBKXNXHJMZJXSTRSTLDXSKZYSYBZXJLXYSLBZYSLHXJPFXPQNBYLLJQKYGZMCYZZYMCCSLCLHZFWFWYXZMWSXTYNXJHPYYMCYSPMHYSMYDYSHQYZCHMJJMZCAAGCFJBBHPLYZYLXXSDJGXDHKXXTXXNBHRMLYJSLTXMRHNLXQJXYZLLYSWQGDLBJHDCGJYQYCMHWFMJYBMBYJYJWYMDPWHXQLDYGPDFXXBCGJSPCKRSSYZJMSLBZZJFLJJJLGXZGYXYXLSZQYXBEXYXHGCXBPLDYHWETTWWCJMBTXCHXYQXLLXFLYXLLJLSSFWDPZSMYJCLMWYTCZPCHQEKCQBWLCQYDPLQPPQZQFJQDJHYMMCXTXDRMJWRHXCJZYLQXDYYNHYYHRSLSRSYWWZJYMTLTLLGTQCJZYABTCKZCJYCCQLJZQXALMZYHYWLWDXZXQDLLQSHGPJFJLJHJABCQZDJGTKHSSTCYJLPSWZLXZXRWGLDLZRLZXTGSLLLLZLYXXWGDZYGBDPHZPBRLWSXQBPFDWOFMWHLYPCBJCCLDMBZPBZZLCYQXLDOMZBLZWPDWYYGDSTTHCSQSCCRSSSYSLFYBFNTYJSZDFNDPDHDZZMBBLSLCMYFFGTJJQWFTMTPJWFNLBZCMMJTGBDZLQLPYFHYYMJYLSDCHDZJWJCCTLJCLDTLJJCPDDSQDSSZYBNDBJLGGJZXSXNLYCYBJXQYCBYLZCFZPPGKCXZDZFZTJJFJSJXZBNZYJQTTYJYHTYCZHYMDJXTTMPXSPLZCDWSLSHXYPZGTFMLCJTYCBPMGDKWYCYZCDSZZYHFLYCTYGWHKJYYLSJCXGYWJCBLLCSNDDBTZBSCLYZCZZSSQDLLMQYYHFSLQLLXFTYHABXGWNYWYYPLLSDLDLLBJCYXJZMLHLJDXYYQYTDLLLBUGBFDFBBQJZZMDPJHGCLGMJJPGAEHHBWCQXAXHHHZCHXYPHJAXHLPHJPGPZJQCQZGJJZZUZDMQYYBZZPHYHYBWHAZYJHYKFGDPFQSDLZMLJXKXGALXZDAGLMDGXMWZQYXXDXXPFDMMSSYMPFMDMMKXKSYZYSHDZKXSYSMMZZZMSYDNZZCZXFPLSTMZDNMXCKJMZTYYMZMZZMSXHHDCZJEMXXKLJSTLWLSQLYJZLLZJSSDPPMHNLZJCZYHMXXHGZCJMDHXTKGRMXFWMCGMWKDTKSXQMMMFZZYDKMSCLCMPCGMHSPXQPZDSSLCXKYXTWLWJYAHZJGZQMCSNXYYMMPMLKJXMHLMLQMXCTKZMJQYSZJSYSZHSYJZJCDAJZYBSDQJZGWZQQXFKDMSDJLFWEHKZQKJPEYPZYSZCDWYJFFMZZYLTTDZZEFMZLBNPPLPLPEPSZALLTYLKCKQZKGENQLWAGYXYDPXLHSXQQWQCQXQCLHYXXMLYCCWLYMQYSKGCHLCJNSZKPYZKCQZQLJPDMDZHLASXLBYDWQLWDNBQCRYDDZTJYBKBWSZDXDTNPJDTCTQDFXQQMGNXECLTTBKPWSLCTYQLPWYZZKLPYGZCQQPLLKCCYLPQMZCZQCLJSLQZDJXLDDHPZQDLJJXZQDXYZQKZLJCYQDYJPPYPQYKJYRMPCBYMCXKLLZLLFQPYLLLMBSGLCYSSLRSYSQTMXYXZQZFDZUYSYZTFFMZZSMZQHZSSCCMLYXWTPZGXZJGZGSJSGKDDHTQGGZLLBJDZLCBCHYXYZHZFYWXYZYMSDBZZYJGTSMTFXQYXQSTDGSLNXDLRYZZLRYYLXQHTXSRTZNGZXBNQQZFMYKMZJBZYMKBPNLYZPBLMCNQYZZZSJZHJCTZKHYZZJRDYZHNPXGLFZTLKGJTCTSSYLLGZRZBBQZZKLPKLCZYSSUYXBJFPNJZZXCDWXZYJXZZDJJKGGRSRJKMSMZJLSJYWQSKYHQJSXPJZZZLSNSHRNYPZTWCHKLPSRZLZXYJQXQKYSJYCZTLQZYBBYBWZPQDWWYZCYTJCJXCKCWDKKZXSGKDZXWWYYJQYYTCYTDLLXWKCZKKLCCLZCQQDZLQLCSFQCHQHSFSMQZZLNBJJZBSJHTSZDYSJQJPDLZCDCWJKJZZLPYCGMZWDJJBSJQZSYZYHHXJPBJYDSSXDZNCGLQMBTSFSBPDZDLZNFGFJGFSMPXJQLMBLGQCYYXBQKDJJQYRFKZTJDHCZKLBSDZCFJTPLLJGXHYXZCSSZZXSTJYGKGCKGYOQXJPLZPBPGTGYJZGHZQZZLBJLSQFZGKQQJZGYCZBZQTLDXRJXBSXXPZXHYZYCLWDXJJHXMFDZPFZHQHQMQGKSLYHTYCGFRZGNQXCLPDLBZCSCZQLLJBLHBZCYPZZPPDYMZZSGYHCKCPZJGSLJLNSCDSLDLXBMSTLDDFJMKDJDHZLZXLSZQPQPGJLLYBDSZGQLBZLSLKYYHZTTNTJYQTZZPSZQZTLLJTYYLLQLLQYZQLBDZLSLYYZYMDFSZSNHLXZNCZQZPBWSKRFBSYZMTHBLGJPMCZZLSTLXSHTCSYZLZBLFEQHLXFLCJLYLJQCBZLZJHHSSTBRMHXZHJZCLXFNBGXGTQJCZTMSFZKJMSSNXLJKBHSJXNTNLZDNTLMSJXGZJYJCZXYJYJWRWWQNZTNFJSZPZSHZJFYRDJSFSZJZBJFZQZZHZLXFYSBZQLZSGYFTZDCSZXZJBQMSZKJRHYJZCKMJKHCHGTXKXQGLXPXFXTRTYLXJXHDTSJXHJZJXZWZLCQSBTXWXGXTXXHXFTSDKFJHZYJFJXRZSDLLLTQSQQZQWZXSYQTWGWBZCGZLLYZBCLMQQTZHZXZXLJFRMYZFLXYSQXXJKXRMQDZDMMYYBSQBHGZMWFWXGMXLZPYYTGZYCCDXYZXYWGSYJYZNBHPZJSQSYXSXRTFYZGRHZTXSZZTHCBFCLSYXZLZQMZLMPLMXZJXSFLBYZMYQHXJSXRXSQZZZSSLYFRCZJRCRXHHZXQYDYHXSJJHZCXZBTYNSYSXJBQLPXZQPYMLXZKYXLXCJLCYSXXZZLXDLLLJJYHZXGYJWKJRWYHCPSGNRZLFZWFZZNSXGXFLZSXZZZBFCSYJDBRJKRDHHGXJLJJTGXJXXSTJTJXLYXQFCSGSWMSBCTLQZZWLZZKXJMLTMJYHSDDBXGZHDLBMYJFRZFSGCLYJBPMLYSMSXLSZJQQHJZFXGFQFQBPXZGYYQXGZTCQWYLTLGWSGWHRLFSFGZJMGMGBGTJFSYZZGZYZAFLSSPMLPFLCWBJZCLJJMZLPJJLYMQDMYYYFBGYGYZMLYZDXQYXRQQQHSYYYQXYLJTYXFSFSLLGNQCYHYCWFHCCCFXPYLYPLLZYXXXXXKQHHXSHJZCFZSCZJXCPZWHHHHHAPYLQALPQAFYHXDYLUKMZQGGGDDESRNNZLTZGCHYPPYSQJJHCLLJTOLNJPZLJLHYMHEYDYDSQYCDDHGZUNDZCLZYZLLZNTNYZGSLHSLPJJBDGWXPCDUTJCKLKCLWKLLCASSTKZZDNQNTTLYYZSSYSSZZRYLJQKCQDHHCRXRZYDGRGCWCGZQFFFPPJFZYNAKRGYWYQPQXXFKJTSZZXSWZDDFBBXTBGTZKZNPZZPZXZPJSZBMQHKCYXYLDKLJNYPKYGHGDZJXXEAHPNZKZTZCMXCXMMJXNKSZQNMNLWBWWXJKYHCPSTMCSQTZJYXTPCTPDTNNPGLLLZSJLSPBLPLQHDTNJNLYYRSZFFJFQWDPHZDWMRZCCLODAXNSSNYZRESTYJWJYJDBCFXNMWTTBYLWSTSZGYBLJPXGLBOCLHPCBJLTMXZLJYLZXCLTPNCLCKXTPZJSWCYXSFYSZDKNTLBYJCYJLLSTGQCBXRYZXBXKLYLHZLQZLNZCXWJZLJZJNCJHXMNZZGJZZXTZJXYCYYCXXJYYXJJXSSSJSTSSTTPPGQTCSXWZDCSYFPTFBFHFBBLZJCLZZDBXGCXLQPXKFZFLSYLTUWBMQJHSZBMDDBCYSCCLDXYCDDQLYJJWMQLLCSGLJJSYFPYYCCYLTJANTJJPWYCMMGQYYSXDXQMZHSZXPFTWWZQSWQRFKJLZJQQYFBRXJHHFWJJZYQAZMYFRHCYYBYQWLPEXCCZSTYRLTTDMQLYKMBBGMYYJPRKZNPBSXYXBHYZDJDNGHPMFSGMWFZMFQMMBCMZZCJJLCNUXYQLMLRYGQZCYXZLWJGCJCGGMCJNFYZZJHYCPRRCMTZQZXHFQGTJXCCJEAQCRJYHPLQLSZDJRBCQHQDYRHYLYXJSYMHZYDWLDFRYHBPYDTSSCNWBXGLPZMLZZTQSSCPJMXXYCSJYTYCGHYCJWYRXXLFEMWJNMKLLSWTXHYYYNCMMCWJDQDJZGLLJWJRKHPZGGFLCCSCZMCBLTBHBQJXQDSPDJZZGHGLFQYWBZYZJLTSTDHQHCTCBCHFLQMPWDSHYYTQWCNZZJTLBYMBPDYYYXSQKXWYYFLXXNCWCXYPMAELYKKJMZZZBRXYYQJFLJPFHHHYTZZXSGQQMHSPGDZQWBWPJHZJDYSCQWZKTXXSQLZYYMYSDZGRXCKKUJLWPYSYSCSYZLRMLQSYLJXBCXTLWDQZPCYCYKPPPNSXFYZJJRCEMHSZMSXLXGLRWGCSTLRSXBZGBZGZTCPLUJLSLYLYMTXMTZPALZXPXJTJWTCYYZLBLXBZLQMYLXPGHDSLSSDMXMBDZZSXWHAMLCZCPJMCNHJYSNSYGCHSKQMZZQDLLKABLWJXSFMOCDXJRRLYQZKJMYBYQLYHETFJZFRFKSRYXFJTWDSXXSYSQJYSLYXWJHSNLXYYXHBHAWHHJZXWMYLJCSSLKYDZTXBZSYFDXGXZJKHSXXYBSSXDPYNZWRPTQZCZENYGCXQFJYKJBZMLJCMQQXUOXSLYXXLYLLJDZBTYMHPFSTTQQWLHOKYBLZZALZXQLHZWRRQHLSTMYPYXJJXMQSJFNBXYXYJXXYQYLTHYLQYFMLKLJTMLLHSZWKZHLJMLHLJKLJSTLQXYLMBHHLNLZXQJHXCFXXLHYHJJGBYZZKBXSCQDJQDSUJZYYHZHHMGSXCSYMXFEBCQWWRBPYYJQTYZCYQYQQZYHMWFFHGZFRJFCDPXNTQYZPDYKHJLFRZXPPXZDBBGZQSTLGDGYLCQMLCHHMFYWLZYXKJLYPQHSYWMQQGQZMLZJNSQXJQSYJYCBEHSXFSZPXZWFLLBCYYJDYTDTHWZSFJMQQYJLMQXXLLDTTKHHYBFPWTYYSQQWNQWLGWDEBZWCMYGCULKJXTMXMYJSXHYBRWFYMWFRXYQMXYSZTZZTFYKMLDHQDXWYYNLCRYJBLPSXCXYWLSPRRJWXHQYPHTYDNXHHMMYWYTZCSQMTSSCCDALWZTCPQPYJLLQZYJSWXMZZMMYLMXCLMXCZMXMZSQTZPPQQBLPGXQZHFLJJHYTJSRXWZXSCCDLXTYJDCQJXSLQYCLZXLZZXMXQRJMHRHZJBHMFLJLMLCLQNLDXZLLLPYPSYJYSXCQQDCMQJZZXHNPNXZMEKMXHYKYQLXSXTXJYYHWDCWDZHQYYBGYBCYSCFGPSJNZDYZZJZXRZRQJJYMCANYRJTLDPPYZBSTJKXXZYPFDWFGZZRPYMTNGXZQBYXNBUFNQKRJQZMJEGRZGYCLKXZDSKKNSXKCLJSPJYYZLQQJYBZSSQLLLKJXTBKTYLCCDDBLSPPFYLGYDTZJYQGGKQTTFZXBDKTYYHYBBFYTYYBCLPDYTGDHRYRNJSPTCSNYJQHKLLLZSLYDXXWBCJQSPXBPJZJCJDZFFXXBRMLAZHCSNDLBJDSZBLPRZTSWSBXBCLLXXLZDJZSJPYLYXXYFTFFFBHJJXGBYXJPMMMPSSJZJMTLYZJXSWXTYLEDQPJMYGQZJGDJLQJWJQLLSJGJGYGMSCLJJXDTYGJQJQJCJZCJGDZZSXQGSJGGCXHQXSNQLZZBXHSGZXCXYLJXYXYYDFQQJHJFXDHCTXJYRXYSQTJXYEFYYSSYYJXNCYZXFXMSYSZXYYSCHSHXZZZGZZZGFJDLTYLNPZGYJYZYYQZPBXQBDZTZCZYXXYHHSQXSHDHGQHJHGYWSZTMZMLHYXGEBTYLZKQWYTJZRCLEKYSTDBCYKQQSAYXCJXWWGSBHJYZYDHCSJKQCXSWXFLTYNYZPZCCZJQTZWJQDZZZQZLJJXLSBHPYXXPSXSHHEZTXFPTLQYZZXHYTXNCFZYYHXGNXMYWXTZSJPTHHGYMXMXQZXTSBCZYJYXXTYYZYPCQLMMSZMJZZLLZXGXZAAJZYXJMZXWDXZSXZDZXLEYJJZQBHZWZZZQTZPSXZTDSXJJJZNYAZPHXYYSRNQDTHZHYYKYJHDZXZLSWCLYBZYECWCYCRYLCXNHZYDZYDYJDFRJJHTRSQTXYXJRJHOJYNXELXSFSFJZGHPZSXZSZDZCQZBYYKLSGSJHCZSHDGQGXYZGXCHXZJWYQWGYHKSSEQZZNDZFKWYSSTCLZSTSYMCDHJXXYWEYXCZAYDMPXMDSXYBSQMJMZJMTZQLPJYQZCGQHXJHHLXXHLHDLDJQCLDWBSXFZZYYSCHTYTYYBHECXHYKGJPXHHYZJFXHWHBDZFYZBCAPNPGNYDMSXHMMMMAMYNBYJTMPXYYMCTHJBZYFCGTYHWPHFTWZZEZSBZEGPFMTSKFTYCMHFLLHGPZJXZJGZJYXZSBBQSCZZLZCCSTPGXMJSFTCCZJZDJXCYBZLFCJSYZFGSZLYBCWZZBYZDZYPSWYJZXZBDSYUXLZZBZFYGCZXBZHZFTPBGZGEJBSTGKDMFHYZZJHZLLZZGJQZLSFDJSSCBZGPDLFZFZSZYZYZSYGCXSNXXCHCZXTZZLJFZGQSQYXZJQDCCZTQCDXZJYQJQCHXZTDLGSCXZSYQJQTZWLQDQZTQCHQQJZYEZZZPBWKDJFCJPZTYPQYQTTYNLMBDKTJZPQZQZZFPZSBNJLGYJDXJDZZKZGQKXDLPZJTCJDQBXDJQJSTCKNXBXZMSLYJCQMTJQWWCJQNJNLLLHJCWQTBZQYDZCZPZZDZYDDCYZZZCCJTTJFZDPRRTZTJDCQTQZDTJNPLZBCLLCTZSXKJZQZPZLBZRBTJDCXFCZDBCCJJLTQQPLDCGZDBBZJCQDCJWYNLLZYZCCDWLLXWZLXRXNTQQCZXKQLSGDFQTDDGLRLAJJTKUYMKQLLTZYTDYYCZGJWYXDXFRSKSTQTENQMRKQZHHQKDLDAZFKYPBGGPZREBZZYKZZSPEGJXGYKQZZZSLYSYYYZWFQZYLZZLZHWCHKYPQGNPGBLPLRRJYXCCSYYHSFZFYBZYYTGZXYLXCZWXXZJZBLFFLGSKHYJZEYJHLPLLLLCZGXDRZELRHGKLZZYHZLYQSZZJZQLJZFLNBHGWLCZCFJYSPYXZLZLXGCCPZBLLCYBBBBUBBCBPCRNNZCZYRBFSRLDCGQYYQXYGMQZWTZYTYJXYFWTEHZZJYWLCCNTZYJJZDEDPZDZTSYQJHDYMBJNYJZLXTSSTPHNDJXXBYXQTZQDDTJTDYYTGWSCSZQFLSHLGLBCZPHDLYZJYCKWTYTYLBNYTSDSYCCTYSZYYEBHEXHQDTWNYGYCLXTSZYSTQMYGZAZCCSZZDSLZCLZRQXYYELJSBYMXSXZTEMBBLLYYLLYTDQYSHYMRQWKFKBFXNXSBYCHXBWJYHTQBPBSBWDZYLKGZSKYHXQZJXHXJXGNLJKZLYYCDXLFYFGHLJGJYBXQLYBXQPQGZTZPLNCYPXDJYQYDYMRBESJYYHKXXSTMXRCZZYWXYQYBMCLLYZHQYZWQXDBXBZWZMSLPDMYSKFMZKLZCYQYCZLQXFZZYDQZPZYGYJYZMZXDZFYFYTTQTZHGSPCZMLCCYTZXJCYTJMKSLPZHYSNZLLYTPZCTZZCKTXDHXXTQCYFKSMQCCYYAZHTJPCYLZLYJBJXTPNYLJYYNRXSYLMMNXJSMYBCSYSYLZYLXJJQYLDZLPQBFZZBLFNDXQKCZFYWHGQMRDSXYCYTXNQQJZYYPFZXDYZFPRXEJDGYQBXRCNFYYQPGHYJDYZXGRHTKYLNWDZNTSMPKLBTHBPYSZBZTJZSZZJTYYXZPHSSZZBZCZPTQFZMYFLYPYBBJQXZMXXDJMTSYSKKBJZXHJCKLPSMKYJZCXTMLJYXRZZQSLXXQPYZXMKYXXXJCLJPRMYYGADYSKQLSNDHYZKQXZYZTCGHZTLMLWZYBWSYCTBHJHJFCWZTXWYTKZLXQSHLYJZJXTMPLPYCGLTBZZTLZJCYJGDTCLKLPLLQPJMZPAPXYZLKKTKDZCZZBNZDYDYQZJYJGMCTXLTGXSZLMLHBGLKFWNWZHDXUHLFMKYSLGXDTWWFRJEJZTZHYDXYKSHWFZCQSHKTMQQHTZHYMJDJSKHXZJZBZZXYMPAGQMSTPXLSKLZYNWRTSQLSZBPSPSGZWYHTLKSSSWHZZLYYTNXJGMJSZSUFWNLSOZTXGXLSAMMLBWLDSZYLAKQCQCTMYCFJBSLXCLZZCLXXKSBZQCLHJPSQPLSXXCKSLNHPSFQQYTXYJZLQLDXZQJZDYYDJNZPTUZDSKJFSLJHYLZSQZLBTXYDGTQFDBYAZXDZHZJNHHQBYKNXJJQCZMLLJZKSPLDYCLBBLXKLELXJLBQYCXJXGCNLCQPLZLZYJTZLJGYZDZPLTQCSXFDMNYCXGBTJDCZNBGBQYQJWGKFHTNPYQZQGBKPBBYZMTJDYTBLSQMPSXTBNPDXKLEMYYCJYNZCTLDYKZZXDDXHQSHDGMZSJYCCTAYRZLPYLTLKXSLZCGGEXCLFXLKJRTLQJAQZNCMBYDKKCXGLCZJZXJHPTDJJMZQYKQSECQZDSHHADMLZFMMZBGNTJNNLGBYJBRBTMLBYJDZXLCJLPLDLPCQDHLXZLYCBLCXZZJADJLNZMMSSSMYBHBSQKBHRSXXJMXSDZNZPXLGBRHWGGFCXGMSKLLTSJYYCQLTSKYWYYHYWXBXQYWPYWYKQLSQPTNTKHQCWDQKTWPXXHCPTHTWUMSSYHBWCRWXHJMKMZNGWTMLKFGHKJYLSYYCXWHYECLQHKQHTTQKHFZLDXQWYZYYDESBPKYRZPJFYYZJCEQDZZDLATZBBFJLLCXDLMJSSXEGYGSJQXCWBXSSZPDYZCXDNYXPPZYDLYJCZPLTXLSXYZYRXCYYYDYLWWNZSAHJSYQYHGYWWAXTJZDAXYSRLTDPSSYYFNEJDXYZHLXLLLZQZSJNYQYQQXYJGHZGZCYJCHZLYCDSHWSHJZYJXCLLNXZJJYYXNFXMWFPYLCYLLABWDDHWDXJMCXZTZPMLQZHSFHZYNZTLLDYWLSLXHYMMYLMBWWKYXYADTXYLLDJPYBPWUXJMWMLLSAFDLLYFLBHHHBQQLTZJCQJLDJTFFKMMMBYTHYGDCQRDDWRQJXNBYSNWZDBYYTBJHPYBYTTJXAAHGQDQTMYSTQXKBTZPKJLZRBEQQSSMJJBDJOTGTBXPGBKTLHQXJJJCTHXQDWJLWRFWQGWSHCKRYSWGFTGYGBXSDWDWRFHWYTJJXXXJYZYSLPYYYPAYXHYDQKXSHXYXGSKQHYWFDDDPPLCJLQQEEWXKSYYKDYPLTJTHKJLTCYYHHJTTPLTZZCDLTHQKZXQYSTEEYWYYZYXXYYSTTJKLLPZMCYHQGXYHSRMBXPLLNQYDQHXSXXWGDQBSHYLLPJJJTHYJKYPPTHYYKTYEZYENMDSHLCRPQFDGFXZPSFTLJXXJBSWYYSKSFLXLPPLBBBLBSFXFYZBSJSSYLPBBFFFFSSCJDSTZSXZRYYSYFFSYZYZBJTBCTSBSDHRTJJBYTCXYJEYLXCBNEBJDSYXYKGSJZBXBYTFZWGENYHHTHZHHXFWGCSTBGXKLSXYWMTMBYXJSTZSCDYQRCYTWXZFHMYMCXLZNSDJTTTXRYCFYJSBSDYERXJLJXBBDEYNJGHXGCKGSCYMBLXJMSZNSKGXFBNBPTHFJAAFXYXFPXMYPQDTZCXZZPXRSYWZDLYBBKTYQPQJPZYPZJZNJPZJLZZFYSBTTSLMPTZRTDXQSJEHBZYLZDHLJSQMLHTXTJECXSLZZSPKTLZKQQYFSYGYWPCPQFHQHYTQXZKRSGTTSQCZLPTXCDYYZXSQZSLXLZMYCPCQBZYXHBSXLZDLTCDXTYLZJYYZPZYZLTXJSJXHLPMYTXCQRBLZSSFJZZTNJYTXMYJHLHPPLCYXQJQQKZZSCPZKSWALQSBLCCZJSXGWWWYGYKTJBBZTDKHXHKGTGPBKQYSLPXPJCKBMLLXDZSTBKLGGQKQLSBKKTFXRMDKBFTPZFRTBBRFERQGXYJPZSSTLBZTPSZQZSJDHLJQLZBPMSMMSXLQQNHKNBLRDDNXXDHDDJCYYGYLXGZLXSYGMQQGKHBPMXYXLYTQWLWGCPBMQXCYZYDRJBHTDJYHQSHTMJSBYPLWHLZFFNYPMHXXHPLTBQPFBJWQDBYGPNZTPFZJGSDDTQSHZEAWZZYLLTYYBWJKXXGHLFKXDJTMSZSQYNZGGSWQSPHTLSSKMCLZXYSZQZXNCJDQGZDLFNYKLJCJLLZLMZZNHYDSSHTHZZLZZBBHQZWWYCRZHLYQQJBEYFXXXWHSRXWQHWPSLMSSKZTTYGYQQWRSLALHMJTQJSMXQBJJZJXZYZKXBYQXBJXSHZTSFJLXMXZXFGHKZSZGGYLCLSARJYHSLLLMZXELGLXYDJYTLFBHBPNLYZFBBHPTGJKWETZHKJJXZXXGLLJLSTGSHJJYQLQZFKCGNNDJSSZFDBCTWWSEQFHQJBSAQTGYPQLBXBMMYWXGSLZHGLZGQYFLZBYFZJFRYSFMBYZHQGFWZSYFYJJPHZBYYZFFWODGRLMFTWLBZGYCQXCDJYGZYYYYTYTYDWEGAZYHXJLZYYHLRMGRXXZCLHNELJJTJTPWJYBJJBXJJTJTEEKHWSLJPLPSFYZPQQBDLQJJTYYQLYZKDKSQJYYQZLDQTGJQYZJSUCMRYQTHTEJMFCTYHYPKMHYZWJDQFHYYXWSHCTXRLJHQXHCCYYYJLTKTTYTMXGTCJTZAYYOCZLYLBSZYWJYTSJYHBYSHFJLYGJXXTMZYYLTXXYPZLXYJZYZYYPNHMYMDYYLBLHLSYYQQLLNJJYMSOYQBZGDLYXYLCQYXTSZEGXHZGLHWBLJHEYXTWQMAKBPQCGYSHHEGQCMWYYWLJYJHYYZLLJJYLHZYHMGSLJLJXCJJYCLYCJPCPZJZJMMYLCQLNQLJQJSXYJMLSZLJQLYCMMHCFMMFPQQMFYLQMCFFQMMMMHMZNFHHJGTTHHKHSLNCHHYQDXTMMQDCYZYXYQMYQYLTDCYYYZAZZCYMZYDLZFFFMMYCQZWZZMABTBYZTDMNZZGGDFTYPCGQYTTSSFFWFDTZQSSYSTWXJHXYTSXXYLBYQHWWKXHZXWZNNZZJZJJQJCCCHYYXBZXZCYZTLLCQXYNJYCYYCYNZZQYYYEWYCZDCJYCCHYJLBTZYYCQWMPWPYMLGKDLDLGKQQBGYCHJXY";
+
+    // 此处收录了375个多音字,数据来自于http://www.51windows.net/pages/pinyin.asp
+    var oMultiDiff = {
+        19969: "DZ",
+        19975: "WM",
+        19988: "QJ",
+        20048: "YL",
+        20056: "SC",
+        20060: "NM",
+        20094: "QG",
+        20127: "QJ",
+        20167: "QC",
+        20193: "YG",
+        20250: "KH",
+        20256: "ZC",
+        20282: "SC",
+        20285: "QJG",
+        20291: "TD",
+        20314: "YD",
+        20315: "BF",
+        20340: "NE",
+        20375: "TD",
+        20389: "YJ",
+        20391: "CZ",
+        20415: "PB",
+        20446: "YS",
+        20447: "SQ",
+        20504: "TC",
+        20608: "KG",
+        20854: "QJ",
+        20857: "ZC",
+        20911: "PF",
+        20985: "AW",
+        21032: "PB",
+        21048: "XQ",
+        21049: "SC",
+        21089: "YS",
+        21119: "JC",
+        21242: "SB",
+        21273: "SC",
+        21305: "YP",
+        21306: "QO",
+        21330: "ZC",
+        21333: "SDC",
+        21345: "QK",
+        21378: "CA",
+        21397: "SC",
+        21414: "XS",
+        21442: "SC",
+        21477: "JG",
+        21480: "TD",
+        21484: "ZS",
+        21494: "YX",
+        21505: "YX",
+        21512: "HG",
+        21523: "XH",
+        21537: "PB",
+        21542: "PF",
+        21549: "KH",
+        21571: "E",
+        21574: "DA",
+        21588: "TD",
+        21589: "O",
+        21618: "ZC",
+        21621: "KHA",
+        21632: "ZJ",
+        21654: "KG",
+        21679: "LKG",
+        21683: "KH",
+        21710: "A",
+        21719: "YH",
+        21734: "WOE",
+        21769: "A",
+        21780: "WN",
+        21804: "XH",
+        21834: "A",
+        21899: "ZD",
+        21903: "RN",
+        21908: "WO",
+        21939: "ZC",
+        21956: "SA",
+        21964: "YA",
+        21970: "TD",
+        22003: "A",
+        22031: "JG",
+        22040: "XS",
+        22060: "ZC",
+        22066: "ZC",
+        22079: "MH",
+        22129: "XJ",
+        22179: "XA",
+        22237: "NJ",
+        22244: "TD",
+        22280: "JQ",
+        22300: "YH",
+        22313: "XW",
+        22331: "YQ",
+        22343: "YJ",
+        22351: "PH",
+        22395: "DC",
+        22412: "TD",
+        22484: "PB",
+        22500: "PB",
+        22534: "ZD",
+        22549: "DH",
+        22561: "PB",
+        22612: "TD",
+        22771: "KQ",
+        22831: "HB",
+        22841: "JG",
+        22855: "QJ",
+        22865: "XQ",
+        23013: "ML",
+        23081: "WM",
+        23487: "SX",
+        23558: "QJ",
+        23561: "YW",
+        23586: "YW",
+        23614: "YW",
+        23615: "SN",
+        23631: "PB",
+        23646: "ZS",
+        23663: "ZT",
+        23673: "YG",
+        23762: "TD",
+        23769: "ZS",
+        23780: "QJ",
+        23884: "QK",
+        24055: "XH",
+        24113: "DC",
+        24162: "ZC",
+        24191: "GA",
+        24273: "QJ",
+        24324: "NL",
+        24377: "TD",
+        24378: "QJ",
+        24439: "PF",
+        24554: "ZS",
+        24683: "TD",
+        24694: "WE",
+        24733: "LK",
+        24925: "TN",
+        25094: "ZG",
+        25100: "XQ",
+        25103: "XH",
+        25153: "PB",
+        25170: "PB",
+        25179: "KG",
+        25203: "PB",
+        25240: "ZS",
+        25282: "FB",
+        25303: "NA",
+        25324: "KG",
+        25341: "ZY",
+        25373: "WZ",
+        25375: "XJ",
+        25384: "A",
+        25457: "A",
+        25528: "SD",
+        25530: "SC",
+        25552: "TD",
+        25774: "ZC",
+        25874: "ZC",
+        26044: "YW",
+        26080: "WM",
+        26292: "PB",
+        26333: "PB",
+        26355: "ZY",
+        26366: "CZ",
+        26397: "ZC",
+        26399: "QJ",
+        26415: "ZS",
+        26451: "SB",
+        26526: "ZC",
+        26552: "JG",
+        26561: "TD",
+        26588: "JG",
+        26597: "CZ",
+        26629: "ZS",
+        26638: "YL",
+        26646: "XQ",
+        26653: "KG",
+        26657: "XJ",
+        26727: "HG",
+        26894: "ZC",
+        26937: "ZS",
+        26946: "ZC",
+        26999: "KJ",
+        27099: "KJ",
+        27449: "YQ",
+        27481: "XS",
+        27542: "ZS",
+        27663: "ZS",
+        27748: "TS",
+        27784: "SC",
+        27788: "ZD",
+        27795: "TD",
+        27812: "O",
+        27850: "PB",
+        27852: "MB",
+        27895: "SL",
+        27898: "PL",
+        27973: "QJ",
+        27981: "KH",
+        27986: "HX",
+        27994: "XJ",
+        28044: "YC",
+        28065: "WG",
+        28177: "SM",
+        28267: "QJ",
+        28291: "KH",
+        28337: "ZQ",
+        28463: "TL",
+        28548: "DC",
+        28601: "TD",
+        28689: "PB",
+        28805: "JG",
+        28820: "QG",
+        28846: "PB",
+        28952: "TD",
+        28975: "ZC",
+        29100: "A",
+        29325: "QJ",
+        29575: "SL",
+        29602: "FB",
+        30010: "TD",
+        30044: "CX",
+        30058: "PF",
+        30091: "YSP",
+        30111: "YN",
+        30229: "XJ",
+        30427: "SC",
+        30465: "SX",
+        30631: "YQ",
+        30655: "QJ",
+        30684: "QJG",
+        30707: "SD",
+        30729: "XH",
+        30796: "LG",
+        30917: "PB",
+        31074: "NM",
+        31085: "JZ",
+        31109: "SC",
+        31181: "ZC",
+        31192: "MLB",
+        31293: "JQ",
+        31400: "YX",
+        31584: "YJ",
+        31896: "ZN",
+        31909: "ZY",
+        31995: "XJ",
+        32321: "PF",
+        32327: "ZY",
+        32418: "HG",
+        32420: "XQ",
+        32421: "HG",
+        32438: "LG",
+        32473: "GJ",
+        32488: "TD",
+        32521: "QJ",
+        32527: "PB",
+        32562: "ZSQ",
+        32564: "JZ",
+        32735: "ZD",
+        32793: "PB",
+        33071: "PF",
+        33098: "XL",
+        33100: "YA",
+        33152: "PB",
+        33261: "CX",
+        33324: "BP",
+        33333: "TD",
+        33406: "YA",
+        33426: "WM",
+        33432: "PB",
+        33445: "JG",
+        33486: "ZN",
+        33493: "TS",
+        33507: "QJ",
+        33540: "QJ",
+        33544: "ZC",
+        33564: "XQ",
+        33617: "YT",
+        33632: "QJ",
+        33636: "XH",
+        33637: "YX",
+        33694: "WG",
+        33705: "PF",
+        33728: "YW",
+        33882: "SR",
+        34067: "WM",
+        34074: "YW",
+        34121: "QJ",
+        34255: "ZC",
+        34259: "XL",
+        34425: "JH",
+        34430: "XH",
+        34485: "KH",
+        34503: "YS",
+        34532: "HG",
+        34552: "XS",
+        34558: "YE",
+        34593: "ZL",
+        34660: "YQ",
+        34892: "XH",
+        34928: "SC",
+        34999: "QJ",
+        35048: "PB",
+        35059: "SC",
+        35098: "ZC",
+        35203: "TQ",
+        35265: "JX",
+        35299: "JX",
+        35782: "SZ",
+        35828: "YS",
+        35830: "E",
+        35843: "TD",
+        35895: "YG",
+        35977: "MH",
+        36158: "JG",
+        36228: "QJ",
+        36426: "XQ",
+        36466: "DC",
+        36710: "CJ",
+        36711: "ZYG",
+        36767: "PB",
+        36866: "SK",
+        36951: "YW",
+        37034: "YX",
+        37063: "XH",
+        37218: "ZC",
+        37325: "ZC",
+        38063: "PB",
+        38079: "TD",
+        38085: "QY",
+        38107: "DC",
+        38116: "TD",
+        38123: "YD",
+        38224: "HG",
+        38241: "XTC",
+        38271: "ZC",
+        38415: "YE",
+        38426: "KH",
+        38461: "YD",
+        38463: "AE",
+        38466: "PB",
+        38477: "XJ",
+        38518: "YT",
+        38551: "WK",
+        38585: "ZC",
+        38704: "XS",
+        38739: "LJ",
+        38761: "GJ",
+        38808: "SQ",
+        39048: "JG",
+        39049: "XJ",
+        39052: "HG",
+        39076: "CZ",
+        39271: "XT",
+        39534: "TD",
+        39552: "TD",
+        39584: "PB",
+        39647: "SB",
+        39730: "LG",
+        39748: "TPB",
+        40109: "ZQ",
+        40479: "ND",
+        40516: "HG",
+        40536: "HG",
+        40583: "QJ",
+        40765: "YQ",
+        40784: "QJ",
+        40840: "YK",
+        40863: "QJG"
+    };
+
+    var _checkPYCh = function (ch) {
+        var uni = ch.charCodeAt(0);
+        // 如果不在汉字处理范围之内,返回原字符,也可以调用自己的处理函数
+        if (uni > 40869 || uni < 19968) {return ch;} // dealWithOthers(ch);
+        return (oMultiDiff[uni] ? oMultiDiff[uni] : (_ChineseFirstPY.charAt(uni - 19968)));
+    };
+
+    var _mkPYRslt = function (arr, options) {
+        var ignoreMulti = options.ignoreMulti;
+        var splitChar = options.splitChar;
+        var arrRslt = [""], k, multiLen = 0;
+        for (var i = 0, len = arr.length; i < len; i++) {
+            var str = arr[i];
+            var strlen = str.length;
+            // 多音字过多的情况下，指数增长会造成浏览器卡死，超过20完全卡死，18勉强能用，考虑到不同性能最好是16或者14
+            // 超过14个多音字之后，后面的都用第一个拼音
+            if (strlen == 1 || multiLen > 14 || ignoreMulti) {
+                var tmpStr = str.substring(0, 1);
+                for (k = 0; k < arrRslt.length; k++) {
+                    arrRslt[k] += tmpStr;
+                }
+            } else {
+                var tmpArr = arrRslt.slice(0);
+                arrRslt = [];
+                multiLen ++;
+                for (k = 0; k < strlen; k++) {
+                    // 复制一个相同的arrRslt
+                    var tmp = tmpArr.slice(0);
+                    // 把当前字符str[k]添加到每个元素末尾
+                    for (var j = 0; j < tmp.length; j++) {
+                        tmp[j] += str.charAt(k);
+                    }
+                    // 把复制并修改后的数组连接到arrRslt上
+                    arrRslt = arrRslt.concat(tmp);
+                }
+            }
+        }
+        // BI-56386 这边直接将所有多音字组合拼接是有风险的，因为丢失了每一组的起始索引信息, 外部使用indexOf等方法会造成错位
+        // 一旦错位就可能认为不符合条件， 但实际上还是有可能符合条件的，故此处以一个无法搜索的不可见字符作为连接
+        return arrRslt.join(splitChar || "").toLowerCase();
+    };
+
+    _.extend(BI, {
+        makeFirstPY: function (str, options) {
+            options = options || {};
+            if (typeof (str) !== "string") {return "" + str;}
+            var arrResult = []; // 保存中间结果的数组
+            for (var i = 0, len = str.length; i < len; i++) {
+                // 获得unicode码
+                var ch = str.charAt(i);
+                // 检查该unicode码是否在处理范围之内,在则返回该码对映汉字的拼音首字母,不在则调用其它函数处理
+                arrResult.push(_checkPYCh(ch));
+            }
+            // 处理arrResult,返回所有可能的拼音首字母串数组
+            return _mkPYRslt(arrResult, options);
+        }
+    });
+})();
+
+/***/ }),
+
+/***/ 141:
 /***/ (function(module, exports) {
 
 !(function () {
@@ -8562,448 +5331,7 @@ _.extend(BI, {
 
 /***/ }),
 
-/***/ 151:
-/***/ (function(module, exports) {
-
-(function () {
-    var moduleInjection = {};
-    BI.module = BI.module || function (xtype, cls) {
-        if (moduleInjection[xtype] != null) {
-            _global.console && console.error("module:[" + xtype + "] has been registed");
-        }
-        moduleInjection[xtype] = cls;
-    };
-
-    var constantInjection = {};
-    BI.constant = BI.constant || function (xtype, cls) {
-        if (constantInjection[xtype] != null) {
-            _global.console && console.error("constant:[" + xtype + "] has been registed");
-        }
-        constantInjection[xtype] = cls;
-    };
-
-    var modelInjection = {};
-    BI.model = BI.model || function (xtype, cls) {
-        if (modelInjection[xtype] != null) {
-            _global.console && console.error("model:[" + xtype + "] has been registed");
-        }
-        modelInjection[xtype] = cls;
-    };
-
-    var storeInjection = {};
-    BI.store = BI.store || function (xtype, cls) {
-        if (storeInjection[xtype] != null) {
-            _global.console && console.error("store:[" + xtype + "] has been registed");
-        }
-        storeInjection[xtype] = cls;
-    };
-
-    var serviceInjection = {};
-    BI.service = BI.service || function (xtype, cls) {
-        if (serviceInjection[xtype] != null) {
-            _global.console && console.error("service:[" + xtype + "] has been registed");
-        }
-        serviceInjection[xtype] = cls;
-    };
-
-    var providerInjection = {};
-    BI.provider = BI.provider || function (xtype, cls) {
-        if (providerInjection[xtype] != null) {
-            _global.console && console.error("provider:[" + xtype + "] has been registed");
-        }
-        providerInjection[xtype] = cls;
-    };
-
-    var configFunctions = {};
-    BI.config = BI.config || function (type, configFn, opt) {
-        if (BI.initialized) {
-            if (constantInjection[type]) {
-                return (constantInjection[type] = configFn(constantInjection[type]));
-            }
-            if (providerInjection[type]) {
-                if (!providers[type]) {
-                    providers[type] = new providerInjection[type]();
-                }
-                // 如果config被重新配置的话，需要删除掉之前的实例
-                if (providerInstance[type]) {
-                    delete providerInstance[type];
-                }
-                return configFn(providers[type]);
-            }
-            return BI.Plugin.configWidget(type, configFn, opt);
-        }
-        if (!configFunctions[type]) {
-            configFunctions[type] = [];
-            BI.prepares.push(function () {
-                var queue = configFunctions[type];
-                for (var i = 0; i < queue.length; i++) {
-                    if (constantInjection[type]) {
-                        constantInjection[type] = queue[i](constantInjection[type]);
-                        continue;
-                    }
-                    if (providerInjection[type]) {
-                        if (!providers[type]) {
-                            providers[type] = new providerInjection[type]();
-                        }
-                        if (providerInstance[type]) {
-                            delete providerInstance[type];
-                        }
-                        queue[i](providers[type]);
-                        continue;
-                    }
-                    BI.Plugin.configWidget(type, queue[i]);
-                }
-                configFunctions[type] = null;
-            });
-        }
-        configFunctions[type].push(configFn);
-    };
-
-    BI.getReference = BI.getReference || function (type, fn) {
-        return BI.Plugin.registerObject(type, fn);
-    };
-
-    var actions = {};
-    var globalAction = [];
-    BI.action = BI.action || function (type, actionFn) {
-        if (BI.isFunction(type)) {
-            globalAction.push(type);
-            return function () {
-                BI.remove(globalAction, function (idx) {
-                    return globalAction.indexOf(actionFn) === idx;
-                });
-            };
-        }
-        if (!actions[type]) {
-            actions[type] = [];
-        }
-        actions[type].push(actionFn);
-        return function () {
-            BI.remove(actions[type], function (idx) {
-                return actions[type].indexOf(actionFn) === idx;
-            });
-            if (actions[type].length === 0) {
-                delete actions[type];
-            }
-        };
-    };
-
-    var points = {};
-    BI.point = BI.point || function (type, action, pointFn, after) {
-        if (!points[type]) {
-            points[type] = {};
-        }
-        if (!points[type][action]) {
-            points[type][action] = {};
-        }
-        if (!points[type][action][after ? "after" : "before"]) {
-            points[type][action][after ? "after" : "before"] = [];
-        }
-        points[type][action][after ? "after" : "before"].push(pointFn);
-    };
-
-    BI.Modules = BI.Modules || {
-        getModule: function (type) {
-            if (!moduleInjection[type]) {
-                _global.console && console.error("module:[" + type + "] does not exists");
-                return false;
-            }
-            return moduleInjection[type];
-        },
-        getAllModules: function () {
-            return moduleInjection;
-        }
-    };
-
-    BI.Constants = BI.Constants || {
-        getConstant: function (type) {
-            return constantInjection[type];
-        }
-    };
-
-    var callPoint = function (inst, types) {
-        types = BI.isArray(types) ? types : [types];
-        BI.each(types, function (idx, type) {
-            if (points[type]) {
-                for (var action in points[type]) {
-                    var bfns = points[type][action].before;
-                    if (bfns) {
-                        BI.aspect.before(inst, action, function (bfns) {
-                            return function () {
-                                for (var i = 0, len = bfns.length; i < len; i++) {
-                                    try {
-                                        bfns[i].apply(inst, arguments);
-                                    } catch (e) {
-                                        _global.console && console.error(e);
-                                    }
-                                }
-                            };
-                        }(bfns));
-                    }
-                    var afns = points[type][action].after;
-                    if (afns) {
-                        BI.aspect.after(inst, action, function (afns) {
-                            return function () {
-                                for (var i = 0, len = afns.length; i < len; i++) {
-                                    try {
-                                        afns[i].apply(inst, arguments);
-                                    } catch (e) {
-                                        _global.console && console.error(e);
-                                    }
-                                }
-                            };
-                        }(afns));
-                    }
-                }
-            }
-        });
-    };
-
-    BI.Models = BI.Models || {
-        getModel: function (type, config) {
-            var inst = new modelInjection[type](config);
-            inst._constructor && inst._constructor(config);
-            inst.mixins && callPoint(inst, inst.mixins);
-            callPoint(inst, type);
-            return inst;
-        }
-    };
-
-    var stores = {};
-
-    BI.Stores = BI.Stores || {
-        getStore: function (type, config) {
-            if (stores[type]) {
-                return stores[type];
-            }
-            var inst = stores[type] = new storeInjection[type](config);
-            inst._constructor && inst._constructor(config, function () {
-                delete stores[type];
-            });
-            callPoint(inst, type);
-            return inst;
-        }
-    };
-
-    var services = {};
-
-    BI.Services = BI.Services || {
-        getService: function (type, config) {
-            if (services[type]) {
-                return services[type];
-            }
-            services[type] = new serviceInjection[type](config);
-            callPoint(services[type], type);
-            return services[type];
-        }
-    };
-
-    var providers = {},
-        providerInstance = {};
-
-    BI.Providers = BI.Providers || {
-        getProvider: function (type, config) {
-            if (!providers[type]) {
-                providers[type] = new providerInjection[type]();
-            }
-            if (!providerInstance[type]) {
-                providerInstance[type] = new (providers[type].$get())(config);
-            }
-            return providerInstance[type];
-        }
-    };
-
-    BI.Actions = BI.Actions || {
-        runAction: function (type, event, config) {
-            BI.each(actions[type], function (i, act) {
-                try {
-                    act(event, config);
-                } catch (e) {
-                    _global.console && console.error(e);
-                }
-            });
-        },
-        runGlobalAction: function () {
-            var args = [].slice.call(arguments);
-            BI.each(globalAction, function (i, act) {
-                try {
-                    act.apply(null, args);
-                } catch (e) {
-                    _global.console && console.error(e);
-                }
-            });
-        }
-    };
-
-    BI.getResource = BI.getResource || function (type, config) {
-        if (constantInjection[type]) {
-            return BI.Constants.getConstant(type);
-        }
-        if (modelInjection[type]) {
-            return BI.Models.getModel(type, config);
-        }
-        if (storeInjection[type]) {
-            return BI.Stores.getStore(type, config);
-        }
-        if (serviceInjection[type]) {
-            return BI.Services.getService(type, config);
-        }
-        if (providerInjection[type]) {
-            return BI.Providers.getProvider(type, config);
-        }
-    };
-})();
-
-
-/***/ }),
-
-/***/ 152:
-/***/ (function(module, exports) {
-
-/**
- * 常量
- */
-
-_.extend(BI, {
-    MAX: 0xfffffffffffffff,
-    MIN: -0xfffffffffffffff,
-    EVENT_RESPONSE_TIME: 200,
-    zIndex_layer: 1e5,
-    zIndex_popover: 1e6,
-    zIndex_popup: 1e7,
-    zIndex_masker: 1e8,
-    zIndex_tip: 1e9,
-    emptyStr: "",
-    pixUnit: "px",
-    pixRatio: 1,
-    emptyFn: function () {
-    },
-    empty: null,
-    Key: {
-        48: "0",
-        49: "1",
-        50: "2",
-        51: "3",
-        52: "4",
-        53: "5",
-        54: "6",
-        55: "7",
-        56: "8",
-        57: "9",
-        65: "a",
-        66: "b",
-        67: "c",
-        68: "d",
-        69: "e",
-        70: "f",
-        71: "g",
-        72: "h",
-        73: "i",
-        74: "j",
-        75: "k",
-        76: "l",
-        77: "m",
-        78: "n",
-        79: "o",
-        80: "p",
-        81: "q",
-        82: "r",
-        83: "s",
-        84: "t",
-        85: "u",
-        86: "v",
-        87: "w",
-        88: "x",
-        89: "y",
-        90: "z",
-        96: "0",
-        97: "1",
-        98: "2",
-        99: "3",
-        100: "4",
-        101: "5",
-        102: "6",
-        103: "7",
-        104: "8",
-        105: "9",
-        106: "*",
-        107: "+",
-        109: "-",
-        110: ".",
-        111: "/"
-    },
-    KeyCode: {
-        BACKSPACE: 8,
-        COMMA: 188,
-        DELETE: 46,
-        DOWN: 40,
-        END: 35,
-        ENTER: 13,
-        ESCAPE: 27,
-        HOME: 36,
-        LEFT: 37,
-        NUMPAD_ADD: 107,
-        NUMPAD_DECIMAL: 110,
-        NUMPAD_DIVIDE: 111,
-        NUMPAD_ENTER: 108,
-        NUMPAD_MULTIPLY: 106,
-        NUMPAD_SUBTRACT: 109,
-        PAGE_DOWN: 34,
-        PAGE_UP: 33,
-        PERIOD: 190,
-        RIGHT: 39,
-        SPACE: 32,
-        TAB: 9,
-        UP: 38
-    },
-    Status: {
-        SUCCESS: 1,
-        WRONG: 2,
-        START: 3,
-        END: 4,
-        WAITING: 5,
-        READY: 6,
-        RUNNING: 7,
-        OUTOFBOUNDS: 8,
-        NULL: -1
-    },
-    Direction: {
-        Top: "top",
-        Bottom: "bottom",
-        Left: "left",
-        Right: "right",
-        Custom: "custom"
-    },
-    Axis: {
-        Vertical: "vertical",
-        Horizontal: "horizontal"
-    },
-    Selection: {
-        Default: -2,
-        None: -1,
-        Single: 0,
-        Multi: 1,
-        All: 2
-    },
-    HorizontalAlign: {
-        Left: "left",
-        Right: "right",
-        Center: "center",
-        Stretch: "stretch"
-    },
-    VerticalAlign: {
-        Middle: "middle",
-        Top: "top",
-        Bottom: "bottom",
-        Stretch: "stretch"
-    },
-    StartOfWeek: 1
-});
-
-
-/***/ }),
-
-/***/ 153:
+/***/ 142:
 /***/ (function(module, exports) {
 
 /**
@@ -9031,7 +5359,7 @@ _.extend(BI, {
 
 /***/ }),
 
-/***/ 154:
+/***/ 143:
 /***/ (function(module, exports) {
 
 /**
@@ -9068,7 +5396,7 @@ _.extend(BI, {
 
 /***/ }),
 
-/***/ 155:
+/***/ 144:
 /***/ (function(module, exports) {
 
 BI.Req = {
