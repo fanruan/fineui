@@ -1,4 +1,4 @@
-/*! time: 2021-3-30 19:30:27 */
+/*! time: 2021-3-31 16:10:29 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -75704,7 +75704,7 @@ BI.prepares.push(function () {
                 return BI.extend({}, ob, {type: "bi.flex_center_adapt"});
                 // }
             }
-            if (!BI.isIE() || BI.getIEVersion() > 8) {
+            if (!BI.isIE() || BI.getIEVersion() >= 8) {
                 return BI.extend({}, ob, {type: "bi.inline_center_adapt"});
             }
         }
