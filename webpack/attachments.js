@@ -134,8 +134,8 @@ const bundleWithoutNormalize = [].concat(
     sync([
         "src/less/base/**/*.less",
         "src/less/widget/**/*.less",
-        "public/less/app.less",
         "public/less/**/*.less",
+        "!public/less/app.less",
         // ts的less
     ]),
 );
