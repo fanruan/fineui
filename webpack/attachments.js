@@ -9,6 +9,7 @@ function sync(patterns) {
 }
 
 const fixJs = "./dist/fix/fix.js";
+const fixProxyJs = './dist/fix/fix.proxy.js';
 const fixIEJs = "./dist/fix/fix.ie.js";
 const fixCompact = "./dist/fix/fix.compact.js";
 const fixIECompact = './dist/fix/fix.compact.ie.js';
@@ -82,6 +83,7 @@ const basicAttachmentMap = {
         "src/data/**/*.js",
     ]),
     fix: [fixJs],
+    fixProxy: [fixProxyJs],
     fixIE: [fixIEJs],
 };
 
@@ -153,6 +155,18 @@ const fineui = [].concat(
     basicAttachmentMap.ts,
 );
 
+const fineuiProxy = [].concat(
+    basicAttachmentMap.core,
+    basicAttachmentMap.fixProxy,
+    basicAttachmentMap.base,
+    basicAttachmentMap.case,
+    basicAttachmentMap.widget,
+    basicAttachmentMap.router,
+    [fixCompact, workerCompact],
+    basicAttachmentMap.ui,
+    basicAttachmentMap.ts,
+);
+
 const fineuiIE = [].concat(
     basicAttachmentMap.polyfillIE,
     basicAttachmentMap.core,
@@ -202,6 +216,7 @@ const demo = [].concat(
 
 module.exports = {
     fix: fixJs,
+    fixProxy: fixProxyJs,
     fixIE: fixIEJs,
     lodash: lodashJs,
     font: basicAttachmentMap.font,
@@ -209,6 +224,7 @@ module.exports = {
     bundleIE: uniq(bundleIE),
     bundleWithoutNormalize: uniq(bundleWithoutNormalize),
     fineui: uniq(fineui),
+    fineuiProxy: uniq(fineuiProxy),
     fineuiIE: uniq(fineuiIE),
     fineuiWithoutJqueryAndPolyfillJs: uniq(fineuiWithoutJqueryAndPolyfillJs),
     utils: uniq(basicAttachmentMap.utils),
