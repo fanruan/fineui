@@ -1,4 +1,4 @@
-/*! time: 2021-4-1 12:00:29 */
+/*! time: 2021-4-1 20:00:28 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -18703,7 +18703,7 @@ BI.shortcut("bi.horizontal_auto", BI.HorizontalAutoLayout);
 /**
  * 浮动的水平居中布局
  */
-BI.FloatHorizontalLayout = BI.Layout;
+BI.FloatHorizontalLayout = BI.inherit(BI.Layout);
 BI.shortcut("bi.horizontal_float", BI.FloatHorizontalLayout);
 
 
@@ -20903,7 +20903,7 @@ BI.shortcut("bi.grid", BI.GridLayout);
  * @class BI.HorizontalLayout
  * @extends BI.Layout
  */
-BI.HorizontalLayout = BI.Layout;
+BI.HorizontalLayout = BI.inherit(BI.Layout);
 BI.shortcut("bi.horizontal", BI.HorizontalLayout);
 
 
