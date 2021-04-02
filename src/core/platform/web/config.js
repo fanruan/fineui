@@ -14,10 +14,6 @@ BI.prepares.push(function () {
         return _isSupportFlex;
     };
     BI.Plugin.configWidget("bi.horizontal", function (ob) {
-        var isIE = BI.isIE(), supportFlex = isSupportFlex(), isLessIE8 = isIE && BI.getIEVersion() < 8;
-        if (isLessIE8) {
-            return ob;
-        }
         // 在横向自适应场景下我们需要使用table的自适应撑出滚动条的特性（flex处理不了这种情况）
         // 主要出现在center_adapt或者horizontal_adapt的场景，或者主动设置horizontalAlign的场景
         // if (ob.horizontalAlign === BI.HorizontalAlign.Center || ob.horizontalAlign === BI.HorizontalAlign.Stretch) {
@@ -44,7 +40,7 @@ BI.prepares.push(function () {
             // }
             // return BI.extend({}, ob, {type: "bi.table_adapt"});
         // }
-        if (supportFlex) {
+        if (isSupportFlex()) {
             // IE下其实也是可以使用flex布局的，只要排除掉出现滚动条的情况
             // if (!isIE || (ob.scrollable !== true && ob.scrolly !== true)) {
             return BI.extend({}, ob, {type: "bi.flex_horizontal"});
