@@ -221,7 +221,10 @@
             }
             this._mount();
 
-            this.__async === true && isMounted && callLifeHook(this, "mounted");
+            if (this.__async === true && isMounted) {
+                callLifeHook(this, "mounted");
+                this.fireEvent(BI.Events.MOUNT);
+            }
         },
 
         _setParent: function (parent) {
