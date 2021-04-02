@@ -4,13 +4,9 @@ export declare class ImageButton extends BasicButton {
     static xtype: string;
     static EVENT_CHANGE: string;
 
-    setWidth(w: number): void;
+    setImageWidth(w: number | string): void;
 
-    setHeight(h: number): void;
-
-    setImageWidth(w: number): void;
-
-    setImageHeight(h: number): void;
+    setImageHeight(h: number | string): void;
 
     getImageWidth(): number;
 
@@ -19,6 +15,4 @@ export declare class ImageButton extends BasicButton {
     setSrc(src: string): void;
 
     getSrc(): string;
-    
-    doClick(): void;
 }
