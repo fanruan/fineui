@@ -7,7 +7,7 @@
  */
 
 !(function () {
-    function callLifeHook(self, life) {
+    function callLifeHook (self, life) {
         var hook = self.options[life] || self[life];
         if (hook) {
             var hooks = BI.isArray(hook) ? hook : [hook];
@@ -98,8 +98,9 @@
         _initRender: function () {
             var self = this;
 
-            function render() {
+            function render () {
                 if (self.options.beforeRender || self.beforeRender) {
+                    this.__async = true;
                     (self.options.beforeRender || self.beforeRender).call(self, BI.bind(self._render, self));
                 } else {
                     self._render();
@@ -109,9 +110,6 @@
             if (this.options.beforeInit || this.beforeInit) {
                 this.__asking = true;
                 (this.options.beforeInit || this.beforeInit).call(this, render);
-                if (this.__asking === true) {
-                    this.__async = true;
-                }
             } else {
                 render();
             }
@@ -123,6 +121,7 @@
             this._initElement();
             this._initEffects();
             callLifeHook(this, "created");
+            this.__async = false;
         },
 
         _initCurrent: function () {
@@ -204,6 +203,8 @@
 
         _initElement: function () {
             var self = this;
+            var isMounted = this._isMounted;
+            this.__async === true && isMounted && callLifeHook(this, "beforeMount");
             var render = BI.isFunction(this.options.render) ? this.options.render : this.render;
             var els = render && render.call(this);
             if (BI.isPlainObject(els)) {
@@ -218,9 +219,9 @@
                     }
                 });
             }
-            // if (this._isRoot === true || !(this instanceof BI.Layout)) {
             this._mount();
-            // }
+
+            this.__async === true && isMounted && callLifeHook(this, "mounted");
         },
 
         _setParent: function (parent) {
@@ -242,7 +243,7 @@
                 return false;
             }
             layer = layer || 0;
-            lifeHook !== false && callLifeHook(this, "beforeMount");
+            lifeHook !== false && !this.__async && callLifeHook(this, "beforeMount");
             this._isMounted = true;
             for (var key in this._children) {
                 var child = this._children[key];
@@ -266,8 +267,10 @@
                     var child = this._children[key];
                     child.__afterMount && child.__afterMount(lifeHook, predicate);
                 }
-                lifeHook !== false && callLifeHook(this, "mounted");
-                this.fireEvent(BI.Events.MOUNT);
+                if (lifeHook !== false && !this.__async) {
+                    callLifeHook(this, "mounted");
+                    this.fireEvent(BI.Events.MOUNT);
+                }
                 predicate && predicate(this);
             }
         },
@@ -593,12 +596,12 @@
         BI.Widget.context = context = contextStack.pop();
     };
 
-    function pushTarget(_current) {
+    function pushTarget (_current) {
         if (current) currentStack.push(current);
         BI.Widget.current = current = _current;
     }
 
-    function popTarget() {
+    function popTarget () {
         BI.Widget.current = current = currentStack.pop();
     }
 
