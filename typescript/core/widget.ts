@@ -600,12 +600,12 @@ export declare class Widget extends OB {
     /**
      * 设置宽度
      */
-    setWidth(w: number): void;
+    setWidth(w: number | string): void;
 
     /**
      * 设置高度
      */
-    setHeight(h: number): void;
+    setHeight(h: number | string): void;
 
     /**
      * 设置可用
