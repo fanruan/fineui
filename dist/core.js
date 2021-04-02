@@ -1,4 +1,4 @@
-/*! time: 2021-4-2 12:20:27 */
+/*! time: 2021-4-2 15:50:28 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -9061,7 +9061,7 @@ module.exports = !__webpack_require__(892)(function () {
  */
 
 !(function () {
-    function callLifeHook(self, life) {
+    function callLifeHook (self, life) {
         var hook = self.options[life] || self[life];
         if (hook) {
             var hooks = BI.isArray(hook) ? hook : [hook];
@@ -9152,8 +9152,9 @@ module.exports = !__webpack_require__(892)(function () {
         _initRender: function () {
             var self = this;
 
-            function render() {
+            function render () {
                 if (self.options.beforeRender || self.beforeRender) {
+                    this.__async = true;
                     (self.options.beforeRender || self.beforeRender).call(self, BI.bind(self._render, self));
                 } else {
                     self._render();
@@ -9163,9 +9164,6 @@ module.exports = !__webpack_require__(892)(function () {
             if (this.options.beforeInit || this.beforeInit) {
                 this.__asking = true;
                 (this.options.beforeInit || this.beforeInit).call(this, render);
-                if (this.__asking === true) {
-                    this.__async = true;
-                }
             } else {
                 render();
             }
@@ -9177,6 +9175,7 @@ module.exports = !__webpack_require__(892)(function () {
             this._initElement();
             this._initEffects();
             callLifeHook(this, "created");
+            this.__async = false;
         },
 
         _initCurrent: function () {
@@ -9258,6 +9257,8 @@ module.exports = !__webpack_require__(892)(function () {
 
         _initElement: function () {
             var self = this;
+            var isMounted = this._isMounted;
+            this.__async === true && isMounted && callLifeHook(this, "beforeMount");
             var render = BI.isFunction(this.options.render) ? this.options.render : this.render;
             var els = render && render.call(this);
             if (BI.isPlainObject(els)) {
@@ -9272,9 +9273,9 @@ module.exports = !__webpack_require__(892)(function () {
                     }
                 });
             }
-            // if (this._isRoot === true || !(this instanceof BI.Layout)) {
             this._mount();
-            // }
+
+            this.__async === true && isMounted && callLifeHook(this, "mounted");
         },
 
         _setParent: function (parent) {
@@ -9296,7 +9297,7 @@ module.exports = !__webpack_require__(892)(function () {
                 return false;
             }
             layer = layer || 0;
-            lifeHook !== false && callLifeHook(this, "beforeMount");
+            lifeHook !== false && !this.__async && callLifeHook(this, "beforeMount");
             this._isMounted = true;
             for (var key in this._children) {
                 var child = this._children[key];
@@ -9320,8 +9321,10 @@ module.exports = !__webpack_require__(892)(function () {
                     var child = this._children[key];
                     child.__afterMount && child.__afterMount(lifeHook, predicate);
                 }
-                lifeHook !== false && callLifeHook(this, "mounted");
-                this.fireEvent(BI.Events.MOUNT);
+                if (lifeHook !== false && !this.__async) {
+                    callLifeHook(this, "mounted");
+                    this.fireEvent(BI.Events.MOUNT);
+                }
                 predicate && predicate(this);
             }
         },
@@ -9647,12 +9650,12 @@ module.exports = !__webpack_require__(892)(function () {
         BI.Widget.context = context = contextStack.pop();
     };
 
-    function pushTarget(_current) {
+    function pushTarget (_current) {
         if (current) currentStack.push(current);
         BI.Widget.current = current = _current;
     }
 
-    function popTarget() {
+    function popTarget () {
         BI.Widget.current = current = currentStack.pop();
     }
 
@@ -96293,76 +96296,76 @@ module.exports = function (exec) {
         needPop && popTarget();
     };
 
-    BI.Widget.prototype._initElement = function () {
-        var self = this;
-        var render = BI.isFunction(this.options.render) ? this.options.render : this.render;
-        var els;
-        if (this.options.updateMode === "auto" && this._store) {
-            // 自动更新模式
-            var childComponents = {};
-            var rendered = false;
-            this._watchers.push(Fix.watch(this.model, function () {
-                if (rendered) {
-                    var newEls = render && render.call(this);
-                    BI.each(childComponents, function (i, childComponent) {
-                        if (childComponent.component instanceof BI.Layout) {
-                            return; // 布局的过滤掉
-                        }
-                        var nextProps = BI.get([newEls], childComponent.path);
-                        if (nextProps) {
-                            var shouldUpdate = childComponent.component.shouldUpdate && childComponent.component.shouldUpdate(nextProps);
-                            childComponent.component._update(nextProps, shouldUpdate);
-                            childComponent.props = BI.extend(childComponent.props, nextProps);
-                        }
-                    });
-                } else {
-                    els = render && render.call(this);
-
-                    function traverse (parent, path) {
-                        BI.each(parent, function (i, child) {
-                            var childPath = path.concat(i);
-                            if (BI.isArray(child)) {
-                                traverse(child, childPath);
-                            } else if (BI.isPlainObject(child)) {
-                                if (child.type) {
-                                    child.__ref = function (_ref) {
-                                        if (_ref) {
-                                            var comp = childComponents[this.getName()] = {};
-                                            comp.component = _ref;
-                                            comp.props = child;
-                                            comp.path = childPath;
-                                        } else {
-                                            delete childComponents[this.getName()];
-                                        }
-                                    };
-                                }
-                                traverse(child, childPath);
-                            }
-                        });
-                    }
-
-                    traverse([els], []);
-                    rendered = true;
-                }
-            }));
-        } else {
-            els = render && render.call(this);
-        }
-        if (BI.isPlainObject(els)) {
-            els = [els];
-        }
-        if (BI.isArray(els)) {
-            BI.each(els, function (i, el) {
-                if (el) {
-                    BI._lazyCreateWidget(el, {
-                        element: self
-                    });
-                }
-            });
-        }
-        // if (this._isRoot === true || !(this instanceof BI.Layout)) {
-        this._mount();
-    };
+    // BI.Widget.prototype._initElement = function () {
+    //     var self = this;
+    //     var render = BI.isFunction(this.options.render) ? this.options.render : this.render;
+    //     var els;
+    //     if (this.options.updateMode === "auto" && this._store) {
+    //         // 自动更新模式
+    //         var childComponents = {};
+    //         var rendered = false;
+    //         this._watchers.push(Fix.watch(this.model, function () {
+    //             if (rendered) {
+    //                 var newEls = render && render.call(this);
+    //                 BI.each(childComponents, function (i, childComponent) {
+    //                     if (childComponent.component instanceof BI.Layout) {
+    //                         return; // 布局的过滤掉
+    //                     }
+    //                     var nextProps = BI.get([newEls], childComponent.path);
+    //                     if (nextProps) {
+    //                         var shouldUpdate = childComponent.component.shouldUpdate && childComponent.component.shouldUpdate(nextProps);
+    //                         childComponent.component._update(nextProps, shouldUpdate);
+    //                         childComponent.props = BI.extend(childComponent.props, nextProps);
+    //                     }
+    //                 });
+    //             } else {
+    //                 els = render && render.call(this);
+    //
+    //                 function traverse (parent, path) {
+    //                     BI.each(parent, function (i, child) {
+    //                         var childPath = path.concat(i);
+    //                         if (BI.isArray(child)) {
+    //                             traverse(child, childPath);
+    //                         } else if (BI.isPlainObject(child)) {
+    //                             if (child.type) {
+    //                                 child.__ref = function (_ref) {
+    //                                     if (_ref) {
+    //                                         var comp = childComponents[this.getName()] = {};
+    //                                         comp.component = _ref;
+    //                                         comp.props = child;
+    //                                         comp.path = childPath;
+    //                                     } else {
+    //                                         delete childComponents[this.getName()];
+    //                                     }
+    //                                 };
+    //                             }
+    //                             traverse(child, childPath);
+    //                         }
+    //                     });
+    //                 }
+    //
+    //                 traverse([els], []);
+    //                 rendered = true;
+    //             }
+    //         }));
+    //     } else {
+    //         els = render && render.call(this);
+    //     }
+    //     if (BI.isPlainObject(els)) {
+    //         els = [els];
+    //     }
+    //     if (BI.isArray(els)) {
+    //         BI.each(els, function (i, el) {
+    //             if (el) {
+    //                 BI._lazyCreateWidget(el, {
+    //                     element: self
+    //                 });
+    //             }
+    //         });
+    //     }
+    //     // if (this._isRoot === true || !(this instanceof BI.Layout)) {
+    //     this._mount();
+    // };
 
     var unMount = BI.Widget.prototype.__d;
     BI.Widget.prototype.__d = function () {
