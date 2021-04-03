@@ -76,6 +76,19 @@
     }
   }
 
+  &.f-f {
+    > .f-s-h-w {
+      -webkit-flex-shrink: 0;
+      -moz-flex-shrink: 0;
+      -ms-flex-shrink: 0;
+      flex-shrink: 0;
+      -webkit-flex-grow: 1;
+      -moz-flex-grow: 1;
+      -ms-flex-grow: 1;
+      flex-grow: 1;
+    }
+  }
+
   &.h-right {
     /* 09版 */
     -webkit-box-pack: flex-end;
@@ -179,10 +192,6 @@
       -ms-flex-align: stretch;
       -o-align-items: stretch;
       align-items: stretch;
-    }
-
-    &.h-stretch {
-      min-width: 100%;
     }
 
     &.h-center {
