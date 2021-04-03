@@ -211,7 +211,6 @@
             var o = this.options;
             var adaptLayout = "bi.vertical_adapt";
             var json = this._createJson();
-            json.textAlign = "left";
             if (BI.isNumber(o.width) && o.width > 0) {
                 if (BI.isNumber(o.textWidth) && o.textWidth > 0) {
                     json.width = o.textWidth;
@@ -252,7 +251,6 @@
                     return;
                 }
                 if (BI.isNumber(o.height) && o.height > 0) { // 2.3
-                    json.textAlign = o.textAlign;
                     this.text = BI.createWidget(BI.extend(json, {
                         element: this,
                         hgap: o.hgap,
@@ -316,7 +314,6 @@
                         "line-height": (o.height - (o.vgap * 2)) / BI.pixRatio + BI.pixUnit
                     });
                 }
-                json.textAlign = o.textAlign;
                 this.text = BI.createWidget(BI.extend(json, { // 2.6
                     element: this,
                     hgap: o.hgap,
