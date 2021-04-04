@@ -37,7 +37,7 @@ BI.FlexWrapperHorizontalLayout = BI.inherit(BI.Layout, {
             position: "relative"
         });
         if (o.columnSize[i] !== "auto") {
-            if (!(o.horizontalAlign === BI.HorizontalAlign.Stretch && o.columnSize[i] === "fill")) {
+            if (!(o.horizontalAlign === BI.HorizontalAlign.Stretch && (o.columnSize[i] === "fill" || o.columnSize[i] === ""))) {
                 w.element.addClass("f-s-n");
             }
         }
