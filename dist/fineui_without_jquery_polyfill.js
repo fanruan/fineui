@@ -1,4 +1,4 @@
-/*! time: 2021-4-2 17:00:22 */
+/*! time: 2021-4-4 21:00:25 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -6346,7 +6346,10 @@ BI.Req = {
             }
             this._mount();
 
-            this.__async === true && isMounted && callLifeHook(this, "mounted");
+            if (this.__async === true && isMounted) {
+                callLifeHook(this, "mounted");
+                this.fireEvent(BI.Events.MOUNT);
+            }
         },
 
         _setParent: function (parent) {
@@ -15026,9 +15029,7 @@ BI.FlexHorizontalLayout = BI.inherit(BI.Layout, {
             position: "relative"
         });
         if (o.columnSize[i] !== "auto") {
-            if (o.horizontalAlign === BI.HorizontalAlign.Stretch && o.columnSize[i] === "fill") {
-                w.element.addClass("f-f");
-            } else {
+            if (!(o.horizontalAlign === BI.HorizontalAlign.Stretch && (o.columnSize[i] === "fill" || o.columnSize[i] === ""))) {
                 w.element.addClass("f-s-n");
             }
         }
@@ -15293,9 +15294,7 @@ BI.FlexVerticalLayout = BI.inherit(BI.Layout, {
             position: "relative"
         });
         if (o.rowSize[i] !== "auto") {
-            if (o.verticalAlign === BI.VerticalAlign.Stretch && o.rowSize[i] === "fill") {
-                w.element.addClass("f-f");
-            } else {
+            if (!(o.verticalAlign === BI.VerticalAlign.Stretch && (o.rowSize[i] === "fill" || o.rowSize[i] === ""))) {
                 w.element.addClass("f-s-n");
             }
         }
@@ -15513,9 +15512,7 @@ BI.FlexWrapperHorizontalLayout = BI.inherit(BI.Layout, {
             position: "relative"
         });
         if (o.columnSize[i] !== "auto") {
-            if (o.horizontalAlign === BI.HorizontalAlign.Stretch && o.columnSize[i] !== "") {
-                w.element.addClass("f-f");
-            } else {
+            if (!(o.horizontalAlign === BI.HorizontalAlign.Stretch && (o.columnSize[i] === "fill" || o.columnSize[i] === ""))) {
                 w.element.addClass("f-s-n");
             }
         }
@@ -15524,6 +15521,7 @@ BI.FlexWrapperHorizontalLayout = BI.inherit(BI.Layout, {
         }
         if (o.columnSize[i] === "fill") {
             w.element.addClass("f-f");
+            this.element.addClass("f-f");
         }
         w.element.addClass("c-e");
         if (i === 0) {
@@ -15681,9 +15679,7 @@ BI.FlexWrapperVerticalLayout = BI.inherit(BI.Layout, {
             position: "relative"
         });
         if (o.rowSize[i] !== "auto") {
-            if (o.verticalAlign === BI.VerticalAlign.Stretch && o.rowSize[i] !== "") {
-                w.element.addClass("f-f");
-            } else {
+            if (!(o.verticalAlign === BI.VerticalAlign.Stretch && (o.rowSize[i] === "fill" && o.rowSize[i] === ""))) {
                 w.element.addClass("f-s-n");
             }
         }
@@ -15692,6 +15688,7 @@ BI.FlexWrapperVerticalLayout = BI.inherit(BI.Layout, {
         }
         if (o.rowSize[i] === "fill") {
             w.element.addClass("f-f");
+            this.element.addClass("f-f");
         }
         w.element.addClass("c-e");
         if (i === 0) {
@@ -16930,7 +16927,7 @@ BI.InlineLayout = BI.inherit(BI.Layout, {
             "vertical-align": o.verticalAlign
         });
         w.element.addClass("i-item");
-        if (o.columnSize[i] === "fill") {
+        if (o.columnSize[i] === "fill" || o.columnSize[i] === "") {
             var left = o.hgap + (item.lgap || 0) + (item.hgap || 0),
                 right = o.hgap + (item.rgap || 0) + (item.hgap || 0);
             for (var k = 0; k < i; k++) {
@@ -16939,9 +16936,11 @@ BI.InlineLayout = BI.inherit(BI.Layout, {
             for (var k = i + 1; k < o.columnSize.length; k++) {
                 right += o.hgap + o.lgap + o.rgap + o.columnSize[k];
             }
-            w.element.css("min-width", "calc(100% - " + ((left + right) / BI.pixRatio + BI.pixUnit) + ")");
+            if (o.columnSize[i] === "fill") {
+                w.element.css("min-width", "calc(100% - " + ((left + right) / BI.pixRatio + BI.pixUnit) + ")");
+            }
             if (o.horizontalAlign === BI.HorizontalAlign.Stretch) {
-                w.element.width(0);
+                w.element.css("max-width", "calc(100% - " + ((left + right) / BI.pixRatio + BI.pixUnit) + ")");
             }
         }
         if (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
@@ -27549,7 +27548,7 @@ BI.shortcut("bi.radio", BI.Radio);
                     });
                     return;
                 }
-                if (o.whiteSpace == "normal") { // 1.3
+                if (o.whiteSpace === "normal") { // 1.3
                     BI.extend(json, {
                         hgap: o.hgap,
                         vgap: o.vgap,
@@ -27618,7 +27617,7 @@ BI.shortcut("bi.radio", BI.Radio);
                 });
                 return;
             }
-            if (o.whiteSpace == "normal") { // 1.7
+            if (o.whiteSpace === "normal") { // 1.7
                 BI.extend(json, {
                     hgap: o.hgap,
                     vgap: o.vgap,
