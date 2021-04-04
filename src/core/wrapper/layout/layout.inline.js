@@ -42,7 +42,7 @@ BI.InlineLayout = BI.inherit(BI.Layout, {
             "vertical-align": o.verticalAlign
         });
         w.element.addClass("i-item");
-        if (o.columnSize[i] === "fill") {
+        if (o.columnSize[i] === "fill" || o.columnSize[i] === "") {
             var left = o.hgap + (item.lgap || 0) + (item.hgap || 0),
                 right = o.hgap + (item.rgap || 0) + (item.hgap || 0);
             for (var k = 0; k < i; k++) {
@@ -51,9 +51,11 @@ BI.InlineLayout = BI.inherit(BI.Layout, {
             for (var k = i + 1; k < o.columnSize.length; k++) {
                 right += o.hgap + o.lgap + o.rgap + o.columnSize[k];
             }
-            w.element.css("min-width", "calc(100% - " + ((left + right) / BI.pixRatio + BI.pixUnit) + ")");
+            if (o.columnSize[i] === "fill") {
+                w.element.css("min-width", "calc(100% - " + ((left + right) / BI.pixRatio + BI.pixUnit) + ")");
+            }
             if (o.horizontalAlign === BI.HorizontalAlign.Stretch) {
-                w.element.width(0);
+                w.element.css("max-width", "calc(100% - " + ((left + right) / BI.pixRatio + BI.pixUnit) + ")");
             }
         }
         if (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {

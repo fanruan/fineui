@@ -37,9 +37,7 @@ BI.FlexWrapperVerticalLayout = BI.inherit(BI.Layout, {
             position: "relative"
         });
         if (o.rowSize[i] !== "auto") {
-            if (o.verticalAlign === BI.VerticalAlign.Stretch && o.rowSize[i] !== "") {
-                w.element.addClass("f-f");
-            } else {
+            if (!(o.verticalAlign === BI.VerticalAlign.Stretch && (o.rowSize[i] === "fill" && o.rowSize[i] === ""))) {
                 w.element.addClass("f-s-n");
             }
         }
@@ -48,6 +46,7 @@ BI.FlexWrapperVerticalLayout = BI.inherit(BI.Layout, {
         }
         if (o.rowSize[i] === "fill") {
             w.element.addClass("f-f");
+            this.element.addClass("f-f");
         }
         w.element.addClass("c-e");
         if (i === 0) {
