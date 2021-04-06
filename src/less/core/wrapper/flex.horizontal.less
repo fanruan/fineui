@@ -63,18 +63,31 @@
   flex-wrap: nowrap;
 
   &.v-middle {
-    ///* 09版 */
-    //-webkit-box-align: center;
-    ///* 12版 */
-    //-webkit-align-items: center;
-    //-moz-align-items: center;
-    //-ms-align-items: center;
-    //-ms-flex-align: center;
-    //-o-align-items: center;
-    //align-items: center;
-    > .c-e {
-      margin-top: auto !important;
-      margin-bottom: auto !important;
+    /* 09版 */
+    -webkit-box-align: center;
+    /* 12版 */
+    -webkit-align-items: center;
+    -moz-align-items: center;
+    -ms-align-items: center;
+    -ms-flex-align: center;
+    -o-align-items: center;
+    align-items: center;
+
+    &.f-scroll-y {
+      /* 09版 */
+      -webkit-box-align: flex-start;
+      /* 12版 */
+      -webkit-align-items: flex-start;
+      -moz-align-items: flex-start;
+      -ms-align-items: flex-start;
+      -ms-flex-align: start;
+      -o-align-items: flex-start;
+      align-items: flex-start;
+
+      > .c-e {
+        margin-top: auto !important;
+        margin-bottom: auto !important;
+      }
     }
   }
 
@@ -103,21 +116,34 @@
   }
 
   &.h-center {
-    ///* 09版 */
-    //-webkit-box-pack: center;
-    ///* 12版 */
-    //-webkit-justify-content: center;
-    //-moz-justify-content: center;
-    //-ms-justify-content: center;
-    //-ms-flex-pack: center;
-    //-o-justify-content: center;
-    //justify-content: center;
-    > .f-c {
-      margin-left: auto !important;
-    }
+    /* 09版 */
+    -webkit-box-pack: center;
+    /* 12版 */
+    -webkit-justify-content: center;
+    -moz-justify-content: center;
+    -ms-justify-content: center;
+    -ms-flex-pack: center;
+    -o-justify-content: center;
+    justify-content: center;
 
-    > .l-c {
-      margin-right: auto !important;
+    &.f-scroll-x {
+      /* 09版 */
+      -webkit-box-pack: flex-start;
+      /* 12版 */
+      -webkit-justify-content: flex-start;
+      -moz-justify-content: flex-start;
+      -ms-justify-content: flex-start;
+      -ms-flex-pack: start;
+      -o-justify-content: flex-start;
+      justify-content: flex-start;
+
+      > .f-c {
+        margin-left: auto !important;
+      }
+
+      > .l-c {
+        margin-right: auto !important;
+      }
     }
   }
 

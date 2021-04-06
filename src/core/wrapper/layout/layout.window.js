@@ -15,19 +15,9 @@ BI.WindowLayout = BI.inherit(BI.Layout, {
             rgap: 0,
             tgap: 0,
             bgap: 0,
-            columnSize: [100, "fill", 200],
-            rowSize: [100, "fill"],
-            items: [[
-                {
-                    el: {type: "bi.button", text: "button1"}
-                },
-                {
-                    el: {type: "bi.button", text: "button2"}
-                },
-                {
-                    el: {type: "bi.button", text: "button3"}
-                }
-            ]]
+            columnSize: [],
+            rowSize: [],
+            items: []
         });
     },
     render: function () {

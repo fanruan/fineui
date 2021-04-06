@@ -83,7 +83,7 @@
                     });
                     return;
                 }
-                if (o.whiteSpace == "normal") { // 1.3
+                if (o.whiteSpace === "normal") { // 1.3
                     BI.extend(json, {
                         hgap: o.hgap,
                         vgap: o.vgap,
@@ -152,7 +152,7 @@
                 });
                 return;
             }
-            if (o.whiteSpace == "normal") { // 1.7
+            if (o.whiteSpace === "normal") { // 1.7
                 BI.extend(json, {
                     hgap: o.hgap,
                     vgap: o.vgap,

@@ -37,9 +37,7 @@ BI.FlexWrapperHorizontalLayout = BI.inherit(BI.Layout, {
             position: "relative"
         });
         if (o.columnSize[i] !== "auto") {
-            if (o.horizontalAlign === BI.HorizontalAlign.Stretch && o.columnSize[i] !== "") {
-                w.element.addClass("f-f");
-            } else {
+            if (!(o.horizontalAlign === BI.HorizontalAlign.Stretch && (o.columnSize[i] === "fill" || o.columnSize[i] === ""))) {
                 w.element.addClass("f-s-n");
             }
         }
@@ -48,6 +46,7 @@ BI.FlexWrapperHorizontalLayout = BI.inherit(BI.Layout, {
         }
         if (o.columnSize[i] === "fill") {
             w.element.addClass("f-f");
+            this.element.addClass("f-f");
         }
         w.element.addClass("c-e");
         if (i === 0) {

@@ -16,6 +16,7 @@ module.exports = merge.smart(common, {
     entry: {
         font: attachments.font,
         "fineui.min": attachments.fineui,
+        "fineui.proxy.min": attachments.fineuiProxy,
         "fineui.ie.min": attachments.fineuiIE,
         utils: attachments.utils,
         "utils.min": attachments.utils,
@@ -59,8 +60,7 @@ module.exports = merge.smart(common, {
             path: dirs.DEST,
             filename: "[name].css",
         }),
-        new ForkTsCheckerWebpackPlugin({
-        }),
+        new ForkTsCheckerWebpackPlugin({}),
         new OptimizeCssAssetsPlugin({
             assetNameRegExp: /\.css$/g,
             cssProcessor: require("cssnano"),

@@ -24,6 +24,7 @@ module.exports = {
         demo: attachments.demo,
         // 用于启动dev模式时，工程引用调试
         fineui: attachments.fineui,
+        "fineui.proxy": attachments.fineuiProxy,
     },
     externals: {
         lodash: '_',
@@ -85,6 +86,14 @@ module.exports = {
             },
             {
                 test: path.resolve(__dirname, '../', attachments.fix),
+                use: [
+                    {
+                        loader: 'expose-loader',
+                        options: 'Fix',
+                    },
+                ],
+            }, {
+                test: path.resolve(__dirname, '../', attachments.fixProxy),
                 use: [
                     {
                         loader: 'expose-loader',
