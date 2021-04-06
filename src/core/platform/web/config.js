@@ -23,7 +23,7 @@ BI.prepares.push(function () {
         if (ob.horizontalAlign === BI.HorizontalAlign.Center || ob.horizontalAlign === BI.HorizontalAlign.Stretch) {
             return BI.extend({}, ob, {type: "bi.table_adapt"});
         }
-        if (!isIE && supportFlex) {
+        if (supportFlex) {
             return BI.extend({}, ob, {type: "bi.flex_horizontal"});
         }
         // // 解决使用inline_vertical_adapt的顺序问题
@@ -37,10 +37,10 @@ BI.prepares.push(function () {
         return BI.extend({}, ob, {type: "bi.table_adapt"});
     });
     BI.Plugin.configWidget("bi.center_adapt", function (ob) {
-        var isIE = BI.isIE(), supportFlex = isSupportFlex(), justOneItem = (ob.items && ob.items.length <= 1);
+        var supportFlex = isSupportFlex(), justOneItem = (ob.items && ob.items.length <= 1);
         var isAdapt = !ob.horizontalAlign || ob.horizontalAlign === BI.HorizontalAlign.Center || ob.horizontalAlign === BI.HorizontalAlign.Stretch;
         if (!isAdapt || justOneItem) {
-            if (!isIE && supportFlex) {
+            if (supportFlex) {
                 return BI.extend({}, ob, {type: "bi.flex_center_adapt"});
             }
             return BI.extend({}, ob, {type: "bi.inline_center_adapt"});
@@ -48,10 +48,10 @@ BI.prepares.push(function () {
         return ob;
     });
     BI.Plugin.configWidget("bi.vertical_adapt", function (ob) {
-        var isIE = BI.isIE(), supportFlex = isSupportFlex(), justOneItem = (ob.items && ob.items.length <= 1);
+        var supportFlex = isSupportFlex(), justOneItem = (ob.items && ob.items.length <= 1);
         var isAdapt = ob.horizontalAlign === BI.HorizontalAlign.Center || ob.horizontalAlign === BI.HorizontalAlign.Stretch;
         if (!isAdapt || justOneItem) {
-            if (!isIE && supportFlex) {
+            if (supportFlex) {
                 return BI.extend({}, ob, {type: "bi.flex_vertical_center_adapt"});
             }
             return BI.extend({}, ob, {type: "bi.inline_vertical_adapt"});
@@ -68,7 +68,7 @@ BI.prepares.push(function () {
         return ob;
     });
     BI.Plugin.configWidget("bi.horizontal_float", function (ob) {
-        if (!BI.isIE() && isSupportFlex()) {
+        if (isSupportFlex()) {
             return BI.extend({}, ob, {type: "bi.flex_horizontal_adapt"});
         }
         return BI.extend({}, ob, {type: "bi.inline_horizontal_adapt"});
