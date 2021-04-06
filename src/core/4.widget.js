@@ -100,7 +100,7 @@
 
             function render () {
                 if (self.options.beforeRender || self.beforeRender) {
-                    this.__async = true;
+                    self.__async = true;
                     (self.options.beforeRender || self.beforeRender).call(self, BI.bind(self._render, self));
                 } else {
                     self._render();
