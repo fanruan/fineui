@@ -1,4 +1,4 @@
-/*! time: 2021-4-6 12:20:18 */
+/*! time: 2021-4-6 16:40:34 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -14193,7 +14193,7 @@ BI.HorizontalAdaptLayout = BI.inherit(BI.Layout, {
         return BI.extend(BI.HorizontalAdaptLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-h-a",
             verticalAlign: BI.VerticalAlign.Top,
-            horizontalAlign: BI.HorizontalAlign.Center,
+            horizontalAlign: BI.HorizontalAlign.Left,
             columnSize: [],
             scrollx: false,
             hgap: 0,
