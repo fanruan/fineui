@@ -74,39 +74,27 @@ BI.prepares.push(function () {
         return BI.extend({}, ob, {type: "bi.inline_horizontal_adapt"});
     });
 
+    BI.Plugin.configWidget("bi.left_right_vertical_adapt", function (ob) {
+        if (isSupportFlex()) {
+            // IE下其实也是可以使用flex布局的，只要排除掉出现滚动条的情况
+            // if (!BI.isIE() || (ob.scrollable !== true && ob.scrolly !== true)) {
+            return BI.extend({}, ob, {type: "bi.flex_left_right_vertical_adapt"});
+            // }
+        }
+        return ob;
+    });
     BI.Plugin.configWidget("bi.flex_horizontal", function (ob) {
-        if (ob.scrollable === true || ob.scrolly === true) {
-            return BI.extend({}, ob, {type: "bi.flex_scrollable_horizontal"});
+        if (ob.scrollable === true || ob.scrollx !== false) {
+            if (ob.hgap > 0 || ob.rgap > 0) {// flex中最后一个margin-right不生效
+                return BI.extend({}, ob, {type: "bi.flex_scrollable_horizontal"});
+            }
         }
     });
     BI.Plugin.configWidget("bi.flex_vertical", function (ob) {
         if (ob.scrollable === true || ob.scrollx === true) {
-            return BI.extend({}, ob, {type: "bi.flex_scrollable_vertical"});
-        }
-    });
-    BI.Plugin.configWidget("bi.flex_horizontal_adapt", function (ob) {
-        if (ob.scrollable === true || ob.scrollx === true) {
-            return BI.extend({}, ob, {type: "bi.flex_scrollable_horizontal_adapt"});
-        }
-    });
-    BI.Plugin.configWidget("bi.flex_vertical_adapt", function (ob) {
-        if (ob.scrollable === true || ob.scrolly === true) {
-            return BI.extend({}, ob, {type: "bi.flex_scrollable_vertical_adapt"});
-        }
-    });
-    BI.Plugin.configWidget("bi.flex_horizontal_center_adapt", function (ob) {
-        if (ob.scrollable === true || ob.scrollx === true) {
-            return BI.extend({}, ob, {type: "bi.flex_scrollable_horizontal_adapt"});
-        }
-    });
-    BI.Plugin.configWidget("bi.flex_vertical_center_adapt", function (ob) {
-        if (ob.scrollable === true || ob.scrolly === true) {
-            return BI.extend({}, ob, {type: "bi.flex_scrollable_vertical_adapt"});
-        }
-    });
-    BI.Plugin.configWidget("bi.flex_center_adapt", function (ob) {
-        if (ob.scrollable === true || ob.scrolly === true || ob.scrollx === true) {
-            return BI.extend({}, ob, {type: "bi.flex_scrollable_center_adapt"});
+            if (ob.hgap > 0 || ob.rgap > 0) {// flex中最后一个margin-right不生效
+                return BI.extend({}, ob, {type: "bi.flex_scrollable_vertical"});
+            }
         }
     });
 
