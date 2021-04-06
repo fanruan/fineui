@@ -8,7 +8,7 @@
 BI.FlexWrapperCenterLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.FlexWrapperCenterLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-f-s-c clearfix",
+            baseCls: "bi-f-s-c",
             horizontalAlign: BI.HorizontalAlign.Center,
             verticalAlign: BI.VerticalAlign.Middle,
             columnSize: [],
