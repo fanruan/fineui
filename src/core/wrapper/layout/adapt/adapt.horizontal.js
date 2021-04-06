@@ -8,7 +8,7 @@ BI.HorizontalAdaptLayout = BI.inherit(BI.Layout, {
         return BI.extend(BI.HorizontalAdaptLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-h-a",
             verticalAlign: BI.VerticalAlign.Top,
-            horizontalAlign: BI.HorizontalAlign.Left,
+            horizontalAlign: BI.HorizontalAlign.Center,
             columnSize: [],
             scrollx: false,
             hgap: 0,
