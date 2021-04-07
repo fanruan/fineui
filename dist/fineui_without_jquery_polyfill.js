@@ -1,4 +1,4 @@
-/*! time: 2021-4-7 09:10:33 */
+/*! time: 2021-4-7 21:20:22 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -14681,7 +14681,8 @@ BI.shortcut("bi.horizontal_auto", BI.HorizontalAutoLayout);
 /**
  * 浮动的水平居中布局
  */
-BI.FloatHorizontalLayout = BI.inherit(BI.Layout);
+BI.FloatHorizontalLayout = function () {
+};
 BI.shortcut("bi.horizontal_float", BI.FloatHorizontalLayout);
 
 
@@ -15028,12 +15029,15 @@ BI.FlexHorizontalLayout = BI.inherit(BI.Layout, {
         w.element.css({
             position: "relative"
         });
-        if (o.columnSize[i] !== "auto") {
-            if (!(o.horizontalAlign === BI.HorizontalAlign.Stretch && (o.columnSize[i] === "fill" || o.columnSize[i] === ""))) {
-                w.element.addClass("f-s-n");
+        if (o.columnSize[i] === "fill" || o.columnSize[i] === "") {
+            if (o.horizontalAlign !== BI.HorizontalAlign.Stretch) {
+                if (o.scrollable === true || o.scrollx === true) {
+                    w.element.addClass("f-s-n");
+                }
             }
         }
         if (o.columnSize[i] > 0) {
+            w.element.addClass("f-s-n");
             w.element.width(o.columnSize[i] === "" ? "" : (o.columnSize[i] <= 1 ? ((o.columnSize[i] * 100).toFixed(1) + "%") : (o.columnSize[i] / BI.pixRatio + BI.pixUnit)));
         }
         if (o.columnSize[i] === "fill") {
@@ -15293,12 +15297,15 @@ BI.FlexVerticalLayout = BI.inherit(BI.Layout, {
         w.element.css({
             position: "relative"
         });
-        if (o.rowSize[i] !== "auto") {
-            if (!(o.verticalAlign === BI.VerticalAlign.Stretch && (o.rowSize[i] === "fill" || o.rowSize[i] === ""))) {
-                w.element.addClass("f-s-n");
+        if (o.rowSize[i] === "fill" || o.rowSize[i] === "") {
+            if (o.verticalAlign !== BI.VerticalAlign.Stretch) {
+                if (o.scrollable === true || o.scrolly === true) {
+                    w.element.addClass("f-s-n");
+                }
             }
         }
         if (o.rowSize[i] > 0) {
+            w.element.addClass("f-s-n");
             w.element.height(o.rowSize[i] === "" ? "" : (o.rowSize[i] <= 1 ? ((o.rowSize[i] * 100).toFixed(1) + "%") : (o.rowSize[i] / BI.pixRatio + BI.pixUnit)));
         }
         if (o.rowSize[i] === "fill") {
@@ -15511,12 +15518,15 @@ BI.FlexWrapperHorizontalLayout = BI.inherit(BI.Layout, {
         w.element.css({
             position: "relative"
         });
-        if (o.columnSize[i] !== "auto") {
-            if (!(o.horizontalAlign === BI.HorizontalAlign.Stretch && (o.columnSize[i] === "fill" || o.columnSize[i] === ""))) {
-                w.element.addClass("f-s-n");
+        if (o.columnSize[i] === "fill" || o.columnSize[i] === "") {
+            if (o.horizontalAlign !== BI.HorizontalAlign.Stretch) {
+                if (o.scrollable === true || o.scrollx === true) {
+                    w.element.addClass("f-s-n");
+                }
             }
         }
         if (o.columnSize[i] > 0) {
+            w.element.addClass("f-s-n");
             w.element.width(o.columnSize[i] === "" ? "" : (o.columnSize[i] <= 1 ? ((o.columnSize[i] * 100).toFixed(1) + "%") : (o.columnSize[i] / BI.pixRatio + BI.pixUnit)));
         }
         if (o.columnSize[i] === "fill") {
@@ -15678,12 +15688,15 @@ BI.FlexWrapperVerticalLayout = BI.inherit(BI.Layout, {
         w.element.css({
             position: "relative"
         });
-        if (o.rowSize[i] !== "auto") {
-            if (!(o.verticalAlign === BI.VerticalAlign.Stretch && (o.rowSize[i] === "fill" && o.rowSize[i] === ""))) {
-                w.element.addClass("f-s-n");
+        if (o.rowSize[i] === "fill" || o.rowSize[i] === "") {
+            if (o.verticalAlign !== BI.VerticalAlign.Stretch) {
+                if (o.scrollable === true || o.scrolly === true) {
+                    w.element.addClass("f-s-n");
+                }
             }
         }
         if (o.rowSize[i] > 0) {
+            w.element.addClass("f-s-n");
             w.element.height(o.rowSize[i] === "" ? "" : (o.rowSize[i] <= 1 ? ((o.rowSize[i] * 100).toFixed(1) + "%") : (o.rowSize[i] / BI.pixRatio + BI.pixUnit)));
         }
         if (o.rowSize[i] === "fill") {
@@ -16875,7 +16888,8 @@ BI.shortcut("bi.grid", BI.GridLayout);
  * @class BI.HorizontalLayout
  * @extends BI.Layout
  */
-BI.HorizontalLayout = BI.inherit(BI.Layout);
+BI.HorizontalLayout = function () {
+};
 BI.shortcut("bi.horizontal", BI.HorizontalLayout);
 
 
@@ -16939,7 +16953,7 @@ BI.InlineLayout = BI.inherit(BI.Layout, {
             if (o.columnSize[i] === "fill") {
                 w.element.css("min-width", "calc(100% - " + ((left + right) / BI.pixRatio + BI.pixUnit) + ")");
             }
-            if (o.horizontalAlign === BI.HorizontalAlign.Stretch) {
+            if (o.horizontalAlign === BI.HorizontalAlign.Stretch || !(o.scrollable === true || o.scrollx === true)) {
                 w.element.css("max-width", "calc(100% - " + ((left + right) / BI.pixRatio + BI.pixUnit) + ")");
             }
         }
