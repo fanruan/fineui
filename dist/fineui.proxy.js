@@ -1,4 +1,4 @@
-/*! time: 2021-4-7 09:00:25 */
+/*! time: 2021-4-7 09:10:33 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -15750,7 +15750,7 @@ BI.shortcut("bi.flex_vertical", BI.FlexVerticalLayout);
 BI.FlexWrapperCenterLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.FlexWrapperCenterLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-f-s-c clearfix",
+            baseCls: "bi-f-s-c",
             horizontalAlign: BI.HorizontalAlign.Center,
             verticalAlign: BI.VerticalAlign.Middle,
             columnSize: [],
@@ -15811,7 +15811,7 @@ BI.shortcut("bi.flex_scrollable_center_adapt", BI.FlexWrapperCenterLayout);
 BI.FlexWrapperHorizontalCenter = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.FlexWrapperHorizontalCenter.superclass.props.apply(this, arguments), {
-            baseCls: "bi-f-s-v-c clearfix",
+            baseCls: "bi-f-s-v-c",
             horizontalAlign: BI.HorizontalAlign.Center,
             verticalAlign: BI.VerticalAlign.Top,
             rowSize: [],
@@ -15978,7 +15978,7 @@ BI.shortcut("bi.flex_scrollable_horizontal", BI.FlexWrapperHorizontalLayout);
 BI.FlexWrapperVerticalCenter = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.FlexWrapperVerticalCenter.superclass.props.apply(this, arguments), {
-            baseCls: "bi-f-s-v-c clearfix",
+            baseCls: "bi-f-s-v-c",
             horizontalAlign: BI.HorizontalAlign.Left,
             verticalAlign: BI.VerticalAlign.Middle,
             columnSize: [],
@@ -74105,7 +74105,7 @@ BI.prepares.push(function () {
         if (ob.horizontalAlign === BI.HorizontalAlign.Center || ob.horizontalAlign === BI.HorizontalAlign.Stretch) {
             return BI.extend({}, ob, {type: "bi.table_adapt"});
         }
-        if (!isIE && supportFlex) {
+        if (supportFlex) {
             return BI.extend({}, ob, {type: "bi.flex_horizontal"});
         }
         // // 解决使用inline_vertical_adapt的顺序问题
@@ -74119,10 +74119,10 @@ BI.prepares.push(function () {
         return BI.extend({}, ob, {type: "bi.table_adapt"});
     });
     BI.Plugin.configWidget("bi.center_adapt", function (ob) {
-        var isIE = BI.isIE(), supportFlex = isSupportFlex(), justOneItem = (ob.items && ob.items.length <= 1);
+        var supportFlex = isSupportFlex(), justOneItem = (ob.items && ob.items.length <= 1);
         var isAdapt = !ob.horizontalAlign || ob.horizontalAlign === BI.HorizontalAlign.Center || ob.horizontalAlign === BI.HorizontalAlign.Stretch;
         if (!isAdapt || justOneItem) {
-            if (!isIE && supportFlex) {
+            if (supportFlex) {
                 return BI.extend({}, ob, {type: "bi.flex_center_adapt"});
             }
             return BI.extend({}, ob, {type: "bi.inline_center_adapt"});
@@ -74130,10 +74130,10 @@ BI.prepares.push(function () {
         return ob;
     });
     BI.Plugin.configWidget("bi.vertical_adapt", function (ob) {
-        var isIE = BI.isIE(), supportFlex = isSupportFlex(), justOneItem = (ob.items && ob.items.length <= 1);
+        var supportFlex = isSupportFlex(), justOneItem = (ob.items && ob.items.length <= 1);
         var isAdapt = ob.horizontalAlign === BI.HorizontalAlign.Center || ob.horizontalAlign === BI.HorizontalAlign.Stretch;
         if (!isAdapt || justOneItem) {
-            if (!isIE && supportFlex) {
+            if (supportFlex) {
                 return BI.extend({}, ob, {type: "bi.flex_vertical_center_adapt"});
             }
             return BI.extend({}, ob, {type: "bi.inline_vertical_adapt"});
@@ -74150,7 +74150,7 @@ BI.prepares.push(function () {
         return ob;
     });
     BI.Plugin.configWidget("bi.horizontal_float", function (ob) {
-        if (!BI.isIE() && isSupportFlex()) {
+        if (isSupportFlex()) {
             return BI.extend({}, ob, {type: "bi.flex_horizontal_adapt"});
         }
         return BI.extend({}, ob, {type: "bi.inline_horizontal_adapt"});
