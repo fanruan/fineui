@@ -1,4 +1,4 @@
-/*! time: 2021-4-7 21:20:22 */
+/*! time: 2021-4-7 23:10:28 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -15419,15 +15419,18 @@ BI.FlexHorizontalLayout = BI.inherit(BI.Layout, {
         w.element.css({
             position: "relative"
         });
-        if (o.columnSize[i] === "fill" || o.columnSize[i] === "") {
-            if (o.horizontalAlign !== BI.HorizontalAlign.Stretch) {
-                if (o.scrollable === true || o.scrollx === true) {
-                    w.element.addClass("f-s-n");
+        if (o.columnSize[i] !== "auto") {
+            if (o.columnSize[i] === "fill" || o.columnSize[i] === "") {
+                if (o.horizontalAlign !== BI.HorizontalAlign.Stretch) {
+                    if (o.scrollable === true || o.scrollx === true) {
+                        w.element.addClass("f-s-n");
+                    }
                 }
+            } else {
+                w.element.addClass("f-s-n");
             }
         }
         if (o.columnSize[i] > 0) {
-            w.element.addClass("f-s-n");
             w.element.width(o.columnSize[i] === "" ? "" : (o.columnSize[i] <= 1 ? ((o.columnSize[i] * 100).toFixed(1) + "%") : (o.columnSize[i] / BI.pixRatio + BI.pixUnit)));
         }
         if (o.columnSize[i] === "fill") {
@@ -15687,15 +15690,18 @@ BI.FlexVerticalLayout = BI.inherit(BI.Layout, {
         w.element.css({
             position: "relative"
         });
-        if (o.rowSize[i] === "fill" || o.rowSize[i] === "") {
-            if (o.verticalAlign !== BI.VerticalAlign.Stretch) {
-                if (o.scrollable === true || o.scrolly === true) {
-                    w.element.addClass("f-s-n");
+        if (o.columnSize[i] !== "auto") {
+            if (o.rowSize[i] === "fill" || o.rowSize[i] === "") {
+                if (o.verticalAlign !== BI.VerticalAlign.Stretch) {
+                    if (o.scrollable === true || o.scrolly === true) {
+                        w.element.addClass("f-s-n");
+                    }
                 }
+            } else {
+                w.element.addClass("f-s-n");
             }
         }
         if (o.rowSize[i] > 0) {
-            w.element.addClass("f-s-n");
             w.element.height(o.rowSize[i] === "" ? "" : (o.rowSize[i] <= 1 ? ((o.rowSize[i] * 100).toFixed(1) + "%") : (o.rowSize[i] / BI.pixRatio + BI.pixUnit)));
         }
         if (o.rowSize[i] === "fill") {
@@ -15908,15 +15914,18 @@ BI.FlexWrapperHorizontalLayout = BI.inherit(BI.Layout, {
         w.element.css({
             position: "relative"
         });
-        if (o.columnSize[i] === "fill" || o.columnSize[i] === "") {
-            if (o.horizontalAlign !== BI.HorizontalAlign.Stretch) {
-                if (o.scrollable === true || o.scrollx === true) {
-                    w.element.addClass("f-s-n");
+        if (o.columnSize[i] !== "auto") {
+            if (o.columnSize[i] === "fill" || o.columnSize[i] === "") {
+                if (o.horizontalAlign !== BI.HorizontalAlign.Stretch) {
+                    if (o.scrollable === true || o.scrollx === true) {
+                        w.element.addClass("f-s-n");
+                    }
                 }
+            } else {
+                w.element.addClass("f-s-n");
             }
         }
         if (o.columnSize[i] > 0) {
-            w.element.addClass("f-s-n");
             w.element.width(o.columnSize[i] === "" ? "" : (o.columnSize[i] <= 1 ? ((o.columnSize[i] * 100).toFixed(1) + "%") : (o.columnSize[i] / BI.pixRatio + BI.pixUnit)));
         }
         if (o.columnSize[i] === "fill") {
@@ -16078,15 +16087,18 @@ BI.FlexWrapperVerticalLayout = BI.inherit(BI.Layout, {
         w.element.css({
             position: "relative"
         });
-        if (o.rowSize[i] === "fill" || o.rowSize[i] === "") {
-            if (o.verticalAlign !== BI.VerticalAlign.Stretch) {
-                if (o.scrollable === true || o.scrolly === true) {
-                    w.element.addClass("f-s-n");
+        if (o.columnSize[i] !== "auto") {
+            if (o.rowSize[i] === "fill" || o.rowSize[i] === "") {
+                if (o.verticalAlign !== BI.VerticalAlign.Stretch) {
+                    if (o.scrollable === true || o.scrolly === true) {
+                        w.element.addClass("f-s-n");
+                    }
                 }
+            } else {
+                w.element.addClass("f-s-n");
             }
         }
         if (o.rowSize[i] > 0) {
-            w.element.addClass("f-s-n");
             w.element.height(o.rowSize[i] === "" ? "" : (o.rowSize[i] <= 1 ? ((o.rowSize[i] * 100).toFixed(1) + "%") : (o.rowSize[i] / BI.pixRatio + BI.pixUnit)));
         }
         if (o.rowSize[i] === "fill") {
