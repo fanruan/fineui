@@ -54,7 +54,7 @@ BI.InlineLayout = BI.inherit(BI.Layout, {
             if (o.columnSize[i] === "fill") {
                 w.element.css("min-width", "calc(100% - " + ((left + right) / BI.pixRatio + BI.pixUnit) + ")");
             }
-            if (o.horizontalAlign === BI.HorizontalAlign.Stretch) {
+            if (o.horizontalAlign === BI.HorizontalAlign.Stretch || !(o.scrollable === true || o.scrollx === true)) {
                 w.element.css("max-width", "calc(100% - " + ((left + right) / BI.pixRatio + BI.pixUnit) + ")");
             }
         }
