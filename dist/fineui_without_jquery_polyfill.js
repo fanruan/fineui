@@ -1,4 +1,4 @@
-/*! time: 2021-4-8 10:50:26 */
+/*! time: 2021-4-8 14:00:23 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -82,7 +82,7 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 1423);
+/******/ 	return __webpack_require__(__webpack_require__.s = 1424);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -72063,6 +72063,12 @@ Object.defineProperty(exports, "FloatHorizontalLayout", {
     return _float.FloatHorizontalLayout;
   }
 });
+Object.defineProperty(exports, "AdaptiveLayout", {
+  enumerable: true,
+  get: function get() {
+    return _layout10.AdaptiveLayout;
+  }
+});
 exports["default"] = void 0;
 
 var _combo = __webpack_require__(704);
@@ -72360,6 +72366,8 @@ var _router = __webpack_require__(827);
 var _datetime = __webpack_require__(828);
 
 var _float = __webpack_require__(829);
+
+var _layout10 = __webpack_require__(830);
 
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
@@ -73705,7 +73713,15 @@ var _single = __webpack_require__(2);
 var _layout = __webpack_require__(3);
 
 /***/ }),
-/* 830 */,
+/* 830 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _layout = __webpack_require__(3);
+
+/***/ }),
 /* 831 */,
 /* 832 */,
 /* 833 */,
@@ -73733,7 +73749,8 @@ var _layout = __webpack_require__(3);
 /* 855 */,
 /* 856 */,
 /* 857 */,
-/* 858 */
+/* 858 */,
+/* 859 */
 /***/ (function(module, exports) {
 
 ;(function () {
@@ -73896,7 +73913,6 @@ var _layout = __webpack_require__(3);
 
 
 /***/ }),
-/* 859 */,
 /* 860 */,
 /* 861 */,
 /* 862 */,
@@ -73930,7 +73946,8 @@ var _layout = __webpack_require__(3);
 /* 890 */,
 /* 891 */,
 /* 892 */,
-/* 893 */
+/* 893 */,
+/* 894 */
 /***/ (function(module, exports) {
 
 ;(function () {
@@ -74277,7 +74294,6 @@ var _layout = __webpack_require__(3);
 
 
 /***/ }),
-/* 894 */,
 /* 895 */,
 /* 896 */,
 /* 897 */,
@@ -74286,14 +74302,15 @@ var _layout = __webpack_require__(3);
 /* 900 */,
 /* 901 */,
 /* 902 */,
-/* 903 */
+/* 903 */,
+/* 904 */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(global) {module.exports = global["Fix"] = __webpack_require__(904);
+/* WEBPACK VAR INJECTION */(function(global) {module.exports = global["Fix"] = __webpack_require__(905);
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(14)))
 
 /***/ }),
-/* 904 */
+/* 905 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(setImmediate) {function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -75826,7 +75843,6 @@ var _layout = __webpack_require__(3);
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(57).setImmediate))
 
 /***/ }),
-/* 905 */,
 /* 906 */,
 /* 907 */,
 /* 908 */,
@@ -76026,13 +76042,13 @@ var _layout = __webpack_require__(3);
 /* 1102 */,
 /* 1103 */,
 /* 1104 */,
-/* 1105 */
+/* 1105 */,
+/* 1106 */
 /***/ (function(module, exports) {
 
 
 
 /***/ }),
-/* 1106 */,
 /* 1107 */,
 /* 1108 */,
 /* 1109 */,
@@ -76349,7 +76365,8 @@ var _layout = __webpack_require__(3);
 /* 1420 */,
 /* 1421 */,
 /* 1422 */,
-/* 1423 */
+/* 1423 */,
+/* 1424 */
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(92);
@@ -76455,7 +76472,7 @@ __webpack_require__(366);
 __webpack_require__(110);
 __webpack_require__(111);
 __webpack_require__(112);
-__webpack_require__(903);
+__webpack_require__(904);
 __webpack_require__(367);
 __webpack_require__(368);
 __webpack_require__(369);
@@ -76851,9 +76868,9 @@ __webpack_require__(698);
 __webpack_require__(699);
 __webpack_require__(700);
 __webpack_require__(701);
-__webpack_require__(893);
-__webpack_require__(858);
-__webpack_require__(1105);
+__webpack_require__(894);
+__webpack_require__(859);
+__webpack_require__(1106);
 module.exports = __webpack_require__(702);
 
 
