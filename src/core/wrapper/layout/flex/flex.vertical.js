@@ -39,7 +39,7 @@ BI.FlexVerticalLayout = BI.inherit(BI.Layout, {
         w.element.css({
             position: "relative"
         });
-        if (o.columnSize[i] !== "auto") {
+        if (o.rowSize[i] !== "auto") {
             if (o.rowSize[i] === "fill" || o.rowSize[i] === "") {
                 if (o.verticalAlign !== BI.VerticalAlign.Stretch) {
                     if (o.scrollable === true || o.scrolly === true) {
