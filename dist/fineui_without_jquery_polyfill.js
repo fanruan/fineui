@@ -1,4 +1,4 @@
-/*! time: 2021-4-8 14:00:23 */
+/*! time: 2021-4-8 15:50:27 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -15300,7 +15300,7 @@ BI.FlexVerticalLayout = BI.inherit(BI.Layout, {
         w.element.css({
             position: "relative"
         });
-        if (o.columnSize[i] !== "auto") {
+        if (o.rowSize[i] !== "auto") {
             if (o.rowSize[i] === "fill" || o.rowSize[i] === "") {
                 if (o.verticalAlign !== BI.VerticalAlign.Stretch) {
                     if (o.scrollable === true || o.scrolly === true) {
