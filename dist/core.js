@@ -1,4 +1,4 @@
-/*! time: 2021-4-14 7:30:30 PM */
+/*! time: 2021-4-16 2:50:23 PM */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -24253,10 +24253,10 @@ BI.Tab = BI.inherit(BI.Widget, {
         }
     },
 
-    setSelect: function (v) {
+    setSelect: function (v, action, callback) {
         this.tab && this.tab.setValue(v);
         this._assertCard(v);
-        this.layout.showCardByName(v);
+        this.layout.showCardByName(v, action, callback);
         this._deleteOtherCards(v);
         if (this.curr !== v) {
             this.curr = v;
