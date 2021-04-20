@@ -493,3 +493,14 @@
     .background-color(@color-bi-background-black-theme-dark, 50%);
   }
 }
+
+// hover-visible的原子化形式
+.bi-hover-visible-container {
+  & .bi-hover-visible-item {
+    visibility: hidden;
+  }
+
+  &:hover .bi-hover-visible-item {
+    visibility: visible;
+  }
+}
