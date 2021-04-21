@@ -54,9 +54,14 @@ BI.InlineLayout = BI.inherit(BI.Layout, {
             if (o.columnSize[i] === "fill") {
                 w.element.css("min-width", "calc(100% - " + ((left + right) / BI.pixRatio + BI.pixUnit) + ")");
             }
-            if (o.horizontalAlign === BI.HorizontalAlign.Stretch) {
+            if (o.horizontalAlign === BI.HorizontalAlign.Stretch || !(o.scrollable === true || o.scrollx === true)) {
                 w.element.css("max-width", "calc(100% - " + ((left + right) / BI.pixRatio + BI.pixUnit) + ")");
             }
+        }
+        if (o.verticalAlign === BI.VerticalAlign.Stretch) {
+            var top = o.vgap + (item.tgap || 0) + (item.vgap || 0),
+                bottom = o.vgap + (item.bgap || 0) + (item.vgap || 0);
+            w.element.css("height", "calc(100% - " + ((top + bottom) / BI.pixRatio + BI.pixUnit) + ")");
         }
         if (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
             w.element.css({

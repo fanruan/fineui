@@ -155,6 +155,9 @@ import { ImageButton } from './base/single/button/buttons/button.image';
 import { History, Router } from "./router/router";
 import { DateTimeCombo } from './widget/datetime/datetime.combo';
 import { FloatHorizontalLayout } from "./core/wrapper/layout/adapt/float.horizontal";
+import { AdaptiveLayout } from "./core/wrapper/layout/layout.adaptive";
+import { HexColorChooserPopup } from './case/colorchooser/colorchooser.popup.hex';
+import { BlankIconTextItem } from './base/single/button/listitem/blankicontextitem';
 
 
 export interface BI extends _func, _i18n, _base, _inject, _var, _web, _utils {
@@ -316,6 +319,9 @@ export interface BI extends _func, _i18n, _base, _inject, _var, _web, _utils {
     history: History,
     DateTimeCombo: typeof DateTimeCombo;
     FloatHorizontalLayout: typeof FloatHorizontalLayout;
+    AdaptiveLayout: typeof AdaptiveLayout;
+    HexColorChooserPopup: typeof HexColorChooserPopup;
+    BlankIconTextItem: typeof BlankIconTextItem;
 }
 
 export default {
@@ -479,4 +485,7 @@ export {
     History,
     DateTimeCombo,
     FloatHorizontalLayout,
+    AdaptiveLayout,
+    HexColorChooserPopup,
+    BlankIconTextItem,
 };

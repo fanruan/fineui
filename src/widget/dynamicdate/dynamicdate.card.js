@@ -173,7 +173,8 @@ BI.DynamicDateCard = BI.inherit(BI.Widget, {
                 listeners: [{
                     eventName: "EVENT_CHANGE",
                     action: function () {
-                        this.setValue(self._checkPositionValue(this.getValue()[0]));
+                        self.position = this.getValue()[0];
+                        this.setValue(self.position);
                         self.fireEvent("EVENT_CHANGE");
                     }
                 }]
@@ -189,7 +190,8 @@ BI.DynamicDateCard = BI.inherit(BI.Widget, {
                     listeners: [{
                         eventName: "EVENT_CHANGE",
                         action: function () {
-                            this.setValue(self._checkPositionValue(this.getValue()[0]));
+                            self.position = this.getValue()[0];
+                            this.setValue(self.position);
                             self.fireEvent("EVENT_CHANGE");
                         }
                     }]
@@ -199,15 +201,6 @@ BI.DynamicDateCard = BI.inherit(BI.Widget, {
         }
 
         return items;
-    },
-
-    _checkPositionValue: function (v) {
-        var lastPosition = this.position;
-        this.position = v;
-        if (!this._checkDate({})) {
-            this.position = lastPosition;
-        }
-        return this.position;
     },
 
     _checkDate: function (obj) {

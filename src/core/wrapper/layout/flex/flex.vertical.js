@@ -40,7 +40,13 @@ BI.FlexVerticalLayout = BI.inherit(BI.Layout, {
             position: "relative"
         });
         if (o.rowSize[i] !== "auto") {
-            if (!(o.verticalAlign === BI.VerticalAlign.Stretch && (o.rowSize[i] === "fill" || o.rowSize[i] === ""))) {
+            if (o.rowSize[i] === "fill" || o.rowSize[i] === "") {
+                if (o.verticalAlign !== BI.VerticalAlign.Stretch) {
+                    if (o.scrollable === true || o.scrolly === true) {
+                        w.element.addClass("f-s-n");
+                    }
+                }
+            } else {
                 w.element.addClass("f-s-n");
             }
         }

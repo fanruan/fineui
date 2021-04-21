@@ -1,4 +1,4 @@
-/*! time: 2021-4-7 09:10:33 */
+/*! time: 2021-4-21 2:30:22 PM */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -82,7 +82,7 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 1172);
+/******/ 	return __webpack_require__(__webpack_require__.s = 1175);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -15071,7 +15071,8 @@ BI.shortcut("bi.horizontal_auto", BI.HorizontalAutoLayout);
 /**
  * 浮动的水平居中布局
  */
-BI.FloatHorizontalLayout = BI.inherit(BI.Layout);
+BI.FloatHorizontalLayout = function () {
+};
 BI.shortcut("bi.horizontal_float", BI.FloatHorizontalLayout);
 
 
@@ -15419,7 +15420,13 @@ BI.FlexHorizontalLayout = BI.inherit(BI.Layout, {
             position: "relative"
         });
         if (o.columnSize[i] !== "auto") {
-            if (!(o.horizontalAlign === BI.HorizontalAlign.Stretch && (o.columnSize[i] === "fill" || o.columnSize[i] === ""))) {
+            if (o.columnSize[i] === "fill" || o.columnSize[i] === "") {
+                if (o.horizontalAlign !== BI.HorizontalAlign.Stretch) {
+                    if (o.scrollable === true || o.scrollx === true) {
+                        w.element.addClass("f-s-n");
+                    }
+                }
+            } else {
                 w.element.addClass("f-s-n");
             }
         }
@@ -15684,7 +15691,13 @@ BI.FlexVerticalLayout = BI.inherit(BI.Layout, {
             position: "relative"
         });
         if (o.rowSize[i] !== "auto") {
-            if (!(o.verticalAlign === BI.VerticalAlign.Stretch && (o.rowSize[i] === "fill" || o.rowSize[i] === ""))) {
+            if (o.rowSize[i] === "fill" || o.rowSize[i] === "") {
+                if (o.verticalAlign !== BI.VerticalAlign.Stretch) {
+                    if (o.scrollable === true || o.scrolly === true) {
+                        w.element.addClass("f-s-n");
+                    }
+                }
+            } else {
                 w.element.addClass("f-s-n");
             }
         }
@@ -15902,7 +15915,13 @@ BI.FlexWrapperHorizontalLayout = BI.inherit(BI.Layout, {
             position: "relative"
         });
         if (o.columnSize[i] !== "auto") {
-            if (!(o.horizontalAlign === BI.HorizontalAlign.Stretch && (o.columnSize[i] === "fill" || o.columnSize[i] === ""))) {
+            if (o.columnSize[i] === "fill" || o.columnSize[i] === "") {
+                if (o.horizontalAlign !== BI.HorizontalAlign.Stretch) {
+                    if (o.scrollable === true || o.scrollx === true) {
+                        w.element.addClass("f-s-n");
+                    }
+                }
+            } else {
                 w.element.addClass("f-s-n");
             }
         }
@@ -16069,7 +16088,13 @@ BI.FlexWrapperVerticalLayout = BI.inherit(BI.Layout, {
             position: "relative"
         });
         if (o.rowSize[i] !== "auto") {
-            if (!(o.verticalAlign === BI.VerticalAlign.Stretch && (o.rowSize[i] === "fill" && o.rowSize[i] === ""))) {
+            if (o.rowSize[i] === "fill" || o.rowSize[i] === "") {
+                if (o.verticalAlign !== BI.VerticalAlign.Stretch) {
+                    if (o.scrollable === true || o.scrolly === true) {
+                        w.element.addClass("f-s-n");
+                    }
+                }
+            } else {
                 w.element.addClass("f-s-n");
             }
         }
@@ -17265,7 +17290,8 @@ BI.shortcut("bi.grid", BI.GridLayout);
  * @class BI.HorizontalLayout
  * @extends BI.Layout
  */
-BI.HorizontalLayout = BI.inherit(BI.Layout);
+BI.HorizontalLayout = function () {
+};
 BI.shortcut("bi.horizontal", BI.HorizontalLayout);
 
 
@@ -17329,9 +17355,14 @@ BI.InlineLayout = BI.inherit(BI.Layout, {
             if (o.columnSize[i] === "fill") {
                 w.element.css("min-width", "calc(100% - " + ((left + right) / BI.pixRatio + BI.pixUnit) + ")");
             }
-            if (o.horizontalAlign === BI.HorizontalAlign.Stretch) {
+            if (o.horizontalAlign === BI.HorizontalAlign.Stretch || !(o.scrollable === true || o.scrollx === true)) {
                 w.element.css("max-width", "calc(100% - " + ((left + right) / BI.pixRatio + BI.pixUnit) + ")");
             }
+        }
+        if (o.verticalAlign === BI.VerticalAlign.Stretch) {
+            var top = o.vgap + (item.tgap || 0) + (item.vgap || 0),
+                bottom = o.vgap + (item.bgap || 0) + (item.vgap || 0);
+            w.element.css("height", "calc(100% - " + ((top + bottom) / BI.pixRatio + BI.pixUnit) + ")");
         }
         if (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
             w.element.css({
@@ -21683,10 +21714,10 @@ BI.Tab = BI.inherit(BI.Widget, {
         }
     },
 
-    setSelect: function (v) {
+    setSelect: function (v, action, callback) {
         this.tab && this.tab.setValue(v);
         this._assertCard(v);
-        this.layout.showCardByName(v);
+        this.layout.showCardByName(v, action, callback);
         this._deleteOtherCards(v);
         if (this.curr !== v) {
             this.curr = v;
@@ -43356,7 +43387,8 @@ BI.DynamicDateCard = BI.inherit(BI.Widget, {
                 listeners: [{
                     eventName: "EVENT_CHANGE",
                     action: function () {
-                        this.setValue(self._checkPositionValue(this.getValue()[0]));
+                        self.position = this.getValue()[0];
+                        this.setValue(self.position);
                         self.fireEvent("EVENT_CHANGE");
                     }
                 }]
@@ -43372,7 +43404,8 @@ BI.DynamicDateCard = BI.inherit(BI.Widget, {
                     listeners: [{
                         eventName: "EVENT_CHANGE",
                         action: function () {
-                            this.setValue(self._checkPositionValue(this.getValue()[0]));
+                            self.position = this.getValue()[0];
+                            this.setValue(self.position);
                             self.fireEvent("EVENT_CHANGE");
                         }
                     }]
@@ -43382,15 +43415,6 @@ BI.DynamicDateCard = BI.inherit(BI.Widget, {
         }
 
         return items;
-    },
-
-    _checkPositionValue: function (v) {
-        var lastPosition = this.position;
-        this.position = v;
-        if (!this._checkDate({})) {
-            this.position = lastPosition;
-        }
-        return this.position;
     },
 
     _checkDate: function (obj) {
@@ -44029,9 +44053,6 @@ BI.DynamicDateParamItem = BI.inherit(BI.Widget, {
                 listeners: [{
                     eventName: BI.TextValueCombo.EVENT_CHANGE,
                     action: function () {
-                        if (!o.validationChecker(self.getValue())) {
-                            self.editor.setValue(0);
-                        }
                         self.fireEvent(BI.DynamicDateParamItem.EVENT_CHANGE);
                     }
                 }]
@@ -61255,7 +61276,7 @@ BI.SingleSelectInsertCombo = BI.inherit(BI.Single, {
 
         this.trigger = BI.createWidget({
             type: "bi.single_select_trigger",
-            height: o.height,
+            height: o.height - 2,
             allowNoSelect: o.allowNoSelect,
             allowEdit: o.allowEdit,
             // adapter: this.popup,
@@ -72422,6 +72443,24 @@ Object.defineProperty(exports, "FloatHorizontalLayout", {
     return _float.FloatHorizontalLayout;
   }
 });
+Object.defineProperty(exports, "AdaptiveLayout", {
+  enumerable: true,
+  get: function get() {
+    return _layout10.AdaptiveLayout;
+  }
+});
+Object.defineProperty(exports, "HexColorChooserPopup", {
+  enumerable: true,
+  get: function get() {
+    return _colorchooserPopup.HexColorChooserPopup;
+  }
+});
+Object.defineProperty(exports, "BlankIconTextItem", {
+  enumerable: true,
+  get: function get() {
+    return _blankicontextitem.BlankIconTextItem;
+  }
+});
 exports["default"] = void 0;
 
 var _combo = __webpack_require__(704);
@@ -72719,6 +72758,12 @@ var _router = __webpack_require__(827);
 var _datetime = __webpack_require__(828);
 
 var _float = __webpack_require__(829);
+
+var _layout10 = __webpack_require__(830);
+
+var _colorchooserPopup = __webpack_require__(831);
+
+var _blankicontextitem = __webpack_require__(832);
 
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
@@ -74064,20 +74109,47 @@ var _single = __webpack_require__(2);
 var _layout = __webpack_require__(3);
 
 /***/ }),
-/* 830 */,
+/* 830 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _layout = __webpack_require__(3);
+
+/***/ }),
 /* 831 */
 /***/ (function(module, exports, __webpack_require__) {
 
-// extracted by mini-css-extract-plugin
+"use strict";
+
+
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 832 */
 /***/ (function(module, exports, __webpack_require__) {
 
+"use strict";
+
+
+var _button = __webpack_require__(4);
+
+/***/ }),
+/* 833 */,
+/* 834 */
+/***/ (function(module, exports, __webpack_require__) {
+
 // extracted by mini-css-extract-plugin
 
 /***/ }),
-/* 833 */
+/* 835 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
+/* 836 */
 /***/ (function(module, exports) {
 
 // 工程配置
@@ -74204,7 +74276,7 @@ BI.prepares.push(function () {
 
 
 /***/ }),
-/* 834 */
+/* 837 */
 /***/ (function(module, exports) {
 
 /**
@@ -74371,7 +74443,7 @@ BI.prepares.push(function () {
 
 
 /***/ }),
-/* 835 */
+/* 838 */
 /***/ (function(module, exports) {
 
 /**
@@ -75211,7 +75283,7 @@ BI.prepares.push(function () {
 
 
 /***/ }),
-/* 836 */
+/* 839 */
 /***/ (function(module, exports) {
 
 // 浏览器相关方法
@@ -75345,7 +75417,7 @@ _.extend(BI, {
 });
 
 /***/ }),
-/* 837 */
+/* 840 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -86374,7 +86446,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
 
 
 /***/ }),
-/* 838 */
+/* 841 */
 /***/ (function(module, exports) {
 
 /*
@@ -86389,7 +86461,7 @@ BI.$.extend(BI.$.Event.prototype, {
 });
 
 /***/ }),
-/* 839 */
+/* 842 */
 /***/ (function(module, exports) {
 
 if (BI.jQuery) {
@@ -86639,7 +86711,7 @@ if (BI.jQuery) {
 
 
 /***/ }),
-/* 840 */
+/* 843 */
 /***/ (function(module, exports) {
 
 /* !
@@ -86848,7 +86920,7 @@ if (BI.jQuery) {
 }));
 
 /***/ }),
-/* 841 */
+/* 844 */
 /***/ (function(module, exports) {
 
 _.extend(BI, {
@@ -86908,7 +86980,7 @@ _.extend(BI, {
 });
 
 /***/ }),
-/* 842 */
+/* 845 */
 /***/ (function(module, exports) {
 
 (function () {
@@ -87529,7 +87601,7 @@ _.extend(BI, {
 }());
 
 /***/ }),
-/* 843 */
+/* 846 */
 /***/ (function(module, exports) {
 
 !(function () {
@@ -87541,7 +87613,7 @@ _.extend(BI, {
 })();
 
 /***/ }),
-/* 844 */
+/* 847 */
 /***/ (function(module, exports) {
 
 /**
@@ -88246,7 +88318,7 @@ _.extend(BI, {
 
 
 /***/ }),
-/* 845 */
+/* 848 */
 /***/ (function(module, exports) {
 
 /**
@@ -88794,7 +88866,7 @@ BI.shortcut("bi.tree_view", BI.TreeView);
 
 
 /***/ }),
-/* 846 */
+/* 849 */
 /***/ (function(module, exports) {
 
 /**
@@ -89047,7 +89119,7 @@ BI.AsyncTree = BI.inherit(BI.TreeView, {
 BI.shortcut("bi.async_tree", BI.AsyncTree);
 
 /***/ }),
-/* 847 */
+/* 850 */
 /***/ (function(module, exports) {
 
 /*
@@ -90767,7 +90839,7 @@ BI.shortcut("bi.async_tree", BI.AsyncTree);
 })(BI.jQuery);
 
 /***/ }),
-/* 848 */
+/* 851 */
 /***/ (function(module, exports) {
 
 /*
@@ -91402,7 +91474,7 @@ BI.shortcut("bi.async_tree", BI.AsyncTree);
 })(BI.jQuery);
 
 /***/ }),
-/* 849 */
+/* 852 */
 /***/ (function(module, exports) {
 
 /**
@@ -91525,7 +91597,7 @@ BI.ListTreeView = BI.inherit(BI.TreeView, {
 BI.shortcut("bi.list_tree_view", BI.ListTreeView);
 
 /***/ }),
-/* 850 */
+/* 853 */
 /***/ (function(module, exports) {
 
 /**
@@ -91653,7 +91725,7 @@ BI.ListAsyncTree = BI.inherit(BI.ListTreeView, {
 BI.shortcut("bi.list_async_tree", BI.ListAsyncTree);
 
 /***/ }),
-/* 851 */
+/* 854 */
 /***/ (function(module, exports) {
 
 /**
@@ -91750,7 +91822,7 @@ BI.ListPartTree = BI.inherit(BI.ListAsyncTree, {
 BI.shortcut("bi.list_part_tree", BI.ListPartTree);
 
 /***/ }),
-/* 852 */
+/* 855 */
 /***/ (function(module, exports) {
 
 /**
@@ -91956,7 +92028,7 @@ BI.shortcut("bi.part_tree", BI.PartTree);
 
 
 /***/ }),
-/* 853 */
+/* 856 */
 /***/ (function(module, exports) {
 
 /**
@@ -92028,7 +92100,7 @@ BI.shortcut("bi.display_tree", BI.DisplayTree);
 
 
 /***/ }),
-/* 854 */
+/* 857 */
 /***/ (function(module, exports) {
 
 /**
@@ -92111,7 +92183,7 @@ BI.ListDisplayTree.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.list_display_tree", BI.ListDisplayTree);
 
 /***/ }),
-/* 855 */
+/* 858 */
 /***/ (function(module, exports) {
 
 /**
@@ -92244,7 +92316,7 @@ BI.shortcut("bi.simple_tree", BI.SimpleTreeView);
 
 
 /***/ }),
-/* 856 */
+/* 859 */
 /***/ (function(module, exports) {
 
 /**
@@ -92373,7 +92445,7 @@ BI.shortcut("bi.simple_tree", BI.SimpleTreeView);
 })();
 
 /***/ }),
-/* 857 */
+/* 860 */
 /***/ (function(module, exports) {
 
 /**
@@ -92454,7 +92526,7 @@ BI.shortcut("bi.simple_tree", BI.SimpleTreeView);
 })();
 
 /***/ }),
-/* 858 */
+/* 861 */
 /***/ (function(module, exports) {
 
 ;(function () {
@@ -92617,9 +92689,6 @@ BI.shortcut("bi.simple_tree", BI.SimpleTreeView);
 
 
 /***/ }),
-/* 859 */,
-/* 860 */,
-/* 861 */,
 /* 862 */,
 /* 863 */,
 /* 864 */,
@@ -92651,7 +92720,10 @@ BI.shortcut("bi.simple_tree", BI.SimpleTreeView);
 /* 890 */,
 /* 891 */,
 /* 892 */,
-/* 893 */
+/* 893 */,
+/* 894 */,
+/* 895 */,
+/* 896 */
 /***/ (function(module, exports) {
 
 ;(function () {
@@ -92998,9 +93070,6 @@ BI.shortcut("bi.simple_tree", BI.SimpleTreeView);
 
 
 /***/ }),
-/* 894 */,
-/* 895 */,
-/* 896 */,
 /* 897 */,
 /* 898 */,
 /* 899 */,
@@ -93209,37 +93278,22 @@ BI.shortcut("bi.simple_tree", BI.SimpleTreeView);
 /* 1102 */,
 /* 1103 */,
 /* 1104 */,
-/* 1105 */
+/* 1105 */,
+/* 1106 */,
+/* 1107 */,
+/* 1108 */
 /***/ (function(module, exports) {
 
 
 
 /***/ }),
-/* 1106 */,
-/* 1107 */,
-/* 1108 */,
 /* 1109 */,
 /* 1110 */,
 /* 1111 */,
 /* 1112 */,
-/* 1113 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
-
-/***/ }),
-/* 1114 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
-
-/***/ }),
-/* 1115 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
-
-/***/ }),
+/* 1113 */,
+/* 1114 */,
+/* 1115 */,
 /* 1116 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -93252,9 +93306,24 @@ BI.shortcut("bi.simple_tree", BI.SimpleTreeView);
 // extracted by mini-css-extract-plugin
 
 /***/ }),
-/* 1118 */,
-/* 1119 */,
-/* 1120 */,
+/* 1118 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
+/* 1119 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
+/* 1120 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
 /* 1121 */,
 /* 1122 */,
 /* 1123 */,
@@ -93306,11 +93375,14 @@ BI.shortcut("bi.simple_tree", BI.SimpleTreeView);
 /* 1169 */,
 /* 1170 */,
 /* 1171 */,
-/* 1172 */
+/* 1172 */,
+/* 1173 */,
+/* 1174 */,
+/* 1175 */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(831);
-__webpack_require__(832);
+__webpack_require__(834);
+__webpack_require__(835);
 __webpack_require__(202);
 __webpack_require__(203);
 __webpack_require__(204);
@@ -93365,15 +93437,15 @@ __webpack_require__(299);
 __webpack_require__(300);
 __webpack_require__(301);
 __webpack_require__(302);
-__webpack_require__(833);
-__webpack_require__(834);
-__webpack_require__(835);
 __webpack_require__(836);
 __webpack_require__(837);
 __webpack_require__(838);
 __webpack_require__(839);
 __webpack_require__(840);
 __webpack_require__(841);
+__webpack_require__(842);
+__webpack_require__(843);
+__webpack_require__(844);
 __webpack_require__(303);
 __webpack_require__(304);
 __webpack_require__(305);
@@ -93443,7 +93515,7 @@ __webpack_require__(366);
 __webpack_require__(110);
 __webpack_require__(111);
 __webpack_require__(112);
-__webpack_require__(1173);
+__webpack_require__(1176);
 __webpack_require__(222);
 __webpack_require__(223);
 __webpack_require__(224);
@@ -93502,7 +93574,7 @@ __webpack_require__(276);
 __webpack_require__(277);
 __webpack_require__(278);
 __webpack_require__(279);
-__webpack_require__(843);
+__webpack_require__(846);
 __webpack_require__(367);
 __webpack_require__(368);
 __webpack_require__(369);
@@ -93556,7 +93628,7 @@ __webpack_require__(416);
 __webpack_require__(417);
 __webpack_require__(418);
 __webpack_require__(419);
-__webpack_require__(844);
+__webpack_require__(847);
 __webpack_require__(420);
 __webpack_require__(421);
 __webpack_require__(422);
@@ -93669,9 +93741,6 @@ __webpack_require__(528);
 __webpack_require__(529);
 __webpack_require__(530);
 __webpack_require__(531);
-__webpack_require__(845);
-__webpack_require__(846);
-__webpack_require__(847);
 __webpack_require__(848);
 __webpack_require__(849);
 __webpack_require__(850);
@@ -93682,6 +93751,9 @@ __webpack_require__(854);
 __webpack_require__(855);
 __webpack_require__(856);
 __webpack_require__(857);
+__webpack_require__(858);
+__webpack_require__(859);
+__webpack_require__(860);
 __webpack_require__(113);
 __webpack_require__(114);
 __webpack_require__(115);
@@ -93912,27 +93984,27 @@ __webpack_require__(698);
 __webpack_require__(699);
 __webpack_require__(700);
 __webpack_require__(701);
-__webpack_require__(842);
-__webpack_require__(893);
-__webpack_require__(858);
-__webpack_require__(1113);
-__webpack_require__(1114);
-__webpack_require__(1115);
+__webpack_require__(845);
+__webpack_require__(896);
+__webpack_require__(861);
 __webpack_require__(1116);
 __webpack_require__(1117);
-__webpack_require__(1105);
+__webpack_require__(1118);
+__webpack_require__(1119);
+__webpack_require__(1120);
+__webpack_require__(1108);
 module.exports = __webpack_require__(702);
 
 
 /***/ }),
-/* 1173 */
+/* 1176 */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(global) {module.exports = global["Fix"] = __webpack_require__(1174);
+/* WEBPACK VAR INJECTION */(function(global) {module.exports = global["Fix"] = __webpack_require__(1177);
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(14)))
 
 /***/ }),
-/* 1174 */
+/* 1177 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(setImmediate) {(function (global, factory) {

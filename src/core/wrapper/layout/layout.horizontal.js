@@ -3,5 +3,6 @@
  * @class BI.HorizontalLayout
  * @extends BI.Layout
  */
-BI.HorizontalLayout = BI.inherit(BI.Layout);
+BI.HorizontalLayout = function () {
+};
 BI.shortcut("bi.horizontal", BI.HorizontalLayout);

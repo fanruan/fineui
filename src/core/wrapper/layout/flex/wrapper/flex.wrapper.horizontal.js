@@ -37,7 +37,13 @@ BI.FlexWrapperHorizontalLayout = BI.inherit(BI.Layout, {
             position: "relative"
         });
         if (o.columnSize[i] !== "auto") {
-            if (!(o.horizontalAlign === BI.HorizontalAlign.Stretch && (o.columnSize[i] === "fill" || o.columnSize[i] === ""))) {
+            if (o.columnSize[i] === "fill" || o.columnSize[i] === "") {
+                if (o.horizontalAlign !== BI.HorizontalAlign.Stretch) {
+                    if (o.scrollable === true || o.scrollx === true) {
+                        w.element.addClass("f-s-n");
+                    }
+                }
+            } else {
                 w.element.addClass("f-s-n");
             }
         }

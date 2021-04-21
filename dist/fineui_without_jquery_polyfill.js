@@ -1,4 +1,4 @@
-/*! time: 2021-4-7 09:10:33 */
+/*! time: 2021-4-21 2:30:22 PM */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -82,7 +82,7 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 1423);
+/******/ 	return __webpack_require__(__webpack_require__.s = 1426);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -14681,7 +14681,8 @@ BI.shortcut("bi.horizontal_auto", BI.HorizontalAutoLayout);
 /**
  * 浮动的水平居中布局
  */
-BI.FloatHorizontalLayout = BI.inherit(BI.Layout);
+BI.FloatHorizontalLayout = function () {
+};
 BI.shortcut("bi.horizontal_float", BI.FloatHorizontalLayout);
 
 
@@ -15029,7 +15030,13 @@ BI.FlexHorizontalLayout = BI.inherit(BI.Layout, {
             position: "relative"
         });
         if (o.columnSize[i] !== "auto") {
-            if (!(o.horizontalAlign === BI.HorizontalAlign.Stretch && (o.columnSize[i] === "fill" || o.columnSize[i] === ""))) {
+            if (o.columnSize[i] === "fill" || o.columnSize[i] === "") {
+                if (o.horizontalAlign !== BI.HorizontalAlign.Stretch) {
+                    if (o.scrollable === true || o.scrollx === true) {
+                        w.element.addClass("f-s-n");
+                    }
+                }
+            } else {
                 w.element.addClass("f-s-n");
             }
         }
@@ -15294,7 +15301,13 @@ BI.FlexVerticalLayout = BI.inherit(BI.Layout, {
             position: "relative"
         });
         if (o.rowSize[i] !== "auto") {
-            if (!(o.verticalAlign === BI.VerticalAlign.Stretch && (o.rowSize[i] === "fill" || o.rowSize[i] === ""))) {
+            if (o.rowSize[i] === "fill" || o.rowSize[i] === "") {
+                if (o.verticalAlign !== BI.VerticalAlign.Stretch) {
+                    if (o.scrollable === true || o.scrolly === true) {
+                        w.element.addClass("f-s-n");
+                    }
+                }
+            } else {
                 w.element.addClass("f-s-n");
             }
         }
@@ -15512,7 +15525,13 @@ BI.FlexWrapperHorizontalLayout = BI.inherit(BI.Layout, {
             position: "relative"
         });
         if (o.columnSize[i] !== "auto") {
-            if (!(o.horizontalAlign === BI.HorizontalAlign.Stretch && (o.columnSize[i] === "fill" || o.columnSize[i] === ""))) {
+            if (o.columnSize[i] === "fill" || o.columnSize[i] === "") {
+                if (o.horizontalAlign !== BI.HorizontalAlign.Stretch) {
+                    if (o.scrollable === true || o.scrollx === true) {
+                        w.element.addClass("f-s-n");
+                    }
+                }
+            } else {
                 w.element.addClass("f-s-n");
             }
         }
@@ -15679,7 +15698,13 @@ BI.FlexWrapperVerticalLayout = BI.inherit(BI.Layout, {
             position: "relative"
         });
         if (o.rowSize[i] !== "auto") {
-            if (!(o.verticalAlign === BI.VerticalAlign.Stretch && (o.rowSize[i] === "fill" && o.rowSize[i] === ""))) {
+            if (o.rowSize[i] === "fill" || o.rowSize[i] === "") {
+                if (o.verticalAlign !== BI.VerticalAlign.Stretch) {
+                    if (o.scrollable === true || o.scrolly === true) {
+                        w.element.addClass("f-s-n");
+                    }
+                }
+            } else {
                 w.element.addClass("f-s-n");
             }
         }
@@ -16875,7 +16900,8 @@ BI.shortcut("bi.grid", BI.GridLayout);
  * @class BI.HorizontalLayout
  * @extends BI.Layout
  */
-BI.HorizontalLayout = BI.inherit(BI.Layout);
+BI.HorizontalLayout = function () {
+};
 BI.shortcut("bi.horizontal", BI.HorizontalLayout);
 
 
@@ -16939,9 +16965,14 @@ BI.InlineLayout = BI.inherit(BI.Layout, {
             if (o.columnSize[i] === "fill") {
                 w.element.css("min-width", "calc(100% - " + ((left + right) / BI.pixRatio + BI.pixUnit) + ")");
             }
-            if (o.horizontalAlign === BI.HorizontalAlign.Stretch) {
+            if (o.horizontalAlign === BI.HorizontalAlign.Stretch || !(o.scrollable === true || o.scrollx === true)) {
                 w.element.css("max-width", "calc(100% - " + ((left + right) / BI.pixRatio + BI.pixUnit) + ")");
             }
+        }
+        if (o.verticalAlign === BI.VerticalAlign.Stretch) {
+            var top = o.vgap + (item.tgap || 0) + (item.vgap || 0),
+                bottom = o.vgap + (item.bgap || 0) + (item.vgap || 0);
+            w.element.css("height", "calc(100% - " + ((top + bottom) / BI.pixRatio + BI.pixUnit) + ")");
         }
         if (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
             w.element.css({
@@ -21293,10 +21324,10 @@ BI.Tab = BI.inherit(BI.Widget, {
         }
     },
 
-    setSelect: function (v) {
+    setSelect: function (v, action, callback) {
         this.tab && this.tab.setValue(v);
         this._assertCard(v);
-        this.layout.showCardByName(v);
+        this.layout.showCardByName(v, action, callback);
         this._deleteOtherCards(v);
         if (this.curr !== v) {
             this.curr = v;
@@ -42966,7 +42997,8 @@ BI.DynamicDateCard = BI.inherit(BI.Widget, {
                 listeners: [{
                     eventName: "EVENT_CHANGE",
                     action: function () {
-                        this.setValue(self._checkPositionValue(this.getValue()[0]));
+                        self.position = this.getValue()[0];
+                        this.setValue(self.position);
                         self.fireEvent("EVENT_CHANGE");
                     }
                 }]
@@ -42982,7 +43014,8 @@ BI.DynamicDateCard = BI.inherit(BI.Widget, {
                     listeners: [{
                         eventName: "EVENT_CHANGE",
                         action: function () {
-                            this.setValue(self._checkPositionValue(this.getValue()[0]));
+                            self.position = this.getValue()[0];
+                            this.setValue(self.position);
                             self.fireEvent("EVENT_CHANGE");
                         }
                     }]
@@ -42992,15 +43025,6 @@ BI.DynamicDateCard = BI.inherit(BI.Widget, {
         }
 
         return items;
-    },
-
-    _checkPositionValue: function (v) {
-        var lastPosition = this.position;
-        this.position = v;
-        if (!this._checkDate({})) {
-            this.position = lastPosition;
-        }
-        return this.position;
     },
 
     _checkDate: function (obj) {
@@ -43639,9 +43663,6 @@ BI.DynamicDateParamItem = BI.inherit(BI.Widget, {
                 listeners: [{
                     eventName: BI.TextValueCombo.EVENT_CHANGE,
                     action: function () {
-                        if (!o.validationChecker(self.getValue())) {
-                            self.editor.setValue(0);
-                        }
                         self.fireEvent(BI.DynamicDateParamItem.EVENT_CHANGE);
                     }
                 }]
@@ -60865,7 +60886,7 @@ BI.SingleSelectInsertCombo = BI.inherit(BI.Single, {
 
         this.trigger = BI.createWidget({
             type: "bi.single_select_trigger",
-            height: o.height,
+            height: o.height - 2,
             allowNoSelect: o.allowNoSelect,
             allowEdit: o.allowEdit,
             // adapter: this.popup,
@@ -72032,6 +72053,24 @@ Object.defineProperty(exports, "FloatHorizontalLayout", {
     return _float.FloatHorizontalLayout;
   }
 });
+Object.defineProperty(exports, "AdaptiveLayout", {
+  enumerable: true,
+  get: function get() {
+    return _layout10.AdaptiveLayout;
+  }
+});
+Object.defineProperty(exports, "HexColorChooserPopup", {
+  enumerable: true,
+  get: function get() {
+    return _colorchooserPopup.HexColorChooserPopup;
+  }
+});
+Object.defineProperty(exports, "BlankIconTextItem", {
+  enumerable: true,
+  get: function get() {
+    return _blankicontextitem.BlankIconTextItem;
+  }
+});
 exports["default"] = void 0;
 
 var _combo = __webpack_require__(704);
@@ -72329,6 +72368,12 @@ var _router = __webpack_require__(827);
 var _datetime = __webpack_require__(828);
 
 var _float = __webpack_require__(829);
+
+var _layout10 = __webpack_require__(830);
+
+var _colorchooserPopup = __webpack_require__(831);
+
+var _blankicontextitem = __webpack_require__(832);
 
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
@@ -73674,9 +73719,33 @@ var _single = __webpack_require__(2);
 var _layout = __webpack_require__(3);
 
 /***/ }),
-/* 830 */,
-/* 831 */,
-/* 832 */,
+/* 830 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _layout = __webpack_require__(3);
+
+/***/ }),
+/* 831 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _widget = __webpack_require__(1);
+
+/***/ }),
+/* 832 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _button = __webpack_require__(4);
+
+/***/ }),
 /* 833 */,
 /* 834 */,
 /* 835 */,
@@ -73702,7 +73771,10 @@ var _layout = __webpack_require__(3);
 /* 855 */,
 /* 856 */,
 /* 857 */,
-/* 858 */
+/* 858 */,
+/* 859 */,
+/* 860 */,
+/* 861 */
 /***/ (function(module, exports) {
 
 ;(function () {
@@ -73865,9 +73937,6 @@ var _layout = __webpack_require__(3);
 
 
 /***/ }),
-/* 859 */,
-/* 860 */,
-/* 861 */,
 /* 862 */,
 /* 863 */,
 /* 864 */,
@@ -73899,7 +73968,10 @@ var _layout = __webpack_require__(3);
 /* 890 */,
 /* 891 */,
 /* 892 */,
-/* 893 */
+/* 893 */,
+/* 894 */,
+/* 895 */,
+/* 896 */
 /***/ (function(module, exports) {
 
 ;(function () {
@@ -74246,23 +74318,23 @@ var _layout = __webpack_require__(3);
 
 
 /***/ }),
-/* 894 */,
-/* 895 */,
-/* 896 */,
 /* 897 */,
 /* 898 */,
 /* 899 */,
 /* 900 */,
 /* 901 */,
 /* 902 */,
-/* 903 */
+/* 903 */,
+/* 904 */,
+/* 905 */,
+/* 906 */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(global) {module.exports = global["Fix"] = __webpack_require__(904);
+/* WEBPACK VAR INJECTION */(function(global) {module.exports = global["Fix"] = __webpack_require__(907);
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(14)))
 
 /***/ }),
-/* 904 */
+/* 907 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(setImmediate) {function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -75795,9 +75867,6 @@ var _layout = __webpack_require__(3);
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(57).setImmediate))
 
 /***/ }),
-/* 905 */,
-/* 906 */,
-/* 907 */,
 /* 908 */,
 /* 909 */,
 /* 910 */,
@@ -75995,15 +76064,15 @@ var _layout = __webpack_require__(3);
 /* 1102 */,
 /* 1103 */,
 /* 1104 */,
-/* 1105 */
+/* 1105 */,
+/* 1106 */,
+/* 1107 */,
+/* 1108 */
 /***/ (function(module, exports) {
 
 
 
 /***/ }),
-/* 1106 */,
-/* 1107 */,
-/* 1108 */,
 /* 1109 */,
 /* 1110 */,
 /* 1111 */,
@@ -76318,7 +76387,10 @@ var _layout = __webpack_require__(3);
 /* 1420 */,
 /* 1421 */,
 /* 1422 */,
-/* 1423 */
+/* 1423 */,
+/* 1424 */,
+/* 1425 */,
+/* 1426 */
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(92);
@@ -76424,7 +76496,7 @@ __webpack_require__(366);
 __webpack_require__(110);
 __webpack_require__(111);
 __webpack_require__(112);
-__webpack_require__(903);
+__webpack_require__(906);
 __webpack_require__(367);
 __webpack_require__(368);
 __webpack_require__(369);
@@ -76820,9 +76892,9 @@ __webpack_require__(698);
 __webpack_require__(699);
 __webpack_require__(700);
 __webpack_require__(701);
-__webpack_require__(893);
-__webpack_require__(858);
-__webpack_require__(1105);
+__webpack_require__(896);
+__webpack_require__(861);
+__webpack_require__(1108);
 module.exports = __webpack_require__(702);
 
 

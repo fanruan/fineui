@@ -69,9 +69,6 @@ BI.DynamicDateParamItem = BI.inherit(BI.Widget, {
                 listeners: [{
                     eventName: BI.TextValueCombo.EVENT_CHANGE,
                     action: function () {
-                        if (!o.validationChecker(self.getValue())) {
-                            self.editor.setValue(0);
-                        }
                         self.fireEvent(BI.DynamicDateParamItem.EVENT_CHANGE);
                     }
                 }]
