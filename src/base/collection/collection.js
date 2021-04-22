@@ -103,7 +103,7 @@ BI.CollectionView = BI.inherit(BI.Widget, {
 
     _cellRenderers: function (height, width, x, y) {
         this._lastRenderedCellIndices = this._sectionManager.getCellIndices(height, width, x, y);
-        return this._cellGroupRenderer();
+return this._cellGroupRenderer();
     },
 
     _cellGroupRenderer: function () {
@@ -113,7 +113,7 @@ BI.CollectionView = BI.inherit(BI.Widget, {
             var cellMetadata = self._sectionManager.getCellMetadata(index);
             rendered.push(cellMetadata);
         });
-        return rendered;
+return rendered;
     },
 
     _calculateChildrenToRender: function () {
@@ -160,6 +160,7 @@ BI.CollectionView = BI.inherit(BI.Widget, {
                 var datum = childrenToDisplay[i];
                 var index = this.renderedKeys[datum.index] && this.renderedKeys[datum.index][1];
                 var child;
+                var lastDatum = childrenToDisplay[len - 1];
                 if (index >= 0) {
                     if (datum.width !== this.renderedCells[index]._width) {
                         this.renderedCells[index]._width = datum.width;
@@ -182,7 +183,7 @@ BI.CollectionView = BI.inherit(BI.Widget, {
                         width: datum.width,
                         height: datum.height
                     }, o.items[datum.index], {
-                        cls: (o.items[datum.index].cls || "") + " collection-cell" + (datum.y === 0 ? " first-row" : "") + (datum.x === 0 ? " first-col" : ""),
+                        cls: (o.items[datum.index].cls || "") + " collection-cell" + (datum.y === 0 ? " first-row" : "") + (datum.x === 0 ? " first-col" : "") + (datum.row === lastDatum.row ? " last-row" : "") + (datum.col === lastDatum.col ? " last-col" : ""),
                         _left: datum.x,
                         _top: datum.y
                     }));
