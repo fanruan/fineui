@@ -21,9 +21,9 @@ export interface _OB {
 
     on(eventName: string, fn: Function): Function;
 
-    once(eventName: string, fn?: Function): void;
+    once(eventName: string, fn: Function): void;
 
-    un(eName: string, fn: Function): void;
+    un(eName: string, fn?: Function): void;
 
     _initRef(): void;
 
