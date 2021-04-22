@@ -103,7 +103,7 @@ BI.CollectionView = BI.inherit(BI.Widget, {
 
     _cellRenderers: function (height, width, x, y) {
         this._lastRenderedCellIndices = this._sectionManager.getCellIndices(height, width, x, y);
-return this._cellGroupRenderer();
+        return this._cellGroupRenderer();
     },
 
     _cellGroupRenderer: function () {
@@ -113,7 +113,7 @@ return this._cellGroupRenderer();
             var cellMetadata = self._sectionManager.getCellMetadata(index);
             rendered.push(cellMetadata);
         });
-return rendered;
+        return rendered;
     },
 
     _calculateChildrenToRender: function () {
