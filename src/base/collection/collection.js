@@ -156,11 +156,13 @@ BI.CollectionView = BI.inherit(BI.Widget, {
                     border[offset] = 0;
                 }
             };
+            var lastDatum = BI.last(BI.sortBy(childrenToDisplay, function (index, child) {
+                return (child.x + child.width + child.y + child.height);
+            }));
             for (var i = 0, len = childrenToDisplay.length; i < len; i++) {
                 var datum = childrenToDisplay[i];
                 var index = this.renderedKeys[datum.index] && this.renderedKeys[datum.index][1];
                 var child;
-                var lastDatum = childrenToDisplay[len - 1];
                 if (index >= 0) {
                     if (datum.width !== this.renderedCells[index]._width) {
                         this.renderedCells[index]._width = datum.width;
@@ -183,7 +185,7 @@ BI.CollectionView = BI.inherit(BI.Widget, {
                         width: datum.width,
                         height: datum.height
                     }, o.items[datum.index], {
-                        cls: (o.items[datum.index].cls || "") + " collection-cell" + (datum.y === 0 ? " first-row" : "") + (datum.x === 0 ? " first-col" : "") + (datum.row === lastDatum.row ? " last-row" : "") + (datum.col === lastDatum.col ? " last-col" : ""),
+                        cls: (o.items[datum.index].cls || "") + " collection-cell" + (datum.y === 0 ? " first-row" : "") + (datum.x === 0 ? " first-col" : "") + ((datum.height + datum.y) === (lastDatum.height + lastDatum.y) ? " last-row" : "") + ((datum.width + datum.x) === (lastDatum.width + lastDatum.x) ? " last-col" : ""),
                         _left: datum.x,
                         _top: datum.y
                     }));
