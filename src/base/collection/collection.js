@@ -156,7 +156,7 @@ BI.CollectionView = BI.inherit(BI.Widget, {
                     border[offset] = 0;
                 }
             };
-            var lastDatum = BI.last(BI.sortBy(childrenToDisplay, function (index, child) {
+            var lastDatum = BI.last(BI.sortBy(this._sectionManager.getAllCellMetadata(), function (index, child) {
                 return (child.x + child.width + child.y + child.height);
             }));
             for (var i = 0, len = childrenToDisplay.length; i < len; i++) {
