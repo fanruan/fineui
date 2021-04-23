@@ -71,7 +71,7 @@ export declare class OB {
 
     once(eventName: string, fn: Function): void;
 
-    un(eName: string, fn: Function): void;
+    un(eName: string, fn?: Function): void;
 
     _initRef(): void;
 
