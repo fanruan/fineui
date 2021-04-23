@@ -46,10 +46,6 @@
             });
         },
 
-        getAllCellMetadata: function () {
-            return this._cellMetadata;
-        },
-
         getCellMetadata: function (index) {
             return this._cellMetadata[index];
         },

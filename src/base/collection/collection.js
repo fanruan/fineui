@@ -156,9 +156,6 @@ BI.CollectionView = BI.inherit(BI.Widget, {
                     border[offset] = 0;
                 }
             };
-            var lastDatum = BI.last(BI.sortBy(this._sectionManager.getAllCellMetadata(), function (index, child) {
-                return (child.x + child.width + child.y + child.height);
-            }));
             for (var i = 0, len = childrenToDisplay.length; i < len; i++) {
                 var datum = childrenToDisplay[i];
                 var index = this.renderedKeys[datum.index] && this.renderedKeys[datum.index][1];
@@ -185,7 +182,7 @@ BI.CollectionView = BI.inherit(BI.Widget, {
                         width: datum.width,
                         height: datum.height
                     }, o.items[datum.index], {
-                        cls: (o.items[datum.index].cls || "") + " collection-cell" + (datum.y === 0 ? " first-row" : "") + (datum.x === 0 ? " first-col" : "") + ((datum.height + datum.y) === (lastDatum.height + lastDatum.y) ? " last-row" : "") + ((datum.width + datum.x) === (lastDatum.width + lastDatum.x) ? " last-col" : ""),
+                        cls: (o.items[datum.index].cls || "") + " collection-cell" + (datum.y === 0 ? " first-row" : "") + (datum.x === 0 ? " first-col" : ""),
                         _left: datum.x,
                         _top: datum.y
                     }));
