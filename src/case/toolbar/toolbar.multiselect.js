@@ -18,7 +18,9 @@ BI.MultiSelectBar = BI.inherit(BI.BasicButton, {
                 return selectedValues.length > 0;
             },
             halfSelected: false,
-            iconWrapperWidth: 26
+            iconWrapperWidth: 26,
+            iconWidth: 16,
+            iconHeight: 16,
         });
     },
     _init: function () {
@@ -33,7 +35,9 @@ BI.MultiSelectBar = BI.inherit(BI.BasicButton, {
                 self.setSelected(self.isSelected());
             },
             selected: isSelect,
-            invisible: isHalfSelect
+            invisible: isHalfSelect,
+            iconWidth: o.iconWidth,
+            iconHeight: o.iconHeight
         });
         this.half = BI.createWidget({
             type: "bi.half_icon_button",
@@ -41,7 +45,9 @@ BI.MultiSelectBar = BI.inherit(BI.BasicButton, {
             handler: function () {
                 self.setSelected(true);
             },
-            invisible: isSelect || !isHalfSelect
+            invisible: isSelect || !isHalfSelect,
+            iconWidth: o.iconWidth,
+            iconHeight: o.iconHeight
         });
         this.checkbox.on(BI.Controller.EVENT_CHANGE, function () {
             self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.CLICK, self.isSelected(), self);
