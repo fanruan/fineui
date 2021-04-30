@@ -390,6 +390,10 @@ export declare class Widget extends OB {
      */
     beforeInit?(cb: Function): void;
     /**
+     * 渲染前
+     */
+    beforeRender?(cb: Function): void;
+    /**
      * 创建前
      */
     beforeCreate?(): void;
