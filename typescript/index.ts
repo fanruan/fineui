@@ -20,6 +20,7 @@ import { IconChangeButton } from "./case/button/icon/icon.change";
 import { MultiSelectItem } from "./case/button/item.multiselect";
 import { BubbleCombo } from "./case/combo/bubblecombo/combo.bubble";
 import { TextValueCombo } from "./case/combo/combo.textvalue";
+import { SmallTextValueCombo } from './case/combo/combo.textvaluesmall';
 import { SearchTextValueCombo } from "./case/combo/searchtextvaluecombo/combo.searchtextvalue";
 import { SignEditor } from "./case/editor/editor.sign";
 import { LoadingPane } from "./case/loading/loading_pane";
@@ -82,6 +83,7 @@ import { Html } from "./base/single/html/html";
 import { Switcher } from "./base/combination/switcher";
 import { Loader } from "./base/combination/loader";
 import { ListPane } from "./case/layer/pane.list";
+import { MultiPopupView } from './case/layer/layer.multipopup';
 import { MultiSelectBar } from "./case/toolbar/toolbar.multiselect";
 import { SelectList } from "./case/list/list.select";
 import { AbstractAllValueChooser } from "./component/allvaluechooser/abstract.allvaluechooser";
@@ -120,6 +122,7 @@ import { TextValueDownListCombo } from "./widget/textvaluedownlistcombo/combo.te
 import { Switch } from "./case/button/switch";
 import { HorizontalLayout } from "./core/wrapper/layout/layout.horizontal";
 import { ShelterEditor } from "./case/editor/editor.shelter";
+import { TextTrigger } from './case/trigger/trigger.text';
 import { SelectTextTrigger } from "./case/trigger/trigger.text.select";
 import { DateInterval } from "./widget/timeinterval/dateinterval";
 import { DynamicDatePane } from "./widget/datepane/datepane";
@@ -187,6 +190,7 @@ export interface BI extends _func, _i18n, _base, _inject, _var, _web, _utils {
     ButtonGroup: typeof ButtonGroup;
     Combo: typeof Combo;
     TextValueCombo: typeof TextValueCombo;
+    SmallTextValueCombo: typeof SmallTextValueCombo;
     BubbleCombo: typeof BubbleCombo;
     AllValueMultiTextValueCombo: typeof AllValueMultiTextValueCombo;
     IconTextItem: typeof IconTextItem;
@@ -246,6 +250,7 @@ export interface BI extends _func, _i18n, _base, _inject, _var, _web, _utils {
     Switcher: typeof Switcher;
     Loader: typeof Loader;
     ListPane: typeof ListPane;
+    MultiPopupView: typeof MultiPopupView;
     MultiSelectBar: typeof MultiSelectBar;
     SelectList: typeof SelectList;
     IconLabel: typeof IconLabel;
@@ -286,6 +291,7 @@ export interface BI extends _func, _i18n, _base, _inject, _var, _web, _utils {
     Switch: typeof Switch;
     HorizontalLayout: typeof HorizontalLayout;
     ShelterEditor: typeof ShelterEditor;
+    TextTrigger: typeof TextTrigger;
     SelectTextTrigger: typeof SelectTextTrigger;
     DateInterval: typeof DateInterval;
     DynamicDatePane: typeof DynamicDatePane;
@@ -384,9 +390,11 @@ export {
     BubbleCombo,
     Loader,
     ListPane,
+    MultiPopupView,
     MultiSelectBar,
     SelectList,
     TextValueCombo,
+    SmallTextValueCombo,
     Editor,
     IconLabel,
     Popover,
@@ -451,6 +459,7 @@ export {
     Switch,
     HorizontalLayout,
     ShelterEditor,
+    TextTrigger,
     SelectTextTrigger,
     DateInterval,
     DynamicDatePane,
