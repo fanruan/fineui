@@ -1,4 +1,4 @@
-/*! time: 2021-4-25 3:30:31 PM */
+/*! time: 2021-5-3 12:40:45 PM */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -24677,6 +24677,7 @@ BI.Button = BI.inherit(BI.BasicButton, {
         } else {
             this.text = BI.createWidget({
                 type: "bi.label",
+                height: o.height - 2,
                 textAlign: o.textAlign,
                 whiteSpace: o.whiteSpace,
                 textWidth: o.textWidth,
