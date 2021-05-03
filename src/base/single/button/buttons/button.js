@@ -83,6 +83,7 @@ BI.Button = BI.inherit(BI.BasicButton, {
         } else {
             this.text = BI.createWidget({
                 type: "bi.label",
+                height: o.height - 2,
                 textAlign: o.textAlign,
                 whiteSpace: o.whiteSpace,
                 textWidth: o.textWidth,
