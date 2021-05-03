@@ -1,4 +1,4 @@
-/*! time: 2021-5-3 12:40:45 PM */
+/*! time: 2021-5-3 1:20:23 PM */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -27565,16 +27565,6 @@ BI.Button = BI.inherit(BI.BasicButton, {
     _init: function () {
         BI.Button.superclass._init.apply(this, arguments);
         var o = this.options, self = this;
-        if (BI.isNumber(o.height) && !o.clear && !o.block) {
-            this.element.css({
-                height: o.height / BI.pixRatio + BI.pixUnit,
-                lineHeight: (o.height - 2) / BI.pixRatio + BI.pixUnit
-            });
-        } else if (o.clear || o.block) {
-            this.element.css({lineHeight: o.height / BI.pixRatio + BI.pixUnit});
-        } else {
-            this.element.css({lineHeight: (o.height - 2) / BI.pixRatio + BI.pixUnit});
-        }
         if (BI.isKey(o.iconCls)) {
             this.icon = BI.createWidget({
                 type: "bi.icon_label",
@@ -27606,7 +27596,7 @@ BI.Button = BI.inherit(BI.BasicButton, {
         } else {
             this.text = BI.createWidget({
                 type: "bi.label",
-                height: o.height - 2,
+                height: o.height,
                 textAlign: o.textAlign,
                 whiteSpace: o.whiteSpace,
                 textWidth: o.textWidth,
@@ -27621,6 +27611,16 @@ BI.Button = BI.inherit(BI.BasicButton, {
                 text: o.text,
                 value: o.value
             });
+        }
+        if (BI.isNumber(o.height) && !o.clear && !o.block) {
+            this.element.css({
+                height: o.height / BI.pixRatio + BI.pixUnit,
+                lineHeight: (o.height - 2) / BI.pixRatio + BI.pixUnit
+            });
+        } else if (o.clear || o.block) {
+            this.element.css({lineHeight: o.height / BI.pixRatio + BI.pixUnit});
+        } else {
+            this.element.css({lineHeight: (o.height - 2) / BI.pixRatio + BI.pixUnit});
         }
         if (o.block === true) {
             this.element.addClass("block");
