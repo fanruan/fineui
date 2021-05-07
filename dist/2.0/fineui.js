@@ -1,4 +1,4 @@
-/*! time: 2021-5-6 9:40:23 AM */
+/*! time: 2021-5-7 3:40:25 PM */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -45026,7 +45026,9 @@ BI.DownListCombo = BI.inherit(BI.Widget, {
             trigger: "click",
             container: null,
             stopPropagation: false,
-            el: {}
+            el: {},
+            minWidth: 140,
+            maxHeight: 1000
         });
     },
 
@@ -45070,8 +45072,8 @@ BI.DownListCombo = BI.inherit(BI.Widget, {
             popup: {
                 el: this.popupview,
                 stopPropagation: o.stopPropagation,
-                maxHeight: 1000,
-                minWidth: 140
+                maxHeight: o.maxHeight,
+                minWidth: o.minWidth
             }
         });
 
@@ -64097,6 +64099,10 @@ BI.shortcut("bi.single_select_insert_combo", BI.SingleSelectInsertCombo);
  */
 BI.SingleSelectList = BI.inherit(BI.Widget, {
 
+    _constants: {
+        itemHeight: 24
+    },
+
     _defaultConfig: function () {
         return BI.extend(BI.SingleSelectList.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-select-list",
@@ -64151,7 +64157,7 @@ BI.SingleSelectList = BI.inherit(BI.Widget, {
             items: o.allowNoSelect ? BI.LogicFactory.createLogicItemsByDirection(o.direction, {
                 type: "bi.single_select_item",
                 cls: "bi-list-item-active",
-                height: 24,
+                height: this._constants.itemHeight,
                 forceNotSelected: true,
                 text: BI.i18nText("BI-Basic_No_Select"),
                 ref: function (_ref) {
@@ -64206,7 +64212,7 @@ BI.SingleSelectList = BI.inherit(BI.Widget, {
 
     resetHeight: function (h) {
         this.list.resetHeight ? this.list.resetHeight(h) :
-            this.list.element.css({"max-height": h / BI.pixRatio + BI.pixUnit});
+            this.list.element.css({"max-height": (h - (this.options.allowNoSelect ? this._constants.itemHeight : 0)) / BI.pixRatio + BI.pixUnit});
     },
 
     setNotSelectedValue: function () {
@@ -64260,6 +64266,10 @@ BI.shortcut("bi.single_select_list", BI.SingleSelectList);
  * @extends Widget
  */
 BI.SingleSelectLoader = BI.inherit(BI.Widget, {
+
+    _constants: {
+        itemVgap: 5
+    },
 
     _defaultConfig: function () {
         return BI.extend(BI.SingleSelectLoader.superclass._defaultConfig.apply(this, arguments), {
@@ -64347,7 +64357,7 @@ BI.SingleSelectLoader = BI.inherit(BI.Widget, {
             type: "bi.vertical",
             element: this,
             items: [this.button_group],
-            vgap: 5
+            vgap: this._constants.itemVgap
         });
 
         this.button_group.on(BI.Controller.EVENT_CHANGE, function () {
@@ -64406,7 +64416,7 @@ BI.SingleSelectLoader = BI.inherit(BI.Widget, {
     },
 
     resetHeight: function (h) {
-        this.button_group.resetHeight(h);
+        this.button_group.resetHeight(h - this._constants.itemVgap * 2);
     },
 
     resetWidth: function (w) {
