@@ -1,4 +1,4 @@
-/*! time: 2021-4-25 11:20:28 AM */
+/*! time: 2021-5-6 9:40:23 AM */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -82,7 +82,7 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 1249);
+/******/ 	return __webpack_require__(__webpack_require__.s = 1252);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -2879,7 +2879,44 @@ _.extend(BI, {
 
 /***/ }),
 
-/***/ 1107:
+/***/ 111:
+/***/ (function(module, exports) {
+
+/**
+ * 共享池
+ * @type {{Shared: {}}}
+ */
+
+(function () {
+    var _Shared = {};
+    BI.SharingPool = {
+        _Shared: _Shared,
+        put: function (name, shared) {
+            _Shared[name] = shared;
+        },
+
+        cat: function () {
+            var args = Array.prototype.slice.call(arguments, 0),
+                copy = _Shared;
+            for (var i = 0; i < args.length; i++) {
+                copy = copy && copy[args[i]];
+            }
+            return copy;
+        },
+
+        get: function () {
+            return BI.deepClone(this.cat.apply(this, arguments));
+        },
+
+        remove: function (key) {
+            delete _Shared[key];
+        }
+    };
+})();
+
+/***/ }),
+
+/***/ 1110:
 /***/ (function(module, exports) {
 
 BI.i18n = {
@@ -3083,43 +3120,6 @@ BI.i18n = {
 
 /***/ }),
 
-/***/ 111:
-/***/ (function(module, exports) {
-
-/**
- * 共享池
- * @type {{Shared: {}}}
- */
-
-(function () {
-    var _Shared = {};
-    BI.SharingPool = {
-        _Shared: _Shared,
-        put: function (name, shared) {
-            _Shared[name] = shared;
-        },
-
-        cat: function () {
-            var args = Array.prototype.slice.call(arguments, 0),
-                copy = _Shared;
-            for (var i = 0; i < args.length; i++) {
-                copy = copy && copy[args[i]];
-            }
-            return copy;
-        },
-
-        get: function () {
-            return BI.deepClone(this.cat.apply(this, arguments));
-        },
-
-        remove: function (key) {
-            delete _Shared[key];
-        }
-    };
-})();
-
-/***/ }),
-
 /***/ 112:
 /***/ (function(module, exports) {
 
@@ -3130,7 +3130,7 @@ BI.Req = {
 
 /***/ }),
 
-/***/ 1249:
+/***/ 1252:
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(91);
@@ -3149,8 +3149,8 @@ __webpack_require__(97);
 __webpack_require__(98);
 __webpack_require__(108);
 __webpack_require__(109);
-__webpack_require__(1107);
-__webpack_require__(1250);
+__webpack_require__(1110);
+__webpack_require__(1253);
 __webpack_require__(110);
 __webpack_require__(111);
 module.exports = __webpack_require__(112);
@@ -3158,7 +3158,7 @@ module.exports = __webpack_require__(112);
 
 /***/ }),
 
-/***/ 1250:
+/***/ 1253:
 /***/ (function(module, exports) {
 
 /**
@@ -3261,7 +3261,7 @@ module.exports = g;
 
 /***/ }),
 
-/***/ 57:
+/***/ 59:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4931,7 +4931,7 @@ if (!_global.BI) {
     });
 })();
 
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(14), __webpack_require__(57).setImmediate))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(14), __webpack_require__(59).setImmediate))
 
 /***/ }),
 
