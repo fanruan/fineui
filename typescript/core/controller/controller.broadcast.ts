@@ -5,5 +5,5 @@ export declare class BroadcastController extends Controller {
 
     send(name: string, ...args: any[]): void;
 
-    remove(name: string, fn: Function): this;
+    remove(name: string, fn?: Function): this;
 }
