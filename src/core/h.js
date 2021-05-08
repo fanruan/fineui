@@ -14,6 +14,7 @@ BI.h = function (type, props, children) {
         }, props);
     }
     return BI.extend({
+        type: type,
         items: children
     }, props);
 };
