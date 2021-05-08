@@ -1,4 +1,4 @@
-/*! time: 2021-5-6 9:40:23 AM */
+/*! time: 2021-5-7 8:20:42 PM */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -21678,7 +21678,7 @@ BI.shortcut("bi.collection_view", BI.CollectionView);
                 attributes: {
                     tabIndex: -1
                 },
-                trigger: "click",
+                trigger: "click", // click || hover || click-hover || ""
                 toggle: true,
                 direction: "bottom", // top||bottom||left||right||top,left||top,right||bottom,left||bottom,right||right,innerRight||right,innerLeft||innerRight||innerLeft
                 logic: {
@@ -21848,62 +21848,16 @@ BI.shortcut("bi.collection_view", BI.CollectionView);
                         });
                         break;
                     case "click-hover":
-                    case "click-blur":
-                        // IE走click-hover逻辑
-                        if (BI.isIE() || ev === "click-hover") {
-                            var debounce = BI.debounce(function (e) {
-                                if (self.combo.element.__isMouseInBounds__(e)) {
-                                    if (self.isEnabled() && self.isValid() && self.combo.isEnabled() && self.combo.isValid()) {
-                                        // if (self.isViewVisible()) {
-                                        //     return;
-                                        // }
-                                        self._popupView(e);
-                                        if (self.isViewVisible()) {
-                                            self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.EXPAND, "", self.combo);
-                                            self.fireEvent(BI.Combo.EVENT_EXPAND);
-                                        }
-                                    }
-                                }
-                            }, BI.EVENT_RESPONSE_TIME, {
-                                "leading": true,
-                                "trailing": false
-                            });
-                            self.element.off("click." + self.getName()).on("click." + self.getName(), function (e) {
-                                debounce(e);
-                                st(e);
-                            });
-                            self.element.on("mouseleave." + self.getName(), function (e) {
-                                if (self.popupView) {
-                                    self.popupView.element.on("mouseenter." + self.getName(), function (e) {
-                                        enterPopup = true;
-                                        self.popupView.element.on("mouseleave." + self.getName(), function (e) {
-                                            hide(e);
-                                        });
-                                        self.popupView.element.off("mouseenter." + self.getName());
-                                    });
-                                    BI.defer(function () {
-                                        if (!enterPopup) {
-                                            hide(e);
-                                        }
-                                    }, 50);
-                                }
-                            });
-                            break;
-                        }
-
                         var debounce = BI.debounce(function (e) {
                             if (self.combo.element.__isMouseInBounds__(e)) {
                                 if (self.isEnabled() && self.isValid() && self.combo.isEnabled() && self.combo.isValid()) {
-                                    // if (!o.toggle && self.isViewVisible()) {
+                                    // if (self.isViewVisible()) {
                                     //     return;
                                     // }
-                                    o.toggle ? self._toggle(e) : self._popupView(e);
+                                    self._popupView(e);
                                     if (self.isViewVisible()) {
                                         self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.EXPAND, "", self.combo);
                                         self.fireEvent(BI.Combo.EVENT_EXPAND);
-                                    } else {
-                                        self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.COLLAPSE, "", self.combo);
-                                        self.fireEvent(BI.Combo.EVENT_COLLAPSE);
                                     }
                                 }
                             }
@@ -21913,18 +21867,23 @@ BI.shortcut("bi.collection_view", BI.CollectionView);
                         });
                         self.element.off("click." + self.getName()).on("click." + self.getName(), function (e) {
                             debounce(e);
-                            try {
-                                self.element[0].focus();
-                            } catch (e) {
-
-                            }
                             st(e);
                         });
-                        self.element.off("blur." + self.getName()).on("blur." + self.getName(), function (e) {
-                            if (self.isViewVisible()) {
-                                self._hideView(e);
+                        self.element.on("mouseleave." + self.getName(), function (e) {
+                            if (self.popupView) {
+                                self.popupView.element.on("mouseenter." + self.getName(), function (e) {
+                                    enterPopup = true;
+                                    self.popupView.element.on("mouseleave." + self.getName(), function (e) {
+                                        hide(e);
+                                    });
+                                    self.popupView.element.off("mouseenter." + self.getName());
+                                });
+                                BI.delay(function () {
+                                    if (!enterPopup) {
+                                        hide(e);
+                                    }
+                                }, 50);
                             }
-                            st(e);
                         });
                         break;
                 }
@@ -22019,7 +21978,7 @@ BI.shortcut("bi.collection_view", BI.CollectionView);
             this._assertPopupViewRender();
             this.fireEvent(BI.Combo.EVENT_BEFORE_POPUPVIEW);
             // popupVisible是为了获取其宽高, 放到可视范围之外以防止在IE下闪一下
-            this.popupView.css({left: -999999999, top: -99999999});
+            this.popupView.css({ left: -999999999, top: -99999999 });
             this.popupView.visible();
             BI.each(needHideWhenAnotherComboOpen, function (i, combo) {
                 if (i !== self.getName()) {
@@ -45026,7 +44985,9 @@ BI.DownListCombo = BI.inherit(BI.Widget, {
             trigger: "click",
             container: null,
             stopPropagation: false,
-            el: {}
+            el: {},
+            minWidth: 140,
+            maxHeight: 1000
         });
     },
 
@@ -45070,8 +45031,8 @@ BI.DownListCombo = BI.inherit(BI.Widget, {
             popup: {
                 el: this.popupview,
                 stopPropagation: o.stopPropagation,
-                maxHeight: 1000,
-                minWidth: 140
+                maxHeight: o.maxHeight,
+                minWidth: o.minWidth
             }
         });
 
@@ -64097,6 +64058,10 @@ BI.shortcut("bi.single_select_insert_combo", BI.SingleSelectInsertCombo);
  */
 BI.SingleSelectList = BI.inherit(BI.Widget, {
 
+    _constants: {
+        itemHeight: 24
+    },
+
     _defaultConfig: function () {
         return BI.extend(BI.SingleSelectList.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-select-list",
@@ -64151,7 +64116,7 @@ BI.SingleSelectList = BI.inherit(BI.Widget, {
             items: o.allowNoSelect ? BI.LogicFactory.createLogicItemsByDirection(o.direction, {
                 type: "bi.single_select_item",
                 cls: "bi-list-item-active",
-                height: 24,
+                height: this._constants.itemHeight,
                 forceNotSelected: true,
                 text: BI.i18nText("BI-Basic_No_Select"),
                 ref: function (_ref) {
@@ -64206,7 +64171,7 @@ BI.SingleSelectList = BI.inherit(BI.Widget, {
 
     resetHeight: function (h) {
         this.list.resetHeight ? this.list.resetHeight(h) :
-            this.list.element.css({"max-height": h / BI.pixRatio + BI.pixUnit});
+            this.list.element.css({"max-height": (h - (this.options.allowNoSelect ? this._constants.itemHeight : 0)) / BI.pixRatio + BI.pixUnit});
     },
 
     setNotSelectedValue: function () {
@@ -64260,6 +64225,10 @@ BI.shortcut("bi.single_select_list", BI.SingleSelectList);
  * @extends Widget
  */
 BI.SingleSelectLoader = BI.inherit(BI.Widget, {
+
+    _constants: {
+        itemVgap: 5
+    },
 
     _defaultConfig: function () {
         return BI.extend(BI.SingleSelectLoader.superclass._defaultConfig.apply(this, arguments), {
@@ -64347,7 +64316,7 @@ BI.SingleSelectLoader = BI.inherit(BI.Widget, {
             type: "bi.vertical",
             element: this,
             items: [this.button_group],
-            vgap: 5
+            vgap: this._constants.itemVgap
         });
 
         this.button_group.on(BI.Controller.EVENT_CHANGE, function () {
@@ -64406,7 +64375,7 @@ BI.SingleSelectLoader = BI.inherit(BI.Widget, {
     },
 
     resetHeight: function (h) {
-        this.button_group.resetHeight(h);
+        this.button_group.resetHeight(h - this._constants.itemVgap * 2);
     },
 
     resetWidth: function (w) {
