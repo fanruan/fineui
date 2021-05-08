@@ -161,6 +161,8 @@ import { FloatHorizontalLayout } from "./core/wrapper/layout/adapt/float.horizon
 import { AdaptiveLayout } from "./core/wrapper/layout/layout.adaptive";
 import { HexColorChooserPopup } from './case/colorchooser/colorchooser.popup.hex';
 import { BlankIconTextItem } from './base/single/button/listitem/blankicontextitem';
+import { Broadcasts, Layers } from "./base/base";
+import { BroadcastController } from "./core/controller/controller.broadcast";
 
 
 export interface BI extends _func, _i18n, _base, _inject, _var, _web, _utils {
@@ -179,7 +181,10 @@ export interface BI extends _func, _i18n, _base, _inject, _var, _web, _utils {
     ActionFactory: typeof ActionFactory;
     ShowAction: typeof ShowAction;
     Controller: typeof Controller;
+    Layers: Layers;
     LayerController: typeof LayerController;
+    Broadcasts: Broadcasts;
+    BroadcastController: typeof BroadcastController;
     Behavior: typeof Behavior;
     BehaviorFactory: typeof BehaviorFactory;
     HighlightBehavior: typeof HighlightBehavior;
@@ -371,6 +376,7 @@ export {
     ShowAction,
     Controller,
     LayerController,
+    BroadcastController,
     Behavior,
     BehaviorFactory,
     RedMarkBehavior,
