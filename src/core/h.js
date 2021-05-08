@@ -10,11 +10,11 @@ BI.h = function (type, props, children) {
     }
     if (type === "el") {
         return BI.extend({
-            el: children[0]
+            el: BI.isArray(children) ? children[0] : children
         }, props);
     }
     return BI.extend({
         type: type,
-        items: children
+        items: BI.isArray(children) ? children : [children]
     }, props);
 };
