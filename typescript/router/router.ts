@@ -26,6 +26,8 @@ export declare class History {
 
     route(route: string, callback: Function): void;
 
+    checkRoute(route: string): { route: string, callback: Function};
+
     unRoute(route: string): void;
 
     checkUrl(e?: Event): void;
