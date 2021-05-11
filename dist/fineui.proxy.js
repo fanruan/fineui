@@ -1,4 +1,4 @@
-/*! time: 2021-5-11 2:40:25 PM */
+/*! time: 2021-5-11 3:40:26 PM */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -87566,6 +87566,17 @@ _.extend(BI, {
         // may override previous routes.
         route: function (route, callback) {
             this.handlers.unshift({route: route, callback: callback});
+        },
+
+        // check route is Exist. if exist, return the route
+        checkRoute: function (route) {
+            for (var i = 0; i < this.handlers.length; i++) {
+                if (this.handlers[i].route.toString() === Router.prototype._routeToRegExp(route).toString()) {
+                    return this.handlers[i];
+                }
+            }
+
+            return null;
         },
 
         // remove a route match in routes
