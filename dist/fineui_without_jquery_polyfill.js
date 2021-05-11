@@ -1,4 +1,4 @@
-/*! time: 2021-5-10 9:00:24 AM */
+/*! time: 2021-5-11 2:40:25 PM */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -41938,12 +41938,12 @@ BI.DynamicDateTimePane = BI.inherit(BI.Widget, {
                                 listeners: [{
                                     eventName: "EVENT_CHANGE",
                                     action: function () {
-                                        self.fireEvent("EVENT_CHANGE");
+                                        self.fireEvent(BI.DynamicDateTimePane.EVENT_CHANGE);
                                     }
                                 }, {
                                     eventName: "EVENT_BEFORE_YEAR_MONTH_POPUPVIEW",
                                     action: function () {
-                                        self.fireEvent("EVENT_BEFORE_YEAR_MONTH_POPUPVIEW");
+                                        self.fireEvent(BI.DynamicDateTimePane.EVENT_BEFORE_YEAR_MONTH_POPUPVIEW);
                                     }
                                 }],
                                 ref: function () {
@@ -42070,6 +42070,7 @@ BI.DynamicDateTimePane = BI.inherit(BI.Widget, {
     }
 });
 BI.DynamicDateTimePane.EVENT_CHANGE = "EVENT_CHANGE";
+BI.DynamicDateTimePane.EVENT_BEFORE_YEAR_MONTH_POPUPVIEW = "EVENT_BEFORE_YEAR_MONTH_POPUPVIEW";
 BI.shortcut("bi.dynamic_date_time_pane", BI.DynamicDateTimePane);
 
 BI.extend(BI.DynamicDateTimePane, {

@@ -8,4 +8,6 @@ export declare class DynamicYearMonthCombo extends Single {
     static EVENT_BEFORE_POPUPVIEW: string;
     hideView(): void;
     getKey(): string;
+    setMinDate(minDate: string): void;
+    setMaxDate(maxDate: string): void;
 }
