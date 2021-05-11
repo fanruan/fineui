@@ -11,4 +11,8 @@ export declare class DynamicYearMonthCombo extends Single {
     hideView(): void;
 
     getKey(): string;
+
+    setMinDate(minDate: string): void;
+
+    setMaxDate(maxDate: string): void;
 }
