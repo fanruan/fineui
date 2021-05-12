@@ -9,8 +9,8 @@ export declare class IntervalSlider extends Single {
         max: number;
     };
     setMinAndMax(v: {
-        min: number;
-        max: number;
+        min: number | string;
+        max: number | string;
     }): void;
     reset(): void;
 }
