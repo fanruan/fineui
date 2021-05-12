@@ -164,7 +164,6 @@ BI.MultiSelectTree = BI.inherit(BI.Single, {
     },
 
     populate: function () {
-        this.searcher.populate();
         this.adapter.populate();
     }
 });
