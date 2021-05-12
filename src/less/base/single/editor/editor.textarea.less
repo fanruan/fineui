@@ -10,6 +10,8 @@
     & {
       border: none;
     }
+    // BI-86802 div构造的水印移上去没有输入状态的光标,让编辑框层级比水印高一点
+    z-index: 1;
   }
   & .textarea-watermark{
     max-height: 100%;
