@@ -1,4 +1,4 @@
-/*! time: 2021-5-13 10:14:27 AM */
+/*! time: 2021-5-13 11:30:29 AM */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -26988,7 +26988,7 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
             if (BI.isNotEmptyString(o.watermark)) {
                 if (!this.watermark) {
                     this.watermark = BI.createWidget({
-                        type: "bi.text_button",
+                        type: "bi.label",
                         cls: "bi-water-mark cursor-default textarea-watermark",
                         textAlign: "left",
                         whiteSpace: "normal",
@@ -26998,8 +26998,15 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
                         hgap: 4,
                         vgap: 4
                     });
-                    this.watermark.on(BI.TextButton.EVENT_CHANGE, function () {
-                        self.focus();
+                    this.watermark.element.bind({
+                        mousedown: function (e) {
+                            if (self.isEnabled()) {
+                                self.editor.focus();
+                            } else {
+                                self.editor.blur();
+                            }
+                            e.stopEvent();
+                        }
                     });
                     BI.createWidget({
                         type: "bi.absolute",
