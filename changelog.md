@@ -1,4 +1,7 @@
 # 更新日志
+2.0(2021-05)
+- 解决了树列表populate调用两次itemsCreator的问题
+
 2.0(2021-03)
 - 优化left_right_vertical_adapt布局，去掉float属性只使用flex
 - inline布局支持用calc计算fill列宽度
