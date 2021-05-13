@@ -87,7 +87,7 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
                 if (!this.watermark) {
                     this.watermark = BI.createWidget({
                         type: "bi.label",
-                        cls: "bi-water-mark cursor-text textarea-watermark",
+                        cls: "bi-water-mark textarea-watermark",
                         textAlign: "left",
                         whiteSpace: "normal",
                         text: o.watermark,
