@@ -9,4 +9,6 @@ export declare class YearMonthInterval extends Single {
         start: number;
         end: number;
     };
+    setMinDate(minDate: string): void;
+    setMaxDate(maxDate: string): void;
 }

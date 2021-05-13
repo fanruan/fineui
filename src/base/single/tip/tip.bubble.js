@@ -24,7 +24,7 @@ BI.Bubble = BI.inherit(BI.Tip, {
         };
         this.element.bind({click: fn, mousedown: fn, mouseup: fn, mouseover: fn, mouseenter: fn, mouseleave: fn, mousemove: fn});
         BI.createWidget({
-            type: "bi.left",
+            type: "bi.adaptive",
             element: this,
             items: [this["_" + this.options.direction]()]
         });
@@ -127,7 +127,7 @@ BI.BubbleView = BI.inherit(BI.Single, {
         };
         this.element.bind({click: fn, mousedown: fn, mouseup: fn, mouseover: fn, mouseenter: fn, mouseleave: fn, mousemove: fn});
         BI.createWidget({
-            type: "bi.left",
+            type: "bi.adaptive",
             element: this,
             items: [this["_" + this.options.direction]()]
         });

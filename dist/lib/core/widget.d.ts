@@ -307,6 +307,10 @@ export interface _Widget extends _OB {
      */
     empty(): void;
     /**
+     * 刷新控件
+     */
+    reset(): void;
+    /**
      * 内部destory方法
      */
     _destroy(): void;
@@ -635,6 +639,10 @@ export declare class Widget extends OB {
      * 请除元素
      */
     empty(): void;
+    /**
+     * 刷新控件
+     */
+    reset(): void;
     /**
      * 内部destory方法
      */

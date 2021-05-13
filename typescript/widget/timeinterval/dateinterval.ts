@@ -6,9 +6,14 @@ export declare class DateInterval extends Single {
     static EVENT_CHANGE: string;
     static EVENT_VALID: string;
     static EVENT_ERROR: string;
+    static EVENT_BEFORE_YEAR_MONTH_POPUPVIEW: string;
 
     getValue(): {
         start: DynamicDataComboValue;
         end: DynamicDataComboValue;
     };
+
+    setMinDate(minDate: string): void;
+
+    setMaxDate(minDate: string): void;
 }

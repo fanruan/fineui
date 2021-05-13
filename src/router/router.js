@@ -498,6 +498,17 @@
             this.handlers.unshift({route: route, callback: callback});
         },
 
+        // check route is Exist. if exist, return the route
+        checkRoute: function (route) {
+            for (var i = 0; i < this.handlers.length; i++) {
+                if (this.handlers[i].route.toString() === Router.prototype._routeToRegExp(route).toString()) {
+                    return this.handlers[i];
+                }
+            }
+
+            return null;
+        },
+
         // remove a route match in routes
         unRoute: function (route) {
             var index = _.findIndex(this.handlers, function (handler) {

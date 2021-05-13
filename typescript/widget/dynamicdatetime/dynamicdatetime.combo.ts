@@ -10,6 +10,7 @@ export declare class DynamicDateTimeCombo extends Single {
     static EVENT_VALID: string;
     static EVENT_ERROR: string;
     static EVENT_BEFORE_POPUPVIEW: string;
+    static EVENT_BEFORE_YEAR_MONTH_POPUPVIEW: string;
     static Static: 1;
     static Dynamic: 2;
 

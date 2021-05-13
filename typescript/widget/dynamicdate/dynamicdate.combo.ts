@@ -13,6 +13,7 @@ export declare class DynamicDateCombo extends Single {
     static EVENT_VALID: string;
     static EVENT_ERROR: string;
     static EVENT_BEFORE_POPUPVIEW: string;
+    static EVENT_BEFORE_YEAR_MONTH_POPUPVIEW: string;
 
     setMinDate(minDate: string): void;
 

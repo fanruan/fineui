@@ -6,6 +6,10 @@
  */
 BI.SingleSelectLoader = BI.inherit(BI.Widget, {
 
+    _constants: {
+        itemVgap: 5
+    },
+
     _defaultConfig: function () {
         return BI.extend(BI.SingleSelectLoader.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-single-select-loader",
@@ -92,7 +96,7 @@ BI.SingleSelectLoader = BI.inherit(BI.Widget, {
             type: "bi.vertical",
             element: this,
             items: [this.button_group],
-            vgap: 5
+            vgap: this._constants.itemVgap
         });
 
         this.button_group.on(BI.Controller.EVENT_CHANGE, function () {
@@ -151,7 +155,7 @@ BI.SingleSelectLoader = BI.inherit(BI.Widget, {
     },
 
     resetHeight: function (h) {
-        this.button_group.resetHeight(h);
+        this.button_group.resetHeight(h - this._constants.itemVgap * 2);
     },
 
     resetWidth: function (w) {
