@@ -1,4 +1,4 @@
-/*! time: 2021-5-12 9:50:25 AM */
+/*! time: 2021-5-13 10:14:27 AM */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -58450,7 +58450,6 @@ BI.MultiSelectTree = BI.inherit(BI.Single, {
     },
 
     populate: function () {
-        this.searcher.populate();
         this.adapter.populate();
     }
 });
