@@ -23,7 +23,9 @@ BI.prepares.push(function () {
         if (supportFlex) {
             return BI.extend({}, ob, {type: "bi.flex_horizontal"});
         }
-        return BI.extend({}, ob, {type: "bi.table_adapt"});
+        return BI.extend({
+            scrollx: true
+        }, ob, {type: "bi.inline"});
     });
     BI.Plugin.configWidget("bi.center_adapt", function (ob) {
         var supportFlex = isSupportFlex(), justOneItem = (ob.items && ob.items.length <= 1);
