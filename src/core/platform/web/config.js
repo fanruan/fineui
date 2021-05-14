@@ -38,25 +38,25 @@ BI.prepares.push(function () {
     });
     BI.Plugin.configWidget("bi.center_adapt", function (ob) {
         var supportFlex = isSupportFlex(), justOneItem = (ob.items && ob.items.length <= 1);
-        var isAdapt = !ob.horizontalAlign || ob.horizontalAlign === BI.HorizontalAlign.Center || ob.horizontalAlign === BI.HorizontalAlign.Stretch;
-        if (!isAdapt || justOneItem) {
-            if (supportFlex) {
-                return BI.extend({}, ob, {type: "bi.flex_center_adapt"});
-            }
-            return BI.extend({}, ob, {type: "bi.inline_center_adapt"});
+        // var isAdapt = !ob.horizontalAlign || ob.horizontalAlign === BI.HorizontalAlign.Center || ob.horizontalAlign === BI.HorizontalAlign.Stretch;
+        // if (!isAdapt || justOneItem) {
+        if (supportFlex) {
+            return BI.extend({}, ob, {type: "bi.flex_center_adapt"});
         }
-        return ob;
+        return BI.extend({}, ob, {type: "bi.inline_center_adapt"});
+        // }
+        // return ob;
     });
     BI.Plugin.configWidget("bi.vertical_adapt", function (ob) {
         var supportFlex = isSupportFlex(), justOneItem = (ob.items && ob.items.length <= 1);
-        var isAdapt = ob.horizontalAlign === BI.HorizontalAlign.Center || ob.horizontalAlign === BI.HorizontalAlign.Stretch;
-        if (!isAdapt || justOneItem) {
-            if (supportFlex) {
-                return BI.extend({}, ob, {type: "bi.flex_vertical_center_adapt"});
-            }
-            return BI.extend({}, ob, {type: "bi.inline_vertical_adapt"});
+        // var isAdapt = ob.horizontalAlign === BI.HorizontalAlign.Center || ob.horizontalAlign === BI.HorizontalAlign.Stretch;
+        // if (!isAdapt || justOneItem) {
+        if (supportFlex) {
+            return BI.extend({}, ob, {type: "bi.flex_vertical_center_adapt"});
         }
-        return ob;
+        return BI.extend({}, ob, {type: "bi.inline_vertical_adapt"});
+        // }
+        // return ob;
     });
     BI.Plugin.configWidget("bi.horizontal_adapt", function (ob) {
         var justOneItem = (ob.items && ob.items.length <= 1);
