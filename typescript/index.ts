@@ -163,6 +163,7 @@ import { HexColorChooserPopup } from './case/colorchooser/colorchooser.popup.hex
 import { BlankIconTextItem } from './base/single/button/listitem/blankicontextitem';
 import { Broadcasts, Layers } from "./base/base";
 import { BroadcastController } from "./core/controller/controller.broadcast";
+import { Pager } from "./base/pager/pager";
 
 
 export interface BI extends _func, _i18n, _base, _inject, _var, _web, _utils {
@@ -301,6 +302,7 @@ export interface BI extends _func, _i18n, _base, _inject, _var, _web, _utils {
     DateInterval: typeof DateInterval;
     DynamicDatePane: typeof DynamicDatePane;
     AllCountPager: typeof AllCountPager;
+    Pager: typeof Pager;
     PopupView: typeof PopupView;
     BubblePopupView: typeof BubblePopupView;
     BubblePopupBarView: typeof BubblePopupBarView;
@@ -470,6 +472,7 @@ export {
     DateInterval,
     DynamicDatePane,
     AllCountPager,
+    Pager,
     PopupView,
     BubblePopupView,
     BubblePopupBarView,
