@@ -1,4 +1,4 @@
-/*! time: 2021-5-16 4:50:44 PM */
+/*! time: 2021-5-17 9:50:48 AM */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -74276,58 +74276,58 @@ BI.prepares.push(function () {
         return _isSupportFlex;
     };
     BI.Plugin.configWidget("bi.horizontal", function (ob) {
-        var isIE = BI.isIE(), supportFlex = isSupportFlex(), isLessIE8 = isIE && BI.getIEVersion() < 8;
-        if (isLessIE8) {
-            return ob;
+        var supportFlex = isSupportFlex();
+        // // 在横向自适应场景下我们需要使用table的自适应撑出滚动条的特性（flex处理不了这种情况）
+        // // 主要出现在center_adapt或者horizontal_adapt的场景，或者主动设置horizontalAlign的场景
+        // if (ob.horizontalAlign === BI.HorizontalAlign.Center || ob.horizontalAlign === BI.HorizontalAlign.Stretch) {
+        //     return BI.extend({}, ob, {type: "bi.table_adapt"});
+        // }
+        if (supportFlex) {
+            return BI.extend({}, ob, {type: "bi.flex_horizontal"});
         }
+        return BI.extend({
+            scrollx: true
+        }, ob, {type: "bi.inline"});
+    });
+    BI.Plugin.configWidget("bi.center_adapt", function (ob) {
+        var supportFlex = isSupportFlex(), justOneItem = (ob.items && ob.items.length <= 1);
+        // var isAdapt = !ob.horizontalAlign || ob.horizontalAlign === BI.HorizontalAlign.Center || ob.horizontalAlign === BI.HorizontalAlign.Stretch;
+        // if (!isAdapt || justOneItem) {
+        if (supportFlex) {
+            return BI.extend({}, ob, {type: "bi.flex_center_adapt"});
+        }
+        return BI.extend({}, ob, {type: "bi.inline_center_adapt"});
+        // }
+        // return ob;
+    });
+    BI.Plugin.configWidget("bi.vertical_adapt", function (ob) {
+        var supportFlex = isSupportFlex(), justOneItem = (ob.items && ob.items.length <= 1);
+        // var isAdapt = ob.horizontalAlign === BI.HorizontalAlign.Center || ob.horizontalAlign === BI.HorizontalAlign.Stretch;
+        // if (!isAdapt || justOneItem) {
+        if (supportFlex) {
+            return BI.extend({}, ob, {type: "bi.flex_vertical_center_adapt"});
+        }
+        return BI.extend({}, ob, {type: "bi.inline_vertical_adapt"});
+        // }
+        // return ob;
+    });
+    BI.Plugin.configWidget("bi.horizontal_adapt", function (ob) {
+        var justOneItem = (ob.items && ob.items.length <= 1);
+        var isAdapt = !ob.horizontalAlign || ob.horizontalAlign === BI.HorizontalAlign.Center || ob.horizontalAlign === BI.HorizontalAlign.Stretch;
+        var verticalAlignTop = !ob.verticalAlign || ob.verticalAlign === BI.VerticalAlign.TOP;
+        if (verticalAlignTop && justOneItem) {
+            return BI.extend({}, ob, {type: "bi.horizontal_auto"});
+        }
+        var supportFlex = isSupportFlex();
         // 在横向自适应场景下我们需要使用table的自适应撑出滚动条的特性（flex处理不了这种情况）
         // 主要出现在center_adapt或者horizontal_adapt的场景，或者主动设置horizontalAlign的场景
-        if (ob.horizontalAlign === BI.HorizontalAlign.Center || ob.horizontalAlign === BI.HorizontalAlign.Stretch) {
+        if (isAdapt) {
             return BI.extend({}, ob, {type: "bi.table_adapt"});
         }
         if (supportFlex) {
             return BI.extend({}, ob, {type: "bi.flex_horizontal"});
         }
-        // // 解决使用inline_vertical_adapt的顺序问题
-        // // 从右往左放置时，为了兼容，我们统一采用从右到左的放置方式
-        // if (ob.horizontalAlign === BI.HorizontalAlign.Right) {
-        //     return BI.extend({verticalAlign: BI.VerticalAlign.Top}, ob, {
-        //         type: "bi.inline_vertical_adapt",
-        //         items: ob.items && ob.items.reverse()
-        //     });
-        // }
         return BI.extend({}, ob, {type: "bi.table_adapt"});
-    });
-    BI.Plugin.configWidget("bi.center_adapt", function (ob) {
-        var supportFlex = isSupportFlex(), justOneItem = (ob.items && ob.items.length <= 1);
-        var isAdapt = !ob.horizontalAlign || ob.horizontalAlign === BI.HorizontalAlign.Center || ob.horizontalAlign === BI.HorizontalAlign.Stretch;
-        if (!isAdapt || justOneItem) {
-            if (supportFlex) {
-                return BI.extend({}, ob, {type: "bi.flex_center_adapt"});
-            }
-            return BI.extend({}, ob, {type: "bi.inline_center_adapt"});
-        }
-        return ob;
-    });
-    BI.Plugin.configWidget("bi.vertical_adapt", function (ob) {
-        var supportFlex = isSupportFlex(), justOneItem = (ob.items && ob.items.length <= 1);
-        var isAdapt = ob.horizontalAlign === BI.HorizontalAlign.Center || ob.horizontalAlign === BI.HorizontalAlign.Stretch;
-        if (!isAdapt || justOneItem) {
-            if (supportFlex) {
-                return BI.extend({}, ob, {type: "bi.flex_vertical_center_adapt"});
-            }
-            return BI.extend({}, ob, {type: "bi.inline_vertical_adapt"});
-        }
-        return ob;
-    });
-    BI.Plugin.configWidget("bi.horizontal_adapt", function (ob) {
-        var justOneItem = (ob.items && ob.items.length <= 1);
-        if (!ob.verticalAlign || ob.verticalAlign === BI.VerticalAlign.TOP) {
-            if (justOneItem) {
-                return BI.extend({}, ob, {type: "bi.horizontal_auto"});
-            }
-        }
-        return ob;
     });
     BI.Plugin.configWidget("bi.horizontal_float", function (ob) {
         if (isSupportFlex()) {
