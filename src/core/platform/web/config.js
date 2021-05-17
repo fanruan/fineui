@@ -60,12 +60,18 @@ BI.prepares.push(function () {
         // 在横向自适应场景下我们需要使用table的自适应撑出滚动条的特性（flex处理不了这种情况）
         // 主要出现在center_adapt或者horizontal_adapt的场景，或者主动设置horizontalAlign的场景
         if (isAdapt) {
-            return BI.extend({}, ob, {type: "bi.table_adapt"});
+            return BI.extend({
+                horizontalAlign: BI.HorizontalAlign.Center
+            }, ob, {type: "bi.table_adapt"});
         }
         if (supportFlex) {
-            return BI.extend({}, ob, {type: "bi.flex_horizontal"});
+            return BI.extend({
+                horizontalAlign: BI.HorizontalAlign.Center
+            }, ob, {type: "bi.flex_horizontal"});
         }
-        return BI.extend({}, ob, {type: "bi.table_adapt"});
+        return BI.extend({
+            horizontalAlign: BI.HorizontalAlign.Center
+        }, ob, {type: "bi.table_adapt"});
     });
     BI.Plugin.configWidget("bi.horizontal_float", function (ob) {
         if (isSupportFlex()) {
