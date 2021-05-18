@@ -10,7 +10,7 @@ export declare class Single extends Widget {
         title?: string | (() => string) | null,
         warningTitle?: string | (() => string) | null,
         tipType?: "success" | "warning",
-        value?: string | null,
+        value?: any,
 
         /**
          * title是否跟随鼠标
