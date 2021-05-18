@@ -1,4 +1,4 @@
-/*! time: 2021-5-18 11:30:14 AM */
+/*! time: 2021-5-18 1:50:16 PM */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -28755,9 +28755,17 @@ BI.Toast = BI.inherit(BI.Tip, {
             e.stopEvent();
             return false;
         };
-        this.element.bind({click: fn, mousedown: fn, mouseup: fn, mouseover: fn, mouseenter: fn, mouseleave: fn, mousemove: fn});
+        this.element.bind({
+            click: fn,
+            mousedown: fn,
+            mouseup: fn,
+            mouseover: fn,
+            mouseenter: fn,
+            mouseleave: fn,
+            mousemove: fn
+        });
         var cls = "close-font";
-        switch(o.level) {
+        switch (o.level) {
             case "success":
                 cls = "toast-success-font";
                 break;
@@ -28790,7 +28798,7 @@ BI.Toast = BI.inherit(BI.Tip, {
 
         var columnSize = [36, ""];
 
-        if(o.autoClose === false) {
+        if (o.autoClose === false) {
             items.push({
                 type: "bi.icon_button",
                 cls: "close-font toast-icon",
@@ -28803,7 +28811,8 @@ BI.Toast = BI.inherit(BI.Tip, {
         }
 
         this.text = BI.createWidget({
-            type: "bi.horizontal_adapt",
+            type: "bi.horizontal",
+            horizontalAlign: BI.HorizontalAlign.Stretch,
             element: this,
             items: items,
             vgap: 7,
