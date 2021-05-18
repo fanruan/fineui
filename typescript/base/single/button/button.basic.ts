@@ -6,7 +6,6 @@ export declare class BasicButton extends Single {
     static xtype: string;
 
     props: {
-        value?: string;
         stopEvent?: boolean;
         stopPropagation?: boolean;
         selected?: boolean;
