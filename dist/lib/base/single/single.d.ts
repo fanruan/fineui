@@ -4,6 +4,18 @@ interface SingleOpt {
     belowMouse?: boolean;
 }
 export declare class Single extends Widget {
+    props: {
+        readonly: boolean;
+        title: string | (() => string) | null;
+        warningTitle: string | (() => string) | null;
+        tipType: "success" | "warning";
+        value: string | null;
+        /**
+         * title是否跟随鼠标
+         * @default false
+         */
+        belowMouse: boolean;
+    };
     _showToolTip(e: Event, opt?: SingleOpt): void;
     _hideTooltip(): void;
     _clearTimeOut(): void;
