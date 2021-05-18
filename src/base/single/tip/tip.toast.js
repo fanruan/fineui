@@ -71,7 +71,7 @@ BI.Toast = BI.inherit(BI.Tip, {
             rgap: o.autoClose ? this._const.hgap : 0
         }];
 
-        var columnSize = [36, ""];
+        var columnSize = [36, "fill"];
 
         if (o.autoClose === false) {
             items.push({
