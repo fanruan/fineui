@@ -1,4 +1,4 @@
-/*! time: 2021-5-18 4:50:15 PM */
+/*! time: 2021-5-18 9:20:20 PM */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -28406,7 +28406,7 @@ BI.Toast = BI.inherit(BI.Tip, {
             rgap: o.autoClose ? this._const.hgap : 0
         }];
 
-        var columnSize = [36, ""];
+        var columnSize = [36, "fill"];
 
         if (o.autoClose === false) {
             items.push({
