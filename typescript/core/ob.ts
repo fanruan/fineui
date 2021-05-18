@@ -47,6 +47,12 @@ interface Props {
 }
 
 export declare class OB {
+
+    /**
+     * 用于jsx props声明
+     */
+    __props: Partial<this['props']>;
+
     props: Props | (<T>(config: T) => Props & T);
 
     options: this["props"];
