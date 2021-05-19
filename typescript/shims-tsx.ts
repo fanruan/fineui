@@ -26,8 +26,11 @@ interface ElementClassProps<T> extends UIProps {
     invisible: boolean;
     invalid: boolean;
     attributes: {
-        [key: string]: any
-    }
+        [key: string]: any;
+    };
+    css: {
+        [key: string]: any;
+    };
     tagName: string;
     element: any;
 
