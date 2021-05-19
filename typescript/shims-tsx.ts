@@ -33,7 +33,7 @@ interface ElementClassProps<T> extends UIProps {
 
     beforeRender(callback: () => void): void;
     beforeInit(callback: () => void): void;
-    render(): void;
+    render(): any;
 }
 
 declare namespace JSX {
