@@ -164,6 +164,10 @@ import { BlankIconTextItem } from './base/single/button/listitem/blankicontextit
 import { Broadcasts, Layers } from "./base/base";
 import { BroadcastController } from "./core/controller/controller.broadcast";
 import { Pager } from "./base/pager/pager";
+import { TimeInterval } from './widget/timeinterval/timeinterval';
+import { DynamicDateTimePane } from './widget/datetimepane/datetimepane';
+import { SingleSelectInsertList } from './widget/singleselect/singleselectlist.insert';
+import { MultiSelectTree } from './widget/multiselecttree/multiselecttree';
 
 
 export interface BI extends _func, _i18n, _base, _inject, _var, _web, _utils {
@@ -335,6 +339,10 @@ export interface BI extends _func, _i18n, _base, _inject, _var, _web, _utils {
     AdaptiveLayout: typeof AdaptiveLayout;
     HexColorChooserPopup: typeof HexColorChooserPopup;
     BlankIconTextItem: typeof BlankIconTextItem;
+    TimeInterval: typeof TimeInterval;
+    DynamicDateTimePane: typeof TimeInterval;
+    SingleSelectInsertList: typeof TimeInterval;
+    MultiSelectTree: typeof TimeInterval;
 }
 
 export default {
@@ -506,4 +514,8 @@ export {
     AdaptiveLayout,
     HexColorChooserPopup,
     BlankIconTextItem,
+    TimeInterval,
+    DynamicDateTimePane,
+    SingleSelectInsertList,
+    MultiSelectTree,
 };

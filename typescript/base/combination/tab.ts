@@ -6,6 +6,15 @@ export declare class Tab extends Widget {
 
     static EVENT_CHANGE: string;
 
+    props: {
+        showIndex: any;
+        cardCreator: Function;
+        direction?: string; // top, bottom, left, right, custom
+        single?: boolean; // 是不是单页面
+        logic?: any;
+        tab?: boolean;
+    }
+
     setSelect(v: string | number, action?: Action, callback?: Function): void;
 
     removeTab(v: string | number): void;
