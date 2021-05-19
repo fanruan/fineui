@@ -8,13 +8,18 @@
 
 !(function () {
     function callLifeHook (self, life) {
-        var hook = self.options[life] || self[life];
+        var hooks = [], hook;
+        hook = self[life];
         if (hook) {
-            var hooks = BI.isArray(hook) ? hook : [hook];
-            BI.each(hooks, function (i, hook) {
-                hook.call(self);
-            });
+            hooks = hooks.concat(BI.isArray(hook) ? hook : [hook]);
         }
+        hook = self.options[life];
+        if (hook) {
+            hooks = hooks.concat(BI.isArray(hook) ? hook : [hook]);
+        }
+        BI.each(hooks, function (i, hook) {
+            hook.call(self);
+        });
     }
 
     BI.Widget = BI.Widget || BI.inherit(BI.OB, {
