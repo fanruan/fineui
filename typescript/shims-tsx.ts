@@ -29,6 +29,11 @@ interface ElementClassProps<T> extends UIProps {
         [key: string]: any
     }
     tagName: string;
+    element: any;
+
+    beforeRender(callback: () => void): void;
+    beforeInit(callback: () => void): void;
+    render(): void;
 }
 
 declare namespace JSX {
