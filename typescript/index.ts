@@ -340,9 +340,9 @@ export interface BI extends _func, _i18n, _base, _inject, _var, _web, _utils {
     HexColorChooserPopup: typeof HexColorChooserPopup;
     BlankIconTextItem: typeof BlankIconTextItem;
     TimeInterval: typeof TimeInterval;
-    DynamicDateTimePane: typeof TimeInterval;
-    SingleSelectInsertList: typeof TimeInterval;
-    MultiSelectTree: typeof TimeInterval;
+    DynamicDateTimePane: typeof DynamicDateTimePane;
+    SingleSelectInsertList: typeof SingleSelectInsertList;
+    MultiSelectTree: typeof MultiSelectTree;
 }
 
 export default {
