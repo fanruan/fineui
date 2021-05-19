@@ -8,11 +8,13 @@ export declare class Tab extends Widget {
 
     props: {
         showIndex: any;
-        cardCreator: Function;
-        direction?: string; // top, bottom, left, right, custom
+        cardCreator: (v: any) => Obj;
+        direction?: 'top' | 'bottom' | 'left' | 'right' | 'custom'; // top, bottom, left, right, custom
         single?: boolean; // 是不是单页面
-        logic?: any;
-        tab?: boolean;
+        logic?: {
+            dynamic: boolean;
+        };
+        tab?: any[];
     }
 
     setSelect(v: string | number, action?: Action, callback?: Function): void;
