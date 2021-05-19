@@ -14,9 +14,21 @@ interface UIProps {
 }
 
 interface ElementClassProps<T> extends UIProps {
-    baseCls: string;
     cls: string;
+    extraCls: string;
     ref: (ref: T) => void;
+    listeners: {
+        eventName: string;
+        action: (...args: any[]) => any;
+        once?: boolean;
+    }[];
+    disabled: boolean;
+    invisible: boolean;
+    invalid: boolean;
+    attributes: {
+        [key: string]: any
+    }
+    tagName: string;
 }
 
 declare namespace JSX {
