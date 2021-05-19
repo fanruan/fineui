@@ -1,8 +1,8 @@
 declare const React: any;
 
 interface UIProps {
-    width: number;
-    height: number;
+    width: number | string;
+    height: number | string;
     top: number;
     left: number;
     bottom: number;
