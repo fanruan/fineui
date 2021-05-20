@@ -1,4 +1,4 @@
-/*! time: 2021-5-20 9:00:18 AM */
+/*! time: 2021-5-20 3:30:16 PM */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -9062,13 +9062,18 @@ module.exports = !__webpack_require__(905)(function () {
 
 !(function () {
     function callLifeHook (self, life) {
-        var hook = self.options[life] || self[life];
+        var hooks = [], hook;
+        hook = self[life];
         if (hook) {
-            var hooks = BI.isArray(hook) ? hook : [hook];
-            BI.each(hooks, function (i, hook) {
-                hook.call(self);
-            });
+            hooks = hooks.concat(BI.isArray(hook) ? hook : [hook]);
         }
+        hook = self.options[life];
+        if (hook) {
+            hooks = hooks.concat(BI.isArray(hook) ? hook : [hook]);
+        }
+        BI.each(hooks, function (i, hook) {
+            hook.call(self);
+        });
     }
 
     BI.Widget = BI.Widget || BI.inherit(BI.OB, {
