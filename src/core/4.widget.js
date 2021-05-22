@@ -574,6 +574,7 @@
             if (this.__async === true || this.__asking === true) {
                 return;
             }
+            this._isMounted = false;
             // this.purgeListeners();
             this.empty();
             this._initCurrent();
