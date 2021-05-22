@@ -568,13 +568,17 @@
             this.element.empty();
         },
 
-        // 默认的populate方法就是干掉重来
+        // 默认的reset方法就是干掉重来
         reset: function () {
-            this.purgeListeners();
+            // 还在异步状态的不需要执行reset
+            if (this.__async === true || this.__asking === true) {
+                return;
+            }
+            // this.purgeListeners();
             this.empty();
             this._initCurrent();
             this._init();
-            this._initRef();
+            // this._initRef();
         },
 
         _destroy: function () {
