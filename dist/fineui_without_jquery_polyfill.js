@@ -1,4 +1,4 @@
-/*! time: 2021-5-20 3:30:16 PM */
+/*! time: 2021-5-23 9:00:33 AM */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -6693,13 +6693,18 @@ BI.Req = {
             this.element.empty();
         },
 
-        // 默认的populate方法就是干掉重来
+        // 默认的reset方法就是干掉重来
         reset: function () {
-            this.purgeListeners();
+            // 还在异步状态的不需要执行reset
+            if (this.__async === true || this.__asking === true) {
+                return;
+            }
+            this._isMounted = false;
+            // this.purgeListeners();
             this.empty();
             this._initCurrent();
             this._init();
-            this._initRef();
+            // this._initRef();
         },
 
         _destroy: function () {
@@ -15900,19 +15905,6 @@ BI.AbsoluteLayout = BI.inherit(BI.Layout, {
 
     resize: function () {
         this.stroke(this.options.items);
-    },
-
-    stroke: function (items) {
-        this.options.items = items || [];
-        var self = this;
-        BI.each(items, function (i, item) {
-            if (item) {
-                if (!BI.isWidget(item) && !item.el) {
-                    throw new Error("el must be exist");
-                }
-                self._addElement(i, item);
-            }
-        });
     },
 
     populate: function (items) {
