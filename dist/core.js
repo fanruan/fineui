@@ -1,4 +1,4 @@
-/*! time: 2021-5-23 9:00:33 AM */
+/*! time: 2021-5-23 10:30:20 AM */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -9628,11 +9628,12 @@ module.exports = !__webpack_require__(905)(function () {
             if (this.__async === true || this.__asking === true) {
                 return;
             }
-            this._isMounted = false;
+            // this._isMounted = false;
             // this.purgeListeners();
             this.empty();
             this._initCurrent();
             this._init();
+            this._mount();
             // this._initRef();
         },
 
