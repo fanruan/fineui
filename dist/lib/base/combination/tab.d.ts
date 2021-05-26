@@ -3,6 +3,16 @@ import { Action } from "../../core/action/action";
 export declare class Tab extends Widget {
     static xtype: string;
     static EVENT_CHANGE: string;
+    props: {
+        showIndex: any;
+        cardCreator: (v: any) => Obj;
+        direction?: 'top' | 'bottom' | 'left' | 'right' | 'custom';
+        single?: boolean;
+        logic?: {
+            dynamic: boolean;
+        };
+        tab?: any[];
+    };
     setSelect(v: string | number, action?: Action, callback?: Function): void;
     removeTab(v: string | number): void;
     getSelect(): string | number;

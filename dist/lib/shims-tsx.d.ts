@@ -1,7 +1,7 @@
 declare const React: any;
 interface UIProps {
-    width: number;
-    height: number;
+    width: number | string;
+    height: number | string;
     top: number;
     left: number;
     bottom: number;
@@ -12,9 +12,28 @@ interface UIProps {
     bgap: number;
 }
 interface ElementClassProps<T> extends UIProps {
-    baseCls: string;
     cls: string;
+    extraCls: string;
     ref: (ref: T) => void;
+    listeners: {
+        eventName: string;
+        action: (...args: any[]) => any;
+        once?: boolean;
+    }[];
+    disabled: boolean;
+    invisible: boolean;
+    invalid: boolean;
+    attributes: {
+        [key: string]: any;
+    };
+    css: {
+        [key: string]: any;
+    };
+    tagName: string;
+    element: any;
+    beforeRender(callback: () => void): void;
+    beforeInit(callback: () => void): void;
+    render(): any;
 }
 declare namespace JSX {
     interface IntrinsicElements {

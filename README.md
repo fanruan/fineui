@@ -12,4 +12,4 @@ http://fanruan.design/doc.html?post=0169cf558d
 
 License
 ============
-Please refer to [LICENSE](https://github.com/fanruan/fineui/blob/master/LICENSE) file.
+Please refer to [LICENSE](https://code.fanruan.com/fanruan/fineui/src/branch/master/LICENSE) file.

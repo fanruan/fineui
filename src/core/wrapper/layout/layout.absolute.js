@@ -85,19 +85,6 @@ BI.AbsoluteLayout = BI.inherit(BI.Layout, {
         this.stroke(this.options.items);
     },
 
-    stroke: function (items) {
-        this.options.items = items || [];
-        var self = this;
-        BI.each(items, function (i, item) {
-            if (item) {
-                if (!BI.isWidget(item) && !item.el) {
-                    throw new Error("el must be exist");
-                }
-                self._addElement(i, item);
-            }
-        });
-    },
-
     populate: function (items) {
         BI.AbsoluteLayout.superclass.populate.apply(this, arguments);
         this._mount();
