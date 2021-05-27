@@ -74,24 +74,14 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
             self.fireEvent(BI.MultiSelectInsertCombo.EVENT_STOP);
         });
         this.trigger.on(BI.MultiSelectInsertTrigger.EVENT_PAUSE, function () {
-            if (this.getSearcher().hasMatched()) {
-                self._addItem(assertShowValue, true);
-            }
-        });
-        this.trigger.on(BI.MultiSelectInsertTrigger.EVENT_ADD_ITEM, function () {
-            if (!this.getSearcher().hasMatched()) {
-                self._addItem(assertShowValue);
-                var addedValue = this.getSearcher().getKeyword();
-                self._stopEditing();
-                self.fireEvent(BI.MultiSelectInsertCombo.EVENT_ADD_ITEM, addedValue);
-            }
+            self._addItem(assertShowValue, true);
         });
         this.trigger.on(BI.MultiSelectInsertTrigger.EVENT_SEARCHING, function (keywords) {
             var last = BI.last(keywords);
             keywords = BI.initial(keywords || []);
             if (keywords.length > 0) {
                 self._joinKeywords(keywords, function () {
-                    if (BI.isEndWithBlank(last)) {
+                    if (BI.endWith(last, BI.BlankSplitChar)) {
                         self.combo.setValue(self.storeValue);
                         assertShowValue();
                         self.combo.populate();
@@ -300,9 +290,9 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
         });
     },
 
-    _addItem: function (assertShowValue, matched) {
+    _addItem: function (assertShowValue) {
         var self = this;
-        var keyword = matched ? this.trigger.getSearcher().getMatchedItemValue() : this.trigger.getSearcher().getKeyword();
+        var keyword = this.trigger.getSearcher().getKeyword();
         this._join({
             type: BI.Selection.Multi,
             value: [keyword]
@@ -344,20 +334,12 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
         var self = this, o = this.options;
         this._assertValue(this.storeValue);
         this.requesting = true;
-        o.itemsCreator({
-            type: BI.MultiSelectInsertCombo.REQ_GET_ALL_DATA,
-            keywords: keywords
-        }, function (ob) {
-            var values = BI.map(ob.items, "value");
-            digest(values);
-        });
 
-        function digest (items) {
-            var selectedMap = self._makeMap(items);
+        digest();
+
+        function digest () {
             BI.each(keywords, function (i, val) {
-                if (BI.isNotNull(selectedMap[val])) {
-                    self.storeValue.type === BI.Selection.Multi ? BI.pushDistinct(self.storeValue.value, val) : BI.remove(self.storeValue.value, val);
-                }
+                self.storeValue.type === BI.Selection.Multi ? BI.pushDistinct(self.storeValue.value, val) : BI.remove(self.storeValue.value, val);
             });
             self._adjust(callback);
         }
@@ -491,6 +473,5 @@ BI.MultiSelectInsertCombo.EVENT_STOP = "EVENT_STOP";
 BI.MultiSelectInsertCombo.EVENT_SEARCHING = "EVENT_SEARCHING";
 BI.MultiSelectInsertCombo.EVENT_CLICK_ITEM = "EVENT_CLICK_ITEM";
 BI.MultiSelectInsertCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
-BI.MultiSelectInsertCombo.EVENT_ADD_ITEM = "EVENT_ADD_ITEM";
 
 BI.shortcut("bi.multi_select_insert_combo", BI.MultiSelectInsertCombo);

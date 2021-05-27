@@ -55,25 +55,11 @@ BI.SingleSelectInsertList = BI.inherit(BI.Single, {
                 this.setKeyword(op.keywords[0]);
                 o.itemsCreator(op, callback);
             },
-            listeners: [{
-                eventName: BI.SingleSelectSearchInsertPane.EVENT_ADD_ITEM,
-                action: function () {
-                    var keyword = self.trigger.getKeyword();
-                    if (!self.trigger.hasMatched()) {
-                        self.storeValue = keyword;
-                        self._showAdapter();
-                        self.adapter.setValue(self.storeValue);
-                        self.adapter.populate();
-                        self.fireEvent(BI.SingleSelectInsertList.EVENT_CHANGE);
-                    }
-                }
-            }]
         });
         this.searcherPane.setVisible(false);
 
         this.trigger = BI.createWidget({
             type: "bi.searcher",
-            allowSearchBlank: false,
             isAutoSearch: false,
             isAutoSync: false,
             onSearch: function (op, callback) {
@@ -126,7 +112,7 @@ BI.SingleSelectInsertList = BI.inherit(BI.Single, {
                     keywords = BI.initial(keywords || []);
                     if (keywords.length > 0) {
                         self._joinKeywords(keywords, function () {
-                            if (BI.isEndWithBlank(last)) {
+                            if (BI.endWith(last, BI.BlankSplitChar)) {
                                 self.adapter.setValue(self.storeValue);
                                 assertShowValue();
                                 self.adapter.populate();

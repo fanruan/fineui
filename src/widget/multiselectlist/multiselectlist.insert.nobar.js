@@ -61,32 +61,21 @@ BI.MultiSelectInsertNoBarList = BI.inherit(BI.Single, {
                     o.itemsCreator(op, callback);
                 }
             },
-            listeners: [{
-                eventName: BI.MultiSelectSearchInsertPane.EVENT_ADD_ITEM,
-                action: function () {
-                    var keyword = self.trigger.getKeyword();
-                    if (!self.trigger.hasMatched()) {
-                        if (self.storeValue.type === BI.Selection.Multi) {
-                            BI.pushDistinct(self.storeValue.value, keyword);
-                        }
-                        self._showAdapter();
-                        self.adapter.setValue(self.storeValue);
-                        self.adapter.populate();
-                        if (self.storeValue.type === BI.Selection.Multi) {
-                            self.fireEvent(BI.MultiSelectInsertNoBarList.EVENT_CHANGE);
-                        }
-                    }
-                }
-            }]
         });
         this.searcherPane.setVisible(false);
 
         this.trigger = BI.createWidget({
             type: "bi.searcher",
             el: {
+                type: "bi.select_patch_editor",
+                el: {
+                    type: "bi.search_editor",
+                },
+                ref: function (ref) {
+                    self.editor = ref;
+                },
                 height: o.searcherHeight
             },
-            allowSearchBlank: false,
             isAutoSearch: false,
             isAutoSync: false,
             onSearch: function (op, callback) {
@@ -116,33 +105,31 @@ BI.MultiSelectInsertNoBarList = BI.inherit(BI.Single, {
                 eventName: BI.Searcher.EVENT_PAUSE,
                 action: function () {
                     var keyword = this.getKeyword();
-                    if (this.hasMatched()) {
-                        self._join({
-                            type: BI.Selection.Multi,
-                            value: [keyword]
-                        }, function () {
-                            if (self.storeValue.type === BI.Selection.Multi) {
-                                BI.pushDistinct(self.storeValue.value, keyword);
-                            }
-                            self._showAdapter();
-                            self.adapter.setValue(self.storeValue);
-                            self._setStartValue(keyword);
-                            assertShowValue();
-                            self.adapter.populate();
-                            self._setStartValue("");
-                            self.fireEvent(BI.MultiSelectInsertNoBarList.EVENT_CHANGE);
-                        });
-                    }
+                    self._join({
+                        type: BI.Selection.Multi,
+                        value: [keyword]
+                    }, function () {
+                        if (self.storeValue.type === BI.Selection.Multi) {
+                            BI.pushDistinct(self.storeValue.value, keyword);
+                        }
+                        self._showAdapter();
+                        self.adapter.setValue(self.storeValue);
+                        self._setStartValue(keyword);
+                        assertShowValue();
+                        self.adapter.populate();
+                        self._setStartValue("");
+                        self.fireEvent(BI.MultiSelectInsertNoBarList.EVENT_CHANGE);
+                    });
                 }
             }, {
                 eventName: BI.Searcher.EVENT_SEARCHING,
                 action: function () {
-                    var keywords = this.getKeywords();
+                    var keywords = self._getKeywords();
                     var last = BI.last(keywords);
                     keywords = BI.initial(keywords || []);
                     if (keywords.length > 0) {
                         self._joinKeywords(keywords, function () {
-                            if (BI.isEndWithBlank(last)) {
+                            if (BI.endWith(last, BI.BlankSplitChar)) {
                                 self.adapter.setValue(self.storeValue);
                                 assertShowValue();
                                 self.adapter.populate();
@@ -201,6 +188,19 @@ BI.MultiSelectInsertNoBarList = BI.inherit(BI.Single, {
         });
     },
 
+    _getKeywords: function () {
+        var val = this.editor.getValue();
+        var keywords = val.split(/\u200b\s\u200b/);
+        if (BI.isEmptyString(keywords[keywords.length - 1])) {
+            keywords = keywords.slice(0, keywords.length - 1);
+        }
+        if (/\u200b\s\u200b$/.test(val)) {
+            return keywords.concat([BI.BlankSplitChar]);
+        }
+
+        return keywords;
+    },
+
     _showAdapter: function () {
         this.adapter.setVisible(true);
         this.searcherPane.setVisible(false);
@@ -229,20 +229,11 @@ BI.MultiSelectInsertNoBarList = BI.inherit(BI.Single, {
         var self = this, o = this.options;
         this._assertValue(this.storeValue);
         // 和复选下拉框同步，allData做缓存是会爆炸的
-        o.itemsCreator({
-            type: BI.MultiSelectInsertNoBarList.REQ_GET_ALL_DATA,
-            keywords: keywords
-        }, function (ob) {
-            var values = BI.map(ob.items, "value");
-            digest(values);
-        });
+        digest();
 
         function digest (items) {
-            var selectedMap = self._makeMap(items);
             BI.each(keywords, function (i, val) {
-                if (BI.isNotNull(selectedMap[val])) {
-                    self.storeValue.type === BI.Selection.Multi ? BI.pushDistinct(self.storeValue.value, val) : BI.remove(self.storeValue.value, val);
-                }
+                self.storeValue.type === BI.Selection.Multi ? BI.pushDistinct(self.storeValue.value, val) : BI.remove(self.storeValue.value, val);
             });
             callback();
         }

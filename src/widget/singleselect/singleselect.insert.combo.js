@@ -48,16 +48,6 @@ BI.SingleSelectInsertCombo = BI.inherit(BI.Single, {
             searcher: {
                 popup: {
                     type: "bi.single_select_search_insert_pane",
-                    listeners: [{
-                        eventName: BI.SingleSelectSearchInsertPane.EVENT_ADD_ITEM,
-                        action: function () {
-                            if (!self.trigger.getSearcher().hasMatched()) {
-                                self.storeValue = self.trigger.getSearcher().getKeyword();
-                                assertShowValue();
-                                self._defaultState();
-                            }
-                        }
-                    }]
                 }
             }
         });
@@ -78,22 +68,16 @@ BI.SingleSelectInsertCombo = BI.inherit(BI.Single, {
             self.fireEvent(BI.SingleSelectInsertCombo.EVENT_STOP);
         });
         this.trigger.on(BI.SingleSelectTrigger.EVENT_PAUSE, function () {
-            if (this.getSearcher().hasMatched()) {
-                var keyword = this.getSearcher().getMatchedItemValue();
-                self.storeValue = keyword;
-                self.combo.setValue(self.storeValue);
-                self._setStartValue(keyword);
-                assertShowValue();
-                self.populate();
-                self._setStartValue();
-            }
+            self.storeValue = self.trigger.getSearcher().getKeyword();
+            assertShowValue();
+            self._defaultState();
         });
         this.trigger.on(BI.SingleSelectTrigger.EVENT_SEARCHING, function (keywords) {
             var last = BI.last(keywords);
             keywords = BI.initial(keywords || []);
             if (keywords.length > 0) {
                 self._joinKeywords(keywords, function () {
-                    if (BI.isEndWithBlank(last)) {
+                    if (BI.endWith(last, BI.BlankSplitChar)) {
                         self.combo.setValue(self.storeValue);
                         assertShowValue();
                         self.combo.populate();

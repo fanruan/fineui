@@ -76,18 +76,13 @@ BI.MultiSelectNoBarCombo = BI.inherit(BI.Single, {
             self._setStartValue("");
             self.fireEvent(BI.MultiSelectNoBarCombo.EVENT_STOP);
         });
-        this.trigger.on(BI.MultiSelectTrigger.EVENT_PAUSE, function () {
-            if (this.getSearcher().hasMatched()) {
-                self._addItem(assertShowValue, true);
-            }
-        });
 
         this.trigger.on(BI.MultiSelectTrigger.EVENT_SEARCHING, function (keywords) {
             var last = BI.last(keywords);
             keywords = BI.initial(keywords || []);
             if (keywords.length > 0) {
                 self._joinKeywords(keywords, function () {
-                    if (BI.isEndWithBlank(last)) {
+                    if (BI.endWith(last, BI.BlankSplitChar)) {
                         self.combo.setValue(self.storeValue);
                         assertShowValue();
                         self.combo.populate();
@@ -292,7 +287,7 @@ BI.MultiSelectNoBarCombo = BI.inherit(BI.Single, {
 
     _addItem: function (assertShowValue, matched) {
         var self = this;
-        var keyword = matched ? this.trigger.getSearcher().getMatchedItemValue() : this.trigger.getSearcher().getKeyword();
+        var keyword = this.trigger.getSearcher().getKeyword();
         this._join({
             type: BI.Selection.Multi,
             value: [keyword]

@@ -43,7 +43,6 @@ BI.MultiSelectInsertSearcher = BI.inherit(BI.Widget, {
 
         this.searcher = BI.createWidget({
             type: "bi.searcher",
-            allowSearchBlank: false,
             element: this,
             height: o.height,
             isAutoSearch: false,
@@ -57,22 +56,16 @@ BI.MultiSelectInsertSearcher = BI.inherit(BI.Widget, {
                 type: "bi.multi_select_search_insert_pane",
                 valueFormatter: o.valueFormatter,
                 keywordGetter: function () {
-                    return self.editor.getValue();
+                    return self.editor.getKeyword();
                 },
                 itemsCreator: function (op, callback) {
-                    var keyword = self.editor.getValue();
+                    var keyword = self.editor.getKeyword();
                     op.keywords = [keyword];
                     this.setKeyword(keyword);
                     o.itemsCreator(op, callback);
                 },
                 itemHeight: o.itemHeight,
                 value: o.value,
-                listeners: [{
-                    eventName: BI.MultiSelectSearchInsertPane.EVENT_ADD_ITEM,
-                    action: function () {
-                        self.fireEvent(BI.MultiSelectInsertSearcher.EVENT_ADD_ITEM);
-                    }
-                }]
             }, o.popup),
 
             adapter: o.adapter,
@@ -115,7 +108,7 @@ BI.MultiSelectInsertSearcher = BI.inherit(BI.Widget, {
     },
 
     getKeyword: function () {
-        return this.editor.getValue();
+        return this.editor.getKeyword();
     },
 
     hasMatched: function () {
@@ -169,10 +162,6 @@ BI.MultiSelectInsertSearcher = BI.inherit(BI.Widget, {
         }
     },
 
-    getMatchedItemValue: function() {
-        return this.searcher.getView().getMatchedItemValue();
-    },
-
     getState: function() {
         return this.editor.getState();
     },
@@ -201,7 +190,6 @@ BI.MultiSelectInsertSearcher.EVENT_START = "EVENT_START";
 BI.MultiSelectInsertSearcher.EVENT_STOP = "EVENT_STOP";
 BI.MultiSelectInsertSearcher.EVENT_PAUSE = "EVENT_PAUSE";
 BI.MultiSelectInsertSearcher.EVENT_SEARCHING = "EVENT_SEARCHING";
-BI.MultiSelectInsertSearcher.EVENT_ADD_ITEM = "EVENT_ADD_ITEM";
 BI.MultiSelectInsertSearcher.EVENT_FOCUS = "EVENT_FOCUS";
 BI.MultiSelectInsertSearcher.EVENT_BLUR = "EVENT_BLUR";
 BI.shortcut("bi.multi_select_insert_searcher", BI.MultiSelectInsertSearcher);

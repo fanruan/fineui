@@ -41,7 +41,6 @@ BI.SingleSelectSearcher = BI.inherit(BI.Widget, {
 
         this.searcher = BI.createWidget({
             type: "bi.searcher",
-            allowSearchBlank: false,
             element: this,
             height: o.height,
             isAutoSearch: false,
@@ -93,10 +92,6 @@ BI.SingleSelectSearcher = BI.inherit(BI.Widget, {
         if(BI.isNotNull(o.value)){
             this.setState(o.value);
         }
-    },
-
-    getMatchedItemValue: function() {
-        return this.searcher.getView().getMatchedItemValue();
     },
 
     adjustView: function () {
