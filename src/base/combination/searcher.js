@@ -79,7 +79,9 @@ BI.Searcher = BI.inherit(BI.Widget, {
                     search();
                     break;
                 case BI.Events.PAUSE:
-                    self._pauseSearch();
+                    if (BI.endWith(this.getValue(), BI.BlankSplitChar)) {
+                        self._pauseSearch();
+                    }
                     break;
             }
         });
