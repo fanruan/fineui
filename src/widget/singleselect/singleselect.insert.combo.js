@@ -12,7 +12,8 @@ BI.SingleSelectInsertCombo = BI.inherit(BI.Single, {
             itemsCreator: BI.emptyFn,
             valueFormatter: BI.emptyFn,
             height: 24,
-            allowEdit: true
+            allowEdit: true,
+            watermark: BI.i18nText("BI-Basic_Search_And_Patch_Paste"),
         });
     },
 
@@ -29,6 +30,7 @@ BI.SingleSelectInsertCombo = BI.inherit(BI.Single, {
 
         this.trigger = BI.createWidget({
             type: "bi.single_select_trigger",
+            watermark: o.watermark,
             height: o.height - 2,
             allowNoSelect: o.allowNoSelect,
             allowEdit: o.allowEdit,
@@ -72,22 +74,7 @@ BI.SingleSelectInsertCombo = BI.inherit(BI.Single, {
             assertShowValue();
             self._defaultState();
         });
-        this.trigger.on(BI.SingleSelectTrigger.EVENT_SEARCHING, function (keywords) {
-            var last = BI.last(keywords);
-            keywords = BI.initial(keywords || []);
-            if (keywords.length > 0) {
-                self._joinKeywords(keywords, function () {
-                    if (BI.endWith(last, BI.BlankSplitChar)) {
-                        self.combo.setValue(self.storeValue);
-                        assertShowValue();
-                        self.combo.populate();
-                        self._setStartValue();
-                    } else {
-                        self.combo.setValue(self.storeValue);
-                        assertShowValue();
-                    }
-                });
-            }
+        this.trigger.on(BI.SingleSelectTrigger.EVENT_SEARCHING, function () {
             self.fireEvent(BI.SingleSelectInsertCombo.EVENT_SEARCHING);
         });
 
@@ -202,29 +189,6 @@ BI.SingleSelectInsertCombo = BI.inherit(BI.Single, {
 
     _makeMap: function (values) {
         return BI.makeObject(values || []);
-    },
-
-    _joinKeywords: function (keywords, callback) {
-        var self = this, o = this.options;
-        this._assertValue(this.storeValue);
-        this.requesting = true;
-        o.itemsCreator({
-            type: BI.SingleSelectInsertCombo.REQ_GET_ALL_DATA,
-            keywords: keywords
-        }, function (ob) {
-            var values = BI.map(ob.items, "value");
-            digest(values);
-        });
-
-        function digest (items) {
-            var selectedMap = self._makeMap(items);
-            BI.each(keywords, function (i, val) {
-                if (BI.isNotNull(selectedMap[val])) {
-                    BI.remove(self.storeValue.value, val);
-                }
-            });
-            self._adjust(callback);
-        }
     },
 
     _adjust: function (callback) {

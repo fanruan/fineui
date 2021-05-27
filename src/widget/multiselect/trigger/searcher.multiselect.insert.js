@@ -16,7 +16,8 @@ BI.MultiSelectInsertSearcher = BI.inherit(BI.Widget, {
             valueFormatter: BI.emptyFn,
             adapter: null,
             masker: {},
-            text: BI.i18nText("BI-Basic_Please_Select")
+            text: BI.i18nText("BI-Basic_Please_Select"),
+            watermark: BI.i18nText("BI-Basic_Search_And_Patch_Paste"),
         });
     },
 

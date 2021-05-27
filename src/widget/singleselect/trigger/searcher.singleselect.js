@@ -25,6 +25,7 @@ BI.SingleSelectSearcher = BI.inherit(BI.Widget, {
         this.editor = BI.createWidget(o.el, {
             type: "bi.single_select_editor",
             height: o.height,
+            watermark: o.watermark,
             text: o.text,
             listeners: [{
                 eventName: BI.SingleSelectEditor.EVENT_FOCUS,

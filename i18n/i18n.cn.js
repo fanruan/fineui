@@ -195,4 +195,5 @@ BI.i18n = {
     "BI-Basic_Year_Range_Error": "请选择{R1}年-{R2}年的日期",
     "BI-Basic_Year_Month_Range_Error": "请选择{R1}年{R2}月-{R3}年{R4}月的日期",
     "BI-Basic_Year_Quarter_Range_Error": "请选择{R1}年{R2}季度-{R3}年{R4}季度的日期",
+    "BI-Basic_Search_And_Patch_Paste": "搜索，支持批量粘贴、粘贴值通过换行识别"
 };

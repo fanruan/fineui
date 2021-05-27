@@ -66,6 +66,7 @@ BI.MultiSelectInsertList = BI.inherit(BI.Single, {
                 type: "bi.select_patch_editor",
                 el: {
                     type: "bi.search_editor",
+                    watermark: BI.i18nText("BI-Basic_Search_And_Patch_Paste"),
                 },
                 ref: function (ref) {
                     self.editor = ref;

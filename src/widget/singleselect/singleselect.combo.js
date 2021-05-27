@@ -63,22 +63,7 @@ BI.SingleSelectCombo = BI.inherit(BI.Single, {
             self._setStartValue();
             self.fireEvent(BI.SingleSelectCombo.EVENT_STOP);
         });
-        this.trigger.on(BI.SingleSelectTrigger.EVENT_SEARCHING, function (keywords) {
-            var last = BI.last(keywords);
-            keywords = BI.initial(keywords || []);
-            if (keywords.length > 0) {
-                self._joinKeywords(keywords, function () {
-                    if (BI.endWith(last, BI.BlankSplitChar)) {
-                        self.combo.setValue(self.storeValue);
-                        assertShowValue();
-                        self.combo.populate();
-                        self._setStartValue();
-                    } else {
-                        self.combo.setValue(self.storeValue);
-                        assertShowValue();
-                    }
-                });
-            }
+        this.trigger.on(BI.SingleSelectTrigger.EVENT_SEARCHING, function () {
             self.fireEvent(BI.SingleSelectCombo.EVENT_SEARCHING);
         });
 

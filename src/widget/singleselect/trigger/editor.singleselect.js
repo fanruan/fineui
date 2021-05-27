@@ -10,7 +10,8 @@ BI.SingleSelectEditor = BI.inherit(BI.Widget, {
         return BI.extend(BI.SingleSelectEditor.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-single-select-editor",
             el: {},
-            text: BI.i18nText("BI-Basic_Please_Select")
+            text: BI.i18nText("BI-Basic_Please_Select"),
+            watermark: BI.i18nText("BI-Basic_Search"),
         });
     },
 
@@ -21,7 +22,7 @@ BI.SingleSelectEditor = BI.inherit(BI.Widget, {
             type: "bi.select_patch_editor",
             element: this,
             height: o.height,
-            watermark: BI.i18nText("BI-Basic_Search"),
+            watermark: o.watermark,
             allowBlank: true,
             value: o.value,
             defaultText: o.text,
