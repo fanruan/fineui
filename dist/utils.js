@@ -1,4 +1,4 @@
-/*! time: 2021-5-27 7:20:19 PM */
+/*! time: 2021-5-28 9:30:19 AM */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -82,7 +82,7 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 1259);
+/******/ 	return __webpack_require__(__webpack_require__.s = 1260);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -671,7 +671,8 @@ _.extend(BI, {
         Bottom: "bottom",
         Stretch: "stretch"
     },
-    StartOfWeek: 1
+    StartOfWeek: 1,
+    BlankSplitChar: "\u200b \u200b",
 });
 
 
@@ -2916,7 +2917,7 @@ _.extend(BI, {
 
 /***/ }),
 
-/***/ 1117:
+/***/ 1118:
 /***/ (function(module, exports) {
 
 BI.i18n = {
@@ -3087,7 +3088,7 @@ BI.i18n = {
     "BI-More_Than": "大于",
     "BI-More_And_Equal": "大于等于",
     "BI-Please_Enter_SQL": "请输入SQL",
-    "BI-Basic_Click_To_Add_Text": "+点击新增\"{R1}\"",
+    "BI-Basic_Click_To_Add_Text": "点按回车键添加\"{R1}\"",
     "BI-Basic_Please_Select": "请选择",
     "BI-Basic_Font_Color": "文字颜色",
     "BI-Basic_Background_Color": "背景色",
@@ -3116,6 +3117,7 @@ BI.i18n = {
     "BI-Basic_Year_Range_Error": "请选择{R1}年-{R2}年的日期",
     "BI-Basic_Year_Month_Range_Error": "请选择{R1}年{R2}月-{R3}年{R4}月的日期",
     "BI-Basic_Year_Quarter_Range_Error": "请选择{R1}年{R2}季度-{R3}年{R4}季度的日期",
+    "BI-Basic_Search_And_Patch_Paste": "搜索，支持批量粘贴、粘贴值通过换行识别"
 };
 
 /***/ }),
@@ -3130,7 +3132,7 @@ BI.Req = {
 
 /***/ }),
 
-/***/ 1259:
+/***/ 1260:
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(91);
@@ -3149,8 +3151,8 @@ __webpack_require__(97);
 __webpack_require__(98);
 __webpack_require__(108);
 __webpack_require__(109);
-__webpack_require__(1117);
-__webpack_require__(1260);
+__webpack_require__(1118);
+__webpack_require__(1261);
 __webpack_require__(110);
 __webpack_require__(111);
 module.exports = __webpack_require__(112);
@@ -3158,7 +3160,7 @@ module.exports = __webpack_require__(112);
 
 /***/ }),
 
-/***/ 1260:
+/***/ 1261:
 /***/ (function(module, exports) {
 
 /**
