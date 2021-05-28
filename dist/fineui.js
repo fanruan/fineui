@@ -1,4 +1,4 @@
-/*! time: 2021-5-28 11:40:21 AM */
+/*! time: 2021-5-28 2:20:18 PM */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -61370,7 +61370,7 @@ BI.NumberIntervalSingleEidtor = BI.inherit(BI.Single, {
                 ref: function (_ref) {
                     self.editor = _ref;
                 },
-                height: o.height - 2,
+                height: o.height,
                 watermark: o.watermark,
                 allowBlank: o.allowBlank,
                 value: o.value,
