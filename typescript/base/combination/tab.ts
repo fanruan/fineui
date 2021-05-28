@@ -28,4 +28,6 @@ export declare class Tab extends Widget {
     getTab<T>(v: string | number): T;
 
     populate(): void;
+
+    isCardExisted(): boolean;
 }
