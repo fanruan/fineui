@@ -10,6 +10,8 @@ interface UIProps {
     lgap: number;
     tgap: number;
     bgap: number;
+    vgap: number;
+    hgap: number;
 }
 interface ElementClassProps<T> extends UIProps {
     cls: string;

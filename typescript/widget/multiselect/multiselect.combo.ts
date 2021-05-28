@@ -24,7 +24,7 @@ export declare class MultiSelectCombo extends Single {
     _joinKeywords(keywords: string[], callback: Function): void;
 
     _joinAll(res: {
-        type: string;
+        type: number;
         value: string[];
         assist: string[];
     }, callback: Function): void;
@@ -42,13 +42,13 @@ export declare class MultiSelectCombo extends Single {
     hideView(): void;
 
     setValue(value: {
-        type: string;
+        type: number;
         value: string[];
         assist: string[];
     }): void;
 
     getValue(): {
-        type: string;
+        type: number;
         value: string[];
         assist: string[];
     };

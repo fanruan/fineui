@@ -9,7 +9,8 @@ BI.SingleSelectInsertList = BI.inherit(BI.Single, {
             baseCls: "bi-multi-select-insert-list",
             allowNoSelect: false,
             itemsCreator: BI.emptyFn,
-            valueFormatter: BI.emptyFn
+            valueFormatter: BI.emptyFn,
+            searcherHeight: 24,
         });
     },
     _init: function () {
@@ -55,25 +56,22 @@ BI.SingleSelectInsertList = BI.inherit(BI.Single, {
                 this.setKeyword(op.keywords[0]);
                 o.itemsCreator(op, callback);
             },
-            listeners: [{
-                eventName: BI.SingleSelectSearchInsertPane.EVENT_ADD_ITEM,
-                action: function () {
-                    var keyword = self.trigger.getKeyword();
-                    if (!self.trigger.hasMatched()) {
-                        self.storeValue = keyword;
-                        self._showAdapter();
-                        self.adapter.setValue(self.storeValue);
-                        self.adapter.populate();
-                        self.fireEvent(BI.SingleSelectInsertList.EVENT_CHANGE);
-                    }
-                }
-            }]
         });
         this.searcherPane.setVisible(false);
 
         this.trigger = BI.createWidget({
             type: "bi.searcher",
-            allowSearchBlank: false,
+            el: {
+                type: "bi.select_patch_editor",
+                el: {
+                    type: "bi.search_editor",
+                    watermark: BI.i18nText("BI-Basic_Search_And_Patch_Paste"),
+                },
+                ref: function (ref) {
+                    self.editor = ref;
+                },
+                height: o.searcherHeight,
+            },
             isAutoSearch: false,
             isAutoSync: false,
             onSearch: function (op, callback) {
@@ -104,39 +102,15 @@ BI.SingleSelectInsertList = BI.inherit(BI.Single, {
                 eventName: BI.Searcher.EVENT_PAUSE,
                 action: function () {
                     var keyword = this.getKeyword();
-                    if (this.hasMatched()) {
-                        self.storeValue = keyword;
-                        self._showAdapter();
-                        self.adapter.setValue(self.storeValue);
-                        self._setStartValue(keyword);
-                        assertShowValue();
-                        self.adapter.populate();
-                        self._setStartValue();
-                        self.fireEvent(BI.SingleSelectInsertList.EVENT_CHANGE);
-                    } else {
-                        self._showAdapter();
-                    }
+                    self.storeValue = keyword;
+                    self._showAdapter();
+                    self.adapter.setValue(self.storeValue);
+                    self._setStartValue(keyword);
+                    assertShowValue();
+                    self.adapter.populate();
+                    self._setStartValue();
+                    self.fireEvent(BI.SingleSelectInsertList.EVENT_CHANGE);
 
-                }
-            }, {
-                eventName: BI.Searcher.EVENT_SEARCHING,
-                action: function () {
-                    var keywords = this.getKeyword();
-                    var last = BI.last(keywords);
-                    keywords = BI.initial(keywords || []);
-                    if (keywords.length > 0) {
-                        self._joinKeywords(keywords, function () {
-                            if (BI.isEndWithBlank(last)) {
-                                self.adapter.setValue(self.storeValue);
-                                assertShowValue();
-                                self.adapter.populate();
-                                self._setStartValue();
-                            } else {
-                                self.adapter.setValue(self.storeValue);
-                                assertShowValue();
-                            }
-                        });
-                    }
                 }
             }, {
                 eventName: BI.Searcher.EVENT_CHANGE,
@@ -189,31 +163,6 @@ BI.SingleSelectInsertList = BI.inherit(BI.Single, {
 
     _makeMap: function (values) {
         return BI.makeObject(values || []);
-    },
-
-    _joinKeywords: function (keywords, callback) {
-        var self = this, o = this.options;
-        this._assertValue(this.storeValue);
-        if (!this._allData) {
-            o.itemsCreator({
-                type: BI.SingleSelectInsertList.REQ_GET_ALL_DATA
-            }, function (ob) {
-                self._allData = BI.map(ob.items, "value");
-                digest(self._allData);
-            });
-        } else {
-            digest(this._allData);
-        }
-
-        function digest (items) {
-            var selectedMap = self._makeMap(items);
-            BI.each(keywords, function (i, val) {
-                if (BI.isNotNull(selectedMap[val])) {
-                    BI.pushDistinct(self.storeValue.value, val)
-                }
-            });
-            callback();
-        }
     },
 
     _setStartValue: function (value) {

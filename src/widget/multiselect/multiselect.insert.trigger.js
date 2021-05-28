@@ -49,9 +49,6 @@ BI.MultiSelectInsertTrigger = BI.inherit(BI.Trigger, {
         this.searcher.on(BI.MultiSelectInsertSearcher.EVENT_START, function () {
             self.fireEvent(BI.MultiSelectInsertTrigger.EVENT_START);
         });
-        this.searcher.on(BI.MultiSelectInsertSearcher.EVENT_ADD_ITEM, function () {
-            self.fireEvent(BI.MultiSelectInsertTrigger.EVENT_ADD_ITEM);
-        });
         this.searcher.on(BI.MultiSelectInsertSearcher.EVENT_PAUSE, function () {
             self.fireEvent(BI.MultiSelectInsertTrigger.EVENT_PAUSE);
         });
@@ -150,7 +147,6 @@ BI.MultiSelectInsertTrigger.EVENT_STOP = "EVENT_STOP";
 BI.MultiSelectInsertTrigger.EVENT_PAUSE = "EVENT_PAUSE";
 BI.MultiSelectInsertTrigger.EVENT_SEARCHING = "EVENT_SEARCHING";
 BI.MultiSelectInsertTrigger.EVENT_BEFORE_COUNTER_POPUPVIEW = "EVENT_BEFORE_COUNTER_POPUPVIEW";
-BI.MultiSelectInsertTrigger.EVENT_ADD_ITEM = "EVENT_ADD_ITEM";
 BI.MultiSelectInsertTrigger.EVENT_FOCUS = "EVENT_FOCUS";
 BI.MultiSelectInsertTrigger.EVENT_BLUR = "EVENT_BLUR";
 

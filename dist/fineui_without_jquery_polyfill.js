@@ -1,4 +1,4 @@
-/*! time: 2021-5-24 9:50:17 AM */
+/*! time: 2021-5-28 9:30:19 AM */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -82,7 +82,7 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 1436);
+/******/ 	return __webpack_require__(__webpack_require__.s = 1437);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -3407,7 +3407,8 @@ _.extend(BI, {
         Bottom: "bottom",
         Stretch: "stretch"
     },
-    StartOfWeek: 1
+    StartOfWeek: 1,
+    BlankSplitChar: "\u200b \u200b",
 });
 
 
@@ -20642,7 +20643,6 @@ BI.Searcher = BI.inherit(BI.Widget, {
             isAutoSearch: true, // 是否自动搜索
             isAutoSync: true, // 是否自动同步数据, 即是否保持搜索面板和adapter面板状态值的统一
             chooseType: BI.ButtonGroup.CHOOSE_TYPE_SINGLE,
-            allowSearchBlank: true, // 是否能够搜索包含空格的字符串
 
             // isAutoSearch为false时启用
             onSearch: function (op, callback) {
@@ -20701,8 +20701,7 @@ BI.Searcher = BI.inherit(BI.Widget, {
                     search();
                     break;
                 case BI.Events.PAUSE:
-                    // 可以搜索空格的情况下输入空格不做处理, 展示上一次的结果
-                    if (!o.allowSearchBlank) {
+                    if (BI.endWith(this.getValue(), BI.BlankSplitChar)) {
                         self._pauseSearch();
                     }
                     break;
@@ -20788,7 +20787,7 @@ BI.Searcher = BI.inherit(BI.Widget, {
     },
 
     _search: function () {
-        var self = this, o = this.options, keyword = o.allowSearchBlank ? this.editor.getValue() : this._getLastSearchKeyword();
+        var self = this, o = this.options, keyword = this.editor.getValue();
         if (keyword === "" || this._stop) {
             return;
         }
@@ -20823,7 +20822,10 @@ BI.Searcher = BI.inherit(BI.Widget, {
 
     _getLastSearchKeyword: function () {
         if (this.isValid()) {
-            var res = this.editor.getValue().match(/[\S]+/g);
+            var res = this.editor.getValue().split(/\u200b\s\u200b/);
+            if (BI.isEmptyString(res[res.length - 1])) {
+                res = res.slice(0, res.length - 1);
+            }
             return BI.isNull(res) ? "" : res[res.length - 1];
         }
     },
@@ -26526,6 +26528,7 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
             validationChecker: function () {
                 return true;
             },
+            scrolly: true,
         });
     },
 
@@ -26536,7 +26539,10 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
             tagName: "textarea",
             width: "100%",
             height: "100%",
-            cls: "bi-textarea textarea-editor-content display-block"
+            cls: "bi-textarea textarea-editor-content display-block",
+            css: o.scrolly ? null : {
+                overflowY: "hidden",
+            },
         });
         this.content.element.css({ resize: "none" });
         BI.createWidget({
@@ -26557,7 +26563,11 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
         this.content.element.on("input propertychange", function (e) {
             self._checkError();
             self._checkWaterMark();
+            self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.CHANGE, self.getValue(), self);
             self.fireEvent(BI.TextAreaEditor.EVENT_CHANGE);
+            if (BI.isEmptyString(self.getValue())) {
+                self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.EMPTY, self.getValue(), self);
+            }
         });
 
         this.content.element.focus(function () {
@@ -26574,8 +26584,18 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
         this.content.element.blur(function () {
             self._setErrorVisible(false);
             self._blur();
+            if (!self._isError()) {
+                self.fireEvent(BI.TextAreaEditor.EVENT_CONFIRM);
+            }
             self.fireEvent(BI.TextAreaEditor.EVENT_BLUR);
             BI.Widget._renderEngine.createElement(document).unbind("mousedown." + self.getName());
+        });
+        this.content.element.keydown(function () {
+           // 水印快速消失
+            self.watermark && self.watermark.setVisible(false);
+        });
+        this.content.element.click(function (e) {
+            e.stopPropagation();
         });
         if (BI.isKey(o.value)) {
             this.setValue(o.value);
@@ -26599,12 +26619,13 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
                         type: "bi.label",
                         cls: "bi-water-mark textarea-watermark",
                         textAlign: "left",
-                        whiteSpace: "normal",
+                        whiteSpace: o.scrolly ? "normal" : "nowrap",
+                        title: o.watermark,
                         text: o.watermark,
                         invalid: o.invalid,
                         disabled: o.disabled,
-                        hgap: 4,
-                        vgap: 4
+                        hgap: 6,
+                        vgap: o.height > 24 ? 4 : 2,
                     });
                     this.watermark.element.bind({
                         mousedown: function (e) {
@@ -26614,7 +26635,10 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
                                 self.blur();
                             }
                             e.stopEvent();
-                        }
+                        },
+                        click: function (e) {
+                            e.stopPropagation();
+                        },
                     });
                     BI.createWidget({
                         type: "bi.absolute",
@@ -26635,13 +26659,20 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
         }
     },
 
+    _isError: function () {
+        return this.isEnabled() && !this.options.validationChecker(this.getValue());
+    },
+
     _checkError: function () {
-        this._setErrorVisible(this.isEnabled() && !this.options.validationChecker(this.getValue()));
+        this._setErrorVisible(this._isError());
     },
 
     _focus: function () {
         this.content.element.addClass("textarea-editor-focus");
         this._checkWaterMark();
+        if (BI.isEmptyString(this.getValue())) {
+            this.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.EMPTY, this.getValue(), this);
+        }
     },
 
     _blur: function () {
@@ -26665,6 +26696,13 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
         }
     },
 
+    _defaultState: function () {
+        if (BI.isEmptyString(this.getValue())) {
+            this.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.EMPTY, this.getValue(), this);
+            this.fireEvent(BI.TextAreaEditor.EVENT_EMPTY);
+        }
+    },
+
     focus: function () {
         this._focus();
         this.content.element.focus();
@@ -26683,6 +26721,7 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
         this.content.element.val(value);
         this._checkError();
         this._checkWaterMark();
+        this._defaultState();
     },
 
     setStyle: function (style) {
@@ -26716,6 +26755,8 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
 BI.TextAreaEditor.EVENT_CHANGE = "EVENT_CHANGE";
 BI.TextAreaEditor.EVENT_BLUR = "EVENT_BLUR";
 BI.TextAreaEditor.EVENT_FOCUS = "EVENT_FOCUS";
+BI.TextAreaEditor.EVENT_CONFIRM = "EVENT_CONFIRM";
+BI.TextAreaEditor.EVENT_EMPTY = "EVENT_EMPTY";
 BI.shortcut("bi.textarea_editor", BI.TextAreaEditor);
 
 
@@ -36124,14 +36165,15 @@ BI.StateEditor = BI.inherit(BI.Widget, {
             errorText: "",
             height: 24,
             defaultText: "", // 默认显示值，默认显示值与显示值的区别是默认显示值标记灰色
-            text: BI.i18nText("BI-Basic_Unrestricted") // 显示值
+            text: BI.i18nText("BI-Basic_Unrestricted"), // 显示值
+            el: {}
         });
     },
 
     _init: function () {
         BI.StateEditor.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
-        this.editor = BI.createWidget({
+        this.editor = BI.createWidget(o.el, {
             type: "bi.editor",
             height: o.height,
             hgap: o.hgap,
@@ -45608,7 +45650,7 @@ BI.SearchEditor = BI.inherit(BI.Widget, {
         this.options.height -= 2;
         BI.SearchEditor.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
-        this.editor = BI.createWidget({
+        this.editor = BI.createWidget(o.el, {
             type: "bi.editor",
             height: o.height,
             watermark: o.watermark,
@@ -50327,28 +50369,12 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
             self._setStartValue("");
             self.fireEvent(BI.MultiSelectCombo.EVENT_STOP);
         });
-        this.trigger.on(BI.MultiSelectTrigger.EVENT_PAUSE, function () {
-            if (this.getSearcher().hasMatched()) {
-                var keyword = this.getSearcher().getMatchedItemValue();
-                self._join({
-                    type: BI.Selection.Multi,
-                    value: [keyword]
-                }, function () {
-                    self.combo.setValue(self.storeValue);
-                    self._setStartValue(keyword);
-                    assertShowValue();
-                    self.populate();
-                    self._setStartValue("");
-                    self._dataChange = true;
-                });
-            }
-        });
         this.trigger.on(BI.MultiSelectTrigger.EVENT_SEARCHING, function (keywords) {
             var last = BI.last(keywords);
             keywords = BI.initial(keywords || []);
             if (keywords.length > 0) {
                 self._joinKeywords(keywords, function () {
-                    if (BI.isEndWithBlank(last)) {
+                    if (BI.endWith(last, BI.BlankSplitChar)) {
                         self.combo.setValue(self.storeValue);
                         assertShowValue();
                         self.combo.populate();
@@ -50813,18 +50839,13 @@ BI.MultiSelectNoBarCombo = BI.inherit(BI.Single, {
             self._setStartValue("");
             self.fireEvent(BI.MultiSelectNoBarCombo.EVENT_STOP);
         });
-        this.trigger.on(BI.MultiSelectTrigger.EVENT_PAUSE, function () {
-            if (this.getSearcher().hasMatched()) {
-                self._addItem(assertShowValue, true);
-            }
-        });
 
         this.trigger.on(BI.MultiSelectTrigger.EVENT_SEARCHING, function (keywords) {
             var last = BI.last(keywords);
             keywords = BI.initial(keywords || []);
             if (keywords.length > 0) {
                 self._joinKeywords(keywords, function () {
-                    if (BI.isEndWithBlank(last)) {
+                    if (BI.endWith(last, BI.BlankSplitChar)) {
                         self.combo.setValue(self.storeValue);
                         assertShowValue();
                         self.combo.populate();
@@ -51029,7 +51050,7 @@ BI.MultiSelectNoBarCombo = BI.inherit(BI.Single, {
 
     _addItem: function (assertShowValue, matched) {
         var self = this;
-        var keyword = matched ? this.trigger.getSearcher().getMatchedItemValue() : this.trigger.getSearcher().getKeyword();
+        var keyword = this.trigger.getSearcher().getKeyword();
         this._join({
             type: BI.Selection.Multi,
             value: [keyword]
@@ -51315,24 +51336,14 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
             self.fireEvent(BI.MultiSelectInsertCombo.EVENT_STOP);
         });
         this.trigger.on(BI.MultiSelectInsertTrigger.EVENT_PAUSE, function () {
-            if (this.getSearcher().hasMatched()) {
-                self._addItem(assertShowValue, true);
-            }
-        });
-        this.trigger.on(BI.MultiSelectInsertTrigger.EVENT_ADD_ITEM, function () {
-            if (!this.getSearcher().hasMatched()) {
-                self._addItem(assertShowValue);
-                var addedValue = this.getSearcher().getKeyword();
-                self._stopEditing();
-                self.fireEvent(BI.MultiSelectInsertCombo.EVENT_ADD_ITEM, addedValue);
-            }
+            self._addItem(assertShowValue, true);
         });
         this.trigger.on(BI.MultiSelectInsertTrigger.EVENT_SEARCHING, function (keywords) {
             var last = BI.last(keywords);
             keywords = BI.initial(keywords || []);
             if (keywords.length > 0) {
                 self._joinKeywords(keywords, function () {
-                    if (BI.isEndWithBlank(last)) {
+                    if (BI.endWith(last, BI.BlankSplitChar)) {
                         self.combo.setValue(self.storeValue);
                         assertShowValue();
                         self.combo.populate();
@@ -51541,9 +51552,9 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
         });
     },
 
-    _addItem: function (assertShowValue, matched) {
+    _addItem: function (assertShowValue) {
         var self = this;
-        var keyword = matched ? this.trigger.getSearcher().getMatchedItemValue() : this.trigger.getSearcher().getKeyword();
+        var keyword = this.trigger.getSearcher().getKeyword();
         this._join({
             type: BI.Selection.Multi,
             value: [keyword]
@@ -51585,20 +51596,12 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
         var self = this, o = this.options;
         this._assertValue(this.storeValue);
         this.requesting = true;
-        o.itemsCreator({
-            type: BI.MultiSelectInsertCombo.REQ_GET_ALL_DATA,
-            keywords: keywords
-        }, function (ob) {
-            var values = BI.map(ob.items, "value");
-            digest(values);
-        });
 
-        function digest (items) {
-            var selectedMap = self._makeMap(items);
+        digest();
+
+        function digest () {
             BI.each(keywords, function (i, val) {
-                if (BI.isNotNull(selectedMap[val])) {
-                    self.storeValue.type === BI.Selection.Multi ? BI.pushDistinct(self.storeValue.value, val) : BI.remove(self.storeValue.value, val);
-                }
+                self.storeValue.type === BI.Selection.Multi ? BI.pushDistinct(self.storeValue.value, val) : BI.remove(self.storeValue.value, val);
             });
             self._adjust(callback);
         }
@@ -51732,7 +51735,6 @@ BI.MultiSelectInsertCombo.EVENT_STOP = "EVENT_STOP";
 BI.MultiSelectInsertCombo.EVENT_SEARCHING = "EVENT_SEARCHING";
 BI.MultiSelectInsertCombo.EVENT_CLICK_ITEM = "EVENT_CLICK_ITEM";
 BI.MultiSelectInsertCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
-BI.MultiSelectInsertCombo.EVENT_ADD_ITEM = "EVENT_ADD_ITEM";
 
 BI.shortcut("bi.multi_select_insert_combo", BI.MultiSelectInsertCombo);
 
@@ -51812,24 +51814,14 @@ BI.MultiSelectInsertNoBarCombo = BI.inherit(BI.Single, {
             self._setStartValue("");
         });
         this.trigger.on(BI.MultiSelectInsertTrigger.EVENT_PAUSE, function () {
-            if (this.getSearcher().hasMatched()) {
-                self._addItem(assertShowValue, true);
-            }
-        });
-        this.trigger.on(BI.MultiSelectInsertTrigger.EVENT_ADD_ITEM, function () {
-            if (!this.getSearcher().hasMatched()) {
-                self._addItem(assertShowValue);
-                var addedValue = this.getSearcher().getKeyword();
-                self._stopEditing();
-                self.fireEvent(BI.MultiSelectInsertNoBarCombo.EVENT_ADD_ITEM, addedValue);
-            }
+            self._addItem(assertShowValue, true);
         });
         this.trigger.on(BI.MultiSelectInsertTrigger.EVENT_SEARCHING, function (keywords) {
             var last = BI.last(keywords);
             keywords = BI.initial(keywords || []);
             if (keywords.length > 0) {
                 self._joinKeywords(keywords, function () {
-                    if (BI.isEndWithBlank(last)) {
+                    if (BI.endWith(last, BI.BlankSplitChar)) {
                         self.combo.setValue(self.storeValue);
                         assertShowValue();
                         self.combo.populate();
@@ -52041,9 +52033,9 @@ BI.MultiSelectInsertNoBarCombo = BI.inherit(BI.Single, {
         });
     },
 
-    _addItem: function (assertShowValue, matched) {
+    _addItem: function (assertShowValue) {
         var self = this;
-        var keyword = matched ? this.trigger.getSearcher().getMatchedItemValue() : this.trigger.getSearcher().getKeyword();
+        var keyword = this.trigger.getSearcher().getKeyword();
         this._join({
             type: BI.Selection.Multi,
             value: [keyword]
@@ -52085,20 +52077,12 @@ BI.MultiSelectInsertNoBarCombo = BI.inherit(BI.Single, {
         var self = this, o = this.options;
         this._assertValue(this.storeValue);
         this.requesting = true;
-        o.itemsCreator({
-            type: BI.MultiSelectInsertNoBarCombo.REQ_GET_ALL_DATA,
-            keywords: keywords
-        }, function (ob) {
-            var values = BI.map(ob.items, "value");
-            digest(values);
-        });
 
-        function digest (items) {
-            var selectedMap = self._makeMap(items);
+        digest();
+
+        function digest () {
             BI.each(keywords, function (i, val) {
-                if (BI.isNotNull(selectedMap[val])) {
-                    self.storeValue.type === BI.Selection.Multi ? BI.pushDistinct(self.storeValue.value, val) : BI.remove(self.storeValue.value, val);
-                }
+                self.storeValue.type === BI.Selection.Multi ? BI.pushDistinct(self.storeValue.value, val) : BI.remove(self.storeValue.value, val);
             });
             self._adjust(callback);
         }
@@ -52228,7 +52212,6 @@ BI.extend(BI.MultiSelectInsertNoBarCombo, {
 });
 
 BI.MultiSelectInsertNoBarCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
-BI.MultiSelectInsertNoBarCombo.EVENT_ADD_ITEM = "EVENT_ADD_ITEM";
 
 BI.shortcut("bi.multi_select_insert_no_bar_combo", BI.MultiSelectInsertNoBarCombo);
 
@@ -52287,9 +52270,6 @@ BI.MultiSelectInsertTrigger = BI.inherit(BI.Trigger, {
         });
         this.searcher.on(BI.MultiSelectInsertSearcher.EVENT_START, function () {
             self.fireEvent(BI.MultiSelectInsertTrigger.EVENT_START);
-        });
-        this.searcher.on(BI.MultiSelectInsertSearcher.EVENT_ADD_ITEM, function () {
-            self.fireEvent(BI.MultiSelectInsertTrigger.EVENT_ADD_ITEM);
         });
         this.searcher.on(BI.MultiSelectInsertSearcher.EVENT_PAUSE, function () {
             self.fireEvent(BI.MultiSelectInsertTrigger.EVENT_PAUSE);
@@ -52389,7 +52369,6 @@ BI.MultiSelectInsertTrigger.EVENT_STOP = "EVENT_STOP";
 BI.MultiSelectInsertTrigger.EVENT_PAUSE = "EVENT_PAUSE";
 BI.MultiSelectInsertTrigger.EVENT_SEARCHING = "EVENT_SEARCHING";
 BI.MultiSelectInsertTrigger.EVENT_BEFORE_COUNTER_POPUPVIEW = "EVENT_BEFORE_COUNTER_POPUPVIEW";
-BI.MultiSelectInsertTrigger.EVENT_ADD_ITEM = "EVENT_ADD_ITEM";
 BI.MultiSelectInsertTrigger.EVENT_FOCUS = "EVENT_FOCUS";
 BI.MultiSelectInsertTrigger.EVENT_BLUR = "EVENT_BLUR";
 
@@ -53160,24 +53139,12 @@ BI.MultiSelectSearchInsertPane = BI.inherit(BI.Widget, {
         BI.MultiSelectSearchInsertPane.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
 
-        this.tooltipClick = BI.createWidget({
-            type: "bi.label",
-            invisible: true,
-            text: BI.i18nText("BI-Click_Blank_To_Select"),
-            cls: "multi-select-toolbar",
-            height: this.constants.height
-        });
-
         this.addNotMatchTip = BI.createWidget({
-            type: "bi.text_button",
-            invisible: true,
+            type: "bi.label",
             text: BI.i18nText("BI-Basic_Click_To_Add_Text", ""),
             height: this.constants.height,
             cls: "bi-high-light",
             hgap: 5,
-            handler: function () {
-                self.fireEvent(BI.MultiSelectSearchInsertPane.EVENT_ADD_ITEM, o.keywordGetter());
-            }
         });
 
         this.loader = BI.createWidget({
@@ -53201,38 +53168,16 @@ BI.MultiSelectSearchInsertPane = BI.inherit(BI.Widget, {
             type: "bi.vtape",
             element: this,
             items: [{
-                type: "bi.vertical",
-                items: [this.tooltipClick, this.addNotMatchTip],
-                height: this.constants.height
+                el: this.addNotMatchTip,
+                height: this.constants.height,
             }, {
-                el: this.loader
-            }]
+                el: this.loader,
+            }],
         });
     },
 
     setKeyword: function (keyword) {
-        var o = this.options;
-        var hasSameValue = BI.some(this.loader.getAllButtons(), function (idx, btn) {
-            return keyword === (o.valueFormatter(btn.getValue()) || btn.getValue());
-        });
-        var isMatchTipVisible = this.loader.getAllButtons().length > 0 && hasSameValue;
-        this.tooltipClick.setVisible(isMatchTipVisible);
-        this.addNotMatchTip.setVisible(!isMatchTipVisible);
-        !isMatchTipVisible && this.addNotMatchTip.setText(BI.i18nText("BI-Basic_Click_To_Add_Text", keyword));
-    },
-
-    getMatchedItemValue: function () {
-        var value;
-        var o = this.options;
-        BI.some(this.loader.getAllButtons(), function (idx, btn) {
-            var v = btn.getValue();
-            if (o.keywordGetter() === (o.valueFormatter(v) || v)) {
-                value = v;
-                return true;
-            }
-        });
-
-        return value;
+        this.addNotMatchTip.setText(BI.i18nText("BI-Basic_Click_To_Add_Text", keyword));
     },
 
     isAllSelected: function () {
@@ -53240,7 +53185,7 @@ BI.MultiSelectSearchInsertPane = BI.inherit(BI.Widget, {
     },
 
     hasMatched: function () {
-        return this.tooltipClick.isVisible();
+        return false;
     },
 
     setValue: function (v) {
@@ -53261,7 +53206,6 @@ BI.MultiSelectSearchInsertPane = BI.inherit(BI.Widget, {
 });
 
 BI.MultiSelectSearchInsertPane.EVENT_CHANGE = "EVENT_CHANGE";
-BI.MultiSelectSearchInsertPane.EVENT_ADD_ITEM = "EVENT_ADD_ITEM";
 
 BI.shortcut("bi.multi_select_search_insert_pane", BI.MultiSelectSearchInsertPane);
 
@@ -53465,14 +53409,6 @@ BI.MultiSelectSearchPane = BI.inherit(BI.Widget, {
         BI.MultiSelectSearchPane.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
 
-        this.tooltipClick = BI.createWidget({
-            type: "bi.label",
-            invisible: true,
-            text: BI.i18nText("BI-Click_Blank_To_Select"),
-            cls: "multi-select-toolbar",
-            height: this.constants.height
-        });
-
         this.loader = BI.createWidget({
             type: "bi.multi_select_search_loader",
             keywordGetter: o.keywordGetter,
@@ -53480,7 +53416,6 @@ BI.MultiSelectSearchPane = BI.inherit(BI.Widget, {
             itemsCreator: function (op, callback) {
                 o.itemsCreator.apply(self, [op, function (res) {
                     callback(res);
-                    self.setKeyword(o.keywordGetter());
                 }]);
             },
             itemHeight: o.itemHeight,
@@ -53491,40 +53426,16 @@ BI.MultiSelectSearchPane = BI.inherit(BI.Widget, {
         });
 
         this.resizer = BI.createWidget({
-            type: "bi.vtape",
+            type: "bi.absolute",
             element: this,
             items: [{
-                el: this.tooltipClick,
-                height: 0
-            }, {
-                el: this.loader
-            }]
+                el: this.loader,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                top: 0,
+            }],
         });
-        this.tooltipClick.setVisible(false);
-    },
-
-    setKeyword: function (keyword) {
-        var btn, o = this.options;
-        var isVisible = this.loader.getAllButtons().length > 0 && (btn = this.loader.getAllButtons()[0]) && (keyword === (o.valueFormatter(btn.getValue()) || btn.getValue()));
-        if (isVisible !== this.tooltipClick.isVisible()) {
-            this.tooltipClick.setVisible(isVisible);
-            this.resizer.attr("items")[0].height = (isVisible ? this.constants.height : 0);
-            this.resizer.resize();
-        }
-    },
-
-    getMatchedItemValue: function () {
-        var value;
-        var o = this.options;
-        BI.some(this.loader.getAllButtons(), function (idx, btn) {
-            var v = btn.getValue();
-            if (o.keywordGetter() === (o.valueFormatter(v) || v)) {
-                value = v;
-                return true;
-            }
-        });
-
-        return value;
     },
 
     isAllSelected: function () {
@@ -53532,7 +53443,6 @@ BI.MultiSelectSearchPane = BI.inherit(BI.Widget, {
     },
 
     hasMatched: function () {
-        return this.tooltipClick.isVisible();
     },
 
     setValue: function (v) {
@@ -53685,7 +53595,7 @@ BI.MultiSelectEditor = BI.inherit(BI.Widget, {
         BI.MultiSelectEditor.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
         this.editor = BI.createWidget(o.el, {
-            type: "bi.state_editor",
+            type: "bi.select_patch_editor",
             element: this,
             height: o.height,
             watermark: o.watermark,
@@ -53699,10 +53609,6 @@ BI.MultiSelectEditor = BI.inherit(BI.Widget, {
 
         this.editor.on(BI.Controller.EVENT_CHANGE, function () {
             self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
-        });
-
-        this.editor.on(BI.StateEditor.EVENT_PAUSE, function () {
-            self.fireEvent(BI.MultiSelectEditor.EVENT_PAUSE);
         });
         this.editor.on(BI.StateEditor.EVENT_FOCUS, function () {
             self.fireEvent(BI.MultiSelectEditor.EVENT_FOCUS);
@@ -53733,12 +53639,7 @@ BI.MultiSelectEditor = BI.inherit(BI.Widget, {
     },
 
     getValue: function () {
-        var v = this.editor.getState();
-        if (BI.isArray(v) && v.length > 0) {
-            return v[v.length - 1];
-        }
-        return "";
-
+        return this.editor.getValue();
     },
 
     getState: function () {
@@ -53746,12 +53647,25 @@ BI.MultiSelectEditor = BI.inherit(BI.Widget, {
     },
 
     getKeywords: function () {
-        var val = this.editor.getLastChangedValue();
-        var keywords = val.match(/[\S]+/g);
-        if (BI.isEndWithBlank(val)) {
-            return keywords.concat([" "]);
+        var val = this.editor.getValue();
+        var keywords = val.split(/\u200b\s\u200b/);
+        if (BI.isEmptyString(keywords[keywords.length - 1])) {
+            keywords = keywords.slice(0, keywords.length - 1);
         }
+        if (/\u200b\s\u200b$/.test(val)) {
+            return keywords.concat([BI.BlankSplitChar]);
+        }
+
         return keywords;
+    },
+
+    getKeyword: function () {
+        var val = this.editor.getValue();
+        var keywords = val.split(/\u200b\s\u200b/);
+        if (BI.isEmptyString(keywords[keywords.length - 1])) {
+            keywords = keywords.slice(0, keywords.length - 1);
+        }
+        return BI.isEmptyArray(keywords) ? "" : keywords[keywords.length - 1];
     },
 
     populate: function (items) {
@@ -53767,6 +53681,210 @@ BI.shortcut("bi.multi_select_editor", BI.MultiSelectEditor);
 
 /***/ }),
 /* 609 */
+/***/ (function(module, exports) {
+
+/**
+ * @author windy
+ * @version 2.0
+ * Created by windy on 2021/5/18
+ */
+BI.SelectPatchEditor = BI.inherit(BI.Widget, {
+
+    props: {
+        baseCls: "bi-patch-select-editor",
+        height: 24,
+    },
+
+    render: function () {
+        var self = this, o = this.options;
+
+        var debounceInputChange = BI.debounce(BI.bind(this._dealChange, this), 300);
+
+        return BI.extend({
+            type: "bi.state_editor",
+            ref: function (_ref) {
+                self.editor = _ref;
+            },
+            hgap: o.hgap,
+            vgap: o.vgap,
+            lgap: o.lgap,
+            rgap: o.rgap,
+            tgap: o.tgap,
+            bgap: o.bgap,
+            height: o.height,
+            watermark: o.watermark,
+            allowBlank: true,
+            value: o.value,
+            defaultText: o.text,
+            text: o.text,
+            tipType: o.tipType,
+            warningTitle: o.warningTitle,
+            el: {
+                type: 'bi.textarea_editor',
+                scrolly: false,
+                validationChecker: function () {
+                    return true;
+                },
+                throttle: true,
+            },
+            listeners: [{
+                eventName: BI.Controller.EVENT_CHANGE,
+                action: function (type, v) {
+                    if (BI.contains(v, "\n")) {
+                        self._dealChange(type, v);
+                    } else {
+                        debounceInputChange(type, v);
+                    }
+                },
+            }, {
+                eventName: BI.Editor.EVENT_FOCUS,
+                action: function () {
+                    self.fireEvent(BI.SelectPatchEditor.EVENT_FOCUS, arguments);
+                },
+            }, {
+                eventName: BI.Editor.EVENT_BLUR,
+                action: function () {
+                    self.fireEvent(BI.SelectPatchEditor.EVENT_BLUR, arguments);
+                },
+            }],
+        }, o.el);
+    },
+
+    _dealChange: function (type, v) {
+        var value = "";
+        if (BI.isKey(v)) {
+            value = this._formatText(v);
+        }
+        if (type === BI.Events.CHANGE) {
+            this._setValue(value);
+            if (this._trimValue(value) !== "") {
+                if (!this._start || !BI.isKey(this._lastValue) || (this._pause === true && !/\u200b\s\u200b$/.test(this.getValue()))) {
+                    this._start = true;
+                    this._pause = false;
+                    this.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.STARTEDIT, this.getValue(), this);
+                }
+            }
+            if (this._trimValue(this._lastValue) !== this._trimValue(value)) {
+                this.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
+            }
+            if (BI.endWith(value, BI.BlankSplitChar)) {
+                this._pause = true;
+                this.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.PAUSE, "", this);
+            }
+        }
+        if (type === BI.Events.EMPTY || type === BI.Events.STOPEDIT) {
+            this.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.EMPTY);
+        }
+        this._lastValue = value;
+    },
+
+    _trimValue: function (v) {
+        return BI.trim(BI.replaceAll(v || "", BI.BlankSplitChar, ""));
+    },
+
+    _formatText: function (v) {
+        return BI.replaceAll(v || "", "\n", BI.BlankSplitChar);
+    },
+
+    setWaterMark: function (v) {
+        this.editor.setWaterMark(v);
+    },
+
+    doRedMark: function () {
+        this.editor.doRedMark.apply(this.editor, arguments);
+    },
+
+    unRedMark: function () {
+        this.editor.unRedMark.apply(this.editor, arguments);
+    },
+
+    doHighLight: function () {
+        this.editor.doHighLight.apply(this.editor, arguments);
+    },
+
+    unHighLight: function () {
+        this.text.unHighLight.apply(this.text, arguments);
+    },
+
+    focus: function () {
+        this.editor.focus();
+    },
+
+    blur: function () {
+        this.editor.blur();
+    },
+
+    _setValue: function (v) {
+        this.editor.setValue(this._formatText(v));
+    },
+
+    _showInput: function () {
+        this.editor.visible();
+        this.text.invisible();
+    },
+
+    _showHint: function () {
+        this.editor.invisible();
+        this.text.visible();
+    },
+
+    isValid: function () {
+        return this.editor.isValid();
+    },
+
+    setErrorText: function (text) {
+        this.editor.setErrorText(text);
+    },
+
+    getErrorText: function () {
+        return this.editor.getErrorText();
+    },
+
+    isEditing: function () {
+        return this.editor.isEditing();
+    },
+
+    getLastValidValue: function () {
+        return this.editor.getLastValidValue();
+    },
+
+    getLastChangedValue: function () {
+        return this.editor.getLastChangedValue();
+    },
+
+    setValue: function (v) {
+        this._setValue(v);
+        this._lastValue = this._trimValue(v);
+    },
+
+    getValue: function () {
+        return BI.trim(this.editor.getValue());
+    },
+
+    getState: function () {
+        return this.editor.getState();
+    },
+
+    setState: function (v) {
+        this.editor.setState(v);
+    },
+
+    setTipType: function (v) {
+        this.editor.setTipType(v);
+    },
+
+    getText: function () {
+        return this.editor.getText();
+    },
+});
+BI.SelectPatchEditor.EVENT_CHANGE = "EVENT_CHANGE";
+BI.SelectPatchEditor.EVENT_FOCUS = "EVENT_FOCUS";
+BI.SelectPatchEditor.EVENT_BLUR = "EVENT_BLUR";
+
+BI.shortcut("bi.select_patch_editor", BI.SelectPatchEditor);
+
+/***/ }),
+/* 610 */
 /***/ (function(module, exports) {
 
 /**
@@ -53787,7 +53905,8 @@ BI.MultiSelectInsertSearcher = BI.inherit(BI.Widget, {
             valueFormatter: BI.emptyFn,
             adapter: null,
             masker: {},
-            text: BI.i18nText("BI-Basic_Please_Select")
+            text: BI.i18nText("BI-Basic_Please_Select"),
+            watermark: BI.i18nText("BI-Basic_Search_And_Patch_Paste"),
         });
     },
 
@@ -53814,7 +53933,6 @@ BI.MultiSelectInsertSearcher = BI.inherit(BI.Widget, {
 
         this.searcher = BI.createWidget({
             type: "bi.searcher",
-            allowSearchBlank: false,
             element: this,
             height: o.height,
             isAutoSearch: false,
@@ -53828,22 +53946,16 @@ BI.MultiSelectInsertSearcher = BI.inherit(BI.Widget, {
                 type: "bi.multi_select_search_insert_pane",
                 valueFormatter: o.valueFormatter,
                 keywordGetter: function () {
-                    return self.editor.getValue();
+                    return self.editor.getKeyword();
                 },
                 itemsCreator: function (op, callback) {
-                    var keyword = self.editor.getValue();
+                    var keyword = self.editor.getKeyword();
                     op.keywords = [keyword];
                     this.setKeyword(keyword);
                     o.itemsCreator(op, callback);
                 },
                 itemHeight: o.itemHeight,
                 value: o.value,
-                listeners: [{
-                    eventName: BI.MultiSelectSearchInsertPane.EVENT_ADD_ITEM,
-                    action: function () {
-                        self.fireEvent(BI.MultiSelectInsertSearcher.EVENT_ADD_ITEM);
-                    }
-                }]
             }, o.popup),
 
             adapter: o.adapter,
@@ -53886,7 +53998,7 @@ BI.MultiSelectInsertSearcher = BI.inherit(BI.Widget, {
     },
 
     getKeyword: function () {
-        return this.editor.getValue();
+        return this.editor.getKeyword();
     },
 
     hasMatched: function () {
@@ -53940,10 +54052,6 @@ BI.MultiSelectInsertSearcher = BI.inherit(BI.Widget, {
         }
     },
 
-    getMatchedItemValue: function() {
-        return this.searcher.getView().getMatchedItemValue();
-    },
-
     getState: function() {
         return this.editor.getState();
     },
@@ -53972,13 +54080,12 @@ BI.MultiSelectInsertSearcher.EVENT_START = "EVENT_START";
 BI.MultiSelectInsertSearcher.EVENT_STOP = "EVENT_STOP";
 BI.MultiSelectInsertSearcher.EVENT_PAUSE = "EVENT_PAUSE";
 BI.MultiSelectInsertSearcher.EVENT_SEARCHING = "EVENT_SEARCHING";
-BI.MultiSelectInsertSearcher.EVENT_ADD_ITEM = "EVENT_ADD_ITEM";
 BI.MultiSelectInsertSearcher.EVENT_FOCUS = "EVENT_FOCUS";
 BI.MultiSelectInsertSearcher.EVENT_BLUR = "EVENT_BLUR";
 BI.shortcut("bi.multi_select_insert_searcher", BI.MultiSelectInsertSearcher);
 
 /***/ }),
-/* 610 */
+/* 611 */
 /***/ (function(module, exports) {
 
 /**
@@ -54026,7 +54133,6 @@ BI.MultiSelectSearcher = BI.inherit(BI.Widget, {
 
         this.searcher = BI.createWidget({
             type: "bi.searcher",
-            allowSearchBlank: false,
             element: this,
             height: o.height,
             isAutoSearch: false,
@@ -54045,7 +54151,6 @@ BI.MultiSelectSearcher = BI.inherit(BI.Widget, {
                 itemsCreator: function (op, callback) {
                     var keyword = self.editor.getValue();
                     op.keywords = [keyword];
-                    this.setKeyword(keyword);
                     o.itemsCreator(op, callback);
                 },
                 itemHeight: o.itemHeight,
@@ -54077,10 +54182,6 @@ BI.MultiSelectSearcher = BI.inherit(BI.Widget, {
         if (BI.isNotNull(o.value)) {
             this.setState(o.value);
         }
-    },
-
-    getMatchedItemValue: function() {
-        return this.searcher.getView().getMatchedItemValue();
     },
 
     adjustView: function () {
@@ -54183,7 +54284,7 @@ BI.MultiSelectSearcher.EVENT_BLUR = "EVENT_BLUR";
 BI.shortcut("bi.multi_select_searcher", BI.MultiSelectSearcher);
 
 /***/ }),
-/* 611 */
+/* 612 */
 /***/ (function(module, exports) {
 
 /**
@@ -54300,7 +54401,7 @@ BI.MultiSelectCheckSelectedSwitcher.EVENT_AFTER_HIDEVIEW = "EVENT_AFTER_HIDEVIEW
 BI.shortcut("bi.multi_select_check_selected_switcher", BI.MultiSelectCheckSelectedSwitcher);
 
 /***/ }),
-/* 612 */
+/* 613 */
 /***/ (function(module, exports) {
 
 /**
@@ -54362,32 +54463,22 @@ BI.MultiSelectInsertList = BI.inherit(BI.Single, {
                 }
             },
             itemHeight: o.itemHeight,
-            listeners: [{
-                eventName: BI.MultiSelectSearchInsertPane.EVENT_ADD_ITEM,
-                action: function () {
-                    var keyword = self.trigger.getKeyword();
-                    if (!self.trigger.hasMatched()) {
-                        if (self.storeValue.type === BI.Selection.Multi) {
-                            BI.pushDistinct(self.storeValue.value, keyword);
-                        }
-                        self._showAdapter();
-                        self.adapter.setValue(self.storeValue);
-                        self.adapter.populate();
-                        if (self.storeValue.type === BI.Selection.Multi) {
-                            self.fireEvent(BI.MultiSelectInsertList.EVENT_CHANGE);
-                        }
-                    }
-                }
-            }]
         });
         this.searcherPane.setVisible(false);
 
         this.trigger = BI.createWidget({
             type: "bi.searcher",
             el: {
+                type: "bi.select_patch_editor",
+                el: {
+                    type: "bi.search_editor",
+                    watermark: BI.i18nText("BI-Basic_Search_And_Patch_Paste"),
+                },
+                ref: function (ref) {
+                    self.editor = ref;
+                },
                 height: o.searcherHeight,
             },
-            allowSearchBlank: false,
             isAutoSearch: false,
             isAutoSync: false,
             onSearch: function (op, callback) {
@@ -54417,34 +54508,32 @@ BI.MultiSelectInsertList = BI.inherit(BI.Single, {
                 eventName: BI.Searcher.EVENT_PAUSE,
                 action: function () {
                     var keyword = this.getKeyword();
-                    if (this.hasMatched()) {
-                        self._join({
-                            type: BI.Selection.Multi,
-                            value: [keyword]
-                        }, function () {
-                            if (self.storeValue.type === BI.Selection.Multi) {
-                                BI.pushDistinct(self.storeValue.value, keyword);
-                            }
-                            self._showAdapter();
-                            self.adapter.setValue(self.storeValue);
-                            self._setStartValue(keyword);
-                            assertShowValue();
-                            self.adapter.populate();
-                            self._setStartValue("");
-                            self.fireEvent(BI.MultiSelectInsertList.EVENT_CHANGE);
-                        });
-                    }
+                    self._join({
+                        type: BI.Selection.Multi,
+                        value: [keyword]
+                    }, function () {
+                        if (self.storeValue.type === BI.Selection.Multi) {
+                            BI.pushDistinct(self.storeValue.value, keyword);
+                        }
+                        self._showAdapter();
+                        self.adapter.setValue(self.storeValue);
+                        self._setStartValue(keyword);
+                        assertShowValue();
+                        self.adapter.populate();
+                        self._setStartValue("");
+                        self.fireEvent(BI.MultiSelectInsertList.EVENT_CHANGE);
+                    });
                     self._showAdapter();
                 }
             }, {
                 eventName: BI.Searcher.EVENT_SEARCHING,
                 action: function () {
-                    var keywords = this.getKeywords();
+                    var keywords = self._getKeywords();
                     var last = BI.last(keywords);
                     keywords = BI.initial(keywords || []);
                     if (keywords.length > 0) {
                         self._joinKeywords(keywords, function () {
-                            if (BI.isEndWithBlank(last)) {
+                            if (BI.endWith(last, BI.BlankSplitChar)) {
                                 self.adapter.setValue(self.storeValue);
                                 assertShowValue();
                                 self.adapter.populate();
@@ -54500,6 +54589,19 @@ BI.MultiSelectInsertList = BI.inherit(BI.Single, {
         });
     },
 
+    _getKeywords: function () {
+        var val = this.editor.getValue();
+        var keywords = val.split(/\u200b\s\u200b/);
+        if (BI.isEmptyString(keywords[keywords.length - 1])) {
+            keywords = keywords.slice(0, keywords.length - 1);
+        }
+        if (/\u200b\s\u200b$/.test(val)) {
+            return keywords.concat([BI.BlankSplitChar]);
+        }
+
+        return keywords;
+    },
+
     _showAdapter: function () {
         this.adapter.setVisible(true);
         this.searcherPane.setVisible(false);
@@ -54529,20 +54631,12 @@ BI.MultiSelectInsertList = BI.inherit(BI.Single, {
         var self = this, o = this.options;
         this._assertValue(this.storeValue);
         // 和复选下拉框同步，allData做缓存是会爆炸的
-        o.itemsCreator({
-            type: BI.MultiSelectInsertList.REQ_GET_ALL_DATA,
-            keywords: keywords
-        }, function (ob) {
-            var values = BI.map(ob.items, "value");
-            digest(values);
-        });
 
-        function digest (items) {
-            var selectedMap = self._makeMap(items);
+        digest();
+
+        function digest () {
             BI.each(keywords, function (i, val) {
-                if (BI.isNotNull(selectedMap[val])) {
-                    self.storeValue.type === BI.Selection.Multi ? BI.pushDistinct(self.storeValue.value, val) : BI.remove(self.storeValue.value, val);
-                }
+                self.storeValue.type === BI.Selection.Multi ? BI.pushDistinct(self.storeValue.value, val) : BI.remove(self.storeValue.value, val);
             });
             callback();
         }
@@ -54651,7 +54745,7 @@ BI.shortcut("bi.multi_select_insert_list", BI.MultiSelectInsertList);
 
 
 /***/ }),
-/* 613 */
+/* 614 */
 /***/ (function(module, exports) {
 
 /**
@@ -54717,32 +54811,22 @@ BI.MultiSelectInsertNoBarList = BI.inherit(BI.Single, {
                     o.itemsCreator(op, callback);
                 }
             },
-            listeners: [{
-                eventName: BI.MultiSelectSearchInsertPane.EVENT_ADD_ITEM,
-                action: function () {
-                    var keyword = self.trigger.getKeyword();
-                    if (!self.trigger.hasMatched()) {
-                        if (self.storeValue.type === BI.Selection.Multi) {
-                            BI.pushDistinct(self.storeValue.value, keyword);
-                        }
-                        self._showAdapter();
-                        self.adapter.setValue(self.storeValue);
-                        self.adapter.populate();
-                        if (self.storeValue.type === BI.Selection.Multi) {
-                            self.fireEvent(BI.MultiSelectInsertNoBarList.EVENT_CHANGE);
-                        }
-                    }
-                }
-            }]
         });
         this.searcherPane.setVisible(false);
 
         this.trigger = BI.createWidget({
             type: "bi.searcher",
             el: {
+                type: "bi.select_patch_editor",
+                el: {
+                    type: "bi.search_editor",
+                    watermark: BI.i18nText("BI-Basic_Search_And_Patch_Paste"),
+                },
+                ref: function (ref) {
+                    self.editor = ref;
+                },
                 height: o.searcherHeight
             },
-            allowSearchBlank: false,
             isAutoSearch: false,
             isAutoSync: false,
             onSearch: function (op, callback) {
@@ -54772,33 +54856,31 @@ BI.MultiSelectInsertNoBarList = BI.inherit(BI.Single, {
                 eventName: BI.Searcher.EVENT_PAUSE,
                 action: function () {
                     var keyword = this.getKeyword();
-                    if (this.hasMatched()) {
-                        self._join({
-                            type: BI.Selection.Multi,
-                            value: [keyword]
-                        }, function () {
-                            if (self.storeValue.type === BI.Selection.Multi) {
-                                BI.pushDistinct(self.storeValue.value, keyword);
-                            }
-                            self._showAdapter();
-                            self.adapter.setValue(self.storeValue);
-                            self._setStartValue(keyword);
-                            assertShowValue();
-                            self.adapter.populate();
-                            self._setStartValue("");
-                            self.fireEvent(BI.MultiSelectInsertNoBarList.EVENT_CHANGE);
-                        });
-                    }
+                    self._join({
+                        type: BI.Selection.Multi,
+                        value: [keyword]
+                    }, function () {
+                        if (self.storeValue.type === BI.Selection.Multi) {
+                            BI.pushDistinct(self.storeValue.value, keyword);
+                        }
+                        self._showAdapter();
+                        self.adapter.setValue(self.storeValue);
+                        self._setStartValue(keyword);
+                        assertShowValue();
+                        self.adapter.populate();
+                        self._setStartValue("");
+                        self.fireEvent(BI.MultiSelectInsertNoBarList.EVENT_CHANGE);
+                    });
                 }
             }, {
                 eventName: BI.Searcher.EVENT_SEARCHING,
                 action: function () {
-                    var keywords = this.getKeywords();
+                    var keywords = self._getKeywords();
                     var last = BI.last(keywords);
                     keywords = BI.initial(keywords || []);
                     if (keywords.length > 0) {
                         self._joinKeywords(keywords, function () {
-                            if (BI.isEndWithBlank(last)) {
+                            if (BI.endWith(last, BI.BlankSplitChar)) {
                                 self.adapter.setValue(self.storeValue);
                                 assertShowValue();
                                 self.adapter.populate();
@@ -54857,6 +54939,19 @@ BI.MultiSelectInsertNoBarList = BI.inherit(BI.Single, {
         });
     },
 
+    _getKeywords: function () {
+        var val = this.editor.getValue();
+        var keywords = val.split(/\u200b\s\u200b/);
+        if (BI.isEmptyString(keywords[keywords.length - 1])) {
+            keywords = keywords.slice(0, keywords.length - 1);
+        }
+        if (/\u200b\s\u200b$/.test(val)) {
+            return keywords.concat([BI.BlankSplitChar]);
+        }
+
+        return keywords;
+    },
+
     _showAdapter: function () {
         this.adapter.setVisible(true);
         this.searcherPane.setVisible(false);
@@ -54885,20 +54980,11 @@ BI.MultiSelectInsertNoBarList = BI.inherit(BI.Single, {
         var self = this, o = this.options;
         this._assertValue(this.storeValue);
         // 和复选下拉框同步，allData做缓存是会爆炸的
-        o.itemsCreator({
-            type: BI.MultiSelectInsertNoBarList.REQ_GET_ALL_DATA,
-            keywords: keywords
-        }, function (ob) {
-            var values = BI.map(ob.items, "value");
-            digest(values);
-        });
+        digest();
 
         function digest (items) {
-            var selectedMap = self._makeMap(items);
             BI.each(keywords, function (i, val) {
-                if (BI.isNotNull(selectedMap[val])) {
-                    self.storeValue.type === BI.Selection.Multi ? BI.pushDistinct(self.storeValue.value, val) : BI.remove(self.storeValue.value, val);
-                }
+                self.storeValue.type === BI.Selection.Multi ? BI.pushDistinct(self.storeValue.value, val) : BI.remove(self.storeValue.value, val);
             });
             callback();
         }
@@ -55008,7 +55094,7 @@ BI.MultiSelectInsertNoBarList.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multi_select_insert_no_bar_list", BI.MultiSelectInsertNoBarList);
 
 /***/ }),
-/* 614 */
+/* 615 */
 /***/ (function(module, exports) {
 
 /**
@@ -55066,7 +55152,6 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
                 var keyword = self.trigger.getKeyword();
                 if (BI.isNotEmptyString(keyword)) {
                     op.keywords = [keyword];
-                    this.setKeyword(op.keywords[0]);
                     o.itemsCreator(op, callback);
                 }
             },
@@ -55077,9 +55162,15 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
         this.trigger = BI.createWidget({
             type: "bi.searcher",
             el: {
+                type: "bi.select_patch_editor",
+                el: {
+                    type: "bi.search_editor",
+                },
+                ref: function (ref) {
+                    self.editor = ref;
+                },
                 height: o.searcherHeight
             },
-            allowSearchBlank: false,
             isAutoSearch: false,
             isAutoSync: false,
             onSearch: function (op, callback) {
@@ -55108,22 +55199,9 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
             }, {
                 eventName: BI.Searcher.EVENT_PAUSE,
                 action: function () {
-                    var keyword = this.getKeyword();
-                    if (this.hasMatched()) {
-                        self._join({
-                            type: BI.Selection.Multi,
-                            value: [keyword]
-                        }, function () {
-                            self._showAdapter();
-                            self.adapter.setValue(self.storeValue);
-                            self._setStartValue(keyword);
-                            assertShowValue();
-                            self.adapter.populate();
-                            self._setStartValue("");
-                            self.fireEvent(BI.MultiSelectList.EVENT_CHANGE);
-                        });
-                    }
-                }
+                    self._showAdapter();
+                    self.fireEvent(BI.MultiSelectList.EVENT_CHANGE);
+                },
             }, {
                 eventName: BI.Searcher.EVENT_SEARCHING,
                 action: function () {
@@ -55132,7 +55210,7 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
                     keywords = BI.initial(keywords || []);
                     if (keywords.length > 0) {
                         self._joinKeywords(keywords, function () {
-                            if (BI.isEndWithBlank(last)) {
+                            if (BI.endWith(last, BI.BlankSplitChar)) {
                                 self.adapter.setValue(self.storeValue);
                                 assertShowValue();
                                 self.adapter.populate();
@@ -55185,6 +55263,19 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
                 right: 0
             }]
         });
+    },
+
+    _getKeywords: function () {
+        var val = this.editor.getValue();
+        var keywords = val.split(/\u200b\s\u200b/);
+        if (BI.isEmptyString(keywords[keywords.length - 1])) {
+            keywords = keywords.slice(0, keywords.length - 1);
+        }
+        if (/\u200b\s\u200b$/.test(val)) {
+            return keywords.concat([BI.BlankSplitChar]);
+        }
+
+        return keywords;
     },
 
     _showAdapter: function () {
@@ -55366,7 +55457,7 @@ BI.MultiSelectList.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multi_select_list", BI.MultiSelectList);
 
 /***/ }),
-/* 615 */
+/* 616 */
 /***/ (function(module, exports) {
 
 /**
@@ -55543,7 +55634,7 @@ BI.shortcut("bi.multi_select_tree", BI.MultiSelectTree);
 
 
 /***/ }),
-/* 616 */
+/* 617 */
 /***/ (function(module, exports) {
 
 /**
@@ -55606,7 +55697,7 @@ BI.MultiSelectTreePopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multi_select_tree_popup", BI.MultiSelectTreePopup);
 
 /***/ }),
-/* 617 */
+/* 618 */
 /***/ (function(module, exports) {
 
 /**
@@ -55730,7 +55821,7 @@ BI.MultiTreeCheckPane.EVENT_CONTINUE_CLICK = "EVENT_CONTINUE_CLICK";
 BI.shortcut("bi.multi_tree_check_pane", BI.MultiTreeCheckPane);
 
 /***/ }),
-/* 618 */
+/* 619 */
 /***/ (function(module, exports) {
 
 /**
@@ -56090,7 +56181,7 @@ BI.shortcut("bi.multi_tree_combo", BI.MultiTreeCombo);
 
 
 /***/ }),
-/* 619 */
+/* 620 */
 /***/ (function(module, exports) {
 
 /**
@@ -56465,7 +56556,7 @@ BI.shortcut("bi.multi_tree_insert_combo", BI.MultiTreeInsertCombo);
 
 
 /***/ }),
-/* 620 */
+/* 621 */
 /***/ (function(module, exports) {
 
 /**
@@ -56864,7 +56955,7 @@ BI.shortcut("bi.multi_tree_list_combo", BI.MultiTreeListCombo);
 
 
 /***/ }),
-/* 621 */
+/* 622 */
 /***/ (function(module, exports) {
 
 /**
@@ -56971,7 +57062,7 @@ BI.MultiTreePopup.EVENT_AFTERINIT = "EVENT_AFTERINIT";
 BI.shortcut("bi.multi_tree_popup_view", BI.MultiTreePopup);
 
 /***/ }),
-/* 622 */
+/* 623 */
 /***/ (function(module, exports) {
 
 /**
@@ -57044,7 +57135,7 @@ BI.MultiTreeCheckSelectedButton.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multi_tree_check_selected_button", BI.MultiTreeCheckSelectedButton);
 
 /***/ }),
-/* 623 */
+/* 624 */
 /***/ (function(module, exports) {
 
 /**
@@ -57168,7 +57259,7 @@ BI.MultiTreeSearchInsertPane.EVENT_ADD_ITEM = "EVENT_ADD_ITEM";
 BI.shortcut("bi.multi_tree_search_insert_pane", BI.MultiTreeSearchInsertPane);
 
 /***/ }),
-/* 624 */
+/* 625 */
 /***/ (function(module, exports) {
 
 /**
@@ -57249,7 +57340,7 @@ BI.MultiTreeSearchPane.EVENT_CLICK_CLEAR = "EVENT_CLICK_CLEAR";
 BI.shortcut("bi.multi_tree_search_pane", BI.MultiTreeSearchPane);
 
 /***/ }),
-/* 625 */
+/* 626 */
 /***/ (function(module, exports) {
 
 /**
@@ -57418,7 +57509,7 @@ BI.MultiListTreeSearcher.EVENT_PAUSE = "EVENT_PAUSE";
 BI.shortcut("bi.multi_list_tree_searcher", BI.MultiListTreeSearcher);
 
 /***/ }),
-/* 626 */
+/* 627 */
 /***/ (function(module, exports) {
 
 /**
@@ -57619,7 +57710,7 @@ BI.MultiTreeSearcher.EVENT_PAUSE = "EVENT_PAUSE";
 BI.shortcut("bi.multi_tree_searcher", BI.MultiTreeSearcher);
 
 /***/ }),
-/* 627 */
+/* 628 */
 /***/ (function(module, exports) {
 
 /**
@@ -57778,7 +57869,7 @@ BI.NumberEditor.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.number_editor", BI.NumberEditor);
 
 /***/ }),
-/* 628 */
+/* 629 */
 /***/ (function(module, exports) {
 
 // 小于号的值为：0，小于等于号的值为:1
@@ -58326,7 +58417,7 @@ BI.NumberInterval.EVENT_ERROR = "EVENT_ERROR";
 BI.shortcut("bi.number_interval", BI.NumberInterval);
 
 /***/ }),
-/* 629 */
+/* 630 */
 /***/ (function(module, exports) {
 
 BI.NumberIntervalSingleEidtor = BI.inherit(BI.Single, {
@@ -58415,7 +58506,7 @@ BI.NumberIntervalSingleEidtor.EVENT_CONFIRM = "EVENT_CONFIRM";
 BI.shortcut("bi.number_interval_single_editor", BI.NumberIntervalSingleEidtor);
 
 /***/ }),
-/* 630 */
+/* 631 */
 /***/ (function(module, exports) {
 
 /**
@@ -58489,28 +58580,12 @@ BI.SearchMultiTextValueCombo = BI.inherit(BI.Single, {
         this.trigger.on(BI.MultiSelectTrigger.EVENT_STOP, function () {
             self._setStartValue("");
         });
-        this.trigger.on(BI.MultiSelectTrigger.EVENT_PAUSE, function () {
-            if (this.getSearcher().hasMatched()) {
-                var keyword = this.getSearcher().getKeyword();
-                self._join({
-                    type: BI.Selection.Multi,
-                    value: [keyword]
-                }, function () {
-                    self.combo.setValue(self.storeValue);
-                    self._setStartValue(keyword);
-                    assertShowValue();
-                    self._populate();
-                    self._setStartValue("");
-                    self._dataChange = true;
-                });
-            }
-        });
         this.trigger.on(BI.MultiSelectTrigger.EVENT_SEARCHING, function (keywords) {
             var last = BI.last(keywords);
             keywords = BI.initial(keywords || []);
             if (keywords.length > 0) {
                 self._joinKeywords(keywords, function () {
-                    if (BI.isEndWithBlank(last)) {
+                    if (BI.endWith(last, BI.BlankSplitChar)) {
                         self.combo.setValue(self.storeValue);
                         assertShowValue();
                         self.combo.populate();
@@ -58918,7 +58993,7 @@ BI.shortcut("bi.search_multi_text_value_combo", BI.SearchMultiTextValueCombo);
 
 
 /***/ }),
-/* 631 */
+/* 632 */
 /***/ (function(module, exports) {
 
 BI.SearchMultiSelectTrigger = BI.inherit(BI.Trigger, {
@@ -59078,7 +59153,7 @@ BI.shortcut("bi.search_multi_select_trigger", BI.SearchMultiSelectTrigger);
 
 
 /***/ }),
-/* 632 */
+/* 633 */
 /***/ (function(module, exports) {
 
 /**
@@ -59258,7 +59333,7 @@ BI.SearchMultiSelectLoader.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.search_multi_select_loader", BI.SearchMultiSelectLoader);
 
 /***/ }),
-/* 633 */
+/* 634 */
 /***/ (function(module, exports) {
 
 BI.SearchMultiSelectPopupView = BI.inherit(BI.Widget, {
@@ -59351,7 +59426,7 @@ BI.SearchMultiSelectPopupView.EVENT_CLICK_CLEAR = "EVENT_CLICK_CLEAR";
 BI.shortcut("bi.search_multi_select_popup_view", BI.SearchMultiSelectPopupView);
 
 /***/ }),
-/* 634 */
+/* 635 */
 /***/ (function(module, exports) {
 
 BI.SearchMultiSelectSearcher = BI.inherit(BI.Widget, {
@@ -59381,7 +59456,6 @@ BI.SearchMultiSelectSearcher = BI.inherit(BI.Widget, {
 
         this.searcher = BI.createWidget({
             type: "bi.searcher",
-            allowSearchBlank: false,
             element: this,
             height: o.height,
             isAutoSearch: false,
@@ -59400,7 +59474,6 @@ BI.SearchMultiSelectSearcher = BI.inherit(BI.Widget, {
                 itemsCreator: function (op, callback) {
                     var keyword = self.editor.getValue();
                     op.keywords = [keyword];
-                    this.setKeyword(keyword);
                     o.itemsCreator(op, callback);
                 },
                 value: o.value
@@ -59534,7 +59607,7 @@ BI.shortcut("bi.search_multi_select_searcher", BI.SearchMultiSelectSearcher);
 
 
 /***/ }),
-/* 635 */
+/* 636 */
 /***/ (function(module, exports) {
 
 /**
@@ -59625,7 +59698,7 @@ BI.SelectTreeFirstPlusGroupNode = BI.inherit(BI.NodeButton, {
 BI.shortcut("bi.select_tree_first_plus_group_node", BI.SelectTreeFirstPlusGroupNode);
 
 /***/ }),
-/* 636 */
+/* 637 */
 /***/ (function(module, exports) {
 
 /**
@@ -59716,7 +59789,7 @@ BI.SelectTreeLastPlusGroupNode = BI.inherit(BI.NodeButton, {
 BI.shortcut("bi.select_tree_last_plus_group_node", BI.SelectTreeLastPlusGroupNode);
 
 /***/ }),
-/* 637 */
+/* 638 */
 /***/ (function(module, exports) {
 
 /**
@@ -59807,7 +59880,7 @@ BI.SelectTreeMidPlusGroupNode = BI.inherit(BI.NodeButton, {
 BI.shortcut("bi.select_tree_mid_plus_group_node", BI.SelectTreeMidPlusGroupNode);
 
 /***/ }),
-/* 638 */
+/* 639 */
 /***/ (function(module, exports) {
 
 /**
@@ -59898,7 +59971,7 @@ BI.SelectTreePlusGroupNode = BI.inherit(BI.NodeButton, {
 BI.shortcut("bi.select_tree_plus_group_node", BI.SelectTreePlusGroupNode);
 
 /***/ }),
-/* 639 */
+/* 640 */
 /***/ (function(module, exports) {
 
 /**
@@ -59977,7 +60050,7 @@ BI.SelectTreeCombo = BI.inherit(BI.Widget, {
 BI.shortcut("bi.select_tree_combo", BI.SelectTreeCombo);
 
 /***/ }),
-/* 640 */
+/* 641 */
 /***/ (function(module, exports) {
 
 /**
@@ -60059,7 +60132,7 @@ BI.SelectTreeExpander = BI.inherit(BI.Widget, {
 BI.shortcut("bi.select_tree_expander", BI.SelectTreeExpander);
 
 /***/ }),
-/* 641 */
+/* 642 */
 /***/ (function(module, exports) {
 
 /**
@@ -60165,7 +60238,7 @@ BI.SelectTreePopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.select_level_tree", BI.SelectTreePopup);
 
 /***/ }),
-/* 642 */
+/* 643 */
 /***/ (function(module, exports) {
 
 /**
@@ -60326,7 +60399,7 @@ BI.shortcut("bi.single_select_search_loader", BI.SingleSelectSearchLoader);
 
 
 /***/ }),
-/* 643 */
+/* 644 */
 /***/ (function(module, exports) {
 
 /**
@@ -60367,15 +60440,12 @@ BI.SingleSelectSearchInsertPane = BI.inherit(BI.Widget, {
         });
 
         this.addNotMatchTip = BI.createWidget({
-            type: "bi.text_button",
+            type: "bi.label",
             invisible: true,
             text: BI.i18nText("BI-Basic_Click_To_Add_Text", ""),
             height: this.constants.height,
             cls: "bi-high-light",
             hgap: 5,
-            handler: function () {
-                self.fireEvent(BI.SingleSelectSearchInsertPane.EVENT_ADD_ITEM, o.keywordGetter());
-            }
         });
 
         this.loader = BI.createWidget({
@@ -60419,20 +60489,6 @@ BI.SingleSelectSearchInsertPane = BI.inherit(BI.Widget, {
         !isMatchTipVisible && this.addNotMatchTip.setText(BI.i18nText("BI-Basic_Click_To_Add_Text", keyword));
     },
 
-    getMatchedItemValue: function () {
-        var value;
-        var o = this.options;
-        BI.some(this.loader.getAllButtons(), function (idx, btn) {
-            var v = btn.getValue();
-            if (o.keywordGetter() === (o.valueFormatter(v) || v)) {
-                value = v;
-                return true;
-            }
-        });
-
-        return value;
-    },
-
     hasMatched: function () {
         return this.tooltipClick.isVisible();
     },
@@ -60455,12 +60511,11 @@ BI.SingleSelectSearchInsertPane = BI.inherit(BI.Widget, {
 });
 
 BI.SingleSelectSearchInsertPane.EVENT_CHANGE = "EVENT_CHANGE";
-BI.SingleSelectSearchInsertPane.EVENT_ADD_ITEM = "EVENT_ADD_ITEM";
 
 BI.shortcut("bi.single_select_search_insert_pane", BI.SingleSelectSearchInsertPane);
 
 /***/ }),
-/* 644 */
+/* 645 */
 /***/ (function(module, exports) {
 
 /**
@@ -60540,20 +60595,6 @@ BI.SingleSelectSearchPane = BI.inherit(BI.Widget, {
         }
     },
 
-    getMatchedItemValue: function () {
-        var value;
-        var o = this.options;
-        BI.some(this.loader.getAllButtons(), function (idx, btn) {
-            var v = btn.getValue();
-            if (o.keywordGetter() === (o.valueFormatter(v) || v)) {
-                value = v;
-                return true;
-            }
-        });
-
-        return value;
-    },
-
     hasMatched: function () {
         return this.tooltipClick.isVisible();
     },
@@ -60580,7 +60621,7 @@ BI.SingleSelectSearchPane.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.single_select_search_pane", BI.SingleSelectSearchPane);
 
 /***/ }),
-/* 645 */
+/* 646 */
 /***/ (function(module, exports) {
 
 /**
@@ -60648,32 +60689,7 @@ BI.SingleSelectCombo = BI.inherit(BI.Single, {
             self._setStartValue();
             self.fireEvent(BI.SingleSelectCombo.EVENT_STOP);
         });
-        this.trigger.on(BI.SingleSelectTrigger.EVENT_PAUSE, function () {
-            if (this.getSearcher().hasMatched()) {
-                var keyword = this.getSearcher().getMatchedItemValue();
-                self.combo.setValue(self.storeValue);
-                self._setStartValue(keyword);
-                assertShowValue();
-                self.populate();
-                self._setStartValue();
-            }
-        });
-        this.trigger.on(BI.SingleSelectTrigger.EVENT_SEARCHING, function (keywords) {
-            var last = BI.last(keywords);
-            keywords = BI.initial(keywords || []);
-            if (keywords.length > 0) {
-                self._joinKeywords(keywords, function () {
-                    if (BI.isEndWithBlank(last)) {
-                        self.combo.setValue(self.storeValue);
-                        assertShowValue();
-                        self.combo.populate();
-                        self._setStartValue();
-                    } else {
-                        self.combo.setValue(self.storeValue);
-                        assertShowValue();
-                    }
-                });
-            }
+        this.trigger.on(BI.SingleSelectTrigger.EVENT_SEARCHING, function () {
             self.fireEvent(BI.SingleSelectCombo.EVENT_SEARCHING);
         });
 
@@ -60874,7 +60890,7 @@ BI.shortcut("bi.single_select_combo", BI.SingleSelectCombo);
 
 
 /***/ }),
-/* 646 */
+/* 647 */
 /***/ (function(module, exports) {
 
 /**
@@ -60891,7 +60907,8 @@ BI.SingleSelectInsertCombo = BI.inherit(BI.Single, {
             itemsCreator: BI.emptyFn,
             valueFormatter: BI.emptyFn,
             height: 24,
-            allowEdit: true
+            allowEdit: true,
+            watermark: BI.i18nText("BI-Basic_Search_And_Patch_Paste"),
         });
     },
 
@@ -60908,6 +60925,7 @@ BI.SingleSelectInsertCombo = BI.inherit(BI.Single, {
 
         this.trigger = BI.createWidget({
             type: "bi.single_select_trigger",
+            watermark: o.watermark,
             height: o.height - 2,
             allowNoSelect: o.allowNoSelect,
             allowEdit: o.allowEdit,
@@ -60927,16 +60945,6 @@ BI.SingleSelectInsertCombo = BI.inherit(BI.Single, {
             searcher: {
                 popup: {
                     type: "bi.single_select_search_insert_pane",
-                    listeners: [{
-                        eventName: BI.SingleSelectSearchInsertPane.EVENT_ADD_ITEM,
-                        action: function () {
-                            if (!self.trigger.getSearcher().hasMatched()) {
-                                self.storeValue = self.trigger.getSearcher().getKeyword();
-                                assertShowValue();
-                                self._defaultState();
-                            }
-                        }
-                    }]
                 }
             }
         });
@@ -60957,32 +60965,11 @@ BI.SingleSelectInsertCombo = BI.inherit(BI.Single, {
             self.fireEvent(BI.SingleSelectInsertCombo.EVENT_STOP);
         });
         this.trigger.on(BI.SingleSelectTrigger.EVENT_PAUSE, function () {
-            if (this.getSearcher().hasMatched()) {
-                var keyword = this.getSearcher().getMatchedItemValue();
-                self.storeValue = keyword;
-                self.combo.setValue(self.storeValue);
-                self._setStartValue(keyword);
-                assertShowValue();
-                self.populate();
-                self._setStartValue();
-            }
+            self.storeValue = self.trigger.getSearcher().getKeyword();
+            assertShowValue();
+            self._defaultState();
         });
-        this.trigger.on(BI.SingleSelectTrigger.EVENT_SEARCHING, function (keywords) {
-            var last = BI.last(keywords);
-            keywords = BI.initial(keywords || []);
-            if (keywords.length > 0) {
-                self._joinKeywords(keywords, function () {
-                    if (BI.isEndWithBlank(last)) {
-                        self.combo.setValue(self.storeValue);
-                        assertShowValue();
-                        self.combo.populate();
-                        self._setStartValue();
-                    } else {
-                        self.combo.setValue(self.storeValue);
-                        assertShowValue();
-                    }
-                });
-            }
+        this.trigger.on(BI.SingleSelectTrigger.EVENT_SEARCHING, function () {
             self.fireEvent(BI.SingleSelectInsertCombo.EVENT_SEARCHING);
         });
 
@@ -61099,29 +61086,6 @@ BI.SingleSelectInsertCombo = BI.inherit(BI.Single, {
         return BI.makeObject(values || []);
     },
 
-    _joinKeywords: function (keywords, callback) {
-        var self = this, o = this.options;
-        this._assertValue(this.storeValue);
-        this.requesting = true;
-        o.itemsCreator({
-            type: BI.SingleSelectInsertCombo.REQ_GET_ALL_DATA,
-            keywords: keywords
-        }, function (ob) {
-            var values = BI.map(ob.items, "value");
-            digest(values);
-        });
-
-        function digest (items) {
-            var selectedMap = self._makeMap(items);
-            BI.each(keywords, function (i, val) {
-                if (BI.isNotNull(selectedMap[val])) {
-                    BI.remove(self.storeValue.value, val);
-                }
-            });
-            self._adjust(callback);
-        }
-    },
-
     _adjust: function (callback) {
         var self = this, o = this.options;
         adjust();
@@ -61171,7 +61135,7 @@ BI.SingleSelectInsertCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
 BI.shortcut("bi.single_select_insert_combo", BI.SingleSelectInsertCombo);
 
 /***/ }),
-/* 647 */
+/* 648 */
 /***/ (function(module, exports) {
 
 /**
@@ -61340,7 +61304,7 @@ BI.shortcut("bi.single_select_list", BI.SingleSelectList);
 
 
 /***/ }),
-/* 648 */
+/* 649 */
 /***/ (function(module, exports) {
 
 /**
@@ -61513,7 +61477,7 @@ BI.shortcut("bi.single_select_loader", BI.SingleSelectLoader);
 
 
 /***/ }),
-/* 649 */
+/* 650 */
 /***/ (function(module, exports) {
 
 /**
@@ -61596,7 +61560,7 @@ BI.SingleSelectPopupView.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.single_select_popup_view", BI.SingleSelectPopupView);
 
 /***/ }),
-/* 650 */
+/* 651 */
 /***/ (function(module, exports) {
 
 /**
@@ -61636,6 +61600,7 @@ BI.SingleSelectTrigger = BI.inherit(BI.Trigger, {
 
         this.searcher = BI.createWidget(o.searcher, {
             type: "bi.single_select_searcher",
+            watermark: o.watermark,
             allowNoSelect: o.allowNoSelect,
             text: o.text,
             height: o.height,
@@ -61738,7 +61703,7 @@ BI.SingleSelectTrigger.EVENT_BLUR = "EVENT_BLUR";
 BI.shortcut("bi.single_select_trigger", BI.SingleSelectTrigger);
 
 /***/ }),
-/* 651 */
+/* 652 */
 /***/ (function(module, exports) {
 
 /**
@@ -61752,7 +61717,8 @@ BI.SingleSelectInsertList = BI.inherit(BI.Single, {
             baseCls: "bi-multi-select-insert-list",
             allowNoSelect: false,
             itemsCreator: BI.emptyFn,
-            valueFormatter: BI.emptyFn
+            valueFormatter: BI.emptyFn,
+            searcherHeight: 24,
         });
     },
     _init: function () {
@@ -61798,25 +61764,22 @@ BI.SingleSelectInsertList = BI.inherit(BI.Single, {
                 this.setKeyword(op.keywords[0]);
                 o.itemsCreator(op, callback);
             },
-            listeners: [{
-                eventName: BI.SingleSelectSearchInsertPane.EVENT_ADD_ITEM,
-                action: function () {
-                    var keyword = self.trigger.getKeyword();
-                    if (!self.trigger.hasMatched()) {
-                        self.storeValue = keyword;
-                        self._showAdapter();
-                        self.adapter.setValue(self.storeValue);
-                        self.adapter.populate();
-                        self.fireEvent(BI.SingleSelectInsertList.EVENT_CHANGE);
-                    }
-                }
-            }]
         });
         this.searcherPane.setVisible(false);
 
         this.trigger = BI.createWidget({
             type: "bi.searcher",
-            allowSearchBlank: false,
+            el: {
+                type: "bi.select_patch_editor",
+                el: {
+                    type: "bi.search_editor",
+                    watermark: BI.i18nText("BI-Basic_Search_And_Patch_Paste"),
+                },
+                ref: function (ref) {
+                    self.editor = ref;
+                },
+                height: o.searcherHeight,
+            },
             isAutoSearch: false,
             isAutoSync: false,
             onSearch: function (op, callback) {
@@ -61847,39 +61810,15 @@ BI.SingleSelectInsertList = BI.inherit(BI.Single, {
                 eventName: BI.Searcher.EVENT_PAUSE,
                 action: function () {
                     var keyword = this.getKeyword();
-                    if (this.hasMatched()) {
-                        self.storeValue = keyword;
-                        self._showAdapter();
-                        self.adapter.setValue(self.storeValue);
-                        self._setStartValue(keyword);
-                        assertShowValue();
-                        self.adapter.populate();
-                        self._setStartValue();
-                        self.fireEvent(BI.SingleSelectInsertList.EVENT_CHANGE);
-                    } else {
-                        self._showAdapter();
-                    }
+                    self.storeValue = keyword;
+                    self._showAdapter();
+                    self.adapter.setValue(self.storeValue);
+                    self._setStartValue(keyword);
+                    assertShowValue();
+                    self.adapter.populate();
+                    self._setStartValue();
+                    self.fireEvent(BI.SingleSelectInsertList.EVENT_CHANGE);
 
-                }
-            }, {
-                eventName: BI.Searcher.EVENT_SEARCHING,
-                action: function () {
-                    var keywords = this.getKeyword();
-                    var last = BI.last(keywords);
-                    keywords = BI.initial(keywords || []);
-                    if (keywords.length > 0) {
-                        self._joinKeywords(keywords, function () {
-                            if (BI.isEndWithBlank(last)) {
-                                self.adapter.setValue(self.storeValue);
-                                assertShowValue();
-                                self.adapter.populate();
-                                self._setStartValue();
-                            } else {
-                                self.adapter.setValue(self.storeValue);
-                                assertShowValue();
-                            }
-                        });
-                    }
                 }
             }, {
                 eventName: BI.Searcher.EVENT_CHANGE,
@@ -61934,31 +61873,6 @@ BI.SingleSelectInsertList = BI.inherit(BI.Single, {
         return BI.makeObject(values || []);
     },
 
-    _joinKeywords: function (keywords, callback) {
-        var self = this, o = this.options;
-        this._assertValue(this.storeValue);
-        if (!this._allData) {
-            o.itemsCreator({
-                type: BI.SingleSelectInsertList.REQ_GET_ALL_DATA
-            }, function (ob) {
-                self._allData = BI.map(ob.items, "value");
-                digest(self._allData);
-            });
-        } else {
-            digest(this._allData);
-        }
-
-        function digest (items) {
-            var selectedMap = self._makeMap(items);
-            BI.each(keywords, function (i, val) {
-                if (BI.isNotNull(selectedMap[val])) {
-                    BI.pushDistinct(self.storeValue.value, val)
-                }
-            });
-            callback();
-        }
-    },
-
     _setStartValue: function (value) {
         this._startValue = value;
         this.adapter.setStartValue(value);
@@ -62000,7 +61914,7 @@ BI.shortcut("bi.single_select_insert_list", BI.SingleSelectInsertList);
 
 
 /***/ }),
-/* 652 */
+/* 653 */
 /***/ (function(module, exports) {
 
 /**
@@ -62015,7 +61929,8 @@ BI.SingleSelectEditor = BI.inherit(BI.Widget, {
         return BI.extend(BI.SingleSelectEditor.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-single-select-editor",
             el: {},
-            text: BI.i18nText("BI-Basic_Please_Select")
+            text: BI.i18nText("BI-Basic_Please_Select"),
+            watermark: BI.i18nText("BI-Basic_Search"),
         });
     },
 
@@ -62023,10 +61938,10 @@ BI.SingleSelectEditor = BI.inherit(BI.Widget, {
         BI.SingleSelectEditor.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
         this.editor = BI.createWidget(o.el, {
-            type: "bi.state_editor",
+            type: "bi.select_patch_editor",
             element: this,
             height: o.height,
-            watermark: BI.i18nText("BI-Basic_Search"),
+            watermark: o.watermark,
             allowBlank: true,
             value: o.value,
             defaultText: o.text,
@@ -62035,10 +61950,6 @@ BI.SingleSelectEditor = BI.inherit(BI.Widget, {
 
         this.editor.on(BI.Controller.EVENT_CHANGE, function () {
             self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
-        });
-
-        this.editor.on(BI.StateEditor.EVENT_PAUSE, function () {
-            self.fireEvent(BI.SingleSelectEditor.EVENT_PAUSE);
         });
         this.editor.on(BI.StateEditor.EVENT_FOCUS, function () {
             self.fireEvent(BI.SingleSelectEditor.EVENT_FOCUS);
@@ -62065,21 +61976,29 @@ BI.SingleSelectEditor = BI.inherit(BI.Widget, {
     },
 
     getValue: function () {
-        var v = this.editor.getState();
-        if (BI.isArray(v) && v.length > 0) {
-            return v[v.length - 1];
-        }
-        return "";
-
+        return this.editor.getValue();
     },
 
     getKeywords: function () {
-        var val = this.editor.getLastChangedValue();
-        var keywords = val.match(/[\S]+/g);
-        if (BI.isEndWithBlank(val)) {
-            return keywords.concat([" "]);
+        var val = this.editor.getValue();
+        var keywords = val.split(/\u200b\s\u200b/);
+        if (BI.isEmptyString(keywords[keywords.length - 1])) {
+            keywords = keywords.slice(0, keywords.length - 1);
         }
+        if (/\u200b\s\u200b$/.test(val)) {
+            return keywords.concat([BI.BlankSplitChar]);
+        }
+
         return keywords;
+    },
+
+    getKeyword: function () {
+        var val = this.editor.getValue();
+        var keywords = val.split(/\u200b\s\u200b/);
+        if (BI.isEmptyString(keywords[keywords.length - 1])) {
+            keywords = keywords.slice(0, keywords.length - 1);
+        }
+        return BI.isEmptyArray(keywords) ? "" : keywords[keywords.length - 1];
     },
 
     populate: function (items) {
@@ -62089,11 +62008,10 @@ BI.SingleSelectEditor = BI.inherit(BI.Widget, {
 
 BI.SingleSelectEditor.EVENT_FOCUS = "EVENT_FOCUS";
 BI.SingleSelectEditor.EVENT_BLUR = "EVENT_BLUR";
-BI.SingleSelectEditor.EVENT_PAUSE = "EVENT_PAUSE";
 BI.shortcut("bi.single_select_editor", BI.SingleSelectEditor);
 
 /***/ }),
-/* 653 */
+/* 654 */
 /***/ (function(module, exports) {
 
 /**
@@ -62123,6 +62041,7 @@ BI.SingleSelectSearcher = BI.inherit(BI.Widget, {
         this.editor = BI.createWidget(o.el, {
             type: "bi.single_select_editor",
             height: o.height,
+            watermark: o.watermark,
             text: o.text,
             listeners: [{
                 eventName: BI.SingleSelectEditor.EVENT_FOCUS,
@@ -62139,7 +62058,6 @@ BI.SingleSelectSearcher = BI.inherit(BI.Widget, {
 
         this.searcher = BI.createWidget({
             type: "bi.searcher",
-            allowSearchBlank: false,
             element: this,
             height: o.height,
             isAutoSearch: false,
@@ -62191,10 +62109,6 @@ BI.SingleSelectSearcher = BI.inherit(BI.Widget, {
         if(BI.isNotNull(o.value)){
             this.setState(o.value);
         }
-    },
-
-    getMatchedItemValue: function() {
-        return this.searcher.getView().getMatchedItemValue();
     },
 
     adjustView: function () {
@@ -62264,7 +62178,7 @@ BI.shortcut("bi.single_select_searcher", BI.SingleSelectSearcher);
 
 
 /***/ }),
-/* 654 */
+/* 655 */
 /***/ (function(module, exports) {
 
 BI.SignTextEditor = BI.inherit(BI.Widget, {
@@ -62464,7 +62378,7 @@ BI.SignTextEditor.EVENT_CLICK_LABEL = "EVENT_CLICK_LABEL";
 BI.shortcut("bi.sign_text_editor", BI.SignTextEditor);
 
 /***/ }),
-/* 655 */
+/* 656 */
 /***/ (function(module, exports) {
 
 /**
@@ -62505,7 +62419,7 @@ BI.SliderIconButton = BI.inherit(BI.Widget, {
 BI.shortcut("bi.single_slider_button", BI.SliderIconButton);
 
 /***/ }),
-/* 656 */
+/* 657 */
 /***/ (function(module, exports) {
 
 /**
@@ -62852,7 +62766,7 @@ BI.SingleSlider.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.single_slider", BI.SingleSlider);
 
 /***/ }),
-/* 657 */
+/* 658 */
 /***/ (function(module, exports) {
 
 /**
@@ -63168,7 +63082,7 @@ BI.SingleSliderLabel.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.single_slider_label", BI.SingleSliderLabel);
 
 /***/ }),
-/* 658 */
+/* 659 */
 /***/ (function(module, exports) {
 
 /**
@@ -63458,7 +63372,7 @@ BI.SingleSliderNormal.EVENT_DRAG = "EVENT_DRAG";
 BI.shortcut("bi.single_slider_normal", BI.SingleSliderNormal);
 
 /***/ }),
-/* 659 */
+/* 660 */
 /***/ (function(module, exports) {
 
 /**
@@ -63543,7 +63457,7 @@ BI.SingleTreeCombo.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
 BI.shortcut("bi.single_tree_combo", BI.SingleTreeCombo);
 
 /***/ }),
-/* 660 */
+/* 661 */
 /***/ (function(module, exports) {
 
 /**
@@ -63614,7 +63528,7 @@ BI.SingleTreePopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.single_level_tree", BI.SingleTreePopup);
 
 /***/ }),
-/* 661 */
+/* 662 */
 /***/ (function(module, exports) {
 
 /**
@@ -63680,7 +63594,7 @@ BI.shortcut("bi.single_tree_trigger", BI.SingleTreeTrigger);
 
 
 /***/ }),
-/* 662 */
+/* 663 */
 /***/ (function(module, exports) {
 
 /**
@@ -63783,7 +63697,7 @@ BI.TextValueDownListCombo.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.text_value_down_list_combo", BI.TextValueDownListCombo);
 
 /***/ }),
-/* 663 */
+/* 664 */
 /***/ (function(module, exports) {
 
 /**
@@ -63843,7 +63757,7 @@ BI.DownListSelectTextTrigger = BI.inherit(BI.Trigger, {
 BI.shortcut("bi.down_list_select_text_trigger", BI.DownListSelectTextTrigger);
 
 /***/ }),
-/* 664 */
+/* 665 */
 /***/ (function(module, exports) {
 
 !(function () {
@@ -63942,7 +63856,7 @@ BI.shortcut("bi.down_list_select_text_trigger", BI.DownListSelectTextTrigger);
 })();
 
 /***/ }),
-/* 665 */
+/* 666 */
 /***/ (function(module, exports) {
 
 /**
@@ -64180,7 +64094,7 @@ BI.shortcut("bi.down_list_select_text_trigger", BI.DownListSelectTextTrigger);
 })();
 
 /***/ }),
-/* 666 */
+/* 667 */
 /***/ (function(module, exports) {
 
 !(function () {
@@ -64372,7 +64286,7 @@ BI.shortcut("bi.down_list_select_text_trigger", BI.DownListSelectTextTrigger);
 })();
 
 /***/ }),
-/* 667 */
+/* 668 */
 /***/ (function(module, exports) {
 
 /**
@@ -64587,7 +64501,7 @@ BI.shortcut("bi.date_interval", BI.DateInterval);
 
 
 /***/ }),
-/* 668 */
+/* 669 */
 /***/ (function(module, exports) {
 
 /**
@@ -64795,7 +64709,7 @@ BI.TimeInterval.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.time_interval", BI.TimeInterval);
 
 /***/ }),
-/* 669 */
+/* 670 */
 /***/ (function(module, exports) {
 
 /**
@@ -64920,7 +64834,7 @@ BI.shortcut("bi.time_interval", BI.TimeInterval);
 })();
 
 /***/ }),
-/* 670 */
+/* 671 */
 /***/ (function(module, exports) {
 
 /**
@@ -65044,7 +64958,7 @@ BI.DynamicYearCard.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.dynamic_year_card", BI.DynamicYearCard);
 
 /***/ }),
-/* 671 */
+/* 672 */
 /***/ (function(module, exports) {
 
 /**
@@ -65243,7 +65157,7 @@ BI.StaticYearCard.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.static_year_card", BI.StaticYearCard);
 
 /***/ }),
-/* 672 */
+/* 673 */
 /***/ (function(module, exports) {
 
 BI.DynamicYearCombo = BI.inherit(BI.Widget, {
@@ -65460,7 +65374,7 @@ BI.extend(BI.DynamicYearCombo, {
 
 
 /***/ }),
-/* 673 */
+/* 674 */
 /***/ (function(module, exports) {
 
 /**
@@ -65712,7 +65626,7 @@ BI.DynamicYearPopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.dynamic_year_popup", BI.DynamicYearPopup);
 
 /***/ }),
-/* 674 */
+/* 675 */
 /***/ (function(module, exports) {
 
 BI.DynamicYearTrigger = BI.inherit(BI.Trigger, {
@@ -65907,7 +65821,7 @@ BI.DynamicYearTrigger.EVENT_VALID = "EVENT_VALID";
 BI.shortcut("bi.dynamic_year_trigger", BI.DynamicYearTrigger);
 
 /***/ }),
-/* 675 */
+/* 676 */
 /***/ (function(module, exports) {
 
 /**
@@ -66120,7 +66034,7 @@ BI.YearInterval.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
 BI.shortcut("bi.year_interval", BI.YearInterval);
 
 /***/ }),
-/* 676 */
+/* 677 */
 /***/ (function(module, exports) {
 
 /**
@@ -66291,7 +66205,7 @@ BI.DynamicYearMonthCard.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.dynamic_year_month_card", BI.DynamicYearMonthCard);
 
 /***/ }),
-/* 677 */
+/* 678 */
 /***/ (function(module, exports) {
 
 BI.StaticYearMonthCard = BI.inherit(BI.Widget, {
@@ -66460,7 +66374,7 @@ BI.shortcut("bi.static_year_month_card", BI.StaticYearMonthCard);
 
 
 /***/ }),
-/* 678 */
+/* 679 */
 /***/ (function(module, exports) {
 
 BI.DynamicYearMonthCombo = BI.inherit(BI.Single, {
@@ -66691,7 +66605,7 @@ BI.extend(BI.DynamicYearMonthCombo, {
 
 
 /***/ }),
-/* 679 */
+/* 680 */
 /***/ (function(module, exports) {
 
 /**
@@ -66938,7 +66852,7 @@ BI.DynamicYearMonthPopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.dynamic_year_month_popup", BI.DynamicYearMonthPopup);
 
 /***/ }),
-/* 680 */
+/* 681 */
 /***/ (function(module, exports) {
 
 BI.DynamicYearMonthTrigger = BI.inherit(BI.Trigger, {
@@ -67216,7 +67130,7 @@ BI.DynamicYearMonthTrigger.EVENT_KEY_DOWN = "EVENT_KEY_DOWN";
 BI.shortcut("bi.dynamic_year_month_trigger", BI.DynamicYearMonthTrigger);
 
 /***/ }),
-/* 681 */
+/* 682 */
 /***/ (function(module, exports) {
 
 BI.YearMonthInterval = BI.inherit(BI.Single, {
@@ -67428,7 +67342,7 @@ BI.shortcut("bi.year_month_interval", BI.YearMonthInterval);
 
 
 /***/ }),
-/* 682 */
+/* 683 */
 /***/ (function(module, exports) {
 
 /**
@@ -67599,7 +67513,7 @@ BI.DynamicYearQuarterCard.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.dynamic_year_quarter_card", BI.DynamicYearQuarterCard);
 
 /***/ }),
-/* 683 */
+/* 684 */
 /***/ (function(module, exports) {
 
 BI.StaticYearQuarterCard = BI.inherit(BI.Widget, {
@@ -67756,7 +67670,7 @@ BI.shortcut("bi.static_year_quarter_card", BI.StaticYearQuarterCard);
 
 
 /***/ }),
-/* 684 */
+/* 685 */
 /***/ (function(module, exports) {
 
 BI.DynamicYearQuarterCombo = BI.inherit(BI.Widget, {
@@ -67987,7 +67901,7 @@ BI.extend(BI.DynamicYearQuarterCombo, {
 
 
 /***/ }),
-/* 685 */
+/* 686 */
 /***/ (function(module, exports) {
 
 BI.DynamicYearQuarterPopup = BI.inherit(BI.Widget, {
@@ -68227,7 +68141,7 @@ BI.DynamicYearQuarterPopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.dynamic_year_quarter_popup", BI.DynamicYearQuarterPopup);
 
 /***/ }),
-/* 686 */
+/* 687 */
 /***/ (function(module, exports) {
 
 BI.DynamicYearQuarterTrigger = BI.inherit(BI.Trigger, {
@@ -68489,7 +68403,7 @@ BI.DynamicYearQuarterTrigger.EVENT_VALID = "EVENT_VALID";
 BI.shortcut("bi.dynamic_year_quarter_trigger", BI.DynamicYearQuarterTrigger);
 
 /***/ }),
-/* 687 */
+/* 688 */
 /***/ (function(module, exports) {
 
 /**
@@ -68700,7 +68614,7 @@ BI.YearQuarterInterval.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
 BI.shortcut("bi.year_quarter_interval", BI.YearQuarterInterval);
 
 /***/ }),
-/* 688 */
+/* 689 */
 /***/ (function(module, exports) {
 
 /**
@@ -68806,7 +68720,7 @@ BI.AbstractAllValueChooser = BI.inherit(BI.Widget, {
 });
 
 /***/ }),
-/* 689 */
+/* 690 */
 /***/ (function(module, exports) {
 
 /**
@@ -68888,7 +68802,7 @@ BI.shortcut("bi.all_value_chooser_combo", BI.AllValueChooserCombo);
 
 
 /***/ }),
-/* 690 */
+/* 691 */
 /***/ (function(module, exports) {
 
 /**
@@ -68962,7 +68876,7 @@ BI.shortcut("bi.all_value_chooser_pane", BI.AllValueChooserPane);
 
 
 /***/ }),
-/* 691 */
+/* 692 */
 /***/ (function(module, exports) {
 
 BI.AllValueMultiTextValueCombo = BI.inherit(BI.Widget, {
@@ -69033,7 +68947,7 @@ BI.shortcut("bi.all_value_multi_text_value_combo", BI.AllValueMultiTextValueComb
 
 
 /***/ }),
-/* 692 */
+/* 693 */
 /***/ (function(module, exports) {
 
 BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
@@ -69893,7 +69807,7 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
 
 
 /***/ }),
-/* 693 */
+/* 694 */
 /***/ (function(module, exports) {
 
 BI.AbstractListTreeValueChooser = BI.inherit(BI.AbstractTreeValueChooser, {
@@ -70185,7 +70099,7 @@ BI.AbstractListTreeValueChooser = BI.inherit(BI.AbstractTreeValueChooser, {
 });
 
 /***/ }),
-/* 694 */
+/* 695 */
 /***/ (function(module, exports) {
 
 /**
@@ -70301,7 +70215,7 @@ BI.shortcut("bi.list_tree_value_chooser_insert_combo", BI.ListTreeValueChooserIn
 
 
 /***/ }),
-/* 695 */
+/* 696 */
 /***/ (function(module, exports) {
 
 /**
@@ -70416,7 +70330,7 @@ BI.shortcut("bi.tree_value_chooser_insert_combo", BI.TreeValueChooserInsertCombo
 
 
 /***/ }),
-/* 696 */
+/* 697 */
 /***/ (function(module, exports) {
 
 /**
@@ -70535,7 +70449,7 @@ BI.shortcut("bi.tree_value_chooser_combo", BI.TreeValueChooserCombo);
 
 
 /***/ }),
-/* 697 */
+/* 698 */
 /***/ (function(module, exports) {
 
 /**
@@ -70603,7 +70517,7 @@ BI.shortcut("bi.tree_value_chooser_pane", BI.TreeValueChooserPane);
 
 
 /***/ }),
-/* 698 */
+/* 699 */
 /***/ (function(module, exports) {
 
 /**
@@ -70715,7 +70629,7 @@ BI.AbstractValueChooser = BI.inherit(BI.Widget, {
 });
 
 /***/ }),
-/* 699 */
+/* 700 */
 /***/ (function(module, exports) {
 
 /**
@@ -70825,7 +70739,7 @@ BI.shortcut("bi.value_chooser_insert_combo", BI.ValueChooserInsertCombo);
 
 
 /***/ }),
-/* 700 */
+/* 701 */
 /***/ (function(module, exports) {
 
 /**
@@ -70939,7 +70853,7 @@ BI.shortcut("bi.value_chooser_combo", BI.ValueChooserCombo);
 
 
 /***/ }),
-/* 701 */
+/* 702 */
 /***/ (function(module, exports) {
 
 /**
@@ -71041,7 +70955,7 @@ BI.shortcut("bi.value_chooser_no_bar_combo", BI.ValueChooserNoBarCombo);
 
 
 /***/ }),
-/* 702 */
+/* 703 */
 /***/ (function(module, exports) {
 
 /**
@@ -71117,20 +71031,20 @@ BI.shortcut("bi.value_chooser_pane", BI.ValueChooserPane);
 
 
 /***/ }),
-/* 703 */
+/* 704 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var _index = _interopRequireDefault(__webpack_require__(704));
+var _index = _interopRequireDefault(__webpack_require__(705));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 BI.extend(BI, _index["default"]);
 
 /***/ }),
-/* 704 */
+/* 705 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -72157,11 +72071,11 @@ Object.defineProperty(exports, "MultiSelectTree", {
 });
 exports["default"] = void 0;
 
-var _combo = __webpack_require__(705);
+var _combo = __webpack_require__(706);
 
 var _group = __webpack_require__(67);
 
-var _tab = __webpack_require__(706);
+var _tab = __webpack_require__(707);
 
 var _pane = __webpack_require__(16);
 
@@ -72169,23 +72083,23 @@ var _button = __webpack_require__(4);
 
 var _button2 = __webpack_require__(46);
 
-var _button3 = __webpack_require__(707);
+var _button3 = __webpack_require__(708);
 
-var _button4 = __webpack_require__(708);
+var _button4 = __webpack_require__(709);
 
-var _icontextitem = __webpack_require__(709);
+var _icontextitem = __webpack_require__(710);
 
-var _editor = __webpack_require__(710);
+var _editor = __webpack_require__(711);
 
-var _iframe = __webpack_require__(711);
+var _iframe = __webpack_require__(712);
 
-var _checkbox = __webpack_require__(712);
+var _checkbox = __webpack_require__(713);
 
-var _input = __webpack_require__(713);
+var _input = __webpack_require__(714);
 
 var _abstract = __webpack_require__(68);
 
-var _label = __webpack_require__(714);
+var _label = __webpack_require__(715);
 
 var _single = __webpack_require__(2);
 
@@ -72193,23 +72107,23 @@ var _text = __webpack_require__(69);
 
 var _trigger = __webpack_require__(47);
 
-var _icon = __webpack_require__(715);
+var _icon = __webpack_require__(716);
 
-var _item = __webpack_require__(716);
+var _item = __webpack_require__(717);
 
-var _combo2 = __webpack_require__(717);
+var _combo2 = __webpack_require__(718);
 
-var _combo3 = __webpack_require__(718);
+var _combo3 = __webpack_require__(719);
 
-var _combo4 = __webpack_require__(719);
+var _combo4 = __webpack_require__(720);
 
-var _combo5 = __webpack_require__(720);
+var _combo5 = __webpack_require__(721);
 
-var _editor2 = __webpack_require__(721);
+var _editor2 = __webpack_require__(722);
 
-var _loading_pane = __webpack_require__(722);
+var _loading_pane = __webpack_require__(723);
 
-var _allvalueMultitextvalue = __webpack_require__(723);
+var _allvalueMultitextvalue = __webpack_require__(724);
 
 var _abstract2 = __webpack_require__(33);
 
@@ -72217,15 +72131,15 @@ var _abstractTreevaluechooser = __webpack_require__(70);
 
 var _action = __webpack_require__(71);
 
-var _action2 = __webpack_require__(724);
+var _action2 = __webpack_require__(725);
 
 var _behavior = __webpack_require__(48);
 
-var _behavior2 = __webpack_require__(725);
+var _behavior2 = __webpack_require__(726);
 
-var _behavior3 = __webpack_require__(726);
+var _behavior3 = __webpack_require__(727);
 
-var decorator = _interopRequireWildcard(__webpack_require__(727));
+var decorator = _interopRequireWildcard(__webpack_require__(728));
 
 var _ob = __webpack_require__(29);
 
@@ -72233,249 +72147,249 @@ var _widget = __webpack_require__(1);
 
 var _layout = __webpack_require__(3);
 
-var _layout2 = __webpack_require__(728);
+var _layout2 = __webpack_require__(729);
 
-var _layout3 = __webpack_require__(729);
+var _layout3 = __webpack_require__(730);
 
-var _layout4 = __webpack_require__(730);
+var _layout4 = __webpack_require__(731);
 
-var _layout5 = __webpack_require__(731);
+var _layout5 = __webpack_require__(732);
 
-var _combo6 = __webpack_require__(732);
+var _combo6 = __webpack_require__(733);
 
-var _icon2 = __webpack_require__(733);
+var _icon2 = __webpack_require__(734);
 
-var _adapt = __webpack_require__(734);
+var _adapt = __webpack_require__(735);
 
-var _adapt2 = __webpack_require__(735);
+var _adapt2 = __webpack_require__(736);
 
-var _icontexticonitem = __webpack_require__(736);
+var _icontexticonitem = __webpack_require__(737);
 
-var _auto = __webpack_require__(737);
+var _auto = __webpack_require__(738);
 
-var _inline = __webpack_require__(738);
+var _inline = __webpack_require__(739);
 
-var _adapt3 = __webpack_require__(739);
+var _adapt3 = __webpack_require__(740);
 
 var _button5 = __webpack_require__(49);
 
 var _editor3 = __webpack_require__(72);
 
-var _icon3 = __webpack_require__(740);
+var _icon3 = __webpack_require__(741);
 
-var _layer = __webpack_require__(741);
+var _layer = __webpack_require__(742);
 
-var _combo7 = __webpack_require__(742);
+var _combo7 = __webpack_require__(743);
 
-var _dynamicdate = __webpack_require__(743);
+var _dynamicdate = __webpack_require__(744);
 
-var _customtree = __webpack_require__(744);
+var _customtree = __webpack_require__(745);
 
-var _tree = __webpack_require__(745);
+var _tree = __webpack_require__(746);
 
-var _nodeIcon = __webpack_require__(746);
+var _nodeIcon = __webpack_require__(747);
 
-var _itemMid = __webpack_require__(747);
+var _itemMid = __webpack_require__(748);
 
-var _itemFirst = __webpack_require__(748);
+var _itemFirst = __webpack_require__(749);
 
-var _itemLast = __webpack_require__(749);
+var _itemLast = __webpack_require__(750);
 
-var _editorText = __webpack_require__(750);
+var _editorText = __webpack_require__(751);
 
-var _editor4 = __webpack_require__(751);
+var _editor4 = __webpack_require__(752);
 
-var _absolute = __webpack_require__(752);
+var _absolute = __webpack_require__(753);
 
-var _adapt4 = __webpack_require__(753);
+var _adapt4 = __webpack_require__(754);
 
-var _layout6 = __webpack_require__(754);
+var _layout6 = __webpack_require__(755);
 
-var _adapt5 = __webpack_require__(755);
+var _adapt5 = __webpack_require__(756);
 
-var _adapt6 = __webpack_require__(756);
+var _adapt6 = __webpack_require__(757);
 
-var _multiselectInsert = __webpack_require__(757);
+var _multiselectInsert = __webpack_require__(758);
 
-var _multiselect = __webpack_require__(758);
+var _multiselect = __webpack_require__(759);
 
-var _editor5 = __webpack_require__(759);
+var _editor5 = __webpack_require__(760);
 
-var _multilayersingletree = __webpack_require__(760);
+var _multilayersingletree = __webpack_require__(761);
 
-var _colorchooser = __webpack_require__(761);
+var _colorchooser = __webpack_require__(762);
 
-var _a = __webpack_require__(762);
+var _a = __webpack_require__(763);
 
-var _html = __webpack_require__(763);
+var _html = __webpack_require__(764);
 
-var _switcher = __webpack_require__(764);
+var _switcher = __webpack_require__(765);
 
-var _loader = __webpack_require__(765);
+var _loader = __webpack_require__(766);
 
-var _pane2 = __webpack_require__(766);
+var _pane2 = __webpack_require__(767);
 
-var _layer2 = __webpack_require__(767);
+var _layer2 = __webpack_require__(768);
 
-var _toolbar = __webpack_require__(768);
+var _toolbar = __webpack_require__(769);
 
-var _list = __webpack_require__(769);
+var _list = __webpack_require__(770);
 
 var _abstract3 = __webpack_require__(73);
 
-var _combo8 = __webpack_require__(770);
+var _combo8 = __webpack_require__(771);
 
-var _editor6 = __webpack_require__(771);
+var _editor6 = __webpack_require__(772);
 
-var _item2 = __webpack_require__(772);
+var _item2 = __webpack_require__(773);
 
-var _dynamicdatetime = __webpack_require__(773);
+var _dynamicdatetime = __webpack_require__(774);
 
-var _multiTree = __webpack_require__(774);
+var _multiTree = __webpack_require__(775);
 
-var _middle = __webpack_require__(775);
+var _middle = __webpack_require__(776);
 
-var _group2 = __webpack_require__(776);
+var _group2 = __webpack_require__(777);
 
-var _layout7 = __webpack_require__(777);
+var _layout7 = __webpack_require__(778);
 
-var _icon4 = __webpack_require__(778);
+var _icon4 = __webpack_require__(779);
 
-var _searcher = __webpack_require__(779);
+var _searcher = __webpack_require__(780);
 
-var _combo9 = __webpack_require__(780);
+var _combo9 = __webpack_require__(781);
 
-var _combo10 = __webpack_require__(781);
+var _combo10 = __webpack_require__(782);
 
-var _comboTreevaluechooser = __webpack_require__(782);
+var _comboTreevaluechooser = __webpack_require__(783);
 
-var _radio = __webpack_require__(783);
+var _radio = __webpack_require__(784);
 
-var _multilayerselecttree = __webpack_require__(784);
+var _multilayerselecttree = __webpack_require__(785);
 
-var _multilayersingletree2 = __webpack_require__(785);
+var _multilayersingletree2 = __webpack_require__(786);
 
 var _treeview = __webpack_require__(51);
 
-var _multiTree2 = __webpack_require__(786);
+var _multiTree2 = __webpack_require__(787);
 
-var _itemSingleselect = __webpack_require__(787);
+var _itemSingleselect = __webpack_require__(788);
 
-var _singleselectInsert = __webpack_require__(788);
+var _singleselectInsert = __webpack_require__(789);
 
-var _singleselect = __webpack_require__(789);
+var _singleselect = __webpack_require__(790);
 
-var _layout8 = __webpack_require__(790);
+var _layout8 = __webpack_require__(791);
 
-var _combo11 = __webpack_require__(791);
+var _combo11 = __webpack_require__(792);
 
-var _time = __webpack_require__(792);
+var _time = __webpack_require__(793);
 
 var _listtreeview = __webpack_require__(74);
 
-var _listasynctree = __webpack_require__(793);
+var _listasynctree = __webpack_require__(794);
 
-var _asynctree = __webpack_require__(794);
+var _asynctree = __webpack_require__(795);
 
-var _multilayersingletree3 = __webpack_require__(795);
+var _multilayersingletree3 = __webpack_require__(796);
 
-var _multilayerselecttree2 = __webpack_require__(796);
+var _multilayerselecttree2 = __webpack_require__(797);
 
-var _multiTreeList = __webpack_require__(797);
+var _multiTreeList = __webpack_require__(798);
 
-var _multiTreeInsert = __webpack_require__(798);
+var _multiTreeInsert = __webpack_require__(799);
 
-var _combo12 = __webpack_require__(799);
+var _combo12 = __webpack_require__(800);
 
-var _switch = __webpack_require__(800);
+var _switch = __webpack_require__(801);
 
-var _layout9 = __webpack_require__(801);
+var _layout9 = __webpack_require__(802);
 
-var _editor7 = __webpack_require__(802);
+var _editor7 = __webpack_require__(803);
 
-var _trigger2 = __webpack_require__(803);
+var _trigger2 = __webpack_require__(804);
 
-var _triggerText = __webpack_require__(804);
+var _triggerText = __webpack_require__(805);
 
-var _dateinterval = __webpack_require__(805);
+var _dateinterval = __webpack_require__(806);
 
-var _datepane = __webpack_require__(806);
+var _datepane = __webpack_require__(807);
 
-var _pagerAll = __webpack_require__(807);
+var _pagerAll = __webpack_require__(808);
 
 var _layer3 = __webpack_require__(50);
 
-var _popup = __webpack_require__(808);
+var _popup = __webpack_require__(809);
 
-var _check = __webpack_require__(809);
+var _check = __webpack_require__(810);
 
-var _numberinterval = __webpack_require__(810);
+var _numberinterval = __webpack_require__(811);
 
-var _combo13 = __webpack_require__(811);
+var _combo13 = __webpack_require__(812);
 
-var _combo14 = __webpack_require__(812);
+var _combo14 = __webpack_require__(813);
 
-var _intervalslider = __webpack_require__(813);
+var _intervalslider = __webpack_require__(814);
 
-var _multiselectlist = __webpack_require__(814);
+var _multiselectlist = __webpack_require__(815);
 
-var _yearmonthinterval = __webpack_require__(815);
+var _yearmonthinterval = __webpack_require__(816);
 
-var _numbereditor = __webpack_require__(816);
+var _numbereditor = __webpack_require__(817);
 
-var _combo15 = __webpack_require__(817);
+var _combo15 = __webpack_require__(818);
 
-var _linear = __webpack_require__(818);
+var _linear = __webpack_require__(819);
 
-var _img = __webpack_require__(819);
+var _img = __webpack_require__(820);
 
-var _combo16 = __webpack_require__(820);
+var _combo16 = __webpack_require__(821);
 
-var _combo17 = __webpack_require__(821);
+var _combo17 = __webpack_require__(822);
 
-var _listview = __webpack_require__(822);
+var _listview = __webpack_require__(823);
 
-var _middleFloat = __webpack_require__(823);
+var _middleFloat = __webpack_require__(824);
 
-var _popup2 = __webpack_require__(824);
+var _popup2 = __webpack_require__(825);
 
 var _controller = __webpack_require__(52);
 
-var _controller2 = __webpack_require__(825);
+var _controller2 = __webpack_require__(826);
 
-var _popupCalendar = __webpack_require__(826);
+var _popupCalendar = __webpack_require__(827);
 
-var _tree2 = __webpack_require__(827);
+var _tree2 = __webpack_require__(828);
 
-var _textnode = __webpack_require__(828);
+var _textnode = __webpack_require__(829);
 
-var _popup3 = __webpack_require__(829);
+var _popup3 = __webpack_require__(830);
 
-var _button6 = __webpack_require__(830);
+var _button6 = __webpack_require__(831);
 
-var _router = __webpack_require__(831);
+var _router = __webpack_require__(832);
 
-var _datetime = __webpack_require__(832);
+var _datetime = __webpack_require__(833);
 
-var _float = __webpack_require__(833);
+var _float = __webpack_require__(834);
 
-var _layout10 = __webpack_require__(834);
+var _layout10 = __webpack_require__(835);
 
-var _colorchooserPopup = __webpack_require__(835);
+var _colorchooserPopup = __webpack_require__(836);
 
-var _blankicontextitem = __webpack_require__(836);
+var _blankicontextitem = __webpack_require__(837);
 
-var _controller3 = __webpack_require__(837);
+var _controller3 = __webpack_require__(838);
 
-var _pager = __webpack_require__(838);
+var _pager = __webpack_require__(839);
 
-var _timeinterval = __webpack_require__(839);
+var _timeinterval = __webpack_require__(840);
 
-var _datetimepane = __webpack_require__(840);
+var _datetimepane = __webpack_require__(841);
 
-var _singleselectlist = __webpack_require__(841);
+var _singleselectlist = __webpack_require__(842);
 
-var _multiselecttree = __webpack_require__(842);
+var _multiselecttree = __webpack_require__(843);
 
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
@@ -72485,15 +72399,6 @@ var _default = {
   Decorators: decorator
 };
 exports["default"] = _default;
-
-/***/ }),
-/* 705 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 706 */
@@ -72511,7 +72416,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _button = __webpack_require__(4);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 708 */
@@ -72538,7 +72443,7 @@ var _button = __webpack_require__(4);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _button = __webpack_require__(4);
 
 /***/ }),
 /* 711 */
@@ -72556,7 +72461,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _button = __webpack_require__(4);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 713 */
@@ -72565,7 +72470,7 @@ var _button = __webpack_require__(4);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _button = __webpack_require__(4);
 
 /***/ }),
 /* 714 */
@@ -72574,7 +72479,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _abstract = __webpack_require__(68);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 715 */
@@ -72583,7 +72488,7 @@ var _abstract = __webpack_require__(68);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _abstract = __webpack_require__(68);
 
 /***/ }),
 /* 716 */
@@ -72592,7 +72497,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _button = __webpack_require__(4);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 717 */
@@ -72601,7 +72506,7 @@ var _button = __webpack_require__(4);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _button = __webpack_require__(4);
 
 /***/ }),
 /* 718 */
@@ -72646,7 +72551,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _pane = __webpack_require__(16);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 723 */
@@ -72655,7 +72560,7 @@ var _pane = __webpack_require__(16);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _pane = __webpack_require__(16);
 
 /***/ }),
 /* 724 */
@@ -72664,7 +72569,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _action = __webpack_require__(71);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 725 */
@@ -72673,7 +72578,7 @@ var _action = __webpack_require__(71);
 "use strict";
 
 
-var _behavior = __webpack_require__(48);
+var _action = __webpack_require__(71);
 
 /***/ }),
 /* 726 */
@@ -72686,6 +72591,15 @@ var _behavior = __webpack_require__(48);
 
 /***/ }),
 /* 727 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _behavior = __webpack_require__(48);
+
+/***/ }),
+/* 728 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -72896,15 +72810,6 @@ type UnionToTuple<U> = UnionToTupleRecursively<U, []>;
 exports.Model = Model;
 
 /***/ }),
-/* 728 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _layout = __webpack_require__(3);
-
-/***/ }),
 /* 729 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -72938,7 +72843,7 @@ var _layout = __webpack_require__(3);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _layout = __webpack_require__(3);
 
 /***/ }),
 /* 733 */
@@ -72947,7 +72852,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 734 */
@@ -72956,7 +72861,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _layout = __webpack_require__(3);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 735 */
@@ -72974,7 +72879,7 @@ var _layout = __webpack_require__(3);
 "use strict";
 
 
-var _button = __webpack_require__(4);
+var _layout = __webpack_require__(3);
 
 /***/ }),
 /* 737 */
@@ -72983,7 +72888,7 @@ var _button = __webpack_require__(4);
 "use strict";
 
 
-var _layout = __webpack_require__(3);
+var _button = __webpack_require__(4);
 
 /***/ }),
 /* 738 */
@@ -73010,7 +72915,7 @@ var _layout = __webpack_require__(3);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _layout = __webpack_require__(3);
 
 /***/ }),
 /* 741 */
@@ -73019,7 +72924,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 742 */
@@ -73037,7 +72942,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 744 */
@@ -73046,7 +72951,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 745 */
@@ -73055,7 +72960,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _group = __webpack_require__(67);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 746 */
@@ -73064,7 +72969,7 @@ var _group = __webpack_require__(67);
 "use strict";
 
 
-var _button = __webpack_require__(46);
+var _group = __webpack_require__(67);
 
 /***/ }),
 /* 747 */
@@ -73073,7 +72978,7 @@ var _button = __webpack_require__(46);
 "use strict";
 
 
-var _button = __webpack_require__(4);
+var _button = __webpack_require__(46);
 
 /***/ }),
 /* 748 */
@@ -73100,7 +73005,7 @@ var _button = __webpack_require__(4);
 "use strict";
 
 
-var _editor = __webpack_require__(72);
+var _button = __webpack_require__(4);
 
 /***/ }),
 /* 751 */
@@ -73109,7 +73014,7 @@ var _editor = __webpack_require__(72);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _editor = __webpack_require__(72);
 
 /***/ }),
 /* 752 */
@@ -73118,7 +73023,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _layout = __webpack_require__(3);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 753 */
@@ -73163,7 +73068,7 @@ var _layout = __webpack_require__(3);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _layout = __webpack_require__(3);
 
 /***/ }),
 /* 758 */
@@ -73181,7 +73086,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 760 */
@@ -73190,7 +73095,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _pane = __webpack_require__(16);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 761 */
@@ -73199,7 +73104,7 @@ var _pane = __webpack_require__(16);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _pane = __webpack_require__(16);
 
 /***/ }),
 /* 762 */
@@ -73208,7 +73113,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _text = __webpack_require__(69);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 763 */
@@ -73217,7 +73122,7 @@ var _text = __webpack_require__(69);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _text = __webpack_require__(69);
 
 /***/ }),
 /* 764 */
@@ -73226,7 +73131,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 765 */
@@ -73244,7 +73149,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _pane = __webpack_require__(16);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 767 */
@@ -73253,7 +73158,7 @@ var _pane = __webpack_require__(16);
 "use strict";
 
 
-var _layer = __webpack_require__(50);
+var _pane = __webpack_require__(16);
 
 /***/ }),
 /* 768 */
@@ -73262,7 +73167,7 @@ var _layer = __webpack_require__(50);
 "use strict";
 
 
-var _button = __webpack_require__(4);
+var _layer = __webpack_require__(50);
 
 /***/ }),
 /* 769 */
@@ -73271,7 +73176,7 @@ var _button = __webpack_require__(4);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _button = __webpack_require__(4);
 
 /***/ }),
 /* 770 */
@@ -73280,7 +73185,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _abstract = __webpack_require__(73);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 771 */
@@ -73289,7 +73194,7 @@ var _abstract = __webpack_require__(73);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _abstract = __webpack_require__(73);
 
 /***/ }),
 /* 772 */
@@ -73298,7 +73203,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _button = __webpack_require__(4);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 773 */
@@ -73307,7 +73212,7 @@ var _button = __webpack_require__(4);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _button = __webpack_require__(4);
 
 /***/ }),
 /* 774 */
@@ -73325,7 +73230,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _layout = __webpack_require__(3);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 776 */
@@ -73334,7 +73239,7 @@ var _layout = __webpack_require__(3);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _layout = __webpack_require__(3);
 
 /***/ }),
 /* 777 */
@@ -73343,7 +73248,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _layout = __webpack_require__(3);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 778 */
@@ -73352,7 +73257,7 @@ var _layout = __webpack_require__(3);
 "use strict";
 
 
-var _button = __webpack_require__(49);
+var _layout = __webpack_require__(3);
 
 /***/ }),
 /* 779 */
@@ -73361,7 +73266,7 @@ var _button = __webpack_require__(49);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _button = __webpack_require__(49);
 
 /***/ }),
 /* 780 */
@@ -73370,7 +73275,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _abstractTreevaluechooser = __webpack_require__(70);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 781 */
@@ -73379,7 +73284,7 @@ var _abstractTreevaluechooser = __webpack_require__(70);
 "use strict";
 
 
-var _abstract = __webpack_require__(33);
+var _abstractTreevaluechooser = __webpack_require__(70);
 
 /***/ }),
 /* 782 */
@@ -73397,7 +73302,7 @@ var _abstract = __webpack_require__(33);
 "use strict";
 
 
-var _button = __webpack_require__(4);
+var _abstract = __webpack_require__(33);
 
 /***/ }),
 /* 784 */
@@ -73406,7 +73311,7 @@ var _button = __webpack_require__(4);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _button = __webpack_require__(4);
 
 /***/ }),
 /* 785 */
@@ -73424,7 +73329,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _pane = __webpack_require__(16);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 787 */
@@ -73433,7 +73338,7 @@ var _pane = __webpack_require__(16);
 "use strict";
 
 
-var _button = __webpack_require__(4);
+var _pane = __webpack_require__(16);
 
 /***/ }),
 /* 788 */
@@ -73442,7 +73347,7 @@ var _button = __webpack_require__(4);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _button = __webpack_require__(4);
 
 /***/ }),
 /* 789 */
@@ -73460,7 +73365,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _layout = __webpack_require__(3);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 791 */
@@ -73469,7 +73374,7 @@ var _layout = __webpack_require__(3);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _layout = __webpack_require__(3);
 
 /***/ }),
 /* 792 */
@@ -73487,7 +73392,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _listtreeview = __webpack_require__(74);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 794 */
@@ -73496,7 +73401,7 @@ var _listtreeview = __webpack_require__(74);
 "use strict";
 
 
-var _treeview = __webpack_require__(51);
+var _listtreeview = __webpack_require__(74);
 
 /***/ }),
 /* 795 */
@@ -73505,7 +73410,7 @@ var _treeview = __webpack_require__(51);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _treeview = __webpack_require__(51);
 
 /***/ }),
 /* 796 */
@@ -73523,7 +73428,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 798 */
@@ -73541,7 +73446,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 800 */
@@ -73550,7 +73455,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _button = __webpack_require__(4);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 801 */
@@ -73559,7 +73464,7 @@ var _button = __webpack_require__(4);
 "use strict";
 
 
-var _layout = __webpack_require__(3);
+var _button = __webpack_require__(4);
 
 /***/ }),
 /* 802 */
@@ -73568,7 +73473,7 @@ var _layout = __webpack_require__(3);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _layout = __webpack_require__(3);
 
 /***/ }),
 /* 803 */
@@ -73577,7 +73482,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _trigger = __webpack_require__(47);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 804 */
@@ -73595,7 +73500,7 @@ var _trigger = __webpack_require__(47);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _trigger = __webpack_require__(47);
 
 /***/ }),
 /* 806 */
@@ -73604,7 +73509,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 807 */
@@ -73622,8 +73527,6 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _layer = __webpack_require__(50);
-
 var _widget = __webpack_require__(1);
 
 /***/ }),
@@ -73633,7 +73536,9 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _button = __webpack_require__(49);
+var _layer = __webpack_require__(50);
+
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 810 */
@@ -73642,7 +73547,7 @@ var _button = __webpack_require__(49);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _button = __webpack_require__(49);
 
 /***/ }),
 /* 811 */
@@ -73651,7 +73556,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 812 */
@@ -73669,7 +73574,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 814 */
@@ -73696,7 +73601,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 817 */
@@ -73723,7 +73628,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 820 */
@@ -73732,7 +73637,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 821 */
@@ -73759,7 +73664,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _layout = __webpack_require__(3);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 824 */
@@ -73768,7 +73673,7 @@ var _layout = __webpack_require__(3);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _layout = __webpack_require__(3);
 
 /***/ }),
 /* 825 */
@@ -73777,7 +73682,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _controller = __webpack_require__(52);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 826 */
@@ -73786,7 +73691,7 @@ var _controller = __webpack_require__(52);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _controller = __webpack_require__(52);
 
 /***/ }),
 /* 827 */
@@ -73795,14 +73700,14 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
+var _widget = __webpack_require__(1);
+
 /***/ }),
 /* 828 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
-
-var _button = __webpack_require__(46);
 
 /***/ }),
 /* 829 */
@@ -73811,7 +73716,7 @@ var _button = __webpack_require__(46);
 "use strict";
 
 
-var _pane = __webpack_require__(16);
+var _button = __webpack_require__(46);
 
 /***/ }),
 /* 830 */
@@ -73820,7 +73725,7 @@ var _pane = __webpack_require__(16);
 "use strict";
 
 
-var _button = __webpack_require__(4);
+var _pane = __webpack_require__(16);
 
 /***/ }),
 /* 831 */
@@ -73829,14 +73734,14 @@ var _button = __webpack_require__(4);
 "use strict";
 
 
+var _button = __webpack_require__(4);
+
 /***/ }),
 /* 832 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
-
-var _single = __webpack_require__(2);
 
 /***/ }),
 /* 833 */
@@ -73845,7 +73750,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _layout = __webpack_require__(3);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 834 */
@@ -73863,7 +73768,7 @@ var _layout = __webpack_require__(3);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _layout = __webpack_require__(3);
 
 /***/ }),
 /* 836 */
@@ -73872,7 +73777,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _button = __webpack_require__(4);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 837 */
@@ -73881,7 +73786,7 @@ var _button = __webpack_require__(4);
 "use strict";
 
 
-var _controller = __webpack_require__(52);
+var _button = __webpack_require__(4);
 
 /***/ }),
 /* 838 */
@@ -73890,7 +73795,7 @@ var _controller = __webpack_require__(52);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _controller = __webpack_require__(52);
 
 /***/ }),
 /* 839 */
@@ -73899,7 +73804,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 840 */
@@ -73908,7 +73813,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 841 */
@@ -73917,7 +73822,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 842 */
@@ -73929,7 +73834,15 @@ var _single = __webpack_require__(2);
 var _single = __webpack_require__(2);
 
 /***/ }),
-/* 843 */,
+/* 843 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _single = __webpack_require__(2);
+
+/***/ }),
 /* 844 */,
 /* 845 */,
 /* 846 */,
@@ -73957,7 +73870,8 @@ var _single = __webpack_require__(2);
 /* 868 */,
 /* 869 */,
 /* 870 */,
-/* 871 */
+/* 871 */,
+/* 872 */
 /***/ (function(module, exports) {
 
 ;(function () {
@@ -74120,7 +74034,6 @@ var _single = __webpack_require__(2);
 
 
 /***/ }),
-/* 872 */,
 /* 873 */,
 /* 874 */,
 /* 875 */,
@@ -74154,7 +74067,8 @@ var _single = __webpack_require__(2);
 /* 903 */,
 /* 904 */,
 /* 905 */,
-/* 906 */
+/* 906 */,
+/* 907 */
 /***/ (function(module, exports) {
 
 ;(function () {
@@ -74501,7 +74415,6 @@ var _single = __webpack_require__(2);
 
 
 /***/ }),
-/* 907 */,
 /* 908 */,
 /* 909 */,
 /* 910 */,
@@ -74510,14 +74423,15 @@ var _single = __webpack_require__(2);
 /* 913 */,
 /* 914 */,
 /* 915 */,
-/* 916 */
+/* 916 */,
+/* 917 */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(global) {module.exports = global["Fix"] = __webpack_require__(917);
+/* WEBPACK VAR INJECTION */(function(global) {module.exports = global["Fix"] = __webpack_require__(918);
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(14)))
 
 /***/ }),
-/* 917 */
+/* 918 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(setImmediate) {function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -76050,7 +75964,6 @@ var _single = __webpack_require__(2);
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(60).setImmediate))
 
 /***/ }),
-/* 918 */,
 /* 919 */,
 /* 920 */,
 /* 921 */,
@@ -76250,13 +76163,13 @@ var _single = __webpack_require__(2);
 /* 1115 */,
 /* 1116 */,
 /* 1117 */,
-/* 1118 */
+/* 1118 */,
+/* 1119 */
 /***/ (function(module, exports) {
 
 
 
 /***/ }),
-/* 1119 */,
 /* 1120 */,
 /* 1121 */,
 /* 1122 */,
@@ -76573,7 +76486,8 @@ var _single = __webpack_require__(2);
 /* 1433 */,
 /* 1434 */,
 /* 1435 */,
-/* 1436 */
+/* 1436 */,
+/* 1437 */
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(92);
@@ -76680,7 +76594,7 @@ __webpack_require__(367);
 __webpack_require__(110);
 __webpack_require__(111);
 __webpack_require__(112);
-__webpack_require__(916);
+__webpack_require__(917);
 __webpack_require__(368);
 __webpack_require__(369);
 __webpack_require__(370);
@@ -77076,10 +76990,11 @@ __webpack_require__(699);
 __webpack_require__(700);
 __webpack_require__(701);
 __webpack_require__(702);
-__webpack_require__(906);
-__webpack_require__(871);
-__webpack_require__(1118);
-module.exports = __webpack_require__(703);
+__webpack_require__(703);
+__webpack_require__(907);
+__webpack_require__(872);
+__webpack_require__(1119);
+module.exports = __webpack_require__(704);
 
 
 /***/ })

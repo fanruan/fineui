@@ -9,7 +9,7 @@ Demo.SingleSelectCombo = BI.inherit(BI.Widget, {
     _createSingleSelectCombo: function () {
         var self = this;
         var widget = BI.createWidget({
-            type: "bi.single_select_insert_combo",
+            type: "bi.single_select_combo",
             itemsCreator: BI.bind(this._itemsCreator, this),
             width: 200,
             ref: function () {
