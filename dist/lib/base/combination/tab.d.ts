@@ -19,4 +19,5 @@ export declare class Tab extends Widget {
     getSelectedTab<T>(): T;
     getTab<T>(v: string | number): T;
     populate(): void;
+    isCardExisted(): boolean;
 }
