@@ -1,4 +1,4 @@
-/*! time: 2021-5-28 9:30:19 AM */
+/*! time: 2021-5-28 11:40:21 AM */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -21342,6 +21342,10 @@ BI.Tab = BI.inherit(BI.Widget, {
                 return true;
             }
         });
+    },
+
+    isCardExisted: function (cardName) {
+        return this.layout.isCardExisted(cardName);
     },
 
     getSelect: function () {
