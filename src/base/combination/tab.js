@@ -104,6 +104,10 @@ BI.Tab = BI.inherit(BI.Widget, {
         });
     },
 
+    isCardExisted: function (cardName) {
+        return this.layout.isCardExisted(cardName);
+    },
+
     getSelect: function () {
         return this.curr;
     },
