@@ -29,5 +29,5 @@ export declare class Tab extends Widget {
 
     populate(): void;
 
-    isCardExisted(): boolean;
+    isCardExisted(cardName: string): boolean;
 }
