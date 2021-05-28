@@ -135,5 +135,6 @@ _.extend(BI, {
         Bottom: "bottom",
         Stretch: "stretch"
     },
-    StartOfWeek: 1
+    StartOfWeek: 1,
+    BlankSplitChar: "\u200b \u200b",
 });

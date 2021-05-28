@@ -63,32 +63,7 @@ BI.SingleSelectCombo = BI.inherit(BI.Single, {
             self._setStartValue();
             self.fireEvent(BI.SingleSelectCombo.EVENT_STOP);
         });
-        this.trigger.on(BI.SingleSelectTrigger.EVENT_PAUSE, function () {
-            if (this.getSearcher().hasMatched()) {
-                var keyword = this.getSearcher().getMatchedItemValue();
-                self.combo.setValue(self.storeValue);
-                self._setStartValue(keyword);
-                assertShowValue();
-                self.populate();
-                self._setStartValue();
-            }
-        });
-        this.trigger.on(BI.SingleSelectTrigger.EVENT_SEARCHING, function (keywords) {
-            var last = BI.last(keywords);
-            keywords = BI.initial(keywords || []);
-            if (keywords.length > 0) {
-                self._joinKeywords(keywords, function () {
-                    if (BI.isEndWithBlank(last)) {
-                        self.combo.setValue(self.storeValue);
-                        assertShowValue();
-                        self.combo.populate();
-                        self._setStartValue();
-                    } else {
-                        self.combo.setValue(self.storeValue);
-                        assertShowValue();
-                    }
-                });
-            }
+        this.trigger.on(BI.SingleSelectTrigger.EVENT_SEARCHING, function () {
             self.fireEvent(BI.SingleSelectCombo.EVENT_SEARCHING);
         });
 

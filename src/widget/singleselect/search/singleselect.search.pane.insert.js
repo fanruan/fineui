@@ -36,15 +36,12 @@ BI.SingleSelectSearchInsertPane = BI.inherit(BI.Widget, {
         });
 
         this.addNotMatchTip = BI.createWidget({
-            type: "bi.text_button",
+            type: "bi.label",
             invisible: true,
             text: BI.i18nText("BI-Basic_Click_To_Add_Text", ""),
             height: this.constants.height,
             cls: "bi-high-light",
             hgap: 5,
-            handler: function () {
-                self.fireEvent(BI.SingleSelectSearchInsertPane.EVENT_ADD_ITEM, o.keywordGetter());
-            }
         });
 
         this.loader = BI.createWidget({
@@ -88,20 +85,6 @@ BI.SingleSelectSearchInsertPane = BI.inherit(BI.Widget, {
         !isMatchTipVisible && this.addNotMatchTip.setText(BI.i18nText("BI-Basic_Click_To_Add_Text", keyword));
     },
 
-    getMatchedItemValue: function () {
-        var value;
-        var o = this.options;
-        BI.some(this.loader.getAllButtons(), function (idx, btn) {
-            var v = btn.getValue();
-            if (o.keywordGetter() === (o.valueFormatter(v) || v)) {
-                value = v;
-                return true;
-            }
-        });
-
-        return value;
-    },
-
     hasMatched: function () {
         return this.tooltipClick.isVisible();
     },
@@ -124,6 +107,5 @@ BI.SingleSelectSearchInsertPane = BI.inherit(BI.Widget, {
 });
 
 BI.SingleSelectSearchInsertPane.EVENT_CHANGE = "EVENT_CHANGE";
-BI.SingleSelectSearchInsertPane.EVENT_ADD_ITEM = "EVENT_ADD_ITEM";
 
 BI.shortcut("bi.single_select_search_insert_pane", BI.SingleSelectSearchInsertPane);
