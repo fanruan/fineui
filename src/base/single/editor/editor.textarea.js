@@ -114,6 +114,7 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
                         disabled: o.disabled,
                         hgap: 6,
                         vgap: o.height > 24 ? 4 : 2,
+                        height: o.height > 24 ? "" : o.height,
                     });
                     this.watermark.element.bind({
                         mousedown: function (e) {
