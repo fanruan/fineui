@@ -1,4 +1,4 @@
-/*! time: 2021-5-28 2:20:18 PM */
+/*! time: 2021-5-30 9:00:41 AM */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -16627,7 +16627,7 @@ BI.shortcut("bi.division", BI.DivisionLayout);
 BI.FloatLeftLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.FloatLeftLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-left clearfix border-sizing",
+            baseCls: "bi-left",
             hgap: 0,
             vgap: 0,
             lgap: 0,
@@ -16639,14 +16639,15 @@ BI.FloatLeftLayout = BI.inherit(BI.Layout, {
     render: function () {
         BI.FloatLeftLayout.superclass.render.apply(this, arguments);
         var o = this.options;
+        this.$innerDiv = BI.Widget._renderEngine.createElement("<div>").addClass("clearfix");
         if (o.hgap > 0) {
-            this.element.css({
+            this.$innerDiv.css({
                 "padding-left": o.hgap / 2 / BI.pixRatio + BI.pixUnit,
                 "padding-right": o.hgap / 2 / BI.pixRatio + BI.pixUnit
             });
         }
         if (o.vgap > 0) {
-            this.element.css({
+            this.$innerDiv.css({
                 "padding-top": o.vgap / 2 / BI.pixRatio + BI.pixUnit,
                 "padding-bottom": o.vgap / 2 / BI.pixRatio + BI.pixUnit
             });
@@ -16693,6 +16694,11 @@ BI.FloatLeftLayout = BI.inherit(BI.Layout, {
         return w;
     },
 
+    appendFragment: function (frag) {
+        this.$innerDiv.append(frag);
+        this.element.append(this.$innerDiv);
+    },
+
     resize: function () {
         this.stroke(this.options.items);
     },
@@ -16716,7 +16722,7 @@ BI.shortcut("bi.left", BI.FloatLeftLayout);
 BI.FloatRightLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.FloatRightLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-right clearfix border-sizing",
+            baseCls: "bi-right",
             hgap: 0,
             vgap: 0,
             lgap: 0,
@@ -16728,14 +16734,15 @@ BI.FloatRightLayout = BI.inherit(BI.Layout, {
     render: function () {
         BI.FloatRightLayout.superclass.render.apply(this, arguments);
         var o = this.options;
+        this.$innerDiv = BI.Widget._renderEngine.createElement("<div>").addClass("clearfix");
         if (o.hgap > 0) {
-            this.element.css({
+            this.$innerDiv.css({
                 "padding-left": o.hgap / 2 / BI.pixRatio + BI.pixUnit,
                 "padding-right": o.hgap / 2 / BI.pixRatio + BI.pixUnit
             });
         }
         if (o.vgap > 0) {
-            this.element.css({
+            this.$innerDiv.css({
                 "padding-top": o.vgap / 2 / BI.pixRatio + BI.pixUnit,
                 "padding-bottom": o.vgap / 2 / BI.pixRatio + BI.pixUnit
             });
@@ -16780,6 +16787,11 @@ BI.FloatRightLayout = BI.inherit(BI.Layout, {
             });
         }
         return w;
+    },
+
+    appendFragment: function (frag) {
+        this.$innerDiv.append(frag);
+        this.element.append(this.$innerDiv);
     },
 
     resize: function () {
