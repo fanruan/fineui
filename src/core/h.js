@@ -22,7 +22,7 @@ BI.h = function (type, props, children) {
         return children;
     }
     if (BI.isFunction(type)) {
-        type = type.xtype;
+        type = type.xtype || type;
     }
     if (type === "el") {
         return BI.extend({
