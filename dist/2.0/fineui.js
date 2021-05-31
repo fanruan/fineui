@@ -1,4 +1,4 @@
-/*! time: 2021-5-31 5:20:22 PM */
+/*! time: 2021-5-31 11:20:21 PM */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -11230,7 +11230,7 @@ BI.h = function (type, props, children) {
         return children;
     }
     if (BI.isFunction(type)) {
-        type = type.xtype;
+        type = type.xtype || type;
     }
     if (type === "el") {
         return BI.extend({
@@ -11241,6 +11241,7 @@ BI.h = function (type, props, children) {
         type: type,
     }, children.length > 0 ? {items: children} : {}, props);
 };
+
 
 /***/ }),
 /* 300 */
