@@ -1,4 +1,4 @@
-/*! time: 2021-5-30 7:20:18 PM */
+/*! time: 2021-5-31 11:20:19 AM */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -56698,13 +56698,16 @@ BI.SelectPatchEditor = BI.inherit(BI.Widget, {
 
     _dealChange: function (type, v) {
         var value = "";
+        if (v !== this.editor.getValue()) {
+            return;
+        }
         if (BI.isKey(v)) {
             value = this._formatText(v);
         }
         if (type === BI.Events.CHANGE) {
             this._setValue(value);
             if (this._trimValue(value) !== "") {
-                if (!this._start || !BI.isKey(this._lastValue) || (this._pause === true && !/\u200b\s\u200b$/.test(this.getValue()))) {
+                if (!this._start || !BI.isKey(this._lastValue) || (this._pause === true && this._trimValue(this._lastValue) !== this._trimValue(value))) {
                     this._start = true;
                     this._pause = false;
                     this.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.STARTEDIT, this.getValue(), this);
