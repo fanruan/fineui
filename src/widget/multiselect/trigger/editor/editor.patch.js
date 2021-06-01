@@ -73,12 +73,10 @@ BI.SelectPatchEditor = BI.inherit(BI.Widget, {
     },
 
     _clearSplitValue: function () {
-        console.log(6);
         this.editor.setValue("");
     },
 
     _dealChange: function (type, v) {
-        console.log(5);
         var value = "";
         if (v !== this.editor.getValue()) {
             return;
