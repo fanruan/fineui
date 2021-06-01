@@ -1,4 +1,4 @@
-/*! time: 2021-5-31 11:20:21 PM */
+/*! time: 2021-6-1 6:50:23 PM */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -26575,6 +26575,9 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
            // 水印快速消失
             self.watermark && self.watermark.setVisible(false);
         });
+        this.content.element.keyup(function (e) {
+            self.fireEvent(BI.TextAreaEditor.EVENT_KEY_DOWN, e.keyCode);
+        });
         this.content.element.click(function (e) {
             e.stopPropagation();
         });
@@ -26739,6 +26742,7 @@ BI.TextAreaEditor.EVENT_BLUR = "EVENT_BLUR";
 BI.TextAreaEditor.EVENT_FOCUS = "EVENT_FOCUS";
 BI.TextAreaEditor.EVENT_CONFIRM = "EVENT_CONFIRM";
 BI.TextAreaEditor.EVENT_EMPTY = "EVENT_EMPTY";
+BI.TextAreaEditor.EVENT_KEY_DOWN = "EVENT_KEY_DOWN";
 BI.shortcut("bi.textarea_editor", BI.TextAreaEditor);
 
 
@@ -53719,6 +53723,13 @@ BI.SelectPatchEditor = BI.inherit(BI.Widget, {
                     }
                 },
             }, {
+                eventName: BI.Editor.EVENT_KEY_DOWN,
+                action: function (keyCode) {
+                    if (keyCode === BI.KeyCode.ENTER) {
+                        self._clearSplitValue();
+                    }
+                },
+            }, {
                 eventName: BI.Editor.EVENT_FOCUS,
                 action: function () {
                     self.fireEvent(BI.SelectPatchEditor.EVENT_FOCUS, arguments);
@@ -53726,10 +53737,15 @@ BI.SelectPatchEditor = BI.inherit(BI.Widget, {
             }, {
                 eventName: BI.Editor.EVENT_BLUR,
                 action: function () {
+                    self._start = false;
                     self.fireEvent(BI.SelectPatchEditor.EVENT_BLUR, arguments);
                 },
             }],
         }, o.el);
+    },
+
+    _clearSplitValue: function () {
+        this.editor.setValue("");
     },
 
     _dealChange: function (type, v) {
