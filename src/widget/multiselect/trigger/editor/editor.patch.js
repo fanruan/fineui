@@ -66,6 +66,7 @@ BI.SelectPatchEditor = BI.inherit(BI.Widget, {
             }, {
                 eventName: BI.Editor.EVENT_BLUR,
                 action: function () {
+                    self._start = false;
                     self.fireEvent(BI.SelectPatchEditor.EVENT_BLUR, arguments);
                 },
             }],
