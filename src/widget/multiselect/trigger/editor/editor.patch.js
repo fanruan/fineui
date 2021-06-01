@@ -52,6 +52,13 @@ BI.SelectPatchEditor = BI.inherit(BI.Widget, {
                     }
                 },
             }, {
+                eventName: BI.Editor.EVENT_KEY_DOWN,
+                action: function (keyCode) {
+                    if (keyCode === BI.KeyCode.ENTER) {
+                        self._clearSplitValue();
+                    }
+                },
+            }, {
                 eventName: BI.Editor.EVENT_FOCUS,
                 action: function () {
                     self.fireEvent(BI.SelectPatchEditor.EVENT_FOCUS, arguments);
@@ -59,10 +66,15 @@ BI.SelectPatchEditor = BI.inherit(BI.Widget, {
             }, {
                 eventName: BI.Editor.EVENT_BLUR,
                 action: function () {
+                    self._start = false;
                     self.fireEvent(BI.SelectPatchEditor.EVENT_BLUR, arguments);
                 },
             }],
         }, o.el);
+    },
+
+    _clearSplitValue: function () {
+        this.editor.setValue("");
     },
 
     _dealChange: function (type, v) {

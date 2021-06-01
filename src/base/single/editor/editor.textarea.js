@@ -82,6 +82,9 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
            // 水印快速消失
             self.watermark && self.watermark.setVisible(false);
         });
+        this.content.element.keyup(function (e) {
+            self.fireEvent(BI.TextAreaEditor.EVENT_KEY_DOWN, e.keyCode);
+        });
         this.content.element.click(function (e) {
             e.stopPropagation();
         });
@@ -246,4 +249,5 @@ BI.TextAreaEditor.EVENT_BLUR = "EVENT_BLUR";
 BI.TextAreaEditor.EVENT_FOCUS = "EVENT_FOCUS";
 BI.TextAreaEditor.EVENT_CONFIRM = "EVENT_CONFIRM";
 BI.TextAreaEditor.EVENT_EMPTY = "EVENT_EMPTY";
+BI.TextAreaEditor.EVENT_KEY_DOWN = "EVENT_KEY_DOWN";
 BI.shortcut("bi.textarea_editor", BI.TextAreaEditor);
