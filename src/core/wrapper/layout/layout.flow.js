@@ -10,7 +10,7 @@
 BI.FloatLeftLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.FloatLeftLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-left clearfix border-sizing",
+            baseCls: "bi-left clearfix",
             hgap: 0,
             vgap: 0,
             lgap: 0,
@@ -22,18 +22,6 @@ BI.FloatLeftLayout = BI.inherit(BI.Layout, {
     render: function () {
         BI.FloatLeftLayout.superclass.render.apply(this, arguments);
         var o = this.options;
-        if (o.hgap > 0) {
-            this.element.css({
-                "padding-left": o.hgap / 2 / BI.pixRatio + BI.pixUnit,
-                "padding-right": o.hgap / 2 / BI.pixRatio + BI.pixUnit
-            });
-        }
-        if (o.vgap > 0) {
-            this.element.css({
-                "padding-top": o.vgap / 2 / BI.pixRatio + BI.pixUnit,
-                "padding-bottom": o.vgap / 2 / BI.pixRatio + BI.pixUnit
-            });
-        }
         this.populate(this.options.items);
     },
 
@@ -99,7 +87,7 @@ BI.shortcut("bi.left", BI.FloatLeftLayout);
 BI.FloatRightLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.FloatRightLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-right clearfix border-sizing",
+            baseCls: "bi-right clearfix",
             hgap: 0,
             vgap: 0,
             lgap: 0,
@@ -111,18 +99,6 @@ BI.FloatRightLayout = BI.inherit(BI.Layout, {
     render: function () {
         BI.FloatRightLayout.superclass.render.apply(this, arguments);
         var o = this.options;
-        if (o.hgap > 0) {
-            this.element.css({
-                "padding-left": o.hgap / 2 / BI.pixRatio + BI.pixUnit,
-                "padding-right": o.hgap / 2 / BI.pixRatio + BI.pixUnit
-            });
-        }
-        if (o.vgap > 0) {
-            this.element.css({
-                "padding-top": o.vgap / 2 / BI.pixRatio + BI.pixUnit,
-                "padding-bottom": o.vgap / 2 / BI.pixRatio + BI.pixUnit
-            });
-        }
         this.populate(this.options.items);
     },
 

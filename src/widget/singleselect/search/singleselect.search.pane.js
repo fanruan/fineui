@@ -75,20 +75,6 @@ BI.SingleSelectSearchPane = BI.inherit(BI.Widget, {
         }
     },
 
-    getMatchedItemValue: function () {
-        var value;
-        var o = this.options;
-        BI.some(this.loader.getAllButtons(), function (idx, btn) {
-            var v = btn.getValue();
-            if (o.keywordGetter() === (o.valueFormatter(v) || v)) {
-                value = v;
-                return true;
-            }
-        });
-
-        return value;
-    },
-
     hasMatched: function () {
         return this.tooltipClick.isVisible();
     },

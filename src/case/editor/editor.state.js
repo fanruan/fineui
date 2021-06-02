@@ -22,14 +22,15 @@ BI.StateEditor = BI.inherit(BI.Widget, {
             errorText: "",
             height: 24,
             defaultText: "", // 默认显示值，默认显示值与显示值的区别是默认显示值标记灰色
-            text: BI.i18nText("BI-Basic_Unrestricted") // 显示值
+            text: BI.i18nText("BI-Basic_Unrestricted"), // 显示值
+            el: {}
         });
     },
 
     _init: function () {
         BI.StateEditor.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
-        this.editor = BI.createWidget({
+        this.editor = BI.createWidget(o.el, {
             type: "bi.editor",
             height: o.height,
             hgap: o.hgap,

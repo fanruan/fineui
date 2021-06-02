@@ -15,7 +15,7 @@ BI.NumberIntervalSingleEidtor = BI.inherit(BI.Single, {
                 ref: function (_ref) {
                     self.editor = _ref;
                 },
-                height: o.height - 2,
+                height: o.height,
                 watermark: o.watermark,
                 allowBlank: o.allowBlank,
                 value: o.value,

@@ -27,24 +27,12 @@ BI.MultiSelectSearchInsertPane = BI.inherit(BI.Widget, {
         BI.MultiSelectSearchInsertPane.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
 
-        this.tooltipClick = BI.createWidget({
-            type: "bi.label",
-            invisible: true,
-            text: BI.i18nText("BI-Click_Blank_To_Select"),
-            cls: "multi-select-toolbar",
-            height: this.constants.height
-        });
-
         this.addNotMatchTip = BI.createWidget({
-            type: "bi.text_button",
-            invisible: true,
+            type: "bi.label",
             text: BI.i18nText("BI-Basic_Click_To_Add_Text", ""),
             height: this.constants.height,
             cls: "bi-high-light",
             hgap: 5,
-            handler: function () {
-                self.fireEvent(BI.MultiSelectSearchInsertPane.EVENT_ADD_ITEM, o.keywordGetter());
-            }
         });
 
         this.loader = BI.createWidget({
@@ -68,38 +56,16 @@ BI.MultiSelectSearchInsertPane = BI.inherit(BI.Widget, {
             type: "bi.vtape",
             element: this,
             items: [{
-                type: "bi.vertical",
-                items: [this.tooltipClick, this.addNotMatchTip],
-                height: this.constants.height
+                el: this.addNotMatchTip,
+                height: this.constants.height,
             }, {
-                el: this.loader
-            }]
+                el: this.loader,
+            }],
         });
     },
 
     setKeyword: function (keyword) {
-        var o = this.options;
-        var hasSameValue = BI.some(this.loader.getAllButtons(), function (idx, btn) {
-            return keyword === (o.valueFormatter(btn.getValue()) || btn.getValue());
-        });
-        var isMatchTipVisible = this.loader.getAllButtons().length > 0 && hasSameValue;
-        this.tooltipClick.setVisible(isMatchTipVisible);
-        this.addNotMatchTip.setVisible(!isMatchTipVisible);
-        !isMatchTipVisible && this.addNotMatchTip.setText(BI.i18nText("BI-Basic_Click_To_Add_Text", keyword));
-    },
-
-    getMatchedItemValue: function () {
-        var value;
-        var o = this.options;
-        BI.some(this.loader.getAllButtons(), function (idx, btn) {
-            var v = btn.getValue();
-            if (o.keywordGetter() === (o.valueFormatter(v) || v)) {
-                value = v;
-                return true;
-            }
-        });
-
-        return value;
+        this.addNotMatchTip.setText(BI.i18nText("BI-Basic_Click_To_Add_Text", keyword));
     },
 
     isAllSelected: function () {
@@ -107,7 +73,7 @@ BI.MultiSelectSearchInsertPane = BI.inherit(BI.Widget, {
     },
 
     hasMatched: function () {
-        return this.tooltipClick.isVisible();
+        return false;
     },
 
     setValue: function (v) {
@@ -128,6 +94,5 @@ BI.MultiSelectSearchInsertPane = BI.inherit(BI.Widget, {
 });
 
 BI.MultiSelectSearchInsertPane.EVENT_CHANGE = "EVENT_CHANGE";
-BI.MultiSelectSearchInsertPane.EVENT_ADD_ITEM = "EVENT_ADD_ITEM";
 
 BI.shortcut("bi.multi_select_search_insert_pane", BI.MultiSelectSearchInsertPane);

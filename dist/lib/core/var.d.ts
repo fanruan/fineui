@@ -129,4 +129,5 @@ export interface _var {
         Stretch: string;
     };
     StartOfWeek: number;
+    BlankSplitChar: string;
 }

@@ -21,7 +21,6 @@ BI.Searcher = BI.inherit(BI.Widget, {
             isAutoSearch: true, // 是否自动搜索
             isAutoSync: true, // 是否自动同步数据, 即是否保持搜索面板和adapter面板状态值的统一
             chooseType: BI.ButtonGroup.CHOOSE_TYPE_SINGLE,
-            allowSearchBlank: true, // 是否能够搜索包含空格的字符串
 
             // isAutoSearch为false时启用
             onSearch: function (op, callback) {
@@ -80,8 +79,7 @@ BI.Searcher = BI.inherit(BI.Widget, {
                     search();
                     break;
                 case BI.Events.PAUSE:
-                    // 可以搜索空格的情况下输入空格不做处理, 展示上一次的结果
-                    if (!o.allowSearchBlank) {
+                    if (BI.endWith(this.getValue(), BI.BlankSplitChar)) {
                         self._pauseSearch();
                     }
                     break;
@@ -167,7 +165,7 @@ BI.Searcher = BI.inherit(BI.Widget, {
     },
 
     _search: function () {
-        var self = this, o = this.options, keyword = o.allowSearchBlank ? this.editor.getValue() : this._getLastSearchKeyword();
+        var self = this, o = this.options, keyword = this.editor.getValue();
         if (keyword === "" || this._stop) {
             return;
         }
@@ -202,7 +200,10 @@ BI.Searcher = BI.inherit(BI.Widget, {
 
     _getLastSearchKeyword: function () {
         if (this.isValid()) {
-            var res = this.editor.getValue().match(/[\S]+/g);
+            var res = this.editor.getValue().split(/\u200b\s\u200b/);
+            if (BI.isEmptyString(res[res.length - 1])) {
+                res = res.slice(0, res.length - 1);
+            }
             return BI.isNull(res) ? "" : res[res.length - 1];
         }
     },

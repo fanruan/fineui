@@ -53,7 +53,6 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
                 var keyword = self.trigger.getKeyword();
                 if (BI.isNotEmptyString(keyword)) {
                     op.keywords = [keyword];
-                    this.setKeyword(op.keywords[0]);
                     o.itemsCreator(op, callback);
                 }
             },
@@ -64,9 +63,15 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
         this.trigger = BI.createWidget({
             type: "bi.searcher",
             el: {
+                type: "bi.select_patch_editor",
+                el: {
+                    type: "bi.search_editor",
+                },
+                ref: function (ref) {
+                    self.editor = ref;
+                },
                 height: o.searcherHeight
             },
-            allowSearchBlank: false,
             isAutoSearch: false,
             isAutoSync: false,
             onSearch: function (op, callback) {
@@ -95,22 +100,9 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
             }, {
                 eventName: BI.Searcher.EVENT_PAUSE,
                 action: function () {
-                    var keyword = this.getKeyword();
-                    if (this.hasMatched()) {
-                        self._join({
-                            type: BI.Selection.Multi,
-                            value: [keyword]
-                        }, function () {
-                            self._showAdapter();
-                            self.adapter.setValue(self.storeValue);
-                            self._setStartValue(keyword);
-                            assertShowValue();
-                            self.adapter.populate();
-                            self._setStartValue("");
-                            self.fireEvent(BI.MultiSelectList.EVENT_CHANGE);
-                        });
-                    }
-                }
+                    self._showAdapter();
+                    self.fireEvent(BI.MultiSelectList.EVENT_CHANGE);
+                },
             }, {
                 eventName: BI.Searcher.EVENT_SEARCHING,
                 action: function () {
@@ -119,7 +111,7 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
                     keywords = BI.initial(keywords || []);
                     if (keywords.length > 0) {
                         self._joinKeywords(keywords, function () {
-                            if (BI.isEndWithBlank(last)) {
+                            if (BI.endWith(last, BI.BlankSplitChar)) {
                                 self.adapter.setValue(self.storeValue);
                                 assertShowValue();
                                 self.adapter.populate();
@@ -172,6 +164,19 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
                 right: 0
             }]
         });
+    },
+
+    _getKeywords: function () {
+        var val = this.editor.getValue();
+        var keywords = val.split(/\u200b\s\u200b/);
+        if (BI.isEmptyString(keywords[keywords.length - 1])) {
+            keywords = keywords.slice(0, keywords.length - 1);
+        }
+        if (/\u200b\s\u200b$/.test(val)) {
+            return keywords.concat([BI.BlankSplitChar]);
+        }
+
+        return keywords;
     },
 
     _showAdapter: function () {

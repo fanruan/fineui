@@ -27,14 +27,6 @@ BI.MultiSelectSearchPane = BI.inherit(BI.Widget, {
         BI.MultiSelectSearchPane.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
 
-        this.tooltipClick = BI.createWidget({
-            type: "bi.label",
-            invisible: true,
-            text: BI.i18nText("BI-Click_Blank_To_Select"),
-            cls: "multi-select-toolbar",
-            height: this.constants.height
-        });
-
         this.loader = BI.createWidget({
             type: "bi.multi_select_search_loader",
             keywordGetter: o.keywordGetter,
@@ -42,7 +34,6 @@ BI.MultiSelectSearchPane = BI.inherit(BI.Widget, {
             itemsCreator: function (op, callback) {
                 o.itemsCreator.apply(self, [op, function (res) {
                     callback(res);
-                    self.setKeyword(o.keywordGetter());
                 }]);
             },
             itemHeight: o.itemHeight,
@@ -53,40 +44,16 @@ BI.MultiSelectSearchPane = BI.inherit(BI.Widget, {
         });
 
         this.resizer = BI.createWidget({
-            type: "bi.vtape",
+            type: "bi.absolute",
             element: this,
             items: [{
-                el: this.tooltipClick,
-                height: 0
-            }, {
-                el: this.loader
-            }]
+                el: this.loader,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                top: 0,
+            }],
         });
-        this.tooltipClick.setVisible(false);
-    },
-
-    setKeyword: function (keyword) {
-        var btn, o = this.options;
-        var isVisible = this.loader.getAllButtons().length > 0 && (btn = this.loader.getAllButtons()[0]) && (keyword === (o.valueFormatter(btn.getValue()) || btn.getValue()));
-        if (isVisible !== this.tooltipClick.isVisible()) {
-            this.tooltipClick.setVisible(isVisible);
-            this.resizer.attr("items")[0].height = (isVisible ? this.constants.height : 0);
-            this.resizer.resize();
-        }
-    },
-
-    getMatchedItemValue: function () {
-        var value;
-        var o = this.options;
-        BI.some(this.loader.getAllButtons(), function (idx, btn) {
-            var v = btn.getValue();
-            if (o.keywordGetter() === (o.valueFormatter(v) || v)) {
-                value = v;
-                return true;
-            }
-        });
-
-        return value;
     },
 
     isAllSelected: function () {
@@ -94,7 +61,6 @@ BI.MultiSelectSearchPane = BI.inherit(BI.Widget, {
     },
 
     hasMatched: function () {
-        return this.tooltipClick.isVisible();
     },
 
     setValue: function (v) {

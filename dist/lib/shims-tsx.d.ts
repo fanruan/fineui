@@ -10,6 +10,8 @@ interface UIProps {
     lgap: number;
     tgap: number;
     bgap: number;
+    vgap: number;
+    hgap: number;
 }
 interface ElementClassProps<T> extends UIProps {
     cls: string;
@@ -31,6 +33,10 @@ interface ElementClassProps<T> extends UIProps {
     };
     tagName: string;
     element: any;
+    $testId: string;
+    $point: any;
+    $value: any;
+    $scope: () => any;
     beforeRender(callback: () => void): void;
     beforeInit(callback: () => void): void;
     render(): any;
@@ -39,12 +45,12 @@ declare namespace JSX {
     interface IntrinsicElements {
         [elemName: string]: Partial<UIProps>;
     }
-    type ElementAttributesProperty = {
+    interface ElementAttributesProperty {
         /**
          * specify the property name to use
          */
         __props: any;
-    };
+    }
     interface IntrinsicClassAttributes<T> extends Partial<ElementClassProps<T>> {
     }
 }
