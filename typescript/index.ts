@@ -23,6 +23,7 @@ import { TextValueCombo } from "./case/combo/combo.textvalue";
 import { SmallTextValueCombo } from './case/combo/combo.textvaluesmall';
 import { SearchTextValueCombo } from "./case/combo/searchtextvaluecombo/combo.searchtextvalue";
 import { SignEditor } from "./case/editor/editor.sign";
+import { StateEditor } from './case/editor/editor.state';
 import { LoadingPane } from "./case/loading/loading_pane";
 import { AllValueMultiTextValueCombo } from "./component/allvaluemultitextvaluecombo/allvalue.multitextvalue.combo";
 import { AbstractTreeValueChooser } from "./component/treevaluechooser/abstract.treevaluechooser";
@@ -210,6 +211,7 @@ export interface BI extends _func, _i18n, _base, _inject, _var, _web, _utils {
     Text: typeof Text;
     Editor: typeof Editor;
     SignEditor: typeof SignEditor;
+    StateEditor: typeof StateEditor;
     Layout: typeof Layout;
     HTapeLayout: typeof HTapeLayout;
     VTapeLayout: typeof VTapeLayout;
@@ -447,6 +449,7 @@ export {
     SmallTextEditor,
     MultifileEditor,
     SignEditor,
+    StateEditor,
     MultiSelectInsertCombo,
     MultiSelectCombo,
     SearchEditor,
