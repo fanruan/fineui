@@ -7,6 +7,7 @@ export declare class Button extends BasicButton {
     static EVENT_CHANGE: string;
 
     props: {
+        text?: string;
         minWidth?: number;
         readonly?: boolean;
         iconCls?: string;
