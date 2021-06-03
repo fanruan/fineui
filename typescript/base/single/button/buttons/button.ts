@@ -1,4 +1,4 @@
-import { IconLabel, Label } from "../../../..";
+import { AbstractLabel, IconLabel, Label } from "../../../..";
 import { BasicButton } from "../button.basic";
 
 export declare class Button extends BasicButton {
@@ -14,11 +14,7 @@ export declare class Button extends BasicButton {
         block?: boolean; // 是否块状显示，即不显示边框，没有最小宽度的限制
         clear?: boolean; // 是否去掉边框和背景
         ghost?: boolean; // 是否幽灵显示, 即正常状态无背景
-        textAlign?: 'center' | 'left' | 'right';
-        whiteSpace?: 'nowrap' | 'normal',
-        textWidth?: number | null,
-        textHeight?: number | null,
-    } & BasicButton['props'];
+    } & AbstractLabel['props'] & IconLabel['props'] & BasicButton['props'];
 
     text: Label;
     icon?: IconLabel;
