@@ -1,4 +1,4 @@
-/*! time: 2021-6-3 11:10:30 AM */
+/*! time: 2021-6-3 4:30:25 PM */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -25242,7 +25242,7 @@ BI.Popover = BI.inherit(BI.Widget, {
                 },
                 css: {
                     "max-height": this._getSuitableBodyHeight(c.MAX_HEIGHT - o.headerHeight - (o.footer ? o.footerHeight : 0) - o.bodyTgap),
-                    "min-height": this._getSuitableBodyHeight(size.height),
+                    "min-height": this._getSuitableBodyHeight(size.height - o.headerHeight - (o.footer ? o.footerHeight : 0) - o.bodyTgap),
                 },
                 items: [{
                     el: o.body,
@@ -29502,7 +29502,7 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
         });
         this.content.element.keydown(function () {
            // 水印快速消失
-            self.watermark && self.watermark.setVisible(false);
+            self._checkWaterMark();
         });
         this.content.element.keyup(function (e) {
             self.fireEvent(BI.TextAreaEditor.EVENT_KEY_DOWN, e.keyCode);
