@@ -13,6 +13,10 @@ interface UIProps {
     vgap: number;
     hgap: number;
 }
+interface AdditionalProps {
+    column: number;
+    row: number;
+}
 interface ElementClassProps<T> extends UIProps {
     cls: string;
     extraCls: string;
@@ -43,7 +47,7 @@ interface ElementClassProps<T> extends UIProps {
 }
 declare namespace JSX {
     interface IntrinsicElements {
-        [elemName: string]: Partial<UIProps>;
+        [elemName: string]: Partial<UIProps & AdditionalProps>;
     }
     interface ElementAttributesProperty {
         /**

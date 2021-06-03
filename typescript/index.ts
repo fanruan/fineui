@@ -169,6 +169,7 @@ import { TimeInterval } from './widget/timeinterval/timeinterval';
 import { DynamicDateTimePane } from './widget/datetimepane/datetimepane';
 import { SingleSelectInsertList } from './widget/singleselect/singleselectlist.insert';
 import { MultiSelectTree } from './widget/multiselecttree/multiselecttree';
+import { HtmlLabel } from "./base/single/label/html.label";
 
 
 export interface BI extends _func, _i18n, _base, _inject, _var, _web, _utils {
@@ -345,6 +346,7 @@ export interface BI extends _func, _i18n, _base, _inject, _var, _web, _utils {
     DynamicDateTimePane: typeof DynamicDateTimePane;
     SingleSelectInsertList: typeof SingleSelectInsertList;
     MultiSelectTree: typeof MultiSelectTree;
+    HtmlLabel: typeof HtmlLabel;
 }
 
 export default {
@@ -521,4 +523,5 @@ export {
     DynamicDateTimePane,
     SingleSelectInsertList,
     MultiSelectTree,
+    HtmlLabel,
 };

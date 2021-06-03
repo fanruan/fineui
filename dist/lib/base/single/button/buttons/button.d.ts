@@ -1,4 +1,4 @@
-import { IconLabel, Label } from "../../../..";
+import { AbstractLabel, IconLabel, Label } from "../../../..";
 import { BasicButton } from "../button.basic";
 export declare class Button extends BasicButton {
     static xtype: string;
@@ -11,11 +11,7 @@ export declare class Button extends BasicButton {
         block?: boolean;
         clear?: boolean;
         ghost?: boolean;
-        textAlign?: 'center' | 'left' | 'right';
-        whiteSpace?: 'nowrap' | 'normal';
-        textWidth?: number | null;
-        textHeight?: number | null;
-    } & BasicButton['props'];
+    } & AbstractLabel['props'] & IconLabel['props'] & BasicButton['props'];
     text: Label;
     icon?: IconLabel;
     doRedMark(...args: any[]): void;

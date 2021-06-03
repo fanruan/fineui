@@ -4,12 +4,13 @@ export declare class AbstractLabel extends Single {
     static xtype: string;
 
     props: {
-        textAlign: "left" | "center" | "right",
-        whiteSpace: "nowrap" | "normal",
-        textWidth: number | null,
-        textHeight: number | null,
-        highLight: boolean,
-        handler: Function | null,
+        textAlign: "left" | "center" | "right";
+        whiteSpace: "nowrap" | "normal";
+        textWidth: number | null;
+        textHeight: number | null;
+        highLight: boolean;
+        handler: Function | null;
+        text: string;
     } & Single['props']
 
     doRedMark(...args: any[]): void;
