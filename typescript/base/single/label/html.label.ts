@@ -1,9 +1,8 @@
 import { AbstractLabel } from "./abstract.label";
 
-export declare class Label extends AbstractLabel {
+export declare class HtmlLabel extends AbstractLabel {
     props: {
-        py: string;
-        keyword: string;
+        lineHeight: number;
     } & AbstractLabel['props'];
 
     static xtype: string;
