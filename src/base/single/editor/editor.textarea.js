@@ -80,7 +80,7 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
         });
         this.content.element.keydown(function () {
            // 水印快速消失
-            self.watermark && self.watermark.setVisible(false);
+            self._checkWaterMark();
         });
         this.content.element.keyup(function (e) {
             self.fireEvent(BI.TextAreaEditor.EVENT_KEY_DOWN, e.keyCode);
