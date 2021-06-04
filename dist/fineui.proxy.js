@@ -1,4 +1,4 @@
-/*! time: 2021-6-4 10:20:49 AM */
+/*! time: 2021-6-4 2:10:15 PM */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -21505,9 +21505,13 @@ BI.Switcher = BI.inherit(BI.Widget, {
         }, this.getName());
     },
 
-    populate: function (items) {
+    _populate: function () {
         this._assertPopupView();
         this.popupView.populate.apply(this.popupView, arguments);
+    },
+
+    populate: function (items) {
+        this._populate.apply(this, arguments);
         this.switcher.populate && this.switcher.populate.apply(this.switcher, arguments);
     },
 
@@ -46053,7 +46057,7 @@ BI.SearchEditor = BI.inherit(BI.Widget, {
         });
         this.clear.on(BI.IconButton.EVENT_CHANGE, function () {
             self.setValue("");
-            self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.STOPEDIT);
+            self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.STOPEDIT, self.getValue());
             // 从有内容到无内容的清空也是一次change
             self.fireEvent(BI.SearchEditor.EVENT_CHANGE);
             self.fireEvent(BI.SearchEditor.EVENT_CLEAR);
@@ -54751,7 +54755,7 @@ BI.MultiSelectCheckSelectedSwitcher = BI.inherit(BI.Widget, {
         this.switcher.on(BI.Switcher.EVENT_AFTER_POPUPVIEW, function () {
             var me = this;
             BI.nextTick(function () {
-                me.populate();
+                me._populate();
             });
         });
     },
