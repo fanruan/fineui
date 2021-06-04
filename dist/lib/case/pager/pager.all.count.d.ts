@@ -6,6 +6,7 @@ export declare class AllCountPager extends Widget {
     setValue(v: number): void;
     setVPage(v: number): void;
     setCount(v: number | string): void;
+    setCountPrevText(v: string): void;
     getCurrentPage(): number;
     hasPrev(): boolean;
     hasNext(): boolean;

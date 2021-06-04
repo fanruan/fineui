@@ -1,4 +1,4 @@
-/*! time: 2021-6-3 4:30:25 PM */
+/*! time: 2021-6-4 10:20:49 AM */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -38392,6 +38392,7 @@ BI.AllCountPager = BI.inherit(BI.Widget, {
             pages: 1, // 必选项
             curr: 1, // 初始化当前页， pages为数字时可用，
             count: 1, // 总行数
+            rowInfoObject: null,
             showRowCount: true
         });
     },
@@ -38517,7 +38518,9 @@ BI.AllCountPager = BI.inherit(BI.Widget, {
                 type: "bi.label",
                 height: o.height,
                 text: BI.i18nText("BI-Basic_Total"),
-                width: 15
+                ref: function (_ref) {
+                    self.prevText = _ref;
+                }
             }, {
                 type: "bi.label",
                 ref: function (_ref) {
@@ -38532,9 +38535,9 @@ BI.AllCountPager = BI.inherit(BI.Widget, {
                 type: "bi.label",
                 height: o.height,
                 text: BI.i18nText("BI-Tiao_Data"),
-                width: 50,
+                width: 40,
                 textAlign: "left"
-            }]
+            }, BI.isNotEmptyObject(o.rowInfoObject) ? o.rowInfoObject : null]
         };
     },
 
@@ -38559,6 +38562,12 @@ BI.AllCountPager = BI.inherit(BI.Widget, {
         if (this.options.showRowCount) {
             this.rowCount.setText(count);
             this.rowCount.setTitle(count);
+        }
+    },
+
+    setCountPrevText: function (text) {
+        if (this.options.showRowCount) {
+            this.prevText.setText(text);
         }
     },
 
