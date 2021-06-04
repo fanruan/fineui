@@ -62,7 +62,7 @@ BI.MultiSelectCheckSelectedSwitcher = BI.inherit(BI.Widget, {
         this.switcher.on(BI.Switcher.EVENT_AFTER_POPUPVIEW, function () {
             var me = this;
             BI.nextTick(function () {
-                me.populate();
+                me._populate();
             });
         });
     },

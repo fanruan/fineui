@@ -191,9 +191,13 @@ BI.Switcher = BI.inherit(BI.Widget, {
         }, this.getName());
     },
 
-    populate: function (items) {
+    _populate: function () {
         this._assertPopupView();
         this.popupView.populate.apply(this.popupView, arguments);
+    },
+
+    populate: function (items) {
+        this._populate.apply(this, arguments);
         this.switcher.populate && this.switcher.populate.apply(this.switcher, arguments);
     },
 
