@@ -11,5 +11,6 @@ export declare class AllCountPager extends Widget {
     hasPrev(): boolean;
     hasNext(): boolean;
     setPagerVisible(v: boolean): void;
+    setRowCountVisible(v: boolean): void;
     populate(): void;
 }
