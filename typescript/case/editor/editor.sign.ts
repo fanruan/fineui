@@ -46,7 +46,7 @@ export declare class SignEditor extends Widget {
 
     getLastChangedValue(): string;
 
-    getState(): any;
+    getState(): number | string | Array<string>;
 
-    setState(...args: any[]): void;
+    setState(...args: (number | string | Array<string>)[]): void;
 }
