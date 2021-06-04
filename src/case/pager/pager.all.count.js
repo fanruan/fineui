@@ -134,6 +134,9 @@ BI.AllCountPager = BI.inherit(BI.Widget, {
             type: "bi.left",
             height: o.height,
             scrollable: false,
+            ref: function (_ref) {
+                self.rowCountObject = _ref;
+            },
             items: [{
                 type: "bi.label",
                 height: o.height,
@@ -207,6 +210,10 @@ BI.AllCountPager = BI.inherit(BI.Widget, {
         this.editor.setVisible(b);
         this.allPages.setVisible(b);
         this.pager.setVisible(b);
+    },
+
+    setRowCountVisible: function (b) {
+        this.rowCountObject.setVisible(b);
     },
 
     populate: function () {
