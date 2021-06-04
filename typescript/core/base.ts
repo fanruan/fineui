@@ -269,7 +269,7 @@ export interface _base {
 
     contains: (obj: any[], target: any, fromIndex?: number) => boolean;
 
-    deepContains: (obj: any[], copy: any) => number;
+    deepContains: (obj: any[], copy: any) => boolean;
 
     deepIndexOf: (obj: any[], target: any) => number;
 
