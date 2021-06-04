@@ -8,6 +8,7 @@ export declare class AbstractLabel extends Single {
         textHeight: number | null;
         highLight: boolean;
         handler: Function | null;
+        text: string;
     } & Single['props'];
     doRedMark(...args: any[]): void;
     unRedMark(...args: any[]): void;

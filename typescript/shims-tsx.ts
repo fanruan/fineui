@@ -15,6 +15,12 @@ interface UIProps {
     hgap: number;
 }
 
+// 一些布局的附加属性
+interface AdditionalProps {
+    column: number;
+    row: number;
+}
+
 interface ElementClassProps<T> extends UIProps {
     cls: string;
     extraCls: string;
@@ -48,7 +54,7 @@ interface ElementClassProps<T> extends UIProps {
 declare namespace JSX {
     // for undefined
     interface IntrinsicElements {
-        [elemName: string]: Partial<UIProps>;
+        [elemName: string]: Partial<UIProps & AdditionalProps>;
     }
 
     interface ElementAttributesProperty {
