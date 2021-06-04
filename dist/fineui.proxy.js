@@ -1,4 +1,4 @@
-/*! time: 2021-6-3 4:30:25 PM */
+/*! time: 2021-6-4 2:10:15 PM */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -21505,9 +21505,13 @@ BI.Switcher = BI.inherit(BI.Widget, {
         }, this.getName());
     },
 
-    populate: function (items) {
+    _populate: function () {
         this._assertPopupView();
         this.popupView.populate.apply(this.popupView, arguments);
+    },
+
+    populate: function (items) {
+        this._populate.apply(this, arguments);
         this.switcher.populate && this.switcher.populate.apply(this.switcher, arguments);
     },
 
@@ -38392,6 +38396,7 @@ BI.AllCountPager = BI.inherit(BI.Widget, {
             pages: 1, // 必选项
             curr: 1, // 初始化当前页， pages为数字时可用，
             count: 1, // 总行数
+            rowInfoObject: null,
             showRowCount: true
         });
     },
@@ -38517,7 +38522,9 @@ BI.AllCountPager = BI.inherit(BI.Widget, {
                 type: "bi.label",
                 height: o.height,
                 text: BI.i18nText("BI-Basic_Total"),
-                width: 15
+                ref: function (_ref) {
+                    self.prevText = _ref;
+                }
             }, {
                 type: "bi.label",
                 ref: function (_ref) {
@@ -38532,9 +38539,9 @@ BI.AllCountPager = BI.inherit(BI.Widget, {
                 type: "bi.label",
                 height: o.height,
                 text: BI.i18nText("BI-Tiao_Data"),
-                width: 50,
+                width: 40,
                 textAlign: "left"
-            }]
+            }, BI.isNotEmptyObject(o.rowInfoObject) ? o.rowInfoObject : null]
         };
     },
 
@@ -38559,6 +38566,12 @@ BI.AllCountPager = BI.inherit(BI.Widget, {
         if (this.options.showRowCount) {
             this.rowCount.setText(count);
             this.rowCount.setTitle(count);
+        }
+    },
+
+    setCountPrevText: function (text) {
+        if (this.options.showRowCount) {
+            this.prevText.setText(text);
         }
     },
 
@@ -46044,7 +46057,7 @@ BI.SearchEditor = BI.inherit(BI.Widget, {
         });
         this.clear.on(BI.IconButton.EVENT_CHANGE, function () {
             self.setValue("");
-            self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.STOPEDIT);
+            self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.STOPEDIT, self.getValue());
             // 从有内容到无内容的清空也是一次change
             self.fireEvent(BI.SearchEditor.EVENT_CHANGE);
             self.fireEvent(BI.SearchEditor.EVENT_CLEAR);
@@ -54742,7 +54755,7 @@ BI.MultiSelectCheckSelectedSwitcher = BI.inherit(BI.Widget, {
         this.switcher.on(BI.Switcher.EVENT_AFTER_POPUPVIEW, function () {
             var me = this;
             BI.nextTick(function () {
-                me.populate();
+                me._populate();
             });
         });
     },

@@ -29,6 +29,6 @@ export declare class StateEditor extends Widget {
     getErrorText(): string;
     isEditing(): boolean;
     getLastChangedValue(): string;
-    getState(): any;
-    setState(...args: any[]): void;
+    getState(): number | string | Array<string>;
+    setState(...args: (number | string | Array<string>)[]): void;
 }
