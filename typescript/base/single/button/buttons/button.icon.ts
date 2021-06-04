@@ -5,7 +5,7 @@ export declare class IconButton extends BasicButton {
     static EVENT_CHANGE: string;
 
     props: {
-        iconWidth: number;
-        iconHeight: number;
+        iconWidth?: number;
+        iconHeight?: number;
     } & BasicButton['props']
 }
