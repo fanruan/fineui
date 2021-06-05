@@ -7,6 +7,7 @@ BI.VerticalLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.VerticalLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-v",
+            horizontalAlign: BI.HorizontalAlign.Stretch,
             hgap: 0,
             vgap: 0,
             lgap: 0,
@@ -45,6 +46,16 @@ BI.VerticalLayout = BI.inherit(BI.Layout, {
         if (o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0) !== 0) {
             w.element.css({
                 "margin-bottom": (o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0)) / BI.pixRatio + BI.pixUnit
+            });
+        }
+        if (o.horizontalAlign === BI.HorizontalAlign.Center) {
+            w.element.css({
+                marginLeft: "auto",
+                marginRight: "auto"
+            });
+        } else if (o.horizontalAlign === BI.HorizontalAlign.Right) {
+            w.element.css({
+                marginLeft: "auto"
             });
         }
         return w;
