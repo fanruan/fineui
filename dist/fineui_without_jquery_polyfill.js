@@ -1,4 +1,4 @@
-/*! time: 2021-6-5 9:40:33 PM */
+/*! time: 2021-6-6 9:00:18 AM */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -15201,28 +15201,18 @@ BI.FlexLeftRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
             }
             return json;
         });
-        rightItems = BI.map(rightItems, function (i, item) {
-            var json = {
-                el: BI.stripEL(item)
-            };
-            if (o.rvgap + o.rtgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
-                json.tgap = o.rvgap + o.rtgap + (item.tgap || 0) + (item.vgap || 0);
-            }
-            if (o.rhgap + o.rlgap + (item.lgap || 0) + (item.hgap || 0) !== 0) {
-                json.lgap = o.rlgap + (item.lgap || 0) + (item.hgap || 0);
-            }
-            if (o.rhgap + o.rrgap + (item.rgap || 0) + (item.hgap || 0) !== 0) {
-                json.rgap = o.rhgap + o.rrgap + (item.rgap || 0) + (item.hgap || 0);
-            }
-            if (o.rvgap + o.rbgap + (item.bgap || 0) + (item.vgap || 0) !== 0) {
-                json.bgap = o.rvgap + o.rbgap + (item.bgap || 0) + (item.vgap || 0);
-            }
-            return json;
-        });
         return leftItems.concat({
-            type: "bi.flex_vertical_adapt",
-            cls: "flex-left-auto",
-            items: rightItems
+            el: {
+                type: "bi.flex_vertical_adapt",
+                cls: "flex-left-auto",
+                hgap: o.rhgap,
+                vgap: o.rvgap,
+                lgap: o.rlgap,
+                rgap: o.rrgap,
+                tgap: o.rtgap,
+                bgap: o.rbgap,
+                items: rightItems
+            }
         });
     },
 
@@ -17649,6 +17639,7 @@ BI.VerticalLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.VerticalLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-v",
+            horizontalAlign: BI.HorizontalAlign.Stretch,
             hgap: 0,
             vgap: 0,
             lgap: 0,
@@ -17687,6 +17678,16 @@ BI.VerticalLayout = BI.inherit(BI.Layout, {
         if (o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0) !== 0) {
             w.element.css({
                 "margin-bottom": (o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0)) / BI.pixRatio + BI.pixUnit
+            });
+        }
+        if (o.horizontalAlign === BI.HorizontalAlign.Center) {
+            w.element.css({
+                marginLeft: "auto",
+                marginRight: "auto"
+            });
+        } else if (o.horizontalAlign === BI.HorizontalAlign.Right) {
+            w.element.css({
+                marginLeft: "auto"
             });
         }
         return w;
