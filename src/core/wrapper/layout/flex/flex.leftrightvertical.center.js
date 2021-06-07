@@ -54,28 +54,18 @@ BI.FlexLeftRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
             }
             return json;
         });
-        rightItems = BI.map(rightItems, function (i, item) {
-            var json = {
-                el: BI.stripEL(item)
-            };
-            if (o.rvgap + o.rtgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
-                json.tgap = o.rvgap + o.rtgap + (item.tgap || 0) + (item.vgap || 0);
-            }
-            if (o.rhgap + o.rlgap + (item.lgap || 0) + (item.hgap || 0) !== 0) {
-                json.lgap = o.rlgap + (item.lgap || 0) + (item.hgap || 0);
-            }
-            if (o.rhgap + o.rrgap + (item.rgap || 0) + (item.hgap || 0) !== 0) {
-                json.rgap = o.rhgap + o.rrgap + (item.rgap || 0) + (item.hgap || 0);
-            }
-            if (o.rvgap + o.rbgap + (item.bgap || 0) + (item.vgap || 0) !== 0) {
-                json.bgap = o.rvgap + o.rbgap + (item.bgap || 0) + (item.vgap || 0);
-            }
-            return json;
-        });
         return leftItems.concat({
-            type: "bi.flex_vertical_adapt",
-            cls: "flex-left-auto",
-            items: rightItems
+            el: {
+                type: "bi.flex_vertical_adapt",
+                cls: "flex-left-auto",
+                hgap: o.rhgap,
+                vgap: o.rvgap,
+                lgap: o.rlgap,
+                rgap: o.rrgap,
+                tgap: o.rtgap,
+                bgap: o.rbgap,
+                items: rightItems
+            }
         });
     },
 

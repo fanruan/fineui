@@ -138,7 +138,7 @@ export interface _base {
     deepExtend: merge['deepExtend'];
     isDeepMatch: (object: any, attrs: any) => boolean;
     contains: (obj: any[], target: any, fromIndex?: number) => boolean;
-    deepContains: (obj: any[], copy: any) => number;
+    deepContains: (obj: any[], copy: any) => boolean;
     deepIndexOf: (obj: any[], target: any) => number;
     deepRemove: (obj: any[], target: any) => boolean;
     deepWithout: (obj: any[], target: any) => any[];

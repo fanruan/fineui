@@ -1,4 +1,4 @@
-/*! time: 2021-6-4 5:10:18 PM */
+/*! time: 2021-6-7 3:40:35 PM */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -18130,28 +18130,18 @@ BI.FlexLeftRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
             }
             return json;
         });
-        rightItems = BI.map(rightItems, function (i, item) {
-            var json = {
-                el: BI.stripEL(item)
-            };
-            if (o.rvgap + o.rtgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
-                json.tgap = o.rvgap + o.rtgap + (item.tgap || 0) + (item.vgap || 0);
-            }
-            if (o.rhgap + o.rlgap + (item.lgap || 0) + (item.hgap || 0) !== 0) {
-                json.lgap = o.rlgap + (item.lgap || 0) + (item.hgap || 0);
-            }
-            if (o.rhgap + o.rrgap + (item.rgap || 0) + (item.hgap || 0) !== 0) {
-                json.rgap = o.rhgap + o.rrgap + (item.rgap || 0) + (item.hgap || 0);
-            }
-            if (o.rvgap + o.rbgap + (item.bgap || 0) + (item.vgap || 0) !== 0) {
-                json.bgap = o.rvgap + o.rbgap + (item.bgap || 0) + (item.vgap || 0);
-            }
-            return json;
-        });
         return leftItems.concat({
-            type: "bi.flex_vertical_adapt",
-            cls: "flex-left-auto",
-            items: rightItems
+            el: {
+                type: "bi.flex_vertical_adapt",
+                cls: "flex-left-auto",
+                hgap: o.rhgap,
+                vgap: o.rvgap,
+                lgap: o.rlgap,
+                rgap: o.rrgap,
+                tgap: o.rtgap,
+                bgap: o.rbgap,
+                items: rightItems
+            }
         });
     },
 
@@ -20186,6 +20176,7 @@ BI.HTapeLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.HTapeLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-h-tape",
+            verticalAlign: BI.VerticalAlign.Top,
             hgap: 0,
             vgap: 0,
             lgap: 0,
@@ -20223,6 +20214,16 @@ BI.HTapeLayout = BI.inherit(BI.Layout, {
                 top: ((item.vgap || 0) + (item.tgap || 0) + o.vgap + o.tgap) / BI.pixRatio + BI.pixUnit,
                 bottom: ((item.bgap || 0) + (item.vgap || 0) + o.vgap + o.bgap) / BI.pixRatio + BI.pixUnit
             });
+            if (o.verticalAlign === BI.VerticalAlign.Middle) {
+                w.element.css({
+                    marginTop: "auto",
+                    marginBottom: "auto"
+                });
+            } else if (o.verticalAlign === BI.VerticalAlign.Bottom) {
+                w.element.css({
+                    marginTop: "auto"
+                });
+            }
         });
 
         var left = {}, right = {};
@@ -20289,6 +20290,7 @@ BI.VTapeLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.VTapeLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-v-tape-layout",
+            horizontalAlign: BI.HorizontalAlign.Left,
             hgap: 0,
             vgap: 0,
             lgap: 0,
@@ -20327,6 +20329,16 @@ BI.VTapeLayout = BI.inherit(BI.Layout, {
                 left: ((item.lgap || 0) + (item.hgap || 0) + o.hgap + o.lgap) / BI.pixRatio + BI.pixUnit,
                 right: +((item.hgap || 0) + (item.rgap || 0) + o.hgap + o.rgap) / BI.pixRatio + BI.pixUnit
             });
+            if (o.horizontalAlign === BI.HorizontalAlign.Center) {
+                w.element.css({
+                    marginLeft: "auto",
+                    marginRight: "auto"
+                });
+            } else if (o.horizontalAlign === BI.HorizontalAlign.Right) {
+                w.element.css({
+                    marginLeft: "auto"
+                });
+            }
         });
 
         var top = {}, bottom = {};
@@ -20356,7 +20368,10 @@ BI.VTapeLayout = BI.inherit(BI.Layout, {
                 bottom[i] = bottom[i + 1] + items[i + 1].height + (items[i + 1].bgap || 0) + 2 * (items[i + 1].vgap || 0) + o.vgap + o.tgap + o.bgap;
             }
             if (item.height < 1 && item.height >= 0) {
-                w.element.css({bottom: (bottom[i] * 100).toFixed(1) + "%", height: (item.height * 100).toFixed(1) + "%"});
+                w.element.css({
+                    bottom: (bottom[i] * 100).toFixed(1) + "%",
+                    height: (item.height * 100).toFixed(1) + "%"
+                });
             } else {
                 w.element.css({
                     bottom: (bottom[i] + (item.vgap || 0) + (item.bgap || 0) + o.vgap + o.bgap) / BI.pixRatio + BI.pixUnit,
@@ -20553,6 +20568,7 @@ BI.VerticalLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.VerticalLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-v",
+            horizontalAlign: BI.HorizontalAlign.Stretch,
             hgap: 0,
             vgap: 0,
             lgap: 0,
@@ -20591,6 +20607,16 @@ BI.VerticalLayout = BI.inherit(BI.Layout, {
         if (o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0) !== 0) {
             w.element.css({
                 "margin-bottom": (o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0)) / BI.pixRatio + BI.pixUnit
+            });
+        }
+        if (o.horizontalAlign === BI.HorizontalAlign.Center) {
+            w.element.css({
+                marginLeft: "auto",
+                marginRight: "auto"
+            });
+        } else if (o.horizontalAlign === BI.HorizontalAlign.Right) {
+            w.element.css({
+                marginLeft: "auto"
             });
         }
         return w;
@@ -41081,7 +41107,6 @@ BI.AllCountPager = BI.inherit(BI.Widget, {
                 type: "bi.label",
                 height: o.height,
                 text: BI.i18nText("BI-Tiao_Data"),
-                width: 40,
                 textAlign: "left"
             }, BI.isNotEmptyObject(o.rowInfoObject) ? o.rowInfoObject : null]
         };
