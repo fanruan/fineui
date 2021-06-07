@@ -158,7 +158,6 @@ BI.AllCountPager = BI.inherit(BI.Widget, {
                 type: "bi.label",
                 height: o.height,
                 text: BI.i18nText("BI-Tiao_Data"),
-                width: 40,
                 textAlign: "left"
             }, BI.isNotEmptyObject(o.rowInfoObject) ? o.rowInfoObject : null]
         };
