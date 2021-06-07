@@ -1,4 +1,4 @@
-/*! time: 2021-6-6 9:00:18 AM */
+/*! time: 2021-6-7 3:40:35 PM */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -38568,7 +38568,6 @@ BI.AllCountPager = BI.inherit(BI.Widget, {
                 type: "bi.label",
                 height: o.height,
                 text: BI.i18nText("BI-Tiao_Data"),
-                width: 40,
                 textAlign: "left"
             }, BI.isNotEmptyObject(o.rowInfoObject) ? o.rowInfoObject : null]
         };
