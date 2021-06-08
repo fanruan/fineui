@@ -1,4 +1,4 @@
-/*! time: 2021-6-6 9:00:18 AM */
+/*! time: 2021-6-8 2:20:16 PM */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -6703,6 +6703,7 @@ BI.Req = {
             // this._isMounted = false;
             // this.purgeListeners();
             this.empty();
+            this.element.unbind();
             this._initCurrent();
             this._init();
             this._mount();
@@ -18259,18 +18260,20 @@ BI.Pane = BI.inherit(BI.Widget, {
     },
 
     _assertTip: function () {
-        var o = this.options;
+        var self = this, o = this.options;
         if (!this._tipText) {
-            this._tipText = BI.createWidget({
-                type: "bi.label",
-                cls: "bi-tips",
-                text: o.tipText,
-                height: 25
-            });
             BI.createWidget({
                 type: "bi.absolute_center_adapt",
                 element: this,
-                items: [this._tipText]
+                items: [{
+                    type: "bi.label",
+                    ref: function (_ref) {
+                        self._tipText = _ref;
+                    },
+                    cls: "bi-tips",
+                    text: o.tipText,
+                    height: 25
+                }]
             });
         }
     },
@@ -18289,17 +18292,17 @@ BI.Pane = BI.inherit(BI.Widget, {
                 type: "bi.layout",
                 cls: "animate-rect rect1",
                 height: this._getSize(50),
-                width: this._getSize(5),
+                width: this._getSize(5)
             }, {
                 type: "bi.layout",
                 cls: "animate-rect rect2",
                 height: this._getSize(50),
-                width: this._getSize(5),
+                width: this._getSize(5)
             }, {
                 type: "bi.layout",
                 cls: "animate-rect rect3",
                 height: this._getSize(50),
-                width: this._getSize(5),
+                width: this._getSize(5)
             }]
         });
         // pane在同步方式下由items决定tipText的显示与否
@@ -18316,25 +18319,24 @@ BI.Pane = BI.inherit(BI.Widget, {
             }
             BI.Layers.show(self.getName());
         } else if (BI.isNull(this._loading)) {
-            this._loading = loadingAnimation;
-            this._loading.element.css("zIndex", 1);
+            loadingAnimation.element.css("zIndex", 1);
             BI.createWidget({
                 type: "bi.center_adapt",
                 element: this,
                 cls: "loading-container",
-                items: this._getLoadingTipItems(this._loading)
+                items: this._getLoadingTipItems(loadingAnimation)
             });
         }
         self.fireEvent(BI.Pane.EVENT_LOADING);
         this.element.addClass("loading-status");
     },
 
-    _getSize: function(v) {
-        return Math.ceil(v / (this.options.loadingSize === 'small' ? 2 : 1));
+    _getSize: function (v) {
+        return Math.ceil(v / (this.options.loadingSize === "small" ? 2 : 1));
     },
 
     _getLoadingTipItems: function (loadingTip) {
-        var o = this.options;
+        var self = this, o = this.options;
         var loadingTipItems = [{
             type: "bi.horizontal_adapt",
             items: [loadingTip]
@@ -18342,11 +18344,14 @@ BI.Pane = BI.inherit(BI.Widget, {
         BI.isNotEmptyString(o.loadingText) && loadingTipItems.push({
             type: "bi.text",
             text: o.loadingText,
-            tgap: this._getSize(10),
+            tgap: this._getSize(10)
         });
 
         return [{
             type: "bi.vertical",
+            ref: function (_ref) {
+                self._loading = _ref;
+            },
             items: loadingTipItems
         }];
     },
@@ -18355,7 +18360,6 @@ BI.Pane = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
         BI.Layers.remove(self.getName());
         this._loading && this._loading.destroy();
-        this._loading && (this._loading = null);
         o.onLoaded();
         self.fireEvent(BI.Pane.EVENT_LOADED);
         this.element.removeClass("loading-status");
@@ -18377,14 +18381,11 @@ BI.Pane = BI.inherit(BI.Widget, {
     populate: function (items) {
         this.options.items = items || [];
         this.check();
-    },
-
-    empty: function () {
-
     }
 });
 BI.Pane.EVENT_LOADED = "EVENT_LOADED";
 BI.Pane.EVENT_LOADING = "EVENT_LOADING";
+
 
 /***/ }),
 /* 370 */
@@ -38178,7 +38179,6 @@ BI.AllCountPager = BI.inherit(BI.Widget, {
                 type: "bi.label",
                 height: o.height,
                 text: BI.i18nText("BI-Tiao_Data"),
-                width: 40,
                 textAlign: "left"
             }, BI.isNotEmptyObject(o.rowInfoObject) ? o.rowInfoObject : null]
         };

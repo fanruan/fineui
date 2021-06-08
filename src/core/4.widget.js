@@ -577,6 +577,7 @@
             // this._isMounted = false;
             // this.purgeListeners();
             this.empty();
+            this.element.unbind();
             this._initCurrent();
             this._init();
             this._mount();
