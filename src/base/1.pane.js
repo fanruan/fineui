@@ -79,13 +79,12 @@ BI.Pane = BI.inherit(BI.Widget, {
             }
             BI.Layers.show(self.getName());
         } else if (BI.isNull(this._loading)) {
-            this._loading = loadingAnimation;
-            this._loading.element.css("zIndex", 1);
+            loadingAnimation.element.css("zIndex", 1);
             BI.createWidget({
                 type: "bi.center_adapt",
                 element: this,
                 cls: "loading-container",
-                items: this._getLoadingTipItems(this._loading)
+                items: this._getLoadingTipItems(loadingAnimation)
             });
         }
         self.fireEvent(BI.Pane.EVENT_LOADING);
@@ -97,7 +96,7 @@ BI.Pane = BI.inherit(BI.Widget, {
     },
 
     _getLoadingTipItems: function (loadingTip) {
-        var o = this.options;
+        var self = this, o = this.options;
         var loadingTipItems = [{
             type: "bi.horizontal_adapt",
             items: [loadingTip]
@@ -110,6 +109,9 @@ BI.Pane = BI.inherit(BI.Widget, {
 
         return [{
             type: "bi.vertical",
+            ref: function (_ref) {
+                self._loading = _ref;
+            },
             items: loadingTipItems
         }];
     },
@@ -118,7 +120,6 @@ BI.Pane = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
         BI.Layers.remove(self.getName());
         this._loading && this._loading.destroy();
-        this._loading && (this._loading = null);
         o.onLoaded();
         self.fireEvent(BI.Pane.EVENT_LOADED);
         this.element.removeClass("loading-status");
