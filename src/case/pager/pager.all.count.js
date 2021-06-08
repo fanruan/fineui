@@ -108,7 +108,7 @@ BI.AllCountPager = BI.inherit(BI.Widget, {
         });
     },
 
-    alwaysShowPager: true,
+    showPager: true,
 
     _getPagerIconCls: function () {
         var o = this.options;
@@ -213,6 +213,7 @@ BI.AllCountPager = BI.inherit(BI.Widget, {
 
     setRowCountVisible: function (b) {
         this.rowCountObject.setVisible(b);
+        this.showPager = b || this.options.pages > 1;
     },
 
     populate: function () {
