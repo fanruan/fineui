@@ -172,7 +172,10 @@ BI.MultiSelectLoader = BI.inherit(BI.Widget, {
     },
 
     populate: function (items) {
-        arguments[0] = this._createItems(items);
+        // arguments.length为0时对arguments[0]赋值后不同环境对其length的取值不同(nashorn)
+        if (BI.isNotNull(items)) {
+            arguments[0] = this._createItems(items);
+        }
         this.button_group.populate.apply(this.button_group, arguments);
     },
 
