@@ -1,4 +1,4 @@
-/*! time: 2021-6-8 2:20:16 PM */
+/*! time: 2021-6-9 4:31:18 PM */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -52974,7 +52974,10 @@ BI.MultiSelectLoader = BI.inherit(BI.Widget, {
     },
 
     populate: function (items) {
-        arguments[0] = this._createItems(items);
+        // arguments.length为0时对arguments[0]赋值后不同环境对其length的取值不同(nashorn)
+        if (BI.isNotNull(items)) {
+            arguments[0] = this._createItems(items);
+        }
         this.button_group.populate.apply(this.button_group, arguments);
     },
 
@@ -53157,7 +53160,9 @@ BI.MultiSelectNoBarLoader = BI.inherit(BI.Widget, {
     },
 
     populate: function (items) {
-        arguments[0] = this._createItems(items);
+        if (BI.isNotNull(items)) {
+            arguments[0] = this._createItems(items);
+        }
         this.button_group.populate.apply(this.button_group, arguments);
     },
 
@@ -59753,7 +59758,9 @@ BI.SearchMultiSelectLoader = BI.inherit(BI.Widget, {
     },
 
     populate: function (items) {
-        arguments[0] = this._createItems(items);
+        if (BI.isNotNull(items)) {
+            arguments[0] = this._createItems(items);
+        }
         this.button_group.populate.apply(this.button_group, arguments);
     },
 
