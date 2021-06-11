@@ -144,15 +144,17 @@ BI.AllCountPager = BI.inherit(BI.Widget, {
                     self.prevText = _ref;
                 }
             }, {
-                type: "bi.label",
-                ref: function (_ref) {
-                    self.rowCount = _ref;
+                el: {
+                    type: "bi.label",
+                    ref: function (_ref) {
+                        self.rowCount = _ref;
+                    },
+                    cls: "row-count",
+                    height: o.height,
+                    text: o.count,
+                    title: o.count
                 },
-                cls: "row-count",
-                height: o.height,
                 hgap: 5,
-                text: o.count,
-                title: o.count
             }, {
                 type: "bi.label",
                 height: o.height,
