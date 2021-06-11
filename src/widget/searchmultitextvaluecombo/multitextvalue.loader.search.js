@@ -158,7 +158,9 @@ BI.SearchMultiSelectLoader = BI.inherit(BI.Widget, {
     },
 
     populate: function (items) {
-        arguments[0] = this._createItems(items);
+        if (BI.isNotNull(items)) {
+            arguments[0] = this._createItems(items);
+        }
         this.button_group.populate.apply(this.button_group, arguments);
     },
 

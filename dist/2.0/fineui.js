@@ -1,4 +1,4 @@
-/*! time: 2021-6-8 2:20:16 PM */
+/*! time: 2021-6-10 11:00:18 AM */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -40963,7 +40963,8 @@ BI.AllCountPager = BI.inherit(BI.Widget, {
             curr: 1, // 初始化当前页， pages为数字时可用，
             count: 1, // 总行数
             rowInfoObject: null,
-            showRowCount: true
+            showRowCount: true,
+            showRowInfo: true,
         });
     },
     _init: function () {
@@ -41058,8 +41059,6 @@ BI.AllCountPager = BI.inherit(BI.Widget, {
         });
     },
 
-    alwaysShowPager: true,
-
     _getPagerIconCls: function () {
         var o = this.options;
         switch (o.pagerDirection) {
@@ -41122,6 +41121,11 @@ BI.AllCountPager = BI.inherit(BI.Widget, {
         this.setPagerVisible(v > 1);
     },
 
+    setShowRowInfo: function (b) {
+        this.options.showRowInfo = b;
+        this.rowCountObject.setVisible(b);
+    },
+
     setValue: function (v) {
         this.pager.setValue(v);
     },
@@ -41155,14 +41159,14 @@ BI.AllCountPager = BI.inherit(BI.Widget, {
         return this.pager.hasNext();
     },
 
+    isShowPager: function () {
+        return this.options.showRowInfo || this.options.pages > 1;
+    },
+
     setPagerVisible: function (b) {
         this.editor.setVisible(b);
         this.allPages.setVisible(b);
         this.pager.setVisible(b);
-    },
-
-    setRowCountVisible: function (b) {
-        this.rowCountObject.setVisible(b);
     },
 
     populate: function () {
@@ -55513,7 +55517,10 @@ BI.MultiSelectLoader = BI.inherit(BI.Widget, {
     },
 
     populate: function (items) {
-        arguments[0] = this._createItems(items);
+        // arguments.length为0时对arguments[0]赋值后不同环境对其length的取值不同(nashorn)
+        if (BI.isNotNull(items)) {
+            arguments[0] = this._createItems(items);
+        }
         this.button_group.populate.apply(this.button_group, arguments);
     },
 
@@ -55696,7 +55703,9 @@ BI.MultiSelectNoBarLoader = BI.inherit(BI.Widget, {
     },
 
     populate: function (items) {
-        arguments[0] = this._createItems(items);
+        if (BI.isNotNull(items)) {
+            arguments[0] = this._createItems(items);
+        }
         this.button_group.populate.apply(this.button_group, arguments);
     },
 
@@ -62292,7 +62301,9 @@ BI.SearchMultiSelectLoader = BI.inherit(BI.Widget, {
     },
 
     populate: function (items) {
-        arguments[0] = this._createItems(items);
+        if (BI.isNotNull(items)) {
+            arguments[0] = this._createItems(items);
+        }
         this.button_group.populate.apply(this.button_group, arguments);
     },
 
