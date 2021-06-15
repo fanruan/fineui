@@ -581,11 +581,6 @@ BI.Layout = BI.inherit(BI.Widget, {
         }
     },
 
-    empty: function () {
-        BI.Layout.superclass.empty.apply(this, arguments);
-        this.options.items = [];
-    },
-
     destroy: function () {
         BI.Layout.superclass.destroy.apply(this, arguments);
         this.options.items = [];
