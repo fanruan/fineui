@@ -1,4 +1,4 @@
-/*! time: 2021-6-11 19:43:37 */
+/*! time: 2021-6-15 14:20:53 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -6679,6 +6679,14 @@ BI.Req = {
             this.purgeListeners();
         },
 
+        _empty: function () {
+            BI.each(this._children, function (i, widget) {
+                widget && widget._unMount && widget._unMount();
+            });
+            this._children = {};
+            this.element.empty();
+        },
+
         isolate: function () {
             if (this._parent) {
                 this._parent.removeWidget(this);
@@ -6687,11 +6695,7 @@ BI.Req = {
         },
 
         empty: function () {
-            BI.each(this._children, function (i, widget) {
-                widget && widget._unMount && widget._unMount();
-            });
-            this._children = {};
-            this.element.empty();
+            this._empty();
         },
 
         // 默认的reset方法就是干掉重来
@@ -6702,7 +6706,7 @@ BI.Req = {
             }
             // this._isMounted = false;
             // this.purgeListeners();
-            this.empty();
+            this._empty();
             this.element.unbind();
             this._initCurrent();
             this._init();
