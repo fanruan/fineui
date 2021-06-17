@@ -1,4 +1,4 @@
-/*! time: 2021-6-17 10:10:21 */
+/*! time: 2021-6-17 17:50:23 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -57015,9 +57015,9 @@ BI.MultiSelectInsertSearcher = BI.inherit(BI.Widget, {
                 var state = "";
                 BI.each(ob.assist, function (i, v) {
                     if (i === 0) {
-                        state += "" + (o.valueFormatter(v + "") || v);
+                        state += "" + (v === null ? "" : (o.valueFormatter(v + "") || v));
                     } else {
-                        state += "," + (o.valueFormatter(v + "") || v);
+                        state += "," + (v === null ? "" : (o.valueFormatter(v + "") || v));
                     }
                 });
                 this.editor.setState(state);
@@ -57031,9 +57031,9 @@ BI.MultiSelectInsertSearcher = BI.inherit(BI.Widget, {
                 var state = "";
                 BI.each(ob.value, function (i, v) {
                     if (i === 0) {
-                        state += "" + (o.valueFormatter(v + "") || v);
+                        state += "" + (v === null ? "" : (o.valueFormatter(v + "") || v));
                     } else {
-                        state += "," + (o.valueFormatter(v + "") || v);
+                        state += "," + (v === null ? "" : (o.valueFormatter(v + "") || v));
                     }
                 });
                 this.editor.setState(state);
@@ -57074,6 +57074,7 @@ BI.MultiSelectInsertSearcher.EVENT_SEARCHING = "EVENT_SEARCHING";
 BI.MultiSelectInsertSearcher.EVENT_FOCUS = "EVENT_FOCUS";
 BI.MultiSelectInsertSearcher.EVENT_BLUR = "EVENT_BLUR";
 BI.shortcut("bi.multi_select_insert_searcher", BI.MultiSelectInsertSearcher);
+
 
 /***/ }),
 /* 611 */
@@ -57214,9 +57215,9 @@ BI.MultiSelectSearcher = BI.inherit(BI.Widget, {
                 var state = "";
                 BI.each(ob.assist, function (i, v) {
                     if (i === 0) {
-                        state += "" + (o.valueFormatter(v + "") || v);
+                        state += "" + (v === null ? "" : (o.valueFormatter(v + "") || v));
                     } else {
-                        state += "," + (o.valueFormatter(v + "") || v);
+                        state += "," + (v === null ? "" : (o.valueFormatter(v + "") || v));
                     }
                 });
                 this.editor.setState(state);
@@ -57230,9 +57231,9 @@ BI.MultiSelectSearcher = BI.inherit(BI.Widget, {
                 var state = "";
                 BI.each(ob.value, function (i, v) {
                     if (i === 0) {
-                        state += "" + (o.valueFormatter(v + "") || v);
+                        state += "" + (v === null ? "" : (o.valueFormatter(v + "") || v));
                     } else {
-                        state += "," + (o.valueFormatter(v + "") || v);
+                        state += "," + (v === null ? "" : (o.valueFormatter(v + "") || v));
                     }
                 });
                 this.editor.setState(state);
@@ -57242,7 +57243,7 @@ BI.MultiSelectSearcher = BI.inherit(BI.Widget, {
         }
     },
 
-    getState: function() {
+    getState: function () {
         return this.editor.getState();
     },
 
@@ -57273,6 +57274,7 @@ BI.MultiSelectSearcher.EVENT_SEARCHING = "EVENT_SEARCHING";
 BI.MultiSelectSearcher.EVENT_FOCUS = "EVENT_FOCUS";
 BI.MultiSelectSearcher.EVENT_BLUR = "EVENT_BLUR";
 BI.shortcut("bi.multi_select_searcher", BI.MultiSelectSearcher);
+
 
 /***/ }),
 /* 612 */
@@ -60458,7 +60460,7 @@ BI.MultiListTreeSearcher = BI.inherit(BI.Widget, {
             var text = "";
             BI.each(ob.value, function (idx, path) {
                 var childValue = BI.last(path);
-                text += (o.valueFormatter(childValue + "") || childValue) + "; ";
+                text += (path === "null" ? "" : (o.valueFormatter(childValue + "") || childValue) + "; ");
                 count++;
             });
 
@@ -60470,7 +60472,7 @@ BI.MultiListTreeSearcher = BI.inherit(BI.Widget, {
         }
     },
 
-    getState: function() {
+    getState: function () {
         return this.editor.getState();
     },
 
@@ -60499,6 +60501,7 @@ BI.MultiListTreeSearcher.EVENT_STOP = "EVENT_STOP";
 BI.MultiListTreeSearcher.EVENT_PAUSE = "EVENT_PAUSE";
 BI.shortcut("bi.multi_list_tree_searcher", BI.MultiListTreeSearcher);
 
+
 /***/ }),
 /* 627 */
 /***/ (function(module, exports) {
@@ -60521,7 +60524,7 @@ BI.MultiTreeSearcher = BI.inherit(BI.Widget, {
             popup: {},
 
             adapter: null,
-            masker: {},
+            masker: {}
         });
     },
 
@@ -60641,7 +60644,7 @@ BI.MultiTreeSearcher = BI.inherit(BI.Widget, {
             var names = BI.Func.getSortedResult(BI.keys(value));
             BI.each(names, function (idx, name) {
                 var childNodes = getChildrenNode(value[name]);
-                text += (o.valueFormatter(name + "") || name) + (childNodes === "" ? "" : (":" + childNodes)) + "; ";
+                text += (name === "null" ? "" : (o.valueFormatter(name + "") || name)) + (childNodes === "" ? "" : (":" + childNodes)) + "; ";
                 if (childNodes === "") {
                     count++;
                 }
@@ -60661,7 +60664,7 @@ BI.MultiTreeSearcher = BI.inherit(BI.Widget, {
             BI.each(names, function (idx, name) {
                 index++;
                 var childNodes = getChildrenNode(ob[name]);
-                text += (o.valueFormatter(name + "") || name) + (childNodes === "" ? "" : (":" + childNodes)) + (index === size ? "" : ",");
+                text += (name === "null" ? "" : (o.valueFormatter(name + "") || name)) + (childNodes === "" ? "" : (":" + childNodes)) + (index === size ? "" : ",");
                 if (childNodes === "") {
                     count++;
                 }
@@ -60670,7 +60673,7 @@ BI.MultiTreeSearcher = BI.inherit(BI.Widget, {
         }
     },
 
-    getState: function() {
+    getState: function () {
         return this.editor.getState();
     },
 
@@ -60699,6 +60702,7 @@ BI.MultiTreeSearcher.EVENT_START = "EVENT_START";
 BI.MultiTreeSearcher.EVENT_STOP = "EVENT_STOP";
 BI.MultiTreeSearcher.EVENT_PAUSE = "EVENT_PAUSE";
 BI.shortcut("bi.multi_tree_searcher", BI.MultiTreeSearcher);
+
 
 /***/ }),
 /* 628 */
@@ -91169,7 +91173,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
                 expandSpeed: "",
                 nameIsHTML: true,   // 节点可以用html标签代替
                 dblClickExpand: false,
-                showLine: o.showLine,
+                showLine: o.showLine
             },
             callback: {
                 beforeExpand: beforeExpand,
@@ -91312,7 +91316,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
 
     _getNodeValue: function (node) {
         // 去除标红
-        return node.value == null ? BI.replaceAll(node.text.replace(/<[^>]+>/g, ""), "&nbsp;", " ") : node.value;
+        return BI.isUndefined(node.value) ? BI.replaceAll(node.text.replace(/<[^>]+>/g, ""), "&nbsp;", " ") : node.value;
     },
 
     // 获取半选框值
@@ -91412,10 +91416,14 @@ BI.TreeView = BI.inherit(BI.Pane, {
             n.isParent = n.isParent || n.parent;
             n.value = BI.isUndefined(n.value) ? n.text : n.value;
             // 处理标红
-            if (BI.isKey(o.paras.keyword)) {
-                n.text = BI.$("<div>").__textKeywordMarked__(BI.Text.formatText(n.text + ""), o.paras.keyword, n.py).html();
+            if (BI.isNotNull(n.text)) {
+                if (BI.isKey(o.paras.keyword)) {
+                    n.text = BI.$("<div>").__textKeywordMarked__(BI.Text.formatText(n.text + ""), o.paras.keyword, n.py).html();
+                } else {
+                    n.text = BI.htmlEncode(BI.Text.formatText(n.text + ""));
+                }
             } else {
-                n.text = BI.htmlEncode(BI.Text.formatText(n.text + ""));
+                n.text = "";
             }
         });
         return nodes;
