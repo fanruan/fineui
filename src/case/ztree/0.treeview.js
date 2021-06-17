@@ -334,9 +334,15 @@ BI.TreeView = BI.inherit(BI.Pane, {
         var self = this, o = this.options;
         var ns = BI.Tree.arrayFormat(nodes);
         BI.each(ns, function (i, n) {
-            n.title = n.title || n.text || n.value;
             n.isParent = n.isParent || n.parent;
             n.value = BI.isUndefined(n.value) ? n.text : n.value;
+            n.text = BI.isUndefined(n.text) ? n.value : n.text;
+            if (n.text === null) {
+                n.text = "(null)";
+            }
+            if (BI.isNull(n.title)) {
+                n.title = n.text;
+            }
             // 处理标红
             if (BI.isNotNull(n.text)) {
                 if (BI.isKey(o.paras.keyword)) {
@@ -344,8 +350,6 @@ BI.TreeView = BI.inherit(BI.Pane, {
                 } else {
                     n.text = BI.htmlEncode(BI.Text.formatText(n.text + ""));
                 }
-            } else {
-                n.text = "";
             }
         });
         return nodes;
