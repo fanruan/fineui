@@ -135,9 +135,9 @@ BI.MultiSelectInsertSearcher = BI.inherit(BI.Widget, {
                 var state = "";
                 BI.each(ob.assist, function (i, v) {
                     if (i === 0) {
-                        state += "" + (o.valueFormatter(v + "") || v);
+                        state += "" + (v === null ? "" : (o.valueFormatter(v + "") || v));
                     } else {
-                        state += "," + (o.valueFormatter(v + "") || v);
+                        state += "," + (v === null ? "" : (o.valueFormatter(v + "") || v));
                     }
                 });
                 this.editor.setState(state);
@@ -151,9 +151,9 @@ BI.MultiSelectInsertSearcher = BI.inherit(BI.Widget, {
                 var state = "";
                 BI.each(ob.value, function (i, v) {
                     if (i === 0) {
-                        state += "" + (o.valueFormatter(v + "") || v);
+                        state += "" + (v === null ? "" : (o.valueFormatter(v + "") || v));
                     } else {
-                        state += "," + (o.valueFormatter(v + "") || v);
+                        state += "," + (v === null ? "" : (o.valueFormatter(v + "") || v));
                     }
                 });
                 this.editor.setState(state);
