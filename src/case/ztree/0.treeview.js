@@ -336,9 +336,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
         BI.each(ns, function (i, n) {
             n.isParent = n.isParent || n.parent;
             n.value = BI.isUndefined(n.value) ? n.text : n.value;
-            if (BI.isUndefined(n.text)) {
-                n.text = n.value;
-            }
+            n.text = BI.isUndefined(n.text) ? n.value : n.text;
             if (n.text === null) {
                 n.text = "(null)";
             }
