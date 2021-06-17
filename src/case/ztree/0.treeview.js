@@ -338,16 +338,11 @@ BI.TreeView = BI.inherit(BI.Pane, {
             n.value = BI.isUndefined(n.value) ? n.text : n.value;
             if (n.text === null) {
                 n.text = "(null)";
+            } else if (BI.isUndefined(n.text)) {
+                n.text = n.value;
             }
             if (BI.isNull(n.title)) {
-                if (BI.isNotNull(n.text)) {
-                    n.title = n.text;
-                } else {
-                    n.title = n.value;
-                }
-            }
-            if (BI.isUndefined(n.text)) {
-                n.text = "";
+                n.title = n.text;
             }
             // 处理标红
             if (BI.isNotNull(n.text)) {
