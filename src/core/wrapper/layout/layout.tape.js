@@ -67,7 +67,7 @@ BI.HTapeLayout = BI.inherit(BI.Layout, {
             if (BI.isNull(left[i])) {
                 left[i] = left[i - 1] + (o.columnSize[i - 1] || items[i - 1].width) + (items[i - 1].lgap || 0) + 2 * (items[i - 1].hgap || 0) + o.hgap + o.lgap + o.rgap;
             }
-            if (o.columnSize[i] < 1 && o.columnSize[i] >= 0) {
+            if (o.columnSize[i] < 1 && o.columnSize[i] > 0) {
                 w.element.css({
                     left: (left[i] * 100).toFixed(1) + "%",
                     width: (o.columnSize[i] * 100).toFixed(1) + "%"
@@ -96,9 +96,9 @@ BI.HTapeLayout = BI.inherit(BI.Layout, {
             if (BI.isNull(right[i])) {
                 right[i] = right[i + 1] + (o.columnSize[i + 1] || items[i + 1].width) + (items[i + 1].rgap || 0) + 2 * (items[i + 1].hgap || 0) + o.hgap + o.lgap + o.rgap;
             }
-            if (o.columnSize[i] < 1 && o.columnSize[i] >= 0) {
+            if (o.columnSize[i] < 1 && o.columnSize[i] > 0) {
                 w.element.css({
-                    right: (left[i] * 100).toFixed(1) + "%",
+                    right: (right[i] * 100).toFixed(1) + "%",
                     width: (o.columnSize[i] * 100).toFixed(1) + "%"
                 });
             } else if (item.width < 1 && item.width >= 0) {
@@ -207,7 +207,7 @@ BI.VTapeLayout = BI.inherit(BI.Layout, {
             if (BI.isNull(top[i])) {
                 top[i] = top[i - 1] + (o.rowSize[i - 1] || items[i - 1].height) + (items[i - 1].tgap || 0) + 2 * (items[i - 1].vgap || 0) + o.vgap + o.tgap + o.bgap;
             }
-            if (o.rowSize[i] < 1 && o.rowSize[i] >= 0) {
+            if (o.rowSize[i] < 1 && o.rowSize[i] >=0) {
                 w.element.css({
                     top: (top[i] * 100).toFixed(1) + "%",
                     height: (o.rowSize[i] * 100).toFixed(1) + "%"
@@ -236,7 +236,7 @@ BI.VTapeLayout = BI.inherit(BI.Layout, {
             if (BI.isNull(bottom[i])) {
                 bottom[i] = bottom[i + 1] + (o.rowSize[i + 1] || items[i + 1].height) + (items[i + 1].bgap || 0) + 2 * (items[i + 1].vgap || 0) + o.vgap + o.tgap + o.bgap;
             }
-            if (o.rowSize[i] < 1 && o.rowSize[i] >= 0) {
+            if (o.rowSize[i] < 1 && o.rowSize[i] > 0) {
                 w.element.css({
                     bottom: (bottom[i] * 100).toFixed(1) + "%",
                     height: (o.rowSize[i] * 100).toFixed(1) + "%"
