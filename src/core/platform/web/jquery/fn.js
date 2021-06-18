@@ -77,15 +77,7 @@ if (BI.jQuery) {
          * 3、text和py各自取tidx/pidx + keyword.length索引开始的子串作为新的text和py, 重复1, 直到text和py有一个为""
          */
         __textKeywordMarked__: function (text, keyword, py) {
-            if (text === null) {
-                if (BI.isIE9Below()) {
-                    return this.html("(null)");
-                }
-                // textContent性能更好,并且原生防xss
-                this[0].textContent = "(null)";
-                return this;
-            }
-            if (BI.isUndefined(text)) {
+            if (BI.isNull(text)) {
                 text = "";
             }
             if (!BI.isKey(keyword) || (text + "").length > 100) {
