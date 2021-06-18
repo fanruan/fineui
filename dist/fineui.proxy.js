@@ -1,4 +1,4 @@
-/*! time: 2021-6-18 20:10:57 */
+/*! time: 2021-6-18 21:10:25 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -17842,7 +17842,7 @@ BI.VTapeLayout = BI.inherit(BI.Layout, {
             if (BI.isNull(top[i])) {
                 top[i] = top[i - 1] + (o.rowSize[i - 1] || items[i - 1].height) + (items[i - 1].tgap || 0) + 2 * (items[i - 1].vgap || 0) + o.vgap + o.tgap + o.bgap;
             }
-            if (o.rowSize[i] < 1 && o.rowSize[i] >=0) {
+            if (o.rowSize[i] < 1 && o.rowSize[i] > 0) {
                 w.element.css({
                     top: (top[i] * 100).toFixed(1) + "%",
                     height: (o.rowSize[i] * 100).toFixed(1) + "%"
