@@ -2,7 +2,7 @@ import { AbstractLabel } from "./abstract.label";
 
 export declare class HtmlLabel extends AbstractLabel {
     props: {
-        lineHeight: number;
+        textHeight: number;
     } & AbstractLabel['props'];
 
     static xtype: string;
