@@ -87,7 +87,7 @@ BI.HTapeLayout = BI.inherit(BI.Layout, {
             if (o.columnSize[i] === "" || o.columnSize[i] === "fill") {
                 return true;
             }
-            if (o.columnSize.length > 0 && !BI.isNumber(item.width)) {
+            if (o.columnSize.length <= 0 && !BI.isNumber(item.width)) {
                 return true;
             }
         });
@@ -116,7 +116,7 @@ BI.HTapeLayout = BI.inherit(BI.Layout, {
             if (o.columnSize[i] === "" || o.columnSize[i] === "fill") {
                 return true;
             }
-            if (o.columnSize.length > 0 && !BI.isNumber(item.width)) {
+            if (o.columnSize.length <= 0 && !BI.isNumber(item.width)) {
                 return true;
             }
         });
@@ -227,7 +227,7 @@ BI.VTapeLayout = BI.inherit(BI.Layout, {
             if (o.rowSize[i] === "" || o.rowSize[i] === "fill") {
                 return true;
             }
-            if (o.rowSize.length > 0 && !BI.isNumber(item.height)) {
+            if (o.rowSize.length <= 0 && !BI.isNumber(item.height)) {
                 return true;
             }
         });
@@ -256,7 +256,7 @@ BI.VTapeLayout = BI.inherit(BI.Layout, {
             if (o.rowSize[i] === "" || o.rowSize[i] === "fill") {
                 return true;
             }
-            if (o.rowSize.length > 0 && !BI.isNumber(item.height)) {
+            if (o.rowSize.length <= 0 && !BI.isNumber(item.height)) {
                 return true;
             }
         });
