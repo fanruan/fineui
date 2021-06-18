@@ -1,4 +1,4 @@
-/*! time: 2021-6-17 17:50:23 */
+/*! time: 2021-6-18 9:00:42 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -24148,6 +24148,7 @@ BI.shortcut("bi.single", BI.Single);
             }
 
             var text = this._getShowText();
+            // 只要不是undefined就可以显示text值，否则显示value
             if (!BI.isUndefined(text)) {
                 this.setText(text);
             } else if (BI.isKey(o.value)) {
@@ -24182,7 +24183,7 @@ BI.shortcut("bi.single", BI.Single);
 
         _doRedMark: function (keyword) {
             var o = this.options;
-            // render之后做的doredmark,这个时候虽然标红了，但是之后text mounted执行的时候并没有keyword
+            // render之后做的doRedMark,这个时候虽然标红了，但是之后text mounted执行的时候并没有keyword
             o.keyword = keyword;
             this.text.element.__textKeywordMarked__(this._getShowText(), keyword, o.py);
         },
@@ -24220,8 +24221,7 @@ BI.shortcut("bi.single", BI.Single);
 
         setText: function (text) {
             BI.Text.superclass.setText.apply(this, arguments);
-            //  为textContext赋值为undefined时在ie和edge下会真的显示undefined
-            this.options.text = BI.isNotNull(text) ? text : "";
+            this.options.text = text;
             this._doRedMark(this.options.keyword);
         }
     });
@@ -54476,9 +54476,9 @@ BI.MultiSelectInsertSearcher = BI.inherit(BI.Widget, {
                 var state = "";
                 BI.each(ob.assist, function (i, v) {
                     if (i === 0) {
-                        state += "" + (v === null ? "" : (o.valueFormatter(v + "") || v));
+                        state += "" + (v === null ? "(null)" : (o.valueFormatter(v + "") || v));
                     } else {
-                        state += "," + (v === null ? "" : (o.valueFormatter(v + "") || v));
+                        state += "," + (v === null ? "(null)" : (o.valueFormatter(v + "") || v));
                     }
                 });
                 this.editor.setState(state);
@@ -54492,9 +54492,9 @@ BI.MultiSelectInsertSearcher = BI.inherit(BI.Widget, {
                 var state = "";
                 BI.each(ob.value, function (i, v) {
                     if (i === 0) {
-                        state += "" + (v === null ? "" : (o.valueFormatter(v + "") || v));
+                        state += "" + (v === null ? "(null)" : (o.valueFormatter(v + "") || v));
                     } else {
-                        state += "," + (v === null ? "" : (o.valueFormatter(v + "") || v));
+                        state += "," + (v === null ? "(null)" : (o.valueFormatter(v + "") || v));
                     }
                 });
                 this.editor.setState(state);
@@ -54676,9 +54676,9 @@ BI.MultiSelectSearcher = BI.inherit(BI.Widget, {
                 var state = "";
                 BI.each(ob.assist, function (i, v) {
                     if (i === 0) {
-                        state += "" + (v === null ? "" : (o.valueFormatter(v + "") || v));
+                        state += "" + (v === null ? "(null)" : (o.valueFormatter(v + "") || v));
                     } else {
-                        state += "," + (v === null ? "" : (o.valueFormatter(v + "") || v));
+                        state += "," + (v === null ? "(null)" : (o.valueFormatter(v + "") || v));
                     }
                 });
                 this.editor.setState(state);
@@ -54692,9 +54692,9 @@ BI.MultiSelectSearcher = BI.inherit(BI.Widget, {
                 var state = "";
                 BI.each(ob.value, function (i, v) {
                     if (i === 0) {
-                        state += "" + (v === null ? "" : (o.valueFormatter(v + "") || v));
+                        state += "" + (v === null ? "(null)" : (o.valueFormatter(v + "") || v));
                     } else {
-                        state += "," + (v === null ? "" : (o.valueFormatter(v + "") || v));
+                        state += "," + (v === null ? "(null)" : (o.valueFormatter(v + "") || v));
                     }
                 });
                 this.editor.setState(state);
@@ -57921,7 +57921,7 @@ BI.MultiListTreeSearcher = BI.inherit(BI.Widget, {
             var text = "";
             BI.each(ob.value, function (idx, path) {
                 var childValue = BI.last(path);
-                text += (path === "null" ? "" : (o.valueFormatter(childValue + "") || childValue) + "; ");
+                text += (path === "null" ? "(null)" : (o.valueFormatter(childValue + "") || childValue) + "; ");
                 count++;
             });
 
@@ -58105,7 +58105,7 @@ BI.MultiTreeSearcher = BI.inherit(BI.Widget, {
             var names = BI.Func.getSortedResult(BI.keys(value));
             BI.each(names, function (idx, name) {
                 var childNodes = getChildrenNode(value[name]);
-                text += (name === "null" ? "" : (o.valueFormatter(name + "") || name)) + (childNodes === "" ? "" : (":" + childNodes)) + "; ";
+                text += (name === "null" ? "(null)" : (o.valueFormatter(name + "") || name)) + (childNodes === "" ? "" : (":" + childNodes)) + "; ";
                 if (childNodes === "") {
                     count++;
                 }
@@ -58125,7 +58125,7 @@ BI.MultiTreeSearcher = BI.inherit(BI.Widget, {
             BI.each(names, function (idx, name) {
                 index++;
                 var childNodes = getChildrenNode(ob[name]);
-                text += (name === "null" ? "" : (o.valueFormatter(name + "") || name)) + (childNodes === "" ? "" : (":" + childNodes)) + (index === size ? "" : ",");
+                text += (name === "null" ? "(null)" : (o.valueFormatter(name + "") || name)) + (childNodes === "" ? "" : (":" + childNodes)) + (index === size ? "" : ",");
                 if (childNodes === "") {
                     count++;
                 }
@@ -86748,17 +86748,28 @@ if (BI.jQuery) {
          * 3、text和py各自取tidx/pidx + keyword.length索引开始的子串作为新的text和py, 重复1, 直到text和py有一个为""
          */
         __textKeywordMarked__: function (text, keyword, py) {
+            if (text === null) {
+                if (BI.isIE9Below()) {
+                    return this.html("(null)");
+                }
+                // textContent性能更好,并且原生防xss
+                this[0].textContent = "(null)";
+                return this;
+            }
+            if (BI.isUndefined(text)) {
+                text = "";
+            }
             if (!BI.isKey(keyword) || (text + "").length > 100) {
                 if (BI.isIE9Below()) {
                     return this.html(BI.htmlEncode(text));
                 }
-                //  textContent性能更好,并且原生防xss
+                // textContent性能更好,并且原生防xss
                 this[0].textContent = text;
                 return this;
             }
             keyword = keyword + "";
             keyword = BI.toUpperCase(keyword);
-            var textLeft = (text || "") + "";
+            var textLeft = text + "";
             py = (py || BI.makeFirstPY(text, {
                 splitChar: "\u200b"
             })) + "";
@@ -88873,9 +88884,15 @@ BI.TreeView = BI.inherit(BI.Pane, {
         var self = this, o = this.options;
         var ns = BI.Tree.arrayFormat(nodes);
         BI.each(ns, function (i, n) {
-            n.title = n.title || n.text || n.value;
             n.isParent = n.isParent || n.parent;
             n.value = BI.isUndefined(n.value) ? n.text : n.value;
+            n.text = BI.isUndefined(n.text) ? n.value : n.text;
+            if (n.text === null) {
+                n.text = "(null)";
+            }
+            if (BI.isNull(n.title)) {
+                n.title = n.text;
+            }
             // 处理标红
             if (BI.isNotNull(n.text)) {
                 if (BI.isKey(o.paras.keyword)) {
@@ -88883,8 +88900,6 @@ BI.TreeView = BI.inherit(BI.Pane, {
                 } else {
                     n.text = BI.htmlEncode(BI.Text.formatText(n.text + ""));
                 }
-            } else {
-                n.text = "";
             }
         });
         return nodes;
