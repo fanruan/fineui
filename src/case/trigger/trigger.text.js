@@ -55,6 +55,10 @@ BI.TextTrigger = BI.inherit(BI.Trigger, {
         });
     },
 
+    getTextor: function() {
+        return this.text;
+    },
+
     setTextCls: function(cls) {
         var o = this.options;
         var oldCls = o.textCls;

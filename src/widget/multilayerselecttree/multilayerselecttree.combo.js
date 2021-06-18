@@ -230,7 +230,7 @@ BI.MultiLayerSelectTreeCombo = BI.inherit(BI.Widget, {
     },
 
     getSearcher: function () {
-        return this.trigger ? this.trigger.getSearcher() : this.textTrigger;
+        return this.trigger ? this.trigger.getSearcher() : this.textTrigger.getTextor();
     },
 
     populate: function (items) {

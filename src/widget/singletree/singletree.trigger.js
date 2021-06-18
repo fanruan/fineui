@@ -51,8 +51,8 @@ BI.SingleTreeTrigger = BI.inherit(BI.Trigger, {
         return this.options.value || [];
     },
 
-    getLabel: function () {
-        return this.trigger.getLabel();
+    getTextor: function() {
+        return this.trigger.getTextor();
     },
 
     populate: function (items) {
