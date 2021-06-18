@@ -77,6 +77,7 @@
             }
 
             var text = this._getShowText();
+            // 只要不是undefined就可以显示text值，否则显示value
             if (!BI.isUndefined(text)) {
                 this.setText(text);
             } else if (BI.isKey(o.value)) {
@@ -111,7 +112,7 @@
 
         _doRedMark: function (keyword) {
             var o = this.options;
-            // render之后做的doredmark,这个时候虽然标红了，但是之后text mounted执行的时候并没有keyword
+            // render之后做的doRedMark,这个时候虽然标红了，但是之后text mounted执行的时候并没有keyword
             o.keyword = keyword;
             this.text.element.__textKeywordMarked__(this._getShowText(), keyword, o.py);
         },
@@ -149,8 +150,7 @@
 
         setText: function (text) {
             BI.Text.superclass.setText.apply(this, arguments);
-            //  为textContext赋值为undefined时在ie和edge下会真的显示undefined
-            this.options.text = BI.isNotNull(text) ? text : "";
+            this.options.text = text;
             this._doRedMark(this.options.keyword);
         }
     });

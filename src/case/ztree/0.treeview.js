@@ -95,7 +95,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
                 expandSpeed: "",
                 nameIsHTML: true,   // 节点可以用html标签代替
                 dblClickExpand: false,
-                showLine: o.showLine,
+                showLine: o.showLine
             },
             callback: {
                 beforeExpand: beforeExpand,
@@ -238,7 +238,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
 
     _getNodeValue: function (node) {
         // 去除标红
-        return node.value == null ? BI.replaceAll(node.text.replace(/<[^>]+>/g, ""), "&nbsp;", " ") : node.value;
+        return BI.isUndefined(node.value) ? BI.replaceAll(node.text.replace(/<[^>]+>/g, ""), "&nbsp;", " ") : node.value;
     },
 
     // 获取半选框值
@@ -334,14 +334,22 @@ BI.TreeView = BI.inherit(BI.Pane, {
         var self = this, o = this.options;
         var ns = BI.Tree.arrayFormat(nodes);
         BI.each(ns, function (i, n) {
-            n.title = n.title || n.text || n.value;
             n.isParent = n.isParent || n.parent;
             n.value = BI.isUndefined(n.value) ? n.text : n.value;
+            n.text = BI.isUndefined(n.text) ? n.value : n.text;
+            if (n.text === null) {
+                n.text = "(null)";
+            }
+            if (BI.isNull(n.title)) {
+                n.title = n.text;
+            }
             // 处理标红
-            if (BI.isKey(o.paras.keyword)) {
-                n.text = BI.$("<div>").__textKeywordMarked__(BI.Text.formatText(n.text + ""), o.paras.keyword, n.py).html();
-            } else {
-                n.text = BI.htmlEncode(BI.Text.formatText(n.text + ""));
+            if (BI.isNotNull(n.text)) {
+                if (BI.isKey(o.paras.keyword)) {
+                    n.text = BI.$("<div>").__textKeywordMarked__(BI.Text.formatText(n.text + ""), o.paras.keyword, n.py).html();
+                } else {
+                    n.text = BI.htmlEncode(BI.Text.formatText(n.text + ""));
+                }
             }
         });
         return nodes;

@@ -1,4 +1,4 @@
-/*! time: 2021-6-9 7:40:16 PM */
+/*! time: 2021-6-18 11:30:22 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -7069,6 +7069,14 @@ BI.Req = {
             this.purgeListeners();
         },
 
+        _empty: function () {
+            BI.each(this._children, function (i, widget) {
+                widget && widget._unMount && widget._unMount();
+            });
+            this._children = {};
+            this.element.empty();
+        },
+
         isolate: function () {
             if (this._parent) {
                 this._parent.removeWidget(this);
@@ -7077,11 +7085,7 @@ BI.Req = {
         },
 
         empty: function () {
-            BI.each(this._children, function (i, widget) {
-                widget && widget._unMount && widget._unMount();
-            });
-            this._children = {};
-            this.element.empty();
+            this._empty();
         },
 
         // 默认的reset方法就是干掉重来
@@ -7092,7 +7096,7 @@ BI.Req = {
             }
             // this._isMounted = false;
             // this.purgeListeners();
-            this.empty();
+            this._empty();
             this.element.unbind();
             this._initCurrent();
             this._init();
@@ -24144,6 +24148,7 @@ BI.shortcut("bi.single", BI.Single);
             }
 
             var text = this._getShowText();
+            // 只要不是undefined就可以显示text值，否则显示value
             if (!BI.isUndefined(text)) {
                 this.setText(text);
             } else if (BI.isKey(o.value)) {
@@ -24178,7 +24183,7 @@ BI.shortcut("bi.single", BI.Single);
 
         _doRedMark: function (keyword) {
             var o = this.options;
-            // render之后做的doredmark,这个时候虽然标红了，但是之后text mounted执行的时候并没有keyword
+            // render之后做的doRedMark,这个时候虽然标红了，但是之后text mounted执行的时候并没有keyword
             o.keyword = keyword;
             this.text.element.__textKeywordMarked__(this._getShowText(), keyword, o.py);
         },
@@ -24216,8 +24221,7 @@ BI.shortcut("bi.single", BI.Single);
 
         setText: function (text) {
             BI.Text.superclass.setText.apply(this, arguments);
-            //  为textContext赋值为undefined时在ie和edge下会真的显示undefined
-            this.options.text = BI.isNotNull(text) ? text : "";
+            this.options.text = text;
             this._doRedMark(this.options.keyword);
         }
     });
@@ -38555,15 +38559,17 @@ BI.AllCountPager = BI.inherit(BI.Widget, {
                     self.prevText = _ref;
                 }
             }, {
-                type: "bi.label",
-                ref: function (_ref) {
-                    self.rowCount = _ref;
+                el: {
+                    type: "bi.label",
+                    ref: function (_ref) {
+                        self.rowCount = _ref;
+                    },
+                    cls: "row-count",
+                    height: o.height,
+                    text: o.count,
+                    title: o.count
                 },
-                cls: "row-count",
-                height: o.height,
                 hgap: 5,
-                text: o.count,
-                title: o.count
             }, {
                 type: "bi.label",
                 height: o.height,
@@ -54470,9 +54476,9 @@ BI.MultiSelectInsertSearcher = BI.inherit(BI.Widget, {
                 var state = "";
                 BI.each(ob.assist, function (i, v) {
                     if (i === 0) {
-                        state += "" + (o.valueFormatter(v + "") || v);
+                        state += "" + (v === null ? "" : (o.valueFormatter(v + "") || v));
                     } else {
-                        state += "," + (o.valueFormatter(v + "") || v);
+                        state += "," + (v === null ? "" : (o.valueFormatter(v + "") || v));
                     }
                 });
                 this.editor.setState(state);
@@ -54486,9 +54492,9 @@ BI.MultiSelectInsertSearcher = BI.inherit(BI.Widget, {
                 var state = "";
                 BI.each(ob.value, function (i, v) {
                     if (i === 0) {
-                        state += "" + (o.valueFormatter(v + "") || v);
+                        state += "" + (v === null ? "" : (o.valueFormatter(v + "") || v));
                     } else {
-                        state += "," + (o.valueFormatter(v + "") || v);
+                        state += "," + (v === null ? "" : (o.valueFormatter(v + "") || v));
                     }
                 });
                 this.editor.setState(state);
@@ -54529,6 +54535,7 @@ BI.MultiSelectInsertSearcher.EVENT_SEARCHING = "EVENT_SEARCHING";
 BI.MultiSelectInsertSearcher.EVENT_FOCUS = "EVENT_FOCUS";
 BI.MultiSelectInsertSearcher.EVENT_BLUR = "EVENT_BLUR";
 BI.shortcut("bi.multi_select_insert_searcher", BI.MultiSelectInsertSearcher);
+
 
 /***/ }),
 /* 611 */
@@ -54669,9 +54676,9 @@ BI.MultiSelectSearcher = BI.inherit(BI.Widget, {
                 var state = "";
                 BI.each(ob.assist, function (i, v) {
                     if (i === 0) {
-                        state += "" + (o.valueFormatter(v + "") || v);
+                        state += "" + (v === null ? "" : (o.valueFormatter(v + "") || v));
                     } else {
-                        state += "," + (o.valueFormatter(v + "") || v);
+                        state += "," + (v === null ? "" : (o.valueFormatter(v + "") || v));
                     }
                 });
                 this.editor.setState(state);
@@ -54685,9 +54692,9 @@ BI.MultiSelectSearcher = BI.inherit(BI.Widget, {
                 var state = "";
                 BI.each(ob.value, function (i, v) {
                     if (i === 0) {
-                        state += "" + (o.valueFormatter(v + "") || v);
+                        state += "" + (v === null ? "" : (o.valueFormatter(v + "") || v));
                     } else {
-                        state += "," + (o.valueFormatter(v + "") || v);
+                        state += "," + (v === null ? "" : (o.valueFormatter(v + "") || v));
                     }
                 });
                 this.editor.setState(state);
@@ -54697,7 +54704,7 @@ BI.MultiSelectSearcher = BI.inherit(BI.Widget, {
         }
     },
 
-    getState: function() {
+    getState: function () {
         return this.editor.getState();
     },
 
@@ -54728,6 +54735,7 @@ BI.MultiSelectSearcher.EVENT_SEARCHING = "EVENT_SEARCHING";
 BI.MultiSelectSearcher.EVENT_FOCUS = "EVENT_FOCUS";
 BI.MultiSelectSearcher.EVENT_BLUR = "EVENT_BLUR";
 BI.shortcut("bi.multi_select_searcher", BI.MultiSelectSearcher);
+
 
 /***/ }),
 /* 612 */
@@ -57913,7 +57921,7 @@ BI.MultiListTreeSearcher = BI.inherit(BI.Widget, {
             var text = "";
             BI.each(ob.value, function (idx, path) {
                 var childValue = BI.last(path);
-                text += (o.valueFormatter(childValue + "") || childValue) + "; ";
+                text += (path === "null" ? "" : (o.valueFormatter(childValue + "") || childValue) + "; ");
                 count++;
             });
 
@@ -57925,7 +57933,7 @@ BI.MultiListTreeSearcher = BI.inherit(BI.Widget, {
         }
     },
 
-    getState: function() {
+    getState: function () {
         return this.editor.getState();
     },
 
@@ -57954,6 +57962,7 @@ BI.MultiListTreeSearcher.EVENT_STOP = "EVENT_STOP";
 BI.MultiListTreeSearcher.EVENT_PAUSE = "EVENT_PAUSE";
 BI.shortcut("bi.multi_list_tree_searcher", BI.MultiListTreeSearcher);
 
+
 /***/ }),
 /* 627 */
 /***/ (function(module, exports) {
@@ -57976,7 +57985,7 @@ BI.MultiTreeSearcher = BI.inherit(BI.Widget, {
             popup: {},
 
             adapter: null,
-            masker: {},
+            masker: {}
         });
     },
 
@@ -58096,7 +58105,7 @@ BI.MultiTreeSearcher = BI.inherit(BI.Widget, {
             var names = BI.Func.getSortedResult(BI.keys(value));
             BI.each(names, function (idx, name) {
                 var childNodes = getChildrenNode(value[name]);
-                text += (o.valueFormatter(name + "") || name) + (childNodes === "" ? "" : (":" + childNodes)) + "; ";
+                text += (name === "null" ? "" : (o.valueFormatter(name + "") || name)) + (childNodes === "" ? "" : (":" + childNodes)) + "; ";
                 if (childNodes === "") {
                     count++;
                 }
@@ -58116,7 +58125,7 @@ BI.MultiTreeSearcher = BI.inherit(BI.Widget, {
             BI.each(names, function (idx, name) {
                 index++;
                 var childNodes = getChildrenNode(ob[name]);
-                text += (o.valueFormatter(name + "") || name) + (childNodes === "" ? "" : (":" + childNodes)) + (index === size ? "" : ",");
+                text += (name === "null" ? "(null)" : (o.valueFormatter(name + "") || name)) + (childNodes === "" ? "" : (":" + childNodes)) + (index === size ? "" : ",");
                 if (childNodes === "") {
                     count++;
                 }
@@ -58125,7 +58134,7 @@ BI.MultiTreeSearcher = BI.inherit(BI.Widget, {
         }
     },
 
-    getState: function() {
+    getState: function () {
         return this.editor.getState();
     },
 
@@ -58154,6 +58163,7 @@ BI.MultiTreeSearcher.EVENT_START = "EVENT_START";
 BI.MultiTreeSearcher.EVENT_STOP = "EVENT_STOP";
 BI.MultiTreeSearcher.EVENT_PAUSE = "EVENT_PAUSE";
 BI.shortcut("bi.multi_tree_searcher", BI.MultiTreeSearcher);
+
 
 /***/ }),
 /* 628 */
@@ -86738,17 +86748,20 @@ if (BI.jQuery) {
          * 3、text和py各自取tidx/pidx + keyword.length索引开始的子串作为新的text和py, 重复1, 直到text和py有一个为""
          */
         __textKeywordMarked__: function (text, keyword, py) {
+            if (BI.isNull(text)) {
+                text = "";
+            }
             if (!BI.isKey(keyword) || (text + "").length > 100) {
                 if (BI.isIE9Below()) {
                     return this.html(BI.htmlEncode(text));
                 }
-                //  textContent性能更好,并且原生防xss
+                // textContent性能更好,并且原生防xss
                 this[0].textContent = text;
                 return this;
             }
             keyword = keyword + "";
             keyword = BI.toUpperCase(keyword);
-            var textLeft = (text || "") + "";
+            var textLeft = text + "";
             py = (py || BI.makeFirstPY(text, {
                 splitChar: "\u200b"
             })) + "";
@@ -88624,7 +88637,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
                 expandSpeed: "",
                 nameIsHTML: true,   // 节点可以用html标签代替
                 dblClickExpand: false,
-                showLine: o.showLine,
+                showLine: o.showLine
             },
             callback: {
                 beforeExpand: beforeExpand,
@@ -88767,7 +88780,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
 
     _getNodeValue: function (node) {
         // 去除标红
-        return node.value == null ? BI.replaceAll(node.text.replace(/<[^>]+>/g, ""), "&nbsp;", " ") : node.value;
+        return BI.isUndefined(node.value) ? BI.replaceAll(node.text.replace(/<[^>]+>/g, ""), "&nbsp;", " ") : node.value;
     },
 
     // 获取半选框值
@@ -88863,14 +88876,22 @@ BI.TreeView = BI.inherit(BI.Pane, {
         var self = this, o = this.options;
         var ns = BI.Tree.arrayFormat(nodes);
         BI.each(ns, function (i, n) {
-            n.title = n.title || n.text || n.value;
             n.isParent = n.isParent || n.parent;
             n.value = BI.isUndefined(n.value) ? n.text : n.value;
+            n.text = BI.isUndefined(n.text) ? n.value : n.text;
+            if (n.text === null) {
+                n.text = "(null)";
+            }
+            if (BI.isNull(n.title)) {
+                n.title = n.text;
+            }
             // 处理标红
-            if (BI.isKey(o.paras.keyword)) {
-                n.text = BI.$("<div>").__textKeywordMarked__(BI.Text.formatText(n.text + ""), o.paras.keyword, n.py).html();
-            } else {
-                n.text = BI.htmlEncode(BI.Text.formatText(n.text + ""));
+            if (BI.isNotNull(n.text)) {
+                if (BI.isKey(o.paras.keyword)) {
+                    n.text = BI.$("<div>").__textKeywordMarked__(BI.Text.formatText(n.text + ""), o.paras.keyword, n.py).html();
+                } else {
+                    n.text = BI.htmlEncode(BI.Text.formatText(n.text + ""));
+                }
             }
         });
         return nodes;
