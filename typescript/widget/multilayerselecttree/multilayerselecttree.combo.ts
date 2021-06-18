@@ -1,3 +1,4 @@
+import { Trigger } from "../../base/single/trigger/trigger";
 import { Widget } from "../../core/widget";
 
 export declare class MultiLayerSelectTreeCombo extends Widget {
@@ -13,4 +14,6 @@ export declare class MultiLayerSelectTreeCombo extends Widget {
     getValue(): string[];
 
     populate<T>(items: T[]): void;
+
+    getSearcher(): Trigger;
 }

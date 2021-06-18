@@ -199,11 +199,14 @@ BI.MultiLayerSelectTreeCombo = BI.inherit(BI.Widget, {
     },
 
     _getSyncConfig: function () {
-        var o = this.options;
+        var o = this.options, self = this;
         var baseConfig = this._getBaseConfig();
         return BI.extend(baseConfig, o.allowEdit ? this._getSearchConfig() : {
             el: {
                 type: "bi.single_tree_trigger",
+                ref: function(_ref) {
+                    self.textTrigger = _ref;
+                },
                 text: o.text,
                 height: o.height,
                 items: o.items,
@@ -224,6 +227,10 @@ BI.MultiLayerSelectTreeCombo = BI.inherit(BI.Widget, {
 
     getValue: function () {
         return this.combo.getValue();
+    },
+
+    getSearcher: function () {
+        return this.trigger ? this.trigger.getSearcher() : this.textTrigger;
     },
 
     populate: function (items) {

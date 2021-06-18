@@ -1,4 +1,4 @@
-import { Trigger } from "typescript/base/single/trigger/trigger";
+import { Trigger } from "../../base/single/trigger/trigger";
 import { AbstractTreeValueChooser } from "./abstract.treevaluechooser";
 
 export declare class TreeValueChooserInsertCombo extends AbstractTreeValueChooser {
