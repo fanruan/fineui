@@ -1,6 +1,6 @@
 import { Single } from "../../base/single/single";
-import { Trigger } from "../../base/single/trigger/trigger";
 import { TreeValue } from "../../base/tree/ztree/treeview";
+import { Widget } from "../../core/widget";
 
 export declare class MultiTreeInsertCombo extends Single {
     static xtype: string;
@@ -22,5 +22,5 @@ export declare class MultiTreeInsertCombo extends Single {
 
     populate(): void;
 
-    getSearcher(): Trigger;
+    getSearcher(): Widget;
 }

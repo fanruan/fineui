@@ -1,5 +1,5 @@
 import { Single } from "../../base/single/single";
-import { Trigger } from "../../base/single/trigger/trigger";
+import { Widget } from "../../core/widget";
 
 export declare class MultiTreeListCombo extends Single {
     static xtype: string;
@@ -21,5 +21,5 @@ export declare class MultiTreeListCombo extends Single {
 
     populate(): void;
 
-    getSearcher(): Trigger;
+    getSearcher(): Widget;
 }

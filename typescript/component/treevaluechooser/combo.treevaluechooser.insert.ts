@@ -1,4 +1,4 @@
-import { Trigger } from "../../base/single/trigger/trigger";
+import { Widget } from "../../core/widget";
 import { AbstractTreeValueChooser } from "./abstract.treevaluechooser";
 
 export declare class TreeValueChooserInsertCombo extends AbstractTreeValueChooser {
@@ -21,5 +21,5 @@ export declare class TreeValueChooserInsertCombo extends AbstractTreeValueChoose
 
     populate<T>(items: T[]): void;
 
-    getSearcher(): Trigger;
+    getSearcher(): Widget;
 }

@@ -1,5 +1,5 @@
 import { Single } from "../../base/single/single";
-import { Trigger } from "../../base/single/trigger/trigger";
+import { Widget } from "../../core/widget";
 
 export declare class MultiTreeCombo extends Single {
     static xtype: string;
@@ -14,5 +14,5 @@ export declare class MultiTreeCombo extends Single {
     showView(): void;
     hideView(): void;
 
-    getSearcher(): Trigger;
+    getSearcher(): Widget;
 }
