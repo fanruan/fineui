@@ -35,6 +35,9 @@ BI.HTapeLayout = BI.inherit(BI.Layout, {
         var self = this, o = this.options;
         items = BI.compact(items);
         BI.each(items, function (i, item) {
+            if (BI.isEmptyObject(item)) {
+                return;
+            }
             if (!self.hasWidget(self._getChildName(i))) {
                 var w = BI._lazyCreateWidget(item);
                 self.addWidget(self._getChildName(i), w);
@@ -63,6 +66,9 @@ BI.HTapeLayout = BI.inherit(BI.Layout, {
         right[items.length - 1] = 0;
 
         BI.any(items, function (i, item) {
+            if (BI.isEmptyObject(item)) {
+                return true;
+            }
             var w = self.getWidgetByName(self._getChildName(i));
             var columnSize = o.columnSize.length > 0 ? o.columnSize[i] : item.width;
             if (o.columnSize.length > 0) {
@@ -72,7 +78,7 @@ BI.HTapeLayout = BI.inherit(BI.Layout, {
             }
             if (BI.isNull(left[i])) {
                 var preColumnSize = o.columnSize.length > 0 ? o.columnSize[i - 1] : items[i - 1].width;
-                left[i] = left[i - 1] + preColumnSize + (items[i - 1].lgap || 0) + 2 * (items[i - 1].hgap || 0) + o.hgap + o.lgap + o.rgap;
+                left[i] = left[i - 1] + preColumnSize + (items[i - 1].lgap || 0) + (items[i - 1].rgap || 0) + 2 * (items[i - 1].hgap || 0) + o.hgap + o.lgap + o.rgap;
             }
             if (columnSize < 1 && columnSize > 0) {
                 w.element.css({
@@ -90,11 +96,14 @@ BI.HTapeLayout = BI.inherit(BI.Layout, {
             }
         });
         BI.backAny(items, function (i, item) {
+            if (BI.isEmptyObject(item)) {
+                return true;
+            }
             var w = self.getWidgetByName(self._getChildName(i));
             var columnSize = o.columnSize.length > 0 ? o.columnSize[i] : item.width;
             if (BI.isNull(right[i])) {
                 var nextColumnSize = o.columnSize.length > 0 ? o.columnSize[i + 1] : items[i + 1].width;
-                right[i] = right[i + 1] + nextColumnSize + (items[i + 1].rgap || 0) + 2 * (items[i + 1].hgap || 0) + o.hgap + o.lgap + o.rgap;
+                right[i] = right[i + 1] + nextColumnSize + (items[i + 1].lgap || 0) + (items[i + 1].rgap || 0) + 2 * (items[i + 1].hgap || 0) + o.hgap + o.lgap + o.rgap;
             }
             if (columnSize < 1 && columnSize > 0) {
                 w.element.css({
@@ -166,6 +175,9 @@ BI.VTapeLayout = BI.inherit(BI.Layout, {
         var self = this, o = this.options;
         items = BI.compact(items);
         BI.each(items, function (i, item) {
+            if (BI.isEmptyObject(item)) {
+                return;
+            }
             if (!self.hasWidget(self._getChildName(i))) {
                 var w = BI._lazyCreateWidget(item);
                 self.addWidget(self._getChildName(i), w);
@@ -194,6 +206,9 @@ BI.VTapeLayout = BI.inherit(BI.Layout, {
         bottom[items.length - 1] = 0;
 
         BI.any(items, function (i, item) {
+            if (BI.isEmptyObject(item)) {
+                return true;
+            }
             var w = self.getWidgetByName(self._getChildName(i));
             var rowSize = o.rowSize.length > 0 ? o.rowSize[i] : item.height;
             if (o.rowSize.length > 0) {
@@ -203,7 +218,7 @@ BI.VTapeLayout = BI.inherit(BI.Layout, {
             }
             if (BI.isNull(top[i])) {
                 var preRowSize = o.rowSize.length > 0 ? o.rowSize[i - 1] : items[i - 1].height;
-                top[i] = top[i - 1] + preRowSize + (items[i - 1].tgap || 0) + 2 * (items[i - 1].vgap || 0) + o.vgap + o.tgap + o.bgap;
+                top[i] = top[i - 1] + preRowSize + (items[i - 1].tgap || 0) + (items[i - 1].bgap || 0) + 2 * (items[i - 1].vgap || 0) + o.vgap + o.tgap + o.bgap;
             }
             if (rowSize < 1 && rowSize > 0) {
                 w.element.css({
@@ -221,11 +236,14 @@ BI.VTapeLayout = BI.inherit(BI.Layout, {
             }
         });
         BI.backAny(items, function (i, item) {
+            if (BI.isEmptyObject(item)) {
+                return true;
+            }
             var w = self.getWidgetByName(self._getChildName(i));
             var rowSize = o.rowSize.length > 0 ? o.rowSize[i] : item.height;
             if (BI.isNull(bottom[i])) {
                 var nextRowSize = o.rowSize.length > 0 ? o.rowSize[i + 1] : items[i + 1].height;
-                bottom[i] = bottom[i + 1] + nextRowSize + (items[i + 1].bgap || 0) + 2 * (items[i + 1].vgap || 0) + o.vgap + o.tgap + o.bgap;
+                bottom[i] = bottom[i + 1] + nextRowSize + (items[i + 1].tgap || 0) + (items[i + 1].bgap || 0) + 2 * (items[i + 1].vgap || 0) + o.vgap + o.tgap + o.bgap;
             }
             if (rowSize < 1 && rowSize > 0) {
                 w.element.css({
