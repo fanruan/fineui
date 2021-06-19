@@ -64,8 +64,8 @@
                     type: "bi.layout",
                     tagName: "span"
                 });
-                this.text.element.click(function () {
-                    o.handler(self.getValue());
+                this.text.element.click(function (e) {
+                    o.handler.call(self, self.getValue(), self, e);
                 });
                 BI.createWidget({
                     type: "bi.default",

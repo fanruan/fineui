@@ -34,13 +34,14 @@ BI.FlexVerticalLayout = BI.inherit(BI.Layout, {
     },
 
     _addElement: function (i, item) {
-        var w = BI.FlexVerticalLayout.superclass._addElement.apply(this, arguments);
         var o = this.options;
+        var w = BI.FlexVerticalLayout.superclass._addElement.apply(this, arguments);
+        var rowSize = o.rowSize.length > 0 ? o.rowSize[i] : item.height;
         w.element.css({
             position: "relative"
         });
-        if (o.rowSize[i] !== "auto") {
-            if (o.rowSize[i] === "fill" || o.rowSize[i] === "") {
+        if (rowSize !== "auto") {
+            if (rowSize === "fill" || rowSize === "") {
                 if (o.verticalAlign !== BI.VerticalAlign.Stretch) {
                     if (o.scrollable === true || o.scrolly === true) {
                         w.element.addClass("f-s-n");
@@ -50,10 +51,10 @@ BI.FlexVerticalLayout = BI.inherit(BI.Layout, {
                 w.element.addClass("f-s-n");
             }
         }
-        if (o.rowSize[i] > 0) {
-            w.element.height(o.rowSize[i] === "" ? "" : (o.rowSize[i] <= 1 ? ((o.rowSize[i] * 100).toFixed(1) + "%") : (o.rowSize[i] / BI.pixRatio + BI.pixUnit)));
+        if (rowSize > 0) {
+            w.element.height(rowSize < 1 ? ((rowSize * 100).toFixed(1) + "%") : (rowSize / BI.pixRatio + BI.pixUnit));
         }
-        if (o.rowSize[i] === "fill") {
+        if (rowSize === "fill") {
             w.element.addClass("f-f");
         }
         w.element.addClass("c-e");
