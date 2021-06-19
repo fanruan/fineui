@@ -1,4 +1,4 @@
-/*! time: 2021-6-19 14:10:40 */
+/*! time: 2021-6-19 16:10:14 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -15474,7 +15474,12 @@ BI.FlexHorizontalLayout = BI.inherit(BI.Layout, {
     _addElement: function (i, item) {
         var o = this.options;
         var w = BI.FlexHorizontalLayout.superclass._addElement.apply(this, arguments);
-        var columnSize = o.columnSize.length > 0 ? o.columnSize[i] : item.width >= 1 ? "" : item.width;
+        var columnSize = o.columnSize.length > 0 ? o.columnSize[i] : item.width >= 1 ? null : item.width;
+        if (o.columnSize.length > 0) {
+            if (item.width >= 1 && o.columnSize[i] >= 1 && o.columnSize[i] !== item.width) {
+                columnSize = null;
+            }
+        }
         w.element.css({
             position: "relative"
         });
@@ -15736,7 +15741,12 @@ BI.FlexVerticalLayout = BI.inherit(BI.Layout, {
     _addElement: function (i, item) {
         var o = this.options;
         var w = BI.FlexVerticalLayout.superclass._addElement.apply(this, arguments);
-        var rowSize = o.rowSize.length > 0 ? o.rowSize[i] : item.height >= 1 ? "" : item.height;
+        var rowSize = o.rowSize.length > 0 ? o.rowSize[i] : item.height >= 1 ? null : item.height;
+        if (o.rowSize.length > 0) {
+            if (item.height >= 1 && o.rowSize[i] >= 1 && o.rowSize[i] !== item.height) {
+                rowSize = null;
+            }
+        }
         w.element.css({
             position: "relative"
         });
@@ -15961,7 +15971,12 @@ BI.FlexWrapperHorizontalLayout = BI.inherit(BI.Layout, {
     _addElement: function (i, item) {
         var o = this.options;
         var w = BI.FlexWrapperHorizontalLayout.superclass._addElement.apply(this, arguments);
-        var columnSize = o.columnSize.length > 0 ? o.columnSize[i] : item.width >= 1 ? "" : item.width;
+        var columnSize = o.columnSize.length > 0 ? o.columnSize[i] : item.width >= 1 ? null : item.width;
+        if (o.columnSize.length > 0) {
+            if (item.width >= 1 && o.columnSize[i] >= 1 && o.columnSize[i] !== item.width) {
+                columnSize = null;
+            }
+        }
         w.element.css({
             position: "relative"
         });
@@ -16135,7 +16150,12 @@ BI.FlexWrapperVerticalLayout = BI.inherit(BI.Layout, {
     _addElement: function (i, item) {
         var o = this.options;
         var w = BI.FlexWrapperVerticalLayout.superclass._addElement.apply(this, arguments);
-        var rowSize = o.rowSize.length > 0 ? o.rowSize[i] : item.height >= 1 ? "" : item.height;
+        var rowSize = o.rowSize.length > 0 ? o.rowSize[i] : item.height >= 1 ? null : item.height;
+        if (o.rowSize.length > 0) {
+            if (item.height >= 1 && o.rowSize[i] >= 1 && o.rowSize[i] !== item.height) {
+                rowSize = null;
+            }
+        }
         w.element.css({
             position: "relative"
         });
@@ -17704,6 +17724,11 @@ BI.HTapeLayout = BI.inherit(BI.Layout, {
         BI.any(items, function (i, item) {
             var w = self.getWidgetByName(self._getChildName(i));
             var columnSize = o.columnSize.length > 0 ? o.columnSize[i] : item.width;
+            if (o.columnSize.length > 0) {
+                if (item.width >= 1 && o.columnSize[i] >= 1 && o.columnSize[i] !== item.width) {
+                    columnSize = item.width;
+                }
+            }
             if (BI.isNull(left[i])) {
                 var preColumnSize = o.columnSize.length > 0 ? o.columnSize[i - 1] : items[i - 1].width;
                 left[i] = left[i - 1] + preColumnSize + (items[i - 1].lgap || 0) + 2 * (items[i - 1].hgap || 0) + o.hgap + o.lgap + o.rgap;
@@ -17830,6 +17855,11 @@ BI.VTapeLayout = BI.inherit(BI.Layout, {
         BI.any(items, function (i, item) {
             var w = self.getWidgetByName(self._getChildName(i));
             var rowSize = o.rowSize.length > 0 ? o.rowSize[i] : item.height;
+            if (o.rowSize.length > 0) {
+                if (item.height >= 1 && o.rowSize[i] >= 1 && o.rowSize[i] !== item.height) {
+                    rowSize = item.height;
+                }
+            }
             if (BI.isNull(top[i])) {
                 var preRowSize = o.rowSize.length > 0 ? o.rowSize[i - 1] : items[i - 1].height;
                 top[i] = top[i - 1] + preRowSize + (items[i - 1].tgap || 0) + 2 * (items[i - 1].vgap || 0) + o.vgap + o.tgap + o.bgap;
