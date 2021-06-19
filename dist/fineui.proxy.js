@@ -1,4 +1,4 @@
-/*! time: 2021-6-19 16:10:14 */
+/*! time: 2021-6-19 19:30:18 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -17372,8 +17372,16 @@ BI.InlineLayout = BI.inherit(BI.Layout, {
     _addElement: function (i, item, length) {
         var o = this.options;
         var w = BI.InlineLayout.superclass._addElement.apply(this, arguments);
+        var columnSize = o.columnSize.length > 0 ? o.columnSize[i] : item.width >= 1 ? null : item.width;
+        if (o.columnSize.length > 0) {
+            if (item.width >= 1 && o.columnSize[i] >= 1 && o.columnSize[i] !== item.width) {
+                columnSize = null;
+            }
+        }
+        if (columnSize > 0) {
+            w.element.width(columnSize < 1 ? ((columnSize * 100).toFixed(1) + "%") : (columnSize / BI.pixRatio + BI.pixUnit));
+        }
         w.element.css({
-            width: o.columnSize[i] === "" ? "" : (o.columnSize[i] < 1 ? ((o.columnSize[i] * 100).toFixed(1) + "%") : (o.columnSize[i] / BI.pixRatio + BI.pixUnit)),
             position: "relative",
             "vertical-align": o.verticalAlign
         });
