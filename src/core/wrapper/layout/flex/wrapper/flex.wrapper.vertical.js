@@ -33,7 +33,7 @@ BI.FlexWrapperVerticalLayout = BI.inherit(BI.Layout, {
     _addElement: function (i, item) {
         var o = this.options;
         var w = BI.FlexWrapperVerticalLayout.superclass._addElement.apply(this, arguments);
-        var rowSize = o.rowSize.length > 0 ? o.rowSize[i] : item.width;
+        var rowSize = o.rowSize.length > 0 ? o.rowSize[i] : item.height;
         w.element.css({
             position: "relative"
         });
@@ -49,7 +49,7 @@ BI.FlexWrapperVerticalLayout = BI.inherit(BI.Layout, {
             }
         }
         if (rowSize > 0) {
-            w.element.height(rowSize <= 1 ? ((rowSize * 100).toFixed(1) + "%") : (rowSize / BI.pixRatio + BI.pixUnit));
+            w.element.height(rowSize < 1 ? ((rowSize * 100).toFixed(1) + "%") : (rowSize / BI.pixRatio + BI.pixUnit));
         }
         if (rowSize === "fill") {
             w.element.addClass("f-f");
