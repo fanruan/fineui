@@ -1,4 +1,4 @@
-/*! time: 2021-6-19 13:50:14 */
+/*! time: 2021-6-19 14:10:40 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -17986,7 +17986,7 @@ BI.FlexHorizontalLayout = BI.inherit(BI.Layout, {
         return BI.extend(BI.FlexHorizontalLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-f-h",
             verticalAlign: BI.VerticalAlign.Top,
-            horizontalAlign: BI.HorizontalAlign.Left,// 如果只有一个子元素且想让该子元素横向撑满，设置成Stretch
+            horizontalAlign: BI.HorizontalAlign.Left, // 如果只有一个子元素且想让该子元素横向撑满，设置成Stretch
             columnSize: [],
             scrollx: true,
             hgap: 0,
@@ -18013,7 +18013,7 @@ BI.FlexHorizontalLayout = BI.inherit(BI.Layout, {
     _addElement: function (i, item) {
         var o = this.options;
         var w = BI.FlexHorizontalLayout.superclass._addElement.apply(this, arguments);
-        var columnSize = o.columnSize.length > 0 ? o.columnSize[i] : item.width;
+        var columnSize = o.columnSize.length > 0 ? o.columnSize[i] : item.width >= 1 ? "" : item.width;
         w.element.css({
             position: "relative"
         });
@@ -18275,7 +18275,7 @@ BI.FlexVerticalLayout = BI.inherit(BI.Layout, {
     _addElement: function (i, item) {
         var o = this.options;
         var w = BI.FlexVerticalLayout.superclass._addElement.apply(this, arguments);
-        var rowSize = o.rowSize.length > 0 ? o.rowSize[i] : item.height;
+        var rowSize = o.rowSize.length > 0 ? o.rowSize[i] : item.height >= 1 ? "" : item.height;
         w.element.css({
             position: "relative"
         });
@@ -18500,7 +18500,7 @@ BI.FlexWrapperHorizontalLayout = BI.inherit(BI.Layout, {
     _addElement: function (i, item) {
         var o = this.options;
         var w = BI.FlexWrapperHorizontalLayout.superclass._addElement.apply(this, arguments);
-        var columnSize = o.columnSize.length > 0 ? o.columnSize[i] : item.width;
+        var columnSize = o.columnSize.length > 0 ? o.columnSize[i] : item.width >= 1 ? "" : item.width;
         w.element.css({
             position: "relative"
         });
@@ -18674,7 +18674,7 @@ BI.FlexWrapperVerticalLayout = BI.inherit(BI.Layout, {
     _addElement: function (i, item) {
         var o = this.options;
         var w = BI.FlexWrapperVerticalLayout.superclass._addElement.apply(this, arguments);
-        var rowSize = o.rowSize.length > 0 ? o.rowSize[i] : item.height;
+        var rowSize = o.rowSize.length > 0 ? o.rowSize[i] : item.height >= 1 ? "" : item.height;
         w.element.css({
             position: "relative"
         });
