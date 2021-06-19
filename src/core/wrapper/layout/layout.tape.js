@@ -65,6 +65,11 @@ BI.HTapeLayout = BI.inherit(BI.Layout, {
         BI.any(items, function (i, item) {
             var w = self.getWidgetByName(self._getChildName(i));
             var columnSize = o.columnSize.length > 0 ? o.columnSize[i] : item.width;
+            if (o.columnSize.length > 0) {
+                if (item.width >= 1 && o.columnSize[i] >= 1 && o.columnSize[i] !== item.width) {
+                    columnSize = item.width;
+                }
+            }
             if (BI.isNull(left[i])) {
                 var preColumnSize = o.columnSize.length > 0 ? o.columnSize[i - 1] : items[i - 1].width;
                 left[i] = left[i - 1] + preColumnSize + (items[i - 1].lgap || 0) + 2 * (items[i - 1].hgap || 0) + o.hgap + o.lgap + o.rgap;
@@ -191,6 +196,11 @@ BI.VTapeLayout = BI.inherit(BI.Layout, {
         BI.any(items, function (i, item) {
             var w = self.getWidgetByName(self._getChildName(i));
             var rowSize = o.rowSize.length > 0 ? o.rowSize[i] : item.height;
+            if (o.rowSize.length > 0) {
+                if (item.height >= 1 && o.rowSize[i] >= 1 && o.rowSize[i] !== item.height) {
+                    rowSize = item.height;
+                }
+            }
             if (BI.isNull(top[i])) {
                 var preRowSize = o.rowSize.length > 0 ? o.rowSize[i - 1] : items[i - 1].height;
                 top[i] = top[i - 1] + preRowSize + (items[i - 1].tgap || 0) + 2 * (items[i - 1].vgap || 0) + o.vgap + o.tgap + o.bgap;
