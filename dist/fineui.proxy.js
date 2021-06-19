@@ -1,4 +1,4 @@
-/*! time: 2021-6-19 19:30:18 */
+/*! time: 2021-6-19 21:40:51 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -17369,7 +17369,7 @@ BI.InlineLayout = BI.inherit(BI.Layout, {
         this.populate(o.items);
     },
 
-    _addElement: function (i, item, length) {
+    _addElement: function (i, item) {
         var o = this.options;
         var w = BI.InlineLayout.superclass._addElement.apply(this, arguments);
         var columnSize = o.columnSize.length > 0 ? o.columnSize[i] : item.width >= 1 ? null : item.width;
@@ -17386,16 +17386,16 @@ BI.InlineLayout = BI.inherit(BI.Layout, {
             "vertical-align": o.verticalAlign
         });
         w.element.addClass("i-item");
-        if (o.columnSize[i] === "fill" || o.columnSize[i] === "") {
+        if (columnSize === "fill" || columnSize === "") {
             var left = o.hgap + (item.lgap || 0) + (item.hgap || 0),
                 right = o.hgap + (item.rgap || 0) + (item.hgap || 0);
             for (var k = 0; k < i; k++) {
-                left += o.hgap + o.lgap + o.rgap + o.columnSize[k];
+                left += o.hgap + o.lgap + o.rgap + (o.columnSize[k] || o.items[k].width);
             }
             for (var k = i + 1; k < o.columnSize.length; k++) {
-                right += o.hgap + o.lgap + o.rgap + o.columnSize[k];
+                right += o.hgap + o.lgap + o.rgap + (o.columnSize[k] || o.items[k].width);
             }
-            if (o.columnSize[i] === "fill") {
+            if (columnSize === "fill") {
                 w.element.css("min-width", "calc(100% - " + ((left + right) / BI.pixRatio + BI.pixUnit) + ")");
             }
             if (o.horizontalAlign === BI.HorizontalAlign.Stretch || !(o.scrollable === true || o.scrollx === true)) {
@@ -17436,15 +17436,6 @@ BI.InlineLayout = BI.inherit(BI.Layout, {
 
     addItem: function (item) {
         throw new Error("不能添加元素");
-    },
-
-    stroke: function (items) {
-        var self = this;
-        BI.each(items, function (i, item) {
-            if (item) {
-                self._addElement(i, item, items.length);
-            }
-        });
     },
 
     populate: function (items) {
