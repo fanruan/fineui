@@ -33,7 +33,7 @@ BI.FlexWrapperVerticalLayout = BI.inherit(BI.Layout, {
     _addElement: function (i, item) {
         var o = this.options;
         var w = BI.FlexWrapperVerticalLayout.superclass._addElement.apply(this, arguments);
-        var rowSize = o.rowSize.length > 0 ? o.rowSize[i] : item.height;
+        var rowSize = o.rowSize.length > 0 ? o.rowSize[i] : item.height >= 1 ? "" : item.height;
         w.element.css({
             position: "relative"
         });

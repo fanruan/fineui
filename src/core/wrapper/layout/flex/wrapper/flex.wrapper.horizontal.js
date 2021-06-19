@@ -33,7 +33,7 @@ BI.FlexWrapperHorizontalLayout = BI.inherit(BI.Layout, {
     _addElement: function (i, item) {
         var o = this.options;
         var w = BI.FlexWrapperHorizontalLayout.superclass._addElement.apply(this, arguments);
-        var columnSize = o.columnSize.length > 0 ? o.columnSize[i] : item.width;
+        var columnSize = o.columnSize.length > 0 ? o.columnSize[i] : item.width >= 1 ? "" : item.width;
         w.element.css({
             position: "relative"
         });
