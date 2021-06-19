@@ -65,7 +65,7 @@
                     tagName: "span"
                 });
                 this.text.element.click(function () {
-                    o.handler(self.getValue());
+                    o.handler.call(self, self.getValue());
                 });
                 BI.createWidget({
                     type: "bi.default",
