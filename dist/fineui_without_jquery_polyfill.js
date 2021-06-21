@@ -1,4 +1,4 @@
-/*! time: 2021-6-10 11:00:18 AM */
+/*! time: 2021-6-21 18:30:18 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -82,7 +82,7 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 1439);
+/******/ 	return __webpack_require__(__webpack_require__.s = 1441);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -189,10 +189,7 @@ var _widget = __webpack_require__(1);
 
 
 /***/ }),
-/* 30 */,
-/* 31 */,
-/* 32 */,
-/* 33 */
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -201,6 +198,9 @@ var _widget = __webpack_require__(1);
 var _widget = __webpack_require__(1);
 
 /***/ }),
+/* 31 */,
+/* 32 */,
+/* 33 */,
 /* 34 */,
 /* 35 */,
 /* 36 */,
@@ -389,7 +389,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _abstract = __webpack_require__(33);
+var _abstract = __webpack_require__(30);
 
 /***/ }),
 /* 71 */
@@ -6679,6 +6679,14 @@ BI.Req = {
             this.purgeListeners();
         },
 
+        _empty: function () {
+            BI.each(this._children, function (i, widget) {
+                widget && widget._unMount && widget._unMount();
+            });
+            this._children = {};
+            this.element.empty();
+        },
+
         isolate: function () {
             if (this._parent) {
                 this._parent.removeWidget(this);
@@ -6687,11 +6695,7 @@ BI.Req = {
         },
 
         empty: function () {
-            BI.each(this._children, function (i, widget) {
-                widget && widget._unMount && widget._unMount();
-            });
-            this._children = {};
-            this.element.empty();
+            this._empty();
         },
 
         // 默认的reset方法就是干掉重来
@@ -6702,7 +6706,7 @@ BI.Req = {
             }
             // this._isMounted = false;
             // this.purgeListeners();
-            this.empty();
+            this._empty();
             this.element.unbind();
             this._initCurrent();
             this._init();
@@ -14071,6 +14075,8 @@ BI.AbsoluteHorizontalLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.AbsoluteHorizontalLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-abs-h-a",
+            horizontalAlign: BI.HorizontalAlign.Center,
+            rowSize: [],
             hgap: 0,
             lgap: 0,
             rgap: 0,
@@ -14081,26 +14087,26 @@ BI.AbsoluteHorizontalLayout = BI.inherit(BI.Layout, {
     },
 
     render: function () {
+        var self = this, o = this.options;
         BI.AbsoluteHorizontalLayout.superclass.render.apply(this, arguments);
-        this.populate(this.options.items);
-    },
-
-    _addElement: function (i, item) {
-        var o = this.options;
-        var w = BI.AbsoluteHorizontalLayout.superclass._addElement.apply(this, arguments);
-        w.element.css({
-            position: "absolute",
-            left: (o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0)) / BI.pixRatio + BI.pixUnit,
-            right: (o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0)) / BI.pixRatio + BI.pixUnit,
-            margin: "auto"
-        });
-        if (o.vgap + o.tgap + (item.vgap || 0) + (item.tgap || 0) !== 0) {
-            w.element.css("top", (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0)) / BI.pixRatio + BI.pixUnit);
-        }
-        if (o.vgap + o.bgap + (item.vgap || 0) + (item.bgap || 0) !== 0) {
-            w.element.css("bottom", (o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0)) / BI.pixRatio + BI.pixUnit);
-        }
-        return w;
+        return {
+            type: "bi.vtape",
+            horizontalAlign: o.horizontalAlign,
+            rowSize: o.rowSize,
+            items: o.items,
+            scrollx: o.scrollx,
+            scrolly: o.scrolly,
+            scrollable: o.scrollable,
+            ref: function (_ref) {
+                self.layout = _ref;
+            },
+            hgap: o.hgap,
+            vgap: o.vgap,
+            lgap: o.lgap,
+            rgap: o.rgap,
+            tgap: o.tgap,
+            bgap: o.bgap
+        };
     },
 
     resize: function () {
@@ -14108,8 +14114,7 @@ BI.AbsoluteHorizontalLayout = BI.inherit(BI.Layout, {
     },
 
     populate: function (items) {
-        BI.AbsoluteHorizontalLayout.superclass.populate.apply(this, arguments);
-        this._mount();
+        this.layout.populate.apply(this, arguments);
     }
 });
 BI.shortcut("bi.absolute_horizontal_adapt", BI.AbsoluteHorizontalLayout);
@@ -14117,6 +14122,158 @@ BI.shortcut("bi.absolute_horizontal_adapt", BI.AbsoluteHorizontalLayout);
 
 /***/ }),
 /* 326 */
+/***/ (function(module, exports) {
+
+BI.AbsoluteLeftRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
+    props: function () {
+        return BI.extend(BI.AbsoluteLeftRightVerticalAdaptLayout.superclass.props.apply(this, arguments), {
+            baseCls: "bi-abs-lr-v-a",
+            verticalAlign: BI.VerticalAlign.Middle,
+            items: {},
+            llgap: 0,
+            lrgap: 0,
+            lhgap: 0,
+            ltgap: 0,
+            lbgap: 0,
+            lvgap: 0,
+            rlgap: 0,
+            rrgap: 0,
+            rhgap: 0,
+            rtgap: 0,
+            rbgap: 0,
+            rvgap: 0
+        });
+    },
+    render: function () {
+        var o = this.options, self = this;
+        BI.AbsoluteLeftRightVerticalAdaptLayout.superclass.render.apply(this, arguments);
+        return {
+            type: "bi.htape",
+            ref: function (_ref) {
+                self.layout = _ref;
+            },
+            verticalAlign: o.verticalAlign,
+            items: this._formatItems(),
+            scrollx: o.scrollx,
+            scrolly: o.scrolly,
+            scrollable: o.scrollable
+        };
+    },
+
+    _formatItems: function () {
+        var o = this.options;
+        var leftItems = o.items.left || [];
+        var rightItems = o.items.right || [];
+        leftItems = BI.map(leftItems, function (i, item) {
+            var json = {
+                el: BI.stripEL(item),
+                width: item.width
+            };
+            if (o.lvgap + o.ltgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
+                json.tgap = o.lvgap + o.ltgap + (item.tgap || 0) + (item.vgap || 0);
+            }
+            if (o.lhgap + o.llgap + (item.lgap || 0) + (item.hgap || 0) !== 0) {
+                json.lgap = (i === 0 ? o.lhgap : 0) + o.llgap + (item.lgap || 0) + (item.hgap || 0);
+            }
+            if (o.lhgap + o.lrgap + (item.rgap || 0) + (item.hgap || 0) !== 0) {
+                json.rgap = o.lhgap + o.lrgap + (item.rgap || 0) + (item.hgap || 0);
+            }
+            if (o.lvgap + o.lbgap + (item.bgap || 0) + (item.vgap || 0) !== 0) {
+                json.bgap = o.lvgap + o.lbgap + (item.bgap || 0) + (item.vgap || 0);
+            }
+            return json;
+        });
+        rightItems = BI.map(rightItems, function (i, item) {
+            var json = {
+                el: BI.stripEL(item),
+                width: item.width
+            };
+            if (o.rvgap + o.rtgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
+                json.tgap = o.rvgap + o.rtgap + (item.tgap || 0) + (item.vgap || 0);
+            }
+            if (o.rhgap + o.rlgap + (item.lgap || 0) + (item.hgap || 0) !== 0) {
+                json.lgap = (i === 0 ? o.rhgap : 0) + o.rlgap + (item.lgap || 0) + (item.hgap || 0);
+            }
+            if (o.rhgap + o.rrgap + (item.rgap || 0) + (item.hgap || 0) !== 0) {
+                json.rgap = o.rhgap + o.rrgap + (item.rgap || 0) + (item.hgap || 0);
+            }
+            if (o.rvgap + o.rbgap + (item.bgap || 0) + (item.vgap || 0) !== 0) {
+                json.bgap = o.rvgap + o.rbgap + (item.bgap || 0) + (item.vgap || 0);
+            }
+            return json;
+        });
+        return leftItems.concat({}, rightItems);
+    },
+
+    resize: function () {
+        // console.log("absolute_left_right_vertical_adapt布局不需要resize");
+    },
+
+    addItem: function () {
+        // do nothing
+        throw new Error("cannot be added");
+    },
+
+    populate: function (items) {
+        this.options.items = items;
+        this.layout.populate(this._formatItems());
+    }
+});
+BI.shortcut("bi.absolute_left_right_vertical_adapt", BI.AbsoluteLeftRightVerticalAdaptLayout);
+
+BI.AbsoluteRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
+    props: function () {
+        return BI.extend(BI.AbsoluteRightVerticalAdaptLayout.superclass.props.apply(this, arguments), {
+            baseCls: "bi-abs-r-v-a",
+            verticalAlign: BI.VerticalAlign.Middle,
+            items: [],
+            lgap: 0,
+            rgap: 0,
+            hgap: 0,
+            tgap: 0,
+            bgap: 0,
+            vgap: 0
+        });
+    },
+    render: function () {
+        var o = this.options, self = this;
+        BI.AbsoluteRightVerticalAdaptLayout.superclass.render.apply(this, arguments);
+        return {
+            type: "bi.htape",
+            ref: function (_ref) {
+                self.layout = _ref;
+            },
+            verticalAlign: o.verticalAlign,
+            items: [{}].concat(o.items),
+            hgap: o.hgap,
+            lgap: o.lgap,
+            rgap: o.rgap,
+            tgap: o.tgap,
+            bgap: o.bgap,
+            vgap: o.vgap,
+            scrollx: o.scrollx,
+            scrolly: o.scrolly,
+            scrollable: o.scrollable
+        };
+    },
+
+    resize: function () {
+
+    },
+
+    addItem: function () {
+        // do nothing
+        throw new Error("cannot be added");
+    },
+
+    populate: function (items) {
+        this.layout.populate(items);
+    }
+});
+BI.shortcut("bi.absolute_right_vertical_adapt", BI.AbsoluteRightVerticalAdaptLayout);
+
+/***/ }),
+/* 327 */
 /***/ (function(module, exports) {
 
 /**
@@ -14128,6 +14285,8 @@ BI.AbsoluteVerticalLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.AbsoluteVerticalLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-abs-v-a",
+            verticalAlign: BI.VerticalAlign.Middle,
+            columnSize: [],
             hgap: 0,
             lgap: 0,
             rgap: 0,
@@ -14138,28 +14297,26 @@ BI.AbsoluteVerticalLayout = BI.inherit(BI.Layout, {
     },
 
     render: function () {
+        var self = this, o = this.options;
         BI.AbsoluteVerticalLayout.superclass.render.apply(this, arguments);
-        this.populate(this.options.items);
-    },
-
-    _addElement: function (i, item) {
-        var o = this.options;
-        var w = BI.AbsoluteVerticalLayout.superclass._addElement.apply(this, arguments);
-        w.element.css({
-            position: "absolute",
-            left: item.lgap / BI.pixRatio + BI.pixUnit,
-            right: item.rgap / BI.pixRatio + BI.pixUnit,
-            top: (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0)) / BI.pixRatio + BI.pixUnit,
-            bottom: (o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0)) / BI.pixRatio + BI.pixUnit,
-            margin: "auto"
-        });
-        if (o.hgap + o.lgap + (item.hgap || 0) + (item.lgap || 0) !== 0) {
-            w.element.css("left", (o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0)) / BI.pixRatio + BI.pixUnit);
-        }
-        if (o.hgap + o.rgap + (item.hgap || 0) + (item.rgap || 0) !== 0) {
-            w.element.css("right", (o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0)) / BI.pixRatio + BI.pixUnit);
-        }
-        return w;
+        return {
+            type: "bi.htape",
+            verticalAlign: o.verticalAlign,
+            columnSize: o.columnSize,
+            items: o.items,
+            scrollx: o.scrollx,
+            scrolly: o.scrolly,
+            scrollable: o.scrollable,
+            ref: function (_ref) {
+                self.layout = _ref;
+            },
+            hgap: o.hgap,
+            vgap: o.vgap,
+            lgap: o.lgap,
+            rgap: o.rgap,
+            tgap: o.tgap,
+            bgap: o.bgap
+        };
     },
 
     resize: function () {
@@ -14167,15 +14324,14 @@ BI.AbsoluteVerticalLayout = BI.inherit(BI.Layout, {
     },
 
     populate: function (items) {
-        BI.AbsoluteVerticalLayout.superclass.populate.apply(this, arguments);
-        this._mount();
+        this.layout.populate.apply(this, arguments);
     }
 });
 BI.shortcut("bi.absolute_vertical_adapt", BI.AbsoluteVerticalLayout);
 
 
 /***/ }),
-/* 327 */
+/* 328 */
 /***/ (function(module, exports) {
 
 /**
@@ -14234,7 +14390,7 @@ BI.shortcut("bi.center_adapt", BI.CenterAdaptLayout);
 
 
 /***/ }),
-/* 328 */
+/* 329 */
 /***/ (function(module, exports) {
 
 /**
@@ -14294,7 +14450,7 @@ BI.shortcut("bi.horizontal_adapt", BI.HorizontalAdaptLayout);
 
 
 /***/ }),
-/* 329 */
+/* 330 */
 /***/ (function(module, exports) {
 
 /**
@@ -14492,7 +14648,7 @@ BI.shortcut("bi.right_vertical_adapt", BI.RightVerticalAdaptLayout);
 
 
 /***/ }),
-/* 330 */
+/* 331 */
 /***/ (function(module, exports) {
 
 /**
@@ -14532,7 +14688,7 @@ BI.TableAdaptLayout = BI.inherit(BI.Layout, {
     _addElement: function (i, item) {
         var o = this.options;
         var td;
-        var width = o.columnSize[i] === "" ? "" : (o.columnSize[i] <= 1 ? ((o.columnSize[i] * 100).toFixed(1) + "%") : (i === 0 ? o.hgap : 0) + o.hgap + o.lgap + o.rgap + o.columnSize[i]);
+        var width = o.columnSize[i] === "" ? "" : (o.columnSize[i] < 1 ? ((o.columnSize[i] * 100).toFixed(1) + "%") : (i === 0 ? o.hgap : 0) + o.hgap + o.lgap + o.rgap + o.columnSize[i]);
         if (!this.hasWidget(this._getChildName(i))) {
             var w = BI._lazyCreateWidget(item);
             w.element.css({position: "relative", top: "0", left: "0", margin: "0px auto"});
@@ -14550,7 +14706,7 @@ BI.TableAdaptLayout = BI.inherit(BI.Layout, {
         // 1、由于直接对td设置最大宽度是在规范中未定义的, 所以要使用类似td:firstChild来迂回实现
         // 2、不能给多个td设置最大宽度，这样只会平分宽度
         // 3、多百分比宽度就算了
-        td.element.css({"max-width": BI.isNumber(o.columnSize[i]) ? (o.columnSize[i] <= 1 ? width : width / BI.pixRatio + BI.pixUnit) : width});
+        td.element.css({"max-width": BI.isNumber(o.columnSize[i]) ? (o.columnSize[i] < 1 ? width : width / BI.pixRatio + BI.pixUnit) : width});
         if (i === 0) {
             td.element.addClass("first-element");
         }
@@ -14601,7 +14757,7 @@ BI.shortcut("bi.table_adapt", BI.TableAdaptLayout);
 
 
 /***/ }),
-/* 331 */
+/* 332 */
 /***/ (function(module, exports) {
 
 /**
@@ -14660,7 +14816,7 @@ BI.shortcut("bi.vertical_adapt", BI.VerticalAdaptLayout);
 
 
 /***/ }),
-/* 332 */
+/* 333 */
 /***/ (function(module, exports) {
 
 /**
@@ -14729,7 +14885,7 @@ BI.shortcut("bi.horizontal_auto", BI.HorizontalAutoLayout);
 
 
 /***/ }),
-/* 333 */
+/* 334 */
 /***/ (function(module, exports) {
 
 /**
@@ -14741,7 +14897,7 @@ BI.shortcut("bi.horizontal_float", BI.FloatHorizontalLayout);
 
 
 /***/ }),
-/* 334 */
+/* 335 */
 /***/ (function(module, exports) {
 
 /**
@@ -14798,7 +14954,7 @@ BI.shortcut("bi.inline_center_adapt", BI.InlineCenterAdaptLayout);
 
 
 /***/ }),
-/* 335 */
+/* 336 */
 /***/ (function(module, exports) {
 
 /**
@@ -14855,7 +15011,7 @@ BI.shortcut("bi.inline_horizontal_adapt", BI.InlineHorizontalAdaptLayout);
 
 
 /***/ }),
-/* 336 */
+/* 337 */
 /***/ (function(module, exports) {
 
 /**
@@ -14912,7 +15068,7 @@ BI.shortcut("bi.inline_vertical_adapt", BI.InlineVerticalAdaptLayout);
 
 
 /***/ }),
-/* 337 */
+/* 338 */
 /***/ (function(module, exports) {
 
 /**
@@ -14974,7 +15130,7 @@ BI.shortcut("bi.flex_center_adapt", BI.FlexCenterLayout);
 
 
 /***/ }),
-/* 338 */
+/* 339 */
 /***/ (function(module, exports) {
 
 /**
@@ -15038,7 +15194,7 @@ BI.shortcut("bi.flex_horizontal_center_adapt", BI.FlexHorizontalCenter);
 
 
 /***/ }),
-/* 339 */
+/* 340 */
 /***/ (function(module, exports) {
 
 /**
@@ -15053,7 +15209,7 @@ BI.FlexHorizontalLayout = BI.inherit(BI.Layout, {
         return BI.extend(BI.FlexHorizontalLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-f-h",
             verticalAlign: BI.VerticalAlign.Top,
-            horizontalAlign: BI.HorizontalAlign.Left,// 如果只有一个子元素且想让该子元素横向撑满，设置成Stretch
+            horizontalAlign: BI.HorizontalAlign.Left, // 如果只有一个子元素且想让该子元素横向撑满，设置成Stretch
             columnSize: [],
             scrollx: true,
             hgap: 0,
@@ -15080,11 +15236,17 @@ BI.FlexHorizontalLayout = BI.inherit(BI.Layout, {
     _addElement: function (i, item) {
         var o = this.options;
         var w = BI.FlexHorizontalLayout.superclass._addElement.apply(this, arguments);
+        var columnSize = o.columnSize.length > 0 ? o.columnSize[i] : item.width >= 1 ? null : item.width;
+        if (o.columnSize.length > 0) {
+            if (item.width >= 1 && o.columnSize[i] >= 1 && o.columnSize[i] !== item.width) {
+                columnSize = null;
+            }
+        }
         w.element.css({
             position: "relative"
         });
-        if (o.columnSize[i] !== "auto") {
-            if (o.columnSize[i] === "fill" || o.columnSize[i] === "") {
+        if (columnSize !== "auto") {
+            if (columnSize === "fill" || columnSize === "") {
                 if (o.horizontalAlign !== BI.HorizontalAlign.Stretch) {
                     if (o.scrollable === true || o.scrollx === true) {
                         w.element.addClass("f-s-n");
@@ -15094,10 +15256,10 @@ BI.FlexHorizontalLayout = BI.inherit(BI.Layout, {
                 w.element.addClass("f-s-n");
             }
         }
-        if (o.columnSize[i] > 0) {
-            w.element.width(o.columnSize[i] === "" ? "" : (o.columnSize[i] <= 1 ? ((o.columnSize[i] * 100).toFixed(1) + "%") : (o.columnSize[i] / BI.pixRatio + BI.pixUnit)));
+        if (columnSize > 0) {
+            w.element.width(columnSize < 1 ? ((columnSize * 100).toFixed(1) + "%") : (columnSize / BI.pixRatio + BI.pixUnit));
         }
-        if (o.columnSize[i] === "fill") {
+        if (columnSize === "fill") {
             w.element.addClass("f-f");
         }
         w.element.addClass("c-e");
@@ -15143,7 +15305,7 @@ BI.shortcut("bi.flex_horizontal", BI.FlexHorizontalLayout);
 
 
 /***/ }),
-/* 340 */
+/* 341 */
 /***/ (function(module, exports) {
 
 BI.FlexLeftRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
@@ -15235,7 +15397,7 @@ BI.shortcut("bi.flex_left_right_vertical_adapt", BI.FlexLeftRightVerticalAdaptLa
 
 
 /***/ }),
-/* 341 */
+/* 342 */
 /***/ (function(module, exports) {
 
 /**
@@ -15300,7 +15462,7 @@ BI.shortcut("bi.flex_vertical_center_adapt", BI.FlexVerticalCenter);
 
 
 /***/ }),
-/* 342 */
+/* 343 */
 /***/ (function(module, exports) {
 
 /**
@@ -15339,13 +15501,19 @@ BI.FlexVerticalLayout = BI.inherit(BI.Layout, {
     },
 
     _addElement: function (i, item) {
-        var w = BI.FlexVerticalLayout.superclass._addElement.apply(this, arguments);
         var o = this.options;
+        var w = BI.FlexVerticalLayout.superclass._addElement.apply(this, arguments);
+        var rowSize = o.rowSize.length > 0 ? o.rowSize[i] : item.height >= 1 ? null : item.height;
+        if (o.rowSize.length > 0) {
+            if (item.height >= 1 && o.rowSize[i] >= 1 && o.rowSize[i] !== item.height) {
+                rowSize = null;
+            }
+        }
         w.element.css({
             position: "relative"
         });
-        if (o.rowSize[i] !== "auto") {
-            if (o.rowSize[i] === "fill" || o.rowSize[i] === "") {
+        if (rowSize !== "auto") {
+            if (rowSize === "fill" || rowSize === "") {
                 if (o.verticalAlign !== BI.VerticalAlign.Stretch) {
                     if (o.scrollable === true || o.scrolly === true) {
                         w.element.addClass("f-s-n");
@@ -15355,10 +15523,10 @@ BI.FlexVerticalLayout = BI.inherit(BI.Layout, {
                 w.element.addClass("f-s-n");
             }
         }
-        if (o.rowSize[i] > 0) {
-            w.element.height(o.rowSize[i] === "" ? "" : (o.rowSize[i] <= 1 ? ((o.rowSize[i] * 100).toFixed(1) + "%") : (o.rowSize[i] / BI.pixRatio + BI.pixUnit)));
+        if (rowSize > 0) {
+            w.element.height(rowSize < 1 ? ((rowSize * 100).toFixed(1) + "%") : (rowSize / BI.pixRatio + BI.pixUnit));
         }
-        if (o.rowSize[i] === "fill") {
+        if (rowSize === "fill") {
             w.element.addClass("f-f");
         }
         w.element.addClass("c-e");
@@ -15404,7 +15572,7 @@ BI.shortcut("bi.flex_vertical", BI.FlexVerticalLayout);
 
 
 /***/ }),
-/* 343 */
+/* 344 */
 /***/ (function(module, exports) {
 
 /**
@@ -15465,7 +15633,7 @@ BI.shortcut("bi.flex_scrollable_center_adapt", BI.FlexWrapperCenterLayout);
 
 
 /***/ }),
-/* 344 */
+/* 345 */
 /***/ (function(module, exports) {
 
 /**
@@ -15527,7 +15695,7 @@ BI.shortcut("bi.flex_scrollable_horizontal_center_adapt", BI.FlexWrapperHorizont
 
 
 /***/ }),
-/* 345 */
+/* 346 */
 /***/ (function(module, exports) {
 
 /**
@@ -15565,11 +15733,17 @@ BI.FlexWrapperHorizontalLayout = BI.inherit(BI.Layout, {
     _addElement: function (i, item) {
         var o = this.options;
         var w = BI.FlexWrapperHorizontalLayout.superclass._addElement.apply(this, arguments);
+        var columnSize = o.columnSize.length > 0 ? o.columnSize[i] : item.width >= 1 ? null : item.width;
+        if (o.columnSize.length > 0) {
+            if (item.width >= 1 && o.columnSize[i] >= 1 && o.columnSize[i] !== item.width) {
+                columnSize = null;
+            }
+        }
         w.element.css({
             position: "relative"
         });
-        if (o.columnSize[i] !== "auto") {
-            if (o.columnSize[i] === "fill" || o.columnSize[i] === "") {
+        if (columnSize !== "auto") {
+            if (columnSize === "fill" || columnSize === "") {
                 if (o.horizontalAlign !== BI.HorizontalAlign.Stretch) {
                     if (o.scrollable === true || o.scrollx === true) {
                         w.element.addClass("f-s-n");
@@ -15579,10 +15753,10 @@ BI.FlexWrapperHorizontalLayout = BI.inherit(BI.Layout, {
                 w.element.addClass("f-s-n");
             }
         }
-        if (o.columnSize[i] > 0) {
-            w.element.width(o.columnSize[i] === "" ? "" : (o.columnSize[i] <= 1 ? ((o.columnSize[i] * 100).toFixed(1) + "%") : (o.columnSize[i] / BI.pixRatio + BI.pixUnit)));
+        if (columnSize > 0) {
+            w.element.width(columnSize < 1 ? ((columnSize * 100).toFixed(1) + "%") : (columnSize / BI.pixRatio + BI.pixUnit));
         }
-        if (o.columnSize[i] === "fill") {
+        if (columnSize === "fill") {
             w.element.addClass("f-f");
             this.element.addClass("f-f");
         }
@@ -15638,7 +15812,7 @@ BI.shortcut("bi.flex_scrollable_horizontal", BI.FlexWrapperHorizontalLayout);
 
 
 /***/ }),
-/* 346 */
+/* 347 */
 /***/ (function(module, exports) {
 
 /**
@@ -15700,7 +15874,7 @@ BI.shortcut("bi.flex_scrollable_vertical_center_adapt", BI.FlexWrapperVerticalCe
 
 
 /***/ }),
-/* 347 */
+/* 348 */
 /***/ (function(module, exports) {
 
 /**
@@ -15738,11 +15912,17 @@ BI.FlexWrapperVerticalLayout = BI.inherit(BI.Layout, {
     _addElement: function (i, item) {
         var o = this.options;
         var w = BI.FlexWrapperVerticalLayout.superclass._addElement.apply(this, arguments);
+        var rowSize = o.rowSize.length > 0 ? o.rowSize[i] : item.height >= 1 ? null : item.height;
+        if (o.rowSize.length > 0) {
+            if (item.height >= 1 && o.rowSize[i] >= 1 && o.rowSize[i] !== item.height) {
+                rowSize = null;
+            }
+        }
         w.element.css({
             position: "relative"
         });
-        if (o.rowSize[i] !== "auto") {
-            if (o.rowSize[i] === "fill" || o.rowSize[i] === "") {
+        if (rowSize !== "auto") {
+            if (rowSize === "fill" || rowSize === "") {
                 if (o.verticalAlign !== BI.VerticalAlign.Stretch) {
                     if (o.scrollable === true || o.scrolly === true) {
                         w.element.addClass("f-s-n");
@@ -15752,10 +15932,10 @@ BI.FlexWrapperVerticalLayout = BI.inherit(BI.Layout, {
                 w.element.addClass("f-s-n");
             }
         }
-        if (o.rowSize[i] > 0) {
-            w.element.height(o.rowSize[i] === "" ? "" : (o.rowSize[i] <= 1 ? ((o.rowSize[i] * 100).toFixed(1) + "%") : (o.rowSize[i] / BI.pixRatio + BI.pixUnit)));
+        if (rowSize > 0) {
+            w.element.height(rowSize < 1 ? ((rowSize * 100).toFixed(1) + "%") : (rowSize / BI.pixRatio + BI.pixUnit));
         }
-        if (o.rowSize[i] === "fill") {
+        if (rowSize === "fill") {
             w.element.addClass("f-f");
             this.element.addClass("f-f");
         }
@@ -15811,7 +15991,7 @@ BI.shortcut("bi.flex_scrollable_vertical", BI.FlexWrapperVerticalLayout);
 
 
 /***/ }),
-/* 348 */
+/* 349 */
 /***/ (function(module, exports) {
 
 /**
@@ -15910,7 +16090,7 @@ BI.shortcut("bi.absolute", BI.AbsoluteLayout);
 
 
 /***/ }),
-/* 349 */
+/* 350 */
 /***/ (function(module, exports) {
 
 BI.AdaptiveLayout = BI.inherit(BI.Layout, {
@@ -16008,7 +16188,7 @@ BI.shortcut("bi.adaptive", BI.AdaptiveLayout);
 
 
 /***/ }),
-/* 350 */
+/* 351 */
 /***/ (function(module, exports) {
 
 /**
@@ -16155,7 +16335,7 @@ BI.shortcut("bi.border", BI.BorderLayout);
 
 
 /***/ }),
-/* 351 */
+/* 352 */
 /***/ (function(module, exports) {
 
 /**
@@ -16371,7 +16551,7 @@ BI.shortcut("bi.card", BI.CardLayout);
 
 
 /***/ }),
-/* 352 */
+/* 353 */
 /***/ (function(module, exports) {
 
 /**
@@ -16436,7 +16616,7 @@ BI.shortcut("bi.default", BI.DefaultLayout);
 
 
 /***/ }),
-/* 353 */
+/* 354 */
 /***/ (function(module, exports) {
 
 /**
@@ -16604,7 +16784,7 @@ BI.shortcut("bi.division", BI.DivisionLayout);
 
 
 /***/ }),
-/* 354 */
+/* 355 */
 /***/ (function(module, exports) {
 
 /**
@@ -16763,7 +16943,7 @@ BI.shortcut("bi.right", BI.FloatRightLayout);
 
 
 /***/ }),
-/* 355 */
+/* 356 */
 /***/ (function(module, exports) {
 
 /**
@@ -16899,7 +17079,7 @@ BI.shortcut("bi.grid", BI.GridLayout);
 
 
 /***/ }),
-/* 356 */
+/* 357 */
 /***/ (function(module, exports) {
 
 /**
@@ -16913,7 +17093,7 @@ BI.shortcut("bi.horizontal", BI.HorizontalLayout);
 
 
 /***/ }),
-/* 357 */
+/* 358 */
 /***/ (function(module, exports) {
 
 /**
@@ -16951,25 +17131,33 @@ BI.InlineLayout = BI.inherit(BI.Layout, {
         this.populate(o.items);
     },
 
-    _addElement: function (i, item, length) {
+    _addElement: function (i, item) {
         var o = this.options;
         var w = BI.InlineLayout.superclass._addElement.apply(this, arguments);
+        var columnSize = o.columnSize.length > 0 ? o.columnSize[i] : item.width >= 1 ? null : item.width;
+        if (o.columnSize.length > 0) {
+            if (item.width >= 1 && o.columnSize[i] >= 1 && o.columnSize[i] !== item.width) {
+                columnSize = null;
+            }
+        }
+        if (columnSize > 0) {
+            w.element.width(columnSize < 1 ? ((columnSize * 100).toFixed(1) + "%") : (columnSize / BI.pixRatio + BI.pixUnit));
+        }
         w.element.css({
-            width: o.columnSize[i] === "" ? "" : (o.columnSize[i] <= 1 ? ((o.columnSize[i] * 100).toFixed(1) + "%") : (o.columnSize[i] / BI.pixRatio + BI.pixUnit)),
             position: "relative",
             "vertical-align": o.verticalAlign
         });
         w.element.addClass("i-item");
-        if (o.columnSize[i] === "fill" || o.columnSize[i] === "") {
+        if (columnSize === "fill" || columnSize === "") {
             var left = o.hgap + (item.lgap || 0) + (item.hgap || 0),
                 right = o.hgap + (item.rgap || 0) + (item.hgap || 0);
             for (var k = 0; k < i; k++) {
-                left += o.hgap + o.lgap + o.rgap + o.columnSize[k];
+                left += o.hgap + o.lgap + o.rgap + (o.columnSize[k] || o.items[k].width);
             }
             for (var k = i + 1; k < o.columnSize.length; k++) {
-                right += o.hgap + o.lgap + o.rgap + o.columnSize[k];
+                right += o.hgap + o.lgap + o.rgap + (o.columnSize[k] || o.items[k].width);
             }
-            if (o.columnSize[i] === "fill") {
+            if (columnSize === "fill") {
                 w.element.css("min-width", "calc(100% - " + ((left + right) / BI.pixRatio + BI.pixUnit) + ")");
             }
             if (o.horizontalAlign === BI.HorizontalAlign.Stretch || !(o.scrollable === true || o.scrollx === true)) {
@@ -17012,15 +17200,6 @@ BI.InlineLayout = BI.inherit(BI.Layout, {
         throw new Error("不能添加元素");
     },
 
-    stroke: function (items) {
-        var self = this;
-        BI.each(items, function (i, item) {
-            if (item) {
-                self._addElement(i, item, items.length);
-            }
-        });
-    },
-
     populate: function (items) {
         BI.InlineLayout.superclass.populate.apply(this, arguments);
         this._mount();
@@ -17030,7 +17209,7 @@ BI.shortcut("bi.inline", BI.InlineLayout);
 
 
 /***/ }),
-/* 358 */
+/* 359 */
 /***/ (function(module, exports) {
 
 /**
@@ -17091,7 +17270,7 @@ BI.shortcut("bi.lattice", BI.LatticeLayout);
 
 
 /***/ }),
-/* 359 */
+/* 360 */
 /***/ (function(module, exports) {
 
 /**
@@ -17165,8 +17344,8 @@ BI.TableLayout = BI.inherit(BI.Layout, {
                 abs.push(BI.extend({
                     top: 0,
                     bottom: 0,
-                    left: o.columnSize[i] <= 1 ? (left * 100).toFixed(1) + "%" : left,
-                    width: o.columnSize[i] <= 1 ? (o.columnSize[i] * 100).toFixed(1) + "%" : o.columnSize[i]
+                    left: o.columnSize[i] < 1 ? (left * 100).toFixed(1) + "%" : left,
+                    width: o.columnSize[i] < 1 ? (o.columnSize[i] * 100).toFixed(1) + "%" : o.columnSize[i]
                 }, arr[i]));
                 left += o.columnSize[i] + (o.columnSize[i] < 1 ? 0 : o.hgap);
             } else {
@@ -17179,8 +17358,8 @@ BI.TableLayout = BI.inherit(BI.Layout, {
                 abs.push(BI.extend({
                     top: 0,
                     bottom: 0,
-                    right: o.columnSize[j] <= 1 ? (right * 100).toFixed(1) + "%" : right,
-                    width: o.columnSize[j] <= 1 ? (o.columnSize[j] * 100).toFixed(1) + "%" : o.columnSize[j]
+                    right: o.columnSize[j] < 1 ? (right * 100).toFixed(1) + "%" : right,
+                    width: o.columnSize[j] < 1 ? (o.columnSize[j] * 100).toFixed(1) + "%" : o.columnSize[j]
                 }, arr[j]));
                 right += o.columnSize[j] + (o.columnSize[j] < 1 ? 0 : o.hgap);
             } else {
@@ -17192,8 +17371,8 @@ BI.TableLayout = BI.inherit(BI.Layout, {
             abs.push(BI.extend({
                 top: 0,
                 bottom: 0,
-                left: left <= 1 ? (left * 100).toFixed(1) + "%" : left,
-                right: right <= 1 ? (right * 100).toFixed(1) + "%" : right
+                left: left < 1 ? (left * 100).toFixed(1) + "%" : left,
+                right: right < 1 ? (right * 100).toFixed(1) + "%" : right
             }, arr[i]));
         }
         var w = BI._lazyCreateWidget({
@@ -17236,7 +17415,7 @@ BI.shortcut("bi.table", BI.TableLayout);
 
 
 /***/ }),
-/* 360 */
+/* 361 */
 /***/ (function(module, exports) {
 
 /**
@@ -17255,6 +17434,7 @@ BI.HTapeLayout = BI.inherit(BI.Layout, {
             rgap: 0,
             tgap: 0,
             bgap: 0,
+            columnSize: [],
             items: []
         });
     },
@@ -17275,6 +17455,9 @@ BI.HTapeLayout = BI.inherit(BI.Layout, {
         var self = this, o = this.options;
         items = BI.compact(items);
         BI.each(items, function (i, item) {
+            if (BI.isEmptyObject(item)) {
+                return;
+            }
             if (!self.hasWidget(self._getChildName(i))) {
                 var w = BI._lazyCreateWidget(item);
                 self.addWidget(self._getChildName(i), w);
@@ -17303,36 +17486,57 @@ BI.HTapeLayout = BI.inherit(BI.Layout, {
         right[items.length - 1] = 0;
 
         BI.any(items, function (i, item) {
-            var w = self.getWidgetByName(self._getChildName(i));
-            if (BI.isNull(left[i])) {
-                left[i] = left[i - 1] + items[i - 1].width + (items[i - 1].lgap || 0) + 2 * (items[i - 1].hgap || 0) + o.hgap + o.lgap + o.rgap;
+            if (BI.isEmptyObject(item)) {
+                return true;
             }
-            if (item.width < 1 && item.width >= 0) {
-                w.element.css({left: (left[i] * 100).toFixed(1) + "%", width: (item.width * 100).toFixed(1) + "%"});
+            var w = self.getWidgetByName(self._getChildName(i));
+            var columnSize = o.columnSize.length > 0 ? o.columnSize[i] : item.width;
+            if (o.columnSize.length > 0) {
+                if (item.width >= 1 && o.columnSize[i] >= 1 && o.columnSize[i] !== item.width) {
+                    columnSize = item.width;
+                }
+            }
+            if (BI.isNull(left[i])) {
+                var preColumnSize = o.columnSize.length > 0 ? o.columnSize[i - 1] : items[i - 1].width;
+                left[i] = left[i - 1] + preColumnSize + (items[i - 1].lgap || 0) + (items[i - 1].rgap || 0) + 2 * (items[i - 1].hgap || 0) + o.hgap + o.lgap + o.rgap;
+            }
+            if (columnSize < 1 && columnSize > 0) {
+                w.element.css({
+                    left: (left[i] * 100).toFixed(1) + "%",
+                    width: (columnSize * 100).toFixed(1) + "%"
+                });
             } else {
                 w.element.css({
                     left: (left[i] + (item.lgap || 0) + (item.hgap || 0) + o.hgap + o.lgap) / BI.pixRatio + BI.pixUnit,
-                    width: BI.isNumber(item.width) ? item.width / BI.pixRatio + BI.pixUnit : ""
+                    width: BI.isNumber(columnSize) ? columnSize / BI.pixRatio + BI.pixUnit : ""
                 });
             }
-            if (!BI.isNumber(item.width)) {
+            if (columnSize === "" || columnSize === "fill") {
                 return true;
             }
         });
         BI.backAny(items, function (i, item) {
-            var w = self.getWidgetByName(self._getChildName(i));
-            if (BI.isNull(right[i])) {
-                right[i] = right[i + 1] + items[i + 1].width + (items[i + 1].rgap || 0) + 2 * (items[i + 1].hgap || 0) + o.hgap + o.lgap + o.rgap;
+            if (BI.isEmptyObject(item)) {
+                return true;
             }
-            if (item.width < 1 && item.width >= 0) {
-                w.element.css({right: (right[i] * 100).toFixed(1) + "%", width: (item.width * 100).toFixed(1) + "%"});
+            var w = self.getWidgetByName(self._getChildName(i));
+            var columnSize = o.columnSize.length > 0 ? o.columnSize[i] : item.width;
+            if (BI.isNull(right[i])) {
+                var nextColumnSize = o.columnSize.length > 0 ? o.columnSize[i + 1] : items[i + 1].width;
+                right[i] = right[i + 1] + nextColumnSize + (items[i + 1].lgap || 0) + (items[i + 1].rgap || 0) + 2 * (items[i + 1].hgap || 0) + o.hgap + o.lgap + o.rgap;
+            }
+            if (columnSize < 1 && columnSize > 0) {
+                w.element.css({
+                    right: (right[i] * 100).toFixed(1) + "%",
+                    width: (columnSize * 100).toFixed(1) + "%"
+                });
             } else {
                 w.element.css({
                     right: (right[i] + (item.rgap || 0) + (item.hgap || 0) + o.hgap + o.rgap) / BI.pixRatio + BI.pixUnit,
-                    width: BI.isNumber(item.width) ? item.width / BI.pixRatio + BI.pixUnit : ""
+                    width: BI.isNumber(columnSize) ? columnSize / BI.pixRatio + BI.pixUnit : ""
                 });
             }
-            if (!BI.isNumber(item.width)) {
+            if (columnSize === "" || columnSize === "fill") {
                 return true;
             }
         });
@@ -17369,6 +17573,7 @@ BI.VTapeLayout = BI.inherit(BI.Layout, {
             rgap: 0,
             tgap: 0,
             bgap: 0,
+            rowSize: [],
             items: []
         });
     },
@@ -17390,6 +17595,9 @@ BI.VTapeLayout = BI.inherit(BI.Layout, {
         var self = this, o = this.options;
         items = BI.compact(items);
         BI.each(items, function (i, item) {
+            if (BI.isEmptyObject(item)) {
+                return;
+            }
             if (!self.hasWidget(self._getChildName(i))) {
                 var w = BI._lazyCreateWidget(item);
                 self.addWidget(self._getChildName(i), w);
@@ -17399,7 +17607,7 @@ BI.VTapeLayout = BI.inherit(BI.Layout, {
             w.element.css({
                 position: "absolute",
                 left: ((item.lgap || 0) + (item.hgap || 0) + o.hgap + o.lgap) / BI.pixRatio + BI.pixUnit,
-                right: +((item.hgap || 0) + (item.rgap || 0) + o.hgap + o.rgap) / BI.pixRatio + BI.pixUnit
+                right: ((item.hgap || 0) + (item.rgap || 0) + o.hgap + o.rgap) / BI.pixRatio + BI.pixUnit
             });
             if (o.horizontalAlign === BI.HorizontalAlign.Center) {
                 w.element.css({
@@ -17418,39 +17626,57 @@ BI.VTapeLayout = BI.inherit(BI.Layout, {
         bottom[items.length - 1] = 0;
 
         BI.any(items, function (i, item) {
-            var w = self.getWidgetByName(self._getChildName(i));
-            if (BI.isNull(top[i])) {
-                top[i] = top[i - 1] + items[i - 1].height + (items[i - 1].tgap || 0) + 2 * (items[i - 1].vgap || 0) + o.vgap + o.tgap + o.bgap;
+            if (BI.isEmptyObject(item)) {
+                return true;
             }
-            if (item.height < 1 && item.height >= 0) {
-                w.element.css({top: (top[i] * 100).toFixed(1) + "%", height: (item.height * 100).toFixed(1) + "%"});
+            var w = self.getWidgetByName(self._getChildName(i));
+            var rowSize = o.rowSize.length > 0 ? o.rowSize[i] : item.height;
+            if (o.rowSize.length > 0) {
+                if (item.height >= 1 && o.rowSize[i] >= 1 && o.rowSize[i] !== item.height) {
+                    rowSize = item.height;
+                }
+            }
+            if (BI.isNull(top[i])) {
+                var preRowSize = o.rowSize.length > 0 ? o.rowSize[i - 1] : items[i - 1].height;
+                top[i] = top[i - 1] + preRowSize + (items[i - 1].tgap || 0) + (items[i - 1].bgap || 0) + 2 * (items[i - 1].vgap || 0) + o.vgap + o.tgap + o.bgap;
+            }
+            if (rowSize < 1 && rowSize > 0) {
+                w.element.css({
+                    top: (top[i] * 100).toFixed(1) + "%",
+                    height: (rowSize * 100).toFixed(1) + "%"
+                });
             } else {
                 w.element.css({
                     top: (top[i] + (item.vgap || 0) + (item.tgap || 0) + o.vgap + o.tgap) / BI.pixRatio + BI.pixUnit,
-                    height: BI.isNumber(item.height) ? item.height / BI.pixRatio + BI.pixUnit : ""
+                    height: BI.isNumber(rowSize) ? rowSize / BI.pixRatio + BI.pixUnit : ""
                 });
             }
-            if (!BI.isNumber(item.height)) {
+            if (rowSize === "" || rowSize === "fill") {
                 return true;
             }
         });
         BI.backAny(items, function (i, item) {
-            var w = self.getWidgetByName(self._getChildName(i));
-            if (BI.isNull(bottom[i])) {
-                bottom[i] = bottom[i + 1] + items[i + 1].height + (items[i + 1].bgap || 0) + 2 * (items[i + 1].vgap || 0) + o.vgap + o.tgap + o.bgap;
+            if (BI.isEmptyObject(item)) {
+                return true;
             }
-            if (item.height < 1 && item.height >= 0) {
+            var w = self.getWidgetByName(self._getChildName(i));
+            var rowSize = o.rowSize.length > 0 ? o.rowSize[i] : item.height;
+            if (BI.isNull(bottom[i])) {
+                var nextRowSize = o.rowSize.length > 0 ? o.rowSize[i + 1] : items[i + 1].height;
+                bottom[i] = bottom[i + 1] + nextRowSize + (items[i + 1].tgap || 0) + (items[i + 1].bgap || 0) + 2 * (items[i + 1].vgap || 0) + o.vgap + o.tgap + o.bgap;
+            }
+            if (rowSize < 1 && rowSize > 0) {
                 w.element.css({
                     bottom: (bottom[i] * 100).toFixed(1) + "%",
-                    height: (item.height * 100).toFixed(1) + "%"
+                    height: (rowSize * 100).toFixed(1) + "%"
                 });
             } else {
                 w.element.css({
                     bottom: (bottom[i] + (item.vgap || 0) + (item.bgap || 0) + o.vgap + o.bgap) / BI.pixRatio + BI.pixUnit,
-                    height: BI.isNumber(item.height) ? item.height / BI.pixRatio + BI.pixUnit : ""
+                    height: BI.isNumber(rowSize) ? rowSize / BI.pixRatio + BI.pixUnit : ""
                 });
             }
-            if (!BI.isNumber(item.height)) {
+            if (rowSize === "" || rowSize === "fill") {
                 return true;
             }
         });
@@ -17468,7 +17694,7 @@ BI.shortcut("bi.vtape", BI.VTapeLayout);
 
 
 /***/ }),
-/* 361 */
+/* 362 */
 /***/ (function(module, exports) {
 
 /**
@@ -17575,7 +17801,7 @@ BI.TdLayout = BI.inherit(BI.Layout, {
                 });
             }
             first(w, this.rows++, i);
-            var width = o.columnSize[i] === "" ? "" : (o.columnSize[i] <= 1 ? ((o.columnSize[i] * 100).toFixed(1) + "%") : (i === 0 ? o.hgap : 0) + o.hgap + o.lgap + o.rgap + o.columnSize[i]);
+            var width = o.columnSize[i] === "" ? "" : (o.columnSize[i] < 1 ? ((o.columnSize[i] * 100).toFixed(1) + "%") : (i === 0 ? o.hgap : 0) + o.hgap + o.lgap + o.rgap + o.columnSize[i]);
             var td = BI._lazyCreateWidget({
                 type: "bi.default",
                 width: width,
@@ -17628,7 +17854,7 @@ BI.shortcut("bi.td", BI.TdLayout);
 
 
 /***/ }),
-/* 362 */
+/* 363 */
 /***/ (function(module, exports) {
 
 /**
@@ -17707,7 +17933,7 @@ BI.shortcut("bi.vertical", BI.VerticalLayout);
 
 
 /***/ }),
-/* 363 */
+/* 364 */
 /***/ (function(module, exports) {
 
 /**
@@ -17895,7 +18121,7 @@ BI.shortcut("bi.window", BI.WindowLayout);
 
 
 /***/ }),
-/* 364 */
+/* 365 */
 /***/ (function(module, exports) {
 
 /**
@@ -17977,7 +18203,7 @@ BI.shortcut("bi.center", BI.CenterLayout);
 
 
 /***/ }),
-/* 365 */
+/* 366 */
 /***/ (function(module, exports) {
 
 /**
@@ -18058,7 +18284,7 @@ BI.shortcut("bi.float_center", BI.FloatCenterLayout);
 
 
 /***/ }),
-/* 366 */
+/* 367 */
 /***/ (function(module, exports) {
 
 /**
@@ -18138,7 +18364,7 @@ BI.shortcut("bi.horizontal_center", BI.HorizontalCenterLayout);
 
 
 /***/ }),
-/* 367 */
+/* 368 */
 /***/ (function(module, exports) {
 
 /**
@@ -18219,7 +18445,7 @@ BI.shortcut("bi.vertical_center", BI.VerticalCenterLayout);
 
 
 /***/ }),
-/* 368 */
+/* 369 */
 /***/ (function(module, exports) {
 
 BI.prepares.push(function () {
@@ -18235,7 +18461,7 @@ BI.prepares.push(function () {
 
 
 /***/ }),
-/* 369 */
+/* 370 */
 /***/ (function(module, exports) {
 
 /**
@@ -18388,7 +18614,7 @@ BI.Pane.EVENT_LOADING = "EVENT_LOADING";
 
 
 /***/ }),
-/* 370 */
+/* 371 */
 /***/ (function(module, exports) {
 
 /**
@@ -18775,7 +19001,7 @@ BI.shortcut("bi.collection_view", BI.CollectionView);
 
 
 /***/ }),
-/* 371 */
+/* 372 */
 /***/ (function(module, exports) {
 
 !(function () {
@@ -19343,7 +19569,7 @@ BI.shortcut("bi.collection_view", BI.CollectionView);
 
 
 /***/ }),
-/* 372 */
+/* 373 */
 /***/ (function(module, exports) {
 
 /**
@@ -19630,7 +19856,7 @@ BI.Expander.EVENT_AFTER_HIDEVIEW = "EVENT_AFTER_HIDEVIEW";
 BI.shortcut("bi.expander", BI.Expander);
 
 /***/ }),
-/* 373 */
+/* 374 */
 /***/ (function(module, exports) {
 
 /**
@@ -19965,7 +20191,7 @@ BI.ButtonGroup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.button_group", BI.ButtonGroup);
 
 /***/ }),
-/* 374 */
+/* 375 */
 /***/ (function(module, exports) {
 
 /**
@@ -20067,7 +20293,7 @@ BI.ComboGroup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.combo_group", BI.ComboGroup);
 
 /***/ }),
-/* 375 */
+/* 376 */
 /***/ (function(module, exports) {
 
 BI.VirtualGroup = BI.inherit(BI.Widget, {
@@ -20188,7 +20414,7 @@ BI.VirtualGroup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.virtual_group", BI.VirtualGroup);
 
 /***/ }),
-/* 376 */
+/* 377 */
 /***/ (function(module, exports) {
 
 /**
@@ -20453,7 +20679,7 @@ BI.Loader.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.loader", BI.Loader);
 
 /***/ }),
-/* 377 */
+/* 378 */
 /***/ (function(module, exports) {
 
 /**
@@ -20621,7 +20847,7 @@ BI.shortcut("bi.navigation", BI.Navigation);
 
 
 /***/ }),
-/* 378 */
+/* 379 */
 /***/ (function(module, exports) {
 
 /**
@@ -20946,7 +21172,7 @@ BI.Searcher.EVENT_AFTER_INIT = "EVENT_AFTER_INIT";
 BI.shortcut("bi.searcher", BI.Searcher);
 
 /***/ }),
-/* 379 */
+/* 380 */
 /***/ (function(module, exports) {
 
 /**
@@ -21243,7 +21469,7 @@ BI.Switcher.EVENT_AFTER_HIDEVIEW = "EVENT_AFTER_HIDEVIEW";
 BI.shortcut("bi.switcher", BI.Switcher);
 
 /***/ }),
-/* 380 */
+/* 381 */
 /***/ (function(module, exports) {
 
 /**
@@ -21406,7 +21632,7 @@ BI.shortcut("bi.tab", BI.Tab);
 
 
 /***/ }),
-/* 381 */
+/* 382 */
 /***/ (function(module, exports) {
 
 /**
@@ -21593,7 +21819,7 @@ BI.ButtonTree.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.button_tree", BI.ButtonTree);
 
 /***/ }),
-/* 382 */
+/* 383 */
 /***/ (function(module, exports) {
 
 /**
@@ -21640,7 +21866,7 @@ BI.EL = BI.inherit(BI.Widget, {
 BI.shortcut("bi.el", BI.EL);
 
 /***/ }),
-/* 383 */
+/* 384 */
 /***/ (function(module, exports) {
 
 /**
@@ -21849,7 +22075,7 @@ BI.Msg = function () {
 
 
 /***/ }),
-/* 384 */
+/* 385 */
 /***/ (function(module, exports) {
 
 /**
@@ -22237,7 +22463,7 @@ BI.shortcut("bi.grid_view", BI.GridView);
 
 
 /***/ }),
-/* 385 */
+/* 386 */
 /***/ (function(module, exports) {
 
 /**
@@ -22515,7 +22741,7 @@ BI.Popover.EVENT_CONFIRM = "EVENT_CONFIRM";
 
 
 /***/ }),
-/* 386 */
+/* 387 */
 /***/ (function(module, exports) {
 
 /**
@@ -22702,7 +22928,7 @@ BI.shortcut("bi.popup_view", BI.PopupView);
 
 
 /***/ }),
-/* 387 */
+/* 388 */
 /***/ (function(module, exports) {
 
 /**
@@ -22848,7 +23074,7 @@ BI.SearcherView.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.searcher_view", BI.SearcherView);
 
 /***/ }),
-/* 388 */
+/* 389 */
 /***/ (function(module, exports) {
 
 /**
@@ -22973,7 +23199,7 @@ BI.shortcut("bi.list_view", BI.ListView);
 
 
 /***/ }),
-/* 389 */
+/* 390 */
 /***/ (function(module, exports) {
 
 /**
@@ -23165,7 +23391,7 @@ BI.shortcut("bi.virtual_list", BI.VirtualList);
 
 
 /***/ }),
-/* 390 */
+/* 391 */
 /***/ (function(module, exports) {
 
 /**
@@ -23459,7 +23685,7 @@ BI.Pager.EVENT_AFTER_POPULATE = "EVENT_AFTER_POPULATE";
 BI.shortcut("bi.pager", BI.Pager);
 
 /***/ }),
-/* 391 */
+/* 392 */
 /***/ (function(module, exports) {
 
 /**
@@ -23672,7 +23898,7 @@ BI.shortcut("bi.single", BI.Single);
 
 
 /***/ }),
-/* 392 */
+/* 393 */
 /***/ (function(module, exports) {
 
 /**
@@ -23741,8 +23967,8 @@ BI.shortcut("bi.single", BI.Single);
                     type: "bi.layout",
                     tagName: "span"
                 });
-                this.text.element.click(function () {
-                    o.handler(self.getValue());
+                this.text.element.click(function (e) {
+                    o.handler.call(self, self.getValue(), self, e);
                 });
                 BI.createWidget({
                     type: "bi.default",
@@ -23754,6 +23980,7 @@ BI.shortcut("bi.single", BI.Single);
             }
 
             var text = this._getShowText();
+            // 只要不是undefined就可以显示text值，否则显示value
             if (!BI.isUndefined(text)) {
                 this.setText(text);
             } else if (BI.isKey(o.value)) {
@@ -23788,7 +24015,7 @@ BI.shortcut("bi.single", BI.Single);
 
         _doRedMark: function (keyword) {
             var o = this.options;
-            // render之后做的doredmark,这个时候虽然标红了，但是之后text mounted执行的时候并没有keyword
+            // render之后做的doRedMark,这个时候虽然标红了，但是之后text mounted执行的时候并没有keyword
             o.keyword = keyword;
             this.text.element.__textKeywordMarked__(this._getShowText(), keyword, o.py);
         },
@@ -23826,8 +24053,7 @@ BI.shortcut("bi.single", BI.Single);
 
         setText: function (text) {
             BI.Text.superclass.setText.apply(this, arguments);
-            //  为textContext赋值为undefined时在ie和edge下会真的显示undefined
-            this.options.text = BI.isNotNull(text) ? text : "";
+            this.options.text = text;
             this._doRedMark(this.options.keyword);
         }
     });
@@ -23849,7 +24075,7 @@ BI.shortcut("bi.single", BI.Single);
 
 
 /***/ }),
-/* 393 */
+/* 394 */
 /***/ (function(module, exports) {
 
 /**
@@ -23886,7 +24112,7 @@ BI.A = BI.inherit(BI.Text, {
 BI.shortcut("bi.a", BI.A);
 
 /***/ }),
-/* 394 */
+/* 395 */
 /***/ (function(module, exports) {
 
 /**
@@ -23971,7 +24197,7 @@ BI.LoadingBar = BI.inherit(BI.Single, {
 BI.shortcut("bi.loading_bar", BI.LoadingBar);
 
 /***/ }),
-/* 395 */
+/* 396 */
 /***/ (function(module, exports) {
 
 /**
@@ -24389,7 +24615,7 @@ BI.shortcut("bi.basic_button", BI.BasicButton);
 
 
 /***/ }),
-/* 396 */
+/* 397 */
 /***/ (function(module, exports) {
 
 /**
@@ -24450,7 +24676,7 @@ BI.NodeButton = BI.inherit(BI.BasicButton, {
 });
 
 /***/ }),
-/* 397 */
+/* 398 */
 /***/ (function(module, exports) {
 
 /**
@@ -24508,7 +24734,7 @@ BI.shortcut("bi.icon_button", BI.IconButton);
 
 
 /***/ }),
-/* 398 */
+/* 399 */
 /***/ (function(module, exports) {
 
 /**
@@ -24600,7 +24826,7 @@ BI.ImageButton.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.image_button", BI.ImageButton);
 
 /***/ }),
-/* 399 */
+/* 400 */
 /***/ (function(module, exports) {
 
 /**
@@ -24758,7 +24984,7 @@ BI.Button.EVENT_CHANGE = "EVENT_CHANGE";
 
 
 /***/ }),
-/* 400 */
+/* 401 */
 /***/ (function(module, exports) {
 
 /**
@@ -24853,7 +25079,7 @@ BI.TextButton.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.text_button", BI.TextButton);
 
 /***/ }),
-/* 401 */
+/* 402 */
 /***/ (function(module, exports) {
 
 /**
@@ -24977,7 +25203,7 @@ BI.BlankIconIconTextItem.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.blank_icon_icon_text_item", BI.BlankIconIconTextItem);
 
 /***/ }),
-/* 402 */
+/* 403 */
 /***/ (function(module, exports) {
 
 /**
@@ -25108,7 +25334,7 @@ BI.BlankIconTextIconItem.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.blank_icon_text_icon_item", BI.BlankIconTextIconItem);
 
 /***/ }),
-/* 403 */
+/* 404 */
 /***/ (function(module, exports) {
 
 /**
@@ -25217,7 +25443,7 @@ BI.BlankIconTextItem.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.blank_icon_text_item", BI.BlankIconTextItem);
 
 /***/ }),
-/* 404 */
+/* 405 */
 /***/ (function(module, exports) {
 
 /**
@@ -25345,7 +25571,7 @@ BI.IconTextIconItem.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.icon_text_icon_item", BI.IconTextIconItem);
 
 /***/ }),
-/* 405 */
+/* 406 */
 /***/ (function(module, exports) {
 
 /**
@@ -25450,7 +25676,7 @@ BI.IconTextItem.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.icon_text_item", BI.IconTextItem);
 
 /***/ }),
-/* 406 */
+/* 407 */
 /***/ (function(module, exports) {
 
 /**
@@ -25555,7 +25781,7 @@ BI.TextIconItem.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.text_icon_item", BI.TextIconItem);
 
 /***/ }),
-/* 407 */
+/* 408 */
 /***/ (function(module, exports) {
 
 /**
@@ -25646,7 +25872,7 @@ BI.TextItem.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.text_item", BI.TextItem);
 
 /***/ }),
-/* 408 */
+/* 409 */
 /***/ (function(module, exports) {
 
 /**
@@ -25764,7 +25990,7 @@ BI.IconTextIconNode.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.icon_text_icon_node", BI.IconTextIconNode);
 
 /***/ }),
-/* 409 */
+/* 410 */
 /***/ (function(module, exports) {
 
 /**
@@ -25859,7 +26085,7 @@ BI.IconTextNode.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.icon_text_node", BI.IconTextNode);
 
 /***/ }),
-/* 410 */
+/* 411 */
 /***/ (function(module, exports) {
 
 /**
@@ -25953,7 +26179,7 @@ BI.TextIconNode.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.text_icon_node", BI.TextIconNode);
 
 /***/ }),
-/* 411 */
+/* 412 */
 /***/ (function(module, exports) {
 
 /**
@@ -26035,7 +26261,7 @@ BI.TextNode.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.text_node", BI.TextNode);
 
 /***/ }),
-/* 412 */
+/* 413 */
 /***/ (function(module, exports) {
 
 /**
@@ -26413,7 +26639,7 @@ BI.shortcut("bi.editor", BI.Editor);
 
 
 /***/ }),
-/* 413 */
+/* 414 */
 /***/ (function(module, exports) {
 
 /**
@@ -26519,7 +26745,7 @@ BI.shortcut("bi.multifile_editor", BI.MultifileEditor);
 
 
 /***/ }),
-/* 414 */
+/* 415 */
 /***/ (function(module, exports) {
 
 /**
@@ -26778,7 +27004,7 @@ BI.shortcut("bi.textarea_editor", BI.TextAreaEditor);
 
 
 /***/ }),
-/* 415 */
+/* 416 */
 /***/ (function(module, exports) {
 
 /**
@@ -26898,7 +27124,7 @@ BI.shortcut("bi.html", BI.Html);
 
 
 /***/ }),
-/* 416 */
+/* 417 */
 /***/ (function(module, exports) {
 
 /**
@@ -26924,7 +27150,7 @@ BI.Icon = BI.inherit(BI.Single, {
 BI.shortcut("bi.icon", BI.Icon);
 
 /***/ }),
-/* 417 */
+/* 418 */
 /***/ (function(module, exports) {
 
 /**
@@ -26988,7 +27214,7 @@ BI.shortcut("bi.iframe", BI.Iframe);
 
 
 /***/ }),
-/* 418 */
+/* 419 */
 /***/ (function(module, exports) {
 
 /**
@@ -27034,7 +27260,7 @@ BI.shortcut("bi.img", BI.Img);
 
 
 /***/ }),
-/* 419 */
+/* 420 */
 /***/ (function(module, exports) {
 
 /**
@@ -27061,7 +27287,7 @@ BI.ImageCheckbox.EVENT_CHANGE = BI.IconButton.EVENT_CHANGE;
 BI.shortcut("bi.image_checkbox", BI.ImageCheckbox);
 
 /***/ }),
-/* 420 */
+/* 421 */
 /***/ (function(module, exports) {
 
 /**
@@ -27127,7 +27353,7 @@ BI.Checkbox.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.checkbox", BI.Checkbox);
 
 /***/ }),
-/* 421 */
+/* 422 */
 /***/ (function(module, exports) {
 
 /**
@@ -27449,7 +27675,7 @@ BI.shortcut("bi.input", BI.Input);
 
 
 /***/ }),
-/* 422 */
+/* 423 */
 /***/ (function(module, exports) {
 
 /**
@@ -27487,7 +27713,7 @@ BI.ImageRadio.EVENT_CHANGE = BI.IconButton.EVENT_CHANGE;
 BI.shortcut("bi.image_radio", BI.ImageRadio);
 
 /***/ }),
-/* 423 */
+/* 424 */
 /***/ (function(module, exports) {
 
 /**
@@ -27554,7 +27780,7 @@ BI.Radio.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.radio", BI.Radio);
 
 /***/ }),
-/* 424 */
+/* 425 */
 /***/ (function(module, exports) {
 
 /**
@@ -27946,7 +28172,7 @@ BI.shortcut("bi.radio", BI.Radio);
 
 
 /***/ }),
-/* 425 */
+/* 426 */
 /***/ (function(module, exports) {
 
 /**
@@ -27976,7 +28202,7 @@ BI.HtmlLabel = BI.inherit(BI.AbstractLabel, {
 BI.shortcut("bi.html_label", BI.HtmlLabel);
 
 /***/ }),
-/* 426 */
+/* 427 */
 /***/ (function(module, exports) {
 
 /**
@@ -28024,7 +28250,7 @@ BI.shortcut("bi.icon_label", BI.IconLabel);
 
 
 /***/ }),
-/* 427 */
+/* 428 */
 /***/ (function(module, exports) {
 
 /**
@@ -28052,7 +28278,7 @@ BI.shortcut("bi.label", BI.Label);
 
 
 /***/ }),
-/* 428 */
+/* 429 */
 /***/ (function(module, exports) {
 
 /**
@@ -28092,7 +28318,7 @@ BI.shortcut("bi.link", BI.Link);
 
 
 /***/ }),
-/* 429 */
+/* 430 */
 /***/ (function(module, exports) {
 
 /**
@@ -28141,7 +28367,7 @@ BI.shortcut("bi.link", BI.Link);
 
 
 /***/ }),
-/* 430 */
+/* 431 */
 /***/ (function(module, exports) {
 
 /**
@@ -28168,7 +28394,7 @@ BI.Tip = BI.inherit(BI.Single, {
 });
 
 /***/ }),
-/* 431 */
+/* 432 */
 /***/ (function(module, exports) {
 
 /**
@@ -28386,7 +28612,7 @@ BI.shortcut("bi.bubble_view", BI.BubbleView);
 
 
 /***/ }),
-/* 432 */
+/* 433 */
 /***/ (function(module, exports) {
 
 /**
@@ -28499,7 +28725,7 @@ BI.shortcut("bi.toast", BI.Toast);
 
 
 /***/ }),
-/* 433 */
+/* 434 */
 /***/ (function(module, exports) {
 
 /**
@@ -28588,7 +28814,7 @@ BI.Tooltip = BI.inherit(BI.Tip, {
 BI.shortcut("bi.tooltip", BI.Tooltip);
 
 /***/ }),
-/* 434 */
+/* 435 */
 /***/ (function(module, exports) {
 
 /**
@@ -28620,7 +28846,7 @@ BI.Trigger = BI.inherit(BI.Single, {
 });
 
 /***/ }),
-/* 435 */
+/* 436 */
 /***/ (function(module, exports) {
 
 /**
@@ -28773,7 +28999,7 @@ BI.CustomTree.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.custom_tree", BI.CustomTree);
 
 /***/ }),
-/* 436 */
+/* 437 */
 /***/ (function(module, exports) {
 
 /**
@@ -28861,7 +29087,7 @@ BI.IconChangeButton.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.icon_change_button", BI.IconChangeButton);
 
 /***/ }),
-/* 437 */
+/* 438 */
 /***/ (function(module, exports) {
 
 /**
@@ -28886,7 +29112,7 @@ BI.shortcut("bi.trigger_icon_button", BI.TriggerIconButton);
 
 
 /***/ }),
-/* 438 */
+/* 439 */
 /***/ (function(module, exports) {
 
 /**
@@ -28912,7 +29138,7 @@ BI.HalfIconButton.EVENT_CHANGE = BI.IconButton.EVENT_CHANGE;
 BI.shortcut("bi.half_icon_button", BI.HalfIconButton);
 
 /***/ }),
-/* 439 */
+/* 440 */
 /***/ (function(module, exports) {
 
 /**
@@ -28957,7 +29183,7 @@ BI.HalfButton.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.half_button", BI.HalfButton);
 
 /***/ }),
-/* 440 */
+/* 441 */
 /***/ (function(module, exports) {
 
 /**
@@ -29043,7 +29269,7 @@ BI.shortcut("bi.multi_select_item", BI.MultiSelectItem);
 
 
 /***/ }),
-/* 441 */
+/* 442 */
 /***/ (function(module, exports) {
 
 /**
@@ -29107,7 +29333,7 @@ BI.SingleSelectIconTextItem = BI.inherit(BI.Single, {
 BI.shortcut("bi.single_select_icon_text_item", BI.SingleSelectIconTextItem);
 
 /***/ }),
-/* 442 */
+/* 443 */
 /***/ (function(module, exports) {
 
 BI.SingleSelectItem = BI.inherit(BI.BasicButton, {
@@ -29163,7 +29389,7 @@ BI.SingleSelectItem.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.single_select_item", BI.SingleSelectItem);
 
 /***/ }),
-/* 443 */
+/* 444 */
 /***/ (function(module, exports) {
 
 /**
@@ -29247,7 +29473,7 @@ BI.shortcut("bi.single_select_radio_item", BI.SingleSelectRadioItem);
 
 
 /***/ }),
-/* 444 */
+/* 445 */
 /***/ (function(module, exports) {
 
 /**
@@ -29335,7 +29561,7 @@ BI.shortcut("bi.arrow_group_node", BI.ArrowNode);
 
 
 /***/ }),
-/* 445 */
+/* 446 */
 /***/ (function(module, exports) {
 
 /**
@@ -29423,7 +29649,7 @@ BI.shortcut("bi.first_plus_group_node", BI.FirstPlusGroupNode);
 
 
 /***/ }),
-/* 446 */
+/* 447 */
 /***/ (function(module, exports) {
 
 /**
@@ -29531,7 +29757,7 @@ BI.shortcut("bi.icon_arrow_node", BI.IconArrowNode);
 
 
 /***/ }),
-/* 447 */
+/* 448 */
 /***/ (function(module, exports) {
 
 /**
@@ -29618,7 +29844,7 @@ BI.LastPlusGroupNode = BI.inherit(BI.NodeButton, {
 BI.shortcut("bi.last_plus_group_node", BI.LastPlusGroupNode);
 
 /***/ }),
-/* 448 */
+/* 449 */
 /***/ (function(module, exports) {
 
 /**
@@ -29705,7 +29931,7 @@ BI.MidPlusGroupNode = BI.inherit(BI.NodeButton, {
 BI.shortcut("bi.mid_plus_group_node", BI.MidPlusGroupNode);
 
 /***/ }),
-/* 449 */
+/* 450 */
 /***/ (function(module, exports) {
 
 BI.MultiLayerIconArrowNode = BI.inherit(BI.NodeButton, {
@@ -29800,7 +30026,7 @@ BI.shortcut("bi.multilayer_icon_arrow_node", BI.MultiLayerIconArrowNode);
 
 
 /***/ }),
-/* 450 */
+/* 451 */
 /***/ (function(module, exports) {
 
 /**
@@ -29883,7 +30109,7 @@ BI.PlusGroupNode = BI.inherit(BI.NodeButton, {
 BI.shortcut("bi.plus_group_node", BI.PlusGroupNode);
 
 /***/ }),
-/* 451 */
+/* 452 */
 /***/ (function(module, exports) {
 
 /**
@@ -29935,7 +30161,7 @@ BI.Switch.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.switch", BI.Switch);
 
 /***/ }),
-/* 452 */
+/* 453 */
 /***/ (function(module, exports) {
 
 BI.FirstTreeLeafItem = BI.inherit(BI.BasicButton, {
@@ -30021,7 +30247,7 @@ BI.FirstTreeLeafItem = BI.inherit(BI.BasicButton, {
 BI.shortcut("bi.first_tree_leaf_item", BI.FirstTreeLeafItem);
 
 /***/ }),
-/* 453 */
+/* 454 */
 /***/ (function(module, exports) {
 
 BI.IconTreeLeafItem = BI.inherit(BI.BasicButton, {
@@ -30108,7 +30334,7 @@ BI.IconTreeLeafItem = BI.inherit(BI.BasicButton, {
 BI.shortcut("bi.icon_tree_leaf_item", BI.IconTreeLeafItem);
 
 /***/ }),
-/* 454 */
+/* 455 */
 /***/ (function(module, exports) {
 
 BI.LastTreeLeafItem = BI.inherit(BI.BasicButton, {
@@ -30194,7 +30420,7 @@ BI.LastTreeLeafItem = BI.inherit(BI.BasicButton, {
 BI.shortcut("bi.last_tree_leaf_item", BI.LastTreeLeafItem);
 
 /***/ }),
-/* 455 */
+/* 456 */
 /***/ (function(module, exports) {
 
 BI.MidTreeLeafItem = BI.inherit(BI.BasicButton, {
@@ -30280,7 +30506,7 @@ BI.MidTreeLeafItem = BI.inherit(BI.BasicButton, {
 BI.shortcut("bi.mid_tree_leaf_item", BI.MidTreeLeafItem);
 
 /***/ }),
-/* 456 */
+/* 457 */
 /***/ (function(module, exports) {
 
 /**
@@ -30384,7 +30610,7 @@ BI.shortcut("bi.multilayer_icon_tree_leaf_item", BI.MultiLayerIconTreeLeafItem);
 
 
 /***/ }),
-/* 457 */
+/* 458 */
 /***/ (function(module, exports) {
 
 BI.RootTreeLeafItem = BI.inherit(BI.BasicButton, {
@@ -30464,7 +30690,7 @@ BI.shortcut("bi.root_tree_leaf_item", BI.RootTreeLeafItem);
 
 
 /***/ }),
-/* 458 */
+/* 459 */
 /***/ (function(module, exports) {
 
 /**
@@ -30540,7 +30766,7 @@ BI.shortcut("bi.tree_text_leaf_item", BI.TreeTextLeafItem);
 
 
 /***/ }),
-/* 459 */
+/* 460 */
 /***/ (function(module, exports) {
 
 /**
@@ -30598,7 +30824,7 @@ BI.CalendarDateItem = BI.inherit(BI.BasicButton, {
 BI.shortcut("bi.calendar_date_item", BI.CalendarDateItem);
 
 /***/ }),
-/* 460 */
+/* 461 */
 /***/ (function(module, exports) {
 
 /**
@@ -30837,7 +31063,7 @@ BI.extend(BI.Calendar, {
 BI.shortcut("bi.calendar", BI.Calendar);
 
 /***/ }),
-/* 461 */
+/* 462 */
 /***/ (function(module, exports) {
 
 /**
@@ -31013,7 +31239,7 @@ BI.extend(BI.YearCalendar, {
 BI.shortcut("bi.year_calendar", BI.YearCalendar);
 
 /***/ }),
-/* 462 */
+/* 463 */
 /***/ (function(module, exports) {
 
 /**
@@ -31039,7 +31265,7 @@ BI.ArrowTreeGroupNodeCheckbox = BI.inherit(BI.IconButton, {
 BI.shortcut("bi.arrow_group_node_checkbox", BI.ArrowTreeGroupNodeCheckbox);
 
 /***/ }),
-/* 463 */
+/* 464 */
 /***/ (function(module, exports) {
 
 /**
@@ -31070,7 +31296,7 @@ BI.CheckingMarkNode = BI.inherit(BI.IconButton, {
 BI.shortcut("bi.checking_mark_node", BI.CheckingMarkNode);
 
 /***/ }),
-/* 464 */
+/* 465 */
 /***/ (function(module, exports) {
 
 /**
@@ -31099,7 +31325,7 @@ BI.FirstTreeNodeCheckbox = BI.inherit(BI.IconButton, {
 BI.shortcut("bi.first_tree_node_checkbox", BI.FirstTreeNodeCheckbox);
 
 /***/ }),
-/* 465 */
+/* 466 */
 /***/ (function(module, exports) {
 
 /**
@@ -31128,7 +31354,7 @@ BI.LastTreeNodeCheckbox = BI.inherit(BI.IconButton, {
 BI.shortcut("bi.last_tree_node_checkbox", BI.LastTreeNodeCheckbox);
 
 /***/ }),
-/* 466 */
+/* 467 */
 /***/ (function(module, exports) {
 
 /**
@@ -31157,7 +31383,7 @@ BI.MidTreeNodeCheckbox = BI.inherit(BI.IconButton, {
 BI.shortcut("bi.mid_tree_node_checkbox", BI.MidTreeNodeCheckbox);
 
 /***/ }),
-/* 467 */
+/* 468 */
 /***/ (function(module, exports) {
 
 /**
@@ -31186,7 +31412,7 @@ BI.TreeNodeCheckbox = BI.inherit(BI.IconButton, {
 BI.shortcut("bi.tree_node_checkbox", BI.TreeNodeCheckbox);
 
 /***/ }),
-/* 468 */
+/* 469 */
 /***/ (function(module, exports) {
 
 /**
@@ -31260,7 +31486,7 @@ BI.CustomColorChooser.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.custom_color_chooser", BI.CustomColorChooser);
 
 /***/ }),
-/* 469 */
+/* 470 */
 /***/ (function(module, exports) {
 
 /**
@@ -31367,7 +31593,7 @@ BI.shortcut("bi.color_chooser", BI.ColorChooser);
 
 
 /***/ }),
-/* 470 */
+/* 471 */
 /***/ (function(module, exports) {
 
 /**
@@ -31626,7 +31852,7 @@ BI.shortcut("bi.hex_color_chooser_popup", BI.HexColorChooserPopup);
 
 
 /***/ }),
-/* 471 */
+/* 472 */
 /***/ (function(module, exports) {
 
 /**
@@ -31680,7 +31906,7 @@ BI.SimpleHexColorChooserPopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.simple_hex_color_chooser_popup", BI.SimpleHexColorChooserPopup);
 
 /***/ }),
-/* 472 */
+/* 473 */
 /***/ (function(module, exports) {
 
 /**
@@ -31923,7 +32149,7 @@ BI.shortcut("bi.color_chooser_popup", BI.ColorChooserPopup);
 
 
 /***/ }),
-/* 473 */
+/* 474 */
 /***/ (function(module, exports) {
 
 /**
@@ -31975,7 +32201,7 @@ BI.SimpleColorChooserPopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.simple_color_chooser_popup", BI.SimpleColorChooserPopup);
 
 /***/ }),
-/* 474 */
+/* 475 */
 /***/ (function(module, exports) {
 
 /**
@@ -32038,7 +32264,7 @@ BI.SimpleColorChooser.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.simple_color_chooser", BI.SimpleColorChooser);
 
 /***/ }),
-/* 475 */
+/* 476 */
 /***/ (function(module, exports) {
 
 /**
@@ -32109,7 +32335,7 @@ BI.shortcut("bi.color_chooser_trigger", BI.ColorChooserTrigger);
 
 
 /***/ }),
-/* 476 */
+/* 477 */
 /***/ (function(module, exports) {
 
 /**
@@ -32213,7 +32439,7 @@ BI.shortcut("bi.long_color_chooser_trigger", BI.LongColorChooserTrigger);
 
 
 /***/ }),
-/* 477 */
+/* 478 */
 /***/ (function(module, exports) {
 
 /**
@@ -32278,7 +32504,7 @@ BI.ColorPickerButton.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.color_picker_button", BI.ColorPickerButton);
 
 /***/ }),
-/* 478 */
+/* 479 */
 /***/ (function(module, exports) {
 
 /**
@@ -32473,7 +32699,7 @@ BI.ColorPicker.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.color_picker", BI.ColorPicker);
 
 /***/ }),
-/* 479 */
+/* 480 */
 /***/ (function(module, exports) {
 
 /**
@@ -32805,7 +33031,7 @@ BI.HexColorPickerEditor.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.hex_color_picker_editor", BI.HexColorPickerEditor);
 
 /***/ }),
-/* 480 */
+/* 481 */
 /***/ (function(module, exports) {
 
 /**
@@ -33006,7 +33232,7 @@ BI.SimpleHexColorPickerEditor.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.simple_hex_color_picker_editor", BI.SimpleHexColorPickerEditor);
 
 /***/ }),
-/* 481 */
+/* 482 */
 /***/ (function(module, exports) {
 
 /**
@@ -33255,7 +33481,7 @@ BI.ColorPickerEditor.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.color_picker_editor", BI.ColorPickerEditor);
 
 /***/ }),
-/* 482 */
+/* 483 */
 /***/ (function(module, exports) {
 
 /**
@@ -33383,7 +33609,7 @@ BI.SimpleColorPickerEditor.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.simple_color_picker_editor", BI.SimpleColorPickerEditor);
 
 /***/ }),
-/* 483 */
+/* 484 */
 /***/ (function(module, exports) {
 
 BI.Farbtastic = BI.inherit(BI.BasicButton, {
@@ -33668,7 +33894,7 @@ BI.shortcut("bi.farbtastic", BI.Farbtastic);
 
 
 /***/ }),
-/* 484 */
+/* 485 */
 /***/ (function(module, exports) {
 
 /**
@@ -33893,7 +34119,7 @@ BI.shortcut("bi.bubble_combo", BI.BubbleCombo);
 
 
 /***/ }),
-/* 485 */
+/* 486 */
 /***/ (function(module, exports) {
 
 /**
@@ -34063,7 +34289,7 @@ BI.shortcut("bi.text_bubble_bar_popup_view", BI.TextBubblePopupBarView);
 
 
 /***/ }),
-/* 486 */
+/* 487 */
 /***/ (function(module, exports) {
 
 /**
@@ -34164,7 +34390,7 @@ BI.shortcut("bi.editor_icon_check_combo", BI.EditorIconCheckCombo);
 
 
 /***/ }),
-/* 487 */
+/* 488 */
 /***/ (function(module, exports) {
 
 /**
@@ -34268,7 +34494,7 @@ BI.IconCombo.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.icon_combo", BI.IconCombo);
 
 /***/ }),
-/* 488 */
+/* 489 */
 /***/ (function(module, exports) {
 
 /**
@@ -34338,7 +34564,7 @@ BI.IconComboPopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.icon_combo_popup", BI.IconComboPopup);
 
 /***/ }),
-/* 489 */
+/* 490 */
 /***/ (function(module, exports) {
 
 /**
@@ -34445,7 +34671,7 @@ BI.IconComboTrigger.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.icon_combo_trigger", BI.IconComboTrigger);
 
 /***/ }),
-/* 490 */
+/* 491 */
 /***/ (function(module, exports) {
 
 /**
@@ -34555,7 +34781,7 @@ BI.shortcut("bi.icon_text_value_combo", BI.IconTextValueCombo);
 
 
 /***/ }),
-/* 491 */
+/* 492 */
 /***/ (function(module, exports) {
 
 /**
@@ -34637,7 +34863,7 @@ BI.shortcut("bi.icon_text_value_combo_popup", BI.IconTextValueComboPopup);
 
 
 /***/ }),
-/* 492 */
+/* 493 */
 /***/ (function(module, exports) {
 
 /**
@@ -34804,7 +35030,7 @@ BI.shortcut("bi.search_text_value_combo", BI.SearchTextValueCombo);
 
 
 /***/ }),
-/* 493 */
+/* 494 */
 /***/ (function(module, exports) {
 
 /**
@@ -34883,7 +35109,7 @@ BI.shortcut("bi.search_text_value_combo_popup", BI.SearchTextValueComboPopup);
 
 
 /***/ }),
-/* 494 */
+/* 495 */
 /***/ (function(module, exports) {
 
 /**
@@ -35002,7 +35228,7 @@ BI.SearchTextValueTrigger.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.search_text_value_trigger", BI.SearchTextValueTrigger);
 
 /***/ }),
-/* 495 */
+/* 496 */
 /***/ (function(module, exports) {
 
 /**
@@ -35092,7 +35318,7 @@ BI.TextValueCheckCombo.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.text_value_check_combo", BI.TextValueCheckCombo);
 
 /***/ }),
-/* 496 */
+/* 497 */
 /***/ (function(module, exports) {
 
 BI.TextValueCheckComboPopup = BI.inherit(BI.Pane, {
@@ -35160,7 +35386,7 @@ BI.shortcut("bi.text_value_check_combo_popup", BI.TextValueCheckComboPopup);
 
 
 /***/ }),
-/* 497 */
+/* 498 */
 /***/ (function(module, exports) {
 
 /**
@@ -35265,7 +35491,7 @@ BI.shortcut("bi.text_value_combo", BI.TextValueCombo);
 
 
 /***/ }),
-/* 498 */
+/* 499 */
 /***/ (function(module, exports) {
 
 /**
@@ -35339,7 +35565,7 @@ BI.SmallTextValueCombo.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.small_text_value_combo", BI.SmallTextValueCombo);
 
 /***/ }),
-/* 499 */
+/* 500 */
 /***/ (function(module, exports) {
 
 BI.TextValueComboPopup = BI.inherit(BI.Pane, {
@@ -35405,7 +35631,7 @@ BI.TextValueComboPopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.text_value_combo_popup", BI.TextValueComboPopup);
 
 /***/ }),
-/* 500 */
+/* 501 */
 /***/ (function(module, exports) {
 
 /**
@@ -35592,7 +35818,7 @@ BI.ClearEditor.EVENT_EMPTY = "EVENT_EMPTY";
 BI.shortcut("bi.clear_editor", BI.ClearEditor);
 
 /***/ }),
-/* 501 */
+/* 502 */
 /***/ (function(module, exports) {
 
 /**
@@ -35874,7 +36100,7 @@ BI.shortcut("bi.shelter_editor", BI.ShelterEditor);
 
 
 /***/ }),
-/* 502 */
+/* 503 */
 /***/ (function(module, exports) {
 
 /**
@@ -36155,7 +36381,7 @@ BI.SignEditor.EVENT_EMPTY = "EVENT_EMPTY";
 BI.shortcut("bi.sign_editor", BI.SignEditor);
 
 /***/ }),
-/* 503 */
+/* 504 */
 /***/ (function(module, exports) {
 
 /**
@@ -36472,7 +36698,7 @@ BI.shortcut("bi.state_editor", BI.StateEditor);
 
 
 /***/ }),
-/* 504 */
+/* 505 */
 /***/ (function(module, exports) {
 
 /**
@@ -36759,7 +36985,7 @@ BI.SimpleStateEditor.EVENT_EMPTY = "EVENT_EMPTY";
 BI.shortcut("bi.simple_state_editor", BI.SimpleStateEditor);
 
 /***/ }),
-/* 505 */
+/* 506 */
 /***/ (function(module, exports) {
 
 /**
@@ -36825,7 +37051,7 @@ BI.shortcut("bi.multi_popup_view", BI.MultiPopupView);
 
 
 /***/ }),
-/* 506 */
+/* 507 */
 /***/ (function(module, exports) {
 
 /**
@@ -36884,7 +37110,7 @@ BI.shortcut("bi.popup_panel", BI.PopupPanel);
 
 
 /***/ }),
-/* 507 */
+/* 508 */
 /***/ (function(module, exports) {
 
 /**
@@ -36993,7 +37219,7 @@ BI.ListPane = BI.inherit(BI.Pane, {
     },
 
     removeItemAt: function (indexes) {
-        indexes = indexes || [];
+        indexes = BI.isNull(indexes) ? [] : indexes;
         BI.removeAt(this.options.items, indexes);
         this.button_group.removeItemAt.apply(this.button_group, arguments);
         this.check();
@@ -37066,7 +37292,7 @@ BI.ListPane.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.list_pane", BI.ListPane);
 
 /***/ }),
-/* 508 */
+/* 509 */
 /***/ (function(module, exports) {
 
 /**
@@ -37151,7 +37377,7 @@ BI.shortcut("bi.panel", BI.Panel);
 
 
 /***/ }),
-/* 509 */
+/* 510 */
 /***/ (function(module, exports) {
 
 BI.LinearSegmentButton = BI.inherit(BI.BasicButton, {
@@ -37210,7 +37436,7 @@ BI.LinearSegmentButton = BI.inherit(BI.BasicButton, {
 BI.shortcut("bi.linear_segment_button", BI.LinearSegmentButton);
 
 /***/ }),
-/* 510 */
+/* 511 */
 /***/ (function(module, exports) {
 
 BI.LinearSegment = BI.inherit(BI.Widget, {
@@ -37266,7 +37492,7 @@ BI.LinearSegment = BI.inherit(BI.Widget, {
 BI.shortcut("bi.linear_segment", BI.LinearSegment);
 
 /***/ }),
-/* 511 */
+/* 512 */
 /***/ (function(module, exports) {
 
 /**
@@ -37489,7 +37715,7 @@ BI.shortcut("bi.select_list", BI.SelectList);
 
 
 /***/ }),
-/* 512 */
+/* 513 */
 /***/ (function(module, exports) {
 
 /**
@@ -37597,7 +37823,7 @@ BI.LazyLoader.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.lazy_loader", BI.LazyLoader);
 
 /***/ }),
-/* 513 */
+/* 514 */
 /***/ (function(module, exports) {
 
 /**
@@ -37798,7 +38024,7 @@ BI.ListLoader.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.list_loader", BI.ListLoader);
 
 /***/ }),
-/* 514 */
+/* 515 */
 /***/ (function(module, exports) {
 
 /**
@@ -37980,7 +38206,7 @@ BI.shortcut("bi.sort_list", BI.SortList);
 
 
 /***/ }),
-/* 515 */
+/* 516 */
 /***/ (function(module, exports) {
 
 /**
@@ -38016,7 +38242,7 @@ BI.LoadingPane = BI.inherit(BI.Pane, {
 });
 
 /***/ }),
-/* 516 */
+/* 517 */
 /***/ (function(module, exports) {
 
 /**
@@ -38165,15 +38391,17 @@ BI.AllCountPager = BI.inherit(BI.Widget, {
                     self.prevText = _ref;
                 }
             }, {
-                type: "bi.label",
-                ref: function (_ref) {
-                    self.rowCount = _ref;
+                el: {
+                    type: "bi.label",
+                    ref: function (_ref) {
+                        self.rowCount = _ref;
+                    },
+                    cls: "row-count",
+                    height: o.height,
+                    text: o.count,
+                    title: o.count
                 },
-                cls: "row-count",
-                height: o.height,
                 hgap: 5,
-                text: o.count,
-                title: o.count
             }, {
                 type: "bi.label",
                 height: o.height,
@@ -38249,7 +38477,7 @@ BI.AllCountPager.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.all_count_pager", BI.AllCountPager);
 
 /***/ }),
-/* 517 */
+/* 518 */
 /***/ (function(module, exports) {
 
 /**
@@ -38530,7 +38758,7 @@ BI.DirectionPager.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.direction_pager", BI.DirectionPager);
 
 /***/ }),
-/* 518 */
+/* 519 */
 /***/ (function(module, exports) {
 
 /**
@@ -38823,7 +39051,7 @@ BI.DetailPager.EVENT_AFTER_POPULATE = "EVENT_AFTER_POPULATE";
 BI.shortcut("bi.detail_pager", BI.DetailPager);
 
 /***/ }),
-/* 519 */
+/* 520 */
 /***/ (function(module, exports) {
 
 /**
@@ -38875,7 +39103,7 @@ BI.shortcut("bi.segment_button", BI.SegmentButton);
 
 
 /***/ }),
-/* 520 */
+/* 521 */
 /***/ (function(module, exports) {
 
 /**
@@ -38944,7 +39172,7 @@ BI.Segment.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.segment", BI.Segment);
 
 /***/ }),
-/* 521 */
+/* 522 */
 /***/ (function(module, exports) {
 
 /**
@@ -39095,7 +39323,7 @@ BI.shortcut("bi.multi_select_bar", BI.MultiSelectBar);
 
 
 /***/ }),
-/* 522 */
+/* 523 */
 /***/ (function(module, exports) {
 
 /**
@@ -39237,7 +39465,7 @@ BI.shortcut("bi.level_tree", BI.LevelTree);
 
 
 /***/ }),
-/* 523 */
+/* 524 */
 /***/ (function(module, exports) {
 
 !(function () {
@@ -39320,7 +39548,7 @@ BI.shortcut("bi.level_tree", BI.LevelTree);
 
 
 /***/ }),
-/* 524 */
+/* 525 */
 /***/ (function(module, exports) {
 
 !(function () {
@@ -39379,7 +39607,7 @@ BI.shortcut("bi.level_tree", BI.LevelTree);
 
 
 /***/ }),
-/* 525 */
+/* 526 */
 /***/ (function(module, exports) {
 
 /**
@@ -39481,7 +39709,7 @@ BI.shortcut("bi.editor_trigger", BI.EditorTrigger);
 
 
 /***/ }),
-/* 526 */
+/* 527 */
 /***/ (function(module, exports) {
 
 /**
@@ -39516,7 +39744,7 @@ BI.IconTrigger = BI.inherit(BI.Trigger, {
 BI.shortcut("bi.icon_trigger", BI.IconTrigger);
 
 /***/ }),
-/* 527 */
+/* 528 */
 /***/ (function(module, exports) {
 
 /**
@@ -39626,7 +39854,7 @@ BI.IconTextTrigger = BI.inherit(BI.Trigger, {
 BI.shortcut("bi.icon_text_trigger", BI.IconTextTrigger);
 
 /***/ }),
-/* 528 */
+/* 529 */
 /***/ (function(module, exports) {
 
 /**
@@ -39705,7 +39933,7 @@ BI.SelectIconTextTrigger = BI.inherit(BI.Trigger, {
 BI.shortcut("bi.select_icon_text_trigger", BI.SelectIconTextTrigger);
 
 /***/ }),
-/* 529 */
+/* 530 */
 /***/ (function(module, exports) {
 
 /**
@@ -39765,6 +39993,10 @@ BI.TextTrigger = BI.inherit(BI.Trigger, {
         });
     },
 
+    getTextor: function() {
+        return this.text;
+    },
+
     setTextCls: function(cls) {
         var o = this.options;
         var oldCls = o.textCls;
@@ -39784,7 +40016,7 @@ BI.shortcut("bi.text_trigger", BI.TextTrigger);
 
 
 /***/ }),
-/* 530 */
+/* 531 */
 /***/ (function(module, exports) {
 
 /**
@@ -39853,6 +40085,10 @@ BI.SelectTextTrigger = BI.inherit(BI.Trigger, {
         this.trigger.setTipType(v);
     },
 
+    getTextor: function() {
+        return this.trigger.getTextor();
+    },
+
     populate: function (items) {
         this.options.items = items;
     }
@@ -39861,7 +40097,7 @@ BI.shortcut("bi.select_text_trigger", BI.SelectTextTrigger);
 
 
 /***/ }),
-/* 531 */
+/* 532 */
 /***/ (function(module, exports) {
 
 /**
@@ -39930,7 +40166,7 @@ BI.SmallSelectTextTrigger = BI.inherit(BI.Trigger, {
 BI.shortcut("bi.small_select_text_trigger", BI.SmallSelectTextTrigger);
 
 /***/ }),
-/* 532 */
+/* 533 */
 /***/ (function(module, exports) {
 
 /**
@@ -39992,7 +40228,7 @@ BI.SmallTextTrigger = BI.inherit(BI.Trigger, {
 BI.shortcut("bi.small_text_trigger", BI.SmallTextTrigger);
 
 /***/ }),
-/* 533 */
+/* 534 */
 /***/ (function(module, exports) {
 
 /**
@@ -40070,7 +40306,7 @@ BI.MonthDateCombo.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.month_date_combo", BI.MonthDateCombo);
 
 /***/ }),
-/* 534 */
+/* 535 */
 /***/ (function(module, exports) {
 
 /**
@@ -40160,7 +40396,7 @@ BI.shortcut("bi.year_date_combo", BI.YearDateCombo);
 
 
 /***/ }),
-/* 535 */
+/* 536 */
 /***/ (function(module, exports) {
 
 /**
@@ -40394,7 +40630,7 @@ BI.shortcut("bi.date_picker", BI.DatePicker);
 
 
 /***/ }),
-/* 536 */
+/* 537 */
 /***/ (function(module, exports) {
 
 /**
@@ -40531,7 +40767,7 @@ BI.shortcut("bi.year_picker", BI.YearPicker);
 
 
 /***/ }),
-/* 537 */
+/* 538 */
 /***/ (function(module, exports) {
 
 /**
@@ -40687,7 +40923,7 @@ BI.DateCalendarPopup.EVENT_BEFORE_YEAR_MONTH_POPUPVIEW = "EVENT_BEFORE_YEAR_MONT
 BI.shortcut("bi.date_calendar_popup", BI.DateCalendarPopup);
 
 /***/ }),
-/* 538 */
+/* 539 */
 /***/ (function(module, exports) {
 
 /**
@@ -40790,7 +41026,7 @@ BI.MonthPopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.month_popup", BI.MonthPopup);
 
 /***/ }),
-/* 539 */
+/* 540 */
 /***/ (function(module, exports) {
 
 /**
@@ -40931,7 +41167,7 @@ BI.YearPopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.year_popup", BI.YearPopup);
 
 /***/ }),
-/* 540 */
+/* 541 */
 /***/ (function(module, exports) {
 
 /**
@@ -41002,7 +41238,7 @@ BI.DateTriangleTrigger = BI.inherit(BI.Trigger, {
 BI.shortcut("bi.date_triangle_trigger", BI.DateTriangleTrigger);
 
 /***/ }),
-/* 541 */
+/* 542 */
 /***/ (function(module, exports) {
 
 /**
@@ -41192,7 +41428,7 @@ BI.StaticDatePaneCard.EVENT_BEFORE_YEAR_MONTH_POPUPVIEW = "EVENT_BEFORE_YEAR_MON
 BI.shortcut("bi.static_date_pane_card", BI.StaticDatePaneCard);
 
 /***/ }),
-/* 542 */
+/* 543 */
 /***/ (function(module, exports) {
 
 BI.DynamicDatePane = BI.inherit(BI.Widget, {
@@ -41415,7 +41651,7 @@ BI.extend(BI.DynamicDatePane, {
 
 
 /***/ }),
-/* 543 */
+/* 544 */
 /***/ (function(module, exports) {
 
 /**
@@ -41451,6 +41687,7 @@ BI.DateTimeCombo = BI.inherit(BI.Single, {
         };
         this.trigger = BI.createWidget({
             type: "bi.date_time_trigger",
+            height: opts.height,
             min: opts.minDate,
             max: opts.maxDate,
             value: opts.value
@@ -41502,8 +41739,8 @@ BI.DateTimeCombo = BI.inherit(BI.Single, {
         var triggerBtn = BI.createWidget({
             type: "bi.icon_button",
             cls: "bi-trigger-icon-button date-font",
-            width: 24,
-            height: 24
+            width: opts.height,
+            height: opts.height,
         });
         triggerBtn.on(BI.IconButton.EVENT_CHANGE, function () {
             if (self.combo.isViewVisible()) {
@@ -41555,7 +41792,7 @@ BI.shortcut("bi.date_time_combo", BI.DateTimeCombo);
 
 
 /***/ }),
-/* 544 */
+/* 545 */
 /***/ (function(module, exports) {
 
 /**
@@ -41674,7 +41911,7 @@ BI.shortcut("bi.date_time_popup", BI.DateTimePopup);
 
 
 /***/ }),
-/* 545 */
+/* 546 */
 /***/ (function(module, exports) {
 
 /**
@@ -41742,7 +41979,7 @@ BI.shortcut("bi.date_time_trigger", BI.DateTimeTrigger);
 
 
 /***/ }),
-/* 546 */
+/* 547 */
 /***/ (function(module, exports) {
 
 BI.StaticDateTimePaneCard = BI.inherit(BI.Widget, {
@@ -41952,7 +42189,7 @@ BI.StaticDateTimePaneCard.EVENT_BEFORE_YEAR_MONTH_POPUPVIEW = "EVENT_BEFORE_YEAR
 BI.shortcut("bi.static_date_time_pane_card", BI.StaticDateTimePaneCard);
 
 /***/ }),
-/* 547 */
+/* 548 */
 /***/ (function(module, exports) {
 
 BI.DynamicDateTimePane = BI.inherit(BI.Widget, {
@@ -42172,7 +42409,7 @@ BI.extend(BI.DynamicDateTimePane, {
 
 
 /***/ }),
-/* 548 */
+/* 549 */
 /***/ (function(module, exports) {
 
 /**
@@ -42271,7 +42508,7 @@ BI.DownListCombo.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
 BI.shortcut("bi.down_list_combo", BI.DownListCombo);
 
 /***/ }),
-/* 549 */
+/* 550 */
 /***/ (function(module, exports) {
 
 /**
@@ -42327,7 +42564,7 @@ BI.DownListGroup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.down_list_group", BI.DownListGroup);
 
 /***/ }),
-/* 550 */
+/* 551 */
 /***/ (function(module, exports) {
 
 BI.DownListItem = BI.inherit(BI.BasicButton, {
@@ -42430,7 +42667,7 @@ BI.DownListItem.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.down_list_item", BI.DownListItem);
 
 /***/ }),
-/* 551 */
+/* 552 */
 /***/ (function(module, exports) {
 
 BI.DownListGroupItem = BI.inherit(BI.BasicButton, {
@@ -42556,7 +42793,7 @@ BI.DownListGroupItem.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.down_list_group_item", BI.DownListGroupItem);
 
 /***/ }),
-/* 552 */
+/* 553 */
 /***/ (function(module, exports) {
 
 /**
@@ -42848,7 +43085,7 @@ BI.DownListPopup.EVENT_SON_VALUE_CHANGE = "EVENT_SON_VALUE_CHANGE";
 BI.shortcut("bi.down_list_popup", BI.DownListPopup);
 
 /***/ }),
-/* 553 */
+/* 554 */
 /***/ (function(module, exports) {
 
 !(function () {
@@ -42858,6 +43095,57 @@ BI.shortcut("bi.down_list_popup", BI.DownListPopup);
             var date = BI.getDate();
 
             return this.getCalculationByDate(date, obj);
+        },
+
+        getDescription: function (obj) {
+            var value = "";
+            var endText = "";
+            if(BI.isNotNull(obj.year)) {
+                if(BI.parseInt(obj.year) !== 0) {
+                    value += Math.abs(obj.year) + BI.i18nText("BI-Basic_Year") + (obj.year < 0 ? BI.i18nText("BI-Basic_Front") : BI.i18nText("BI-Basic_Behind"));
+                }
+                endText = getPositionText(BI.i18nText("BI-Basic_Year"), obj.position);
+            }
+            if(BI.isNotNull(obj.quarter)) {
+                if(BI.parseInt(obj.quarter) !== 0) {
+                    value += Math.abs(obj.quarter) + BI.i18nText("BI-Basic_Single_Quarter") + (obj.quarter < 0 ? BI.i18nText("BI-Basic_Front") : BI.i18nText("BI-Basic_Behind"));
+                }
+                endText = getPositionText(BI.i18nText("BI-Basic_Single_Quarter"), obj.position);
+            }
+            if(BI.isNotNull(obj.month)) {
+                if(BI.parseInt(obj.month) !== 0) {
+                    value += Math.abs(obj.month) + BI.i18nText("BI-Basic_Month") + (obj.month < 0 ? BI.i18nText("BI-Basic_Front") : BI.i18nText("BI-Basic_Behind"));
+                }
+                endText = getPositionText(BI.i18nText("BI-Basic_Month"), obj.position);
+            }
+            if(BI.isNotNull(obj.week)) {
+                if(BI.parseInt(obj.week) !== 0) {
+                    value += Math.abs(obj.week) + BI.i18nText("BI-Basic_Week") + (obj.week < 0 ? BI.i18nText("BI-Basic_Front") : BI.i18nText("BI-Basic_Behind"));
+                }
+                endText = getPositionText(BI.i18nText("BI-Basic_Week"), obj.position);
+            }
+            if(BI.isNotNull(obj.day)) {
+                if(BI.parseInt(obj.day) !== 0) {
+                    value += Math.abs(obj.day) + BI.i18nText("BI-Basic_Day") + (obj.day < 0 ? BI.i18nText("BI-Basic_Front") : BI.i18nText("BI-Basic_Behind"));
+                }
+                endText = BI.size(obj) === 1 ? getPositionText(BI.i18nText("BI-Basic_Month"), obj.position) : "";
+            }
+            if(BI.isNotNull(obj.workDay) && BI.parseInt(obj.workDay) !== 0) {
+                value += Math.abs(obj.workDay) + BI.i18nText("BI-Basic_Work_Day") + (obj.workDay < 0 ? BI.i18nText("BI-Basic_Front") : BI.i18nText("BI-Basic_Behind"));
+            }
+            return value +  endText;
+
+            function getPositionText (baseText, position) {
+                switch (position) {
+                    case BI.DynamicDateCard.OFFSET.BEGIN:
+                        return baseText + BI.i18nText("BI-Basic_Begin_Start");
+                    case BI.DynamicDateCard.OFFSET.END:
+                        return baseText + BI.i18nText("BI-Basic_End_Stop");
+                    case BI.DynamicDateCard.OFFSET.CURRENT:
+                    default:
+                        return BI.i18nText("BI-Basic_Current_Day");
+                }
+            }
         },
 
         getCalculationByDate: function (date, obj) {
@@ -42920,7 +43208,7 @@ BI.shortcut("bi.down_list_popup", BI.DownListPopup);
 
 
 /***/ }),
-/* 554 */
+/* 555 */
 /***/ (function(module, exports) {
 
 BI.DynamicDateCard = BI.inherit(BI.Widget, {
@@ -43349,7 +43637,7 @@ BI.extend(BI.DynamicDateCard, {
 });
 
 /***/ }),
-/* 555 */
+/* 556 */
 /***/ (function(module, exports) {
 
 BI.DynamicDateCombo = BI.inherit(BI.Single, {
@@ -43690,7 +43978,7 @@ BI.extend(BI.DynamicDateCombo, {
 
 
 /***/ }),
-/* 556 */
+/* 557 */
 /***/ (function(module, exports) {
 
 BI.DynamicDateParamItem = BI.inherit(BI.Widget, {
@@ -43824,7 +44112,7 @@ BI.shortcut("bi.dynamic_date_param_item", BI.DynamicDateParamItem);
 
 
 /***/ }),
-/* 557 */
+/* 558 */
 /***/ (function(module, exports) {
 
 BI.DynamicDatePopup = BI.inherit(BI.Widget, {
@@ -44087,7 +44375,7 @@ BI.DynamicDatePopup.EVENT_BEFORE_YEAR_MONTH_POPUPVIEW = "EVENT_BEFORE_YEAR_MONTH
 BI.shortcut("bi.dynamic_date_popup", BI.DynamicDatePopup);
 
 /***/ }),
-/* 558 */
+/* 559 */
 /***/ (function(module, exports) {
 
 BI.DynamicDateTrigger = BI.inherit(BI.Trigger, {
@@ -44332,54 +44620,7 @@ BI.DynamicDateTrigger = BI.inherit(BI.Trigger, {
     },
 
     _getText: function (obj) {
-        var value = "";
-        var endText = "";
-        if(BI.isNotNull(obj.year)) {
-            if(BI.parseInt(obj.year) !== 0) {
-                value += Math.abs(obj.year) + BI.i18nText("BI-Basic_Year") + (obj.year < 0 ? BI.i18nText("BI-Basic_Front") : BI.i18nText("BI-Basic_Behind"));
-            }
-            endText = getPositionText(BI.i18nText("BI-Basic_Year"), obj.position);
-        }
-        if(BI.isNotNull(obj.quarter)) {
-            if(BI.parseInt(obj.quarter) !== 0) {
-                value += Math.abs(obj.quarter) + BI.i18nText("BI-Basic_Single_Quarter") + (obj.quarter < 0 ? BI.i18nText("BI-Basic_Front") : BI.i18nText("BI-Basic_Behind"));
-            }
-            endText = getPositionText(BI.i18nText("BI-Basic_Single_Quarter"), obj.position);
-        }
-        if(BI.isNotNull(obj.month)) {
-            if(BI.parseInt(obj.month) !== 0) {
-                value += Math.abs(obj.month) + BI.i18nText("BI-Basic_Month") + (obj.month < 0 ? BI.i18nText("BI-Basic_Front") : BI.i18nText("BI-Basic_Behind"));
-            }
-            endText = getPositionText(BI.i18nText("BI-Basic_Month"), obj.position);
-        }
-        if(BI.isNotNull(obj.week)) {
-            if(BI.parseInt(obj.week) !== 0) {
-                value += Math.abs(obj.week) + BI.i18nText("BI-Basic_Week") + (obj.week < 0 ? BI.i18nText("BI-Basic_Front") : BI.i18nText("BI-Basic_Behind"));
-            }
-            endText = getPositionText(BI.i18nText("BI-Basic_Week"), obj.position);
-        }
-        if(BI.isNotNull(obj.day)) {
-            if(BI.parseInt(obj.day) !== 0) {
-                value += Math.abs(obj.day) + BI.i18nText("BI-Basic_Day") + (obj.day < 0 ? BI.i18nText("BI-Basic_Front") : BI.i18nText("BI-Basic_Behind"));
-            }
-            endText = BI.size(obj) === 1 ? getPositionText(BI.i18nText("BI-Basic_Month"), obj.position) : "";
-        }
-        if(BI.isNotNull(obj.workDay) && BI.parseInt(obj.workDay) !== 0) {
-            value += Math.abs(obj.workDay) + BI.i18nText("BI-Basic_Work_Day") + (obj.workDay < 0 ? BI.i18nText("BI-Basic_Front") : BI.i18nText("BI-Basic_Behind"));
-        }
-        return value +  endText;
-
-        function getPositionText (baseText, position) {
-            switch (position) {
-                case BI.DynamicDateCard.OFFSET.BEGIN:
-                    return baseText + BI.i18nText("BI-Basic_Begin_Start");
-                case BI.DynamicDateCard.OFFSET.END:
-                    return baseText + BI.i18nText("BI-Basic_End_Stop");
-                case BI.DynamicDateCard.OFFSET.CURRENT:
-                default:
-                    return BI.i18nText("BI-Basic_Current_Day");
-            }
-        }
+        return BI.DynamicDateHelper.getDescription(obj);
     },
 
     setValue: function (v) {
@@ -44445,7 +44686,7 @@ BI.shortcut("bi.dynamic_date_trigger", BI.DynamicDateTrigger);
 
 
 /***/ }),
-/* 559 */
+/* 560 */
 /***/ (function(module, exports) {
 
 BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
@@ -44794,7 +45035,7 @@ BI.extend(BI.DynamicDateTimeCombo, {
 
 
 /***/ }),
-/* 560 */
+/* 561 */
 /***/ (function(module, exports) {
 
 BI.DynamicDateTimePopup = BI.inherit(BI.Widget, {
@@ -45065,7 +45306,7 @@ BI.DynamicDateTimePopup.EVENT_BEFORE_YEAR_MONTH_POPUPVIEW = "EVENT_BEFORE_YEAR_M
 BI.shortcut("bi.dynamic_date_time_popup", BI.DynamicDateTimePopup);
 
 /***/ }),
-/* 561 */
+/* 562 */
 /***/ (function(module, exports) {
 
 BI.DynamicDateTimeSelect = BI.inherit(BI.Widget, {
@@ -45282,7 +45523,7 @@ BI.extend(BI.DynamicDateTimeSelect, {
 });
 
 /***/ }),
-/* 562 */
+/* 563 */
 /***/ (function(module, exports) {
 
 BI.DynamicDateTimeTrigger = BI.inherit(BI.Trigger, {
@@ -45664,7 +45905,7 @@ BI.DynamicDateTimeTrigger.EVENT_KEY_DOWN = "EVENT_KEY_DOWN";
 BI.shortcut("bi.dynamic_date_time_trigger", BI.DynamicDateTimeTrigger);
 
 /***/ }),
-/* 563 */
+/* 564 */
 /***/ (function(module, exports) {
 
 /**
@@ -45885,7 +46126,7 @@ BI.SearchEditor.EVENT_EMPTY = "EVENT_EMPTY";
 BI.shortcut("bi.search_editor", BI.SearchEditor);
 
 /***/ }),
-/* 564 */
+/* 565 */
 /***/ (function(module, exports) {
 
 /**
@@ -45910,7 +46151,7 @@ BI.SmallSearchEditor = BI.inherit(BI.SearchEditor, {
 BI.shortcut("bi.small_search_editor", BI.SmallSearchEditor);
 
 /***/ }),
-/* 565 */
+/* 566 */
 /***/ (function(module, exports) {
 
 /**
@@ -46089,7 +46330,7 @@ BI.TextEditor.EVENT_EMPTY = "EVENT_EMPTY";
 BI.shortcut("bi.text_editor", BI.TextEditor);
 
 /***/ }),
-/* 566 */
+/* 567 */
 /***/ (function(module, exports) {
 
 /**
@@ -46114,7 +46355,7 @@ BI.SmallTextEditor = BI.inherit(BI.TextEditor, {
 BI.shortcut("bi.small_text_editor", BI.SmallTextEditor);
 
 /***/ }),
-/* 567 */
+/* 568 */
 /***/ (function(module, exports) {
 
 /**
@@ -46659,7 +46900,7 @@ BI.IntervalSlider.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.interval_slider", BI.IntervalSlider);
 
 /***/ }),
-/* 568 */
+/* 569 */
 /***/ (function(module, exports) {
 
 /**
@@ -46886,7 +47127,7 @@ BI.AccurateCalculationModel = BI.inherit(BI.Widget, {
 });
 
 /***/ }),
-/* 569 */
+/* 570 */
 /***/ (function(module, exports) {
 
 /**
@@ -46981,7 +47222,7 @@ BI.MultiLayerDownListCombo.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
 BI.shortcut("bi.multi_layer_down_list_combo", BI.MultiLayerDownListCombo);
 
 /***/ }),
-/* 570 */
+/* 571 */
 /***/ (function(module, exports) {
 
 /**
@@ -47308,7 +47549,7 @@ BI.MultiLayerDownListPopup.EVENT_SON_VALUE_CHANGE = "EVENT_SON_VALUE_CHANGE";
 BI.shortcut("bi.multi_layer_down_list_popup", BI.MultiLayerDownListPopup);
 
 /***/ }),
-/* 571 */
+/* 572 */
 /***/ (function(module, exports) {
 
 /**
@@ -47512,11 +47753,14 @@ BI.MultiLayerSelectTreeCombo = BI.inherit(BI.Widget, {
     },
 
     _getSyncConfig: function () {
-        var o = this.options;
+        var o = this.options, self = this;
         var baseConfig = this._getBaseConfig();
         return BI.extend(baseConfig, o.allowEdit ? this._getSearchConfig() : {
             el: {
                 type: "bi.single_tree_trigger",
+                ref: function(_ref) {
+                    self.textTrigger = _ref;
+                },
                 text: o.text,
                 height: o.height,
                 items: o.items,
@@ -47539,6 +47783,10 @@ BI.MultiLayerSelectTreeCombo = BI.inherit(BI.Widget, {
         return this.combo.getValue();
     },
 
+    getSearcher: function () {
+        return this.trigger ? this.trigger.getSearcher() : this.textTrigger.getTextor();
+    },
+
     populate: function (items) {
         this.combo.populate(items);
     }
@@ -47552,7 +47800,7 @@ BI.MultiLayerSelectTreeCombo.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
 BI.shortcut("bi.multilayer_select_tree_combo", BI.MultiLayerSelectTreeCombo);
 
 /***/ }),
-/* 572 */
+/* 573 */
 /***/ (function(module, exports) {
 
 /**
@@ -47649,7 +47897,7 @@ BI.MultiLayerSelectTreeInsertSearchPane.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multilayer_select_tree_insert_search_pane", BI.MultiLayerSelectTreeInsertSearchPane);
 
 /***/ }),
-/* 573 */
+/* 574 */
 /***/ (function(module, exports) {
 
 /**
@@ -47844,7 +48092,7 @@ BI.shortcut("bi.multilayer_select_level_tree", BI.MultiLayerSelectLevelTree);
 
 
 /***/ }),
-/* 574 */
+/* 575 */
 /***/ (function(module, exports) {
 
 /**
@@ -47926,7 +48174,7 @@ BI.MultiLayerSelectTreePopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multilayer_select_tree_popup", BI.MultiLayerSelectTreePopup);
 
 /***/ }),
-/* 575 */
+/* 576 */
 /***/ (function(module, exports) {
 
 /**
@@ -48181,7 +48429,7 @@ BI.MultiLayerSelectTreeTrigger.EVENT_ADD_ITEM = "EVENT_ADD_ITEM";
 BI.shortcut("bi.multilayer_select_tree_trigger", BI.MultiLayerSelectTreeTrigger);
 
 /***/ }),
-/* 576 */
+/* 577 */
 /***/ (function(module, exports) {
 
 /**
@@ -48286,7 +48534,7 @@ BI.shortcut("bi.multilayer_select_tree_first_plus_group_node", BI.MultiLayerSele
 
 
 /***/ }),
-/* 577 */
+/* 578 */
 /***/ (function(module, exports) {
 
 /**
@@ -48380,7 +48628,7 @@ BI.shortcut("bi.multilayer_select_tree_last_plus_group_node", BI.MultiLayerSelec
 
 
 /***/ }),
-/* 578 */
+/* 579 */
 /***/ (function(module, exports) {
 
 /**
@@ -48474,7 +48722,7 @@ BI.shortcut("bi.multilayer_select_tree_mid_plus_group_node", BI.MultiLayerSelect
 
 
 /***/ }),
-/* 579 */
+/* 580 */
 /***/ (function(module, exports) {
 
 /**
@@ -48572,7 +48820,7 @@ BI.shortcut("bi.multilayer_select_tree_plus_group_node", BI.MultiLayerSelectTree
 
 
 /***/ }),
-/* 580 */
+/* 581 */
 /***/ (function(module, exports) {
 
 /**
@@ -48779,11 +49027,14 @@ BI.MultiLayerSingleTreeCombo = BI.inherit(BI.Widget, {
     },
 
     _getSyncConfig: function () {
-        var o = this.options;
+        var o = this.options, self = this;
         var baseConfig = this._getBaseConfig();
         return BI.extend(baseConfig, o.allowEdit ? this._getSearchConfig() : {
             el: {
                 type: "bi.single_tree_trigger",
+                ref: function(_ref) {
+                    self.textTrigger = _ref;
+                },
                 text: o.text,
                 height: o.height,
                 items: o.items,
@@ -48795,6 +49046,10 @@ BI.MultiLayerSingleTreeCombo = BI.inherit(BI.Widget, {
     _getAsyncConfig: function () {
         var config = this._getBaseConfig();
         return BI.extend(config, this._getSearchConfig());
+    },
+
+    getSearcher: function () {
+        return this.trigger ? this.trigger.getSearcher() : this.textTrigger.getTextor();
     },
 
     setValue: function (v) {
@@ -48819,7 +49074,7 @@ BI.MultiLayerSingleTreeCombo.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
 BI.shortcut("bi.multilayer_single_tree_combo", BI.MultiLayerSingleTreeCombo);
 
 /***/ }),
-/* 581 */
+/* 582 */
 /***/ (function(module, exports) {
 
 /**
@@ -48916,7 +49171,7 @@ BI.MultiLayerSingleTreeInsertSearchPane.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multilayer_single_tree_insert_search_pane", BI.MultiLayerSingleTreeInsertSearchPane);
 
 /***/ }),
-/* 582 */
+/* 583 */
 /***/ (function(module, exports) {
 
 /**
@@ -49110,7 +49365,7 @@ BI.shortcut("bi.multilayer_single_level_tree", BI.MultiLayerSingleLevelTree);
 
 
 /***/ }),
-/* 583 */
+/* 584 */
 /***/ (function(module, exports) {
 
 /**
@@ -49191,7 +49446,7 @@ BI.MultiLayerSingleTreePopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multilayer_single_tree_popup", BI.MultiLayerSingleTreePopup);
 
 /***/ }),
-/* 584 */
+/* 585 */
 /***/ (function(module, exports) {
 
 /**
@@ -49447,7 +49702,7 @@ BI.MultiLayerSingleTreeTrigger.EVENT_ADD_ITEM = "EVENT_ADD_ITEM";
 BI.shortcut("bi.multilayer_single_tree_trigger", BI.MultiLayerSingleTreeTrigger);
 
 /***/ }),
-/* 585 */
+/* 586 */
 /***/ (function(module, exports) {
 
 /**
@@ -49544,7 +49799,7 @@ BI.shortcut("bi.multilayer_single_tree_first_plus_group_node", BI.MultiLayerSing
 
 
 /***/ }),
-/* 586 */
+/* 587 */
 /***/ (function(module, exports) {
 
 /**
@@ -49640,7 +49895,7 @@ BI.shortcut("bi.multilayer_single_tree_last_plus_group_node", BI.MultiLayerSingl
 
 
 /***/ }),
-/* 587 */
+/* 588 */
 /***/ (function(module, exports) {
 
 /**
@@ -49736,7 +49991,7 @@ BI.shortcut("bi.multilayer_single_tree_mid_plus_group_node", BI.MultiLayerSingle
 
 
 /***/ }),
-/* 588 */
+/* 589 */
 /***/ (function(module, exports) {
 
 /**
@@ -49843,7 +50098,7 @@ BI.MultiLayerSingleTreePlusGroupNode = BI.inherit(BI.NodeButton, {
 BI.shortcut("bi.multilayer_single_tree_plus_group_node", BI.MultiLayerSingleTreePlusGroupNode);
 
 /***/ }),
-/* 589 */
+/* 590 */
 /***/ (function(module, exports) {
 
 /**
@@ -49935,7 +50190,7 @@ BI.shortcut("bi.multilayer_single_tree_first_tree_leaf_item", BI.MultiLayerSingl
 
 
 /***/ }),
-/* 590 */
+/* 591 */
 /***/ (function(module, exports) {
 
 /**
@@ -50027,7 +50282,7 @@ BI.shortcut("bi.multilayer_single_tree_last_tree_leaf_item", BI.MultiLayerSingle
 
 
 /***/ }),
-/* 591 */
+/* 592 */
 /***/ (function(module, exports) {
 
 /**
@@ -50119,7 +50374,7 @@ BI.shortcut("bi.multilayer_single_tree_mid_tree_leaf_item", BI.MultiLayerSingleT
 
 
 /***/ }),
-/* 592 */
+/* 593 */
 /***/ (function(module, exports) {
 
 /**
@@ -50232,7 +50487,7 @@ BI.MultiSelectCheckPane = BI.inherit(BI.Widget, {
 BI.shortcut("bi.multi_select_check_pane", BI.MultiSelectCheckPane);
 
 /***/ }),
-/* 593 */
+/* 594 */
 /***/ (function(module, exports) {
 
 /**
@@ -50324,7 +50579,7 @@ BI.DisplaySelectedList = BI.inherit(BI.Pane, {
 BI.shortcut("bi.display_selected_list", BI.DisplaySelectedList);
 
 /***/ }),
-/* 594 */
+/* 595 */
 /***/ (function(module, exports) {
 
 /**
@@ -50724,7 +50979,7 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
             var map = this._makeMap(this.storeValue.value);
             BI.each(res.value, function (i, v) {
                 if (!map[v]) {
-                    self.storeValue.value.push(v);
+                    BI.pushDistinct(self.storeValue.value, v);
                     BI.remove(self.storeValue.assist, v);
                     map[v] = v;
                 }
@@ -50794,7 +51049,7 @@ BI.shortcut("bi.multi_select_combo", BI.MultiSelectCombo);
 
 
 /***/ }),
-/* 595 */
+/* 596 */
 /***/ (function(module, exports) {
 
 /**
@@ -51221,7 +51476,7 @@ BI.MultiSelectNoBarCombo = BI.inherit(BI.Single, {
             var map = this._makeMap(this.storeValue.value);
             BI.each(res.value, function (i, v) {
                 if (!map[v]) {
-                    self.storeValue.value.push(v);
+                    BI.pushDistinct(self.storeValue.value, v);
                     BI.remove(self.storeValue.assist, v);
                     map[v] = v;
                 }
@@ -51293,7 +51548,7 @@ BI.shortcut("bi.multi_select_no_bar_combo", BI.MultiSelectNoBarCombo);
 
 
 /***/ }),
-/* 596 */
+/* 597 */
 /***/ (function(module, exports) {
 
 /**
@@ -51705,7 +51960,7 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
             var map = this._makeMap(this.storeValue.value);
             BI.each(res.value, function (i, v) {
                 if (!map[v]) {
-                    self.storeValue.value.push(v);
+                    BI.pushDistinct(self.storeValue.value, v);
                     // value更新的时候assist也需要更新
                     BI.remove(self.storeValue.assist, v);
                     map[v] = v;
@@ -51776,7 +52031,7 @@ BI.shortcut("bi.multi_select_insert_combo", BI.MultiSelectInsertCombo);
 
 
 /***/ }),
-/* 597 */
+/* 598 */
 /***/ (function(module, exports) {
 
 /**
@@ -52253,7 +52508,7 @@ BI.shortcut("bi.multi_select_insert_no_bar_combo", BI.MultiSelectInsertNoBarComb
 
 
 /***/ }),
-/* 598 */
+/* 599 */
 /***/ (function(module, exports) {
 
 /**
@@ -52411,7 +52666,7 @@ BI.MultiSelectInsertTrigger.EVENT_BLUR = "EVENT_BLUR";
 BI.shortcut("bi.multi_select_insert_trigger", BI.MultiSelectInsertTrigger);
 
 /***/ }),
-/* 599 */
+/* 600 */
 /***/ (function(module, exports) {
 
 /**
@@ -52608,7 +52863,7 @@ BI.MultiSelectLoader.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multi_select_loader", BI.MultiSelectLoader);
 
 /***/ }),
-/* 600 */
+/* 601 */
 /***/ (function(module, exports) {
 
 /**
@@ -52794,7 +53049,7 @@ BI.shortcut("bi.multi_select_no_bar_loader", BI.MultiSelectNoBarLoader);
 
 
 /***/ }),
-/* 601 */
+/* 602 */
 /***/ (function(module, exports) {
 
 /**
@@ -52894,7 +53149,7 @@ BI.MultiSelectPopupView.EVENT_CLICK_CLEAR = "EVENT_CLICK_CLEAR";
 BI.shortcut("bi.multi_select_popup_view", BI.MultiSelectPopupView);
 
 /***/ }),
-/* 602 */
+/* 603 */
 /***/ (function(module, exports) {
 
 /**
@@ -52990,7 +53245,7 @@ BI.MultiSelectNoBarPopupView.EVENT_CLICK_CLEAR = "EVENT_CLICK_CLEAR";
 BI.shortcut("bi.multi_select_no_bar_popup_view", BI.MultiSelectNoBarPopupView);
 
 /***/ }),
-/* 603 */
+/* 604 */
 /***/ (function(module, exports) {
 
 /**
@@ -53148,7 +53403,7 @@ BI.MultiSelectTrigger.EVENT_FOCUS = "EVENT_FOCUS";
 BI.shortcut("bi.multi_select_trigger", BI.MultiSelectTrigger);
 
 /***/ }),
-/* 604 */
+/* 605 */
 /***/ (function(module, exports) {
 
 /**
@@ -53251,7 +53506,7 @@ BI.MultiSelectSearchInsertPane.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multi_select_search_insert_pane", BI.MultiSelectSearchInsertPane);
 
 /***/ }),
-/* 605 */
+/* 606 */
 /***/ (function(module, exports) {
 
 /**
@@ -53418,7 +53673,7 @@ BI.MultiSelectSearchLoader.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multi_select_search_loader", BI.MultiSelectSearchLoader);
 
 /***/ }),
-/* 606 */
+/* 607 */
 /***/ (function(module, exports) {
 
 /**
@@ -53508,7 +53763,7 @@ BI.MultiSelectSearchPane.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multi_select_search_pane", BI.MultiSelectSearchPane);
 
 /***/ }),
-/* 607 */
+/* 608 */
 /***/ (function(module, exports) {
 
 /**
@@ -53613,7 +53868,7 @@ BI.shortcut("bi.multi_select_check_selected_button", BI.MultiSelectCheckSelected
 
 
 /***/ }),
-/* 608 */
+/* 609 */
 /***/ (function(module, exports) {
 
 /**
@@ -53721,7 +53976,7 @@ BI.shortcut("bi.multi_select_editor", BI.MultiSelectEditor);
 
 
 /***/ }),
-/* 609 */
+/* 610 */
 /***/ (function(module, exports) {
 
 /**
@@ -53940,7 +54195,7 @@ BI.SelectPatchEditor.EVENT_BLUR = "EVENT_BLUR";
 BI.shortcut("bi.select_patch_editor", BI.SelectPatchEditor);
 
 /***/ }),
-/* 610 */
+/* 611 */
 /***/ (function(module, exports) {
 
 /**
@@ -54080,9 +54335,9 @@ BI.MultiSelectInsertSearcher = BI.inherit(BI.Widget, {
                 var state = "";
                 BI.each(ob.assist, function (i, v) {
                     if (i === 0) {
-                        state += "" + (o.valueFormatter(v + "") || v);
+                        state += "" + (v === null ? "" : (o.valueFormatter(v + "") || v));
                     } else {
-                        state += "," + (o.valueFormatter(v + "") || v);
+                        state += "," + (v === null ? "" : (o.valueFormatter(v + "") || v));
                     }
                 });
                 this.editor.setState(state);
@@ -54096,9 +54351,9 @@ BI.MultiSelectInsertSearcher = BI.inherit(BI.Widget, {
                 var state = "";
                 BI.each(ob.value, function (i, v) {
                     if (i === 0) {
-                        state += "" + (o.valueFormatter(v + "") || v);
+                        state += "" + (v === null ? "" : (o.valueFormatter(v + "") || v));
                     } else {
-                        state += "," + (o.valueFormatter(v + "") || v);
+                        state += "," + (v === null ? "" : (o.valueFormatter(v + "") || v));
                     }
                 });
                 this.editor.setState(state);
@@ -54140,8 +54395,9 @@ BI.MultiSelectInsertSearcher.EVENT_FOCUS = "EVENT_FOCUS";
 BI.MultiSelectInsertSearcher.EVENT_BLUR = "EVENT_BLUR";
 BI.shortcut("bi.multi_select_insert_searcher", BI.MultiSelectInsertSearcher);
 
+
 /***/ }),
-/* 611 */
+/* 612 */
 /***/ (function(module, exports) {
 
 /**
@@ -54279,9 +54535,9 @@ BI.MultiSelectSearcher = BI.inherit(BI.Widget, {
                 var state = "";
                 BI.each(ob.assist, function (i, v) {
                     if (i === 0) {
-                        state += "" + (o.valueFormatter(v + "") || v);
+                        state += "" + (v === null ? "" : (o.valueFormatter(v + "") || v));
                     } else {
-                        state += "," + (o.valueFormatter(v + "") || v);
+                        state += "," + (v === null ? "" : (o.valueFormatter(v + "") || v));
                     }
                 });
                 this.editor.setState(state);
@@ -54295,9 +54551,9 @@ BI.MultiSelectSearcher = BI.inherit(BI.Widget, {
                 var state = "";
                 BI.each(ob.value, function (i, v) {
                     if (i === 0) {
-                        state += "" + (o.valueFormatter(v + "") || v);
+                        state += "" + (v === null ? "" : (o.valueFormatter(v + "") || v));
                     } else {
-                        state += "," + (o.valueFormatter(v + "") || v);
+                        state += "," + (v === null ? "" : (o.valueFormatter(v + "") || v));
                     }
                 });
                 this.editor.setState(state);
@@ -54307,7 +54563,7 @@ BI.MultiSelectSearcher = BI.inherit(BI.Widget, {
         }
     },
 
-    getState: function() {
+    getState: function () {
         return this.editor.getState();
     },
 
@@ -54339,8 +54595,9 @@ BI.MultiSelectSearcher.EVENT_FOCUS = "EVENT_FOCUS";
 BI.MultiSelectSearcher.EVENT_BLUR = "EVENT_BLUR";
 BI.shortcut("bi.multi_select_searcher", BI.MultiSelectSearcher);
 
+
 /***/ }),
-/* 612 */
+/* 613 */
 /***/ (function(module, exports) {
 
 /**
@@ -54457,7 +54714,7 @@ BI.MultiSelectCheckSelectedSwitcher.EVENT_AFTER_HIDEVIEW = "EVENT_AFTER_HIDEVIEW
 BI.shortcut("bi.multi_select_check_selected_switcher", BI.MultiSelectCheckSelectedSwitcher);
 
 /***/ }),
-/* 613 */
+/* 614 */
 /***/ (function(module, exports) {
 
 /**
@@ -54743,7 +55000,7 @@ BI.MultiSelectInsertList = BI.inherit(BI.Single, {
             var map = this._makeMap(this.storeValue.value);
             BI.each(res.value, function (i, v) {
                 if (!map[v]) {
-                    self.storeValue.value.push(v);
+                    BI.pushDistinct(self.storeValue.value, v);
                     map[v] = v;
                 }
             });
@@ -54801,7 +55058,7 @@ BI.shortcut("bi.multi_select_insert_list", BI.MultiSelectInsertList);
 
 
 /***/ }),
-/* 614 */
+/* 615 */
 /***/ (function(module, exports) {
 
 /**
@@ -55091,7 +55348,7 @@ BI.MultiSelectInsertNoBarList = BI.inherit(BI.Single, {
             var map = this._makeMap(this.storeValue.value);
             BI.each(res.value, function (i, v) {
                 if (!map[v]) {
-                    self.storeValue.value.push(v);
+                    BI.pushDistinct(self.storeValue.value, v);
                     map[v] = v;
                 }
             });
@@ -55150,7 +55407,7 @@ BI.MultiSelectInsertNoBarList.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multi_select_insert_no_bar_list", BI.MultiSelectInsertNoBarList);
 
 /***/ }),
-/* 615 */
+/* 616 */
 /***/ (function(module, exports) {
 
 /**
@@ -55456,7 +55713,7 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
             var map = this._makeMap(this.storeValue.value);
             BI.each(res.value, function (i, v) {
                 if (!map[v]) {
-                    self.storeValue.value.push(v);
+                    BI.pushDistinct(self.storeValue.value, v);
                     map[v] = v;
                 }
             });
@@ -55513,7 +55770,7 @@ BI.MultiSelectList.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multi_select_list", BI.MultiSelectList);
 
 /***/ }),
-/* 616 */
+/* 617 */
 /***/ (function(module, exports) {
 
 /**
@@ -55690,7 +55947,7 @@ BI.shortcut("bi.multi_select_tree", BI.MultiSelectTree);
 
 
 /***/ }),
-/* 617 */
+/* 618 */
 /***/ (function(module, exports) {
 
 /**
@@ -55753,7 +56010,7 @@ BI.MultiSelectTreePopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multi_select_tree_popup", BI.MultiSelectTreePopup);
 
 /***/ }),
-/* 618 */
+/* 619 */
 /***/ (function(module, exports) {
 
 /**
@@ -55877,7 +56134,7 @@ BI.MultiTreeCheckPane.EVENT_CONTINUE_CLICK = "EVENT_CONTINUE_CLICK";
 BI.shortcut("bi.multi_tree_check_pane", BI.MultiTreeCheckPane);
 
 /***/ }),
-/* 619 */
+/* 620 */
 /***/ (function(module, exports) {
 
 /**
@@ -56216,6 +56473,10 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
         });
     },
 
+    getSearcher: function () {
+        return this.trigger.getSearcher();
+    },
+
     getValue: function () {
         return BI.deepClone(this.storeValue.value);
     },
@@ -56237,7 +56498,7 @@ BI.shortcut("bi.multi_tree_combo", BI.MultiTreeCombo);
 
 
 /***/ }),
-/* 620 */
+/* 621 */
 /***/ (function(module, exports) {
 
 /**
@@ -56573,6 +56834,10 @@ BI.MultiTreeInsertCombo = BI.inherit(BI.Single, {
         this.combo.hideView();
     },
 
+    getSearcher: function () {
+        return this.trigger.getSearcher();
+    },
+
     showView: function () {
         this.combo.showView();
     },
@@ -56612,7 +56877,7 @@ BI.shortcut("bi.multi_tree_insert_combo", BI.MultiTreeInsertCombo);
 
 
 /***/ }),
-/* 621 */
+/* 622 */
 /***/ (function(module, exports) {
 
 /**
@@ -56980,6 +57245,10 @@ BI.MultiTreeListCombo = BI.inherit(BI.Single, {
         this.combo.hideView();
     },
 
+    getSearcher: function () {
+        return this.trigger.getSearcher();
+    },
+
     setValue: function (v) {
         this.storeValue.value = v || [];
         this.combo.setValue({
@@ -57011,7 +57280,7 @@ BI.shortcut("bi.multi_tree_list_combo", BI.MultiTreeListCombo);
 
 
 /***/ }),
-/* 622 */
+/* 623 */
 /***/ (function(module, exports) {
 
 /**
@@ -57118,7 +57387,7 @@ BI.MultiTreePopup.EVENT_AFTERINIT = "EVENT_AFTERINIT";
 BI.shortcut("bi.multi_tree_popup_view", BI.MultiTreePopup);
 
 /***/ }),
-/* 623 */
+/* 624 */
 /***/ (function(module, exports) {
 
 /**
@@ -57191,7 +57460,7 @@ BI.MultiTreeCheckSelectedButton.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multi_tree_check_selected_button", BI.MultiTreeCheckSelectedButton);
 
 /***/ }),
-/* 624 */
+/* 625 */
 /***/ (function(module, exports) {
 
 /**
@@ -57315,7 +57584,7 @@ BI.MultiTreeSearchInsertPane.EVENT_ADD_ITEM = "EVENT_ADD_ITEM";
 BI.shortcut("bi.multi_tree_search_insert_pane", BI.MultiTreeSearchInsertPane);
 
 /***/ }),
-/* 625 */
+/* 626 */
 /***/ (function(module, exports) {
 
 /**
@@ -57396,7 +57665,7 @@ BI.MultiTreeSearchPane.EVENT_CLICK_CLEAR = "EVENT_CLICK_CLEAR";
 BI.shortcut("bi.multi_tree_search_pane", BI.MultiTreeSearchPane);
 
 /***/ }),
-/* 626 */
+/* 627 */
 /***/ (function(module, exports) {
 
 /**
@@ -57523,7 +57792,7 @@ BI.MultiListTreeSearcher = BI.inherit(BI.Widget, {
             var text = "";
             BI.each(ob.value, function (idx, path) {
                 var childValue = BI.last(path);
-                text += (o.valueFormatter(childValue + "") || childValue) + "; ";
+                text += (path === "null" ? "" : (o.valueFormatter(childValue + "") || childValue) + "; ");
                 count++;
             });
 
@@ -57535,7 +57804,7 @@ BI.MultiListTreeSearcher = BI.inherit(BI.Widget, {
         }
     },
 
-    getState: function() {
+    getState: function () {
         return this.editor.getState();
     },
 
@@ -57564,8 +57833,9 @@ BI.MultiListTreeSearcher.EVENT_STOP = "EVENT_STOP";
 BI.MultiListTreeSearcher.EVENT_PAUSE = "EVENT_PAUSE";
 BI.shortcut("bi.multi_list_tree_searcher", BI.MultiListTreeSearcher);
 
+
 /***/ }),
-/* 627 */
+/* 628 */
 /***/ (function(module, exports) {
 
 /**
@@ -57586,7 +57856,7 @@ BI.MultiTreeSearcher = BI.inherit(BI.Widget, {
             popup: {},
 
             adapter: null,
-            masker: {},
+            masker: {}
         });
     },
 
@@ -57706,7 +57976,7 @@ BI.MultiTreeSearcher = BI.inherit(BI.Widget, {
             var names = BI.Func.getSortedResult(BI.keys(value));
             BI.each(names, function (idx, name) {
                 var childNodes = getChildrenNode(value[name]);
-                text += (o.valueFormatter(name + "") || name) + (childNodes === "" ? "" : (":" + childNodes)) + "; ";
+                text += (name === "null" ? "" : (o.valueFormatter(name + "") || name)) + (childNodes === "" ? "" : (":" + childNodes)) + "; ";
                 if (childNodes === "") {
                     count++;
                 }
@@ -57726,7 +57996,7 @@ BI.MultiTreeSearcher = BI.inherit(BI.Widget, {
             BI.each(names, function (idx, name) {
                 index++;
                 var childNodes = getChildrenNode(ob[name]);
-                text += (o.valueFormatter(name + "") || name) + (childNodes === "" ? "" : (":" + childNodes)) + (index === size ? "" : ",");
+                text += (name === "null" ? "(null)" : (o.valueFormatter(name + "") || name)) + (childNodes === "" ? "" : (":" + childNodes)) + (index === size ? "" : ",");
                 if (childNodes === "") {
                     count++;
                 }
@@ -57735,7 +58005,7 @@ BI.MultiTreeSearcher = BI.inherit(BI.Widget, {
         }
     },
 
-    getState: function() {
+    getState: function () {
         return this.editor.getState();
     },
 
@@ -57765,8 +58035,9 @@ BI.MultiTreeSearcher.EVENT_STOP = "EVENT_STOP";
 BI.MultiTreeSearcher.EVENT_PAUSE = "EVENT_PAUSE";
 BI.shortcut("bi.multi_tree_searcher", BI.MultiTreeSearcher);
 
+
 /***/ }),
-/* 628 */
+/* 629 */
 /***/ (function(module, exports) {
 
 /**
@@ -57925,7 +58196,7 @@ BI.NumberEditor.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.number_editor", BI.NumberEditor);
 
 /***/ }),
-/* 629 */
+/* 630 */
 /***/ (function(module, exports) {
 
 // 小于号的值为：0，小于等于号的值为:1
@@ -58473,7 +58744,7 @@ BI.NumberInterval.EVENT_ERROR = "EVENT_ERROR";
 BI.shortcut("bi.number_interval", BI.NumberInterval);
 
 /***/ }),
-/* 630 */
+/* 631 */
 /***/ (function(module, exports) {
 
 BI.NumberIntervalSingleEidtor = BI.inherit(BI.Single, {
@@ -58562,7 +58833,7 @@ BI.NumberIntervalSingleEidtor.EVENT_CONFIRM = "EVENT_CONFIRM";
 BI.shortcut("bi.number_interval_single_editor", BI.NumberIntervalSingleEidtor);
 
 /***/ }),
-/* 631 */
+/* 632 */
 /***/ (function(module, exports) {
 
 /**
@@ -59049,7 +59320,7 @@ BI.shortcut("bi.search_multi_text_value_combo", BI.SearchMultiTextValueCombo);
 
 
 /***/ }),
-/* 632 */
+/* 633 */
 /***/ (function(module, exports) {
 
 BI.SearchMultiSelectTrigger = BI.inherit(BI.Trigger, {
@@ -59209,7 +59480,7 @@ BI.shortcut("bi.search_multi_select_trigger", BI.SearchMultiSelectTrigger);
 
 
 /***/ }),
-/* 633 */
+/* 634 */
 /***/ (function(module, exports) {
 
 /**
@@ -59391,7 +59662,7 @@ BI.SearchMultiSelectLoader.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.search_multi_select_loader", BI.SearchMultiSelectLoader);
 
 /***/ }),
-/* 634 */
+/* 635 */
 /***/ (function(module, exports) {
 
 BI.SearchMultiSelectPopupView = BI.inherit(BI.Widget, {
@@ -59484,7 +59755,7 @@ BI.SearchMultiSelectPopupView.EVENT_CLICK_CLEAR = "EVENT_CLICK_CLEAR";
 BI.shortcut("bi.search_multi_select_popup_view", BI.SearchMultiSelectPopupView);
 
 /***/ }),
-/* 635 */
+/* 636 */
 /***/ (function(module, exports) {
 
 BI.SearchMultiSelectSearcher = BI.inherit(BI.Widget, {
@@ -59665,7 +59936,7 @@ BI.shortcut("bi.search_multi_select_searcher", BI.SearchMultiSelectSearcher);
 
 
 /***/ }),
-/* 636 */
+/* 637 */
 /***/ (function(module, exports) {
 
 /**
@@ -59756,7 +60027,7 @@ BI.SelectTreeFirstPlusGroupNode = BI.inherit(BI.NodeButton, {
 BI.shortcut("bi.select_tree_first_plus_group_node", BI.SelectTreeFirstPlusGroupNode);
 
 /***/ }),
-/* 637 */
+/* 638 */
 /***/ (function(module, exports) {
 
 /**
@@ -59847,7 +60118,7 @@ BI.SelectTreeLastPlusGroupNode = BI.inherit(BI.NodeButton, {
 BI.shortcut("bi.select_tree_last_plus_group_node", BI.SelectTreeLastPlusGroupNode);
 
 /***/ }),
-/* 638 */
+/* 639 */
 /***/ (function(module, exports) {
 
 /**
@@ -59938,7 +60209,7 @@ BI.SelectTreeMidPlusGroupNode = BI.inherit(BI.NodeButton, {
 BI.shortcut("bi.select_tree_mid_plus_group_node", BI.SelectTreeMidPlusGroupNode);
 
 /***/ }),
-/* 639 */
+/* 640 */
 /***/ (function(module, exports) {
 
 /**
@@ -60029,7 +60300,7 @@ BI.SelectTreePlusGroupNode = BI.inherit(BI.NodeButton, {
 BI.shortcut("bi.select_tree_plus_group_node", BI.SelectTreePlusGroupNode);
 
 /***/ }),
-/* 640 */
+/* 641 */
 /***/ (function(module, exports) {
 
 /**
@@ -60108,7 +60379,7 @@ BI.SelectTreeCombo = BI.inherit(BI.Widget, {
 BI.shortcut("bi.select_tree_combo", BI.SelectTreeCombo);
 
 /***/ }),
-/* 641 */
+/* 642 */
 /***/ (function(module, exports) {
 
 /**
@@ -60190,7 +60461,7 @@ BI.SelectTreeExpander = BI.inherit(BI.Widget, {
 BI.shortcut("bi.select_tree_expander", BI.SelectTreeExpander);
 
 /***/ }),
-/* 642 */
+/* 643 */
 /***/ (function(module, exports) {
 
 /**
@@ -60296,7 +60567,7 @@ BI.SelectTreePopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.select_level_tree", BI.SelectTreePopup);
 
 /***/ }),
-/* 643 */
+/* 644 */
 /***/ (function(module, exports) {
 
 /**
@@ -60457,7 +60728,7 @@ BI.shortcut("bi.single_select_search_loader", BI.SingleSelectSearchLoader);
 
 
 /***/ }),
-/* 644 */
+/* 645 */
 /***/ (function(module, exports) {
 
 /**
@@ -60573,7 +60844,7 @@ BI.SingleSelectSearchInsertPane.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.single_select_search_insert_pane", BI.SingleSelectSearchInsertPane);
 
 /***/ }),
-/* 645 */
+/* 646 */
 /***/ (function(module, exports) {
 
 /**
@@ -60679,7 +60950,7 @@ BI.SingleSelectSearchPane.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.single_select_search_pane", BI.SingleSelectSearchPane);
 
 /***/ }),
-/* 646 */
+/* 647 */
 /***/ (function(module, exports) {
 
 /**
@@ -60948,7 +61219,7 @@ BI.shortcut("bi.single_select_combo", BI.SingleSelectCombo);
 
 
 /***/ }),
-/* 647 */
+/* 648 */
 /***/ (function(module, exports) {
 
 /**
@@ -61193,7 +61464,7 @@ BI.SingleSelectInsertCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
 BI.shortcut("bi.single_select_insert_combo", BI.SingleSelectInsertCombo);
 
 /***/ }),
-/* 648 */
+/* 649 */
 /***/ (function(module, exports) {
 
 /**
@@ -61362,7 +61633,7 @@ BI.shortcut("bi.single_select_list", BI.SingleSelectList);
 
 
 /***/ }),
-/* 649 */
+/* 650 */
 /***/ (function(module, exports) {
 
 /**
@@ -61535,7 +61806,7 @@ BI.shortcut("bi.single_select_loader", BI.SingleSelectLoader);
 
 
 /***/ }),
-/* 650 */
+/* 651 */
 /***/ (function(module, exports) {
 
 /**
@@ -61618,7 +61889,7 @@ BI.SingleSelectPopupView.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.single_select_popup_view", BI.SingleSelectPopupView);
 
 /***/ }),
-/* 651 */
+/* 652 */
 /***/ (function(module, exports) {
 
 /**
@@ -61761,7 +62032,7 @@ BI.SingleSelectTrigger.EVENT_BLUR = "EVENT_BLUR";
 BI.shortcut("bi.single_select_trigger", BI.SingleSelectTrigger);
 
 /***/ }),
-/* 652 */
+/* 653 */
 /***/ (function(module, exports) {
 
 /**
@@ -61972,7 +62243,7 @@ BI.shortcut("bi.single_select_insert_list", BI.SingleSelectInsertList);
 
 
 /***/ }),
-/* 653 */
+/* 654 */
 /***/ (function(module, exports) {
 
 /**
@@ -62069,7 +62340,7 @@ BI.SingleSelectEditor.EVENT_BLUR = "EVENT_BLUR";
 BI.shortcut("bi.single_select_editor", BI.SingleSelectEditor);
 
 /***/ }),
-/* 654 */
+/* 655 */
 /***/ (function(module, exports) {
 
 /**
@@ -62182,7 +62453,7 @@ BI.SingleSelectSearcher = BI.inherit(BI.Widget, {
     },
 
     getKeyword: function () {
-        return this.editor.getValue();
+        return this.editor.getKeyword();
     },
 
     hasMatched: function () {
@@ -62236,7 +62507,7 @@ BI.shortcut("bi.single_select_searcher", BI.SingleSelectSearcher);
 
 
 /***/ }),
-/* 655 */
+/* 656 */
 /***/ (function(module, exports) {
 
 BI.SignTextEditor = BI.inherit(BI.Widget, {
@@ -62436,7 +62707,7 @@ BI.SignTextEditor.EVENT_CLICK_LABEL = "EVENT_CLICK_LABEL";
 BI.shortcut("bi.sign_text_editor", BI.SignTextEditor);
 
 /***/ }),
-/* 656 */
+/* 657 */
 /***/ (function(module, exports) {
 
 /**
@@ -62477,7 +62748,7 @@ BI.SliderIconButton = BI.inherit(BI.Widget, {
 BI.shortcut("bi.single_slider_button", BI.SliderIconButton);
 
 /***/ }),
-/* 657 */
+/* 658 */
 /***/ (function(module, exports) {
 
 /**
@@ -62824,7 +63095,7 @@ BI.SingleSlider.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.single_slider", BI.SingleSlider);
 
 /***/ }),
-/* 658 */
+/* 659 */
 /***/ (function(module, exports) {
 
 /**
@@ -63140,7 +63411,7 @@ BI.SingleSliderLabel.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.single_slider_label", BI.SingleSliderLabel);
 
 /***/ }),
-/* 659 */
+/* 660 */
 /***/ (function(module, exports) {
 
 /**
@@ -63430,7 +63701,7 @@ BI.SingleSliderNormal.EVENT_DRAG = "EVENT_DRAG";
 BI.shortcut("bi.single_slider_normal", BI.SingleSliderNormal);
 
 /***/ }),
-/* 660 */
+/* 661 */
 /***/ (function(module, exports) {
 
 /**
@@ -63515,7 +63786,7 @@ BI.SingleTreeCombo.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
 BI.shortcut("bi.single_tree_combo", BI.SingleTreeCombo);
 
 /***/ }),
-/* 661 */
+/* 662 */
 /***/ (function(module, exports) {
 
 /**
@@ -63586,7 +63857,7 @@ BI.SingleTreePopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.single_level_tree", BI.SingleTreePopup);
 
 /***/ }),
-/* 662 */
+/* 663 */
 /***/ (function(module, exports) {
 
 /**
@@ -63642,6 +63913,10 @@ BI.SingleTreeTrigger = BI.inherit(BI.Trigger, {
         return this.options.value || [];
     },
 
+    getTextor: function() {
+        return this.trigger.getTextor();
+    },
+
     populate: function (items) {
         this.trigger.populate(items);
     }
@@ -63652,7 +63927,7 @@ BI.shortcut("bi.single_tree_trigger", BI.SingleTreeTrigger);
 
 
 /***/ }),
-/* 663 */
+/* 664 */
 /***/ (function(module, exports) {
 
 /**
@@ -63755,7 +64030,7 @@ BI.TextValueDownListCombo.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.text_value_down_list_combo", BI.TextValueDownListCombo);
 
 /***/ }),
-/* 664 */
+/* 665 */
 /***/ (function(module, exports) {
 
 /**
@@ -63815,7 +64090,7 @@ BI.DownListSelectTextTrigger = BI.inherit(BI.Trigger, {
 BI.shortcut("bi.down_list_select_text_trigger", BI.DownListSelectTextTrigger);
 
 /***/ }),
-/* 665 */
+/* 666 */
 /***/ (function(module, exports) {
 
 !(function () {
@@ -63914,7 +64189,7 @@ BI.shortcut("bi.down_list_select_text_trigger", BI.DownListSelectTextTrigger);
 })();
 
 /***/ }),
-/* 666 */
+/* 667 */
 /***/ (function(module, exports) {
 
 /**
@@ -64152,7 +64427,7 @@ BI.shortcut("bi.down_list_select_text_trigger", BI.DownListSelectTextTrigger);
 })();
 
 /***/ }),
-/* 667 */
+/* 668 */
 /***/ (function(module, exports) {
 
 !(function () {
@@ -64344,7 +64619,7 @@ BI.shortcut("bi.down_list_select_text_trigger", BI.DownListSelectTextTrigger);
 })();
 
 /***/ }),
-/* 668 */
+/* 669 */
 /***/ (function(module, exports) {
 
 /**
@@ -64559,7 +64834,7 @@ BI.shortcut("bi.date_interval", BI.DateInterval);
 
 
 /***/ }),
-/* 669 */
+/* 670 */
 /***/ (function(module, exports) {
 
 /**
@@ -64767,7 +65042,7 @@ BI.TimeInterval.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.time_interval", BI.TimeInterval);
 
 /***/ }),
-/* 670 */
+/* 671 */
 /***/ (function(module, exports) {
 
 /**
@@ -64892,7 +65167,7 @@ BI.shortcut("bi.time_interval", BI.TimeInterval);
 })();
 
 /***/ }),
-/* 671 */
+/* 672 */
 /***/ (function(module, exports) {
 
 /**
@@ -65016,7 +65291,7 @@ BI.DynamicYearCard.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.dynamic_year_card", BI.DynamicYearCard);
 
 /***/ }),
-/* 672 */
+/* 673 */
 /***/ (function(module, exports) {
 
 /**
@@ -65215,7 +65490,7 @@ BI.StaticYearCard.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.static_year_card", BI.StaticYearCard);
 
 /***/ }),
-/* 673 */
+/* 674 */
 /***/ (function(module, exports) {
 
 BI.DynamicYearCombo = BI.inherit(BI.Widget, {
@@ -65432,7 +65707,7 @@ BI.extend(BI.DynamicYearCombo, {
 
 
 /***/ }),
-/* 674 */
+/* 675 */
 /***/ (function(module, exports) {
 
 /**
@@ -65684,7 +65959,7 @@ BI.DynamicYearPopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.dynamic_year_popup", BI.DynamicYearPopup);
 
 /***/ }),
-/* 675 */
+/* 676 */
 /***/ (function(module, exports) {
 
 BI.DynamicYearTrigger = BI.inherit(BI.Trigger, {
@@ -65879,7 +66154,7 @@ BI.DynamicYearTrigger.EVENT_VALID = "EVENT_VALID";
 BI.shortcut("bi.dynamic_year_trigger", BI.DynamicYearTrigger);
 
 /***/ }),
-/* 676 */
+/* 677 */
 /***/ (function(module, exports) {
 
 /**
@@ -66092,7 +66367,7 @@ BI.YearInterval.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
 BI.shortcut("bi.year_interval", BI.YearInterval);
 
 /***/ }),
-/* 677 */
+/* 678 */
 /***/ (function(module, exports) {
 
 /**
@@ -66263,7 +66538,7 @@ BI.DynamicYearMonthCard.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.dynamic_year_month_card", BI.DynamicYearMonthCard);
 
 /***/ }),
-/* 678 */
+/* 679 */
 /***/ (function(module, exports) {
 
 BI.StaticYearMonthCard = BI.inherit(BI.Widget, {
@@ -66432,7 +66707,7 @@ BI.shortcut("bi.static_year_month_card", BI.StaticYearMonthCard);
 
 
 /***/ }),
-/* 679 */
+/* 680 */
 /***/ (function(module, exports) {
 
 BI.DynamicYearMonthCombo = BI.inherit(BI.Single, {
@@ -66663,7 +66938,7 @@ BI.extend(BI.DynamicYearMonthCombo, {
 
 
 /***/ }),
-/* 680 */
+/* 681 */
 /***/ (function(module, exports) {
 
 /**
@@ -66910,7 +67185,7 @@ BI.DynamicYearMonthPopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.dynamic_year_month_popup", BI.DynamicYearMonthPopup);
 
 /***/ }),
-/* 681 */
+/* 682 */
 /***/ (function(module, exports) {
 
 BI.DynamicYearMonthTrigger = BI.inherit(BI.Trigger, {
@@ -67188,7 +67463,7 @@ BI.DynamicYearMonthTrigger.EVENT_KEY_DOWN = "EVENT_KEY_DOWN";
 BI.shortcut("bi.dynamic_year_month_trigger", BI.DynamicYearMonthTrigger);
 
 /***/ }),
-/* 682 */
+/* 683 */
 /***/ (function(module, exports) {
 
 BI.YearMonthInterval = BI.inherit(BI.Single, {
@@ -67400,7 +67675,7 @@ BI.shortcut("bi.year_month_interval", BI.YearMonthInterval);
 
 
 /***/ }),
-/* 683 */
+/* 684 */
 /***/ (function(module, exports) {
 
 /**
@@ -67571,7 +67846,7 @@ BI.DynamicYearQuarterCard.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.dynamic_year_quarter_card", BI.DynamicYearQuarterCard);
 
 /***/ }),
-/* 684 */
+/* 685 */
 /***/ (function(module, exports) {
 
 BI.StaticYearQuarterCard = BI.inherit(BI.Widget, {
@@ -67728,7 +68003,7 @@ BI.shortcut("bi.static_year_quarter_card", BI.StaticYearQuarterCard);
 
 
 /***/ }),
-/* 685 */
+/* 686 */
 /***/ (function(module, exports) {
 
 BI.DynamicYearQuarterCombo = BI.inherit(BI.Widget, {
@@ -67959,7 +68234,7 @@ BI.extend(BI.DynamicYearQuarterCombo, {
 
 
 /***/ }),
-/* 686 */
+/* 687 */
 /***/ (function(module, exports) {
 
 BI.DynamicYearQuarterPopup = BI.inherit(BI.Widget, {
@@ -68199,7 +68474,7 @@ BI.DynamicYearQuarterPopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.dynamic_year_quarter_popup", BI.DynamicYearQuarterPopup);
 
 /***/ }),
-/* 687 */
+/* 688 */
 /***/ (function(module, exports) {
 
 BI.DynamicYearQuarterTrigger = BI.inherit(BI.Trigger, {
@@ -68461,7 +68736,7 @@ BI.DynamicYearQuarterTrigger.EVENT_VALID = "EVENT_VALID";
 BI.shortcut("bi.dynamic_year_quarter_trigger", BI.DynamicYearQuarterTrigger);
 
 /***/ }),
-/* 688 */
+/* 689 */
 /***/ (function(module, exports) {
 
 /**
@@ -68672,7 +68947,7 @@ BI.YearQuarterInterval.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
 BI.shortcut("bi.year_quarter_interval", BI.YearQuarterInterval);
 
 /***/ }),
-/* 689 */
+/* 690 */
 /***/ (function(module, exports) {
 
 /**
@@ -68778,7 +69053,7 @@ BI.AbstractAllValueChooser = BI.inherit(BI.Widget, {
 });
 
 /***/ }),
-/* 690 */
+/* 691 */
 /***/ (function(module, exports) {
 
 /**
@@ -68860,7 +69135,7 @@ BI.shortcut("bi.all_value_chooser_combo", BI.AllValueChooserCombo);
 
 
 /***/ }),
-/* 691 */
+/* 692 */
 /***/ (function(module, exports) {
 
 /**
@@ -68934,7 +69209,7 @@ BI.shortcut("bi.all_value_chooser_pane", BI.AllValueChooserPane);
 
 
 /***/ }),
-/* 692 */
+/* 693 */
 /***/ (function(module, exports) {
 
 BI.AllValueMultiTextValueCombo = BI.inherit(BI.Widget, {
@@ -69005,7 +69280,7 @@ BI.shortcut("bi.all_value_multi_text_value_combo", BI.AllValueMultiTextValueComb
 
 
 /***/ }),
-/* 693 */
+/* 694 */
 /***/ (function(module, exports) {
 
 BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
@@ -69865,7 +70140,7 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
 
 
 /***/ }),
-/* 694 */
+/* 695 */
 /***/ (function(module, exports) {
 
 BI.AbstractListTreeValueChooser = BI.inherit(BI.AbstractTreeValueChooser, {
@@ -70157,7 +70432,7 @@ BI.AbstractListTreeValueChooser = BI.inherit(BI.AbstractTreeValueChooser, {
 });
 
 /***/ }),
-/* 695 */
+/* 696 */
 /***/ (function(module, exports) {
 
 /**
@@ -70246,6 +70521,10 @@ BI.ListTreeValueChooserInsertCombo = BI.inherit(BI.AbstractListTreeValueChooser,
         this.combo.hideView();
     },
 
+    getSearcher: function () {
+        return this.combo.getSearcher();
+    },
+
     setValue: function (v) {
         this.combo.setValue(v);
     },
@@ -70273,7 +70552,7 @@ BI.shortcut("bi.list_tree_value_chooser_insert_combo", BI.ListTreeValueChooserIn
 
 
 /***/ }),
-/* 696 */
+/* 697 */
 /***/ (function(module, exports) {
 
 /**
@@ -70361,6 +70640,10 @@ BI.TreeValueChooserInsertCombo = BI.inherit(BI.AbstractTreeValueChooser, {
         this.combo.hideView();
     },
 
+    getSearcher: function () {
+        return this.combo.getSearcher();
+    },
+
     setValue: function (v) {
         this.combo.setValue(v);
     },
@@ -70388,7 +70671,7 @@ BI.shortcut("bi.tree_value_chooser_insert_combo", BI.TreeValueChooserInsertCombo
 
 
 /***/ }),
-/* 697 */
+/* 698 */
 /***/ (function(module, exports) {
 
 /**
@@ -70476,6 +70759,10 @@ BI.TreeValueChooserCombo = BI.inherit(BI.AbstractTreeValueChooser, {
         this.combo.hideView();
     },
 
+    getSearcher: function () {
+        return this.combo.getSearcher();
+    },
+
     setValue: function (v) {
         this.combo.setValue(v);
     },
@@ -70507,7 +70794,7 @@ BI.shortcut("bi.tree_value_chooser_combo", BI.TreeValueChooserCombo);
 
 
 /***/ }),
-/* 698 */
+/* 699 */
 /***/ (function(module, exports) {
 
 /**
@@ -70575,7 +70862,7 @@ BI.shortcut("bi.tree_value_chooser_pane", BI.TreeValueChooserPane);
 
 
 /***/ }),
-/* 699 */
+/* 700 */
 /***/ (function(module, exports) {
 
 /**
@@ -70687,7 +70974,7 @@ BI.AbstractValueChooser = BI.inherit(BI.Widget, {
 });
 
 /***/ }),
-/* 700 */
+/* 701 */
 /***/ (function(module, exports) {
 
 /**
@@ -70797,7 +71084,7 @@ BI.shortcut("bi.value_chooser_insert_combo", BI.ValueChooserInsertCombo);
 
 
 /***/ }),
-/* 701 */
+/* 702 */
 /***/ (function(module, exports) {
 
 /**
@@ -70911,7 +71198,7 @@ BI.shortcut("bi.value_chooser_combo", BI.ValueChooserCombo);
 
 
 /***/ }),
-/* 702 */
+/* 703 */
 /***/ (function(module, exports) {
 
 /**
@@ -71013,7 +71300,7 @@ BI.shortcut("bi.value_chooser_no_bar_combo", BI.ValueChooserNoBarCombo);
 
 
 /***/ }),
-/* 703 */
+/* 704 */
 /***/ (function(module, exports) {
 
 /**
@@ -71089,20 +71376,20 @@ BI.shortcut("bi.value_chooser_pane", BI.ValueChooserPane);
 
 
 /***/ }),
-/* 704 */
+/* 705 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var _index = _interopRequireDefault(__webpack_require__(705));
+var _index = _interopRequireDefault(__webpack_require__(706));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 BI.extend(BI, _index["default"]);
 
 /***/ }),
-/* 705 */
+/* 706 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -72139,13 +72426,19 @@ Object.defineProperty(exports, "HtmlLabel", {
     return _html2.HtmlLabel;
   }
 });
+Object.defineProperty(exports, "TreeValueChooserPane", {
+  enumerable: true,
+  get: function get() {
+    return _pane3.TreeValueChooserPane;
+  }
+});
 exports["default"] = void 0;
 
-var _combo = __webpack_require__(706);
+var _combo = __webpack_require__(707);
 
 var _group = __webpack_require__(68);
 
-var _tab = __webpack_require__(707);
+var _tab = __webpack_require__(708);
 
 var _pane = __webpack_require__(16);
 
@@ -72153,23 +72446,23 @@ var _button = __webpack_require__(4);
 
 var _button2 = __webpack_require__(46);
 
-var _button3 = __webpack_require__(708);
+var _button3 = __webpack_require__(709);
 
-var _button4 = __webpack_require__(709);
+var _button4 = __webpack_require__(710);
 
-var _icontextitem = __webpack_require__(710);
+var _icontextitem = __webpack_require__(711);
 
-var _editor = __webpack_require__(711);
+var _editor = __webpack_require__(712);
 
-var _iframe = __webpack_require__(712);
+var _iframe = __webpack_require__(713);
 
-var _checkbox = __webpack_require__(713);
+var _checkbox = __webpack_require__(714);
 
-var _input = __webpack_require__(714);
+var _input = __webpack_require__(715);
 
 var _abstract = __webpack_require__(47);
 
-var _label = __webpack_require__(715);
+var _label = __webpack_require__(716);
 
 var _single = __webpack_require__(2);
 
@@ -72177,41 +72470,41 @@ var _text = __webpack_require__(69);
 
 var _trigger = __webpack_require__(48);
 
-var _icon = __webpack_require__(716);
+var _icon = __webpack_require__(717);
 
-var _item = __webpack_require__(717);
+var _item = __webpack_require__(718);
 
-var _combo2 = __webpack_require__(718);
+var _combo2 = __webpack_require__(719);
 
-var _combo3 = __webpack_require__(719);
+var _combo3 = __webpack_require__(720);
 
-var _combo4 = __webpack_require__(720);
+var _combo4 = __webpack_require__(721);
 
-var _combo5 = __webpack_require__(721);
+var _combo5 = __webpack_require__(722);
 
-var _editor2 = __webpack_require__(722);
+var _editor2 = __webpack_require__(723);
 
-var _editor3 = __webpack_require__(723);
+var _editor3 = __webpack_require__(724);
 
-var _loading_pane = __webpack_require__(724);
+var _loading_pane = __webpack_require__(725);
 
-var _allvalueMultitextvalue = __webpack_require__(725);
+var _allvalueMultitextvalue = __webpack_require__(726);
 
-var _abstract2 = __webpack_require__(33);
+var _abstract2 = __webpack_require__(30);
 
 var _abstractTreevaluechooser = __webpack_require__(70);
 
 var _action = __webpack_require__(71);
 
-var _action2 = __webpack_require__(726);
+var _action2 = __webpack_require__(727);
 
 var _behavior = __webpack_require__(49);
 
-var _behavior2 = __webpack_require__(727);
+var _behavior2 = __webpack_require__(728);
 
-var _behavior3 = __webpack_require__(728);
+var _behavior3 = __webpack_require__(729);
 
-var decorator = _interopRequireWildcard(__webpack_require__(729));
+var decorator = _interopRequireWildcard(__webpack_require__(730));
 
 var _ob = __webpack_require__(29);
 
@@ -72219,251 +72512,253 @@ var _widget = __webpack_require__(1);
 
 var _layout = __webpack_require__(3);
 
-var _layout2 = __webpack_require__(730);
+var _layout2 = __webpack_require__(731);
 
-var _layout3 = __webpack_require__(731);
+var _layout3 = __webpack_require__(732);
 
-var _layout4 = __webpack_require__(732);
+var _layout4 = __webpack_require__(733);
 
-var _layout5 = __webpack_require__(733);
+var _layout5 = __webpack_require__(734);
 
-var _combo6 = __webpack_require__(734);
+var _combo6 = __webpack_require__(735);
 
-var _icon2 = __webpack_require__(735);
+var _icon2 = __webpack_require__(736);
 
-var _adapt = __webpack_require__(736);
+var _adapt = __webpack_require__(737);
 
-var _adapt2 = __webpack_require__(737);
+var _adapt2 = __webpack_require__(738);
 
-var _icontexticonitem = __webpack_require__(738);
+var _icontexticonitem = __webpack_require__(739);
 
-var _auto = __webpack_require__(739);
+var _auto = __webpack_require__(740);
 
-var _inline = __webpack_require__(740);
+var _inline = __webpack_require__(741);
 
-var _adapt3 = __webpack_require__(741);
+var _adapt3 = __webpack_require__(742);
 
 var _button5 = __webpack_require__(50);
 
 var _editor4 = __webpack_require__(72);
 
-var _icon3 = __webpack_require__(742);
+var _icon3 = __webpack_require__(743);
 
-var _layer = __webpack_require__(743);
+var _layer = __webpack_require__(744);
 
-var _combo7 = __webpack_require__(744);
+var _combo7 = __webpack_require__(745);
 
-var _dynamicdate = __webpack_require__(745);
+var _dynamicdate = __webpack_require__(746);
 
-var _customtree = __webpack_require__(746);
+var _customtree = __webpack_require__(747);
 
-var _tree = __webpack_require__(747);
+var _tree = __webpack_require__(748);
 
-var _nodeIcon = __webpack_require__(748);
+var _nodeIcon = __webpack_require__(749);
 
-var _itemMid = __webpack_require__(749);
+var _itemMid = __webpack_require__(750);
 
-var _itemFirst = __webpack_require__(750);
+var _itemFirst = __webpack_require__(751);
 
-var _itemLast = __webpack_require__(751);
+var _itemLast = __webpack_require__(752);
 
-var _editorText = __webpack_require__(752);
+var _editorText = __webpack_require__(753);
 
-var _editor5 = __webpack_require__(753);
+var _editor5 = __webpack_require__(754);
 
-var _absolute = __webpack_require__(754);
+var _absolute = __webpack_require__(755);
 
-var _adapt4 = __webpack_require__(755);
+var _adapt4 = __webpack_require__(756);
 
-var _layout6 = __webpack_require__(756);
+var _layout6 = __webpack_require__(757);
 
-var _adapt5 = __webpack_require__(757);
+var _adapt5 = __webpack_require__(758);
 
-var _adapt6 = __webpack_require__(758);
+var _adapt6 = __webpack_require__(759);
 
-var _multiselectInsert = __webpack_require__(759);
+var _multiselectInsert = __webpack_require__(760);
 
-var _multiselect = __webpack_require__(760);
+var _multiselect = __webpack_require__(761);
 
-var _editor6 = __webpack_require__(761);
+var _editor6 = __webpack_require__(762);
 
-var _multilayersingletree = __webpack_require__(762);
+var _multilayersingletree = __webpack_require__(763);
 
-var _colorchooser = __webpack_require__(763);
+var _colorchooser = __webpack_require__(764);
 
-var _a = __webpack_require__(764);
+var _a = __webpack_require__(765);
 
-var _html = __webpack_require__(765);
+var _html = __webpack_require__(766);
 
-var _switcher = __webpack_require__(766);
+var _switcher = __webpack_require__(767);
 
-var _loader = __webpack_require__(767);
+var _loader = __webpack_require__(768);
 
-var _pane2 = __webpack_require__(768);
+var _pane2 = __webpack_require__(769);
 
-var _layer2 = __webpack_require__(769);
+var _layer2 = __webpack_require__(770);
 
-var _toolbar = __webpack_require__(770);
+var _toolbar = __webpack_require__(771);
 
-var _list = __webpack_require__(771);
+var _list = __webpack_require__(772);
 
 var _abstract3 = __webpack_require__(73);
 
-var _combo8 = __webpack_require__(772);
+var _combo8 = __webpack_require__(773);
 
-var _editor7 = __webpack_require__(773);
+var _editor7 = __webpack_require__(774);
 
-var _item2 = __webpack_require__(774);
+var _item2 = __webpack_require__(775);
 
-var _dynamicdatetime = __webpack_require__(775);
+var _dynamicdatetime = __webpack_require__(776);
 
-var _multiTree = __webpack_require__(776);
+var _multiTree = __webpack_require__(777);
 
-var _middle = __webpack_require__(777);
+var _middle = __webpack_require__(778);
 
-var _group2 = __webpack_require__(778);
+var _group2 = __webpack_require__(779);
 
-var _layout7 = __webpack_require__(779);
+var _layout7 = __webpack_require__(780);
 
-var _icon4 = __webpack_require__(780);
+var _icon4 = __webpack_require__(781);
 
-var _searcher = __webpack_require__(781);
+var _searcher = __webpack_require__(782);
 
-var _combo9 = __webpack_require__(782);
+var _combo9 = __webpack_require__(783);
 
-var _combo10 = __webpack_require__(783);
+var _combo10 = __webpack_require__(784);
 
-var _comboTreevaluechooser = __webpack_require__(784);
+var _comboTreevaluechooser = __webpack_require__(785);
 
-var _radio = __webpack_require__(785);
+var _radio = __webpack_require__(786);
 
-var _multilayerselecttree = __webpack_require__(786);
+var _multilayerselecttree = __webpack_require__(787);
 
-var _multilayersingletree2 = __webpack_require__(787);
+var _multilayersingletree2 = __webpack_require__(788);
 
 var _treeview = __webpack_require__(52);
 
-var _multiTree2 = __webpack_require__(788);
+var _multiTree2 = __webpack_require__(789);
 
-var _itemSingleselect = __webpack_require__(789);
+var _itemSingleselect = __webpack_require__(790);
 
-var _singleselectInsert = __webpack_require__(790);
+var _singleselectInsert = __webpack_require__(791);
 
-var _singleselect = __webpack_require__(791);
+var _singleselect = __webpack_require__(792);
 
-var _layout8 = __webpack_require__(792);
+var _layout8 = __webpack_require__(793);
 
-var _combo11 = __webpack_require__(793);
+var _combo11 = __webpack_require__(794);
 
-var _time = __webpack_require__(794);
+var _time = __webpack_require__(795);
 
 var _listtreeview = __webpack_require__(74);
 
-var _listasynctree = __webpack_require__(795);
+var _listasynctree = __webpack_require__(796);
 
-var _asynctree = __webpack_require__(796);
+var _asynctree = __webpack_require__(797);
 
-var _multilayersingletree3 = __webpack_require__(797);
+var _multilayersingletree3 = __webpack_require__(798);
 
-var _multilayerselecttree2 = __webpack_require__(798);
+var _multilayerselecttree2 = __webpack_require__(799);
 
-var _multiTreeList = __webpack_require__(799);
+var _multiTreeList = __webpack_require__(800);
 
-var _multiTreeInsert = __webpack_require__(800);
+var _multiTreeInsert = __webpack_require__(801);
 
-var _combo12 = __webpack_require__(801);
+var _combo12 = __webpack_require__(802);
 
-var _switch = __webpack_require__(802);
+var _switch = __webpack_require__(803);
 
-var _layout9 = __webpack_require__(803);
+var _layout9 = __webpack_require__(804);
 
-var _editor8 = __webpack_require__(804);
+var _editor8 = __webpack_require__(805);
 
-var _trigger2 = __webpack_require__(805);
+var _trigger2 = __webpack_require__(806);
 
-var _triggerText = __webpack_require__(806);
+var _triggerText = __webpack_require__(807);
 
-var _dateinterval = __webpack_require__(807);
+var _dateinterval = __webpack_require__(808);
 
-var _datepane = __webpack_require__(808);
+var _datepane = __webpack_require__(809);
 
-var _pagerAll = __webpack_require__(809);
+var _pagerAll = __webpack_require__(810);
 
 var _layer3 = __webpack_require__(51);
 
-var _popup = __webpack_require__(810);
+var _popup = __webpack_require__(811);
 
-var _check = __webpack_require__(811);
+var _check = __webpack_require__(812);
 
-var _numberinterval = __webpack_require__(812);
+var _numberinterval = __webpack_require__(813);
 
-var _combo13 = __webpack_require__(813);
+var _combo13 = __webpack_require__(814);
 
-var _combo14 = __webpack_require__(814);
+var _combo14 = __webpack_require__(815);
 
-var _intervalslider = __webpack_require__(815);
+var _intervalslider = __webpack_require__(816);
 
-var _multiselectlist = __webpack_require__(816);
+var _multiselectlist = __webpack_require__(817);
 
-var _yearmonthinterval = __webpack_require__(817);
+var _yearmonthinterval = __webpack_require__(818);
 
-var _numbereditor = __webpack_require__(818);
+var _numbereditor = __webpack_require__(819);
 
-var _combo15 = __webpack_require__(819);
+var _combo15 = __webpack_require__(820);
 
-var _linear = __webpack_require__(820);
+var _linear = __webpack_require__(821);
 
-var _img = __webpack_require__(821);
+var _img = __webpack_require__(822);
 
-var _combo16 = __webpack_require__(822);
+var _combo16 = __webpack_require__(823);
 
-var _combo17 = __webpack_require__(823);
+var _combo17 = __webpack_require__(824);
 
-var _listview = __webpack_require__(824);
+var _listview = __webpack_require__(825);
 
-var _middleFloat = __webpack_require__(825);
+var _middleFloat = __webpack_require__(826);
 
-var _popup2 = __webpack_require__(826);
+var _popup2 = __webpack_require__(827);
 
 var _controller = __webpack_require__(53);
 
-var _controller2 = __webpack_require__(827);
+var _controller2 = __webpack_require__(828);
 
-var _popupCalendar = __webpack_require__(828);
+var _popupCalendar = __webpack_require__(829);
 
-var _tree2 = __webpack_require__(829);
+var _tree2 = __webpack_require__(830);
 
-var _textnode = __webpack_require__(830);
+var _textnode = __webpack_require__(831);
 
-var _popup3 = __webpack_require__(831);
+var _popup3 = __webpack_require__(832);
 
-var _button6 = __webpack_require__(832);
+var _button6 = __webpack_require__(833);
 
-var _router = __webpack_require__(833);
+var _router = __webpack_require__(834);
 
-var _datetime = __webpack_require__(834);
+var _datetime = __webpack_require__(835);
 
-var _float = __webpack_require__(835);
+var _float = __webpack_require__(836);
 
-var _layout10 = __webpack_require__(836);
+var _layout10 = __webpack_require__(837);
 
-var _colorchooserPopup = __webpack_require__(837);
+var _colorchooserPopup = __webpack_require__(838);
 
-var _blankicontextitem = __webpack_require__(838);
+var _blankicontextitem = __webpack_require__(839);
 
-var _controller3 = __webpack_require__(839);
+var _controller3 = __webpack_require__(840);
 
-var _pager = __webpack_require__(840);
+var _pager = __webpack_require__(841);
 
-var _timeinterval = __webpack_require__(841);
+var _timeinterval = __webpack_require__(842);
 
-var _datetimepane = __webpack_require__(842);
+var _datetimepane = __webpack_require__(843);
 
-var _singleselectlist = __webpack_require__(843);
+var _singleselectlist = __webpack_require__(844);
 
-var _multiselecttree = __webpack_require__(844);
+var _multiselecttree = __webpack_require__(845);
 
-var _html2 = __webpack_require__(845);
+var _html2 = __webpack_require__(846);
+
+var _pane3 = __webpack_require__(847);
 
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
@@ -72473,15 +72768,6 @@ var _default = {
   Decorators: decorator
 };
 exports["default"] = _default;
-
-/***/ }),
-/* 706 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 707 */
@@ -72499,7 +72785,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _button = __webpack_require__(4);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 709 */
@@ -72526,7 +72812,7 @@ var _button = __webpack_require__(4);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _button = __webpack_require__(4);
 
 /***/ }),
 /* 712 */
@@ -72544,7 +72830,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _button = __webpack_require__(4);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 714 */
@@ -72553,7 +72839,7 @@ var _button = __webpack_require__(4);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _button = __webpack_require__(4);
 
 /***/ }),
 /* 715 */
@@ -72562,7 +72848,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _abstract = __webpack_require__(47);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 716 */
@@ -72571,7 +72857,7 @@ var _abstract = __webpack_require__(47);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _abstract = __webpack_require__(47);
 
 /***/ }),
 /* 717 */
@@ -72580,7 +72866,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _button = __webpack_require__(4);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 718 */
@@ -72589,7 +72875,7 @@ var _button = __webpack_require__(4);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _button = __webpack_require__(4);
 
 /***/ }),
 /* 719 */
@@ -72643,7 +72929,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _pane = __webpack_require__(16);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 725 */
@@ -72652,7 +72938,7 @@ var _pane = __webpack_require__(16);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _pane = __webpack_require__(16);
 
 /***/ }),
 /* 726 */
@@ -72661,7 +72947,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _action = __webpack_require__(71);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 727 */
@@ -72670,7 +72956,7 @@ var _action = __webpack_require__(71);
 "use strict";
 
 
-var _behavior = __webpack_require__(49);
+var _action = __webpack_require__(71);
 
 /***/ }),
 /* 728 */
@@ -72683,6 +72969,15 @@ var _behavior = __webpack_require__(49);
 
 /***/ }),
 /* 729 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _behavior = __webpack_require__(49);
+
+/***/ }),
+/* 730 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -72893,15 +73188,6 @@ type UnionToTuple<U> = UnionToTupleRecursively<U, []>;
 exports.Model = Model;
 
 /***/ }),
-/* 730 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _layout = __webpack_require__(3);
-
-/***/ }),
 /* 731 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -72935,7 +73221,7 @@ var _layout = __webpack_require__(3);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _layout = __webpack_require__(3);
 
 /***/ }),
 /* 735 */
@@ -72944,7 +73230,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 736 */
@@ -72953,7 +73239,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _layout = __webpack_require__(3);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 737 */
@@ -72971,7 +73257,7 @@ var _layout = __webpack_require__(3);
 "use strict";
 
 
-var _button = __webpack_require__(4);
+var _layout = __webpack_require__(3);
 
 /***/ }),
 /* 739 */
@@ -72980,7 +73266,7 @@ var _button = __webpack_require__(4);
 "use strict";
 
 
-var _layout = __webpack_require__(3);
+var _button = __webpack_require__(4);
 
 /***/ }),
 /* 740 */
@@ -73007,7 +73293,7 @@ var _layout = __webpack_require__(3);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _layout = __webpack_require__(3);
 
 /***/ }),
 /* 743 */
@@ -73016,7 +73302,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 744 */
@@ -73034,7 +73320,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 746 */
@@ -73043,7 +73329,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 747 */
@@ -73052,7 +73338,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _group = __webpack_require__(68);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 748 */
@@ -73061,7 +73347,7 @@ var _group = __webpack_require__(68);
 "use strict";
 
 
-var _button = __webpack_require__(46);
+var _group = __webpack_require__(68);
 
 /***/ }),
 /* 749 */
@@ -73070,7 +73356,7 @@ var _button = __webpack_require__(46);
 "use strict";
 
 
-var _button = __webpack_require__(4);
+var _button = __webpack_require__(46);
 
 /***/ }),
 /* 750 */
@@ -73097,7 +73383,7 @@ var _button = __webpack_require__(4);
 "use strict";
 
 
-var _editor = __webpack_require__(72);
+var _button = __webpack_require__(4);
 
 /***/ }),
 /* 753 */
@@ -73106,7 +73392,7 @@ var _editor = __webpack_require__(72);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _editor = __webpack_require__(72);
 
 /***/ }),
 /* 754 */
@@ -73115,7 +73401,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _layout = __webpack_require__(3);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 755 */
@@ -73160,7 +73446,7 @@ var _layout = __webpack_require__(3);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _layout = __webpack_require__(3);
 
 /***/ }),
 /* 760 */
@@ -73178,7 +73464,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 762 */
@@ -73187,7 +73473,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _pane = __webpack_require__(16);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 763 */
@@ -73196,7 +73482,7 @@ var _pane = __webpack_require__(16);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _pane = __webpack_require__(16);
 
 /***/ }),
 /* 764 */
@@ -73205,7 +73491,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _text = __webpack_require__(69);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 765 */
@@ -73214,7 +73500,7 @@ var _text = __webpack_require__(69);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _text = __webpack_require__(69);
 
 /***/ }),
 /* 766 */
@@ -73223,7 +73509,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 767 */
@@ -73241,7 +73527,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _pane = __webpack_require__(16);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 769 */
@@ -73250,7 +73536,7 @@ var _pane = __webpack_require__(16);
 "use strict";
 
 
-var _layer = __webpack_require__(51);
+var _pane = __webpack_require__(16);
 
 /***/ }),
 /* 770 */
@@ -73259,7 +73545,7 @@ var _layer = __webpack_require__(51);
 "use strict";
 
 
-var _button = __webpack_require__(4);
+var _layer = __webpack_require__(51);
 
 /***/ }),
 /* 771 */
@@ -73268,7 +73554,7 @@ var _button = __webpack_require__(4);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _button = __webpack_require__(4);
 
 /***/ }),
 /* 772 */
@@ -73277,7 +73563,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _abstract = __webpack_require__(73);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 773 */
@@ -73286,7 +73572,7 @@ var _abstract = __webpack_require__(73);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _abstract = __webpack_require__(73);
 
 /***/ }),
 /* 774 */
@@ -73295,7 +73581,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _button = __webpack_require__(4);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 775 */
@@ -73304,7 +73590,7 @@ var _button = __webpack_require__(4);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _button = __webpack_require__(4);
 
 /***/ }),
 /* 776 */
@@ -73322,7 +73608,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _layout = __webpack_require__(3);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 778 */
@@ -73331,7 +73617,7 @@ var _layout = __webpack_require__(3);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _layout = __webpack_require__(3);
 
 /***/ }),
 /* 779 */
@@ -73340,7 +73626,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _layout = __webpack_require__(3);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 780 */
@@ -73349,7 +73635,7 @@ var _layout = __webpack_require__(3);
 "use strict";
 
 
-var _button = __webpack_require__(50);
+var _layout = __webpack_require__(3);
 
 /***/ }),
 /* 781 */
@@ -73358,7 +73644,7 @@ var _button = __webpack_require__(50);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _button = __webpack_require__(50);
 
 /***/ }),
 /* 782 */
@@ -73367,7 +73653,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _abstractTreevaluechooser = __webpack_require__(70);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 783 */
@@ -73376,7 +73662,7 @@ var _abstractTreevaluechooser = __webpack_require__(70);
 "use strict";
 
 
-var _abstract = __webpack_require__(33);
+var _abstractTreevaluechooser = __webpack_require__(70);
 
 /***/ }),
 /* 784 */
@@ -73385,7 +73671,7 @@ var _abstract = __webpack_require__(33);
 "use strict";
 
 
-var _abstract = __webpack_require__(33);
+var _abstract = __webpack_require__(30);
 
 /***/ }),
 /* 785 */
@@ -73394,7 +73680,7 @@ var _abstract = __webpack_require__(33);
 "use strict";
 
 
-var _button = __webpack_require__(4);
+var _abstract = __webpack_require__(30);
 
 /***/ }),
 /* 786 */
@@ -73403,7 +73689,7 @@ var _button = __webpack_require__(4);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _button = __webpack_require__(4);
 
 /***/ }),
 /* 787 */
@@ -73421,7 +73707,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _pane = __webpack_require__(16);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 789 */
@@ -73430,7 +73716,7 @@ var _pane = __webpack_require__(16);
 "use strict";
 
 
-var _button = __webpack_require__(4);
+var _pane = __webpack_require__(16);
 
 /***/ }),
 /* 790 */
@@ -73439,7 +73725,7 @@ var _button = __webpack_require__(4);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _button = __webpack_require__(4);
 
 /***/ }),
 /* 791 */
@@ -73457,7 +73743,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _layout = __webpack_require__(3);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 793 */
@@ -73466,7 +73752,7 @@ var _layout = __webpack_require__(3);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _layout = __webpack_require__(3);
 
 /***/ }),
 /* 794 */
@@ -73484,7 +73770,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _listtreeview = __webpack_require__(74);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 796 */
@@ -73493,7 +73779,7 @@ var _listtreeview = __webpack_require__(74);
 "use strict";
 
 
-var _treeview = __webpack_require__(52);
+var _listtreeview = __webpack_require__(74);
 
 /***/ }),
 /* 797 */
@@ -73502,7 +73788,7 @@ var _treeview = __webpack_require__(52);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _treeview = __webpack_require__(52);
 
 /***/ }),
 /* 798 */
@@ -73520,7 +73806,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 800 */
@@ -73538,7 +73824,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 802 */
@@ -73547,7 +73833,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _button = __webpack_require__(4);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 803 */
@@ -73556,7 +73842,7 @@ var _button = __webpack_require__(4);
 "use strict";
 
 
-var _layout = __webpack_require__(3);
+var _button = __webpack_require__(4);
 
 /***/ }),
 /* 804 */
@@ -73565,7 +73851,7 @@ var _layout = __webpack_require__(3);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _layout = __webpack_require__(3);
 
 /***/ }),
 /* 805 */
@@ -73574,7 +73860,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _trigger = __webpack_require__(48);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 806 */
@@ -73592,7 +73878,7 @@ var _trigger = __webpack_require__(48);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _trigger = __webpack_require__(48);
 
 /***/ }),
 /* 808 */
@@ -73601,7 +73887,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 809 */
@@ -73619,8 +73905,6 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _layer = __webpack_require__(51);
-
 var _widget = __webpack_require__(1);
 
 /***/ }),
@@ -73630,7 +73914,9 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _button = __webpack_require__(50);
+var _layer = __webpack_require__(51);
+
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 812 */
@@ -73639,7 +73925,7 @@ var _button = __webpack_require__(50);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _button = __webpack_require__(50);
 
 /***/ }),
 /* 813 */
@@ -73648,7 +73934,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 814 */
@@ -73666,7 +73952,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 816 */
@@ -73693,7 +73979,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 819 */
@@ -73720,7 +74006,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 822 */
@@ -73729,7 +74015,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 823 */
@@ -73756,7 +74042,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _layout = __webpack_require__(3);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 826 */
@@ -73765,7 +74051,7 @@ var _layout = __webpack_require__(3);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _layout = __webpack_require__(3);
 
 /***/ }),
 /* 827 */
@@ -73774,7 +74060,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _controller = __webpack_require__(53);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 828 */
@@ -73783,7 +74069,7 @@ var _controller = __webpack_require__(53);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _controller = __webpack_require__(53);
 
 /***/ }),
 /* 829 */
@@ -73792,14 +74078,14 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
+var _widget = __webpack_require__(1);
+
 /***/ }),
 /* 830 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
-
-var _button = __webpack_require__(46);
 
 /***/ }),
 /* 831 */
@@ -73808,7 +74094,7 @@ var _button = __webpack_require__(46);
 "use strict";
 
 
-var _pane = __webpack_require__(16);
+var _button = __webpack_require__(46);
 
 /***/ }),
 /* 832 */
@@ -73817,7 +74103,7 @@ var _pane = __webpack_require__(16);
 "use strict";
 
 
-var _button = __webpack_require__(4);
+var _pane = __webpack_require__(16);
 
 /***/ }),
 /* 833 */
@@ -73826,14 +74112,14 @@ var _button = __webpack_require__(4);
 "use strict";
 
 
+var _button = __webpack_require__(4);
+
 /***/ }),
 /* 834 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
-
-var _single = __webpack_require__(2);
 
 /***/ }),
 /* 835 */
@@ -73842,7 +74128,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _layout = __webpack_require__(3);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 836 */
@@ -73860,7 +74146,7 @@ var _layout = __webpack_require__(3);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _layout = __webpack_require__(3);
 
 /***/ }),
 /* 838 */
@@ -73869,7 +74155,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _button = __webpack_require__(4);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 839 */
@@ -73878,7 +74164,7 @@ var _button = __webpack_require__(4);
 "use strict";
 
 
-var _controller = __webpack_require__(53);
+var _button = __webpack_require__(4);
 
 /***/ }),
 /* 840 */
@@ -73887,7 +74173,7 @@ var _controller = __webpack_require__(53);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _controller = __webpack_require__(53);
 
 /***/ }),
 /* 841 */
@@ -73896,7 +74182,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 842 */
@@ -73905,7 +74191,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 843 */
@@ -73914,7 +74200,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 844 */
@@ -73932,11 +74218,27 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
+var _single = __webpack_require__(2);
+
+/***/ }),
+/* 846 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
 var _abstract = __webpack_require__(47);
 
 /***/ }),
-/* 846 */,
-/* 847 */,
+/* 847 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _abstract = __webpack_require__(30);
+
+/***/ }),
 /* 848 */,
 /* 849 */,
 /* 850 */,
@@ -73963,7 +74265,9 @@ var _abstract = __webpack_require__(47);
 /* 871 */,
 /* 872 */,
 /* 873 */,
-/* 874 */
+/* 874 */,
+/* 875 */,
+/* 876 */
 /***/ (function(module, exports) {
 
 ;(function () {
@@ -74126,8 +74430,6 @@ var _abstract = __webpack_require__(47);
 
 
 /***/ }),
-/* 875 */,
-/* 876 */,
 /* 877 */,
 /* 878 */,
 /* 879 */,
@@ -74160,7 +74462,9 @@ var _abstract = __webpack_require__(47);
 /* 906 */,
 /* 907 */,
 /* 908 */,
-/* 909 */
+/* 909 */,
+/* 910 */,
+/* 911 */
 /***/ (function(module, exports) {
 
 ;(function () {
@@ -74507,8 +74811,6 @@ var _abstract = __webpack_require__(47);
 
 
 /***/ }),
-/* 910 */,
-/* 911 */,
 /* 912 */,
 /* 913 */,
 /* 914 */,
@@ -74516,14 +74818,16 @@ var _abstract = __webpack_require__(47);
 /* 916 */,
 /* 917 */,
 /* 918 */,
-/* 919 */
+/* 919 */,
+/* 920 */,
+/* 921 */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(global) {module.exports = global["Fix"] = __webpack_require__(920);
+/* WEBPACK VAR INJECTION */(function(global) {module.exports = global["Fix"] = __webpack_require__(922);
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(14)))
 
 /***/ }),
-/* 920 */
+/* 922 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(setImmediate) {function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -76056,8 +76360,6 @@ var _abstract = __webpack_require__(47);
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(61).setImmediate))
 
 /***/ }),
-/* 921 */,
-/* 922 */,
 /* 923 */,
 /* 924 */,
 /* 925 */,
@@ -76256,14 +76558,14 @@ var _abstract = __webpack_require__(47);
 /* 1118 */,
 /* 1119 */,
 /* 1120 */,
-/* 1121 */
+/* 1121 */,
+/* 1122 */,
+/* 1123 */
 /***/ (function(module, exports) {
 
 
 
 /***/ }),
-/* 1122 */,
-/* 1123 */,
 /* 1124 */,
 /* 1125 */,
 /* 1126 */,
@@ -76579,7 +76881,9 @@ var _abstract = __webpack_require__(47);
 /* 1436 */,
 /* 1437 */,
 /* 1438 */,
-/* 1439 */
+/* 1439 */,
+/* 1440 */,
+/* 1441 */
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(92);
@@ -76683,11 +76987,11 @@ __webpack_require__(364);
 __webpack_require__(365);
 __webpack_require__(366);
 __webpack_require__(367);
+__webpack_require__(368);
 __webpack_require__(110);
 __webpack_require__(111);
 __webpack_require__(112);
-__webpack_require__(919);
-__webpack_require__(368);
+__webpack_require__(921);
 __webpack_require__(369);
 __webpack_require__(370);
 __webpack_require__(371);
@@ -76852,6 +77156,7 @@ __webpack_require__(529);
 __webpack_require__(530);
 __webpack_require__(531);
 __webpack_require__(532);
+__webpack_require__(533);
 __webpack_require__(113);
 __webpack_require__(114);
 __webpack_require__(115);
@@ -76912,7 +77217,6 @@ __webpack_require__(169);
 __webpack_require__(170);
 __webpack_require__(171);
 __webpack_require__(172);
-__webpack_require__(533);
 __webpack_require__(534);
 __webpack_require__(535);
 __webpack_require__(536);
@@ -77083,10 +77387,11 @@ __webpack_require__(700);
 __webpack_require__(701);
 __webpack_require__(702);
 __webpack_require__(703);
-__webpack_require__(909);
-__webpack_require__(874);
-__webpack_require__(1121);
-module.exports = __webpack_require__(704);
+__webpack_require__(704);
+__webpack_require__(911);
+__webpack_require__(876);
+__webpack_require__(1123);
+module.exports = __webpack_require__(705);
 
 
 /***/ })

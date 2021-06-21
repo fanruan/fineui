@@ -122,7 +122,7 @@ BI.MultiListTreeSearcher = BI.inherit(BI.Widget, {
             var text = "";
             BI.each(ob.value, function (idx, path) {
                 var childValue = BI.last(path);
-                text += (o.valueFormatter(childValue + "") || childValue) + "; ";
+                text += (path === "null" ? "" : (o.valueFormatter(childValue + "") || childValue) + "; ");
                 count++;
             });
 
@@ -134,7 +134,7 @@ BI.MultiListTreeSearcher = BI.inherit(BI.Widget, {
         }
     },
 
-    getState: function() {
+    getState: function () {
         return this.editor.getState();
     },
 

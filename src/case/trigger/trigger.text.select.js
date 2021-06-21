@@ -64,6 +64,10 @@ BI.SelectTextTrigger = BI.inherit(BI.Trigger, {
         this.trigger.setTipType(v);
     },
 
+    getTextor: function() {
+        return this.trigger.getTextor();
+    },
+
     populate: function (items) {
         this.options.items = items;
     }

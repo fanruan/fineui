@@ -170,6 +170,7 @@ import { DynamicDateTimePane } from './widget/datetimepane/datetimepane';
 import { SingleSelectInsertList } from './widget/singleselect/singleselectlist.insert';
 import { MultiSelectTree } from './widget/multiselecttree/multiselecttree';
 import { HtmlLabel } from "./base/single/label/html.label";
+import { TreeValueChooserPane } from './component/treevaluechooser/pane.treevaluechooser';
 
 
 export interface BI extends _func, _i18n, _base, _inject, _var, _web, _utils {
@@ -347,6 +348,7 @@ export interface BI extends _func, _i18n, _base, _inject, _var, _web, _utils {
     SingleSelectInsertList: typeof SingleSelectInsertList;
     MultiSelectTree: typeof MultiSelectTree;
     HtmlLabel: typeof HtmlLabel;
+    TreeValueChooserPane: typeof TreeValueChooserPane;
 }
 
 export default {
@@ -524,4 +526,5 @@ export {
     SingleSelectInsertList,
     MultiSelectTree,
     HtmlLabel,
+    TreeValueChooserPane,
 };

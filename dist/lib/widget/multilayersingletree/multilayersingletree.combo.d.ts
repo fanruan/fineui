@@ -9,4 +9,5 @@ export declare class MultiLayerSingleTreeCombo extends Widget {
     setValue(v: string[] | string): void;
     getValue(): string[];
     populate<T>(items: T[]): void;
+    getSearcher(): Widget;
 }

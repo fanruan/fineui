@@ -1,3 +1,4 @@
+import { Widget } from "../../core/widget";
 import { AbstractTreeValueChooser } from "./abstract.treevaluechooser";
 
 export declare class TreeValueChooserCombo extends AbstractTreeValueChooser {
@@ -21,4 +22,6 @@ export declare class TreeValueChooserCombo extends AbstractTreeValueChooser {
     getAllValue<T>(): T;
 
     populate<T>(items: T[]): void;
+
+    getSearcher(): Widget;
 }

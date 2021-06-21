@@ -363,6 +363,10 @@ BI.MultiTreeListCombo = BI.inherit(BI.Single, {
         this.combo.hideView();
     },
 
+    getSearcher: function () {
+        return this.trigger.getSearcher();
+    },
+
     setValue: function (v) {
         this.storeValue.value = v || [];
         this.combo.setValue({

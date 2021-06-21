@@ -104,7 +104,7 @@ BI.ListPane = BI.inherit(BI.Pane, {
     },
 
     removeItemAt: function (indexes) {
-        indexes = indexes || [];
+        indexes = BI.isNull(indexes) ? [] : indexes;
         BI.removeAt(this.options.items, indexes);
         this.button_group.removeItemAt.apply(this.button_group, arguments);
         this.check();

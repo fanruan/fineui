@@ -553,6 +553,14 @@
             this.purgeListeners();
         },
 
+        _empty: function () {
+            BI.each(this._children, function (i, widget) {
+                widget && widget._unMount && widget._unMount();
+            });
+            this._children = {};
+            this.element.empty();
+        },
+
         isolate: function () {
             if (this._parent) {
                 this._parent.removeWidget(this);
@@ -561,11 +569,7 @@
         },
 
         empty: function () {
-            BI.each(this._children, function (i, widget) {
-                widget && widget._unMount && widget._unMount();
-            });
-            this._children = {};
-            this.element.empty();
+            this._empty();
         },
 
         // 默认的reset方法就是干掉重来
@@ -576,7 +580,7 @@
             }
             // this._isMounted = false;
             // this.purgeListeners();
-            this.empty();
+            this._empty();
             this.element.unbind();
             this._initCurrent();
             this._init();
