@@ -1,4 +1,4 @@
-/*! time: 2021-6-20 21:00:15 */
+/*! time: 2021-6-21 11:10:54 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -41679,6 +41679,7 @@ BI.DateTimeCombo = BI.inherit(BI.Single, {
         };
         this.trigger = BI.createWidget({
             type: "bi.date_time_trigger",
+            height: opts.height,
             min: opts.minDate,
             max: opts.maxDate,
             value: opts.value
@@ -41730,8 +41731,8 @@ BI.DateTimeCombo = BI.inherit(BI.Single, {
         var triggerBtn = BI.createWidget({
             type: "bi.icon_button",
             cls: "bi-trigger-icon-button date-font",
-            width: 24,
-            height: 24
+            width: opts.height,
+            height: opts.height,
         });
         triggerBtn.on(BI.IconButton.EVENT_CHANGE, function () {
             if (self.combo.isViewVisible()) {
