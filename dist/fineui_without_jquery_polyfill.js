@@ -1,4 +1,4 @@
-/*! time: 2021-6-21 15:50:16 */
+/*! time: 2021-6-21 18:30:18 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -50979,7 +50979,7 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
             var map = this._makeMap(this.storeValue.value);
             BI.each(res.value, function (i, v) {
                 if (!map[v]) {
-                    self.storeValue.value.push(v);
+                    BI.pushDistinct(self.storeValue.value, v);
                     BI.remove(self.storeValue.assist, v);
                     map[v] = v;
                 }
@@ -51476,7 +51476,7 @@ BI.MultiSelectNoBarCombo = BI.inherit(BI.Single, {
             var map = this._makeMap(this.storeValue.value);
             BI.each(res.value, function (i, v) {
                 if (!map[v]) {
-                    self.storeValue.value.push(v);
+                    BI.pushDistinct(self.storeValue.value, v);
                     BI.remove(self.storeValue.assist, v);
                     map[v] = v;
                 }
@@ -51960,7 +51960,7 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
             var map = this._makeMap(this.storeValue.value);
             BI.each(res.value, function (i, v) {
                 if (!map[v]) {
-                    self.storeValue.value.push(v);
+                    BI.pushDistinct(self.storeValue.value, v);
                     // value更新的时候assist也需要更新
                     BI.remove(self.storeValue.assist, v);
                     map[v] = v;
@@ -55000,7 +55000,7 @@ BI.MultiSelectInsertList = BI.inherit(BI.Single, {
             var map = this._makeMap(this.storeValue.value);
             BI.each(res.value, function (i, v) {
                 if (!map[v]) {
-                    self.storeValue.value.push(v);
+                    BI.pushDistinct(self.storeValue.value, v);
                     map[v] = v;
                 }
             });
@@ -55348,7 +55348,7 @@ BI.MultiSelectInsertNoBarList = BI.inherit(BI.Single, {
             var map = this._makeMap(this.storeValue.value);
             BI.each(res.value, function (i, v) {
                 if (!map[v]) {
-                    self.storeValue.value.push(v);
+                    BI.pushDistinct(self.storeValue.value, v);
                     map[v] = v;
                 }
             });
@@ -55713,7 +55713,7 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
             var map = this._makeMap(this.storeValue.value);
             BI.each(res.value, function (i, v) {
                 if (!map[v]) {
-                    self.storeValue.value.push(v);
+                    BI.pushDistinct(self.storeValue.value, v);
                     map[v] = v;
                 }
             });
@@ -62453,7 +62453,7 @@ BI.SingleSelectSearcher = BI.inherit(BI.Widget, {
     },
 
     getKeyword: function () {
-        return this.editor.getValue();
+        return this.editor.getKeyword();
     },
 
     hasMatched: function () {
