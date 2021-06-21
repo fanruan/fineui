@@ -13,7 +13,7 @@ export declare class ListPane extends Pane {
 
     addItems<T>(items: T[]): void;
 
-    removeItemAt(indexes: number): void;
+    removeItemAt(indexes?: number | number[]): void;
 
     populate<T>(items?: T[]): void;
 

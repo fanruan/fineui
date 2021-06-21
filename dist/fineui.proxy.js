@@ -1,4 +1,4 @@
-/*! time: 2021-6-21 14:00:19 */
+/*! time: 2021-6-21 15:50:16 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -37609,7 +37609,7 @@ BI.ListPane = BI.inherit(BI.Pane, {
     },
 
     removeItemAt: function (indexes) {
-        indexes = indexes || [];
+        indexes = BI.isNull(indexes) ? [] : indexes;
         BI.removeAt(this.options.items, indexes);
         this.button_group.removeItemAt.apply(this.button_group, arguments);
         this.check();
