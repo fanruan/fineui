@@ -334,6 +334,10 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
         });
     },
 
+    getSearcher: function () {
+        return this.trigger.getSearcher();
+    },
+
     getValue: function () {
         return BI.deepClone(this.storeValue.value);
     },

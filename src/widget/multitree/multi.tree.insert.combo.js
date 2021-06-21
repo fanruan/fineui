@@ -331,6 +331,10 @@ BI.MultiTreeInsertCombo = BI.inherit(BI.Single, {
         this.combo.hideView();
     },
 
+    getSearcher: function () {
+        return this.trigger.getSearcher();
+    },
+
     showView: function () {
         this.combo.showView();
     },
