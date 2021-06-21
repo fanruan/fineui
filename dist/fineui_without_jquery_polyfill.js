@@ -1,4 +1,4 @@
-/*! time: 2021-6-21 11:50:17 */
+/*! time: 2021-6-21 14:00:19 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -39993,6 +39993,10 @@ BI.TextTrigger = BI.inherit(BI.Trigger, {
         });
     },
 
+    getTextor: function() {
+        return this.text;
+    },
+
     setTextCls: function(cls) {
         var o = this.options;
         var oldCls = o.textCls;
@@ -40079,6 +40083,10 @@ BI.SelectTextTrigger = BI.inherit(BI.Trigger, {
 
     setTipType: function (v) {
         this.trigger.setTipType(v);
+    },
+
+    getTextor: function() {
+        return this.trigger.getTextor();
     },
 
     populate: function (items) {
@@ -47745,11 +47753,14 @@ BI.MultiLayerSelectTreeCombo = BI.inherit(BI.Widget, {
     },
 
     _getSyncConfig: function () {
-        var o = this.options;
+        var o = this.options, self = this;
         var baseConfig = this._getBaseConfig();
         return BI.extend(baseConfig, o.allowEdit ? this._getSearchConfig() : {
             el: {
                 type: "bi.single_tree_trigger",
+                ref: function(_ref) {
+                    self.textTrigger = _ref;
+                },
                 text: o.text,
                 height: o.height,
                 items: o.items,
@@ -47770,6 +47781,10 @@ BI.MultiLayerSelectTreeCombo = BI.inherit(BI.Widget, {
 
     getValue: function () {
         return this.combo.getValue();
+    },
+
+    getSearcher: function () {
+        return this.trigger ? this.trigger.getSearcher() : this.textTrigger.getTextor();
     },
 
     populate: function (items) {
@@ -49012,11 +49027,14 @@ BI.MultiLayerSingleTreeCombo = BI.inherit(BI.Widget, {
     },
 
     _getSyncConfig: function () {
-        var o = this.options;
+        var o = this.options, self = this;
         var baseConfig = this._getBaseConfig();
         return BI.extend(baseConfig, o.allowEdit ? this._getSearchConfig() : {
             el: {
                 type: "bi.single_tree_trigger",
+                ref: function(_ref) {
+                    self.textTrigger = _ref;
+                },
                 text: o.text,
                 height: o.height,
                 items: o.items,
@@ -49028,6 +49046,10 @@ BI.MultiLayerSingleTreeCombo = BI.inherit(BI.Widget, {
     _getAsyncConfig: function () {
         var config = this._getBaseConfig();
         return BI.extend(config, this._getSearchConfig());
+    },
+
+    getSearcher: function () {
+        return this.trigger ? this.trigger.getSearcher() : this.textTrigger.getTextor();
     },
 
     setValue: function (v) {
@@ -56451,6 +56473,10 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
         });
     },
 
+    getSearcher: function () {
+        return this.trigger.getSearcher();
+    },
+
     getValue: function () {
         return BI.deepClone(this.storeValue.value);
     },
@@ -56806,6 +56832,10 @@ BI.MultiTreeInsertCombo = BI.inherit(BI.Single, {
     _defaultState: function () {
         this._stopEditing();
         this.combo.hideView();
+    },
+
+    getSearcher: function () {
+        return this.trigger.getSearcher();
     },
 
     showView: function () {
@@ -57213,6 +57243,10 @@ BI.MultiTreeListCombo = BI.inherit(BI.Single, {
 
     hideView: function () {
         this.combo.hideView();
+    },
+
+    getSearcher: function () {
+        return this.trigger.getSearcher();
     },
 
     setValue: function (v) {
@@ -63879,6 +63913,10 @@ BI.SingleTreeTrigger = BI.inherit(BI.Trigger, {
         return this.options.value || [];
     },
 
+    getTextor: function() {
+        return this.trigger.getTextor();
+    },
+
     populate: function (items) {
         this.trigger.populate(items);
     }
@@ -70483,6 +70521,10 @@ BI.ListTreeValueChooserInsertCombo = BI.inherit(BI.AbstractListTreeValueChooser,
         this.combo.hideView();
     },
 
+    getSearcher: function () {
+        return this.combo.getSearcher();
+    },
+
     setValue: function (v) {
         this.combo.setValue(v);
     },
@@ -70598,6 +70640,10 @@ BI.TreeValueChooserInsertCombo = BI.inherit(BI.AbstractTreeValueChooser, {
         this.combo.hideView();
     },
 
+    getSearcher: function () {
+        return this.combo.getSearcher();
+    },
+
     setValue: function (v) {
         this.combo.setValue(v);
     },
@@ -70711,6 +70757,10 @@ BI.TreeValueChooserCombo = BI.inherit(BI.AbstractTreeValueChooser, {
 
     hideView: function () {
         this.combo.hideView();
+    },
+
+    getSearcher: function () {
+        return this.combo.getSearcher();
     },
 
     setValue: function (v) {

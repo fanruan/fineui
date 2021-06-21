@@ -1,4 +1,5 @@
 import { Single } from "../../base/single/single";
+import { Widget } from "../../core/widget";
 export declare class MultiTreeCombo extends Single {
     static xtype: string;
     static EVENT_FOCUS: string;
@@ -10,4 +11,5 @@ export declare class MultiTreeCombo extends Single {
     static EVENT_BEFORE_POPUPVIEW: string;
     showView(): void;
     hideView(): void;
+    getSearcher(): Widget;
 }
