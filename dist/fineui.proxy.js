@@ -1,4 +1,4 @@
-/*! time: 2021-6-21 18:30:18 */
+/*! time: 2021-6-22 10:31:13 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -40513,7 +40513,7 @@ BI.SmallSelectTextTrigger = BI.inherit(BI.Trigger, {
         this.trigger = BI.createWidget({
             type: "bi.small_text_trigger",
             element: this,
-            height: o.height - 2,
+            height: o.height,
             text: obj.text,
             cls: obj.cls
         });
