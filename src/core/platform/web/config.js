@@ -28,7 +28,7 @@ BI.prepares.push(function () {
         }, ob, {type: "bi.inline"});
     });
     BI.Plugin.configWidget("bi.center_adapt", function (ob) {
-        var supportFlex = isSupportFlex(), justOneItem = (ob.items && ob.items.length <= 1);
+        var supportFlex = isSupportFlex();
         // var isAdapt = !ob.horizontalAlign || ob.horizontalAlign === BI.HorizontalAlign.Center || ob.horizontalAlign === BI.HorizontalAlign.Stretch;
         // if (!isAdapt || justOneItem) {
         if (supportFlex) {
@@ -39,7 +39,7 @@ BI.prepares.push(function () {
         // return ob;
     });
     BI.Plugin.configWidget("bi.vertical_adapt", function (ob) {
-        var supportFlex = isSupportFlex(), justOneItem = (ob.items && ob.items.length <= 1);
+        var supportFlex = isSupportFlex();
         // var isAdapt = ob.horizontalAlign === BI.HorizontalAlign.Center || ob.horizontalAlign === BI.HorizontalAlign.Stretch;
         // if (!isAdapt || justOneItem) {
         if (supportFlex) {
@@ -66,7 +66,8 @@ BI.prepares.push(function () {
         }
         if (supportFlex) {
             return BI.extend({
-                horizontalAlign: BI.HorizontalAlign.Center
+                horizontalAlign: BI.HorizontalAlign.Center,
+                scrollx: false
             }, ob, {type: "bi.flex_horizontal"});
         }
         return BI.extend({

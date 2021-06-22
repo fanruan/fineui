@@ -10,7 +10,6 @@ BI.TableAdaptLayout = BI.inherit(BI.Layout, {
             columnSize: [],
             verticalAlign: BI.VerticalAlign.Top,
             horizontalAlign: BI.HorizontalAlign.Left,
-            scrollx: true,
             hgap: 0,
             vgap: 0,
             lgap: 0,
