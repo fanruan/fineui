@@ -21,7 +21,7 @@ BI.SmallSelectTextTrigger = BI.inherit(BI.Trigger, {
         this.trigger = BI.createWidget({
             type: "bi.small_text_trigger",
             element: this,
-            height: o.height - 2,
+            height: o.height,
             text: obj.text,
             cls: obj.cls
         });
