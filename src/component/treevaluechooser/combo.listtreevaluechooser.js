@@ -84,6 +84,10 @@ BI.ListTreeValueChooserInsertCombo = BI.inherit(BI.AbstractListTreeValueChooser,
         this.combo.hideView();
     },
 
+    getSearcher: function () {
+        return this.combo.getSearcher();
+    },
+
     setValue: function (v) {
         this.combo.setValue(v);
     },

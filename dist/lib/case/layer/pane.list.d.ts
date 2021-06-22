@@ -6,7 +6,7 @@ export declare class ListPane extends Pane {
     hasNext(): boolean;
     prependItems<T>(items: T[]): void;
     addItems<T>(items: T[]): void;
-    removeItemAt(indexes: number): void;
+    removeItemAt(indexes?: number | number[]): void;
     populate<T>(items?: T[]): void;
     setNotSelectedValue(v: any): void;
     getNotSelectedValue<T>(): T[];

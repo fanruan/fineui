@@ -108,7 +108,7 @@ BI.SingleSelectSearcher = BI.inherit(BI.Widget, {
     },
 
     getKeyword: function () {
-        return this.editor.getValue();
+        return this.editor.getKeyword();
     },
 
     hasMatched: function () {

@@ -422,7 +422,7 @@ BI.MultiSelectNoBarCombo = BI.inherit(BI.Single, {
             var map = this._makeMap(this.storeValue.value);
             BI.each(res.value, function (i, v) {
                 if (!map[v]) {
-                    self.storeValue.value.push(v);
+                    BI.pushDistinct(self.storeValue.value, v);
                     BI.remove(self.storeValue.assist, v);
                     map[v] = v;
                 }

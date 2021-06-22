@@ -104,6 +104,7 @@ import { TreeValueChooserInsertCombo } from "./component/treevaluechooser/combo.
 import { Radio } from "./base/single/input/radio/radio";
 import { MultiLayerSelectTreePopup } from "./widget/multilayerselecttree/multilayerselecttree.popup";
 import { MultiLayerSingleTreePopup } from "./widget/multilayersingletree/multilayersingletree.popup";
+import { MultiLayerDownListPopup } from "./widget/multilayerdownlist/multilayerdownlist.popup";
 import { TreeView } from "./base/tree/ztree/treeview";
 import { MultiTreePopup } from "./widget/multitree/multi.tree.popup";
 import { SingleSelectRadioItem } from "./case/button/item.singleselect.radio";
@@ -117,6 +118,7 @@ import { ListAsyncTree } from "./base/tree/ztree/list/listasynctree";
 import { AsyncTree } from "./base/tree/ztree/asynctree";
 import { MultiLayerSingleTreeCombo } from "./widget/multilayersingletree/multilayersingletree.combo";
 import { MultiLayerSelectTreeCombo } from "./widget/multilayerselecttree/multilayerselecttree.combo";
+import { MultiLayerDownListCombo } from "./widget/multilayerdownlist/multilayerdownlist.combo";
 import { MultiTreeListCombo } from "./widget/multitree/multi.tree.list.combo";
 import { MultiTreeInsertCombo } from "./widget/multitree/multi.tree.insert.combo";
 import { TextValueDownListCombo } from "./widget/textvaluedownlistcombo/combo.textvaluedownlist";
@@ -170,6 +172,7 @@ import { DynamicDateTimePane } from './widget/datetimepane/datetimepane';
 import { SingleSelectInsertList } from './widget/singleselect/singleselectlist.insert';
 import { MultiSelectTree } from './widget/multiselecttree/multiselecttree';
 import { HtmlLabel } from "./base/single/label/html.label";
+import { TreeValueChooserPane } from './component/treevaluechooser/pane.treevaluechooser';
 
 
 export interface BI extends _func, _i18n, _base, _inject, _var, _web, _utils {
@@ -223,12 +226,14 @@ export interface BI extends _func, _i18n, _base, _inject, _var, _web, _utils {
     TreeValueChooserInsertCombo: typeof TreeValueChooserInsertCombo;
     MultiLayerSelectTreePopup: typeof MultiLayerSelectTreePopup;
     MultiLayerSingleTreePopup: typeof MultiLayerSingleTreePopup;
+    MultiLayerDownListPopup: typeof MultiLayerDownListPopup;
     TreeView: typeof TreeView;
     ListTreeView: typeof ListTreeView;
     ListAsyncTree: typeof ListAsyncTree;
     AsyncTree: typeof AsyncTree;
     MultiLayerSingleTreeCombo: typeof MultiLayerSingleTreeCombo;
     MultiLayerSelectTreeCombo: typeof MultiLayerSelectTreeCombo;
+    MultiLayerDownListCombo: typeof MultiLayerDownListCombo;
     MultiTreeListCombo: typeof MultiTreeListCombo;
     MultiTreeInsertCombo: typeof MultiTreeInsertCombo;
     Decorators: typeof decorator;
@@ -347,6 +352,7 @@ export interface BI extends _func, _i18n, _base, _inject, _var, _web, _utils {
     SingleSelectInsertList: typeof SingleSelectInsertList;
     MultiSelectTree: typeof MultiSelectTree;
     HtmlLabel: typeof HtmlLabel;
+    TreeValueChooserPane: typeof TreeValueChooserPane;
 }
 
 export default {
@@ -427,12 +433,14 @@ export {
     TreeValueChooserInsertCombo,
     MultiLayerSelectTreePopup,
     MultiLayerSingleTreePopup,
+    MultiLayerDownListPopup,
     TreeView,
     ListTreeView,
     ListAsyncTree,
     AsyncTree,
     MultiLayerSingleTreeCombo,
     MultiLayerSelectTreeCombo,
+    MultiLayerDownListCombo,
     MultiTreeListCombo,
     MultiTreeInsertCombo,
     Combo,
@@ -524,4 +532,5 @@ export {
     SingleSelectInsertList,
     MultiSelectTree,
     HtmlLabel,
+    TreeValueChooserPane,
 };
