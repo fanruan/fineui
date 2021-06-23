@@ -1,4 +1,4 @@
-/*! time: 2021-6-22 14:00:17 */
+/*! time: 2021-6-23 9:00:51 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -17327,54 +17327,8 @@ BI.shortcut("bi.center_adapt", BI.CenterAdaptLayout);
  * @class BI.HorizontalAdaptLayout
  * @extends BI.Layout
  */
-BI.HorizontalAdaptLayout = BI.inherit(BI.Layout, {
-    props: function () {
-        return BI.extend(BI.HorizontalAdaptLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-h-a",
-            verticalAlign: BI.VerticalAlign.Top,
-            horizontalAlign: BI.HorizontalAlign.Center,
-            columnSize: [],
-            scrollx: false,
-            hgap: 0,
-            vgap: 0,
-            lgap: 0,
-            rgap: 0,
-            tgap: 0,
-            bgap: 0
-        });
-    },
-    render: function () {
-        var self = this, o = this.options;
-        BI.HorizontalAdaptLayout.superclass.render.apply(this, arguments);
-        return {
-            type: "bi.horizontal",
-            verticalAlign: o.verticalAlign,
-            horizontalAlign: o.horizontalAlign,
-            columnSize: o.columnSize,
-            items: o.items,
-            scrollx: o.scrollx,
-            scrolly: o.scrolly,
-            scrollable: o.scrollable,
-            ref: function (_ref) {
-                self.layout = _ref;
-            },
-            hgap: o.hgap,
-            vgap: o.vgap,
-            lgap: o.lgap,
-            rgap: o.rgap,
-            tgap: o.tgap,
-            bgap: o.bgap
-        };
-    },
-
-    resize: function () {
-        // console.log("horizontal_adapt布局不需要resize");
-    },
-
-    populate: function (items) {
-        this.layout.populate.apply(this, arguments);
-    }
-});
+BI.HorizontalAdaptLayout = function () {
+};
 BI.shortcut("bi.horizontal_adapt", BI.HorizontalAdaptLayout);
 
 
@@ -17592,7 +17546,6 @@ BI.TableAdaptLayout = BI.inherit(BI.Layout, {
             columnSize: [],
             verticalAlign: BI.VerticalAlign.Top,
             horizontalAlign: BI.HorizontalAlign.Left,
-            scrollx: true,
             hgap: 0,
             vgap: 0,
             lgap: 0,
@@ -77248,7 +77201,7 @@ BI.prepares.push(function () {
         }, ob, {type: "bi.inline"});
     });
     BI.Plugin.configWidget("bi.center_adapt", function (ob) {
-        var supportFlex = isSupportFlex(), justOneItem = (ob.items && ob.items.length <= 1);
+        var supportFlex = isSupportFlex();
         // var isAdapt = !ob.horizontalAlign || ob.horizontalAlign === BI.HorizontalAlign.Center || ob.horizontalAlign === BI.HorizontalAlign.Stretch;
         // if (!isAdapt || justOneItem) {
         if (supportFlex) {
@@ -77259,7 +77212,7 @@ BI.prepares.push(function () {
         // return ob;
     });
     BI.Plugin.configWidget("bi.vertical_adapt", function (ob) {
-        var supportFlex = isSupportFlex(), justOneItem = (ob.items && ob.items.length <= 1);
+        var supportFlex = isSupportFlex();
         // var isAdapt = ob.horizontalAlign === BI.HorizontalAlign.Center || ob.horizontalAlign === BI.HorizontalAlign.Stretch;
         // if (!isAdapt || justOneItem) {
         if (supportFlex) {
@@ -77286,7 +77239,8 @@ BI.prepares.push(function () {
         }
         if (supportFlex) {
             return BI.extend({
-                horizontalAlign: BI.HorizontalAlign.Center
+                horizontalAlign: BI.HorizontalAlign.Center,
+                scrollx: false
             }, ob, {type: "bi.flex_horizontal"});
         }
         return BI.extend({
