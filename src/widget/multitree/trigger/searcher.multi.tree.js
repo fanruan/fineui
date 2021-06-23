@@ -156,7 +156,7 @@ BI.MultiTreeSearcher = BI.inherit(BI.Widget, {
             BI.each(names, function (idx, name) {
                 index++;
                 var childNodes = getChildrenNode(ob[name]);
-                text += (name === "null" ? "(null)" : (o.valueFormatter(name + "") || name)) + (childNodes === "" ? "" : (":" + childNodes)) + (index === size ? "" : ",");
+                text += (name === "null" ? "" : (o.valueFormatter(name + "") || name)) + (childNodes === "" ? "" : (":" + childNodes)) + (index === size ? "" : ",");
                 if (childNodes === "") {
                     count++;
                 }
