@@ -1,4 +1,4 @@
-/*! time: 2021-6-23 9:00:51 */
+/*! time: 2021-6-23 17:30:17 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -51971,6 +51971,7 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
         });
         this.trigger.on(BI.MultiSelectInsertTrigger.EVENT_PAUSE, function () {
             self._addItem(assertShowValue, true);
+            self.fireEvent(BI.MultiSelectInsertCombo.EVENT_ADD_ITEM, this.getSearcher().getKeyword());
         });
         this.trigger.on(BI.MultiSelectInsertTrigger.EVENT_SEARCHING, function (keywords) {
             var last = BI.last(keywords);
@@ -52369,6 +52370,7 @@ BI.MultiSelectInsertCombo.EVENT_STOP = "EVENT_STOP";
 BI.MultiSelectInsertCombo.EVENT_SEARCHING = "EVENT_SEARCHING";
 BI.MultiSelectInsertCombo.EVENT_CLICK_ITEM = "EVENT_CLICK_ITEM";
 BI.MultiSelectInsertCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
+BI.MultiSelectInsertCombo.EVENT_ADD_ITEM = "EVENT_ADD_ITEM";
 
 BI.shortcut("bi.multi_select_insert_combo", BI.MultiSelectInsertCombo);
 
@@ -52449,6 +52451,7 @@ BI.MultiSelectInsertNoBarCombo = BI.inherit(BI.Single, {
         });
         this.trigger.on(BI.MultiSelectInsertTrigger.EVENT_PAUSE, function () {
             self._addItem(assertShowValue, true);
+            self.fireEvent(BI.MultiSelectInsertNoBarCombo.EVENT_ADD_ITEM, this.getSearcher().getKeyword());
         });
         this.trigger.on(BI.MultiSelectInsertTrigger.EVENT_SEARCHING, function (keywords) {
             var last = BI.last(keywords);
@@ -52846,6 +52849,7 @@ BI.extend(BI.MultiSelectInsertNoBarCombo, {
 });
 
 BI.MultiSelectInsertNoBarCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
+BI.MultiSelectInsertNoBarCombo.EVENT_ADD_ITEM = "EVENT_ADD_ITEM";
 
 BI.shortcut("bi.multi_select_insert_no_bar_combo", BI.MultiSelectInsertNoBarCombo);
 
