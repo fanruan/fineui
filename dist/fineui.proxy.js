@@ -1,4 +1,4 @@
-/*! time: 2021-6-23 17:30:17 */
+/*! time: 2021-6-24 9:50:38 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -58343,7 +58343,7 @@ BI.MultiTreeSearcher = BI.inherit(BI.Widget, {
             BI.each(names, function (idx, name) {
                 index++;
                 var childNodes = getChildrenNode(ob[name]);
-                text += (name === "null" ? "(null)" : (o.valueFormatter(name + "") || name)) + (childNodes === "" ? "" : (":" + childNodes)) + (index === size ? "" : ",");
+                text += (name === "null" ? "" : (o.valueFormatter(name + "") || name)) + (childNodes === "" ? "" : (":" + childNodes)) + (index === size ? "" : ",");
                 if (childNodes === "") {
                     count++;
                 }
@@ -89166,7 +89166,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
             n.value = BI.isUndefined(n.value) ? n.text : n.value;
             n.text = BI.isUndefined(n.text) ? n.value : n.text;
             if (n.text === null) {
-                n.text = "(null)";
+                n.text = "";
             }
             if (BI.isNull(n.title)) {
                 n.title = n.text;
