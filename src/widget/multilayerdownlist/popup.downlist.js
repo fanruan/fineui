@@ -95,7 +95,7 @@ BI.MultiLayerDownListPopup = BI.inherit(BI.Pane, {
                     item.el.logic = {
                         dynamic: true
                     };
-                    item.el.height = self.constants.height;
+                    item.el.height = item.el.height || self.constants.height;
                     item.el.iconCls2 = self.constants.nextIcon;
                     item.popup = {
                         lgap: 1,
@@ -175,7 +175,7 @@ BI.MultiLayerDownListPopup = BI.inherit(BI.Pane, {
             if (BI.isNotEmptyArray(child.children)) {
                 child.type = "bi.down_list_group_item";
                 child.iconCls2 = self.constants.nextIcon;
-                child.height = self.constants.height;
+                child.height = child.height || self.constants.height;
                 self._createChildren(child);
             }
         });
