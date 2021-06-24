@@ -338,7 +338,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
             n.value = BI.isUndefined(n.value) ? n.text : n.value;
             n.text = BI.isUndefined(n.text) ? n.value : n.text;
             if (n.text === null) {
-                n.text = "(null)";
+                n.text = "";
             }
             if (BI.isNull(n.title)) {
                 n.title = n.text;
