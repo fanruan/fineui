@@ -183,7 +183,7 @@ BI.DownListPopup = BI.inherit(BI.Pane, {
     },
 
     _createChildValue: function (fatherValue, childValue) {
-        return fatherValue + "_" + childValue;
+        return fatherValue + BI.BlankSplitChar + childValue;
     },
 
     _digest: function (valueItem) {
