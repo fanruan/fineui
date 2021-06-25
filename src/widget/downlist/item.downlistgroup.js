@@ -73,7 +73,7 @@ BI.DownListGroupItem = BI.inherit(BI.BasicButton, {
 
     _getLevel: function () {
         var child = BI.first(this.options.childValues);
-        return BI.isNotNull(child) ? (child + "").split("_").length : 0;
+        return BI.isNotNull(child) ? (child + "").split(BI.BlankSplitChar).length : 0;
     },
 
     _digest: function (v) {
@@ -81,7 +81,7 @@ BI.DownListGroupItem = BI.inherit(BI.BasicButton, {
         v = BI.isArray(v) ? v : [v];
         var level = this._getLevel();
         return BI.any(v, function (idx, value) {
-            return BI.contains(o.childValues, (value + "").split("_").slice(0, level).join("_"));
+            return BI.contains(o.childValues, (value + "").split(BI.BlankSplitChar).slice(0, level).join(BI.BlankSplitChar));
         });
     },
 
