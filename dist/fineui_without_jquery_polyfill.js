@@ -1,4 +1,4 @@
-/*! time: 2021-6-24 18:50:54 */
+/*! time: 2021-6-25 17:40:18 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -42698,7 +42698,7 @@ BI.DownListGroupItem = BI.inherit(BI.BasicButton, {
 
     _getLevel: function () {
         var child = BI.first(this.options.childValues);
-        return BI.isNotNull(child) ? (child + "").split("_").length : 0;
+        return BI.isNotNull(child) ? (child + "").split(BI.BlankSplitChar).length : 0;
     },
 
     _digest: function (v) {
@@ -42706,7 +42706,7 @@ BI.DownListGroupItem = BI.inherit(BI.BasicButton, {
         v = BI.isArray(v) ? v : [v];
         var level = this._getLevel();
         return BI.any(v, function (idx, value) {
-            return BI.contains(o.childValues, (value + "").split("_").slice(0, level).join("_"));
+            return BI.contains(o.childValues, (value + "").split(BI.BlankSplitChar).slice(0, level).join(BI.BlankSplitChar));
         });
     },
 
@@ -42934,7 +42934,7 @@ BI.DownListPopup = BI.inherit(BI.Pane, {
     },
 
     _createChildValue: function (fatherValue, childValue) {
-        return fatherValue + "_" + childValue;
+        return fatherValue + BI.BlankSplitChar + childValue;
     },
 
     _digest: function (valueItem) {
@@ -60717,17 +60717,8 @@ BI.SingleSelectSearchInsertPane = BI.inherit(BI.Widget, {
         BI.SingleSelectSearchInsertPane.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
 
-        this.tooltipClick = BI.createWidget({
-            type: "bi.label",
-            invisible: true,
-            text: BI.i18nText("BI-Click_Blank_To_Select"),
-            cls: "single-select-toolbar",
-            height: this.constants.height
-        });
-
         this.addNotMatchTip = BI.createWidget({
             type: "bi.label",
-            invisible: true,
             text: BI.i18nText("BI-Basic_Click_To_Add_Text", ""),
             height: this.constants.height,
             cls: "bi-high-light",
@@ -60756,7 +60747,7 @@ BI.SingleSelectSearchInsertPane = BI.inherit(BI.Widget, {
             element: this,
             items: [{
                 type: "bi.vertical",
-                items: [this.tooltipClick, this.addNotMatchTip],
+                items: [this.addNotMatchTip],
                 height: this.constants.height
             }, {
                 el: this.loader
@@ -60765,18 +60756,11 @@ BI.SingleSelectSearchInsertPane = BI.inherit(BI.Widget, {
     },
 
     setKeyword: function (keyword) {
-        var o = this.options;
-        var hasSameValue = BI.some(this.loader.getAllButtons(), function (idx, btn) {
-            return keyword === (o.valueFormatter(btn.getValue()) || btn.getValue());
-        });
-        var isMatchTipVisible = this.loader.getAllButtons().length > 0 && hasSameValue;
-        this.tooltipClick.setVisible(isMatchTipVisible);
-        this.addNotMatchTip.setVisible(!isMatchTipVisible);
-        !isMatchTipVisible && this.addNotMatchTip.setText(BI.i18nText("BI-Basic_Click_To_Add_Text", keyword));
+        this.addNotMatchTip.setText(BI.i18nText("BI-Basic_Click_To_Add_Text", keyword));
     },
 
     hasMatched: function () {
-        return this.tooltipClick.isVisible();
+        return false;
     },
 
     setValue: function (v) {
