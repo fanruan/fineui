@@ -42,7 +42,6 @@
             },
 
             handleTreeSelectChange: function (v) {
-                this.model.activeCard = v;
                 var matched = BI.some(Demo.CONFIG, function (index, item) {
                     if (item.value === v) {
                         BI.router.push(item.text);
