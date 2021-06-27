@@ -7,12 +7,6 @@ Demo.Main = BI.inherit(BI.Widget, {
         return BI.Stores.getStore("demo.store.main");
     },
 
-    watch: {
-        activeCard: function (v) {
-            this.center.setValue(v);
-        }
-    },
-
     beforeInit: function (cb) {
         this.store.init(cb);
     },

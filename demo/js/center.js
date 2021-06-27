@@ -5,22 +5,8 @@ Demo.Center = BI.inherit(BI.Widget, {
     render: function () {
         var self = this;
         return {
-            type: "bi.tab",
-            ref: function () {
-                self.tab = this;
-            },
-            single: true,
-            showIndex: Demo.showIndex,
-            cardCreator: function (v) {
-                return BI.createWidget({
-                    type: v
-                });
-            }
-        };
-    },
-
-    setValue: function (v) {
-        this.tab.setSelect(v);
+            type: "bi.router_view"
+        }
     }
 });
 BI.shortcut("demo.center", Demo.Center);

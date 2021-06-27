@@ -4,12 +4,6 @@
 
         },
 
-        state: function () {
-            return {
-                activeCard: Demo.showIndex
-            };
-        },
-
         computed: {},
 
         watch: {},
@@ -48,15 +42,16 @@
             },
 
             handleTreeSelectChange: function (v) {
-                this.model.activeCard = v;
                 var matched = BI.some(Demo.CONFIG, function (index, item) {
                     if (item.value === v) {
-                        BI.history.navigate(item.text, {trigger: true});
+                        BI.router.push(item.text);
+                        // BI.history.navigate(item.text, {trigger: true});
                         return true;
                     }
                 });
                 if (!matched) {
-                    BI.history.navigate("", {trigger: true});
+                    BI.router.push("/");
+                    // BI.history.navigate("", {trigger: true});
                 }
             }
         }

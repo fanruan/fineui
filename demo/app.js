@@ -9,34 +9,47 @@ BI.$(function () {
     });
     var tree = BI.Tree.transformToTreeFormat(Demo.CONFIG);
 
-    var obj = {
-        routes: {
-            "": "index"
-        },
-        index: function () {
-            Demo.showIndex = "demo.face";
+    var routes = [{ 
+        path: '/', 
+        component: function(){
+            return Promise.resolve({
+                type: "demo.face"
+            })
         }
-    };
+    }];
 
     BI.Tree.traversal(tree, function (index, node) {
         if (!node.children || BI.isEmptyArray(node.children)) {
-            obj.routes[node.text] = node.text;
-            obj[node.text] = function () {
-                Demo.showIndex = node.value;
-            };
+            routes.push({ 
+                path: '/' + node.text, 
+                component: function(){
+                    return Promise.resolve({
+                        type: node.value
+                    })
+                } 
+            });
         }
     });
 
-    var AppRouter = BI.inherit(BI.Router, obj);
-    new AppRouter;
-    BI.history.start();
+    // var AppRouter = BI.inherit(BI.Router, obj);
+    // new AppRouter;
+    // BI.history.start();
 
     BI.createWidget({
-        type: "demo.main",
+        type: "bi.router",
         ref: function (_ref) {
-            console.log(_ref);
-            ref = _ref;
+            BI.router = _ref._router;
         },
-        element: "#wrapper"
+        element: "#wrapper",
+        routes: routes,
+        render: function () {
+            return {
+                type: "demo.main",
+                ref: function (_ref) {
+                    console.log(_ref);
+                    ref = _ref;
+                }
+            }
+        }    
     });
 });
