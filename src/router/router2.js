@@ -3115,7 +3115,7 @@
     return base ? cleanPath(base + '/' + path) : path
   }
 
-  VueRouter.install = install;
+  // VueRouter.install = install;
   VueRouter.version = '3.5.2';
   VueRouter.isNavigationFailure = isNavigationFailure;
   VueRouter.NavigationFailureType = NavigationFailureType;
@@ -3135,7 +3135,7 @@
       });
       this._router.init(this);
     }
-  })
+  });
   BI.shortcut("bi.router", RouterWidget);
 
   var RouterView = BI.inherit(BI.Widget, {
@@ -3145,7 +3145,7 @@
     render: function () {
       return $router.history.current.matched[0].components.default;
     }
-  })
+  });
   BI.shortcut("bi.router_view", RouterView);
 
   return VueRouter;
