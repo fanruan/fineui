@@ -3131,7 +3131,6 @@
       });
       this._router.afterEach(function () {
         cbs.forEach(function (cb) {cb();});
-        cbs = [];
       });
       this._router.init(this);
     }
@@ -3139,11 +3138,28 @@
   BI.shortcut("bi.router", RouterWidget);
 
   var RouterView = BI.inherit(BI.Widget, {
-    beforeInit: function (callback) {
-      cbs.push(callback);
+    created: function () {
+      var self = this;
+      cbs.push(function () {
+        self.tab.setSelect($router.history.current.matched[0].path || "/");
+      });
     },
     render: function () {
-      return $router.history.current.matched[0].components.default;
+      var self = this;
+      return {
+        type: "bi.tab",
+        ref: function (_ref) {
+          self.tab = _ref;
+        },
+        single: false, // 是不是单页面
+        logic: {
+          dynamic: false
+        },
+        showIndex: false,
+        cardCreator: function (v) {
+            return $router.history.current.matched[0].components.default;
+        }
+      };
     }
   });
   BI.shortcut("bi.router_view", RouterView);
