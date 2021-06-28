@@ -3,7 +3,7 @@ const merge = require("webpack-merge");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
 const OptimizeCssAssetsPlugin = require("optimize-css-assets-webpack-plugin");
-const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
+const TerserJsPlugin = require("terser-webpack-plugin");
 
 const dirs = require("./dirs");
 
@@ -31,11 +31,11 @@ module.exports = merge.smart(common, {
     },
     optimization: {
         minimizer: [
-            new UglifyJsPlugin({
+            new TerserJsPlugin({
                 include: /\.min/,
                 parallel: true,
                 sourceMap: true,
-                uglifyOptions: {
+                terserOptions: {
                     ie8: true,
                     output: {
                         comments: false,
