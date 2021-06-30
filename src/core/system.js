@@ -6,7 +6,7 @@
 // 系统参数常量
 !(function () {
     var system = {
-        SIZE: { // 尺寸
+        size: { // 尺寸
             TOOL_BAR_HEIGHT: 24,
             LIST_ITEM_HEIGHT: 24,
             TRIGGER_HEIGHT: 24,
@@ -14,15 +14,18 @@
     };
 
     var provider = function () {
-        this.inject = function (type, config) {
-            BI.deepExtend(system[type], config);
+
+        this.SYSTEM = system;
+
+        this.setSize = function (opt) {
+            BI.deepExtend(system, { size: opt });
         };
 
         this.$get = function () {
             return BI.inherit(BI.OB, {
 
-                getConfig: function (type) {
-                    return system[type];
+                getSize: function () {
+                    return system.size;
                 },
             });
         };
@@ -32,5 +35,5 @@
 })();
 
 BI.prepares.push(function () {
-    BI.SIZE_CONSANTS = BI.Providers.getProvider('bi.provider.system').getConfig('SIZE');
+    BI.SIZE_CONSANTS = BI.Providers.getProvider('bi.provider.system').getSize();
 });
