@@ -1,7 +1,6 @@
 BI.DynamicDatePopup = BI.inherit(BI.Widget, {
     constants: {
         tabHeight: 30,
-        buttonHeight: 24
     },
 
     props: {
@@ -27,7 +26,7 @@ BI.DynamicDatePopup = BI.inherit(BI.Widget, {
                         cls: "bi-high-light bi-split-top",
                         shadow: true,
                         text: BI.i18nText("BI-Basic_Clear"),
-                        textHeight: c.buttonHeight - 1,
+                        textHeight: BI.SIZE_CONSANTS.TOOL_BAR_HEIGHT - 1,
                         listeners: [{
                             eventName: BI.TextButton.EVENT_CHANGE,
                             action: function () {
@@ -38,7 +37,7 @@ BI.DynamicDatePopup = BI.inherit(BI.Widget, {
                         type: "bi.text_button",
                         cls: "bi-split-left bi-split-right bi-high-light bi-split-top",
                         shadow: true,
-                        textHeight: c.buttonHeight - 1,
+                        textHeight: BI.SIZE_CONSANTS.TOOL_BAR_HEIGHT - 1,
                         text: BI.i18nText("BI-Multi_Date_Today"),
                         disabled: this._checkTodayValid(),
                         ref: function () {
@@ -53,7 +52,7 @@ BI.DynamicDatePopup = BI.inherit(BI.Widget, {
                     }, {
                         type: "bi.text_button",
                         cls: "bi-high-light bi-split-top",
-                        textHeight: c.buttonHeight - 1,
+                        textHeight: BI.SIZE_CONSANTS.TOOL_BAR_HEIGHT - 1,
                         shadow: true,
                         text: BI.i18nText("BI-Basic_OK"),
                         listeners: [{
@@ -68,7 +67,7 @@ BI.DynamicDatePopup = BI.inherit(BI.Widget, {
                             }
                         }]
                     }]],
-                    height: 24
+                    height: BI.SIZE_CONSANTS.TOOL_BAR_HEIGHT
                 },
             }]
         });

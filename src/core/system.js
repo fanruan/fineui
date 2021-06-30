@@ -37,3 +37,11 @@
 BI.prepares.push(function () {
     BI.SIZE_CONSANTS = BI.Providers.getProvider('bi.provider.system').getSize();
 });
+
+BI.config('bi.provider.system', function (provider) {
+    provider.setSize({
+        TOOL_BAR_HEIGHT: 30,
+        LIST_ITEM_HEIGHT: 30,
+        TRIGGER_HEIGHT: 30,
+    })
+});

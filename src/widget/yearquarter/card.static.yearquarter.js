@@ -28,7 +28,7 @@ BI.StaticYearQuarterCard = BI.inherit(BI.Widget, {
                 whiteSpace: "nowrap",
                 once: false,
                 forceSelected: true,
-                height: 24,
+                height: BI.SIZE_CONSANTS.TOOL_BAR_HEIGHT,
                 ref: function (_ref) {
                     self.quarterMap[j + 1] = _ref;
                 }
