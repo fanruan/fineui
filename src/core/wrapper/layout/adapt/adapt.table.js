@@ -34,15 +34,10 @@ BI.TableAdaptLayout = BI.inherit(BI.Layout, {
     _addElement: function (i, item) {
         var o = this.options;
         var td, width = "";
-        var columnSize = o.columnSize.length > 0 ? o.columnSize[i] : item.width >= 1 ? null : item.width;
-        if (o.columnSize.length > 0) {
-            if (item.width >= 1 && o.columnSize[i] >= 1 && o.columnSize[i] !== item.width) {
-                columnSize = null;
-            }
-        }
+        var columnSize = o.columnSize.length > 0 ? o.columnSize[i] : item.width;
         if (columnSize > 0) {
             width = columnSize < 1 ?
-                ((columnSize * 100).toFixed(1) + "%") 
+                ((columnSize * 100).toFixed(1) + "%")
                 : (columnSize + (i === 0 ? o.hgap : 0) + o.hgap + o.lgap + o.rgap);
         }
         if (!this.hasWidget(this._getChildName(i))) {
