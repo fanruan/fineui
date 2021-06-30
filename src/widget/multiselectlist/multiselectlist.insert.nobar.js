@@ -7,7 +7,7 @@ BI.MultiSelectInsertNoBarList = BI.inherit(BI.Single, {
             baseCls: "bi-multi-select-insert-list",
             itemsCreator: BI.emptyFn,
             valueFormatter: BI.emptyFn,
-            searcherHeight: 24
+            searcherHeight: BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT,
         });
     },
     _init: function () {

@@ -13,7 +13,7 @@ BI.MultiSelectNoBarPopupView = BI.inherit(BI.Widget, {
             maxHeight: 400,
             valueFormatter: BI.emptyFn,
             itemsCreator: BI.emptyFn,
-            itemHeight: 24,
+            itemHeight: BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT,
             onLoaded: BI.emptyFn
         });
     },

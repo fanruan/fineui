@@ -10,7 +10,7 @@ BI.MultiSelectNoBarCombo = BI.inherit(BI.Single, {
             baseCls: "bi-multi-select-combo-no-bar",
             itemsCreator: BI.emptyFn,
             valueFormatter: BI.emptyFn,
-            itemHeight: 24,
+            itemHeight: BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT,
             height: 24,
         });
     },

@@ -7,8 +7,8 @@ BI.MultiSelectInsertList = BI.inherit(BI.Single, {
             baseCls: "bi-multi-select-insert-list",
             itemsCreator: BI.emptyFn,
             valueFormatter: BI.emptyFn,
-            searcherHeight: 24,
-            itemHeight: 24
+            searcherHeight: BI.SIZE_CONSANTS.TRIGGER_HEIGHT,
+            itemHeight: BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT,
         });
     },
     _init: function () {
@@ -71,7 +71,7 @@ BI.MultiSelectInsertList = BI.inherit(BI.Single, {
                 ref: function (ref) {
                     self.editor = ref;
                 },
-                height: o.searcherHeight,
+                height: o.searcherHeight || BI.SIZE_CONSANTS.TRIGGER_HEIGHT,
             },
             isAutoSearch: false,
             isAutoSync: false,
@@ -164,7 +164,7 @@ BI.MultiSelectInsertList = BI.inherit(BI.Single, {
             element: this,
             items: [{
                 el: this.trigger,
-                height: o.searcherHeight
+                height: o.searcherHeight || BI.SIZE_CONSANTS.TRIGGER_HEIGHT,
             }, {
                 el: this.adapter,
                 height: "fill"
@@ -175,7 +175,7 @@ BI.MultiSelectInsertList = BI.inherit(BI.Single, {
             element: this,
             items: [{
                 el: this.searcherPane,
-                top: o.searcherHeight,
+                top: o.searcherHeight || BI.SIZE_CONSANTS.TRIGGER_HEIGHT,
                 bottom: 0,
                 left: 0,
                 right: 0

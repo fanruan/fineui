@@ -1,14 +1,16 @@
 BI.DynamicDateParamItem = BI.inherit(BI.Widget, {
 
-    props: {
-        baseCls: "bi-dynamic-date-param-item",
-        dateType: BI.DynamicDateCard.TYPE.YEAR,
-        validationChecker: function() {
-            return true;
-        },
-        value: 0,
-        offset: 0,
-        height: 24
+    props: function() {
+        return {
+            baseCls: "bi-dynamic-date-param-item",
+            dateType: BI.DynamicDateCard.TYPE.YEAR,
+            validationChecker: function() {
+                return true;
+            },
+            value: 0,
+            offset: 0,
+            height: BI.SIZE_CONSANTS.TOOL_BAR_HEIGHT,
+        }
     },
 
     render: function () {
@@ -19,7 +21,7 @@ BI.DynamicDateParamItem = BI.inherit(BI.Widget, {
                 el: {
                     type: "bi.sign_editor",
                     cls: "bi-border",
-                    height: 22,
+                    height: BI.SIZE_CONSANTS.TOOL_BAR_HEIGHT - 2,
                     validationChecker: function (v) {
                         return BI.isNaturalNumber(v);
                     },
@@ -47,13 +49,13 @@ BI.DynamicDateParamItem = BI.inherit(BI.Widget, {
             }, {
                 el: {
                     type: "bi.label",
-                    height: 24,
+                    height: BI.SIZE_CONSANTS.TOOL_BAR_HEIGHT,
                     text: this._getText()
                 },
                 width: o.dateType === BI.DynamicDateCard.TYPE.WORK_DAY ? 60 : 20
             }, {
                 type: "bi.text_value_combo",
-                height: 24,
+                height: BI.SIZE_CONSANTS.TOOL_BAR_HEIGHT,
                 items: [{
                     text: BI.i18nText("BI-Basic_Front"),
                     value: 0
