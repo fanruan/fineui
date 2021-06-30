@@ -1,4 +1,4 @@
-/*! time: 2021-6-28 10:56:23 */
+/*! time: 2021-6-30 9:00:52 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -15030,8 +15030,18 @@ BI.TableAdaptLayout = BI.inherit(BI.Layout, {
 
     _addElement: function (i, item) {
         var o = this.options;
-        var td;
-        var width = o.columnSize[i] === "" ? "" : (o.columnSize[i] < 1 ? ((o.columnSize[i] * 100).toFixed(1) + "%") : (i === 0 ? o.hgap : 0) + o.hgap + o.lgap + o.rgap + o.columnSize[i]);
+        var td, width = "";
+        var columnSize = o.columnSize.length > 0 ? o.columnSize[i] : item.width >= 1 ? null : item.width;
+        if (o.columnSize.length > 0) {
+            if (item.width >= 1 && o.columnSize[i] >= 1 && o.columnSize[i] !== item.width) {
+                columnSize = null;
+            }
+        }
+        if (columnSize > 0) {
+            width = columnSize < 1 ?
+                ((columnSize * 100).toFixed(1) + "%") 
+                : (columnSize + (i === 0 ? o.hgap : 0) + o.hgap + o.lgap + o.rgap);
+        }
         if (!this.hasWidget(this._getChildName(i))) {
             var w = BI._lazyCreateWidget(item);
             w.element.css({position: "relative", top: "0", left: "0", margin: "0px auto"});
@@ -91219,7 +91229,6 @@ _.extend(BI, {
   var $router, cbs = [];
   var RouterWidget = BI.inherit(BI.Widget, {
     init: function () {
-      this._routerRoot = this;
       this._router = $router = new VueRouter({
         routes: this.options.routes
       });
@@ -91232,14 +91241,17 @@ _.extend(BI, {
   BI.shortcut("bi.router", RouterWidget);
 
   var RouterView = BI.inherit(BI.Widget, {
+    props: {
+      deps: 0
+    },
     created: function () {
-      var self = this;
-      cbs.push(function () {
-        self.tab.setSelect($router.history.current.matched[0].path || "/");
+      var self = this, o = this.options;
+      cbs.push(this._callbackListener = function () {
+        self.tab.setSelect($router.history.current.matched[o.deps].path || "/");
       });
     },
     render: function () {
-      var self = this;
+      var self = this, o = this.options;
       return {
         type: "bi.tab",
         ref: function (_ref) {
@@ -91251,9 +91263,12 @@ _.extend(BI, {
         },
         showIndex: false,
         cardCreator: function (v) {
-            return $router.history.current.matched[0].components.default;
+            return $router.history.current.matched[o.deps].components.default;
         }
       };
+    },
+    destroyed: function () {
+      BI.remove(cbs, this._callbackListener);
     }
   });
   BI.shortcut("bi.router_view", RouterView);
@@ -91261,6 +91276,7 @@ _.extend(BI, {
   return VueRouter;
 
 })));
+
 
 /***/ }),
 /* 864 */
