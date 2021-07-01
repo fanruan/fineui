@@ -25,7 +25,7 @@ BI.DynamicDateTimePopup = BI.inherit(BI.Widget, {
                     items: [[{
                         type: "bi.text_button",
                         cls: "bi-high-light bi-split-top",
-                        textHeight: c.buttonHeight - 1,
+                        textHeight: BI.SIZE_CONSANTS.TOOL_BAR_HEIGHT - 1,
                         shadow: true,
                         text: BI.i18nText("BI-Basic_Clear"),
                         listeners: [{
@@ -37,7 +37,7 @@ BI.DynamicDateTimePopup = BI.inherit(BI.Widget, {
                     }, {
                         type: "bi.text_button",
                         cls: "bi-split-left bi-split-right bi-high-light bi-split-top",
-                        textHeight: c.buttonHeight - 1,
+                        textHeight: BI.SIZE_CONSANTS.TOOL_BAR_HEIGHT - 1,
                         shadow: true,
                         text: BI.i18nText("BI-Multi_Date_Today"),
                         disabled: this._checkTodayValid(),
@@ -53,7 +53,7 @@ BI.DynamicDateTimePopup = BI.inherit(BI.Widget, {
                     }, {
                         type: "bi.text_button",
                         cls: "bi-high-light bi-split-top",
-                        textHeight: c.buttonHeight - 1,
+                        textHeight: BI.SIZE_CONSANTS.TOOL_BAR_HEIGHT - 1,
                         shadow: true,
                         text: BI.i18nText("BI-Basic_OK"),
                         listeners: [{
@@ -63,7 +63,7 @@ BI.DynamicDateTimePopup = BI.inherit(BI.Widget, {
                             }
                         }]
                     }]],
-                    height: 24
+                    height: BI.SIZE_CONSANTS.TOOL_BAR_HEIGHT
                 }
             }]
         });

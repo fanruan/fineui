@@ -166,7 +166,7 @@ BI.DynamicDateCard = BI.inherit(BI.Widget, {
             comboItems[0].text = BI.i18nText("BI-Basic_Empty");
             items.push({
                 type: "bi.text_value_combo",
-                height: 24,
+                height: BI.SIZE_CONSANTS.TOOL_BAR_HEIGHT,
                 items: comboItems,
                 container: null,
                 value: positionValue || BI.DynamicDateCard.OFFSET.CURRENT,
@@ -183,7 +183,7 @@ BI.DynamicDateCard = BI.inherit(BI.Widget, {
             if(values.length !== 0 && BI.last(values).dateType !== BI.DynamicDateCard.TYPE.DAY && BI.last(values).dateType !== BI.DynamicDateCard.TYPE.WORK_DAY) {
                 items.push({
                     type: "bi.text_value_combo",
-                    height: 24,
+                    height: BI.SIZE_CONSANTS.TOOL_BAR_HEIGHT,
                     container: null,
                     items: this._getText(BI.last(values).dateType),
                     value: positionValue || BI.DynamicDateCard.OFFSET.CURRENT,

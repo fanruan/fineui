@@ -11,7 +11,7 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
             itemsCreator: BI.emptyFn,
             valueFormatter: BI.emptyFn,
             height: 24,
-            itemHeight: 24,
+            itemHeight: BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT,
             allowEdit: true
         });
     },

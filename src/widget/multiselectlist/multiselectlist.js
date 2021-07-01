@@ -8,7 +8,7 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
             itemsCreator: BI.emptyFn,
             valueFormatter: BI.emptyFn,
             searcherHeight: 24,
-            itemHeight: 24
+            itemHeight: BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT,
         });
     },
     _init: function () {

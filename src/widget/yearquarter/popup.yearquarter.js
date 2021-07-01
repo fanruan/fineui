@@ -27,7 +27,7 @@ BI.DynamicYearQuarterPopup = BI.inherit(BI.Widget, {
                         type: "bi.text_button",
                         cls: "bi-split-top bi-high-light",
                         shadow: true,
-                        textHeight: c.buttonHeight - 1,
+                        textHeight: BI.SIZE_CONSANTS.TOOL_BAR_HEIGHT - 1,
                         text: BI.i18nText("BI-Basic_Clear"),
                         listeners: [{
                             eventName: BI.TextButton.EVENT_CHANGE,
@@ -38,7 +38,7 @@ BI.DynamicYearQuarterPopup = BI.inherit(BI.Widget, {
                     }, {
                         type: "bi.text_button",
                         cls: "bi-split-left bi-split-right bi-high-light bi-split-top",
-                        textHeight: c.buttonHeight - 1,
+                        textHeight: BI.SIZE_CONSANTS.TOOL_BAR_HEIGHT - 1,
                         shadow: true,
                         text: BI.i18nText("BI-Basic_Current_Quarter"),
                         disabled: this._checkTodayValid(),
@@ -55,7 +55,7 @@ BI.DynamicYearQuarterPopup = BI.inherit(BI.Widget, {
                         type: "bi.text_button",
                         cls: "bi-split-top bi-high-light",
                         shadow: true,
-                        textHeight: c.buttonHeight - 1,
+                        textHeight: BI.SIZE_CONSANTS.TOOL_BAR_HEIGHT - 1,
                         text: BI.i18nText("BI-Basic_OK"),
                         listeners: [{
                             eventName: BI.TextButton.EVENT_CHANGE,
@@ -69,7 +69,7 @@ BI.DynamicYearQuarterPopup = BI.inherit(BI.Widget, {
                             }
                         }]
                     }]],
-                    height: 24
+                    height: BI.SIZE_CONSANTS.TOOL_BAR_HEIGHT
                 },
             }]
         };
