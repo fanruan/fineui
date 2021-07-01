@@ -44,7 +44,7 @@ interface ElementClassProps<T> extends UIProps {
     $testId: string;
     $point: any;
     $value: any;
-    $scope: () => any;
+    $scope: any;
 
     beforeRender(callback: () => void): void;
     beforeInit(callback: () => void): void;
