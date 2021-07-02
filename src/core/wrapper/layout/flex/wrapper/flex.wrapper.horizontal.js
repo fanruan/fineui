@@ -49,6 +49,10 @@ BI.FlexWrapperHorizontalLayout = BI.inherit(BI.Layout, {
                         w.element.addClass("f-s-n");
                     }
                 }
+                // 当既有动态宽度和自适应宽度的时候只压缩自适应
+                if (columnSize === "" && o.columnSize.indexOf("fill") >= 0) {
+                    w.element.addClass("f-s-n");
+                }
             } else {
                 w.element.addClass("f-s-n");
             }
