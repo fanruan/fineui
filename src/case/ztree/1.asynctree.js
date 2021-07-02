@@ -219,7 +219,7 @@ BI.AsyncTree = BI.inherit(BI.TreeView, {
 
     _getJoinValue: function () {
         if (!this.nodes) {
-            return {};
+            return this.options.paras.selectedValues || {};
         }
         var checkedValues = this._getSelectedValues();
         if (BI.isEmpty(checkedValues)) {
