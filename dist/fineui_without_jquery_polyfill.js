@@ -1,4 +1,4 @@
-/*! time: 2021-7-2 9:31:23 */
+/*! time: 2021-7-2 17:40:22 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -15255,6 +15255,10 @@ BI.FlexHorizontalLayout = BI.inherit(BI.Layout, {
                         w.element.addClass("f-s-n");
                     }
                 }
+                // 当既有动态宽度和自适应宽度的时候只压缩自适应
+                if (columnSize === "" && o.columnSize.indexOf("fill") >= 0) {
+                    w.element.addClass("f-s-n");
+                }
             } else {
                 w.element.addClass("f-s-n");
             }
@@ -15522,6 +15526,10 @@ BI.FlexVerticalLayout = BI.inherit(BI.Layout, {
                         w.element.addClass("f-s-n");
                     }
                 }
+                // 当既有动态宽度和自适应宽度的时候只压缩自适应
+                if (rowSize === "" && o.rowSize.indexOf("fill") >= 0) {
+                    w.element.addClass("f-s-n");
+                }
             } else {
                 w.element.addClass("f-s-n");
             }
@@ -15752,6 +15760,10 @@ BI.FlexWrapperHorizontalLayout = BI.inherit(BI.Layout, {
                         w.element.addClass("f-s-n");
                     }
                 }
+                // 当既有动态宽度和自适应宽度的时候只压缩自适应
+                if (columnSize === "" && o.columnSize.indexOf("fill") >= 0) {
+                    w.element.addClass("f-s-n");
+                }
             } else {
                 w.element.addClass("f-s-n");
             }
@@ -15930,6 +15942,10 @@ BI.FlexWrapperVerticalLayout = BI.inherit(BI.Layout, {
                     if (o.scrollable === true || o.scrolly === true) {
                         w.element.addClass("f-s-n");
                     }
+                }
+                // 当既有动态宽度和自适应宽度的时候只压缩自适应
+                if (rowSize === "" && o.rowSize.indexOf("fill") >= 0) {
+                    w.element.addClass("f-s-n");
                 }
             } else {
                 w.element.addClass("f-s-n");
