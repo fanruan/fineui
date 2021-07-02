@@ -1,4 +1,4 @@
-/*! time: 2021-7-1 17:00:23 */
+/*! time: 2021-7-2 9:31:23 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -95354,7 +95354,7 @@ BI.AsyncTree = BI.inherit(BI.TreeView, {
 
     _getJoinValue: function () {
         if (!this.nodes) {
-            return {};
+            return this.options.paras.selectedValues || {};
         }
         var checkedValues = this._getSelectedValues();
         if (BI.isEmpty(checkedValues)) {
