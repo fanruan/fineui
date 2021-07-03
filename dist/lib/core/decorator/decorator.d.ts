@@ -78,7 +78,7 @@ export declare class Model<U extends {
     context: U["context"];
     actions: {
         [key: string]: (...args: any[]) => any;
-    };
+    } | {};
     childContext: ReadonlyArray<keyof (this["computed"] & ReturnType<this["state"]>)>;
     TYPE: Pick<{
         [key in keyof this["computed"]]: ReturnType<this["computed"][key]>;
