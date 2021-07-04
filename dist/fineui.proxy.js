@@ -1,4 +1,4 @@
-/*! time: 2021-7-3 16:10:42 */
+/*! time: 2021-7-4 12:01:21 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -15082,6 +15082,9 @@ BI.TableAdaptLayout = BI.inherit(BI.Layout, {
                 ((columnSize * 100).toFixed(1) + "%")
                 : (columnSize + (i === 0 ? o.hgap : 0) + o.hgap + o.lgap + o.rgap);
         }
+        if (columnSize === "" && o.columnSize.indexOf("fill") >= 0) {
+            width = 2;
+        }
         if (!this.hasWidget(this._getChildName(i))) {
             var w = BI._lazyCreateWidget(item);
             w.element.css({position: "relative", top: "0", left: "0", margin: "0px auto"});
@@ -15099,7 +15102,9 @@ BI.TableAdaptLayout = BI.inherit(BI.Layout, {
         // 1、由于直接对td设置最大宽度是在规范中未定义的, 所以要使用类似td:firstChild来迂回实现
         // 2、不能给多个td设置最大宽度，这样只会平分宽度
         // 3、多百分比宽度就算了
-        td.element.css({"max-width": BI.isNumber(o.columnSize[i]) ? (o.columnSize[i] < 1 ? width : width / BI.pixRatio + BI.pixUnit) : width});
+        if (columnSize > 0) {
+            td.element.css({"max-width": columnSize < 1 ? width : width / BI.pixRatio + BI.pixUnit});
+        }
         if (i === 0) {
             td.element.addClass("first-element");
         }
@@ -18116,7 +18121,9 @@ BI.TdLayout = BI.inherit(BI.Layout, {
         return BI.extend(BI.TdLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-td",
             columnSize: [],
+            rowSize: [],
             verticalAlign: BI.VerticalAlign.Middle,
+            horizontalAlign: BI.HorizontalAlign.Stretch,
             hgap: 0,
             vgap: 0,
             tgap: 0,
@@ -18128,10 +18135,11 @@ BI.TdLayout = BI.inherit(BI.Layout, {
     },
     render: function () {
         BI.TdLayout.superclass.render.apply(this, arguments);
+        var self = this, o = this.options;
         this.$table = BI.Widget._renderEngine.createElement("<table>").attr({cellspacing: 0, cellpadding: 0}).css({
             position: "relative",
-            width: "100%",
-            height: "100%",
+            width: (o.horizontalAlign === BI.HorizontalAlign.Center || o.horizontalAlign === BI.HorizontalAlign.Stretch) ? "100%" : "auto",
+            height: (o.verticalAlign !== BI.VerticalAlign.Top) ? "100%" : "auto",
             "border-spacing": "0px",
             border: "none",
             "border-collapse": "separate"
@@ -18180,9 +18188,15 @@ BI.TdLayout = BI.inherit(BI.Layout, {
             }
         }
 
+        var height = o.rowSize[idx] === "" ? "" : (o.rowSize[idx] < 1 ? ((o.rowSize[idx] * 100).toFixed(1) + "%") : o.rowSize[idx]);
+
         var tr = BI._lazyCreateWidget({
             type: "bi.default",
-            tagName: "tr"
+            tagName: "tr",
+            height: height,
+            css: {
+                "max-height": BI.isNumber(o.rowSize[idx]) ? (o.rowSize[idx] <= 1 ? height : height / BI.pixRatio + BI.pixUnit) : height
+            }
         });
 
         for (var i = 0; i < arr.length; i++) {
@@ -18210,7 +18224,16 @@ BI.TdLayout = BI.inherit(BI.Layout, {
                 });
             }
             first(w, this.rows++, i);
-            var width = o.columnSize[i] === "" ? "" : (o.columnSize[i] < 1 ? ((o.columnSize[i] * 100).toFixed(1) + "%") : (i === 0 ? o.hgap : 0) + o.hgap + o.lgap + o.rgap + o.columnSize[i]);
+            var width = "";
+            var columnSize = o.columnSize.length > 0 ? o.columnSize[i] : item.width;
+            if (columnSize > 0) {
+                width = columnSize < 1 ?
+                    ((columnSize * 100).toFixed(1) + "%")
+                    : (columnSize + (i === 0 ? o.hgap : 0) + o.hgap + o.lgap + o.rgap);
+            }
+            if (columnSize === "" && o.columnSize.indexOf("fill") >= 0) {
+                width = 2;
+            }
             var td = BI._lazyCreateWidget({
                 type: "bi.default",
                 width: width,
@@ -18221,8 +18244,10 @@ BI.TdLayout = BI.inherit(BI.Layout, {
             // 1、由于直接对td设置最大宽度是在规范中未定义的, 所以要使用类似td:firstChild来迂回实现
             // 2、不能给多个td设置最大宽度，这样只会平分宽度
             // 3、多百分比宽度就算了
+            if (columnSize > 0) {
+                td.element.css({"max-width": columnSize < 1 ? width : width / BI.pixRatio + BI.pixUnit});
+            }
             td.element.css({
-                "max-width": BI.isNumber(o.columnSize[i]) ? (o.columnSize[i] <= 1 ? width : width / BI.pixRatio + BI.pixUnit) : width,
                 position: "relative",
                 "vertical-align": o.verticalAlign,
                 margin: "0",
@@ -74713,6 +74738,15 @@ BI.prepares.push(function () {
         return BI.extend({
             scrollx: true
         }, ob, {type: "bi.inline"});
+    });
+    BI.Plugin.configWidget("bi.inline", function (ob) {
+        // 当列宽既需要自动列宽又需要自适应列宽时，inline布局也处理不了了，降级table处理吧
+        if (ob.columnSize && ob.columnSize.indexOf("") >= 0 && ob.columnSize.indexOf("fill") >= 0) {
+            return BI.extend({
+                horizontalAlign: BI.HorizontalAlign.Stretch
+            }, ob, {type: "bi.table_adapt"});
+        }
+        return ob;
     });
     BI.Plugin.configWidget("bi.center_adapt", function (ob) {
         var supportFlex = isSupportFlex();
