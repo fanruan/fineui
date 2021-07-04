@@ -27,6 +27,15 @@ BI.prepares.push(function () {
             scrollx: true
         }, ob, {type: "bi.inline"});
     });
+    BI.Plugin.configWidget("bi.inline", function (ob) {
+        // 当列宽既需要自动列宽又需要自适应列宽时，inline布局也处理不了了，降级table处理吧
+        if (ob.columnSize && ob.columnSize.indexOf("") >= 0 && ob.columnSize.indexOf("fill") >= 0) {
+            return BI.extend({
+                horizontalAlign: BI.HorizontalAlign.Stretch
+            }, ob, {type: "bi.table_adapt"});
+        }
+        return ob;
+    });
     BI.Plugin.configWidget("bi.center_adapt", function (ob) {
         var supportFlex = isSupportFlex();
         // var isAdapt = !ob.horizontalAlign || ob.horizontalAlign === BI.HorizontalAlign.Center || ob.horizontalAlign === BI.HorizontalAlign.Stretch;
