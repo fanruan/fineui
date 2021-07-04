@@ -8,7 +8,9 @@ BI.TdLayout = BI.inherit(BI.Layout, {
         return BI.extend(BI.TdLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-td",
             columnSize: [],
+            rowSize: [],
             verticalAlign: BI.VerticalAlign.Middle,
+            horizontalAlign: BI.HorizontalAlign.Stretch,
             hgap: 0,
             vgap: 0,
             tgap: 0,
@@ -20,10 +22,11 @@ BI.TdLayout = BI.inherit(BI.Layout, {
     },
     render: function () {
         BI.TdLayout.superclass.render.apply(this, arguments);
+        var self = this, o = this.options;
         this.$table = BI.Widget._renderEngine.createElement("<table>").attr({cellspacing: 0, cellpadding: 0}).css({
             position: "relative",
-            width: "100%",
-            height: "100%",
+            width: (o.horizontalAlign === BI.HorizontalAlign.Center || o.horizontalAlign === BI.HorizontalAlign.Stretch) ? "100%" : "auto",
+            height: (o.verticalAlign !== BI.VerticalAlign.Top) ? "100%" : "auto",
             "border-spacing": "0px",
             border: "none",
             "border-collapse": "separate"
@@ -72,9 +75,15 @@ BI.TdLayout = BI.inherit(BI.Layout, {
             }
         }
 
+        var height = o.rowSize[idx] === "" ? "" : (o.rowSize[idx] < 1 ? ((o.rowSize[idx] * 100).toFixed(1) + "%") : o.rowSize[idx]);
+
         var tr = BI._lazyCreateWidget({
             type: "bi.default",
-            tagName: "tr"
+            tagName: "tr",
+            height: height,
+            css: {
+                "max-height": BI.isNumber(o.rowSize[idx]) ? (o.rowSize[idx] <= 1 ? height : height / BI.pixRatio + BI.pixUnit) : height
+            }
         });
 
         for (var i = 0; i < arr.length; i++) {
