@@ -92,20 +92,19 @@ BI.AllCountPager = BI.inherit(BI.Widget, {
             title: o.pages,
             text: "/" + o.pages,
             lgap: 5,
+            height: o.height,
             invisible: o.pages <= 1
         });
 
         BI.createWidget(o.showRowCount ? {
-            type: "bi.htape",
-            columnSize: ["fill", 140],
+            type: "bi.flex_horizontal",
+            columnSize: ["fill", ""],
             element: this,
+            scrollx: false,
             items: [
                 this._getRowCountObject(),
-                {
-                    type: "bi.right_vertical_adapt",
-                    items: [this.editor, this.allPages, this.pager]
-                }
-            ]
+                this.editor, this.allPages, this.pager
+            ],
         } : {
             type: "bi.vertical_adapt",
             element: this,
