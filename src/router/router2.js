@@ -3125,7 +3125,6 @@
   var $router, cbs = [];
   var RouterWidget = BI.inherit(BI.Widget, {
     init: function () {
-      this._routerRoot = this;
       this._router = $router = new VueRouter({
         routes: this.options.routes
       });
@@ -3138,14 +3137,17 @@
   BI.shortcut("bi.router", RouterWidget);
 
   var RouterView = BI.inherit(BI.Widget, {
+    props: {
+      deps: 0
+    },
     created: function () {
-      var self = this;
-      cbs.push(function () {
-        self.tab.setSelect($router.history.current.matched[0].path || "/");
+      var self = this, o = this.options;
+      cbs.push(this._callbackListener = function () {
+        self.tab.setSelect($router.history.current.matched[o.deps].path || "/");
       });
     },
     render: function () {
-      var self = this;
+      var self = this, o = this.options;
       return {
         type: "bi.tab",
         ref: function (_ref) {
@@ -3157,9 +3159,12 @@
         },
         showIndex: false,
         cardCreator: function (v) {
-            return $router.history.current.matched[0].components.default;
+            return $router.history.current.matched[o.deps].components.default;
         }
       };
+    },
+    destroyed: function () {
+      BI.remove(cbs, this._callbackListener);
     }
   });
   BI.shortcut("bi.router_view", RouterView);

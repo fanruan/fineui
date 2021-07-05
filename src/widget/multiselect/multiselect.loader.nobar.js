@@ -17,7 +17,7 @@ BI.MultiSelectNoBarLoader = BI.inherit(BI.Widget, {
             },
             valueFormatter: BI.emptyFn,
             itemsCreator: BI.emptyFn,
-            itemHeight: 24,
+            itemHeight: BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT,
             onLoaded: BI.emptyFn
         });
     },
@@ -117,7 +117,7 @@ BI.MultiSelectNoBarLoader = BI.inherit(BI.Widget, {
             type: "bi.multi_select_item",
             cls: "bi-list-item-active",
             logic: this.options.logic,
-            height: this.options.itemHeight,
+            height: this.options.itemHeight || BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT,
             iconWrapperWidth: 36
         });
     },

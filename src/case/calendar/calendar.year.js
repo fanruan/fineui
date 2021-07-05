@@ -51,7 +51,7 @@ BI.YearCalendar = BI.inherit(BI.Widget, {
                 columns: 2,
                 rows: 6,
                 columnSize: [1 / 2, 1 / 2],
-                rowSize: 24
+                rowSize: BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT,
             })), {
                 type: "bi.center_adapt",
                 vgap: 1
@@ -110,7 +110,7 @@ BI.YearCalendar = BI.inherit(BI.Widget, {
                     whiteSpace: "normal",
                     once: false,
                     forceSelected: true,
-                    height: 24,
+                    height: BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT,
                     width: 45,
                     value: td.text,
                     disabled: td.disabled

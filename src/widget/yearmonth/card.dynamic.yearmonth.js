@@ -19,7 +19,7 @@ BI.DynamicYearMonthCard = BI.inherit(BI.Widget, {
                 type: "bi.label",
                 text: BI.i18nText("BI-Multi_Date_Relative_Current_Time"),
                 textAlign: "left",
-                height: 24
+                height: BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT,
             }, {
                 type: "bi.vertical",
                 ref: function (_ref) {

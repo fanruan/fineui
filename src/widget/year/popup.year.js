@@ -8,7 +8,6 @@
 BI.DynamicYearPopup = BI.inherit(BI.Widget, {
     constants: {
         tabHeight: 30,
-        buttonHeight: 24
     },
 
     props: {
@@ -33,7 +32,7 @@ BI.DynamicYearPopup = BI.inherit(BI.Widget, {
                     items: [[{
                         type: "bi.text_button",
                         cls: "bi-split-top bi-high-light",
-                        textHeight: c.buttonHeight - 1,
+                        textHeight: BI.SIZE_CONSANTS.TOOL_BAR_HEIGHT - 1,
                         shadow: true,
                         text: BI.i18nText("BI-Basic_Clear"),
                         listeners: [{
@@ -44,7 +43,7 @@ BI.DynamicYearPopup = BI.inherit(BI.Widget, {
                         }]
                     }, {
                         type: "bi.text_button",
-                        textHeight: c.buttonHeight - 1,
+                        textHeight: BI.SIZE_CONSANTS.TOOL_BAR_HEIGHT - 1,
                         cls: "bi-split-left bi-split-right bi-high-light bi-split-top",
                         shadow: true,
                         text: BI.i18nText("BI-Basic_Current_Year"),
@@ -61,7 +60,7 @@ BI.DynamicYearPopup = BI.inherit(BI.Widget, {
                     }, {
                         type: "bi.text_button",
                         cls: "bi-split-top bi-high-light",
-                        textHeight: c.buttonHeight - 1,
+                        textHeight: BI.SIZE_CONSANTS.TOOL_BAR_HEIGHT - 1,
                         shadow: true,
                         text: BI.i18nText("BI-Basic_OK"),
                         listeners: [{
@@ -76,7 +75,7 @@ BI.DynamicYearPopup = BI.inherit(BI.Widget, {
                             }
                         }]
                     }]],
-                    height: 24
+                    height: BI.SIZE_CONSANTS.TOOL_BAR_HEIGHT,
                 },
             }]
         };

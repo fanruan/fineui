@@ -78,7 +78,7 @@ BI.Calendar = BI.inherit(BI.Widget, {
         var items = BI.map(this._getWeekLabel(), function (i, value) {
             return {
                 type: "bi.label",
-                height: 24,
+                height: BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT,
                 text: value
             };
         });
@@ -100,7 +100,7 @@ BI.Calendar = BI.inherit(BI.Widget, {
                 columns: 7,
                 rows: 6,
                 columnSize: [1 / 7, 1 / 7, 1 / 7, 1 / 7, 1 / 7, 1 / 7, 1 / 7],
-                rowSize: 24,
+                rowSize: BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT,
                 vgap: 10
             }))]
         });
@@ -159,7 +159,7 @@ BI.Calendar = BI.inherit(BI.Widget, {
                     whiteSpace: "normal",
                     once: false,
                     forceSelected: true,
-                    height: 24,
+                    height: BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT,
                     value: o.year + "-" + month + "-" + td.text,
                     disabled: td.lastMonth || td.nextMonth || td.disabled,
                     lgap: 5,

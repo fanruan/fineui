@@ -100,7 +100,7 @@ export class Model<U extends {types?: {[key: string]: unknown} | {}, context?: R
 
     context: U["context"];
 
-    actions:{[key: string]: (...args: any[]) => any};
+    actions:{[key: string]: (...args: any[]) => any} | {};
 
     childContext: ReadonlyArray<keyof (this["computed"] & ReturnType<this["state"]>)>;
 

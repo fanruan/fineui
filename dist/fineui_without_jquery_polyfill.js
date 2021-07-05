@@ -1,4 +1,4 @@
-/*! time: 2021-6-25 17:40:18 */
+/*! time: 2021-7-4 12:01:21 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -82,7 +82,7 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 1443);
+/******/ 	return __webpack_require__(__webpack_require__.s = 1445);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -13031,6 +13031,51 @@ BI.Region.prototype = {
 /* 318 */
 /***/ (function(module, exports) {
 
+/**
+ * @author windy
+ * @version 2.0
+ * Created by windy on 2021/6/30
+ */
+// 系统参数常量
+!(function () {
+    var system = {
+        size: { // 尺寸
+            TOOL_BAR_HEIGHT: 24,
+            LIST_ITEM_HEIGHT: 24,
+            TRIGGER_HEIGHT: 24,
+        },
+    };
+
+    var provider = function () {
+
+        this.SYSTEM = system;
+
+        this.setSize = function (opt) {
+            BI.deepExtend(system, { size: opt });
+        };
+
+        this.$get = function () {
+            return BI.inherit(BI.OB, {
+
+                getSize: function () {
+                    return system.size;
+                },
+            });
+        };
+    };
+
+    BI.provider("bi.provider.system", provider);
+})();
+
+BI.prepares.push(function () {
+    BI.SIZE_CONSANTS = BI.Providers.getProvider('bi.provider.system').getSize();
+});
+
+
+/***/ }),
+/* 319 */
+/***/ (function(module, exports) {
+
 BI.EventListener = {
     listen: function listen (target, eventType, callback) {
         if (target.addEventListener) {
@@ -13070,7 +13115,7 @@ BI.EventListener = {
 };
 
 /***/ }),
-/* 319 */
+/* 320 */
 /***/ (function(module, exports) {
 
 !(function () {
@@ -13182,7 +13227,7 @@ BI.EventListener = {
 })();
 
 /***/ }),
-/* 320 */
+/* 321 */
 /***/ (function(module, exports) {
 
 !(function () {
@@ -13336,13 +13381,13 @@ BI.EventListener = {
 })();
 
 /***/ }),
-/* 321 */
+/* 322 */
 /***/ (function(module, exports) {
 
 BI.version = "2.0";
 
 /***/ }),
-/* 322 */
+/* 323 */
 /***/ (function(module, exports) {
 
 !(function () {
@@ -13395,7 +13440,7 @@ BI.version = "2.0";
 
 
 /***/ }),
-/* 323 */
+/* 324 */
 /***/ (function(module, exports) {
 
 /**
@@ -14010,7 +14055,7 @@ BI.shortcut("bi.layout", BI.Layout);
 
 
 /***/ }),
-/* 324 */
+/* 325 */
 /***/ (function(module, exports) {
 
 /**
@@ -14063,7 +14108,7 @@ BI.shortcut("bi.absolute_center_adapt", BI.AbsoluteCenterLayout);
 
 
 /***/ }),
-/* 325 */
+/* 326 */
 /***/ (function(module, exports) {
 
 /**
@@ -14121,7 +14166,7 @@ BI.shortcut("bi.absolute_horizontal_adapt", BI.AbsoluteHorizontalLayout);
 
 
 /***/ }),
-/* 326 */
+/* 327 */
 /***/ (function(module, exports) {
 
 BI.AbsoluteLeftRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
@@ -14273,7 +14318,7 @@ BI.AbsoluteRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
 BI.shortcut("bi.absolute_right_vertical_adapt", BI.AbsoluteRightVerticalAdaptLayout);
 
 /***/ }),
-/* 327 */
+/* 328 */
 /***/ (function(module, exports) {
 
 /**
@@ -14331,7 +14376,7 @@ BI.shortcut("bi.absolute_vertical_adapt", BI.AbsoluteVerticalLayout);
 
 
 /***/ }),
-/* 328 */
+/* 329 */
 /***/ (function(module, exports) {
 
 /**
@@ -14390,7 +14435,7 @@ BI.shortcut("bi.center_adapt", BI.CenterAdaptLayout);
 
 
 /***/ }),
-/* 329 */
+/* 330 */
 /***/ (function(module, exports) {
 
 /**
@@ -14404,7 +14449,7 @@ BI.shortcut("bi.horizontal_adapt", BI.HorizontalAdaptLayout);
 
 
 /***/ }),
-/* 330 */
+/* 331 */
 /***/ (function(module, exports) {
 
 /**
@@ -14602,7 +14647,7 @@ BI.shortcut("bi.right_vertical_adapt", BI.RightVerticalAdaptLayout);
 
 
 /***/ }),
-/* 331 */
+/* 332 */
 /***/ (function(module, exports) {
 
 /**
@@ -14640,8 +14685,16 @@ BI.TableAdaptLayout = BI.inherit(BI.Layout, {
 
     _addElement: function (i, item) {
         var o = this.options;
-        var td;
-        var width = o.columnSize[i] === "" ? "" : (o.columnSize[i] < 1 ? ((o.columnSize[i] * 100).toFixed(1) + "%") : (i === 0 ? o.hgap : 0) + o.hgap + o.lgap + o.rgap + o.columnSize[i]);
+        var td, width = "";
+        var columnSize = o.columnSize.length > 0 ? o.columnSize[i] : item.width;
+        if (columnSize > 0) {
+            width = columnSize < 1 ?
+                ((columnSize * 100).toFixed(1) + "%")
+                : (columnSize + (i === 0 ? o.hgap : 0) + o.hgap + o.lgap + o.rgap);
+        }
+        if (columnSize === "" && o.columnSize.indexOf("fill") >= 0) {
+            width = 2;
+        }
         if (!this.hasWidget(this._getChildName(i))) {
             var w = BI._lazyCreateWidget(item);
             w.element.css({position: "relative", top: "0", left: "0", margin: "0px auto"});
@@ -14659,7 +14712,9 @@ BI.TableAdaptLayout = BI.inherit(BI.Layout, {
         // 1、由于直接对td设置最大宽度是在规范中未定义的, 所以要使用类似td:firstChild来迂回实现
         // 2、不能给多个td设置最大宽度，这样只会平分宽度
         // 3、多百分比宽度就算了
-        td.element.css({"max-width": BI.isNumber(o.columnSize[i]) ? (o.columnSize[i] < 1 ? width : width / BI.pixRatio + BI.pixUnit) : width});
+        if (columnSize > 0) {
+            td.element.css({"max-width": columnSize < 1 ? width : width / BI.pixRatio + BI.pixUnit});
+        }
         if (i === 0) {
             td.element.addClass("first-element");
         }
@@ -14710,7 +14765,7 @@ BI.shortcut("bi.table_adapt", BI.TableAdaptLayout);
 
 
 /***/ }),
-/* 332 */
+/* 333 */
 /***/ (function(module, exports) {
 
 /**
@@ -14769,7 +14824,7 @@ BI.shortcut("bi.vertical_adapt", BI.VerticalAdaptLayout);
 
 
 /***/ }),
-/* 333 */
+/* 334 */
 /***/ (function(module, exports) {
 
 /**
@@ -14838,7 +14893,7 @@ BI.shortcut("bi.horizontal_auto", BI.HorizontalAutoLayout);
 
 
 /***/ }),
-/* 334 */
+/* 335 */
 /***/ (function(module, exports) {
 
 /**
@@ -14850,7 +14905,7 @@ BI.shortcut("bi.horizontal_float", BI.FloatHorizontalLayout);
 
 
 /***/ }),
-/* 335 */
+/* 336 */
 /***/ (function(module, exports) {
 
 /**
@@ -14907,7 +14962,7 @@ BI.shortcut("bi.inline_center_adapt", BI.InlineCenterAdaptLayout);
 
 
 /***/ }),
-/* 336 */
+/* 337 */
 /***/ (function(module, exports) {
 
 /**
@@ -14964,7 +15019,7 @@ BI.shortcut("bi.inline_horizontal_adapt", BI.InlineHorizontalAdaptLayout);
 
 
 /***/ }),
-/* 337 */
+/* 338 */
 /***/ (function(module, exports) {
 
 /**
@@ -15021,7 +15076,7 @@ BI.shortcut("bi.inline_vertical_adapt", BI.InlineVerticalAdaptLayout);
 
 
 /***/ }),
-/* 338 */
+/* 339 */
 /***/ (function(module, exports) {
 
 /**
@@ -15083,7 +15138,7 @@ BI.shortcut("bi.flex_center_adapt", BI.FlexCenterLayout);
 
 
 /***/ }),
-/* 339 */
+/* 340 */
 /***/ (function(module, exports) {
 
 /**
@@ -15147,7 +15202,7 @@ BI.shortcut("bi.flex_horizontal_center_adapt", BI.FlexHorizontalCenter);
 
 
 /***/ }),
-/* 340 */
+/* 341 */
 /***/ (function(module, exports) {
 
 /**
@@ -15205,6 +15260,10 @@ BI.FlexHorizontalLayout = BI.inherit(BI.Layout, {
                         w.element.addClass("f-s-n");
                     }
                 }
+                // 当既有动态宽度和自适应宽度的时候只压缩自适应
+                if (columnSize === "" && o.columnSize.indexOf("fill") >= 0) {
+                    w.element.addClass("f-s-n");
+                }
             } else {
                 w.element.addClass("f-s-n");
             }
@@ -15258,7 +15317,7 @@ BI.shortcut("bi.flex_horizontal", BI.FlexHorizontalLayout);
 
 
 /***/ }),
-/* 341 */
+/* 342 */
 /***/ (function(module, exports) {
 
 BI.FlexLeftRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
@@ -15350,7 +15409,7 @@ BI.shortcut("bi.flex_left_right_vertical_adapt", BI.FlexLeftRightVerticalAdaptLa
 
 
 /***/ }),
-/* 342 */
+/* 343 */
 /***/ (function(module, exports) {
 
 /**
@@ -15415,7 +15474,7 @@ BI.shortcut("bi.flex_vertical_center_adapt", BI.FlexVerticalCenter);
 
 
 /***/ }),
-/* 343 */
+/* 344 */
 /***/ (function(module, exports) {
 
 /**
@@ -15472,6 +15531,10 @@ BI.FlexVerticalLayout = BI.inherit(BI.Layout, {
                         w.element.addClass("f-s-n");
                     }
                 }
+                // 当既有动态宽度和自适应宽度的时候只压缩自适应
+                if (rowSize === "" && o.rowSize.indexOf("fill") >= 0) {
+                    w.element.addClass("f-s-n");
+                }
             } else {
                 w.element.addClass("f-s-n");
             }
@@ -15525,7 +15588,7 @@ BI.shortcut("bi.flex_vertical", BI.FlexVerticalLayout);
 
 
 /***/ }),
-/* 344 */
+/* 345 */
 /***/ (function(module, exports) {
 
 /**
@@ -15586,7 +15649,7 @@ BI.shortcut("bi.flex_scrollable_center_adapt", BI.FlexWrapperCenterLayout);
 
 
 /***/ }),
-/* 345 */
+/* 346 */
 /***/ (function(module, exports) {
 
 /**
@@ -15648,7 +15711,7 @@ BI.shortcut("bi.flex_scrollable_horizontal_center_adapt", BI.FlexWrapperHorizont
 
 
 /***/ }),
-/* 346 */
+/* 347 */
 /***/ (function(module, exports) {
 
 /**
@@ -15701,6 +15764,10 @@ BI.FlexWrapperHorizontalLayout = BI.inherit(BI.Layout, {
                     if (o.scrollable === true || o.scrollx === true) {
                         w.element.addClass("f-s-n");
                     }
+                }
+                // 当既有动态宽度和自适应宽度的时候只压缩自适应
+                if (columnSize === "" && o.columnSize.indexOf("fill") >= 0) {
+                    w.element.addClass("f-s-n");
                 }
             } else {
                 w.element.addClass("f-s-n");
@@ -15765,7 +15832,7 @@ BI.shortcut("bi.flex_scrollable_horizontal", BI.FlexWrapperHorizontalLayout);
 
 
 /***/ }),
-/* 347 */
+/* 348 */
 /***/ (function(module, exports) {
 
 /**
@@ -15827,7 +15894,7 @@ BI.shortcut("bi.flex_scrollable_vertical_center_adapt", BI.FlexWrapperVerticalCe
 
 
 /***/ }),
-/* 348 */
+/* 349 */
 /***/ (function(module, exports) {
 
 /**
@@ -15880,6 +15947,10 @@ BI.FlexWrapperVerticalLayout = BI.inherit(BI.Layout, {
                     if (o.scrollable === true || o.scrolly === true) {
                         w.element.addClass("f-s-n");
                     }
+                }
+                // 当既有动态宽度和自适应宽度的时候只压缩自适应
+                if (rowSize === "" && o.rowSize.indexOf("fill") >= 0) {
+                    w.element.addClass("f-s-n");
                 }
             } else {
                 w.element.addClass("f-s-n");
@@ -15944,7 +16015,7 @@ BI.shortcut("bi.flex_scrollable_vertical", BI.FlexWrapperVerticalLayout);
 
 
 /***/ }),
-/* 349 */
+/* 350 */
 /***/ (function(module, exports) {
 
 /**
@@ -16043,7 +16114,7 @@ BI.shortcut("bi.absolute", BI.AbsoluteLayout);
 
 
 /***/ }),
-/* 350 */
+/* 351 */
 /***/ (function(module, exports) {
 
 BI.AdaptiveLayout = BI.inherit(BI.Layout, {
@@ -16141,7 +16212,7 @@ BI.shortcut("bi.adaptive", BI.AdaptiveLayout);
 
 
 /***/ }),
-/* 351 */
+/* 352 */
 /***/ (function(module, exports) {
 
 /**
@@ -16288,7 +16359,7 @@ BI.shortcut("bi.border", BI.BorderLayout);
 
 
 /***/ }),
-/* 352 */
+/* 353 */
 /***/ (function(module, exports) {
 
 /**
@@ -16504,7 +16575,7 @@ BI.shortcut("bi.card", BI.CardLayout);
 
 
 /***/ }),
-/* 353 */
+/* 354 */
 /***/ (function(module, exports) {
 
 /**
@@ -16569,7 +16640,7 @@ BI.shortcut("bi.default", BI.DefaultLayout);
 
 
 /***/ }),
-/* 354 */
+/* 355 */
 /***/ (function(module, exports) {
 
 /**
@@ -16737,7 +16808,7 @@ BI.shortcut("bi.division", BI.DivisionLayout);
 
 
 /***/ }),
-/* 355 */
+/* 356 */
 /***/ (function(module, exports) {
 
 /**
@@ -16896,7 +16967,7 @@ BI.shortcut("bi.right", BI.FloatRightLayout);
 
 
 /***/ }),
-/* 356 */
+/* 357 */
 /***/ (function(module, exports) {
 
 /**
@@ -17032,7 +17103,7 @@ BI.shortcut("bi.grid", BI.GridLayout);
 
 
 /***/ }),
-/* 357 */
+/* 358 */
 /***/ (function(module, exports) {
 
 /**
@@ -17046,7 +17117,7 @@ BI.shortcut("bi.horizontal", BI.HorizontalLayout);
 
 
 /***/ }),
-/* 358 */
+/* 359 */
 /***/ (function(module, exports) {
 
 /**
@@ -17162,7 +17233,7 @@ BI.shortcut("bi.inline", BI.InlineLayout);
 
 
 /***/ }),
-/* 359 */
+/* 360 */
 /***/ (function(module, exports) {
 
 /**
@@ -17223,7 +17294,7 @@ BI.shortcut("bi.lattice", BI.LatticeLayout);
 
 
 /***/ }),
-/* 360 */
+/* 361 */
 /***/ (function(module, exports) {
 
 /**
@@ -17368,7 +17439,7 @@ BI.shortcut("bi.table", BI.TableLayout);
 
 
 /***/ }),
-/* 361 */
+/* 362 */
 /***/ (function(module, exports) {
 
 /**
@@ -17647,7 +17718,7 @@ BI.shortcut("bi.vtape", BI.VTapeLayout);
 
 
 /***/ }),
-/* 362 */
+/* 363 */
 /***/ (function(module, exports) {
 
 /**
@@ -17660,7 +17731,9 @@ BI.TdLayout = BI.inherit(BI.Layout, {
         return BI.extend(BI.TdLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-td",
             columnSize: [],
+            rowSize: [],
             verticalAlign: BI.VerticalAlign.Middle,
+            horizontalAlign: BI.HorizontalAlign.Stretch,
             hgap: 0,
             vgap: 0,
             tgap: 0,
@@ -17672,10 +17745,11 @@ BI.TdLayout = BI.inherit(BI.Layout, {
     },
     render: function () {
         BI.TdLayout.superclass.render.apply(this, arguments);
+        var self = this, o = this.options;
         this.$table = BI.Widget._renderEngine.createElement("<table>").attr({cellspacing: 0, cellpadding: 0}).css({
             position: "relative",
-            width: "100%",
-            height: "100%",
+            width: (o.horizontalAlign === BI.HorizontalAlign.Center || o.horizontalAlign === BI.HorizontalAlign.Stretch) ? "100%" : "auto",
+            height: (o.verticalAlign !== BI.VerticalAlign.Top) ? "100%" : "auto",
             "border-spacing": "0px",
             border: "none",
             "border-collapse": "separate"
@@ -17724,9 +17798,15 @@ BI.TdLayout = BI.inherit(BI.Layout, {
             }
         }
 
+        var height = o.rowSize[idx] === "" ? "" : (o.rowSize[idx] < 1 ? ((o.rowSize[idx] * 100).toFixed(1) + "%") : o.rowSize[idx]);
+
         var tr = BI._lazyCreateWidget({
             type: "bi.default",
-            tagName: "tr"
+            tagName: "tr",
+            height: height,
+            css: {
+                "max-height": BI.isNumber(o.rowSize[idx]) ? (o.rowSize[idx] <= 1 ? height : height / BI.pixRatio + BI.pixUnit) : height
+            }
         });
 
         for (var i = 0; i < arr.length; i++) {
@@ -17754,7 +17834,16 @@ BI.TdLayout = BI.inherit(BI.Layout, {
                 });
             }
             first(w, this.rows++, i);
-            var width = o.columnSize[i] === "" ? "" : (o.columnSize[i] < 1 ? ((o.columnSize[i] * 100).toFixed(1) + "%") : (i === 0 ? o.hgap : 0) + o.hgap + o.lgap + o.rgap + o.columnSize[i]);
+            var width = "";
+            var columnSize = o.columnSize.length > 0 ? o.columnSize[i] : item.width;
+            if (columnSize > 0) {
+                width = columnSize < 1 ?
+                    ((columnSize * 100).toFixed(1) + "%")
+                    : (columnSize + (i === 0 ? o.hgap : 0) + o.hgap + o.lgap + o.rgap);
+            }
+            if (columnSize === "" && o.columnSize.indexOf("fill") >= 0) {
+                width = 2;
+            }
             var td = BI._lazyCreateWidget({
                 type: "bi.default",
                 width: width,
@@ -17765,8 +17854,10 @@ BI.TdLayout = BI.inherit(BI.Layout, {
             // 1、由于直接对td设置最大宽度是在规范中未定义的, 所以要使用类似td:firstChild来迂回实现
             // 2、不能给多个td设置最大宽度，这样只会平分宽度
             // 3、多百分比宽度就算了
+            if (columnSize > 0) {
+                td.element.css({"max-width": columnSize < 1 ? width : width / BI.pixRatio + BI.pixUnit});
+            }
             td.element.css({
-                "max-width": BI.isNumber(o.columnSize[i]) ? (o.columnSize[i] <= 1 ? width : width / BI.pixRatio + BI.pixUnit) : width,
                 position: "relative",
                 "vertical-align": o.verticalAlign,
                 margin: "0",
@@ -17807,7 +17898,7 @@ BI.shortcut("bi.td", BI.TdLayout);
 
 
 /***/ }),
-/* 363 */
+/* 364 */
 /***/ (function(module, exports) {
 
 /**
@@ -17886,7 +17977,7 @@ BI.shortcut("bi.vertical", BI.VerticalLayout);
 
 
 /***/ }),
-/* 364 */
+/* 365 */
 /***/ (function(module, exports) {
 
 /**
@@ -18074,7 +18165,7 @@ BI.shortcut("bi.window", BI.WindowLayout);
 
 
 /***/ }),
-/* 365 */
+/* 366 */
 /***/ (function(module, exports) {
 
 /**
@@ -18156,7 +18247,7 @@ BI.shortcut("bi.center", BI.CenterLayout);
 
 
 /***/ }),
-/* 366 */
+/* 367 */
 /***/ (function(module, exports) {
 
 /**
@@ -18237,7 +18328,7 @@ BI.shortcut("bi.float_center", BI.FloatCenterLayout);
 
 
 /***/ }),
-/* 367 */
+/* 368 */
 /***/ (function(module, exports) {
 
 /**
@@ -18317,7 +18408,7 @@ BI.shortcut("bi.horizontal_center", BI.HorizontalCenterLayout);
 
 
 /***/ }),
-/* 368 */
+/* 369 */
 /***/ (function(module, exports) {
 
 /**
@@ -18398,7 +18489,7 @@ BI.shortcut("bi.vertical_center", BI.VerticalCenterLayout);
 
 
 /***/ }),
-/* 369 */
+/* 370 */
 /***/ (function(module, exports) {
 
 BI.prepares.push(function () {
@@ -18414,7 +18505,7 @@ BI.prepares.push(function () {
 
 
 /***/ }),
-/* 370 */
+/* 371 */
 /***/ (function(module, exports) {
 
 /**
@@ -18567,7 +18658,7 @@ BI.Pane.EVENT_LOADING = "EVENT_LOADING";
 
 
 /***/ }),
-/* 371 */
+/* 372 */
 /***/ (function(module, exports) {
 
 /**
@@ -18954,7 +19045,7 @@ BI.shortcut("bi.collection_view", BI.CollectionView);
 
 
 /***/ }),
-/* 372 */
+/* 373 */
 /***/ (function(module, exports) {
 
 !(function () {
@@ -19522,7 +19613,7 @@ BI.shortcut("bi.collection_view", BI.CollectionView);
 
 
 /***/ }),
-/* 373 */
+/* 374 */
 /***/ (function(module, exports) {
 
 /**
@@ -19809,7 +19900,7 @@ BI.Expander.EVENT_AFTER_HIDEVIEW = "EVENT_AFTER_HIDEVIEW";
 BI.shortcut("bi.expander", BI.Expander);
 
 /***/ }),
-/* 374 */
+/* 375 */
 /***/ (function(module, exports) {
 
 /**
@@ -20144,7 +20235,7 @@ BI.ButtonGroup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.button_group", BI.ButtonGroup);
 
 /***/ }),
-/* 375 */
+/* 376 */
 /***/ (function(module, exports) {
 
 /**
@@ -20246,7 +20337,7 @@ BI.ComboGroup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.combo_group", BI.ComboGroup);
 
 /***/ }),
-/* 376 */
+/* 377 */
 /***/ (function(module, exports) {
 
 BI.VirtualGroup = BI.inherit(BI.Widget, {
@@ -20367,7 +20458,7 @@ BI.VirtualGroup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.virtual_group", BI.VirtualGroup);
 
 /***/ }),
-/* 377 */
+/* 378 */
 /***/ (function(module, exports) {
 
 /**
@@ -20632,7 +20723,7 @@ BI.Loader.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.loader", BI.Loader);
 
 /***/ }),
-/* 378 */
+/* 379 */
 /***/ (function(module, exports) {
 
 /**
@@ -20800,7 +20891,7 @@ BI.shortcut("bi.navigation", BI.Navigation);
 
 
 /***/ }),
-/* 379 */
+/* 380 */
 /***/ (function(module, exports) {
 
 /**
@@ -21125,7 +21216,7 @@ BI.Searcher.EVENT_AFTER_INIT = "EVENT_AFTER_INIT";
 BI.shortcut("bi.searcher", BI.Searcher);
 
 /***/ }),
-/* 380 */
+/* 381 */
 /***/ (function(module, exports) {
 
 /**
@@ -21422,7 +21513,7 @@ BI.Switcher.EVENT_AFTER_HIDEVIEW = "EVENT_AFTER_HIDEVIEW";
 BI.shortcut("bi.switcher", BI.Switcher);
 
 /***/ }),
-/* 381 */
+/* 382 */
 /***/ (function(module, exports) {
 
 /**
@@ -21585,7 +21676,7 @@ BI.shortcut("bi.tab", BI.Tab);
 
 
 /***/ }),
-/* 382 */
+/* 383 */
 /***/ (function(module, exports) {
 
 /**
@@ -21772,7 +21863,7 @@ BI.ButtonTree.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.button_tree", BI.ButtonTree);
 
 /***/ }),
-/* 383 */
+/* 384 */
 /***/ (function(module, exports) {
 
 /**
@@ -21819,7 +21910,7 @@ BI.EL = BI.inherit(BI.Widget, {
 BI.shortcut("bi.el", BI.EL);
 
 /***/ }),
-/* 384 */
+/* 385 */
 /***/ (function(module, exports) {
 
 /**
@@ -22028,7 +22119,7 @@ BI.Msg = function () {
 
 
 /***/ }),
-/* 385 */
+/* 386 */
 /***/ (function(module, exports) {
 
 /**
@@ -22416,7 +22507,7 @@ BI.shortcut("bi.grid_view", BI.GridView);
 
 
 /***/ }),
-/* 386 */
+/* 387 */
 /***/ (function(module, exports) {
 
 /**
@@ -22694,7 +22785,7 @@ BI.Popover.EVENT_CONFIRM = "EVENT_CONFIRM";
 
 
 /***/ }),
-/* 387 */
+/* 388 */
 /***/ (function(module, exports) {
 
 /**
@@ -22881,7 +22972,7 @@ BI.shortcut("bi.popup_view", BI.PopupView);
 
 
 /***/ }),
-/* 388 */
+/* 389 */
 /***/ (function(module, exports) {
 
 /**
@@ -23027,7 +23118,7 @@ BI.SearcherView.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.searcher_view", BI.SearcherView);
 
 /***/ }),
-/* 389 */
+/* 390 */
 /***/ (function(module, exports) {
 
 /**
@@ -23152,7 +23243,7 @@ BI.shortcut("bi.list_view", BI.ListView);
 
 
 /***/ }),
-/* 390 */
+/* 391 */
 /***/ (function(module, exports) {
 
 /**
@@ -23344,7 +23435,7 @@ BI.shortcut("bi.virtual_list", BI.VirtualList);
 
 
 /***/ }),
-/* 391 */
+/* 392 */
 /***/ (function(module, exports) {
 
 /**
@@ -23638,7 +23729,7 @@ BI.Pager.EVENT_AFTER_POPULATE = "EVENT_AFTER_POPULATE";
 BI.shortcut("bi.pager", BI.Pager);
 
 /***/ }),
-/* 392 */
+/* 393 */
 /***/ (function(module, exports) {
 
 /**
@@ -23851,7 +23942,7 @@ BI.shortcut("bi.single", BI.Single);
 
 
 /***/ }),
-/* 393 */
+/* 394 */
 /***/ (function(module, exports) {
 
 /**
@@ -24028,7 +24119,7 @@ BI.shortcut("bi.single", BI.Single);
 
 
 /***/ }),
-/* 394 */
+/* 395 */
 /***/ (function(module, exports) {
 
 /**
@@ -24065,7 +24156,7 @@ BI.A = BI.inherit(BI.Text, {
 BI.shortcut("bi.a", BI.A);
 
 /***/ }),
-/* 395 */
+/* 396 */
 /***/ (function(module, exports) {
 
 /**
@@ -24150,7 +24241,7 @@ BI.LoadingBar = BI.inherit(BI.Single, {
 BI.shortcut("bi.loading_bar", BI.LoadingBar);
 
 /***/ }),
-/* 396 */
+/* 397 */
 /***/ (function(module, exports) {
 
 /**
@@ -24568,7 +24659,7 @@ BI.shortcut("bi.basic_button", BI.BasicButton);
 
 
 /***/ }),
-/* 397 */
+/* 398 */
 /***/ (function(module, exports) {
 
 /**
@@ -24629,7 +24720,7 @@ BI.NodeButton = BI.inherit(BI.BasicButton, {
 });
 
 /***/ }),
-/* 398 */
+/* 399 */
 /***/ (function(module, exports) {
 
 /**
@@ -24687,7 +24778,7 @@ BI.shortcut("bi.icon_button", BI.IconButton);
 
 
 /***/ }),
-/* 399 */
+/* 400 */
 /***/ (function(module, exports) {
 
 /**
@@ -24779,7 +24870,7 @@ BI.ImageButton.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.image_button", BI.ImageButton);
 
 /***/ }),
-/* 400 */
+/* 401 */
 /***/ (function(module, exports) {
 
 /**
@@ -24937,7 +25028,7 @@ BI.Button.EVENT_CHANGE = "EVENT_CHANGE";
 
 
 /***/ }),
-/* 401 */
+/* 402 */
 /***/ (function(module, exports) {
 
 /**
@@ -25032,7 +25123,7 @@ BI.TextButton.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.text_button", BI.TextButton);
 
 /***/ }),
-/* 402 */
+/* 403 */
 /***/ (function(module, exports) {
 
 /**
@@ -25156,7 +25247,7 @@ BI.BlankIconIconTextItem.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.blank_icon_icon_text_item", BI.BlankIconIconTextItem);
 
 /***/ }),
-/* 403 */
+/* 404 */
 /***/ (function(module, exports) {
 
 /**
@@ -25287,7 +25378,7 @@ BI.BlankIconTextIconItem.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.blank_icon_text_icon_item", BI.BlankIconTextIconItem);
 
 /***/ }),
-/* 404 */
+/* 405 */
 /***/ (function(module, exports) {
 
 /**
@@ -25396,7 +25487,7 @@ BI.BlankIconTextItem.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.blank_icon_text_item", BI.BlankIconTextItem);
 
 /***/ }),
-/* 405 */
+/* 406 */
 /***/ (function(module, exports) {
 
 /**
@@ -25524,7 +25615,7 @@ BI.IconTextIconItem.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.icon_text_icon_item", BI.IconTextIconItem);
 
 /***/ }),
-/* 406 */
+/* 407 */
 /***/ (function(module, exports) {
 
 /**
@@ -25629,7 +25720,7 @@ BI.IconTextItem.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.icon_text_item", BI.IconTextItem);
 
 /***/ }),
-/* 407 */
+/* 408 */
 /***/ (function(module, exports) {
 
 /**
@@ -25734,7 +25825,7 @@ BI.TextIconItem.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.text_icon_item", BI.TextIconItem);
 
 /***/ }),
-/* 408 */
+/* 409 */
 /***/ (function(module, exports) {
 
 /**
@@ -25825,7 +25916,7 @@ BI.TextItem.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.text_item", BI.TextItem);
 
 /***/ }),
-/* 409 */
+/* 410 */
 /***/ (function(module, exports) {
 
 /**
@@ -25943,7 +26034,7 @@ BI.IconTextIconNode.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.icon_text_icon_node", BI.IconTextIconNode);
 
 /***/ }),
-/* 410 */
+/* 411 */
 /***/ (function(module, exports) {
 
 /**
@@ -26038,7 +26129,7 @@ BI.IconTextNode.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.icon_text_node", BI.IconTextNode);
 
 /***/ }),
-/* 411 */
+/* 412 */
 /***/ (function(module, exports) {
 
 /**
@@ -26132,7 +26223,7 @@ BI.TextIconNode.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.text_icon_node", BI.TextIconNode);
 
 /***/ }),
-/* 412 */
+/* 413 */
 /***/ (function(module, exports) {
 
 /**
@@ -26214,7 +26305,7 @@ BI.TextNode.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.text_node", BI.TextNode);
 
 /***/ }),
-/* 413 */
+/* 414 */
 /***/ (function(module, exports) {
 
 /**
@@ -26592,7 +26683,7 @@ BI.shortcut("bi.editor", BI.Editor);
 
 
 /***/ }),
-/* 414 */
+/* 415 */
 /***/ (function(module, exports) {
 
 /**
@@ -26698,7 +26789,7 @@ BI.shortcut("bi.multifile_editor", BI.MultifileEditor);
 
 
 /***/ }),
-/* 415 */
+/* 416 */
 /***/ (function(module, exports) {
 
 /**
@@ -26957,7 +27048,7 @@ BI.shortcut("bi.textarea_editor", BI.TextAreaEditor);
 
 
 /***/ }),
-/* 416 */
+/* 417 */
 /***/ (function(module, exports) {
 
 /**
@@ -27077,7 +27168,7 @@ BI.shortcut("bi.html", BI.Html);
 
 
 /***/ }),
-/* 417 */
+/* 418 */
 /***/ (function(module, exports) {
 
 /**
@@ -27103,7 +27194,7 @@ BI.Icon = BI.inherit(BI.Single, {
 BI.shortcut("bi.icon", BI.Icon);
 
 /***/ }),
-/* 418 */
+/* 419 */
 /***/ (function(module, exports) {
 
 /**
@@ -27167,7 +27258,7 @@ BI.shortcut("bi.iframe", BI.Iframe);
 
 
 /***/ }),
-/* 419 */
+/* 420 */
 /***/ (function(module, exports) {
 
 /**
@@ -27213,7 +27304,7 @@ BI.shortcut("bi.img", BI.Img);
 
 
 /***/ }),
-/* 420 */
+/* 421 */
 /***/ (function(module, exports) {
 
 /**
@@ -27240,7 +27331,7 @@ BI.ImageCheckbox.EVENT_CHANGE = BI.IconButton.EVENT_CHANGE;
 BI.shortcut("bi.image_checkbox", BI.ImageCheckbox);
 
 /***/ }),
-/* 421 */
+/* 422 */
 /***/ (function(module, exports) {
 
 /**
@@ -27306,7 +27397,7 @@ BI.Checkbox.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.checkbox", BI.Checkbox);
 
 /***/ }),
-/* 422 */
+/* 423 */
 /***/ (function(module, exports) {
 
 /**
@@ -27628,7 +27719,7 @@ BI.shortcut("bi.input", BI.Input);
 
 
 /***/ }),
-/* 423 */
+/* 424 */
 /***/ (function(module, exports) {
 
 /**
@@ -27666,7 +27757,7 @@ BI.ImageRadio.EVENT_CHANGE = BI.IconButton.EVENT_CHANGE;
 BI.shortcut("bi.image_radio", BI.ImageRadio);
 
 /***/ }),
-/* 424 */
+/* 425 */
 /***/ (function(module, exports) {
 
 /**
@@ -27733,7 +27824,7 @@ BI.Radio.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.radio", BI.Radio);
 
 /***/ }),
-/* 425 */
+/* 426 */
 /***/ (function(module, exports) {
 
 /**
@@ -28125,7 +28216,7 @@ BI.shortcut("bi.radio", BI.Radio);
 
 
 /***/ }),
-/* 426 */
+/* 427 */
 /***/ (function(module, exports) {
 
 /**
@@ -28155,7 +28246,7 @@ BI.HtmlLabel = BI.inherit(BI.AbstractLabel, {
 BI.shortcut("bi.html_label", BI.HtmlLabel);
 
 /***/ }),
-/* 427 */
+/* 428 */
 /***/ (function(module, exports) {
 
 /**
@@ -28203,7 +28294,7 @@ BI.shortcut("bi.icon_label", BI.IconLabel);
 
 
 /***/ }),
-/* 428 */
+/* 429 */
 /***/ (function(module, exports) {
 
 /**
@@ -28231,7 +28322,7 @@ BI.shortcut("bi.label", BI.Label);
 
 
 /***/ }),
-/* 429 */
+/* 430 */
 /***/ (function(module, exports) {
 
 /**
@@ -28271,7 +28362,7 @@ BI.shortcut("bi.link", BI.Link);
 
 
 /***/ }),
-/* 430 */
+/* 431 */
 /***/ (function(module, exports) {
 
 /**
@@ -28320,7 +28411,7 @@ BI.shortcut("bi.link", BI.Link);
 
 
 /***/ }),
-/* 431 */
+/* 432 */
 /***/ (function(module, exports) {
 
 /**
@@ -28347,7 +28438,7 @@ BI.Tip = BI.inherit(BI.Single, {
 });
 
 /***/ }),
-/* 432 */
+/* 433 */
 /***/ (function(module, exports) {
 
 /**
@@ -28565,7 +28656,7 @@ BI.shortcut("bi.bubble_view", BI.BubbleView);
 
 
 /***/ }),
-/* 433 */
+/* 434 */
 /***/ (function(module, exports) {
 
 /**
@@ -28678,7 +28769,7 @@ BI.shortcut("bi.toast", BI.Toast);
 
 
 /***/ }),
-/* 434 */
+/* 435 */
 /***/ (function(module, exports) {
 
 /**
@@ -28767,7 +28858,7 @@ BI.Tooltip = BI.inherit(BI.Tip, {
 BI.shortcut("bi.tooltip", BI.Tooltip);
 
 /***/ }),
-/* 435 */
+/* 436 */
 /***/ (function(module, exports) {
 
 /**
@@ -28799,7 +28890,7 @@ BI.Trigger = BI.inherit(BI.Single, {
 });
 
 /***/ }),
-/* 436 */
+/* 437 */
 /***/ (function(module, exports) {
 
 /**
@@ -28952,7 +29043,7 @@ BI.CustomTree.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.custom_tree", BI.CustomTree);
 
 /***/ }),
-/* 437 */
+/* 438 */
 /***/ (function(module, exports) {
 
 /**
@@ -29040,7 +29131,7 @@ BI.IconChangeButton.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.icon_change_button", BI.IconChangeButton);
 
 /***/ }),
-/* 438 */
+/* 439 */
 /***/ (function(module, exports) {
 
 /**
@@ -29065,7 +29156,7 @@ BI.shortcut("bi.trigger_icon_button", BI.TriggerIconButton);
 
 
 /***/ }),
-/* 439 */
+/* 440 */
 /***/ (function(module, exports) {
 
 /**
@@ -29091,7 +29182,7 @@ BI.HalfIconButton.EVENT_CHANGE = BI.IconButton.EVENT_CHANGE;
 BI.shortcut("bi.half_icon_button", BI.HalfIconButton);
 
 /***/ }),
-/* 440 */
+/* 441 */
 /***/ (function(module, exports) {
 
 /**
@@ -29136,7 +29227,7 @@ BI.HalfButton.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.half_button", BI.HalfButton);
 
 /***/ }),
-/* 441 */
+/* 442 */
 /***/ (function(module, exports) {
 
 /**
@@ -29222,7 +29313,7 @@ BI.shortcut("bi.multi_select_item", BI.MultiSelectItem);
 
 
 /***/ }),
-/* 442 */
+/* 443 */
 /***/ (function(module, exports) {
 
 /**
@@ -29286,7 +29377,7 @@ BI.SingleSelectIconTextItem = BI.inherit(BI.Single, {
 BI.shortcut("bi.single_select_icon_text_item", BI.SingleSelectIconTextItem);
 
 /***/ }),
-/* 443 */
+/* 444 */
 /***/ (function(module, exports) {
 
 BI.SingleSelectItem = BI.inherit(BI.BasicButton, {
@@ -29342,7 +29433,7 @@ BI.SingleSelectItem.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.single_select_item", BI.SingleSelectItem);
 
 /***/ }),
-/* 444 */
+/* 445 */
 /***/ (function(module, exports) {
 
 /**
@@ -29426,7 +29517,7 @@ BI.shortcut("bi.single_select_radio_item", BI.SingleSelectRadioItem);
 
 
 /***/ }),
-/* 445 */
+/* 446 */
 /***/ (function(module, exports) {
 
 /**
@@ -29514,7 +29605,7 @@ BI.shortcut("bi.arrow_group_node", BI.ArrowNode);
 
 
 /***/ }),
-/* 446 */
+/* 447 */
 /***/ (function(module, exports) {
 
 /**
@@ -29602,7 +29693,7 @@ BI.shortcut("bi.first_plus_group_node", BI.FirstPlusGroupNode);
 
 
 /***/ }),
-/* 447 */
+/* 448 */
 /***/ (function(module, exports) {
 
 /**
@@ -29710,7 +29801,7 @@ BI.shortcut("bi.icon_arrow_node", BI.IconArrowNode);
 
 
 /***/ }),
-/* 448 */
+/* 449 */
 /***/ (function(module, exports) {
 
 /**
@@ -29797,7 +29888,7 @@ BI.LastPlusGroupNode = BI.inherit(BI.NodeButton, {
 BI.shortcut("bi.last_plus_group_node", BI.LastPlusGroupNode);
 
 /***/ }),
-/* 449 */
+/* 450 */
 /***/ (function(module, exports) {
 
 /**
@@ -29884,7 +29975,7 @@ BI.MidPlusGroupNode = BI.inherit(BI.NodeButton, {
 BI.shortcut("bi.mid_plus_group_node", BI.MidPlusGroupNode);
 
 /***/ }),
-/* 450 */
+/* 451 */
 /***/ (function(module, exports) {
 
 BI.MultiLayerIconArrowNode = BI.inherit(BI.NodeButton, {
@@ -29979,7 +30070,7 @@ BI.shortcut("bi.multilayer_icon_arrow_node", BI.MultiLayerIconArrowNode);
 
 
 /***/ }),
-/* 451 */
+/* 452 */
 /***/ (function(module, exports) {
 
 /**
@@ -30062,7 +30153,7 @@ BI.PlusGroupNode = BI.inherit(BI.NodeButton, {
 BI.shortcut("bi.plus_group_node", BI.PlusGroupNode);
 
 /***/ }),
-/* 452 */
+/* 453 */
 /***/ (function(module, exports) {
 
 /**
@@ -30114,7 +30205,7 @@ BI.Switch.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.switch", BI.Switch);
 
 /***/ }),
-/* 453 */
+/* 454 */
 /***/ (function(module, exports) {
 
 BI.FirstTreeLeafItem = BI.inherit(BI.BasicButton, {
@@ -30200,7 +30291,7 @@ BI.FirstTreeLeafItem = BI.inherit(BI.BasicButton, {
 BI.shortcut("bi.first_tree_leaf_item", BI.FirstTreeLeafItem);
 
 /***/ }),
-/* 454 */
+/* 455 */
 /***/ (function(module, exports) {
 
 BI.IconTreeLeafItem = BI.inherit(BI.BasicButton, {
@@ -30287,7 +30378,7 @@ BI.IconTreeLeafItem = BI.inherit(BI.BasicButton, {
 BI.shortcut("bi.icon_tree_leaf_item", BI.IconTreeLeafItem);
 
 /***/ }),
-/* 455 */
+/* 456 */
 /***/ (function(module, exports) {
 
 BI.LastTreeLeafItem = BI.inherit(BI.BasicButton, {
@@ -30373,7 +30464,7 @@ BI.LastTreeLeafItem = BI.inherit(BI.BasicButton, {
 BI.shortcut("bi.last_tree_leaf_item", BI.LastTreeLeafItem);
 
 /***/ }),
-/* 456 */
+/* 457 */
 /***/ (function(module, exports) {
 
 BI.MidTreeLeafItem = BI.inherit(BI.BasicButton, {
@@ -30459,7 +30550,7 @@ BI.MidTreeLeafItem = BI.inherit(BI.BasicButton, {
 BI.shortcut("bi.mid_tree_leaf_item", BI.MidTreeLeafItem);
 
 /***/ }),
-/* 457 */
+/* 458 */
 /***/ (function(module, exports) {
 
 /**
@@ -30563,7 +30654,7 @@ BI.shortcut("bi.multilayer_icon_tree_leaf_item", BI.MultiLayerIconTreeLeafItem);
 
 
 /***/ }),
-/* 458 */
+/* 459 */
 /***/ (function(module, exports) {
 
 BI.RootTreeLeafItem = BI.inherit(BI.BasicButton, {
@@ -30643,7 +30734,7 @@ BI.shortcut("bi.root_tree_leaf_item", BI.RootTreeLeafItem);
 
 
 /***/ }),
-/* 459 */
+/* 460 */
 /***/ (function(module, exports) {
 
 /**
@@ -30719,7 +30810,7 @@ BI.shortcut("bi.tree_text_leaf_item", BI.TreeTextLeafItem);
 
 
 /***/ }),
-/* 460 */
+/* 461 */
 /***/ (function(module, exports) {
 
 /**
@@ -30777,7 +30868,7 @@ BI.CalendarDateItem = BI.inherit(BI.BasicButton, {
 BI.shortcut("bi.calendar_date_item", BI.CalendarDateItem);
 
 /***/ }),
-/* 461 */
+/* 462 */
 /***/ (function(module, exports) {
 
 /**
@@ -30860,7 +30951,7 @@ BI.Calendar = BI.inherit(BI.Widget, {
         var items = BI.map(this._getWeekLabel(), function (i, value) {
             return {
                 type: "bi.label",
-                height: 24,
+                height: BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT,
                 text: value
             };
         });
@@ -30882,7 +30973,7 @@ BI.Calendar = BI.inherit(BI.Widget, {
                 columns: 7,
                 rows: 6,
                 columnSize: [1 / 7, 1 / 7, 1 / 7, 1 / 7, 1 / 7, 1 / 7, 1 / 7],
-                rowSize: 24,
+                rowSize: BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT,
                 vgap: 10
             }))]
         });
@@ -30941,7 +31032,7 @@ BI.Calendar = BI.inherit(BI.Widget, {
                     whiteSpace: "normal",
                     once: false,
                     forceSelected: true,
-                    height: 24,
+                    height: BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT,
                     value: o.year + "-" + month + "-" + td.text,
                     disabled: td.lastMonth || td.nextMonth || td.disabled,
                     lgap: 5,
@@ -31016,7 +31107,7 @@ BI.extend(BI.Calendar, {
 BI.shortcut("bi.calendar", BI.Calendar);
 
 /***/ }),
-/* 462 */
+/* 463 */
 /***/ (function(module, exports) {
 
 /**
@@ -31072,7 +31163,7 @@ BI.YearCalendar = BI.inherit(BI.Widget, {
                 columns: 2,
                 rows: 6,
                 columnSize: [1 / 2, 1 / 2],
-                rowSize: 24
+                rowSize: BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT,
             })), {
                 type: "bi.center_adapt",
                 vgap: 1
@@ -31131,7 +31222,7 @@ BI.YearCalendar = BI.inherit(BI.Widget, {
                     whiteSpace: "normal",
                     once: false,
                     forceSelected: true,
-                    height: 24,
+                    height: BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT,
                     width: 45,
                     value: td.text,
                     disabled: td.disabled
@@ -31192,7 +31283,7 @@ BI.extend(BI.YearCalendar, {
 BI.shortcut("bi.year_calendar", BI.YearCalendar);
 
 /***/ }),
-/* 463 */
+/* 464 */
 /***/ (function(module, exports) {
 
 /**
@@ -31218,7 +31309,7 @@ BI.ArrowTreeGroupNodeCheckbox = BI.inherit(BI.IconButton, {
 BI.shortcut("bi.arrow_group_node_checkbox", BI.ArrowTreeGroupNodeCheckbox);
 
 /***/ }),
-/* 464 */
+/* 465 */
 /***/ (function(module, exports) {
 
 /**
@@ -31249,7 +31340,7 @@ BI.CheckingMarkNode = BI.inherit(BI.IconButton, {
 BI.shortcut("bi.checking_mark_node", BI.CheckingMarkNode);
 
 /***/ }),
-/* 465 */
+/* 466 */
 /***/ (function(module, exports) {
 
 /**
@@ -31278,7 +31369,7 @@ BI.FirstTreeNodeCheckbox = BI.inherit(BI.IconButton, {
 BI.shortcut("bi.first_tree_node_checkbox", BI.FirstTreeNodeCheckbox);
 
 /***/ }),
-/* 466 */
+/* 467 */
 /***/ (function(module, exports) {
 
 /**
@@ -31307,7 +31398,7 @@ BI.LastTreeNodeCheckbox = BI.inherit(BI.IconButton, {
 BI.shortcut("bi.last_tree_node_checkbox", BI.LastTreeNodeCheckbox);
 
 /***/ }),
-/* 467 */
+/* 468 */
 /***/ (function(module, exports) {
 
 /**
@@ -31336,7 +31427,7 @@ BI.MidTreeNodeCheckbox = BI.inherit(BI.IconButton, {
 BI.shortcut("bi.mid_tree_node_checkbox", BI.MidTreeNodeCheckbox);
 
 /***/ }),
-/* 468 */
+/* 469 */
 /***/ (function(module, exports) {
 
 /**
@@ -31365,7 +31456,7 @@ BI.TreeNodeCheckbox = BI.inherit(BI.IconButton, {
 BI.shortcut("bi.tree_node_checkbox", BI.TreeNodeCheckbox);
 
 /***/ }),
-/* 469 */
+/* 470 */
 /***/ (function(module, exports) {
 
 /**
@@ -31439,7 +31530,7 @@ BI.CustomColorChooser.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.custom_color_chooser", BI.CustomColorChooser);
 
 /***/ }),
-/* 470 */
+/* 471 */
 /***/ (function(module, exports) {
 
 /**
@@ -31546,7 +31637,7 @@ BI.shortcut("bi.color_chooser", BI.ColorChooser);
 
 
 /***/ }),
-/* 471 */
+/* 472 */
 /***/ (function(module, exports) {
 
 /**
@@ -31805,7 +31896,7 @@ BI.shortcut("bi.hex_color_chooser_popup", BI.HexColorChooserPopup);
 
 
 /***/ }),
-/* 472 */
+/* 473 */
 /***/ (function(module, exports) {
 
 /**
@@ -31859,7 +31950,7 @@ BI.SimpleHexColorChooserPopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.simple_hex_color_chooser_popup", BI.SimpleHexColorChooserPopup);
 
 /***/ }),
-/* 473 */
+/* 474 */
 /***/ (function(module, exports) {
 
 /**
@@ -32102,7 +32193,7 @@ BI.shortcut("bi.color_chooser_popup", BI.ColorChooserPopup);
 
 
 /***/ }),
-/* 474 */
+/* 475 */
 /***/ (function(module, exports) {
 
 /**
@@ -32154,7 +32245,7 @@ BI.SimpleColorChooserPopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.simple_color_chooser_popup", BI.SimpleColorChooserPopup);
 
 /***/ }),
-/* 475 */
+/* 476 */
 /***/ (function(module, exports) {
 
 /**
@@ -32217,7 +32308,7 @@ BI.SimpleColorChooser.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.simple_color_chooser", BI.SimpleColorChooser);
 
 /***/ }),
-/* 476 */
+/* 477 */
 /***/ (function(module, exports) {
 
 /**
@@ -32288,7 +32379,7 @@ BI.shortcut("bi.color_chooser_trigger", BI.ColorChooserTrigger);
 
 
 /***/ }),
-/* 477 */
+/* 478 */
 /***/ (function(module, exports) {
 
 /**
@@ -32392,7 +32483,7 @@ BI.shortcut("bi.long_color_chooser_trigger", BI.LongColorChooserTrigger);
 
 
 /***/ }),
-/* 478 */
+/* 479 */
 /***/ (function(module, exports) {
 
 /**
@@ -32457,7 +32548,7 @@ BI.ColorPickerButton.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.color_picker_button", BI.ColorPickerButton);
 
 /***/ }),
-/* 479 */
+/* 480 */
 /***/ (function(module, exports) {
 
 /**
@@ -32652,7 +32743,7 @@ BI.ColorPicker.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.color_picker", BI.ColorPicker);
 
 /***/ }),
-/* 480 */
+/* 481 */
 /***/ (function(module, exports) {
 
 /**
@@ -32984,7 +33075,7 @@ BI.HexColorPickerEditor.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.hex_color_picker_editor", BI.HexColorPickerEditor);
 
 /***/ }),
-/* 481 */
+/* 482 */
 /***/ (function(module, exports) {
 
 /**
@@ -33185,7 +33276,7 @@ BI.SimpleHexColorPickerEditor.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.simple_hex_color_picker_editor", BI.SimpleHexColorPickerEditor);
 
 /***/ }),
-/* 482 */
+/* 483 */
 /***/ (function(module, exports) {
 
 /**
@@ -33434,7 +33525,7 @@ BI.ColorPickerEditor.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.color_picker_editor", BI.ColorPickerEditor);
 
 /***/ }),
-/* 483 */
+/* 484 */
 /***/ (function(module, exports) {
 
 /**
@@ -33562,7 +33653,7 @@ BI.SimpleColorPickerEditor.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.simple_color_picker_editor", BI.SimpleColorPickerEditor);
 
 /***/ }),
-/* 484 */
+/* 485 */
 /***/ (function(module, exports) {
 
 BI.Farbtastic = BI.inherit(BI.BasicButton, {
@@ -33847,7 +33938,7 @@ BI.shortcut("bi.farbtastic", BI.Farbtastic);
 
 
 /***/ }),
-/* 485 */
+/* 486 */
 /***/ (function(module, exports) {
 
 /**
@@ -34072,7 +34163,7 @@ BI.shortcut("bi.bubble_combo", BI.BubbleCombo);
 
 
 /***/ }),
-/* 486 */
+/* 487 */
 /***/ (function(module, exports) {
 
 /**
@@ -34242,7 +34333,7 @@ BI.shortcut("bi.text_bubble_bar_popup_view", BI.TextBubblePopupBarView);
 
 
 /***/ }),
-/* 487 */
+/* 488 */
 /***/ (function(module, exports) {
 
 /**
@@ -34343,7 +34434,7 @@ BI.shortcut("bi.editor_icon_check_combo", BI.EditorIconCheckCombo);
 
 
 /***/ }),
-/* 488 */
+/* 489 */
 /***/ (function(module, exports) {
 
 /**
@@ -34447,7 +34538,7 @@ BI.IconCombo.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.icon_combo", BI.IconCombo);
 
 /***/ }),
-/* 489 */
+/* 490 */
 /***/ (function(module, exports) {
 
 /**
@@ -34471,7 +34562,7 @@ BI.IconComboPopup = BI.inherit(BI.Pane, {
             type: "bi.button_group",
             items: BI.createItems(o.items, {
                 type: "bi.single_select_icon_text_item",
-                height: 24
+                height: BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT,
             }),
             chooseType: o.chooseType,
             layouts: [{
@@ -34499,7 +34590,7 @@ BI.IconComboPopup = BI.inherit(BI.Pane, {
         BI.IconComboPopup.superclass.populate.apply(this, arguments);
         items = BI.createItems(items, {
             type: "bi.single_select_icon_text_item",
-            height: 24
+            height: BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT,
         });
         this.popup.populate(items);
     },
@@ -34517,7 +34608,7 @@ BI.IconComboPopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.icon_combo_popup", BI.IconComboPopup);
 
 /***/ }),
-/* 490 */
+/* 491 */
 /***/ (function(module, exports) {
 
 /**
@@ -34624,7 +34715,7 @@ BI.IconComboTrigger.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.icon_combo_trigger", BI.IconComboTrigger);
 
 /***/ }),
-/* 491 */
+/* 492 */
 /***/ (function(module, exports) {
 
 /**
@@ -34734,7 +34825,7 @@ BI.shortcut("bi.icon_text_value_combo", BI.IconTextValueCombo);
 
 
 /***/ }),
-/* 492 */
+/* 493 */
 /***/ (function(module, exports) {
 
 /**
@@ -34759,7 +34850,7 @@ BI.IconTextValueComboPopup = BI.inherit(BI.Pane, {
             type: "bi.button_group",
             items: BI.createItems(o.items, {
                 type: "bi.single_select_icon_text_item",
-                height: 24,
+                height: BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT,
                 iconHeight: o.iconHeight,
                 iconWidth: o.iconWidth,
                 iconWrapperWidth: o.iconWrapperWidth
@@ -34794,10 +34885,10 @@ BI.IconTextValueComboPopup = BI.inherit(BI.Pane, {
         var o = this.options;
         items = BI.createItems(items, {
             type: "bi.single_select_icon_text_item",
-            height: 24,
+            height: BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT,
             iconWrapperWidth: o.iconWrapperWidth,
             iconHeight: o.iconHeight,
-            iconWidth: o.iconWidth
+            iconWidth: o.iconWidth,
         });
         this.popup.populate(items, keyword);
     },
@@ -34816,7 +34907,7 @@ BI.shortcut("bi.icon_text_value_combo_popup", BI.IconTextValueComboPopup);
 
 
 /***/ }),
-/* 493 */
+/* 494 */
 /***/ (function(module, exports) {
 
 /**
@@ -34983,7 +35074,7 @@ BI.shortcut("bi.search_text_value_combo", BI.SearchTextValueCombo);
 
 
 /***/ }),
-/* 494 */
+/* 495 */
 /***/ (function(module, exports) {
 
 /**
@@ -35062,7 +35153,7 @@ BI.shortcut("bi.search_text_value_combo_popup", BI.SearchTextValueComboPopup);
 
 
 /***/ }),
-/* 495 */
+/* 496 */
 /***/ (function(module, exports) {
 
 /**
@@ -35181,7 +35272,7 @@ BI.SearchTextValueTrigger.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.search_text_value_trigger", BI.SearchTextValueTrigger);
 
 /***/ }),
-/* 496 */
+/* 497 */
 /***/ (function(module, exports) {
 
 /**
@@ -35271,7 +35362,7 @@ BI.TextValueCheckCombo.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.text_value_check_combo", BI.TextValueCheckCombo);
 
 /***/ }),
-/* 497 */
+/* 498 */
 /***/ (function(module, exports) {
 
 BI.TextValueCheckComboPopup = BI.inherit(BI.Pane, {
@@ -35339,7 +35430,7 @@ BI.shortcut("bi.text_value_check_combo_popup", BI.TextValueCheckComboPopup);
 
 
 /***/ }),
-/* 498 */
+/* 499 */
 /***/ (function(module, exports) {
 
 /**
@@ -35444,7 +35535,7 @@ BI.shortcut("bi.text_value_combo", BI.TextValueCombo);
 
 
 /***/ }),
-/* 499 */
+/* 500 */
 /***/ (function(module, exports) {
 
 /**
@@ -35518,7 +35609,7 @@ BI.SmallTextValueCombo.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.small_text_value_combo", BI.SmallTextValueCombo);
 
 /***/ }),
-/* 500 */
+/* 501 */
 /***/ (function(module, exports) {
 
 BI.TextValueComboPopup = BI.inherit(BI.Pane, {
@@ -35537,7 +35628,7 @@ BI.TextValueComboPopup = BI.inherit(BI.Pane, {
             items: BI.createItems(o.items, {
                 type: "bi.single_select_item",
                 textAlign: o.textAlign,
-                height: 24
+                height: BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT,
             }),
             chooseType: o.chooseType,
             layouts: [{
@@ -35566,7 +35657,7 @@ BI.TextValueComboPopup = BI.inherit(BI.Pane, {
         BI.TextValueComboPopup.superclass.populate.apply(this, arguments);
         items = BI.createItems(items, {
             type: "bi.single_select_item",
-            height: 24
+            height: BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT,
         });
         this.popup.populate(items);
     },
@@ -35584,7 +35675,7 @@ BI.TextValueComboPopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.text_value_combo_popup", BI.TextValueComboPopup);
 
 /***/ }),
-/* 501 */
+/* 502 */
 /***/ (function(module, exports) {
 
 /**
@@ -35771,7 +35862,7 @@ BI.ClearEditor.EVENT_EMPTY = "EVENT_EMPTY";
 BI.shortcut("bi.clear_editor", BI.ClearEditor);
 
 /***/ }),
-/* 502 */
+/* 503 */
 /***/ (function(module, exports) {
 
 /**
@@ -36053,7 +36144,7 @@ BI.shortcut("bi.shelter_editor", BI.ShelterEditor);
 
 
 /***/ }),
-/* 503 */
+/* 504 */
 /***/ (function(module, exports) {
 
 /**
@@ -36334,7 +36425,7 @@ BI.SignEditor.EVENT_EMPTY = "EVENT_EMPTY";
 BI.shortcut("bi.sign_editor", BI.SignEditor);
 
 /***/ }),
-/* 504 */
+/* 505 */
 /***/ (function(module, exports) {
 
 /**
@@ -36651,7 +36742,7 @@ BI.shortcut("bi.state_editor", BI.StateEditor);
 
 
 /***/ }),
-/* 505 */
+/* 506 */
 /***/ (function(module, exports) {
 
 /**
@@ -36938,7 +37029,7 @@ BI.SimpleStateEditor.EVENT_EMPTY = "EVENT_EMPTY";
 BI.shortcut("bi.simple_state_editor", BI.SimpleStateEditor);
 
 /***/ }),
-/* 506 */
+/* 507 */
 /***/ (function(module, exports) {
 
 /**
@@ -36974,7 +37065,7 @@ BI.MultiPopupView = BI.inherit(BI.PopupView, {
         this.buttongroup = BI.createWidget({
             type: "bi.button_group",
             cls: "list-view-toolbar bi-high-light bi-split-top",
-            height: 24,
+            height: BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT,
             items: BI.createItems(text, {
                 type: "bi.text_button",
                 once: false,
@@ -37004,7 +37095,7 @@ BI.shortcut("bi.multi_popup_view", BI.MultiPopupView);
 
 
 /***/ }),
-/* 507 */
+/* 508 */
 /***/ (function(module, exports) {
 
 /**
@@ -37063,7 +37154,7 @@ BI.shortcut("bi.popup_panel", BI.PopupPanel);
 
 
 /***/ }),
-/* 508 */
+/* 509 */
 /***/ (function(module, exports) {
 
 /**
@@ -37245,7 +37336,7 @@ BI.ListPane.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.list_pane", BI.ListPane);
 
 /***/ }),
-/* 509 */
+/* 510 */
 /***/ (function(module, exports) {
 
 /**
@@ -37330,7 +37421,7 @@ BI.shortcut("bi.panel", BI.Panel);
 
 
 /***/ }),
-/* 510 */
+/* 511 */
 /***/ (function(module, exports) {
 
 BI.LinearSegmentButton = BI.inherit(BI.BasicButton, {
@@ -37389,7 +37480,7 @@ BI.LinearSegmentButton = BI.inherit(BI.BasicButton, {
 BI.shortcut("bi.linear_segment_button", BI.LinearSegmentButton);
 
 /***/ }),
-/* 511 */
+/* 512 */
 /***/ (function(module, exports) {
 
 BI.LinearSegment = BI.inherit(BI.Widget, {
@@ -37445,7 +37536,7 @@ BI.LinearSegment = BI.inherit(BI.Widget, {
 BI.shortcut("bi.linear_segment", BI.LinearSegment);
 
 /***/ }),
-/* 512 */
+/* 513 */
 /***/ (function(module, exports) {
 
 /**
@@ -37668,7 +37759,7 @@ BI.shortcut("bi.select_list", BI.SelectList);
 
 
 /***/ }),
-/* 513 */
+/* 514 */
 /***/ (function(module, exports) {
 
 /**
@@ -37776,7 +37867,7 @@ BI.LazyLoader.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.lazy_loader", BI.LazyLoader);
 
 /***/ }),
-/* 514 */
+/* 515 */
 /***/ (function(module, exports) {
 
 /**
@@ -37977,7 +38068,7 @@ BI.ListLoader.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.list_loader", BI.ListLoader);
 
 /***/ }),
-/* 515 */
+/* 516 */
 /***/ (function(module, exports) {
 
 /**
@@ -38159,7 +38250,7 @@ BI.shortcut("bi.sort_list", BI.SortList);
 
 
 /***/ }),
-/* 516 */
+/* 517 */
 /***/ (function(module, exports) {
 
 /**
@@ -38195,7 +38286,7 @@ BI.LoadingPane = BI.inherit(BI.Pane, {
 });
 
 /***/ }),
-/* 517 */
+/* 518 */
 /***/ (function(module, exports) {
 
 /**
@@ -38430,7 +38521,7 @@ BI.AllCountPager.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.all_count_pager", BI.AllCountPager);
 
 /***/ }),
-/* 518 */
+/* 519 */
 /***/ (function(module, exports) {
 
 /**
@@ -38711,7 +38802,7 @@ BI.DirectionPager.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.direction_pager", BI.DirectionPager);
 
 /***/ }),
-/* 519 */
+/* 520 */
 /***/ (function(module, exports) {
 
 /**
@@ -39004,7 +39095,7 @@ BI.DetailPager.EVENT_AFTER_POPULATE = "EVENT_AFTER_POPULATE";
 BI.shortcut("bi.detail_pager", BI.DetailPager);
 
 /***/ }),
-/* 520 */
+/* 521 */
 /***/ (function(module, exports) {
 
 /**
@@ -39056,7 +39147,7 @@ BI.shortcut("bi.segment_button", BI.SegmentButton);
 
 
 /***/ }),
-/* 521 */
+/* 522 */
 /***/ (function(module, exports) {
 
 /**
@@ -39125,7 +39216,7 @@ BI.Segment.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.segment", BI.Segment);
 
 /***/ }),
-/* 522 */
+/* 523 */
 /***/ (function(module, exports) {
 
 /**
@@ -39276,7 +39367,7 @@ BI.shortcut("bi.multi_select_bar", BI.MultiSelectBar);
 
 
 /***/ }),
-/* 523 */
+/* 524 */
 /***/ (function(module, exports) {
 
 /**
@@ -39418,7 +39509,7 @@ BI.shortcut("bi.level_tree", BI.LevelTree);
 
 
 /***/ }),
-/* 524 */
+/* 525 */
 /***/ (function(module, exports) {
 
 !(function () {
@@ -39501,7 +39592,7 @@ BI.shortcut("bi.level_tree", BI.LevelTree);
 
 
 /***/ }),
-/* 525 */
+/* 526 */
 /***/ (function(module, exports) {
 
 !(function () {
@@ -39560,7 +39651,7 @@ BI.shortcut("bi.level_tree", BI.LevelTree);
 
 
 /***/ }),
-/* 526 */
+/* 527 */
 /***/ (function(module, exports) {
 
 /**
@@ -39662,7 +39753,7 @@ BI.shortcut("bi.editor_trigger", BI.EditorTrigger);
 
 
 /***/ }),
-/* 527 */
+/* 528 */
 /***/ (function(module, exports) {
 
 /**
@@ -39697,7 +39788,7 @@ BI.IconTrigger = BI.inherit(BI.Trigger, {
 BI.shortcut("bi.icon_trigger", BI.IconTrigger);
 
 /***/ }),
-/* 528 */
+/* 529 */
 /***/ (function(module, exports) {
 
 /**
@@ -39807,7 +39898,7 @@ BI.IconTextTrigger = BI.inherit(BI.Trigger, {
 BI.shortcut("bi.icon_text_trigger", BI.IconTextTrigger);
 
 /***/ }),
-/* 529 */
+/* 530 */
 /***/ (function(module, exports) {
 
 /**
@@ -39886,7 +39977,7 @@ BI.SelectIconTextTrigger = BI.inherit(BI.Trigger, {
 BI.shortcut("bi.select_icon_text_trigger", BI.SelectIconTextTrigger);
 
 /***/ }),
-/* 530 */
+/* 531 */
 /***/ (function(module, exports) {
 
 /**
@@ -39969,7 +40060,7 @@ BI.shortcut("bi.text_trigger", BI.TextTrigger);
 
 
 /***/ }),
-/* 531 */
+/* 532 */
 /***/ (function(module, exports) {
 
 /**
@@ -40050,7 +40141,7 @@ BI.shortcut("bi.select_text_trigger", BI.SelectTextTrigger);
 
 
 /***/ }),
-/* 532 */
+/* 533 */
 /***/ (function(module, exports) {
 
 /**
@@ -40119,7 +40210,7 @@ BI.SmallSelectTextTrigger = BI.inherit(BI.Trigger, {
 BI.shortcut("bi.small_select_text_trigger", BI.SmallSelectTextTrigger);
 
 /***/ }),
-/* 533 */
+/* 534 */
 /***/ (function(module, exports) {
 
 /**
@@ -40181,7 +40272,7 @@ BI.SmallTextTrigger = BI.inherit(BI.Trigger, {
 BI.shortcut("bi.small_text_trigger", BI.SmallTextTrigger);
 
 /***/ }),
-/* 534 */
+/* 535 */
 /***/ (function(module, exports) {
 
 /**
@@ -40259,7 +40350,7 @@ BI.MonthDateCombo.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.month_date_combo", BI.MonthDateCombo);
 
 /***/ }),
-/* 535 */
+/* 536 */
 /***/ (function(module, exports) {
 
 /**
@@ -40349,7 +40440,7 @@ BI.shortcut("bi.year_date_combo", BI.YearDateCombo);
 
 
 /***/ }),
-/* 536 */
+/* 537 */
 /***/ (function(module, exports) {
 
 /**
@@ -40583,7 +40674,7 @@ BI.shortcut("bi.date_picker", BI.DatePicker);
 
 
 /***/ }),
-/* 537 */
+/* 538 */
 /***/ (function(module, exports) {
 
 /**
@@ -40720,7 +40811,7 @@ BI.shortcut("bi.year_picker", BI.YearPicker);
 
 
 /***/ }),
-/* 538 */
+/* 539 */
 /***/ (function(module, exports) {
 
 /**
@@ -40876,7 +40967,7 @@ BI.DateCalendarPopup.EVENT_BEFORE_YEAR_MONTH_POPUPVIEW = "EVENT_BEFORE_YEAR_MONT
 BI.shortcut("bi.date_calendar_popup", BI.DateCalendarPopup);
 
 /***/ }),
-/* 539 */
+/* 540 */
 /***/ (function(module, exports) {
 
 /**
@@ -40912,7 +41003,7 @@ BI.MonthPopup = BI.inherit(BI.Widget, {
                 columns: 2,
                 rows: 6,
                 columnSize: [1 / 2, 1 / 2],
-                rowSize: 25
+                rowSize: BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT + 1
             })), {
                 type: "bi.center_adapt",
                 vgap: 1,
@@ -40949,7 +41040,7 @@ BI.MonthPopup = BI.inherit(BI.Widget, {
                     whiteSpace: "nowrap",
                     once: false,
                     forceSelected: true,
-                    height: 23,
+                    height: BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT - 1,
                     width: 38,
                     value: td,
                     text: td,
@@ -40979,7 +41070,7 @@ BI.MonthPopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.month_popup", BI.MonthPopup);
 
 /***/ }),
-/* 540 */
+/* 541 */
 /***/ (function(module, exports) {
 
 /**
@@ -41120,7 +41211,7 @@ BI.YearPopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.year_popup", BI.YearPopup);
 
 /***/ }),
-/* 541 */
+/* 542 */
 /***/ (function(module, exports) {
 
 /**
@@ -41191,7 +41282,7 @@ BI.DateTriangleTrigger = BI.inherit(BI.Trigger, {
 BI.shortcut("bi.date_triangle_trigger", BI.DateTriangleTrigger);
 
 /***/ }),
-/* 542 */
+/* 543 */
 /***/ (function(module, exports) {
 
 /**
@@ -41381,7 +41472,7 @@ BI.StaticDatePaneCard.EVENT_BEFORE_YEAR_MONTH_POPUPVIEW = "EVENT_BEFORE_YEAR_MON
 BI.shortcut("bi.static_date_pane_card", BI.StaticDatePaneCard);
 
 /***/ }),
-/* 543 */
+/* 544 */
 /***/ (function(module, exports) {
 
 BI.DynamicDatePane = BI.inherit(BI.Widget, {
@@ -41604,7 +41695,7 @@ BI.extend(BI.DynamicDatePane, {
 
 
 /***/ }),
-/* 544 */
+/* 545 */
 /***/ (function(module, exports) {
 
 /**
@@ -41745,7 +41836,7 @@ BI.shortcut("bi.date_time_combo", BI.DateTimeCombo);
 
 
 /***/ }),
-/* 545 */
+/* 546 */
 /***/ (function(module, exports) {
 
 /**
@@ -41864,7 +41955,7 @@ BI.shortcut("bi.date_time_popup", BI.DateTimePopup);
 
 
 /***/ }),
-/* 546 */
+/* 547 */
 /***/ (function(module, exports) {
 
 /**
@@ -41932,7 +42023,7 @@ BI.shortcut("bi.date_time_trigger", BI.DateTimeTrigger);
 
 
 /***/ }),
-/* 547 */
+/* 548 */
 /***/ (function(module, exports) {
 
 BI.StaticDateTimePaneCard = BI.inherit(BI.Widget, {
@@ -42142,7 +42233,7 @@ BI.StaticDateTimePaneCard.EVENT_BEFORE_YEAR_MONTH_POPUPVIEW = "EVENT_BEFORE_YEAR
 BI.shortcut("bi.static_date_time_pane_card", BI.StaticDateTimePaneCard);
 
 /***/ }),
-/* 548 */
+/* 549 */
 /***/ (function(module, exports) {
 
 BI.DynamicDateTimePane = BI.inherit(BI.Widget, {
@@ -42362,7 +42453,7 @@ BI.extend(BI.DynamicDateTimePane, {
 
 
 /***/ }),
-/* 549 */
+/* 550 */
 /***/ (function(module, exports) {
 
 /**
@@ -42461,7 +42552,7 @@ BI.DownListCombo.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
 BI.shortcut("bi.down_list_combo", BI.DownListCombo);
 
 /***/ }),
-/* 550 */
+/* 551 */
 /***/ (function(module, exports) {
 
 /**
@@ -42517,7 +42608,7 @@ BI.DownListGroup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.down_list_group", BI.DownListGroup);
 
 /***/ }),
-/* 551 */
+/* 552 */
 /***/ (function(module, exports) {
 
 BI.DownListItem = BI.inherit(BI.BasicButton, {
@@ -42526,7 +42617,7 @@ BI.DownListItem = BI.inherit(BI.BasicButton, {
         return BI.extend(conf, {
             baseCls: "bi-down-list-item bi-list-item-active",
             cls: "",
-            height: 24,
+            height: BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT,
             logic: {
                 dynamic: true
             },
@@ -42620,7 +42711,7 @@ BI.DownListItem.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.down_list_item", BI.DownListItem);
 
 /***/ }),
-/* 552 */
+/* 553 */
 /***/ (function(module, exports) {
 
 BI.DownListGroupItem = BI.inherit(BI.BasicButton, {
@@ -42746,7 +42837,7 @@ BI.DownListGroupItem.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.down_list_group_item", BI.DownListGroupItem);
 
 /***/ }),
-/* 553 */
+/* 554 */
 /***/ (function(module, exports) {
 
 /**
@@ -42849,7 +42940,7 @@ BI.DownListPopup = BI.inherit(BI.Pane, {
                     item.el.logic = {
                         dynamic: true
                     };
-                    item.el.height = item.el.height || self.constants.height;
+                    item.el.height = item.el.height || BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT;
                     item.el.iconCls2 = self.constants.nextIcon;
                     item.popup = {
                         lgap: 1,
@@ -43038,7 +43129,7 @@ BI.DownListPopup.EVENT_SON_VALUE_CHANGE = "EVENT_SON_VALUE_CHANGE";
 BI.shortcut("bi.down_list_popup", BI.DownListPopup);
 
 /***/ }),
-/* 554 */
+/* 555 */
 /***/ (function(module, exports) {
 
 !(function () {
@@ -43161,7 +43252,7 @@ BI.shortcut("bi.down_list_popup", BI.DownListPopup);
 
 
 /***/ }),
-/* 555 */
+/* 556 */
 /***/ (function(module, exports) {
 
 BI.DynamicDateCard = BI.inherit(BI.Widget, {
@@ -43332,7 +43423,7 @@ BI.DynamicDateCard = BI.inherit(BI.Widget, {
             comboItems[0].text = BI.i18nText("BI-Basic_Empty");
             items.push({
                 type: "bi.text_value_combo",
-                height: 24,
+                height: BI.SIZE_CONSANTS.TOOL_BAR_HEIGHT,
                 items: comboItems,
                 container: null,
                 value: positionValue || BI.DynamicDateCard.OFFSET.CURRENT,
@@ -43349,7 +43440,7 @@ BI.DynamicDateCard = BI.inherit(BI.Widget, {
             if(values.length !== 0 && BI.last(values).dateType !== BI.DynamicDateCard.TYPE.DAY && BI.last(values).dateType !== BI.DynamicDateCard.TYPE.WORK_DAY) {
                 items.push({
                     type: "bi.text_value_combo",
-                    height: 24,
+                    height: BI.SIZE_CONSANTS.TOOL_BAR_HEIGHT,
                     container: null,
                     items: this._getText(BI.last(values).dateType),
                     value: positionValue || BI.DynamicDateCard.OFFSET.CURRENT,
@@ -43590,7 +43681,7 @@ BI.extend(BI.DynamicDateCard, {
 });
 
 /***/ }),
-/* 556 */
+/* 557 */
 /***/ (function(module, exports) {
 
 BI.DynamicDateCombo = BI.inherit(BI.Single, {
@@ -43931,20 +44022,22 @@ BI.extend(BI.DynamicDateCombo, {
 
 
 /***/ }),
-/* 557 */
+/* 558 */
 /***/ (function(module, exports) {
 
 BI.DynamicDateParamItem = BI.inherit(BI.Widget, {
 
-    props: {
-        baseCls: "bi-dynamic-date-param-item",
-        dateType: BI.DynamicDateCard.TYPE.YEAR,
-        validationChecker: function() {
-            return true;
-        },
-        value: 0,
-        offset: 0,
-        height: 24
+    props: function() {
+        return {
+            baseCls: "bi-dynamic-date-param-item",
+            dateType: BI.DynamicDateCard.TYPE.YEAR,
+            validationChecker: function() {
+                return true;
+            },
+            value: 0,
+            offset: 0,
+            height: BI.SIZE_CONSANTS.TOOL_BAR_HEIGHT,
+        }
     },
 
     render: function () {
@@ -43955,7 +44048,7 @@ BI.DynamicDateParamItem = BI.inherit(BI.Widget, {
                 el: {
                     type: "bi.sign_editor",
                     cls: "bi-border",
-                    height: 22,
+                    height: BI.SIZE_CONSANTS.TOOL_BAR_HEIGHT - 2,
                     validationChecker: function (v) {
                         return BI.isNaturalNumber(v);
                     },
@@ -43983,13 +44076,13 @@ BI.DynamicDateParamItem = BI.inherit(BI.Widget, {
             }, {
                 el: {
                     type: "bi.label",
-                    height: 24,
+                    height: BI.SIZE_CONSANTS.TOOL_BAR_HEIGHT,
                     text: this._getText()
                 },
                 width: o.dateType === BI.DynamicDateCard.TYPE.WORK_DAY ? 60 : 20
             }, {
                 type: "bi.text_value_combo",
-                height: 24,
+                height: BI.SIZE_CONSANTS.TOOL_BAR_HEIGHT,
                 items: [{
                     text: BI.i18nText("BI-Basic_Front"),
                     value: 0
@@ -44065,13 +44158,12 @@ BI.shortcut("bi.dynamic_date_param_item", BI.DynamicDateParamItem);
 
 
 /***/ }),
-/* 558 */
+/* 559 */
 /***/ (function(module, exports) {
 
 BI.DynamicDatePopup = BI.inherit(BI.Widget, {
     constants: {
         tabHeight: 30,
-        buttonHeight: 24
     },
 
     props: {
@@ -44097,7 +44189,7 @@ BI.DynamicDatePopup = BI.inherit(BI.Widget, {
                         cls: "bi-high-light bi-split-top",
                         shadow: true,
                         text: BI.i18nText("BI-Basic_Clear"),
-                        textHeight: c.buttonHeight - 1,
+                        textHeight: BI.SIZE_CONSANTS.TOOL_BAR_HEIGHT - 1,
                         listeners: [{
                             eventName: BI.TextButton.EVENT_CHANGE,
                             action: function () {
@@ -44108,7 +44200,7 @@ BI.DynamicDatePopup = BI.inherit(BI.Widget, {
                         type: "bi.text_button",
                         cls: "bi-split-left bi-split-right bi-high-light bi-split-top",
                         shadow: true,
-                        textHeight: c.buttonHeight - 1,
+                        textHeight: BI.SIZE_CONSANTS.TOOL_BAR_HEIGHT - 1,
                         text: BI.i18nText("BI-Multi_Date_Today"),
                         disabled: this._checkTodayValid(),
                         ref: function () {
@@ -44123,7 +44215,7 @@ BI.DynamicDatePopup = BI.inherit(BI.Widget, {
                     }, {
                         type: "bi.text_button",
                         cls: "bi-high-light bi-split-top",
-                        textHeight: c.buttonHeight - 1,
+                        textHeight: BI.SIZE_CONSANTS.TOOL_BAR_HEIGHT - 1,
                         shadow: true,
                         text: BI.i18nText("BI-Basic_OK"),
                         listeners: [{
@@ -44138,7 +44230,7 @@ BI.DynamicDatePopup = BI.inherit(BI.Widget, {
                             }
                         }]
                     }]],
-                    height: 24
+                    height: BI.SIZE_CONSANTS.TOOL_BAR_HEIGHT
                 },
             }]
         });
@@ -44328,7 +44420,7 @@ BI.DynamicDatePopup.EVENT_BEFORE_YEAR_MONTH_POPUPVIEW = "EVENT_BEFORE_YEAR_MONTH
 BI.shortcut("bi.dynamic_date_popup", BI.DynamicDatePopup);
 
 /***/ }),
-/* 559 */
+/* 560 */
 /***/ (function(module, exports) {
 
 BI.DynamicDateTrigger = BI.inherit(BI.Trigger, {
@@ -44639,7 +44731,7 @@ BI.shortcut("bi.dynamic_date_trigger", BI.DynamicDateTrigger);
 
 
 /***/ }),
-/* 560 */
+/* 561 */
 /***/ (function(module, exports) {
 
 BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
@@ -44988,7 +45080,7 @@ BI.extend(BI.DynamicDateTimeCombo, {
 
 
 /***/ }),
-/* 561 */
+/* 562 */
 /***/ (function(module, exports) {
 
 BI.DynamicDateTimePopup = BI.inherit(BI.Widget, {
@@ -45018,7 +45110,7 @@ BI.DynamicDateTimePopup = BI.inherit(BI.Widget, {
                     items: [[{
                         type: "bi.text_button",
                         cls: "bi-high-light bi-split-top",
-                        textHeight: c.buttonHeight - 1,
+                        textHeight: BI.SIZE_CONSANTS.TOOL_BAR_HEIGHT - 1,
                         shadow: true,
                         text: BI.i18nText("BI-Basic_Clear"),
                         listeners: [{
@@ -45030,7 +45122,7 @@ BI.DynamicDateTimePopup = BI.inherit(BI.Widget, {
                     }, {
                         type: "bi.text_button",
                         cls: "bi-split-left bi-split-right bi-high-light bi-split-top",
-                        textHeight: c.buttonHeight - 1,
+                        textHeight: BI.SIZE_CONSANTS.TOOL_BAR_HEIGHT - 1,
                         shadow: true,
                         text: BI.i18nText("BI-Multi_Date_Today"),
                         disabled: this._checkTodayValid(),
@@ -45046,7 +45138,7 @@ BI.DynamicDateTimePopup = BI.inherit(BI.Widget, {
                     }, {
                         type: "bi.text_button",
                         cls: "bi-high-light bi-split-top",
-                        textHeight: c.buttonHeight - 1,
+                        textHeight: BI.SIZE_CONSANTS.TOOL_BAR_HEIGHT - 1,
                         shadow: true,
                         text: BI.i18nText("BI-Basic_OK"),
                         listeners: [{
@@ -45056,7 +45148,7 @@ BI.DynamicDateTimePopup = BI.inherit(BI.Widget, {
                             }
                         }]
                     }]],
-                    height: 24
+                    height: BI.SIZE_CONSANTS.TOOL_BAR_HEIGHT
                 }
             }]
         });
@@ -45259,7 +45351,7 @@ BI.DynamicDateTimePopup.EVENT_BEFORE_YEAR_MONTH_POPUPVIEW = "EVENT_BEFORE_YEAR_M
 BI.shortcut("bi.dynamic_date_time_popup", BI.DynamicDateTimePopup);
 
 /***/ }),
-/* 562 */
+/* 563 */
 /***/ (function(module, exports) {
 
 BI.DynamicDateTimeSelect = BI.inherit(BI.Widget, {
@@ -45305,7 +45397,7 @@ BI.DynamicDateTimeSelect = BI.inherit(BI.Widget, {
                             }
                         }],
                         width: 60,
-                        height: 24
+                        height: BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT
                     }
                 }, {
                     type: "bi.label",
@@ -45341,7 +45433,7 @@ BI.DynamicDateTimeSelect = BI.inherit(BI.Widget, {
                         }
                     }],
                     width: 60,
-                    height: 24
+                    height: BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT
                 }, {
                     type: "bi.label",
                     text: ":",
@@ -45370,7 +45462,7 @@ BI.DynamicDateTimeSelect = BI.inherit(BI.Widget, {
                         }
                     }],
                     width: 60,
-                    height: 24
+                    height: BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT
                 }]
             }]
         };
@@ -45476,7 +45568,7 @@ BI.extend(BI.DynamicDateTimeSelect, {
 });
 
 /***/ }),
-/* 563 */
+/* 564 */
 /***/ (function(module, exports) {
 
 BI.DynamicDateTimeTrigger = BI.inherit(BI.Trigger, {
@@ -45858,7 +45950,7 @@ BI.DynamicDateTimeTrigger.EVENT_KEY_DOWN = "EVENT_KEY_DOWN";
 BI.shortcut("bi.dynamic_date_time_trigger", BI.DynamicDateTimeTrigger);
 
 /***/ }),
-/* 564 */
+/* 565 */
 /***/ (function(module, exports) {
 
 /**
@@ -46079,7 +46171,7 @@ BI.SearchEditor.EVENT_EMPTY = "EVENT_EMPTY";
 BI.shortcut("bi.search_editor", BI.SearchEditor);
 
 /***/ }),
-/* 565 */
+/* 566 */
 /***/ (function(module, exports) {
 
 /**
@@ -46104,7 +46196,7 @@ BI.SmallSearchEditor = BI.inherit(BI.SearchEditor, {
 BI.shortcut("bi.small_search_editor", BI.SmallSearchEditor);
 
 /***/ }),
-/* 566 */
+/* 567 */
 /***/ (function(module, exports) {
 
 /**
@@ -46283,7 +46375,7 @@ BI.TextEditor.EVENT_EMPTY = "EVENT_EMPTY";
 BI.shortcut("bi.text_editor", BI.TextEditor);
 
 /***/ }),
-/* 567 */
+/* 568 */
 /***/ (function(module, exports) {
 
 /**
@@ -46308,7 +46400,7 @@ BI.SmallTextEditor = BI.inherit(BI.TextEditor, {
 BI.shortcut("bi.small_text_editor", BI.SmallTextEditor);
 
 /***/ }),
-/* 568 */
+/* 569 */
 /***/ (function(module, exports) {
 
 /**
@@ -46853,7 +46945,7 @@ BI.IntervalSlider.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.interval_slider", BI.IntervalSlider);
 
 /***/ }),
-/* 569 */
+/* 570 */
 /***/ (function(module, exports) {
 
 /**
@@ -47080,7 +47172,7 @@ BI.AccurateCalculationModel = BI.inherit(BI.Widget, {
 });
 
 /***/ }),
-/* 570 */
+/* 571 */
 /***/ (function(module, exports) {
 
 /**
@@ -47175,7 +47267,7 @@ BI.MultiLayerDownListCombo.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
 BI.shortcut("bi.multi_layer_down_list_combo", BI.MultiLayerDownListCombo);
 
 /***/ }),
-/* 571 */
+/* 572 */
 /***/ (function(module, exports) {
 
 /**
@@ -47502,7 +47594,7 @@ BI.MultiLayerDownListPopup.EVENT_SON_VALUE_CHANGE = "EVENT_SON_VALUE_CHANGE";
 BI.shortcut("bi.multi_layer_down_list_popup", BI.MultiLayerDownListPopup);
 
 /***/ }),
-/* 572 */
+/* 573 */
 /***/ (function(module, exports) {
 
 /**
@@ -47753,7 +47845,7 @@ BI.MultiLayerSelectTreeCombo.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
 BI.shortcut("bi.multilayer_select_tree_combo", BI.MultiLayerSelectTreeCombo);
 
 /***/ }),
-/* 573 */
+/* 574 */
 /***/ (function(module, exports) {
 
 /**
@@ -47850,7 +47942,7 @@ BI.MultiLayerSelectTreeInsertSearchPane.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multilayer_select_tree_insert_search_pane", BI.MultiLayerSelectTreeInsertSearchPane);
 
 /***/ }),
-/* 574 */
+/* 575 */
 /***/ (function(module, exports) {
 
 /**
@@ -48045,7 +48137,7 @@ BI.shortcut("bi.multilayer_select_level_tree", BI.MultiLayerSelectLevelTree);
 
 
 /***/ }),
-/* 575 */
+/* 576 */
 /***/ (function(module, exports) {
 
 /**
@@ -48127,7 +48219,7 @@ BI.MultiLayerSelectTreePopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multilayer_select_tree_popup", BI.MultiLayerSelectTreePopup);
 
 /***/ }),
-/* 576 */
+/* 577 */
 /***/ (function(module, exports) {
 
 /**
@@ -48382,7 +48474,7 @@ BI.MultiLayerSelectTreeTrigger.EVENT_ADD_ITEM = "EVENT_ADD_ITEM";
 BI.shortcut("bi.multilayer_select_tree_trigger", BI.MultiLayerSelectTreeTrigger);
 
 /***/ }),
-/* 577 */
+/* 578 */
 /***/ (function(module, exports) {
 
 /**
@@ -48487,7 +48579,7 @@ BI.shortcut("bi.multilayer_select_tree_first_plus_group_node", BI.MultiLayerSele
 
 
 /***/ }),
-/* 578 */
+/* 579 */
 /***/ (function(module, exports) {
 
 /**
@@ -48581,7 +48673,7 @@ BI.shortcut("bi.multilayer_select_tree_last_plus_group_node", BI.MultiLayerSelec
 
 
 /***/ }),
-/* 579 */
+/* 580 */
 /***/ (function(module, exports) {
 
 /**
@@ -48675,7 +48767,7 @@ BI.shortcut("bi.multilayer_select_tree_mid_plus_group_node", BI.MultiLayerSelect
 
 
 /***/ }),
-/* 580 */
+/* 581 */
 /***/ (function(module, exports) {
 
 /**
@@ -48773,7 +48865,7 @@ BI.shortcut("bi.multilayer_select_tree_plus_group_node", BI.MultiLayerSelectTree
 
 
 /***/ }),
-/* 581 */
+/* 582 */
 /***/ (function(module, exports) {
 
 /**
@@ -49027,7 +49119,7 @@ BI.MultiLayerSingleTreeCombo.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
 BI.shortcut("bi.multilayer_single_tree_combo", BI.MultiLayerSingleTreeCombo);
 
 /***/ }),
-/* 582 */
+/* 583 */
 /***/ (function(module, exports) {
 
 /**
@@ -49124,7 +49216,7 @@ BI.MultiLayerSingleTreeInsertSearchPane.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multilayer_single_tree_insert_search_pane", BI.MultiLayerSingleTreeInsertSearchPane);
 
 /***/ }),
-/* 583 */
+/* 584 */
 /***/ (function(module, exports) {
 
 /**
@@ -49318,7 +49410,7 @@ BI.shortcut("bi.multilayer_single_level_tree", BI.MultiLayerSingleLevelTree);
 
 
 /***/ }),
-/* 584 */
+/* 585 */
 /***/ (function(module, exports) {
 
 /**
@@ -49399,7 +49491,7 @@ BI.MultiLayerSingleTreePopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multilayer_single_tree_popup", BI.MultiLayerSingleTreePopup);
 
 /***/ }),
-/* 585 */
+/* 586 */
 /***/ (function(module, exports) {
 
 /**
@@ -49655,7 +49747,7 @@ BI.MultiLayerSingleTreeTrigger.EVENT_ADD_ITEM = "EVENT_ADD_ITEM";
 BI.shortcut("bi.multilayer_single_tree_trigger", BI.MultiLayerSingleTreeTrigger);
 
 /***/ }),
-/* 586 */
+/* 587 */
 /***/ (function(module, exports) {
 
 /**
@@ -49752,7 +49844,7 @@ BI.shortcut("bi.multilayer_single_tree_first_plus_group_node", BI.MultiLayerSing
 
 
 /***/ }),
-/* 587 */
+/* 588 */
 /***/ (function(module, exports) {
 
 /**
@@ -49848,7 +49940,7 @@ BI.shortcut("bi.multilayer_single_tree_last_plus_group_node", BI.MultiLayerSingl
 
 
 /***/ }),
-/* 588 */
+/* 589 */
 /***/ (function(module, exports) {
 
 /**
@@ -49944,7 +50036,7 @@ BI.shortcut("bi.multilayer_single_tree_mid_plus_group_node", BI.MultiLayerSingle
 
 
 /***/ }),
-/* 589 */
+/* 590 */
 /***/ (function(module, exports) {
 
 /**
@@ -50051,7 +50143,7 @@ BI.MultiLayerSingleTreePlusGroupNode = BI.inherit(BI.NodeButton, {
 BI.shortcut("bi.multilayer_single_tree_plus_group_node", BI.MultiLayerSingleTreePlusGroupNode);
 
 /***/ }),
-/* 590 */
+/* 591 */
 /***/ (function(module, exports) {
 
 /**
@@ -50143,7 +50235,7 @@ BI.shortcut("bi.multilayer_single_tree_first_tree_leaf_item", BI.MultiLayerSingl
 
 
 /***/ }),
-/* 591 */
+/* 592 */
 /***/ (function(module, exports) {
 
 /**
@@ -50235,7 +50327,7 @@ BI.shortcut("bi.multilayer_single_tree_last_tree_leaf_item", BI.MultiLayerSingle
 
 
 /***/ }),
-/* 592 */
+/* 593 */
 /***/ (function(module, exports) {
 
 /**
@@ -50327,7 +50419,7 @@ BI.shortcut("bi.multilayer_single_tree_mid_tree_leaf_item", BI.MultiLayerSingleT
 
 
 /***/ }),
-/* 593 */
+/* 594 */
 /***/ (function(module, exports) {
 
 /**
@@ -50440,7 +50532,7 @@ BI.MultiSelectCheckPane = BI.inherit(BI.Widget, {
 BI.shortcut("bi.multi_select_check_pane", BI.MultiSelectCheckPane);
 
 /***/ }),
-/* 594 */
+/* 595 */
 /***/ (function(module, exports) {
 
 /**
@@ -50532,7 +50624,7 @@ BI.DisplaySelectedList = BI.inherit(BI.Pane, {
 BI.shortcut("bi.display_selected_list", BI.DisplaySelectedList);
 
 /***/ }),
-/* 595 */
+/* 596 */
 /***/ (function(module, exports) {
 
 /**
@@ -50547,7 +50639,7 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
             baseCls: "bi-multi-select-combo",
             itemsCreator: BI.emptyFn,
             valueFormatter: BI.emptyFn,
-            itemHeight: 24,
+            itemHeight: BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT,
             height: 24,
             allowEdit: true
         });
@@ -51002,7 +51094,7 @@ BI.shortcut("bi.multi_select_combo", BI.MultiSelectCombo);
 
 
 /***/ }),
-/* 596 */
+/* 597 */
 /***/ (function(module, exports) {
 
 /**
@@ -51017,7 +51109,7 @@ BI.MultiSelectNoBarCombo = BI.inherit(BI.Single, {
             baseCls: "bi-multi-select-combo-no-bar",
             itemsCreator: BI.emptyFn,
             valueFormatter: BI.emptyFn,
-            itemHeight: 24,
+            itemHeight: BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT,
             height: 24,
         });
     },
@@ -51501,7 +51593,7 @@ BI.shortcut("bi.multi_select_no_bar_combo", BI.MultiSelectNoBarCombo);
 
 
 /***/ }),
-/* 597 */
+/* 598 */
 /***/ (function(module, exports) {
 
 /**
@@ -51517,7 +51609,7 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
             itemsCreator: BI.emptyFn,
             valueFormatter: BI.emptyFn,
             height: 24,
-            itemHeight: 24,
+            itemHeight: BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT,
             allowEdit: true
         });
     },
@@ -51986,7 +52078,7 @@ BI.shortcut("bi.multi_select_insert_combo", BI.MultiSelectInsertCombo);
 
 
 /***/ }),
-/* 598 */
+/* 599 */
 /***/ (function(module, exports) {
 
 /**
@@ -52001,7 +52093,7 @@ BI.MultiSelectInsertNoBarCombo = BI.inherit(BI.Single, {
             baseCls: "bi-multi-select-insert-combo-no-bar",
             itemsCreator: BI.emptyFn,
             valueFormatter: BI.emptyFn,
-            itemsHeight: 24,
+            itemHeight: BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT,
             height: 24,
         });
     },
@@ -52465,7 +52557,7 @@ BI.shortcut("bi.multi_select_insert_no_bar_combo", BI.MultiSelectInsertNoBarComb
 
 
 /***/ }),
-/* 599 */
+/* 600 */
 /***/ (function(module, exports) {
 
 /**
@@ -52623,7 +52715,7 @@ BI.MultiSelectInsertTrigger.EVENT_BLUR = "EVENT_BLUR";
 BI.shortcut("bi.multi_select_insert_trigger", BI.MultiSelectInsertTrigger);
 
 /***/ }),
-/* 600 */
+/* 601 */
 /***/ (function(module, exports) {
 
 /**
@@ -52646,7 +52738,7 @@ BI.MultiSelectLoader = BI.inherit(BI.Widget, {
             valueFormatter: BI.emptyFn,
             itemsCreator: BI.emptyFn,
             onLoaded: BI.emptyFn,
-            itemHeight: 24
+            itemHeight: BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT,
         });
     },
 
@@ -52754,7 +52846,7 @@ BI.MultiSelectLoader = BI.inherit(BI.Widget, {
             type: "bi.multi_select_item",
             logic: this.options.logic,
             cls: "bi-list-item-active",
-            height: this.options.itemHeight,
+            height: this.options.itemHeight || BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT,
             selected: this.isAllSelected(),
             iconWrapperWidth: 36
         });
@@ -52820,7 +52912,7 @@ BI.MultiSelectLoader.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multi_select_loader", BI.MultiSelectLoader);
 
 /***/ }),
-/* 601 */
+/* 602 */
 /***/ (function(module, exports) {
 
 /**
@@ -52842,7 +52934,7 @@ BI.MultiSelectNoBarLoader = BI.inherit(BI.Widget, {
             },
             valueFormatter: BI.emptyFn,
             itemsCreator: BI.emptyFn,
-            itemHeight: 24,
+            itemHeight: BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT,
             onLoaded: BI.emptyFn
         });
     },
@@ -52942,7 +53034,7 @@ BI.MultiSelectNoBarLoader = BI.inherit(BI.Widget, {
             type: "bi.multi_select_item",
             cls: "bi-list-item-active",
             logic: this.options.logic,
-            height: this.options.itemHeight,
+            height: this.options.itemHeight || BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT,
             iconWrapperWidth: 36
         });
     },
@@ -53006,7 +53098,7 @@ BI.shortcut("bi.multi_select_no_bar_loader", BI.MultiSelectNoBarLoader);
 
 
 /***/ }),
-/* 602 */
+/* 603 */
 /***/ (function(module, exports) {
 
 /**
@@ -53025,7 +53117,7 @@ BI.MultiSelectPopupView = BI.inherit(BI.Widget, {
             valueFormatter: BI.emptyFn,
             itemsCreator: BI.emptyFn,
             onLoaded: BI.emptyFn,
-            itemHeight: 24,
+            itemHeight: BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT,
         });
     },
 
@@ -53106,7 +53198,7 @@ BI.MultiSelectPopupView.EVENT_CLICK_CLEAR = "EVENT_CLICK_CLEAR";
 BI.shortcut("bi.multi_select_popup_view", BI.MultiSelectPopupView);
 
 /***/ }),
-/* 603 */
+/* 604 */
 /***/ (function(module, exports) {
 
 /**
@@ -53124,7 +53216,7 @@ BI.MultiSelectNoBarPopupView = BI.inherit(BI.Widget, {
             maxHeight: 400,
             valueFormatter: BI.emptyFn,
             itemsCreator: BI.emptyFn,
-            itemHeight: 24,
+            itemHeight: BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT,
             onLoaded: BI.emptyFn
         });
     },
@@ -53202,7 +53294,7 @@ BI.MultiSelectNoBarPopupView.EVENT_CLICK_CLEAR = "EVENT_CLICK_CLEAR";
 BI.shortcut("bi.multi_select_no_bar_popup_view", BI.MultiSelectNoBarPopupView);
 
 /***/ }),
-/* 604 */
+/* 605 */
 /***/ (function(module, exports) {
 
 /**
@@ -53360,7 +53452,7 @@ BI.MultiSelectTrigger.EVENT_FOCUS = "EVENT_FOCUS";
 BI.shortcut("bi.multi_select_trigger", BI.MultiSelectTrigger);
 
 /***/ }),
-/* 605 */
+/* 606 */
 /***/ (function(module, exports) {
 
 /**
@@ -53395,7 +53487,7 @@ BI.MultiSelectSearchInsertPane = BI.inherit(BI.Widget, {
         this.addNotMatchTip = BI.createWidget({
             type: "bi.label",
             text: BI.i18nText("BI-Basic_Click_To_Add_Text", ""),
-            height: this.constants.height,
+            height: BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT,
             cls: "bi-high-light",
             hgap: 5,
         });
@@ -53422,7 +53514,7 @@ BI.MultiSelectSearchInsertPane = BI.inherit(BI.Widget, {
             element: this,
             items: [{
                 el: this.addNotMatchTip,
-                height: this.constants.height,
+                height: BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT,
             }, {
                 el: this.loader,
             }],
@@ -53463,7 +53555,7 @@ BI.MultiSelectSearchInsertPane.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multi_select_search_insert_pane", BI.MultiSelectSearchInsertPane);
 
 /***/ }),
-/* 606 */
+/* 607 */
 /***/ (function(module, exports) {
 
 /**
@@ -53560,7 +53652,7 @@ BI.MultiSelectSearchLoader = BI.inherit(BI.Widget, {
             logic: {
                 dynamic: false
             },
-            height: this.options.itemHeight,
+            height: this.options.itemHeight || BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT,
             selected: this.isAllSelected(),
             cls: "bi-list-item-active",
             iconWrapperWidth: 36
@@ -53630,7 +53722,7 @@ BI.MultiSelectSearchLoader.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multi_select_search_loader", BI.MultiSelectSearchLoader);
 
 /***/ }),
-/* 607 */
+/* 608 */
 /***/ (function(module, exports) {
 
 /**
@@ -53720,7 +53812,7 @@ BI.MultiSelectSearchPane.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multi_select_search_pane", BI.MultiSelectSearchPane);
 
 /***/ }),
-/* 608 */
+/* 609 */
 /***/ (function(module, exports) {
 
 /**
@@ -53825,7 +53917,7 @@ BI.shortcut("bi.multi_select_check_selected_button", BI.MultiSelectCheckSelected
 
 
 /***/ }),
-/* 609 */
+/* 610 */
 /***/ (function(module, exports) {
 
 /**
@@ -53933,7 +54025,7 @@ BI.shortcut("bi.multi_select_editor", BI.MultiSelectEditor);
 
 
 /***/ }),
-/* 610 */
+/* 611 */
 /***/ (function(module, exports) {
 
 /**
@@ -54152,7 +54244,7 @@ BI.SelectPatchEditor.EVENT_BLUR = "EVENT_BLUR";
 BI.shortcut("bi.select_patch_editor", BI.SelectPatchEditor);
 
 /***/ }),
-/* 611 */
+/* 612 */
 /***/ (function(module, exports) {
 
 /**
@@ -54354,7 +54446,7 @@ BI.shortcut("bi.multi_select_insert_searcher", BI.MultiSelectInsertSearcher);
 
 
 /***/ }),
-/* 612 */
+/* 613 */
 /***/ (function(module, exports) {
 
 /**
@@ -54554,7 +54646,7 @@ BI.shortcut("bi.multi_select_searcher", BI.MultiSelectSearcher);
 
 
 /***/ }),
-/* 613 */
+/* 614 */
 /***/ (function(module, exports) {
 
 /**
@@ -54671,7 +54763,7 @@ BI.MultiSelectCheckSelectedSwitcher.EVENT_AFTER_HIDEVIEW = "EVENT_AFTER_HIDEVIEW
 BI.shortcut("bi.multi_select_check_selected_switcher", BI.MultiSelectCheckSelectedSwitcher);
 
 /***/ }),
-/* 614 */
+/* 615 */
 /***/ (function(module, exports) {
 
 /**
@@ -54683,8 +54775,8 @@ BI.MultiSelectInsertList = BI.inherit(BI.Single, {
             baseCls: "bi-multi-select-insert-list",
             itemsCreator: BI.emptyFn,
             valueFormatter: BI.emptyFn,
-            searcherHeight: 24,
-            itemHeight: 24
+            searcherHeight: BI.SIZE_CONSANTS.TRIGGER_HEIGHT,
+            itemHeight: BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT,
         });
     },
     _init: function () {
@@ -54747,7 +54839,7 @@ BI.MultiSelectInsertList = BI.inherit(BI.Single, {
                 ref: function (ref) {
                     self.editor = ref;
                 },
-                height: o.searcherHeight,
+                height: o.searcherHeight || BI.SIZE_CONSANTS.TRIGGER_HEIGHT,
             },
             isAutoSearch: false,
             isAutoSync: false,
@@ -54840,7 +54932,7 @@ BI.MultiSelectInsertList = BI.inherit(BI.Single, {
             element: this,
             items: [{
                 el: this.trigger,
-                height: o.searcherHeight
+                height: o.searcherHeight || BI.SIZE_CONSANTS.TRIGGER_HEIGHT,
             }, {
                 el: this.adapter,
                 height: "fill"
@@ -54851,7 +54943,7 @@ BI.MultiSelectInsertList = BI.inherit(BI.Single, {
             element: this,
             items: [{
                 el: this.searcherPane,
-                top: o.searcherHeight,
+                top: o.searcherHeight || BI.SIZE_CONSANTS.TRIGGER_HEIGHT,
                 bottom: 0,
                 left: 0,
                 right: 0
@@ -55015,7 +55107,7 @@ BI.shortcut("bi.multi_select_insert_list", BI.MultiSelectInsertList);
 
 
 /***/ }),
-/* 615 */
+/* 616 */
 /***/ (function(module, exports) {
 
 /**
@@ -55027,7 +55119,7 @@ BI.MultiSelectInsertNoBarList = BI.inherit(BI.Single, {
             baseCls: "bi-multi-select-insert-list",
             itemsCreator: BI.emptyFn,
             valueFormatter: BI.emptyFn,
-            searcherHeight: 24
+            searcherHeight: BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT,
         });
     },
     _init: function () {
@@ -55364,7 +55456,7 @@ BI.MultiSelectInsertNoBarList.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multi_select_insert_no_bar_list", BI.MultiSelectInsertNoBarList);
 
 /***/ }),
-/* 616 */
+/* 617 */
 /***/ (function(module, exports) {
 
 /**
@@ -55377,7 +55469,7 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
             itemsCreator: BI.emptyFn,
             valueFormatter: BI.emptyFn,
             searcherHeight: 24,
-            itemHeight: 24
+            itemHeight: BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT,
         });
     },
     _init: function () {
@@ -55727,7 +55819,7 @@ BI.MultiSelectList.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multi_select_list", BI.MultiSelectList);
 
 /***/ }),
-/* 617 */
+/* 618 */
 /***/ (function(module, exports) {
 
 /**
@@ -55904,7 +55996,7 @@ BI.shortcut("bi.multi_select_tree", BI.MultiSelectTree);
 
 
 /***/ }),
-/* 618 */
+/* 619 */
 /***/ (function(module, exports) {
 
 /**
@@ -55967,7 +56059,7 @@ BI.MultiSelectTreePopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multi_select_tree_popup", BI.MultiSelectTreePopup);
 
 /***/ }),
-/* 619 */
+/* 620 */
 /***/ (function(module, exports) {
 
 /**
@@ -56091,7 +56183,7 @@ BI.MultiTreeCheckPane.EVENT_CONTINUE_CLICK = "EVENT_CONTINUE_CLICK";
 BI.shortcut("bi.multi_tree_check_pane", BI.MultiTreeCheckPane);
 
 /***/ }),
-/* 620 */
+/* 621 */
 /***/ (function(module, exports) {
 
 /**
@@ -56455,7 +56547,7 @@ BI.shortcut("bi.multi_tree_combo", BI.MultiTreeCombo);
 
 
 /***/ }),
-/* 621 */
+/* 622 */
 /***/ (function(module, exports) {
 
 /**
@@ -56834,7 +56926,7 @@ BI.shortcut("bi.multi_tree_insert_combo", BI.MultiTreeInsertCombo);
 
 
 /***/ }),
-/* 622 */
+/* 623 */
 /***/ (function(module, exports) {
 
 /**
@@ -57237,7 +57329,7 @@ BI.shortcut("bi.multi_tree_list_combo", BI.MultiTreeListCombo);
 
 
 /***/ }),
-/* 623 */
+/* 624 */
 /***/ (function(module, exports) {
 
 /**
@@ -57344,7 +57436,7 @@ BI.MultiTreePopup.EVENT_AFTERINIT = "EVENT_AFTERINIT";
 BI.shortcut("bi.multi_tree_popup_view", BI.MultiTreePopup);
 
 /***/ }),
-/* 624 */
+/* 625 */
 /***/ (function(module, exports) {
 
 /**
@@ -57417,7 +57509,7 @@ BI.MultiTreeCheckSelectedButton.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multi_tree_check_selected_button", BI.MultiTreeCheckSelectedButton);
 
 /***/ }),
-/* 625 */
+/* 626 */
 /***/ (function(module, exports) {
 
 /**
@@ -57541,7 +57633,7 @@ BI.MultiTreeSearchInsertPane.EVENT_ADD_ITEM = "EVENT_ADD_ITEM";
 BI.shortcut("bi.multi_tree_search_insert_pane", BI.MultiTreeSearchInsertPane);
 
 /***/ }),
-/* 626 */
+/* 627 */
 /***/ (function(module, exports) {
 
 /**
@@ -57622,7 +57714,7 @@ BI.MultiTreeSearchPane.EVENT_CLICK_CLEAR = "EVENT_CLICK_CLEAR";
 BI.shortcut("bi.multi_tree_search_pane", BI.MultiTreeSearchPane);
 
 /***/ }),
-/* 627 */
+/* 628 */
 /***/ (function(module, exports) {
 
 /**
@@ -57792,7 +57884,7 @@ BI.shortcut("bi.multi_list_tree_searcher", BI.MultiListTreeSearcher);
 
 
 /***/ }),
-/* 628 */
+/* 629 */
 /***/ (function(module, exports) {
 
 /**
@@ -57994,7 +58086,7 @@ BI.shortcut("bi.multi_tree_searcher", BI.MultiTreeSearcher);
 
 
 /***/ }),
-/* 629 */
+/* 630 */
 /***/ (function(module, exports) {
 
 /**
@@ -58153,7 +58245,7 @@ BI.NumberEditor.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.number_editor", BI.NumberEditor);
 
 /***/ }),
-/* 630 */
+/* 631 */
 /***/ (function(module, exports) {
 
 // 小于号的值为：0，小于等于号的值为:1
@@ -58701,7 +58793,7 @@ BI.NumberInterval.EVENT_ERROR = "EVENT_ERROR";
 BI.shortcut("bi.number_interval", BI.NumberInterval);
 
 /***/ }),
-/* 631 */
+/* 632 */
 /***/ (function(module, exports) {
 
 BI.NumberIntervalSingleEidtor = BI.inherit(BI.Single, {
@@ -58790,7 +58882,7 @@ BI.NumberIntervalSingleEidtor.EVENT_CONFIRM = "EVENT_CONFIRM";
 BI.shortcut("bi.number_interval_single_editor", BI.NumberIntervalSingleEidtor);
 
 /***/ }),
-/* 632 */
+/* 633 */
 /***/ (function(module, exports) {
 
 /**
@@ -59277,7 +59369,7 @@ BI.shortcut("bi.search_multi_text_value_combo", BI.SearchMultiTextValueCombo);
 
 
 /***/ }),
-/* 633 */
+/* 634 */
 /***/ (function(module, exports) {
 
 BI.SearchMultiSelectTrigger = BI.inherit(BI.Trigger, {
@@ -59437,7 +59529,7 @@ BI.shortcut("bi.search_multi_select_trigger", BI.SearchMultiSelectTrigger);
 
 
 /***/ }),
-/* 634 */
+/* 635 */
 /***/ (function(module, exports) {
 
 /**
@@ -59619,7 +59711,7 @@ BI.SearchMultiSelectLoader.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.search_multi_select_loader", BI.SearchMultiSelectLoader);
 
 /***/ }),
-/* 635 */
+/* 636 */
 /***/ (function(module, exports) {
 
 BI.SearchMultiSelectPopupView = BI.inherit(BI.Widget, {
@@ -59712,7 +59804,7 @@ BI.SearchMultiSelectPopupView.EVENT_CLICK_CLEAR = "EVENT_CLICK_CLEAR";
 BI.shortcut("bi.search_multi_select_popup_view", BI.SearchMultiSelectPopupView);
 
 /***/ }),
-/* 636 */
+/* 637 */
 /***/ (function(module, exports) {
 
 BI.SearchMultiSelectSearcher = BI.inherit(BI.Widget, {
@@ -59893,7 +59985,7 @@ BI.shortcut("bi.search_multi_select_searcher", BI.SearchMultiSelectSearcher);
 
 
 /***/ }),
-/* 637 */
+/* 638 */
 /***/ (function(module, exports) {
 
 /**
@@ -59984,7 +60076,7 @@ BI.SelectTreeFirstPlusGroupNode = BI.inherit(BI.NodeButton, {
 BI.shortcut("bi.select_tree_first_plus_group_node", BI.SelectTreeFirstPlusGroupNode);
 
 /***/ }),
-/* 638 */
+/* 639 */
 /***/ (function(module, exports) {
 
 /**
@@ -60075,7 +60167,7 @@ BI.SelectTreeLastPlusGroupNode = BI.inherit(BI.NodeButton, {
 BI.shortcut("bi.select_tree_last_plus_group_node", BI.SelectTreeLastPlusGroupNode);
 
 /***/ }),
-/* 639 */
+/* 640 */
 /***/ (function(module, exports) {
 
 /**
@@ -60166,7 +60258,7 @@ BI.SelectTreeMidPlusGroupNode = BI.inherit(BI.NodeButton, {
 BI.shortcut("bi.select_tree_mid_plus_group_node", BI.SelectTreeMidPlusGroupNode);
 
 /***/ }),
-/* 640 */
+/* 641 */
 /***/ (function(module, exports) {
 
 /**
@@ -60257,7 +60349,7 @@ BI.SelectTreePlusGroupNode = BI.inherit(BI.NodeButton, {
 BI.shortcut("bi.select_tree_plus_group_node", BI.SelectTreePlusGroupNode);
 
 /***/ }),
-/* 641 */
+/* 642 */
 /***/ (function(module, exports) {
 
 /**
@@ -60336,7 +60428,7 @@ BI.SelectTreeCombo = BI.inherit(BI.Widget, {
 BI.shortcut("bi.select_tree_combo", BI.SelectTreeCombo);
 
 /***/ }),
-/* 642 */
+/* 643 */
 /***/ (function(module, exports) {
 
 /**
@@ -60418,7 +60510,7 @@ BI.SelectTreeExpander = BI.inherit(BI.Widget, {
 BI.shortcut("bi.select_tree_expander", BI.SelectTreeExpander);
 
 /***/ }),
-/* 643 */
+/* 644 */
 /***/ (function(module, exports) {
 
 /**
@@ -60524,7 +60616,7 @@ BI.SelectTreePopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.select_level_tree", BI.SelectTreePopup);
 
 /***/ }),
-/* 644 */
+/* 645 */
 /***/ (function(module, exports) {
 
 /**
@@ -60685,7 +60777,7 @@ BI.shortcut("bi.single_select_search_loader", BI.SingleSelectSearchLoader);
 
 
 /***/ }),
-/* 645 */
+/* 646 */
 /***/ (function(module, exports) {
 
 /**
@@ -60785,7 +60877,7 @@ BI.SingleSelectSearchInsertPane.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.single_select_search_insert_pane", BI.SingleSelectSearchInsertPane);
 
 /***/ }),
-/* 646 */
+/* 647 */
 /***/ (function(module, exports) {
 
 /**
@@ -60891,7 +60983,7 @@ BI.SingleSelectSearchPane.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.single_select_search_pane", BI.SingleSelectSearchPane);
 
 /***/ }),
-/* 647 */
+/* 648 */
 /***/ (function(module, exports) {
 
 /**
@@ -61160,7 +61252,7 @@ BI.shortcut("bi.single_select_combo", BI.SingleSelectCombo);
 
 
 /***/ }),
-/* 648 */
+/* 649 */
 /***/ (function(module, exports) {
 
 /**
@@ -61405,7 +61497,7 @@ BI.SingleSelectInsertCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
 BI.shortcut("bi.single_select_insert_combo", BI.SingleSelectInsertCombo);
 
 /***/ }),
-/* 649 */
+/* 650 */
 /***/ (function(module, exports) {
 
 /**
@@ -61574,7 +61666,7 @@ BI.shortcut("bi.single_select_list", BI.SingleSelectList);
 
 
 /***/ }),
-/* 650 */
+/* 651 */
 /***/ (function(module, exports) {
 
 /**
@@ -61747,7 +61839,7 @@ BI.shortcut("bi.single_select_loader", BI.SingleSelectLoader);
 
 
 /***/ }),
-/* 651 */
+/* 652 */
 /***/ (function(module, exports) {
 
 /**
@@ -61830,7 +61922,7 @@ BI.SingleSelectPopupView.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.single_select_popup_view", BI.SingleSelectPopupView);
 
 /***/ }),
-/* 652 */
+/* 653 */
 /***/ (function(module, exports) {
 
 /**
@@ -61973,7 +62065,7 @@ BI.SingleSelectTrigger.EVENT_BLUR = "EVENT_BLUR";
 BI.shortcut("bi.single_select_trigger", BI.SingleSelectTrigger);
 
 /***/ }),
-/* 653 */
+/* 654 */
 /***/ (function(module, exports) {
 
 /**
@@ -62184,7 +62276,7 @@ BI.shortcut("bi.single_select_insert_list", BI.SingleSelectInsertList);
 
 
 /***/ }),
-/* 654 */
+/* 655 */
 /***/ (function(module, exports) {
 
 /**
@@ -62281,7 +62373,7 @@ BI.SingleSelectEditor.EVENT_BLUR = "EVENT_BLUR";
 BI.shortcut("bi.single_select_editor", BI.SingleSelectEditor);
 
 /***/ }),
-/* 655 */
+/* 656 */
 /***/ (function(module, exports) {
 
 /**
@@ -62448,7 +62540,7 @@ BI.shortcut("bi.single_select_searcher", BI.SingleSelectSearcher);
 
 
 /***/ }),
-/* 656 */
+/* 657 */
 /***/ (function(module, exports) {
 
 BI.SignTextEditor = BI.inherit(BI.Widget, {
@@ -62648,7 +62740,7 @@ BI.SignTextEditor.EVENT_CLICK_LABEL = "EVENT_CLICK_LABEL";
 BI.shortcut("bi.sign_text_editor", BI.SignTextEditor);
 
 /***/ }),
-/* 657 */
+/* 658 */
 /***/ (function(module, exports) {
 
 /**
@@ -62689,7 +62781,7 @@ BI.SliderIconButton = BI.inherit(BI.Widget, {
 BI.shortcut("bi.single_slider_button", BI.SliderIconButton);
 
 /***/ }),
-/* 658 */
+/* 659 */
 /***/ (function(module, exports) {
 
 /**
@@ -63036,7 +63128,7 @@ BI.SingleSlider.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.single_slider", BI.SingleSlider);
 
 /***/ }),
-/* 659 */
+/* 660 */
 /***/ (function(module, exports) {
 
 /**
@@ -63352,7 +63444,7 @@ BI.SingleSliderLabel.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.single_slider_label", BI.SingleSliderLabel);
 
 /***/ }),
-/* 660 */
+/* 661 */
 /***/ (function(module, exports) {
 
 /**
@@ -63642,7 +63734,7 @@ BI.SingleSliderNormal.EVENT_DRAG = "EVENT_DRAG";
 BI.shortcut("bi.single_slider_normal", BI.SingleSliderNormal);
 
 /***/ }),
-/* 661 */
+/* 662 */
 /***/ (function(module, exports) {
 
 /**
@@ -63727,7 +63819,7 @@ BI.SingleTreeCombo.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
 BI.shortcut("bi.single_tree_combo", BI.SingleTreeCombo);
 
 /***/ }),
-/* 662 */
+/* 663 */
 /***/ (function(module, exports) {
 
 /**
@@ -63798,7 +63890,7 @@ BI.SingleTreePopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.single_level_tree", BI.SingleTreePopup);
 
 /***/ }),
-/* 663 */
+/* 664 */
 /***/ (function(module, exports) {
 
 /**
@@ -63868,7 +63960,7 @@ BI.shortcut("bi.single_tree_trigger", BI.SingleTreeTrigger);
 
 
 /***/ }),
-/* 664 */
+/* 665 */
 /***/ (function(module, exports) {
 
 /**
@@ -63971,7 +64063,7 @@ BI.TextValueDownListCombo.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.text_value_down_list_combo", BI.TextValueDownListCombo);
 
 /***/ }),
-/* 665 */
+/* 666 */
 /***/ (function(module, exports) {
 
 /**
@@ -64031,7 +64123,7 @@ BI.DownListSelectTextTrigger = BI.inherit(BI.Trigger, {
 BI.shortcut("bi.down_list_select_text_trigger", BI.DownListSelectTextTrigger);
 
 /***/ }),
-/* 666 */
+/* 667 */
 /***/ (function(module, exports) {
 
 !(function () {
@@ -64130,7 +64222,7 @@ BI.shortcut("bi.down_list_select_text_trigger", BI.DownListSelectTextTrigger);
 })();
 
 /***/ }),
-/* 667 */
+/* 668 */
 /***/ (function(module, exports) {
 
 /**
@@ -64368,7 +64460,7 @@ BI.shortcut("bi.down_list_select_text_trigger", BI.DownListSelectTextTrigger);
 })();
 
 /***/ }),
-/* 668 */
+/* 669 */
 /***/ (function(module, exports) {
 
 !(function () {
@@ -64560,7 +64652,7 @@ BI.shortcut("bi.down_list_select_text_trigger", BI.DownListSelectTextTrigger);
 })();
 
 /***/ }),
-/* 669 */
+/* 670 */
 /***/ (function(module, exports) {
 
 /**
@@ -64775,7 +64867,7 @@ BI.shortcut("bi.date_interval", BI.DateInterval);
 
 
 /***/ }),
-/* 670 */
+/* 671 */
 /***/ (function(module, exports) {
 
 /**
@@ -64983,7 +65075,7 @@ BI.TimeInterval.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.time_interval", BI.TimeInterval);
 
 /***/ }),
-/* 671 */
+/* 672 */
 /***/ (function(module, exports) {
 
 /**
@@ -65108,7 +65200,7 @@ BI.shortcut("bi.time_interval", BI.TimeInterval);
 })();
 
 /***/ }),
-/* 672 */
+/* 673 */
 /***/ (function(module, exports) {
 
 /**
@@ -65135,7 +65227,7 @@ BI.DynamicYearCard = BI.inherit(BI.Widget, {
                 type: "bi.label",
                 text: BI.i18nText("BI-Multi_Date_Relative_Current_Time"),
                 textAlign: "left",
-                height: 24
+                height: BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT,
             }, {
                 type: "bi.dynamic_date_param_item",
                 ref: function () {
@@ -65232,7 +65324,7 @@ BI.DynamicYearCard.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.dynamic_year_card", BI.DynamicYearCard);
 
 /***/ }),
-/* 673 */
+/* 674 */
 /***/ (function(module, exports) {
 
 /**
@@ -65431,7 +65523,7 @@ BI.StaticYearCard.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.static_year_card", BI.StaticYearCard);
 
 /***/ }),
-/* 674 */
+/* 675 */
 /***/ (function(module, exports) {
 
 BI.DynamicYearCombo = BI.inherit(BI.Widget, {
@@ -65648,7 +65740,7 @@ BI.extend(BI.DynamicYearCombo, {
 
 
 /***/ }),
-/* 675 */
+/* 676 */
 /***/ (function(module, exports) {
 
 /**
@@ -65661,7 +65753,6 @@ BI.extend(BI.DynamicYearCombo, {
 BI.DynamicYearPopup = BI.inherit(BI.Widget, {
     constants: {
         tabHeight: 30,
-        buttonHeight: 24
     },
 
     props: {
@@ -65686,7 +65777,7 @@ BI.DynamicYearPopup = BI.inherit(BI.Widget, {
                     items: [[{
                         type: "bi.text_button",
                         cls: "bi-split-top bi-high-light",
-                        textHeight: c.buttonHeight - 1,
+                        textHeight: BI.SIZE_CONSANTS.TOOL_BAR_HEIGHT - 1,
                         shadow: true,
                         text: BI.i18nText("BI-Basic_Clear"),
                         listeners: [{
@@ -65697,7 +65788,7 @@ BI.DynamicYearPopup = BI.inherit(BI.Widget, {
                         }]
                     }, {
                         type: "bi.text_button",
-                        textHeight: c.buttonHeight - 1,
+                        textHeight: BI.SIZE_CONSANTS.TOOL_BAR_HEIGHT - 1,
                         cls: "bi-split-left bi-split-right bi-high-light bi-split-top",
                         shadow: true,
                         text: BI.i18nText("BI-Basic_Current_Year"),
@@ -65714,7 +65805,7 @@ BI.DynamicYearPopup = BI.inherit(BI.Widget, {
                     }, {
                         type: "bi.text_button",
                         cls: "bi-split-top bi-high-light",
-                        textHeight: c.buttonHeight - 1,
+                        textHeight: BI.SIZE_CONSANTS.TOOL_BAR_HEIGHT - 1,
                         shadow: true,
                         text: BI.i18nText("BI-Basic_OK"),
                         listeners: [{
@@ -65729,7 +65820,7 @@ BI.DynamicYearPopup = BI.inherit(BI.Widget, {
                             }
                         }]
                     }]],
-                    height: 24
+                    height: BI.SIZE_CONSANTS.TOOL_BAR_HEIGHT,
                 },
             }]
         };
@@ -65900,7 +65991,7 @@ BI.DynamicYearPopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.dynamic_year_popup", BI.DynamicYearPopup);
 
 /***/ }),
-/* 676 */
+/* 677 */
 /***/ (function(module, exports) {
 
 BI.DynamicYearTrigger = BI.inherit(BI.Trigger, {
@@ -66095,7 +66186,7 @@ BI.DynamicYearTrigger.EVENT_VALID = "EVENT_VALID";
 BI.shortcut("bi.dynamic_year_trigger", BI.DynamicYearTrigger);
 
 /***/ }),
-/* 677 */
+/* 678 */
 /***/ (function(module, exports) {
 
 /**
@@ -66308,7 +66399,7 @@ BI.YearInterval.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
 BI.shortcut("bi.year_interval", BI.YearInterval);
 
 /***/ }),
-/* 678 */
+/* 679 */
 /***/ (function(module, exports) {
 
 /**
@@ -66332,7 +66423,7 @@ BI.DynamicYearMonthCard = BI.inherit(BI.Widget, {
                 type: "bi.label",
                 text: BI.i18nText("BI-Multi_Date_Relative_Current_Time"),
                 textAlign: "left",
-                height: 24
+                height: BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT,
             }, {
                 type: "bi.vertical",
                 ref: function (_ref) {
@@ -66479,7 +66570,7 @@ BI.DynamicYearMonthCard.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.dynamic_year_month_card", BI.DynamicYearMonthCard);
 
 /***/ }),
-/* 679 */
+/* 680 */
 /***/ (function(module, exports) {
 
 BI.StaticYearMonthCard = BI.inherit(BI.Widget, {
@@ -66509,7 +66600,7 @@ BI.StaticYearMonthCard = BI.inherit(BI.Widget, {
                     whiteSpace: "nowrap",
                     once: false,
                     forceSelected: true,
-                    height: 23,
+                    height: BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT - 1,
                     width: 38,
                     value: td,
                     text: td,
@@ -66561,7 +66652,7 @@ BI.StaticYearMonthCard = BI.inherit(BI.Widget, {
                         columns: 2,
                         rows: 6,
                         columnSize: [1 / 2, 1 / 2],
-                        rowSize: 25
+                        rowSize: BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT + 1
                     })), {
                         type: "bi.center_adapt",
                         vgap: 1,
@@ -66648,7 +66739,7 @@ BI.shortcut("bi.static_year_month_card", BI.StaticYearMonthCard);
 
 
 /***/ }),
-/* 680 */
+/* 681 */
 /***/ (function(module, exports) {
 
 BI.DynamicYearMonthCombo = BI.inherit(BI.Single, {
@@ -66879,7 +66970,7 @@ BI.extend(BI.DynamicYearMonthCombo, {
 
 
 /***/ }),
-/* 681 */
+/* 682 */
 /***/ (function(module, exports) {
 
 /**
@@ -66892,7 +66983,6 @@ BI.extend(BI.DynamicYearMonthCombo, {
 BI.DynamicYearMonthPopup = BI.inherit(BI.Widget, {
     constants: {
         tabHeight: 30,
-        buttonHeight: 24
     },
 
     props: {
@@ -66917,7 +67007,7 @@ BI.DynamicYearMonthPopup = BI.inherit(BI.Widget, {
                     items: [[{
                         type: "bi.text_button",
                         cls: "bi-split-top bi-high-light",
-                        textHeight: c.buttonHeight - 1,
+                        textHeight: BI.SIZE_CONSANTS.TOOL_BAR_HEIGHT - 1,
                         shadow: true,
                         text: BI.i18nText("BI-Basic_Clear"),
                         listeners: [{
@@ -66929,7 +67019,7 @@ BI.DynamicYearMonthPopup = BI.inherit(BI.Widget, {
                     }, {
                         type: "bi.text_button",
                         cls: "bi-split-left bi-split-right bi-high-light bi-split-top",
-                        textHeight: c.buttonHeight - 1,
+                        textHeight: BI.SIZE_CONSANTS.TOOL_BAR_HEIGHT - 1,
                         shadow: true,
                         text: BI.i18nText("BI-Basic_Current_Month"),
                         disabled: this._checkTodayValid(),
@@ -66945,7 +67035,7 @@ BI.DynamicYearMonthPopup = BI.inherit(BI.Widget, {
                     }, {
                         type: "bi.text_button",
                         cls: "bi-split-top bi-high-light",
-                        textHeight: c.buttonHeight - 1,
+                        textHeight: BI.SIZE_CONSANTS.TOOL_BAR_HEIGHT - 1,
                         shadow: true,
                         text: BI.i18nText("BI-Basic_OK"),
                         listeners: [{
@@ -66960,7 +67050,7 @@ BI.DynamicYearMonthPopup = BI.inherit(BI.Widget, {
                             }
                         }]
                     }]],
-                    height: 24
+                    height: BI.SIZE_CONSANTS.TOOL_BAR_HEIGHT
                 },
             }]
         };
@@ -67126,7 +67216,7 @@ BI.DynamicYearMonthPopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.dynamic_year_month_popup", BI.DynamicYearMonthPopup);
 
 /***/ }),
-/* 682 */
+/* 683 */
 /***/ (function(module, exports) {
 
 BI.DynamicYearMonthTrigger = BI.inherit(BI.Trigger, {
@@ -67404,7 +67494,7 @@ BI.DynamicYearMonthTrigger.EVENT_KEY_DOWN = "EVENT_KEY_DOWN";
 BI.shortcut("bi.dynamic_year_month_trigger", BI.DynamicYearMonthTrigger);
 
 /***/ }),
-/* 683 */
+/* 684 */
 /***/ (function(module, exports) {
 
 BI.YearMonthInterval = BI.inherit(BI.Single, {
@@ -67616,7 +67706,7 @@ BI.shortcut("bi.year_month_interval", BI.YearMonthInterval);
 
 
 /***/ }),
-/* 684 */
+/* 685 */
 /***/ (function(module, exports) {
 
 /**
@@ -67640,7 +67730,7 @@ BI.DynamicYearQuarterCard = BI.inherit(BI.Widget, {
                 type: "bi.label",
                 text: BI.i18nText("BI-Multi_Date_Relative_Current_Time"),
                 textAlign: "left",
-                height: 24
+                height: BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT,
             }, {
                 type: "bi.vertical",
                 ref: function (_ref) {
@@ -67787,7 +67877,7 @@ BI.DynamicYearQuarterCard.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.dynamic_year_quarter_card", BI.DynamicYearQuarterCard);
 
 /***/ }),
-/* 685 */
+/* 686 */
 /***/ (function(module, exports) {
 
 BI.StaticYearQuarterCard = BI.inherit(BI.Widget, {
@@ -67820,7 +67910,7 @@ BI.StaticYearQuarterCard = BI.inherit(BI.Widget, {
                 whiteSpace: "nowrap",
                 once: false,
                 forceSelected: true,
-                height: 24,
+                height: BI.SIZE_CONSANTS.TOOL_BAR_HEIGHT,
                 ref: function (_ref) {
                     self.quarterMap[j + 1] = _ref;
                 }
@@ -67944,7 +68034,7 @@ BI.shortcut("bi.static_year_quarter_card", BI.StaticYearQuarterCard);
 
 
 /***/ }),
-/* 686 */
+/* 687 */
 /***/ (function(module, exports) {
 
 BI.DynamicYearQuarterCombo = BI.inherit(BI.Widget, {
@@ -68175,7 +68265,7 @@ BI.extend(BI.DynamicYearQuarterCombo, {
 
 
 /***/ }),
-/* 687 */
+/* 688 */
 /***/ (function(module, exports) {
 
 BI.DynamicYearQuarterPopup = BI.inherit(BI.Widget, {
@@ -68207,7 +68297,7 @@ BI.DynamicYearQuarterPopup = BI.inherit(BI.Widget, {
                         type: "bi.text_button",
                         cls: "bi-split-top bi-high-light",
                         shadow: true,
-                        textHeight: c.buttonHeight - 1,
+                        textHeight: BI.SIZE_CONSANTS.TOOL_BAR_HEIGHT - 1,
                         text: BI.i18nText("BI-Basic_Clear"),
                         listeners: [{
                             eventName: BI.TextButton.EVENT_CHANGE,
@@ -68218,7 +68308,7 @@ BI.DynamicYearQuarterPopup = BI.inherit(BI.Widget, {
                     }, {
                         type: "bi.text_button",
                         cls: "bi-split-left bi-split-right bi-high-light bi-split-top",
-                        textHeight: c.buttonHeight - 1,
+                        textHeight: BI.SIZE_CONSANTS.TOOL_BAR_HEIGHT - 1,
                         shadow: true,
                         text: BI.i18nText("BI-Basic_Current_Quarter"),
                         disabled: this._checkTodayValid(),
@@ -68235,7 +68325,7 @@ BI.DynamicYearQuarterPopup = BI.inherit(BI.Widget, {
                         type: "bi.text_button",
                         cls: "bi-split-top bi-high-light",
                         shadow: true,
-                        textHeight: c.buttonHeight - 1,
+                        textHeight: BI.SIZE_CONSANTS.TOOL_BAR_HEIGHT - 1,
                         text: BI.i18nText("BI-Basic_OK"),
                         listeners: [{
                             eventName: BI.TextButton.EVENT_CHANGE,
@@ -68249,7 +68339,7 @@ BI.DynamicYearQuarterPopup = BI.inherit(BI.Widget, {
                             }
                         }]
                     }]],
-                    height: 24
+                    height: BI.SIZE_CONSANTS.TOOL_BAR_HEIGHT
                 },
             }]
         };
@@ -68415,7 +68505,7 @@ BI.DynamicYearQuarterPopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.dynamic_year_quarter_popup", BI.DynamicYearQuarterPopup);
 
 /***/ }),
-/* 688 */
+/* 689 */
 /***/ (function(module, exports) {
 
 BI.DynamicYearQuarterTrigger = BI.inherit(BI.Trigger, {
@@ -68677,7 +68767,7 @@ BI.DynamicYearQuarterTrigger.EVENT_VALID = "EVENT_VALID";
 BI.shortcut("bi.dynamic_year_quarter_trigger", BI.DynamicYearQuarterTrigger);
 
 /***/ }),
-/* 689 */
+/* 690 */
 /***/ (function(module, exports) {
 
 /**
@@ -68888,7 +68978,7 @@ BI.YearQuarterInterval.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
 BI.shortcut("bi.year_quarter_interval", BI.YearQuarterInterval);
 
 /***/ }),
-/* 690 */
+/* 691 */
 /***/ (function(module, exports) {
 
 /**
@@ -68994,7 +69084,7 @@ BI.AbstractAllValueChooser = BI.inherit(BI.Widget, {
 });
 
 /***/ }),
-/* 691 */
+/* 692 */
 /***/ (function(module, exports) {
 
 /**
@@ -69076,7 +69166,7 @@ BI.shortcut("bi.all_value_chooser_combo", BI.AllValueChooserCombo);
 
 
 /***/ }),
-/* 692 */
+/* 693 */
 /***/ (function(module, exports) {
 
 /**
@@ -69150,7 +69240,7 @@ BI.shortcut("bi.all_value_chooser_pane", BI.AllValueChooserPane);
 
 
 /***/ }),
-/* 693 */
+/* 694 */
 /***/ (function(module, exports) {
 
 BI.AllValueMultiTextValueCombo = BI.inherit(BI.Widget, {
@@ -69221,7 +69311,7 @@ BI.shortcut("bi.all_value_multi_text_value_combo", BI.AllValueMultiTextValueComb
 
 
 /***/ }),
-/* 694 */
+/* 695 */
 /***/ (function(module, exports) {
 
 BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
@@ -70081,7 +70171,7 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
 
 
 /***/ }),
-/* 695 */
+/* 696 */
 /***/ (function(module, exports) {
 
 BI.AbstractListTreeValueChooser = BI.inherit(BI.AbstractTreeValueChooser, {
@@ -70373,7 +70463,7 @@ BI.AbstractListTreeValueChooser = BI.inherit(BI.AbstractTreeValueChooser, {
 });
 
 /***/ }),
-/* 696 */
+/* 697 */
 /***/ (function(module, exports) {
 
 /**
@@ -70493,7 +70583,7 @@ BI.shortcut("bi.list_tree_value_chooser_insert_combo", BI.ListTreeValueChooserIn
 
 
 /***/ }),
-/* 697 */
+/* 698 */
 /***/ (function(module, exports) {
 
 /**
@@ -70612,7 +70702,7 @@ BI.shortcut("bi.tree_value_chooser_insert_combo", BI.TreeValueChooserInsertCombo
 
 
 /***/ }),
-/* 698 */
+/* 699 */
 /***/ (function(module, exports) {
 
 /**
@@ -70735,7 +70825,7 @@ BI.shortcut("bi.tree_value_chooser_combo", BI.TreeValueChooserCombo);
 
 
 /***/ }),
-/* 699 */
+/* 700 */
 /***/ (function(module, exports) {
 
 /**
@@ -70803,7 +70893,7 @@ BI.shortcut("bi.tree_value_chooser_pane", BI.TreeValueChooserPane);
 
 
 /***/ }),
-/* 700 */
+/* 701 */
 /***/ (function(module, exports) {
 
 /**
@@ -70915,7 +71005,7 @@ BI.AbstractValueChooser = BI.inherit(BI.Widget, {
 });
 
 /***/ }),
-/* 701 */
+/* 702 */
 /***/ (function(module, exports) {
 
 /**
@@ -71025,7 +71115,7 @@ BI.shortcut("bi.value_chooser_insert_combo", BI.ValueChooserInsertCombo);
 
 
 /***/ }),
-/* 702 */
+/* 703 */
 /***/ (function(module, exports) {
 
 /**
@@ -71139,7 +71229,7 @@ BI.shortcut("bi.value_chooser_combo", BI.ValueChooserCombo);
 
 
 /***/ }),
-/* 703 */
+/* 704 */
 /***/ (function(module, exports) {
 
 /**
@@ -71241,7 +71331,7 @@ BI.shortcut("bi.value_chooser_no_bar_combo", BI.ValueChooserNoBarCombo);
 
 
 /***/ }),
-/* 704 */
+/* 705 */
 /***/ (function(module, exports) {
 
 /**
@@ -71317,20 +71407,20 @@ BI.shortcut("bi.value_chooser_pane", BI.ValueChooserPane);
 
 
 /***/ }),
-/* 705 */
+/* 706 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var _index = _interopRequireDefault(__webpack_require__(706));
+var _index = _interopRequireDefault(__webpack_require__(707));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 BI.extend(BI, _index["default"]);
 
 /***/ }),
-/* 706 */
+/* 707 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -72387,11 +72477,11 @@ Object.defineProperty(exports, "TreeValueChooserPane", {
 });
 exports["default"] = void 0;
 
-var _combo = __webpack_require__(707);
+var _combo = __webpack_require__(708);
 
 var _group = __webpack_require__(68);
 
-var _tab = __webpack_require__(708);
+var _tab = __webpack_require__(709);
 
 var _pane = __webpack_require__(16);
 
@@ -72399,23 +72489,23 @@ var _button = __webpack_require__(4);
 
 var _button2 = __webpack_require__(46);
 
-var _button3 = __webpack_require__(709);
+var _button3 = __webpack_require__(710);
 
-var _button4 = __webpack_require__(710);
+var _button4 = __webpack_require__(711);
 
-var _icontextitem = __webpack_require__(711);
+var _icontextitem = __webpack_require__(712);
 
-var _editor = __webpack_require__(712);
+var _editor = __webpack_require__(713);
 
-var _iframe = __webpack_require__(713);
+var _iframe = __webpack_require__(714);
 
-var _checkbox = __webpack_require__(714);
+var _checkbox = __webpack_require__(715);
 
-var _input = __webpack_require__(715);
+var _input = __webpack_require__(716);
 
 var _abstract = __webpack_require__(47);
 
-var _label = __webpack_require__(716);
+var _label = __webpack_require__(717);
 
 var _single = __webpack_require__(2);
 
@@ -72423,25 +72513,25 @@ var _text = __webpack_require__(69);
 
 var _trigger = __webpack_require__(48);
 
-var _icon = __webpack_require__(717);
+var _icon = __webpack_require__(718);
 
-var _item = __webpack_require__(718);
+var _item = __webpack_require__(719);
 
-var _combo2 = __webpack_require__(719);
+var _combo2 = __webpack_require__(720);
 
-var _combo3 = __webpack_require__(720);
+var _combo3 = __webpack_require__(721);
 
-var _combo4 = __webpack_require__(721);
+var _combo4 = __webpack_require__(722);
 
-var _combo5 = __webpack_require__(722);
+var _combo5 = __webpack_require__(723);
 
-var _editor2 = __webpack_require__(723);
+var _editor2 = __webpack_require__(724);
 
-var _editor3 = __webpack_require__(724);
+var _editor3 = __webpack_require__(725);
 
-var _loading_pane = __webpack_require__(725);
+var _loading_pane = __webpack_require__(726);
 
-var _allvalueMultitextvalue = __webpack_require__(726);
+var _allvalueMultitextvalue = __webpack_require__(727);
 
 var _abstract2 = __webpack_require__(30);
 
@@ -72449,15 +72539,15 @@ var _abstractTreevaluechooser = __webpack_require__(70);
 
 var _action = __webpack_require__(71);
 
-var _action2 = __webpack_require__(727);
+var _action2 = __webpack_require__(728);
 
 var _behavior = __webpack_require__(49);
 
-var _behavior2 = __webpack_require__(728);
+var _behavior2 = __webpack_require__(729);
 
-var _behavior3 = __webpack_require__(729);
+var _behavior3 = __webpack_require__(730);
 
-var decorator = _interopRequireWildcard(__webpack_require__(730));
+var decorator = _interopRequireWildcard(__webpack_require__(731));
 
 var _ob = __webpack_require__(29);
 
@@ -72465,257 +72555,257 @@ var _widget = __webpack_require__(1);
 
 var _layout = __webpack_require__(3);
 
-var _layout2 = __webpack_require__(731);
+var _layout2 = __webpack_require__(732);
 
-var _layout3 = __webpack_require__(732);
+var _layout3 = __webpack_require__(733);
 
-var _layout4 = __webpack_require__(733);
+var _layout4 = __webpack_require__(734);
 
-var _layout5 = __webpack_require__(734);
+var _layout5 = __webpack_require__(735);
 
-var _combo6 = __webpack_require__(735);
+var _combo6 = __webpack_require__(736);
 
-var _icon2 = __webpack_require__(736);
+var _icon2 = __webpack_require__(737);
 
-var _adapt = __webpack_require__(737);
+var _adapt = __webpack_require__(738);
 
-var _adapt2 = __webpack_require__(738);
+var _adapt2 = __webpack_require__(739);
 
-var _icontexticonitem = __webpack_require__(739);
+var _icontexticonitem = __webpack_require__(740);
 
-var _auto = __webpack_require__(740);
+var _auto = __webpack_require__(741);
 
-var _inline = __webpack_require__(741);
+var _inline = __webpack_require__(742);
 
-var _adapt3 = __webpack_require__(742);
+var _adapt3 = __webpack_require__(743);
 
 var _button5 = __webpack_require__(50);
 
 var _editor4 = __webpack_require__(72);
 
-var _icon3 = __webpack_require__(743);
+var _icon3 = __webpack_require__(744);
 
-var _layer = __webpack_require__(744);
+var _layer = __webpack_require__(745);
 
-var _combo7 = __webpack_require__(745);
+var _combo7 = __webpack_require__(746);
 
-var _dynamicdate = __webpack_require__(746);
+var _dynamicdate = __webpack_require__(747);
 
-var _customtree = __webpack_require__(747);
+var _customtree = __webpack_require__(748);
 
-var _tree = __webpack_require__(748);
+var _tree = __webpack_require__(749);
 
-var _nodeIcon = __webpack_require__(749);
+var _nodeIcon = __webpack_require__(750);
 
-var _itemMid = __webpack_require__(750);
+var _itemMid = __webpack_require__(751);
 
-var _itemFirst = __webpack_require__(751);
+var _itemFirst = __webpack_require__(752);
 
-var _itemLast = __webpack_require__(752);
+var _itemLast = __webpack_require__(753);
 
-var _editorText = __webpack_require__(753);
+var _editorText = __webpack_require__(754);
 
-var _editor5 = __webpack_require__(754);
+var _editor5 = __webpack_require__(755);
 
-var _absolute = __webpack_require__(755);
+var _absolute = __webpack_require__(756);
 
-var _adapt4 = __webpack_require__(756);
+var _adapt4 = __webpack_require__(757);
 
-var _layout6 = __webpack_require__(757);
+var _layout6 = __webpack_require__(758);
 
-var _adapt5 = __webpack_require__(758);
+var _adapt5 = __webpack_require__(759);
 
-var _adapt6 = __webpack_require__(759);
+var _adapt6 = __webpack_require__(760);
 
-var _multiselectInsert = __webpack_require__(760);
+var _multiselectInsert = __webpack_require__(761);
 
-var _multiselect = __webpack_require__(761);
+var _multiselect = __webpack_require__(762);
 
-var _editor6 = __webpack_require__(762);
+var _editor6 = __webpack_require__(763);
 
-var _multilayersingletree = __webpack_require__(763);
+var _multilayersingletree = __webpack_require__(764);
 
-var _colorchooser = __webpack_require__(764);
+var _colorchooser = __webpack_require__(765);
 
-var _a = __webpack_require__(765);
+var _a = __webpack_require__(766);
 
-var _html = __webpack_require__(766);
+var _html = __webpack_require__(767);
 
-var _switcher = __webpack_require__(767);
+var _switcher = __webpack_require__(768);
 
-var _loader = __webpack_require__(768);
+var _loader = __webpack_require__(769);
 
-var _pane2 = __webpack_require__(769);
+var _pane2 = __webpack_require__(770);
 
-var _layer2 = __webpack_require__(770);
+var _layer2 = __webpack_require__(771);
 
-var _toolbar = __webpack_require__(771);
+var _toolbar = __webpack_require__(772);
 
-var _list = __webpack_require__(772);
+var _list = __webpack_require__(773);
 
 var _abstract3 = __webpack_require__(73);
 
-var _combo8 = __webpack_require__(773);
+var _combo8 = __webpack_require__(774);
 
-var _editor7 = __webpack_require__(774);
+var _editor7 = __webpack_require__(775);
 
-var _item2 = __webpack_require__(775);
+var _item2 = __webpack_require__(776);
 
-var _dynamicdatetime = __webpack_require__(776);
+var _dynamicdatetime = __webpack_require__(777);
 
-var _multiTree = __webpack_require__(777);
+var _multiTree = __webpack_require__(778);
 
-var _middle = __webpack_require__(778);
+var _middle = __webpack_require__(779);
 
-var _group2 = __webpack_require__(779);
+var _group2 = __webpack_require__(780);
 
-var _layout7 = __webpack_require__(780);
+var _layout7 = __webpack_require__(781);
 
-var _icon4 = __webpack_require__(781);
+var _icon4 = __webpack_require__(782);
 
-var _searcher = __webpack_require__(782);
+var _searcher = __webpack_require__(783);
 
-var _combo9 = __webpack_require__(783);
+var _combo9 = __webpack_require__(784);
 
-var _combo10 = __webpack_require__(784);
+var _combo10 = __webpack_require__(785);
 
-var _comboTreevaluechooser = __webpack_require__(785);
+var _comboTreevaluechooser = __webpack_require__(786);
 
-var _radio = __webpack_require__(786);
+var _radio = __webpack_require__(787);
 
-var _multilayerselecttree = __webpack_require__(787);
+var _multilayerselecttree = __webpack_require__(788);
 
-var _multilayersingletree2 = __webpack_require__(788);
+var _multilayersingletree2 = __webpack_require__(789);
 
-var _multilayerdownlist = __webpack_require__(789);
+var _multilayerdownlist = __webpack_require__(790);
 
 var _treeview = __webpack_require__(52);
 
-var _multiTree2 = __webpack_require__(790);
+var _multiTree2 = __webpack_require__(791);
 
-var _itemSingleselect = __webpack_require__(791);
+var _itemSingleselect = __webpack_require__(792);
 
-var _singleselectInsert = __webpack_require__(792);
+var _singleselectInsert = __webpack_require__(793);
 
-var _singleselect = __webpack_require__(793);
+var _singleselect = __webpack_require__(794);
 
-var _layout8 = __webpack_require__(794);
+var _layout8 = __webpack_require__(795);
 
-var _combo11 = __webpack_require__(795);
+var _combo11 = __webpack_require__(796);
 
-var _time = __webpack_require__(796);
+var _time = __webpack_require__(797);
 
 var _listtreeview = __webpack_require__(74);
 
-var _listasynctree = __webpack_require__(797);
+var _listasynctree = __webpack_require__(798);
 
-var _asynctree = __webpack_require__(798);
+var _asynctree = __webpack_require__(799);
 
-var _multilayersingletree3 = __webpack_require__(799);
+var _multilayersingletree3 = __webpack_require__(800);
 
-var _multilayerselecttree2 = __webpack_require__(800);
+var _multilayerselecttree2 = __webpack_require__(801);
 
-var _multilayerdownlist2 = __webpack_require__(801);
+var _multilayerdownlist2 = __webpack_require__(802);
 
-var _multiTreeList = __webpack_require__(802);
+var _multiTreeList = __webpack_require__(803);
 
-var _multiTreeInsert = __webpack_require__(803);
+var _multiTreeInsert = __webpack_require__(804);
 
-var _combo12 = __webpack_require__(804);
+var _combo12 = __webpack_require__(805);
 
-var _switch = __webpack_require__(805);
+var _switch = __webpack_require__(806);
 
-var _layout9 = __webpack_require__(806);
+var _layout9 = __webpack_require__(807);
 
-var _editor8 = __webpack_require__(807);
+var _editor8 = __webpack_require__(808);
 
-var _trigger2 = __webpack_require__(808);
+var _trigger2 = __webpack_require__(809);
 
-var _triggerText = __webpack_require__(809);
+var _triggerText = __webpack_require__(810);
 
-var _dateinterval = __webpack_require__(810);
+var _dateinterval = __webpack_require__(811);
 
-var _datepane = __webpack_require__(811);
+var _datepane = __webpack_require__(812);
 
-var _pagerAll = __webpack_require__(812);
+var _pagerAll = __webpack_require__(813);
 
 var _layer3 = __webpack_require__(51);
 
-var _popup = __webpack_require__(813);
+var _popup = __webpack_require__(814);
 
-var _check = __webpack_require__(814);
+var _check = __webpack_require__(815);
 
-var _numberinterval = __webpack_require__(815);
+var _numberinterval = __webpack_require__(816);
 
-var _combo13 = __webpack_require__(816);
+var _combo13 = __webpack_require__(817);
 
-var _combo14 = __webpack_require__(817);
+var _combo14 = __webpack_require__(818);
 
-var _intervalslider = __webpack_require__(818);
+var _intervalslider = __webpack_require__(819);
 
-var _multiselectlist = __webpack_require__(819);
+var _multiselectlist = __webpack_require__(820);
 
-var _yearmonthinterval = __webpack_require__(820);
+var _yearmonthinterval = __webpack_require__(821);
 
-var _numbereditor = __webpack_require__(821);
+var _numbereditor = __webpack_require__(822);
 
-var _combo15 = __webpack_require__(822);
+var _combo15 = __webpack_require__(823);
 
-var _linear = __webpack_require__(823);
+var _linear = __webpack_require__(824);
 
-var _img = __webpack_require__(824);
+var _img = __webpack_require__(825);
 
-var _combo16 = __webpack_require__(825);
+var _combo16 = __webpack_require__(826);
 
-var _combo17 = __webpack_require__(826);
+var _combo17 = __webpack_require__(827);
 
-var _listview = __webpack_require__(827);
+var _listview = __webpack_require__(828);
 
-var _middleFloat = __webpack_require__(828);
+var _middleFloat = __webpack_require__(829);
 
-var _popup2 = __webpack_require__(829);
+var _popup2 = __webpack_require__(830);
 
 var _controller = __webpack_require__(53);
 
-var _controller2 = __webpack_require__(830);
+var _controller2 = __webpack_require__(831);
 
-var _popupCalendar = __webpack_require__(831);
+var _popupCalendar = __webpack_require__(832);
 
-var _tree2 = __webpack_require__(832);
+var _tree2 = __webpack_require__(833);
 
-var _textnode = __webpack_require__(833);
+var _textnode = __webpack_require__(834);
 
-var _popup3 = __webpack_require__(834);
+var _popup3 = __webpack_require__(835);
 
-var _button6 = __webpack_require__(835);
+var _button6 = __webpack_require__(836);
 
-var _router = __webpack_require__(836);
+var _router = __webpack_require__(837);
 
-var _datetime = __webpack_require__(837);
+var _datetime = __webpack_require__(838);
 
-var _float = __webpack_require__(838);
+var _float = __webpack_require__(839);
 
-var _layout10 = __webpack_require__(839);
+var _layout10 = __webpack_require__(840);
 
-var _colorchooserPopup = __webpack_require__(840);
+var _colorchooserPopup = __webpack_require__(841);
 
-var _blankicontextitem = __webpack_require__(841);
+var _blankicontextitem = __webpack_require__(842);
 
-var _controller3 = __webpack_require__(842);
+var _controller3 = __webpack_require__(843);
 
-var _pager = __webpack_require__(843);
+var _pager = __webpack_require__(844);
 
-var _timeinterval = __webpack_require__(844);
+var _timeinterval = __webpack_require__(845);
 
-var _datetimepane = __webpack_require__(845);
+var _datetimepane = __webpack_require__(846);
 
-var _singleselectlist = __webpack_require__(846);
+var _singleselectlist = __webpack_require__(847);
 
-var _multiselecttree = __webpack_require__(847);
+var _multiselecttree = __webpack_require__(848);
 
-var _html2 = __webpack_require__(848);
+var _html2 = __webpack_require__(849);
 
-var _pane3 = __webpack_require__(849);
+var _pane3 = __webpack_require__(850);
 
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
@@ -72725,15 +72815,6 @@ var _default = {
   Decorators: decorator
 };
 exports["default"] = _default;
-
-/***/ }),
-/* 707 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 708 */
@@ -72751,7 +72832,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _button = __webpack_require__(4);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 710 */
@@ -72778,7 +72859,7 @@ var _button = __webpack_require__(4);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _button = __webpack_require__(4);
 
 /***/ }),
 /* 713 */
@@ -72796,7 +72877,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _button = __webpack_require__(4);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 715 */
@@ -72805,7 +72886,7 @@ var _button = __webpack_require__(4);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _button = __webpack_require__(4);
 
 /***/ }),
 /* 716 */
@@ -72814,7 +72895,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _abstract = __webpack_require__(47);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 717 */
@@ -72823,7 +72904,7 @@ var _abstract = __webpack_require__(47);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _abstract = __webpack_require__(47);
 
 /***/ }),
 /* 718 */
@@ -72832,7 +72913,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _button = __webpack_require__(4);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 719 */
@@ -72841,7 +72922,7 @@ var _button = __webpack_require__(4);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _button = __webpack_require__(4);
 
 /***/ }),
 /* 720 */
@@ -72895,7 +72976,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _pane = __webpack_require__(16);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 726 */
@@ -72904,7 +72985,7 @@ var _pane = __webpack_require__(16);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _pane = __webpack_require__(16);
 
 /***/ }),
 /* 727 */
@@ -72913,7 +72994,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _action = __webpack_require__(71);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 728 */
@@ -72922,7 +73003,7 @@ var _action = __webpack_require__(71);
 "use strict";
 
 
-var _behavior = __webpack_require__(49);
+var _action = __webpack_require__(71);
 
 /***/ }),
 /* 729 */
@@ -72935,6 +73016,15 @@ var _behavior = __webpack_require__(49);
 
 /***/ }),
 /* 730 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _behavior = __webpack_require__(49);
+
+/***/ }),
+/* 731 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -73145,15 +73235,6 @@ type UnionToTuple<U> = UnionToTupleRecursively<U, []>;
 exports.Model = Model;
 
 /***/ }),
-/* 731 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _layout = __webpack_require__(3);
-
-/***/ }),
 /* 732 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -73187,7 +73268,7 @@ var _layout = __webpack_require__(3);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _layout = __webpack_require__(3);
 
 /***/ }),
 /* 736 */
@@ -73196,7 +73277,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 737 */
@@ -73205,7 +73286,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _layout = __webpack_require__(3);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 738 */
@@ -73223,7 +73304,7 @@ var _layout = __webpack_require__(3);
 "use strict";
 
 
-var _button = __webpack_require__(4);
+var _layout = __webpack_require__(3);
 
 /***/ }),
 /* 740 */
@@ -73232,7 +73313,7 @@ var _button = __webpack_require__(4);
 "use strict";
 
 
-var _layout = __webpack_require__(3);
+var _button = __webpack_require__(4);
 
 /***/ }),
 /* 741 */
@@ -73259,7 +73340,7 @@ var _layout = __webpack_require__(3);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _layout = __webpack_require__(3);
 
 /***/ }),
 /* 744 */
@@ -73268,7 +73349,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 745 */
@@ -73286,7 +73367,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 747 */
@@ -73295,7 +73376,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 748 */
@@ -73304,7 +73385,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _group = __webpack_require__(68);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 749 */
@@ -73313,7 +73394,7 @@ var _group = __webpack_require__(68);
 "use strict";
 
 
-var _button = __webpack_require__(46);
+var _group = __webpack_require__(68);
 
 /***/ }),
 /* 750 */
@@ -73322,7 +73403,7 @@ var _button = __webpack_require__(46);
 "use strict";
 
 
-var _button = __webpack_require__(4);
+var _button = __webpack_require__(46);
 
 /***/ }),
 /* 751 */
@@ -73349,7 +73430,7 @@ var _button = __webpack_require__(4);
 "use strict";
 
 
-var _editor = __webpack_require__(72);
+var _button = __webpack_require__(4);
 
 /***/ }),
 /* 754 */
@@ -73358,7 +73439,7 @@ var _editor = __webpack_require__(72);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _editor = __webpack_require__(72);
 
 /***/ }),
 /* 755 */
@@ -73367,7 +73448,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _layout = __webpack_require__(3);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 756 */
@@ -73412,7 +73493,7 @@ var _layout = __webpack_require__(3);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _layout = __webpack_require__(3);
 
 /***/ }),
 /* 761 */
@@ -73430,7 +73511,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 763 */
@@ -73439,7 +73520,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _pane = __webpack_require__(16);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 764 */
@@ -73448,7 +73529,7 @@ var _pane = __webpack_require__(16);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _pane = __webpack_require__(16);
 
 /***/ }),
 /* 765 */
@@ -73457,7 +73538,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _text = __webpack_require__(69);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 766 */
@@ -73466,7 +73547,7 @@ var _text = __webpack_require__(69);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _text = __webpack_require__(69);
 
 /***/ }),
 /* 767 */
@@ -73475,7 +73556,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 768 */
@@ -73493,7 +73574,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _pane = __webpack_require__(16);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 770 */
@@ -73502,7 +73583,7 @@ var _pane = __webpack_require__(16);
 "use strict";
 
 
-var _layer = __webpack_require__(51);
+var _pane = __webpack_require__(16);
 
 /***/ }),
 /* 771 */
@@ -73511,7 +73592,7 @@ var _layer = __webpack_require__(51);
 "use strict";
 
 
-var _button = __webpack_require__(4);
+var _layer = __webpack_require__(51);
 
 /***/ }),
 /* 772 */
@@ -73520,7 +73601,7 @@ var _button = __webpack_require__(4);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _button = __webpack_require__(4);
 
 /***/ }),
 /* 773 */
@@ -73529,7 +73610,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _abstract = __webpack_require__(73);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 774 */
@@ -73538,7 +73619,7 @@ var _abstract = __webpack_require__(73);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _abstract = __webpack_require__(73);
 
 /***/ }),
 /* 775 */
@@ -73547,7 +73628,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _button = __webpack_require__(4);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 776 */
@@ -73556,7 +73637,7 @@ var _button = __webpack_require__(4);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _button = __webpack_require__(4);
 
 /***/ }),
 /* 777 */
@@ -73574,7 +73655,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _layout = __webpack_require__(3);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 779 */
@@ -73583,7 +73664,7 @@ var _layout = __webpack_require__(3);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _layout = __webpack_require__(3);
 
 /***/ }),
 /* 780 */
@@ -73592,7 +73673,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _layout = __webpack_require__(3);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 781 */
@@ -73601,7 +73682,7 @@ var _layout = __webpack_require__(3);
 "use strict";
 
 
-var _button = __webpack_require__(50);
+var _layout = __webpack_require__(3);
 
 /***/ }),
 /* 782 */
@@ -73610,7 +73691,7 @@ var _button = __webpack_require__(50);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _button = __webpack_require__(50);
 
 /***/ }),
 /* 783 */
@@ -73619,7 +73700,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _abstractTreevaluechooser = __webpack_require__(70);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 784 */
@@ -73628,7 +73709,7 @@ var _abstractTreevaluechooser = __webpack_require__(70);
 "use strict";
 
 
-var _abstract = __webpack_require__(30);
+var _abstractTreevaluechooser = __webpack_require__(70);
 
 /***/ }),
 /* 785 */
@@ -73646,7 +73727,7 @@ var _abstract = __webpack_require__(30);
 "use strict";
 
 
-var _button = __webpack_require__(4);
+var _abstract = __webpack_require__(30);
 
 /***/ }),
 /* 787 */
@@ -73655,7 +73736,7 @@ var _button = __webpack_require__(4);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _button = __webpack_require__(4);
 
 /***/ }),
 /* 788 */
@@ -73682,7 +73763,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _pane = __webpack_require__(16);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 791 */
@@ -73691,7 +73772,7 @@ var _pane = __webpack_require__(16);
 "use strict";
 
 
-var _button = __webpack_require__(4);
+var _pane = __webpack_require__(16);
 
 /***/ }),
 /* 792 */
@@ -73700,7 +73781,7 @@ var _button = __webpack_require__(4);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _button = __webpack_require__(4);
 
 /***/ }),
 /* 793 */
@@ -73718,7 +73799,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _layout = __webpack_require__(3);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 795 */
@@ -73727,7 +73808,7 @@ var _layout = __webpack_require__(3);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _layout = __webpack_require__(3);
 
 /***/ }),
 /* 796 */
@@ -73745,7 +73826,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _listtreeview = __webpack_require__(74);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 798 */
@@ -73754,7 +73835,7 @@ var _listtreeview = __webpack_require__(74);
 "use strict";
 
 
-var _treeview = __webpack_require__(52);
+var _listtreeview = __webpack_require__(74);
 
 /***/ }),
 /* 799 */
@@ -73763,7 +73844,7 @@ var _treeview = __webpack_require__(52);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _treeview = __webpack_require__(52);
 
 /***/ }),
 /* 800 */
@@ -73790,7 +73871,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 803 */
@@ -73808,7 +73889,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 805 */
@@ -73817,7 +73898,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _button = __webpack_require__(4);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 806 */
@@ -73826,7 +73907,7 @@ var _button = __webpack_require__(4);
 "use strict";
 
 
-var _layout = __webpack_require__(3);
+var _button = __webpack_require__(4);
 
 /***/ }),
 /* 807 */
@@ -73835,7 +73916,7 @@ var _layout = __webpack_require__(3);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _layout = __webpack_require__(3);
 
 /***/ }),
 /* 808 */
@@ -73844,7 +73925,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _trigger = __webpack_require__(48);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 809 */
@@ -73862,7 +73943,7 @@ var _trigger = __webpack_require__(48);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _trigger = __webpack_require__(48);
 
 /***/ }),
 /* 811 */
@@ -73871,7 +73952,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 812 */
@@ -73889,8 +73970,6 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _layer = __webpack_require__(51);
-
 var _widget = __webpack_require__(1);
 
 /***/ }),
@@ -73900,7 +73979,9 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _button = __webpack_require__(50);
+var _layer = __webpack_require__(51);
+
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 815 */
@@ -73909,7 +73990,7 @@ var _button = __webpack_require__(50);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _button = __webpack_require__(50);
 
 /***/ }),
 /* 816 */
@@ -73918,7 +73999,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 817 */
@@ -73936,7 +74017,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 819 */
@@ -73963,7 +74044,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 822 */
@@ -73990,7 +74071,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 825 */
@@ -73999,7 +74080,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 826 */
@@ -74026,7 +74107,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _layout = __webpack_require__(3);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 829 */
@@ -74035,7 +74116,7 @@ var _layout = __webpack_require__(3);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _layout = __webpack_require__(3);
 
 /***/ }),
 /* 830 */
@@ -74044,7 +74125,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _controller = __webpack_require__(53);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 831 */
@@ -74053,7 +74134,7 @@ var _controller = __webpack_require__(53);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _controller = __webpack_require__(53);
 
 /***/ }),
 /* 832 */
@@ -74062,14 +74143,14 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
+var _widget = __webpack_require__(1);
+
 /***/ }),
 /* 833 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
-
-var _button = __webpack_require__(46);
 
 /***/ }),
 /* 834 */
@@ -74078,7 +74159,7 @@ var _button = __webpack_require__(46);
 "use strict";
 
 
-var _pane = __webpack_require__(16);
+var _button = __webpack_require__(46);
 
 /***/ }),
 /* 835 */
@@ -74087,7 +74168,7 @@ var _pane = __webpack_require__(16);
 "use strict";
 
 
-var _button = __webpack_require__(4);
+var _pane = __webpack_require__(16);
 
 /***/ }),
 /* 836 */
@@ -74096,14 +74177,14 @@ var _button = __webpack_require__(4);
 "use strict";
 
 
+var _button = __webpack_require__(4);
+
 /***/ }),
 /* 837 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
-
-var _single = __webpack_require__(2);
 
 /***/ }),
 /* 838 */
@@ -74112,7 +74193,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _layout = __webpack_require__(3);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 839 */
@@ -74130,7 +74211,7 @@ var _layout = __webpack_require__(3);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _layout = __webpack_require__(3);
 
 /***/ }),
 /* 841 */
@@ -74139,7 +74220,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _button = __webpack_require__(4);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 842 */
@@ -74148,7 +74229,7 @@ var _button = __webpack_require__(4);
 "use strict";
 
 
-var _controller = __webpack_require__(53);
+var _button = __webpack_require__(4);
 
 /***/ }),
 /* 843 */
@@ -74157,7 +74238,7 @@ var _controller = __webpack_require__(53);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _controller = __webpack_require__(53);
 
 /***/ }),
 /* 844 */
@@ -74166,7 +74247,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 845 */
@@ -74175,7 +74256,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 846 */
@@ -74184,7 +74265,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 847 */
@@ -74202,7 +74283,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _abstract = __webpack_require__(47);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 849 */
@@ -74211,10 +74292,18 @@ var _abstract = __webpack_require__(47);
 "use strict";
 
 
+var _abstract = __webpack_require__(47);
+
+/***/ }),
+/* 850 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
 var _abstract = __webpack_require__(30);
 
 /***/ }),
-/* 850 */,
 /* 851 */,
 /* 852 */,
 /* 853 */,
@@ -74242,7 +74331,9 @@ var _abstract = __webpack_require__(30);
 /* 875 */,
 /* 876 */,
 /* 877 */,
-/* 878 */
+/* 878 */,
+/* 879 */,
+/* 880 */
 /***/ (function(module, exports) {
 
 ;(function () {
@@ -74405,8 +74496,6 @@ var _abstract = __webpack_require__(30);
 
 
 /***/ }),
-/* 879 */,
-/* 880 */,
 /* 881 */,
 /* 882 */,
 /* 883 */,
@@ -74439,7 +74528,9 @@ var _abstract = __webpack_require__(30);
 /* 910 */,
 /* 911 */,
 /* 912 */,
-/* 913 */
+/* 913 */,
+/* 914 */,
+/* 915 */
 /***/ (function(module, exports) {
 
 ;(function () {
@@ -74786,8 +74877,6 @@ var _abstract = __webpack_require__(30);
 
 
 /***/ }),
-/* 914 */,
-/* 915 */,
 /* 916 */,
 /* 917 */,
 /* 918 */,
@@ -74795,14 +74884,16 @@ var _abstract = __webpack_require__(30);
 /* 920 */,
 /* 921 */,
 /* 922 */,
-/* 923 */
+/* 923 */,
+/* 924 */,
+/* 925 */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(global) {module.exports = global["Fix"] = __webpack_require__(924);
+/* WEBPACK VAR INJECTION */(function(global) {module.exports = global["Fix"] = __webpack_require__(926);
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(14)))
 
 /***/ }),
-/* 924 */
+/* 926 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(setImmediate) {function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -76335,8 +76426,6 @@ var _abstract = __webpack_require__(30);
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(61).setImmediate))
 
 /***/ }),
-/* 925 */,
-/* 926 */,
 /* 927 */,
 /* 928 */,
 /* 929 */,
@@ -76535,14 +76624,14 @@ var _abstract = __webpack_require__(30);
 /* 1122 */,
 /* 1123 */,
 /* 1124 */,
-/* 1125 */
+/* 1125 */,
+/* 1126 */,
+/* 1127 */
 /***/ (function(module, exports) {
 
 
 
 /***/ }),
-/* 1126 */,
-/* 1127 */,
 /* 1128 */,
 /* 1129 */,
 /* 1130 */,
@@ -76858,7 +76947,9 @@ var _abstract = __webpack_require__(30);
 /* 1440 */,
 /* 1441 */,
 /* 1442 */,
-/* 1443 */
+/* 1443 */,
+/* 1444 */,
+/* 1445 */
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(92);
@@ -76910,12 +77001,12 @@ __webpack_require__(314);
 __webpack_require__(315);
 __webpack_require__(316);
 __webpack_require__(317);
-__webpack_require__(108);
 __webpack_require__(318);
+__webpack_require__(108);
 __webpack_require__(319);
 __webpack_require__(320);
-__webpack_require__(109);
 __webpack_require__(321);
+__webpack_require__(109);
 __webpack_require__(322);
 __webpack_require__(323);
 __webpack_require__(324);
@@ -76963,11 +77054,11 @@ __webpack_require__(365);
 __webpack_require__(366);
 __webpack_require__(367);
 __webpack_require__(368);
+__webpack_require__(369);
 __webpack_require__(110);
 __webpack_require__(111);
 __webpack_require__(112);
-__webpack_require__(923);
-__webpack_require__(369);
+__webpack_require__(925);
 __webpack_require__(370);
 __webpack_require__(371);
 __webpack_require__(372);
@@ -77132,6 +77223,7 @@ __webpack_require__(530);
 __webpack_require__(531);
 __webpack_require__(532);
 __webpack_require__(533);
+__webpack_require__(534);
 __webpack_require__(113);
 __webpack_require__(114);
 __webpack_require__(115);
@@ -77192,7 +77284,6 @@ __webpack_require__(169);
 __webpack_require__(170);
 __webpack_require__(171);
 __webpack_require__(172);
-__webpack_require__(534);
 __webpack_require__(535);
 __webpack_require__(536);
 __webpack_require__(537);
@@ -77363,10 +77454,11 @@ __webpack_require__(701);
 __webpack_require__(702);
 __webpack_require__(703);
 __webpack_require__(704);
-__webpack_require__(913);
-__webpack_require__(878);
-__webpack_require__(1125);
-module.exports = __webpack_require__(705);
+__webpack_require__(705);
+__webpack_require__(915);
+__webpack_require__(880);
+__webpack_require__(1127);
+module.exports = __webpack_require__(706);
 
 
 /***/ })

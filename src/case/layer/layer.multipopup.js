@@ -31,7 +31,7 @@ BI.MultiPopupView = BI.inherit(BI.PopupView, {
         this.buttongroup = BI.createWidget({
             type: "bi.button_group",
             cls: "list-view-toolbar bi-high-light bi-split-top",
-            height: 24,
+            height: BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT,
             items: BI.createItems(text, {
                 type: "bi.text_button",
                 once: false,
