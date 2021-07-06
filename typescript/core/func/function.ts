@@ -28,7 +28,7 @@ export type _function = {
      * @param items
      * @param key
      */
-    getSortedResult: <T>(items: T[], key: string) => T[];
+    getSortedResult: <T>(items: T[], key?: string | Function) => T[];
 
     /**
      * 在方法A执行之前执行方法B
