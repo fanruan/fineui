@@ -17,6 +17,13 @@ export type _function = {
     getSearchResult: (items: any, keyword: any, param?: string) => { find: any[], match: any[] };
 
     /**
+     * 获取按GB2312排序的结果
+     * @param items
+     * @param key
+     */
+    getSortedResult: <T>(items: T[], key: string) => T[];
+
+    /**
      * 在方法A执行之前执行方法B
      * @param sFunc 方法A
      * @param func 方法B
