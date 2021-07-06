@@ -17,6 +17,18 @@ export declare type _function = {
         match: any[];
     };
     /**
+     * 获取编码后的url
+     * @param urlTemplate url模板
+     * @param param 参数
+     */
+    getEncodeURL: (urlTemplate: string, param: any) => string;
+    /**
+     * 获取按GB2312排序的结果
+     * @param items
+     * @param key
+     */
+    getSortedResult: <T>(items: T[], key?: string | Function) => T[];
+    /**
      * 在方法A执行之前执行方法B
      * @param sFunc 方法A
      * @param func 方法B
