@@ -96,12 +96,14 @@ BI.AllCountPager = BI.inherit(BI.Widget, {
         });
 
         BI.createWidget(o.showRowCount ? {
-            type: "bi.left_right_vertical_adapt",
+            type: "bi.vertical_adapt",
+            columnSize: ["fill", ""],
             element: this,
-            items: {
-                left: [this._getRowCountObject()],
-                right: [this.editor, this.allPages, this.pager]
-            }
+            scrollx: false,
+            items: [
+                this._getRowCountObject(),
+                this.editor, this.allPages, this.pager
+            ],
         } : {
             type: "bi.vertical_adapt",
             element: this,
