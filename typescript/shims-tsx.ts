@@ -49,6 +49,16 @@ interface ElementClassProps<T> extends UIProps {
     beforeRender(callback: () => void): void;
     beforeInit(callback: () => void): void;
     render(): any;
+    beforeCreate(): void;
+    created(): void;
+    beforeMount(): void;
+    mounted(): void;
+    shouldUpdate(): void;
+    update(): void;
+    beforeUpdate(): void;
+    updated(): void;
+    beforeDestroy(): void;
+    destroyed(): void;
 }
 
 declare namespace JSX {
