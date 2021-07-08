@@ -48,7 +48,10 @@
                         type: "bi.vertical",
                         items: [{
                             type: "bi.button",
-                            text: store.model.text
+                            text: store.model.text,
+                            handler: function () {
+                                console.log("click");
+                            }
                         }, {
                             type: "bi.label",
                             text: store.model.text
@@ -62,7 +65,12 @@
 
     var Widget = BI.inherit(BI.Widget, {
         props: {
-            updateMode: "auto"
+            vdom: true
+        },
+        watch: {
+            text: function () {
+                this.reset();
+            }
         },
         setup: function () {
             var child;
@@ -72,13 +80,13 @@
             setInterval(function () {
                 store.toggle();
             }, 1000);
-            BI.watch("text", function () {
-                child.reset();
-            });
+            // BI.watch("text", function () {
+            //     child.reset();
+            // });
             return function () {
                 return {
                     type: "bi.vertical",
-                    vgap: 20,
+                    vgap: store.model.expand ? 20 : 30,
                     items: [{
                         type: "demo.child",
                         ref: function (_ref) {

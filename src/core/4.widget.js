@@ -38,7 +38,7 @@
                 extraCls: "",
                 cls: "",
                 css: null,
-                updateMode: "manual" // manual / auto
+                vdom: false
             });
         },
 
@@ -165,6 +165,7 @@
                 this.element = BI.Widget._renderEngine.createElement(this);
             }
             this.element._isWidget = true;
+            (this.element[0]._Widget = this.element[0]._Widget || []).push(this);
             this._initCurrent();
         },
 
@@ -216,20 +217,45 @@
                 els = [els];
             }
             if (BI.isArray(els)) {
-                BI.each(els, function (i, el) {
-                    if (el) {
-                        BI._lazyCreateWidget(el, {
-                            element: self
-                        });
-                    }
-                });
+                if (this.options.vdom) {
+                    this.vnode = this._renderVNode();
+                    var div = document.createElement("div");
+                    this.element.append(div);
+                    BI.patchVNode(div, this.vnode);
+                } else {
+                    BI.each(els, function (i, el) {
+                        if (el) {
+                            BI._lazyCreateWidget(el, {
+                                element: self
+                            });
+                        }
+                    });
+                }
             }
             this._mount();
-
             if (this.__async === true && isMounted) {
                 callLifeHook(this, "mounted");
                 this.fireEvent(BI.Events.MOUNT);
             }
+        },
+
+        _renderVNode: function () {
+            var render = BI.isFunction(this.options.render) ? this.options.render : this.render;
+            var els = render && render.call(this);
+            if (BI.isPlainObject(els)) {
+                els = [els];
+            }
+            if (BI.isArray(els)) {
+                var container = document.createElement("div");
+                BI.each(els, function (i, el) {
+                    if (el) {
+                        BI._lazyCreateWidget(el, {
+                            element: container
+                        });
+                    }
+                });
+            }
+            return BI.Element2Snabbdom(container);
         },
 
         _setParent: function (parent) {
@@ -576,6 +602,12 @@
         reset: function () {
             // 还在异步状态的不需要执行reset
             if (this.__async === true || this.__asking === true) {
+                return;
+            }
+            if (this.options.vdom) {
+                var vnode = this._renderVNode();
+                BI.patchVNode(this.vnode, vnode);
+                this.vnode = vnode;
                 return;
             }
             // this._isMounted = false;
