@@ -24,8 +24,8 @@
             on: on,
             hook: {
                 create: function () {
-                    BI.each(parentNode._Widget, function (i, w) {
-                        w.element = $(vnode.elm);
+                    BI.each(parentNode._Widgets, function (i, w) {
+                        w.element = BI.Widget._renderEngine.createElement(vnode.elm);
                     });
                 }
             }

@@ -38,7 +38,8 @@
                 extraCls: "",
                 cls: "",
                 css: null,
-                vdom: false
+
+                vdom: false,
             });
         },
 
@@ -165,7 +166,7 @@
                 this.element = BI.Widget._renderEngine.createElement(this);
             }
             this.element._isWidget = true;
-            (this.element[0]._Widget = this.element[0]._Widget || []).push(this);
+            (this.element[0]._Widgets = this.element[0]._Widgets || []).push(this);
             this._initCurrent();
         },
 
@@ -222,6 +223,7 @@
                     var div = document.createElement("div");
                     this.element.append(div);
                     BI.patchVNode(div, this.vnode);
+                    // this.element = $(div);
                 } else {
                     BI.each(els, function (i, el) {
                         if (el) {
@@ -240,6 +242,7 @@
         },
 
         _renderVNode: function () {
+            var self = this;
             var render = BI.isFunction(this.options.render) ? this.options.render : this.render;
             var els = render && render.call(this);
             if (BI.isPlainObject(els)) {
@@ -247,11 +250,13 @@
             }
             if (BI.isArray(els)) {
                 var container = document.createElement("div");
+                this._children = {};
                 BI.each(els, function (i, el) {
                     if (el) {
-                        BI._lazyCreateWidget(el, {
-                            element: container
+                        var w = BI._lazyCreateWidget(el, {
+                            element: container,
                         });
+                        self.addWidget(w);
                     }
                 });
             }
@@ -316,15 +321,6 @@
             callLifeHook(this, "beforeUpdate");
             if (shouldUpdate) {
                 var res = this.update && this.update(nextProps, shouldUpdate);
-            } else if (BI.isNull(shouldUpdate)) {
-                // 默认使用shallowCompare的方式进行更新
-                var nextChange = {};
-                BI.each(nextProps, function (key, value) {
-                    if (o[key] !== value) {
-                        nextChange[key] = value;
-                    }
-                });
-                var res = this.update && BI.isNotEmptyObject(nextChange) && this.update(nextChange);
             }
             callLifeHook(this, "updated");
             return res;
