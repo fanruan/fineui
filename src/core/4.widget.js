@@ -29,6 +29,7 @@
                 tagName: "div",
                 attributes: null,
                 data: null,
+                key: null,
 
                 tag: null,
                 disabled: false,
@@ -134,6 +135,9 @@
             var o = this.options;
             if (o._baseCls || o.baseCls || o.extraCls || o.cls) {
                 this.element.addClass((o._baseCls || "") + " " + (o.baseCls || "") + " " + (o.extraCls || "") + " " + (o.cls || ""));
+            }
+            if (o.key != null) {
+                this.element.attr("key", o.key);
             }
             if (o.attributes) {
                 this.element.attr(o.attributes);
