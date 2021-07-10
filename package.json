@@ -1,6 +1,6 @@
 {
   "name": "fineui",
-  "version": "2.0.20210708211222",
+  "version": "2.0.20210710174207",
   "description": "fineui",
   "main": "dist/fineui.min.js",
   "types": "dist/lib/index.d.ts",

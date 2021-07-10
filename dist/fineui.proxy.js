@@ -1,4 +1,4 @@
-/*! time: 2021-7-8 21:10:50 */
+/*! time: 2021-7-10 17:40:40 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -6545,6 +6545,7 @@ BI.Req = {
                 tagName: "div",
                 attributes: null,
                 data: null,
+                key: null,
 
                 tag: null,
                 disabled: false,
@@ -6650,6 +6651,9 @@ BI.Req = {
             var o = this.options;
             if (o._baseCls || o.baseCls || o.extraCls || o.cls) {
                 this.element.addClass((o._baseCls || "") + " " + (o.baseCls || "") + " " + (o.extraCls || "") + " " + (o.cls || ""));
+            }
+            if (o.key != null) {
+                this.element.attr("key", o.key);
             }
             if (o.attributes) {
                 this.element.attr(o.attributes);
@@ -9775,12 +9779,14 @@ BI.TooltipsController = BI.inherit(BI.Controller, {
             };
         });
         var style = parentNode.getAttribute("style");
+        var key = parentNode.getAttribute("key");
         // var claz = parentNode.getAttribute("class");
         var vnode = BI.Snabbdom.h(parentNode.nodeName, {
             class: BI.makeObject(parentNode.classList),
             props: {
                 style: style
             },
+            key: key,
             on: on,
             hook: {
                 create: function () {
