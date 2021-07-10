@@ -15,12 +15,14 @@
             };
         });
         var style = parentNode.getAttribute("style");
+        var key = parentNode.getAttribute("key");
         // var claz = parentNode.getAttribute("class");
         var vnode = BI.Snabbdom.h(parentNode.nodeName, {
             class: BI.makeObject(parentNode.classList),
             props: {
                 style: style
             },
+            key: key,
             on: on,
             hook: {
                 create: function () {
