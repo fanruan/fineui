@@ -170,9 +170,9 @@
                 this.element = BI.Widget._renderEngine.createElement(this);
             }
             this.element._isWidget = true;
-            // var widgets = this.element.data("_Widgets") || [];
-            // widgets.push(this);
-            // this.element.data("_Widgets", widgets);
+            var widgets = this.element.data("__widgets") || [];
+            widgets.push(this);
+            this.element.data("__widgets", widgets);
             this._initCurrent();
         },
 
