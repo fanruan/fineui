@@ -1,4 +1,4 @@
-/*! time: 2021-7-11 14:31:21 */
+/*! time: 2021-7-11 17:50:22 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -6426,8 +6426,10 @@ BI.Req = {
             this._isMounted = true;
             for (var key in this._children) {
                 var child = this._children[key];
-                !self.isEnabled() && child._setEnable(false);
-                !self.isValid() && child._setValid(false);
+                if (layer === 0) {
+                    !self.isEnabled() && child._setEnable(false);
+                    self.isValid() && child._setValid(false);
+                }
                 child._mount && child._mount(deep ? force : false, deep, lifeHook, predicate, layer + 1);
             }
             this._mountChildren && this._mountChildren();
