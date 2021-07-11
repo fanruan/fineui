@@ -1,4 +1,4 @@
-/*! time: 2021-7-10 17:40:40 */
+/*! time: 2021-7-11 14:31:21 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -9225,7 +9225,9 @@ module.exports = !__webpack_require__(915)(function () {
                 this.element = BI.Widget._renderEngine.createElement(this);
             }
             this.element._isWidget = true;
-            (this.element[0]._Widgets = this.element[0]._Widgets || []).push(this);
+            var widgets = this.element.data("_Widgets") || [];
+            widgets.push(this);
+            this.element.data("_Widgets", widgets);
             this._initCurrent();
         },
 
@@ -9278,11 +9280,19 @@ module.exports = !__webpack_require__(915)(function () {
             }
             if (BI.isArray(els)) {
                 if (this.options.vdom) {
-                    this.vnode = this._renderVNode();
                     var div = document.createElement("div");
-                    this.element.append(div);
+                    var element = this.element;
+                    element.append(div);
+                    this.vnode = this._renderVNode();
                     BI.patchVNode(div, this.vnode);
-                    // this.element = $(div);
+                    // 去除这个临时的div
+                    BI.DOM.hang([div]);
+                    element.attr("style", self.vnode.elm.getAttribute("style"));
+                    element.addClass(self.vnode.elm.getAttribute("class"));
+                    element.empty();
+                    BI.each(BI.jQuery(self.vnode.elm).children(), function (i, node) {
+                        element.append(node);
+                    })
                 } else {
                     BI.each(els, function (i, el) {
                         if (el) {
@@ -9319,7 +9329,7 @@ module.exports = !__webpack_require__(915)(function () {
                     }
                 });
             }
-            return BI.Element2Snabbdom(container);
+            return BI.Element2Vnode(container);
         },
 
         _setParent: function (parent) {
@@ -12303,9 +12313,9 @@ BI.TooltipsController = BI.inherit(BI.Controller, {
 
 !function () {
     var patch = BI.Snabbdom.init([BI.Snabbdom.attributesModule, BI.Snabbdom.classModule, BI.Snabbdom.datasetModule, BI.Snabbdom.propsModule, BI.Snabbdom.styleModule, BI.Snabbdom.eventListenersModule]);
-    BI.Element2Snabbdom = function (parentNode) {
+    BI.Element2Vnode = function (parentNode) {
         if (parentNode.nodeType === 3) {
-            return parentNode.textContent;
+            return BI.Snabbdom.vnode(undefined, undefined, undefined, parentNode.textContent, parentNode);
         }
         var data = BI.jQuery._data(parentNode);
         var on = {};
@@ -12317,26 +12327,31 @@ BI.TooltipsController = BI.inherit(BI.Controller, {
                 });
             };
         });
-        var style = parentNode.getAttribute("style");
+        var attrs = {};
+        var elmAttrs = parentNode.attributes;
+        var elmChildren = parentNode.childNodes;
         var key = parentNode.getAttribute("key");
-        // var claz = parentNode.getAttribute("class");
-        var vnode = BI.Snabbdom.h(parentNode.nodeName, {
+        for (i = 0, n = elmAttrs.length; i < n; i++) {
+            var name = elmAttrs[i].nodeName;
+            if (name !== "id" && name !== "class") {
+                attrs[name] = elmAttrs[i].nodeValue;
+            }
+        }
+        var vnode = BI.Snabbdom.vnode(parentNode.nodeName, {
             class: BI.makeObject(parentNode.classList),
-            props: {
-                style: style
-            },
+            attrs: attrs,
             key: key,
             on: on,
             hook: {
                 create: function () {
-                    BI.each(parentNode._Widgets, function (i, w) {
+                    BI.each(BI.Widget._renderEngine.createElement(parentNode).data("_Widgets"), function (i, w) {
                         w.element = BI.Widget._renderEngine.createElement(vnode.elm);
                     });
                 }
             }
-        }, BI.map(parentNode.childNodes, function (i, childNode) {
-            return BI.Element2Snabbdom(childNode);
-        }));
+        }, BI.map(elmChildren, function (i, childNode) {
+            return BI.Element2Vnode(childNode);
+        }), undefined, parentNode);
         return vnode;
     };
 
