@@ -1,4 +1,4 @@
-/*! time: 2021-7-11 17:50:22 */
+/*! time: 2021-7-11 22:50:39 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -6556,7 +6556,7 @@ BI.Req = {
                 cls: "",
                 css: null,
 
-                vdom: false,
+                vdom: false
             });
         },
 
@@ -6686,9 +6686,9 @@ BI.Req = {
                 this.element = BI.Widget._renderEngine.createElement(this);
             }
             this.element._isWidget = true;
-            var widgets = this.element.data("_Widgets") || [];
+            var widgets = this.element.data("__widgets") || [];
             widgets.push(this);
-            this.element.data("_Widgets", widgets);
+            this.element.data("__widgets", widgets);
             this._initCurrent();
         },
 
@@ -6753,7 +6753,7 @@ BI.Req = {
                     element.empty();
                     BI.each(BI.jQuery(self.vnode.elm).children(), function (i, node) {
                         element.append(node);
-                    })
+                    });
                 } else {
                     BI.each(els, function (i, el) {
                         if (el) {
@@ -6784,7 +6784,7 @@ BI.Req = {
                 BI.each(els, function (i, el) {
                     if (el) {
                         var w = BI._lazyCreateWidget(el, {
-                            element: container,
+                            element: container
                         });
                         self.addWidget(w);
                     }
@@ -6818,7 +6818,7 @@ BI.Req = {
                 var child = this._children[key];
                 if (layer === 0) {
                     !self.isEnabled() && child._setEnable(false);
-                    self.isValid() && child._setValid(false);
+                    !self.isValid() && child._setValid(false);
                 }
                 child._mount && child._mount(deep ? force : false, deep, lifeHook, predicate, layer + 1);
             }
@@ -9807,7 +9807,7 @@ BI.TooltipsController = BI.inherit(BI.Controller, {
             on: on,
             hook: {
                 create: function () {
-                    BI.each(BI.Widget._renderEngine.createElement(parentNode).data("_Widgets"), function (i, w) {
+                    BI.each(BI.Widget._renderEngine.createElement(parentNode).data("__widgets"), function (i, w) {
                         w.element = BI.Widget._renderEngine.createElement(vnode.elm);
                     });
                 }
