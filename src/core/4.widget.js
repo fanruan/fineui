@@ -170,7 +170,9 @@
                 this.element = BI.Widget._renderEngine.createElement(this);
             }
             this.element._isWidget = true;
-            (this.element[0]._Widgets = this.element[0]._Widgets || []).push(this);
+            var widgets = this.element.data("_Widgets") || [];
+            widgets.push(this);
+            this.element.data("_Widgets", widgets);
             this._initCurrent();
         },
 
@@ -223,11 +225,19 @@
             }
             if (BI.isArray(els)) {
                 if (this.options.vdom) {
-                    this.vnode = this._renderVNode();
                     var div = document.createElement("div");
-                    this.element.append(div);
+                    var element = this.element;
+                    element.append(div);
+                    this.vnode = this._renderVNode();
                     BI.patchVNode(div, this.vnode);
-                    // this.element = $(div);
+                    // 去除这个临时的div
+                    BI.DOM.hang([div]);
+                    element.attr("style", self.vnode.elm.getAttribute("style"));
+                    element.addClass(self.vnode.elm.getAttribute("class"));
+                    element.empty();
+                    BI.each(BI.jQuery(self.vnode.elm).children(), function (i, node) {
+                        element.append(node);
+                    })
                 } else {
                     BI.each(els, function (i, el) {
                         if (el) {
@@ -264,7 +274,7 @@
                     }
                 });
             }
-            return BI.Element2Snabbdom(container);
+            return BI.Element2Vnode(container);
         },
 
         _setParent: function (parent) {
