@@ -40,7 +40,7 @@
                 cls: "",
                 css: null,
 
-                vdom: false,
+                vdom: false
             });
         },
 
@@ -170,9 +170,9 @@
                 this.element = BI.Widget._renderEngine.createElement(this);
             }
             this.element._isWidget = true;
-            var widgets = this.element.data("_Widgets") || [];
+            var widgets = this.element.data("__widgets") || [];
             widgets.push(this);
-            this.element.data("_Widgets", widgets);
+            this.element.data("__widgets", widgets);
             this._initCurrent();
         },
 
@@ -237,7 +237,7 @@
                     element.empty();
                     BI.each(BI.jQuery(self.vnode.elm).children(), function (i, node) {
                         element.append(node);
-                    })
+                    });
                 } else {
                     BI.each(els, function (i, el) {
                         if (el) {
@@ -268,7 +268,7 @@
                 BI.each(els, function (i, el) {
                     if (el) {
                         var w = BI._lazyCreateWidget(el, {
-                            element: container,
+                            element: container
                         });
                         self.addWidget(w);
                     }
@@ -302,7 +302,7 @@
                 var child = this._children[key];
                 if (layer === 0) {
                     !self.isEnabled() && child._setEnable(false);
-                    self.isValid() && child._setValid(false);
+                    !self.isValid() && child._setValid(false);
                 }
                 child._mount && child._mount(deep ? force : false, deep, lifeHook, predicate, layer + 1);
             }

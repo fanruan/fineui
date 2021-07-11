@@ -31,7 +31,7 @@
             on: on,
             hook: {
                 create: function () {
-                    BI.each(BI.Widget._renderEngine.createElement(parentNode).data("_Widgets"), function (i, w) {
+                    BI.each(BI.Widget._renderEngine.createElement(parentNode).data("__widgets"), function (i, w) {
                         w.element = BI.Widget._renderEngine.createElement(vnode.elm);
                     });
                 }
