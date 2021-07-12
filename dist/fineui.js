@@ -1,4 +1,4 @@
-/*! time: 2021-7-11 22:50:39 */
+/*! time: 2021-7-12 20:10:46 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -48555,11 +48555,25 @@ BI.DynamicDateTrigger = BI.inherit(BI.Trigger, {
             vgap: c.vgap,
             allowBlank: true,
             watermark: BI.isKey(o.watermark) ? o.watermark : BI.i18nText("BI-Basic_Unrestricted"),
-            errorText: function () {
+            errorText: function (v) {
                 var str = "";
                 if (!BI.isKey(o.format)) {
-                    str = self.editor.isEditing() ? BI.i18nText("BI-Date_Trigger_Error_Text") : BI.i18nText("BI-Year_Trigger_Invalid_Text");
+                    if (!self._dateCheck(v)) {
+                        str = self.editor.isEditing() ? BI.i18nText("BI-Date_Trigger_Error_Text") : BI.i18nText("BI-Year_Trigger_Invalid_Text");
+                    } else {
+                        var start = BI.parseDateTime(o.min, "%Y-%X-%d");
+                        var end = BI.parseDateTime(o.max, "%Y-%X-%d");
+                        str = BI.i18nText("BI-Basic_Date_Range_Error",
+                            start.getFullYear(),
+                            start.getMonth() + 1,
+                            start.getDate(),
+                            end.getFullYear(),
+                            end.getMonth() + 1,
+                            end.getDate()
+                        );
+                    }
                 }
+
                 return str;
             },
             title: BI.bind(this._getTitle, this)
@@ -49703,11 +49717,25 @@ BI.DynamicDateTimeTrigger = BI.inherit(BI.Trigger, {
             vgap: c.vgap,
             allowBlank: true,
             watermark: BI.isKey(o.watermark) ? o.watermark : BI.i18nText("BI-Basic_Unrestricted"),
-            errorText: function () {
+            errorText: function (v) {
                 var str = "";
                 if (!BI.isKey(o.format)) {
-                    str = self.editor.isEditing() ? BI.i18nText("BI-Basic_Date_Time_Error_Text") : BI.i18nText("BI-Year_Trigger_Invalid_Text");
+                    if (!self._dateCheck(v)) {
+                        str = self.editor.isEditing() ? BI.i18nText("BI-Date_Trigger_Error_Text") : BI.i18nText("BI-Year_Trigger_Invalid_Text");
+                    } else {
+                        var start = BI.parseDateTime(o.min, "%Y-%X-%d");
+                        var end = BI.parseDateTime(o.max, "%Y-%X-%d");
+                        str = BI.i18nText("BI-Basic_Date_Range_Error",
+                            start.getFullYear(),
+                            start.getMonth() + 1,
+                            start.getDate(),
+                            end.getFullYear(),
+                            end.getMonth() + 1,
+                            end.getDate()
+                        );
+                    }
                 }
+
                 return str;
             },
             title: BI.bind(this._getTitle, this)
@@ -70119,9 +70147,18 @@ BI.DynamicYearTrigger = BI.inherit(BI.Trigger, {
             vgap: c.vgap,
             watermark: BI.i18nText("BI-Basic_Unrestricted"),
             allowBlank: true,
-            errorText: function () {
+            errorText: function (v) {
+                if (BI.isPositiveInteger(v)) {
+                    var start = BI.parseDateTime(o.min, "%Y-%X-%d");
+                    var end = BI.parseDateTime(o.max, "%Y-%X-%d");
+
+                    return BI.i18nText("BI-Basic_Year_Range_Error",
+                        start.getFullYear(),
+                        end.getFullYear());
+                }
+
                 return BI.i18nText("BI-Year_Trigger_Invalid_Text");
-            }
+            },
         });
         this.editor.on(BI.SignEditor.EVENT_KEY_DOWN, function () {
             self.fireEvent(BI.DynamicYearTrigger.EVENT_KEY_DOWN, arguments);
@@ -71387,7 +71424,21 @@ BI.DynamicYearMonthTrigger = BI.inherit(BI.Trigger, {
             },
             watermark: BI.i18nText("BI-Basic_Unrestricted"),
             errorText: function (v) {
-                return BI.i18nText("BI-Year_Trigger_Invalid_Text");
+                var year = isYear ? v : self.yearEditor.getValue();
+                var month = isYear ? self.monthEditor.getValue() : v;
+                if (!BI.isPositiveInteger(year) || !BI.isPositiveInteger(month) || month > 12) {
+                    return BI.i18nText("BI-Year_Trigger_Invalid_Text");
+                }
+
+                var start = BI.parseDateTime(o.min, "%Y-%X-%d");
+                var end = BI.parseDateTime(o.max, "%Y-%X-%d");
+
+                return BI.i18nText("BI-Basic_Year_Month_Range_Error",
+                    start.getFullYear(),
+                    start.getMonth() + 1,
+                    end.getFullYear(),
+                    end.getMonth() + 1
+                );
             },
             hgap: c.hgap,
             vgap: c.vgap,
@@ -72673,12 +72724,25 @@ BI.DynamicYearQuarterTrigger = BI.inherit(BI.Trigger, {
                 return false;
             },
             errorText: function (v) {
-                return BI.i18nText("BI-Year_Trigger_Invalid_Text");
+                var year = isYear ? v : self.yearEditor.getValue();
+                var quarter = isYear ? self.quarterEditor.getValue() : v;
+                if (!BI.isPositiveInteger(year) || !BI.isPositiveInteger(quarter) || quarter > 4) {
+                    return BI.i18nText("BI-Year_Trigger_Invalid_Text");
+                }
+
+                var start = BI.parseDateTime(o.min, "%Y-%X-%d");
+                var end = BI.parseDateTime(o.max, "%Y-%X-%d");
+
+                return BI.i18nText("BI-Basic_Year_Quarter_Range_Error",
+                    start.getFullYear(),
+                    BI.getQuarter(start),
+                    end.getFullYear(),
+                    BI.getQuarter(end)
+                );
             },
             watermark: BI.i18nText("BI-Basic_Unrestricted"),
             hgap: c.hgap,
             vgap: c.vgap,
-            title: "",
             allowBlank: true
         });
         editor.on(BI.SignEditor.EVENT_KEY_DOWN, function () {
