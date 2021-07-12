@@ -22,6 +22,8 @@ BI.DynamicYearTrigger = BI.inherit(BI.Trigger, {
     _init: function () {
         BI.DynamicYearTrigger.superclass._init.apply(this, arguments);
         var self = this, o = this.options, c = this._const;
+        var start = BI.parseDateTime(o.min, "%Y-%X-%d");
+        var end = BI.parseDateTime(o.max, "%Y-%X-%d");
         this.editor = BI.createWidget({
             type: "bi.sign_editor",
             height: o.height,
@@ -35,9 +37,15 @@ BI.DynamicYearTrigger = BI.inherit(BI.Trigger, {
             vgap: c.vgap,
             watermark: BI.i18nText("BI-Basic_Unrestricted"),
             allowBlank: true,
-            errorText: function () {
+            errorText: function (v) {
+                if (BI.isPositiveInteger(v)) {
+                    return BI.i18nText("BI-Basic_Year_Range_Error",
+                        start.getFullYear(),
+                        end.getFullYear());
+                }
+
                 return BI.i18nText("BI-Year_Trigger_Invalid_Text");
-            }
+            },
         });
         this.editor.on(BI.SignEditor.EVENT_KEY_DOWN, function () {
             self.fireEvent(BI.DynamicYearTrigger.EVENT_KEY_DOWN, arguments);

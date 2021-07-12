@@ -21,6 +21,9 @@ BI.DynamicYearMonthTrigger = BI.inherit(BI.Trigger, {
         BI.DynamicYearMonthTrigger.superclass._init.apply(this, arguments);
         var o = this.options;
 
+        var start = BI.parseDateTime(o.min, "%Y-%X-%d");
+        var end = BI.parseDateTime(o.max, "%Y-%X-%d");
+
         this.yearEditor = this._createEditor(true);
         this.monthEditor = this._createEditor(false);
 
@@ -62,6 +65,8 @@ BI.DynamicYearMonthTrigger = BI.inherit(BI.Trigger, {
 
     _createEditor: function (isYear) {
         var self = this, o = this.options, c = this._const;
+        var start = BI.parseDateTime(o.min, "%Y-%X-%d");
+        var end = BI.parseDateTime(o.max, "%Y-%X-%d");
         var editor = BI.createWidget({
             type: "bi.sign_editor",
             height: o.height,
@@ -78,7 +83,18 @@ BI.DynamicYearMonthTrigger = BI.inherit(BI.Trigger, {
             },
             watermark: BI.i18nText("BI-Basic_Unrestricted"),
             errorText: function (v) {
-                return BI.i18nText("BI-Year_Trigger_Invalid_Text");
+                var year = isYear ? v : self.yearEditor.getValue();
+                var month = isYear ? self.monthEditor.getValue() : v;
+                if (!BI.isPositiveInteger(year) || !BI.isPositiveInteger(month) || month > 12) {
+                    return BI.i18nText("BI-Year_Trigger_Invalid_Text");
+                }
+
+                return BI.i18nText("BI-Basic_Year_Month_Range_Error",
+                    start.getFullYear(),
+                    start.getMonth() + 1,
+                    end.getFullYear(),
+                    end.getMonth() + 1
+                );
             },
             hgap: c.hgap,
             vgap: c.vgap,
