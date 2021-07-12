@@ -21,9 +21,6 @@ BI.DynamicYearMonthTrigger = BI.inherit(BI.Trigger, {
         BI.DynamicYearMonthTrigger.superclass._init.apply(this, arguments);
         var o = this.options;
 
-        var start = BI.parseDateTime(o.min, "%Y-%X-%d");
-        var end = BI.parseDateTime(o.max, "%Y-%X-%d");
-
         this.yearEditor = this._createEditor(true);
         this.monthEditor = this._createEditor(false);
 
