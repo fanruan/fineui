@@ -22,8 +22,6 @@ BI.DynamicDateTimeTrigger = BI.inherit(BI.Trigger, {
         BI.DynamicDateTimeTrigger.superclass._init.apply(this, arguments);
         var self = this, o = this.options, c = this._const;
         this.storeTriggerValue = "";
-        var start = BI.parseDateTime(o.min, "%Y-%X-%d");
-        var end = BI.parseDateTime(o.max, "%Y-%X-%d");
         this.editor = BI.createWidget({
             type: "bi.sign_editor",
             height: o.height,
@@ -50,6 +48,8 @@ BI.DynamicDateTimeTrigger = BI.inherit(BI.Trigger, {
                     if (!self._dateCheck(v)) {
                         str = self.editor.isEditing() ? BI.i18nText("BI-Date_Trigger_Error_Text") : BI.i18nText("BI-Year_Trigger_Invalid_Text");
                     } else {
+                        var start = BI.parseDateTime(o.min, "%Y-%X-%d");
+                        var end = BI.parseDateTime(o.max, "%Y-%X-%d");
                         str = BI.i18nText("BI-Basic_Date_Range_Error",
                             start.getFullYear(),
                             start.getMonth() + 1,
