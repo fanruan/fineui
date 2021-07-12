@@ -75,12 +75,25 @@ BI.DynamicYearQuarterTrigger = BI.inherit(BI.Trigger, {
                 return false;
             },
             errorText: function (v) {
-                return BI.i18nText("BI-Year_Trigger_Invalid_Text");
+                var year = isYear ? v : self.yearEditor.getValue();
+                var quarter = isYear ? self.quarterEditor.getValue() : v;
+                if (!BI.isPositiveInteger(year) || !BI.isPositiveInteger(quarter) || quarter > 4) {
+                    return BI.i18nText("BI-Year_Trigger_Invalid_Text");
+                }
+
+                var start = BI.parseDateTime(o.min, "%Y-%X-%d");
+                var end = BI.parseDateTime(o.max, "%Y-%X-%d");
+
+                return BI.i18nText("BI-Basic_Year_Quarter_Range_Error",
+                    start.getFullYear(),
+                    BI.getQuarter(start),
+                    end.getFullYear(),
+                    BI.getQuarter(end)
+                );
             },
             watermark: BI.i18nText("BI-Basic_Unrestricted"),
             hgap: c.hgap,
             vgap: c.vgap,
-            title: "",
             allowBlank: true
         });
         editor.on(BI.SignEditor.EVENT_KEY_DOWN, function () {
