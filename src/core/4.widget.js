@@ -29,6 +29,7 @@
                 tagName: "div",
                 attributes: null,
                 data: null,
+                key: null,
 
                 tag: null,
                 disabled: false,
@@ -38,7 +39,8 @@
                 extraCls: "",
                 cls: "",
                 css: null,
-                updateMode: "manual" // manual / auto
+
+                vdom: false
             });
         },
 
@@ -134,6 +136,9 @@
             if (o._baseCls || o.baseCls || o.extraCls || o.cls) {
                 this.element.addClass((o._baseCls || "") + " " + (o.baseCls || "") + " " + (o.extraCls || "") + " " + (o.cls || ""));
             }
+            if (o.key != null) {
+                this.element.attr("key", o.key);
+            }
             if (o.attributes) {
                 this.element.attr(o.attributes);
             }
@@ -165,6 +170,9 @@
                 this.element = BI.Widget._renderEngine.createElement(this);
             }
             this.element._isWidget = true;
+            var widgets = this.element.data("__widgets") || [];
+            widgets.push(this);
+            this.element.data("__widgets", widgets);
             this._initCurrent();
         },
 
@@ -216,20 +224,57 @@
                 els = [els];
             }
             if (BI.isArray(els)) {
-                BI.each(els, function (i, el) {
-                    if (el) {
-                        BI._lazyCreateWidget(el, {
-                            element: self
-                        });
-                    }
-                });
+                if (this.options.vdom) {
+                    var div = document.createElement("div");
+                    var element = this.element;
+                    element.append(div);
+                    this.vnode = this._renderVNode();
+                    BI.patchVNode(div, this.vnode);
+                    // 去除这个临时的div
+                    BI.DOM.hang([div]);
+                    element.attr("style", self.vnode.elm.getAttribute("style"));
+                    element.addClass(self.vnode.elm.getAttribute("class"));
+                    element.empty();
+                    BI.each(BI.jQuery(self.vnode.elm).children(), function (i, node) {
+                        element.append(node);
+                    });
+                } else {
+                    BI.each(els, function (i, el) {
+                        if (el) {
+                            BI._lazyCreateWidget(el, {
+                                element: self
+                            });
+                        }
+                    });
+                }
             }
             this._mount();
-
             if (this.__async === true && isMounted) {
                 callLifeHook(this, "mounted");
                 this.fireEvent(BI.Events.MOUNT);
             }
+        },
+
+        _renderVNode: function () {
+            var self = this;
+            var render = BI.isFunction(this.options.render) ? this.options.render : this.render;
+            var els = render && render.call(this);
+            if (BI.isPlainObject(els)) {
+                els = [els];
+            }
+            if (BI.isArray(els)) {
+                var container = document.createElement("div");
+                this._children = {};
+                BI.each(els, function (i, el) {
+                    if (el) {
+                        var w = BI._lazyCreateWidget(el, {
+                            element: container
+                        });
+                        self.addWidget(w);
+                    }
+                });
+            }
+            return BI.Element2Vnode(container);
         },
 
         _setParent: function (parent) {
@@ -290,15 +335,6 @@
             callLifeHook(this, "beforeUpdate");
             if (shouldUpdate) {
                 var res = this.update && this.update(nextProps, shouldUpdate);
-            } else if (BI.isNull(shouldUpdate)) {
-                // 默认使用shallowCompare的方式进行更新
-                var nextChange = {};
-                BI.each(nextProps, function (key, value) {
-                    if (o[key] !== value) {
-                        nextChange[key] = value;
-                    }
-                });
-                var res = this.update && BI.isNotEmptyObject(nextChange) && this.update(nextChange);
             }
             callLifeHook(this, "updated");
             return res;
@@ -576,6 +612,12 @@
         reset: function () {
             // 还在异步状态的不需要执行reset
             if (this.__async === true || this.__asking === true) {
+                return;
+            }
+            if (this.options.vdom) {
+                var vnode = this._renderVNode();
+                BI.patchVNode(this.vnode, vnode);
+                this.vnode = vnode;
                 return;
             }
             // this._isMounted = false;

@@ -78,7 +78,21 @@ BI.DynamicYearMonthTrigger = BI.inherit(BI.Trigger, {
             },
             watermark: BI.i18nText("BI-Basic_Unrestricted"),
             errorText: function (v) {
-                return BI.i18nText("BI-Year_Trigger_Invalid_Text");
+                var year = isYear ? v : self.yearEditor.getValue();
+                var month = isYear ? self.monthEditor.getValue() : v;
+                if (!BI.isPositiveInteger(year) || !BI.isPositiveInteger(month) || month > 12) {
+                    return BI.i18nText("BI-Year_Trigger_Invalid_Text");
+                }
+
+                var start = BI.parseDateTime(o.min, "%Y-%X-%d");
+                var end = BI.parseDateTime(o.max, "%Y-%X-%d");
+
+                return BI.i18nText("BI-Basic_Year_Month_Range_Error",
+                    start.getFullYear(),
+                    start.getMonth() + 1,
+                    end.getFullYear(),
+                    end.getMonth() + 1
+                );
             },
             hgap: c.hgap,
             vgap: c.vgap,
