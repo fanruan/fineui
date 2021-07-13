@@ -42,11 +42,25 @@ BI.DynamicDateTrigger = BI.inherit(BI.Trigger, {
             vgap: c.vgap,
             allowBlank: true,
             watermark: BI.isKey(o.watermark) ? o.watermark : BI.i18nText("BI-Basic_Unrestricted"),
-            errorText: function () {
+            errorText: function (v) {
                 var str = "";
                 if (!BI.isKey(o.format)) {
-                    str = self.editor.isEditing() ? BI.i18nText("BI-Date_Trigger_Error_Text") : BI.i18nText("BI-Year_Trigger_Invalid_Text");
+                    if (!self._dateCheck(v)) {
+                        str = self.editor.isEditing() ? BI.i18nText("BI-Date_Trigger_Error_Text") : BI.i18nText("BI-Year_Trigger_Invalid_Text");
+                    } else {
+                        var start = BI.parseDateTime(o.min, "%Y-%X-%d");
+                        var end = BI.parseDateTime(o.max, "%Y-%X-%d");
+                        str = BI.i18nText("BI-Basic_Date_Range_Error",
+                            start.getFullYear(),
+                            start.getMonth() + 1,
+                            start.getDate(),
+                            end.getFullYear(),
+                            end.getMonth() + 1,
+                            end.getDate()
+                        );
+                    }
                 }
+
                 return str;
             },
             title: BI.bind(this._getTitle, this)
