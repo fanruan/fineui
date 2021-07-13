@@ -1,4 +1,4 @@
-/*! time: 2021-7-13 16:40:25 */
+/*! time: 2021-7-13 23:50:49 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -54755,12 +54755,12 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
             valueFormatter: BI.emptyFn,
             itemHeight: BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT,
             height: 24,
-            allowEdit: true
+            allowEdit: true,
         });
     },
 
     _init: function () {
-        var self = this, o = this.options;
+        var self = this; var o = this.options;
         BI.MultiSelectCombo.superclass._init.apply(this, arguments);
         var assertShowValue = function () {
             if (BI.isKey(self._startValue)) {
@@ -54795,13 +54795,13 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
                     left: 0,
                     top: 0,
                     right: 0,
-                    bottom: 25
-                }
+                    bottom: 25,
+                },
             },
             valueFormatter: o.valueFormatter,
             itemsCreator: BI.bind(this._itemsCreator4Trigger, this),
             itemHeight: o.itemHeight,
-            value: this.storeValue
+            value: this.storeValue,
         });
 
         this.trigger.on(BI.MultiSelectTrigger.EVENT_FOCUS, function () {
@@ -54886,22 +54886,22 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
                             assertShowValue();
                         });
                         self.fireEvent(BI.MultiSelectCombo.EVENT_CLICK_ITEM);
-                    }
+                    },
                 }, {
                     eventName: BI.MultiSelectPopupView.EVENT_CLICK_CONFIRM,
                     action: function () {
                         self._defaultState();
-                    }
+                    },
                 }, {
                     eventName: BI.MultiSelectPopupView.EVENT_CLICK_CLEAR,
                     action: function () {
                         self._dataChange = true;
                         self.setValue();
                         self._defaultState();
-                    }
+                    },
                 }],
                 itemsCreator: o.itemsCreator,
-                itemsHeight: o.itemsHeight,
+                itemHeight: o.itemHeight,
                 valueFormatter: o.valueFormatter,
                 onLoaded: function () {
                     BI.nextTick(function () {
@@ -54910,12 +54910,12 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
                         self.numberCounter.adjustView();
                         self.trigger.getSearcher().adjustView();
                     });
-                }
+                },
             },
             value: o.value,
             hideChecker: function (e) {
                 return triggerBtn.element.find(e.target).length === 0 && self.numberCounter.element.find(e.target).length === 0;
-            }
+            },
         });
 
         this.combo.on(BI.Combo.EVENT_BEFORE_POPUPVIEW, function () {
@@ -54943,7 +54943,7 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
             type: "bi.trigger_icon_button",
             width: o.height,
             height: o.height,
-            cls: "multi-select-trigger-icon-button"
+            cls: "multi-select-trigger-icon-button",
         });
         triggerBtn.on(BI.TriggerIconButton.EVENT_CHANGE, function () {
             self.numberCounter.hideView();
@@ -54961,12 +54961,12 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
                     left: 0,
                     top: 0,
                     right: 0,
-                    bottom: 25
-                }
+                    bottom: 25,
+                },
             },
             valueFormatter: o.valueFormatter,
             itemsCreator: BI.bind(this._itemsCreator4Trigger, this),
-            value: this.storeValue
+            value: this.storeValue,
         });
         this.numberCounter.on(BI.MultiSelectCheckSelectedSwitcher.EVENT_TRIGGER_CHANGE, function () {
             if (!self.combo.isViewVisible()) {
@@ -55003,26 +55003,26 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
                 left: 0,
                 right: 0,
                 top: 0,
-                bottom: 0
+                bottom: 0,
             }, {
                 el: triggerBtn,
                 right: 0,
                 top: 0,
-                bottom: 0
+                bottom: 0,
             }, {
                 el: {
                     type: "bi.vertical_adapt",
-                    items: [this.numberCounter]
+                    items: [this.numberCounter],
                 },
                 right: o.height,
                 top: 0,
-                height: o.height
-            }]
+                height: o.height,
+            }],
         });
     },
 
     _itemsCreator4Trigger: function (op, callback) {
-        var self = this, o = this.options;
+        var self = this; var o = this.options;
         o.itemsCreator(op, function (res) {
             if (op.times === 1 && BI.isNotNull(op.keywords)) {
                 // 预防trigger内部把当前的storeValue改掉
@@ -55053,12 +55053,12 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
     },
 
     _joinKeywords: function (keywords, callback) {
-        var self = this, o = this.options;
+        var self = this; var o = this.options;
         this._assertValue(this.storeValue);
         this.requesting = true;
         o.itemsCreator({
             type: BI.MultiSelectCombo.REQ_GET_ALL_DATA,
-            keywords: keywords
+            keywords: keywords,
         }, function (ob) {
             var values = BI.map(ob.items, "value");
             digest(values);
@@ -55076,12 +55076,12 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
     },
 
     _joinAll: function (res, callback) {
-        var self = this, o = this.options;
+        var self = this; var o = this.options;
         this._assertValue(res);
         this.requesting = true;
         o.itemsCreator({
             type: BI.MultiSelectCombo.REQ_GET_ALL_DATA,
-            keywords: [this.trigger.getKey()]
+            keywords: [this.trigger.getKey()],
         }, function (ob) {
             var items = BI.map(ob.items, "value");
             if (self.storeValue.type === res.type) {
@@ -55096,7 +55096,8 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
                 });
                 change && (self.storeValue.value = BI.values(map));
                 self._adjust(callback);
-                return;
+                
+return;
             }
             var selectedMap = self._makeMap(self.storeValue.value);
             var notSelectedMap = self._makeMap(res.value);
@@ -55117,7 +55118,7 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
     },
 
     _adjust: function (callback) {
-        var self = this, o = this.options;
+        var self = this; var o = this.options;
         adjust();
         callback();
 
@@ -55131,7 +55132,7 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
     },
 
     _join: function (res, callback) {
-        var self = this, o = this.options;
+        var self = this; var o = this.options;
         this._assertValue(res);
         this._assertValue(this.storeValue);
         if (this.storeValue.type === res.type) {
@@ -55153,7 +55154,8 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
             });
             change && (this.storeValue.value = BI.values(map));
             self._adjust(callback);
-            return;
+            
+return;
         }
         this._joinAll(res, callback);
     },
@@ -55189,12 +55191,12 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
     populate: function () {
         this._populate.apply(this, arguments);
         this.numberCounter.populateSwitcher.apply(this.numberCounter, arguments);
-    }
+    },
 });
 
 BI.extend(BI.MultiSelectCombo, {
     REQ_GET_DATA_LENGTH: 1,
-    REQ_GET_ALL_DATA: -1
+    REQ_GET_ALL_DATA: -1,
 });
 
 BI.MultiSelectCombo.EVENT_BLUR = "EVENT_BLUR";
