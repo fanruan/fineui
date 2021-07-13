@@ -14,7 +14,7 @@ export declare class MultiSelectItem extends BasicButton {
         textLgap: number;
         textRgap: number;
         textHgap: number;
-    }
+    } & BasicButton['props'];
 
     doClick(...args: any[]): void;
 
