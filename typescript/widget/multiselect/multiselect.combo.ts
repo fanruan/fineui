@@ -11,6 +11,14 @@ export declare class MultiSelectCombo extends Single {
     static REQ_GET_DATA_LENGTH: 1;
     static REQ_GET_ALL_DATA: -1;
 
+    props: {
+        itemsCreator: (options: any, callback: () => any[]) => void;
+        itemHeight: number;
+        text: string;
+        valueFormatter: (v: string) => string;
+        allowEdit: boolean;
+    } & Single['props']
+
     _itemsCreator4Trigger(op: any, callback: Function): void;
 
     _stopEditing(): void;
