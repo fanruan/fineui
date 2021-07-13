@@ -6,5 +6,5 @@ export declare class TextValueCheckComboPopup extends Pane {
 
     populate(items: any[]): void;
     getValue(): any;
-    setValue(): void;
+    setValue(v: any): void;
 }

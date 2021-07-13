@@ -173,6 +173,7 @@ import { SingleSelectInsertList } from './widget/singleselect/singleselectlist.i
 import { MultiSelectTree } from './widget/multiselecttree/multiselecttree';
 import { HtmlLabel } from "./base/single/label/html.label";
 import { TreeValueChooserPane } from './component/treevaluechooser/pane.treevaluechooser';
+import { TdLayout } from './core/wrapper/layout/layout.td';
 
 
 export interface BI extends _func, _i18n, _base, _inject, _var, _web, _utils {
@@ -353,6 +354,7 @@ export interface BI extends _func, _i18n, _base, _inject, _var, _web, _utils {
     MultiSelectTree: typeof MultiSelectTree;
     HtmlLabel: typeof HtmlLabel;
     TreeValueChooserPane: typeof TreeValueChooserPane;
+    TdLayout: typeof TdLayout;
 }
 
 export default {
@@ -533,4 +535,5 @@ export {
     MultiSelectTree,
     HtmlLabel,
     TreeValueChooserPane,
+    TdLayout,
 };
