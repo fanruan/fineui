@@ -1,4 +1,4 @@
-/*! time: 2021-7-13 23:50:49 */
+/*! time: 2021-7-14 11:00:30 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -82,7 +82,7 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 1195);
+/******/ 	return __webpack_require__(__webpack_require__.s = 1196);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -74088,6 +74088,12 @@ Object.defineProperty(exports, "TreeValueChooserPane", {
     return _pane3.TreeValueChooserPane;
   }
 });
+Object.defineProperty(exports, "TdLayout", {
+  enumerable: true,
+  get: function get() {
+    return _layout11.TdLayout;
+  }
+});
 exports["default"] = void 0;
 
 var _combo = __webpack_require__(710);
@@ -74419,6 +74425,8 @@ var _multiselecttree = __webpack_require__(850);
 var _html2 = __webpack_require__(851);
 
 var _pane3 = __webpack_require__(852);
+
+var _layout11 = __webpack_require__(853);
 
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
@@ -75917,13 +75925,16 @@ var _abstract = __webpack_require__(47);
 var _abstract = __webpack_require__(30);
 
 /***/ }),
-/* 853 */,
-/* 854 */
+/* 853 */
 /***/ (function(module, exports, __webpack_require__) {
 
-// extracted by mini-css-extract-plugin
+"use strict";
+
+
+var _layout = __webpack_require__(3);
 
 /***/ }),
+/* 854 */,
 /* 855 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -75931,6 +75942,12 @@ var _abstract = __webpack_require__(30);
 
 /***/ }),
 /* 856 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
+/* 857 */
 /***/ (function(module, exports) {
 
 // 工程配置
@@ -76073,7 +76090,7 @@ BI.prepares.push(function () {
 
 
 /***/ }),
-/* 857 */
+/* 858 */
 /***/ (function(module, exports) {
 
 /**
@@ -76240,7 +76257,7 @@ BI.prepares.push(function () {
 
 
 /***/ }),
-/* 858 */
+/* 859 */
 /***/ (function(module, exports) {
 
 /**
@@ -77080,7 +77097,7 @@ BI.prepares.push(function () {
 
 
 /***/ }),
-/* 859 */
+/* 860 */
 /***/ (function(module, exports) {
 
 // 浏览器相关方法
@@ -77214,7 +77231,7 @@ _.extend(BI, {
 });
 
 /***/ }),
-/* 860 */
+/* 861 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -88243,7 +88260,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
 
 
 /***/ }),
-/* 861 */
+/* 862 */
 /***/ (function(module, exports) {
 
 /*
@@ -88258,7 +88275,7 @@ BI.$.extend(BI.$.Event.prototype, {
 });
 
 /***/ }),
-/* 862 */
+/* 863 */
 /***/ (function(module, exports) {
 
 if (BI.jQuery) {
@@ -88511,7 +88528,7 @@ if (BI.jQuery) {
 
 
 /***/ }),
-/* 863 */
+/* 864 */
 /***/ (function(module, exports) {
 
 /* !
@@ -88720,7 +88737,7 @@ if (BI.jQuery) {
 }));
 
 /***/ }),
-/* 864 */
+/* 865 */
 /***/ (function(module, exports) {
 
 _.extend(BI, {
@@ -88780,7 +88797,7 @@ _.extend(BI, {
 });
 
 /***/ }),
-/* 865 */
+/* 866 */
 /***/ (function(module, exports) {
 
 (function () {
@@ -89412,7 +89429,7 @@ _.extend(BI, {
 }());
 
 /***/ }),
-/* 866 */
+/* 867 */
 /***/ (function(module, exports) {
 
 !(function () {
@@ -89424,7 +89441,7 @@ _.extend(BI, {
 })();
 
 /***/ }),
-/* 867 */
+/* 868 */
 /***/ (function(module, exports) {
 
 /**
@@ -90129,7 +90146,7 @@ _.extend(BI, {
 
 
 /***/ }),
-/* 868 */
+/* 869 */
 /***/ (function(module, exports) {
 
 /**
@@ -90685,7 +90702,7 @@ BI.shortcut("bi.tree_view", BI.TreeView);
 
 
 /***/ }),
-/* 869 */
+/* 870 */
 /***/ (function(module, exports) {
 
 /**
@@ -90938,7 +90955,7 @@ BI.AsyncTree = BI.inherit(BI.TreeView, {
 BI.shortcut("bi.async_tree", BI.AsyncTree);
 
 /***/ }),
-/* 870 */
+/* 871 */
 /***/ (function(module, exports) {
 
 /*
@@ -92658,7 +92675,7 @@ BI.shortcut("bi.async_tree", BI.AsyncTree);
 })(BI.jQuery);
 
 /***/ }),
-/* 871 */
+/* 872 */
 /***/ (function(module, exports) {
 
 /*
@@ -93293,7 +93310,7 @@ BI.shortcut("bi.async_tree", BI.AsyncTree);
 })(BI.jQuery);
 
 /***/ }),
-/* 872 */
+/* 873 */
 /***/ (function(module, exports) {
 
 /**
@@ -93416,7 +93433,7 @@ BI.ListTreeView = BI.inherit(BI.TreeView, {
 BI.shortcut("bi.list_tree_view", BI.ListTreeView);
 
 /***/ }),
-/* 873 */
+/* 874 */
 /***/ (function(module, exports) {
 
 /**
@@ -93544,7 +93561,7 @@ BI.ListAsyncTree = BI.inherit(BI.ListTreeView, {
 BI.shortcut("bi.list_async_tree", BI.ListAsyncTree);
 
 /***/ }),
-/* 874 */
+/* 875 */
 /***/ (function(module, exports) {
 
 /**
@@ -93641,7 +93658,7 @@ BI.ListPartTree = BI.inherit(BI.ListAsyncTree, {
 BI.shortcut("bi.list_part_tree", BI.ListPartTree);
 
 /***/ }),
-/* 875 */
+/* 876 */
 /***/ (function(module, exports) {
 
 /**
@@ -93847,7 +93864,7 @@ BI.shortcut("bi.part_tree", BI.PartTree);
 
 
 /***/ }),
-/* 876 */
+/* 877 */
 /***/ (function(module, exports) {
 
 /**
@@ -93919,7 +93936,7 @@ BI.shortcut("bi.display_tree", BI.DisplayTree);
 
 
 /***/ }),
-/* 877 */
+/* 878 */
 /***/ (function(module, exports) {
 
 /**
@@ -94002,7 +94019,7 @@ BI.ListDisplayTree.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.list_display_tree", BI.ListDisplayTree);
 
 /***/ }),
-/* 878 */
+/* 879 */
 /***/ (function(module, exports) {
 
 /**
@@ -94135,7 +94152,7 @@ BI.shortcut("bi.simple_tree", BI.SimpleTreeView);
 
 
 /***/ }),
-/* 879 */
+/* 880 */
 /***/ (function(module, exports) {
 
 /**
@@ -94264,7 +94281,7 @@ BI.shortcut("bi.simple_tree", BI.SimpleTreeView);
 })();
 
 /***/ }),
-/* 880 */
+/* 881 */
 /***/ (function(module, exports) {
 
 /**
@@ -94345,7 +94362,7 @@ BI.shortcut("bi.simple_tree", BI.SimpleTreeView);
 })();
 
 /***/ }),
-/* 881 */
+/* 882 */
 /***/ (function(module, exports) {
 
 ;(function () {
@@ -94508,7 +94525,6 @@ BI.shortcut("bi.simple_tree", BI.SimpleTreeView);
 
 
 /***/ }),
-/* 882 */,
 /* 883 */,
 /* 884 */,
 /* 885 */,
@@ -94542,7 +94558,8 @@ BI.shortcut("bi.simple_tree", BI.SimpleTreeView);
 /* 913 */,
 /* 914 */,
 /* 915 */,
-/* 916 */
+/* 916 */,
+/* 917 */
 /***/ (function(module, exports) {
 
 ;(function () {
@@ -94818,7 +94835,6 @@ BI.shortcut("bi.simple_tree", BI.SimpleTreeView);
 
 
 /***/ }),
-/* 917 */,
 /* 918 */,
 /* 919 */,
 /* 920 */,
@@ -95029,25 +95045,20 @@ BI.shortcut("bi.simple_tree", BI.SimpleTreeView);
 /* 1125 */,
 /* 1126 */,
 /* 1127 */,
-/* 1128 */
+/* 1128 */,
+/* 1129 */
 /***/ (function(module, exports) {
 
 
 
 /***/ }),
-/* 1129 */,
 /* 1130 */,
 /* 1131 */,
 /* 1132 */,
 /* 1133 */,
 /* 1134 */,
 /* 1135 */,
-/* 1136 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
-
-/***/ }),
+/* 1136 */,
 /* 1137 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -95072,7 +95083,12 @@ BI.shortcut("bi.simple_tree", BI.SimpleTreeView);
 // extracted by mini-css-extract-plugin
 
 /***/ }),
-/* 1141 */,
+/* 1141 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
 /* 1142 */,
 /* 1143 */,
 /* 1144 */,
@@ -95126,11 +95142,12 @@ BI.shortcut("bi.simple_tree", BI.SimpleTreeView);
 /* 1192 */,
 /* 1193 */,
 /* 1194 */,
-/* 1195 */
+/* 1195 */,
+/* 1196 */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(854);
 __webpack_require__(855);
+__webpack_require__(856);
 __webpack_require__(202);
 __webpack_require__(203);
 __webpack_require__(204);
@@ -95188,7 +95205,6 @@ __webpack_require__(302);
 __webpack_require__(303);
 __webpack_require__(304);
 __webpack_require__(305);
-__webpack_require__(856);
 __webpack_require__(857);
 __webpack_require__(858);
 __webpack_require__(859);
@@ -95197,6 +95213,7 @@ __webpack_require__(861);
 __webpack_require__(862);
 __webpack_require__(863);
 __webpack_require__(864);
+__webpack_require__(865);
 __webpack_require__(306);
 __webpack_require__(307);
 __webpack_require__(308);
@@ -95268,7 +95285,7 @@ __webpack_require__(371);
 __webpack_require__(110);
 __webpack_require__(111);
 __webpack_require__(112);
-__webpack_require__(1196);
+__webpack_require__(1197);
 __webpack_require__(222);
 __webpack_require__(223);
 __webpack_require__(224);
@@ -95327,7 +95344,7 @@ __webpack_require__(276);
 __webpack_require__(277);
 __webpack_require__(278);
 __webpack_require__(279);
-__webpack_require__(866);
+__webpack_require__(867);
 __webpack_require__(372);
 __webpack_require__(373);
 __webpack_require__(374);
@@ -95381,7 +95398,7 @@ __webpack_require__(421);
 __webpack_require__(422);
 __webpack_require__(423);
 __webpack_require__(424);
-__webpack_require__(867);
+__webpack_require__(868);
 __webpack_require__(425);
 __webpack_require__(426);
 __webpack_require__(427);
@@ -95494,7 +95511,6 @@ __webpack_require__(533);
 __webpack_require__(534);
 __webpack_require__(535);
 __webpack_require__(536);
-__webpack_require__(868);
 __webpack_require__(869);
 __webpack_require__(870);
 __webpack_require__(871);
@@ -95507,6 +95523,7 @@ __webpack_require__(877);
 __webpack_require__(878);
 __webpack_require__(879);
 __webpack_require__(880);
+__webpack_require__(881);
 __webpack_require__(113);
 __webpack_require__(114);
 __webpack_require__(115);
@@ -95738,27 +95755,27 @@ __webpack_require__(704);
 __webpack_require__(705);
 __webpack_require__(706);
 __webpack_require__(707);
-__webpack_require__(865);
-__webpack_require__(916);
-__webpack_require__(881);
-__webpack_require__(1136);
+__webpack_require__(866);
+__webpack_require__(917);
+__webpack_require__(882);
 __webpack_require__(1137);
 __webpack_require__(1138);
 __webpack_require__(1139);
 __webpack_require__(1140);
-__webpack_require__(1128);
+__webpack_require__(1141);
+__webpack_require__(1129);
 module.exports = __webpack_require__(708);
 
 
 /***/ }),
-/* 1196 */
+/* 1197 */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(global) {module.exports = global["Fix"] = __webpack_require__(1197);
+/* WEBPACK VAR INJECTION */(function(global) {module.exports = global["Fix"] = __webpack_require__(1198);
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(14)))
 
 /***/ }),
-/* 1197 */
+/* 1198 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(setImmediate) {(function (global, factory) {

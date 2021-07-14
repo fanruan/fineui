@@ -5,6 +5,7 @@ export declare class MultiSelectBar extends BasicButton {
     props: {
         text: string;
         isAllCheckedBySelectedValue: (values: any[]) => boolean;
+        disableSelected: boolean;
         isHalfCheckedBySelectedValue: (values: any[]) => boolean;
         halfSelected: boolean;
         iconWrapperWidth: number;
