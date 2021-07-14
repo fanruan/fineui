@@ -4,6 +4,17 @@ export declare class MultiSelectBar extends BasicButton {
     static xtype: string;
 
     static EVENT_CHANGE: string;
+    
+    props: {
+        text: string;
+        isAllCheckedBySelectedValue: Function;
+        disableSelected: boolean;
+        isHalfCheckedBySelectedValue: Function;
+        halfSelected: boolean;
+        iconWrapperWidth: number;
+        iconWidth: number;
+        iconHeight: number;
+    } & BasicButton['props'];
 
     props: {
         text: string;
