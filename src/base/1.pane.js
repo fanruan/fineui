@@ -139,6 +139,7 @@ BI.Pane = BI.inherit(BI.Widget, {
     },
 
     setTipText: function (text) {
+        this._assertTip();
         this._tipText.setText(text);
     },
 
