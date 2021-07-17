@@ -1,4 +1,4 @@
-/*! time: 2021-7-14 11:00:30 */
+/*! time: 2021-7-17 11:01:32 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -16258,7 +16258,11 @@ BI.TableAdaptLayout = BI.inherit(BI.Layout, {
         // 2、不能给多个td设置最大宽度，这样只会平分宽度
         // 3、多百分比宽度就算了
         if (columnSize > 0) {
-            td.element.css({"max-width": columnSize < 1 ? width : width / BI.pixRatio + BI.pixUnit});
+            columnSize = columnSize < 1 ? width : width / BI.pixRatio + BI.pixUnit;
+            td.element.css({
+                "max-width": columnSize,
+                "min-width": columnSize
+            });
         }
         if (i === 0) {
             td.element.addClass("first-element");
@@ -19344,13 +19348,14 @@ BI.TdLayout = BI.inherit(BI.Layout, {
         }
 
         var height = o.rowSize[idx] === "" ? "" : (o.rowSize[idx] < 1 ? ((o.rowSize[idx] * 100).toFixed(1) + "%") : o.rowSize[idx]);
-
+        var rowHeight = BI.isNumber(o.rowSize[idx]) ? (o.rowSize[idx] <= 1 ? height : height / BI.pixRatio + BI.pixUnit) : height;
         var tr = BI._lazyCreateWidget({
             type: "bi.default",
             tagName: "tr",
             height: height,
             css: {
-                "max-height": BI.isNumber(o.rowSize[idx]) ? (o.rowSize[idx] <= 1 ? height : height / BI.pixRatio + BI.pixUnit) : height
+                "max-height": rowHeight,
+                "min-height": rowHeight
             }
         });
 
@@ -19400,7 +19405,11 @@ BI.TdLayout = BI.inherit(BI.Layout, {
             // 2、不能给多个td设置最大宽度，这样只会平分宽度
             // 3、多百分比宽度就算了
             if (columnSize > 0) {
-                td.element.css({"max-width": columnSize < 1 ? width : width / BI.pixRatio + BI.pixUnit});
+                columnSize = columnSize < 1 ? width : width / BI.pixRatio + BI.pixUnit;
+                td.element.css({
+                    "max-width": columnSize,
+                    "min-width": columnSize
+                });
             }
             td.element.css({
                 position: "relative",
