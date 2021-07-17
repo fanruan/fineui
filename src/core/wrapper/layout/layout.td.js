@@ -76,13 +76,14 @@ BI.TdLayout = BI.inherit(BI.Layout, {
         }
 
         var height = o.rowSize[idx] === "" ? "" : (o.rowSize[idx] < 1 ? ((o.rowSize[idx] * 100).toFixed(1) + "%") : o.rowSize[idx]);
-
+        var rowHeight = BI.isNumber(o.rowSize[idx]) ? (o.rowSize[idx] <= 1 ? height : height / BI.pixRatio + BI.pixUnit) : height;
         var tr = BI._lazyCreateWidget({
             type: "bi.default",
             tagName: "tr",
             height: height,
             css: {
-                "max-height": BI.isNumber(o.rowSize[idx]) ? (o.rowSize[idx] <= 1 ? height : height / BI.pixRatio + BI.pixUnit) : height
+                "max-height": rowHeight,
+                "min-height": rowHeight
             }
         });
 
