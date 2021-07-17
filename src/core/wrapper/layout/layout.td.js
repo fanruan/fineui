@@ -132,7 +132,11 @@ BI.TdLayout = BI.inherit(BI.Layout, {
             // 2、不能给多个td设置最大宽度，这样只会平分宽度
             // 3、多百分比宽度就算了
             if (columnSize > 0) {
-                td.element.css({"max-width": columnSize < 1 ? width : width / BI.pixRatio + BI.pixUnit});
+                columnSize = columnSize < 1 ? width : width / BI.pixRatio + BI.pixUnit;
+                td.element.css({
+                    "max-width": columnSize,
+                    "min-width": columnSize
+                });
             }
             td.element.css({
                 position: "relative",
