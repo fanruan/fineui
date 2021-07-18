@@ -1,4 +1,4 @@
-/*! time: 2021-7-17 11:01:32 */
+/*! time: 2021-7-18 18:31:24 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -19812,6 +19812,11 @@ BI.Pane = BI.inherit(BI.Widget, {
         }
     },
 
+    setTipText: function (text) {
+        this._assertTip();
+        this._tipText.setText(text);
+    },
+
     populate: function (items) {
         this.options.items = items || [];
         this.check();
@@ -38445,6 +38450,9 @@ BI.ListPane = BI.inherit(BI.Pane, {
             return;
         }
         BI.ListPane.superclass.populate.apply(this, arguments);
+        var context = BI.get(arguments, [2], {});
+        var tipText = context.tipText || '';
+        BI.isNotEmptyString(tipText) && this.setTipText(tipText);
         this.button_group.populate.apply(this.button_group, arguments);
     },
 
@@ -54824,7 +54832,10 @@ BI.MultiSelectSearchLoader = BI.inherit(BI.Widget, {
                         var json = self._filterValues(self.storeValue);
                         firstItems = self._createItems(json);
                     }
-                    callback(firstItems.concat(self._createItems(ob.items)), keyword);
+                    var context = {
+                        tipText: ob.tipText,
+                    };
+                    callback(firstItems.concat(self._createItems(ob.items)), keyword, context);
                     if (op.times === 1 && self.storeValue) {
                         self.setValue(self.storeValue);
                     }
@@ -61881,7 +61892,10 @@ BI.SingleSelectSearchLoader = BI.inherit(BI.Widget, {
                         var json = self._filterValues(self.storeValue);
                         firstItems = self._createItems(json);
                     }
-                    callback(firstItems.concat(self._createItems(ob.items)), keyword || "");
+                    var context = {
+                        tipText: ob.tipText,
+                    };
+                    callback(firstItems.concat(self._createItems(ob.items)), keyword || "", context);
                     if (op.times === 1 && self.storeValue) {
                         self.setValue(self.storeValue);
                     }
