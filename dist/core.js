@@ -1,4 +1,4 @@
-/*! time: 2021-7-18 18:31:24 */
+/*! time: 2021-7-19 19:31:56 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -71436,7 +71436,11 @@ BI.DynamicYearMonthTrigger = BI.inherit(BI.Trigger, {
             height: o.height,
             validationChecker: function (v) {
                 if (isYear) {
-                    return v === "" || (BI.isPositiveInteger(v) && !BI.checkDateVoid(v, parseInt(v, 10) === BI.parseDateTime(o.min, "%Y-%X-%d").getFullYear() ? BI.parseDateTime(o.min, "%Y-%X-%d").getMonth() + 1 : 1, 1, o.min, o.max)[0]);
+                    var month = self.monthEditor.getValue();
+                    if(BI.isEmptyString(month)) {
+                        month = parseInt(v, 10) === BI.parseDateTime(o.min, "%Y-%X-%d").getFullYear() ? (BI.parseDateTime(o.min, "%Y-%X-%d").getMonth() + 1) : 1;
+                    }
+                    return v === "" || (BI.isPositiveInteger(v) && !BI.checkDateVoid(v, month, 1, o.min, o.max)[0]);
                 }
                 var year = self.yearEditor.getValue();
 
@@ -72737,7 +72741,13 @@ BI.DynamicYearQuarterTrigger = BI.inherit(BI.Trigger, {
             height: o.height,
             validationChecker: function (v) {
                 if(isYear) {
-                    return v === "" || (BI.isPositiveInteger(v) && !BI.checkDateVoid(v, parseInt(v, 10) === BI.parseDateTime(o.min, "%Y-%X-%d").getFullYear() ? BI.parseDateTime(o.min, "%Y-%X-%d").getMonth() + 1 : 1, 1, o.min, o.max)[0]);
+                    var month = self.quarterEditor.getValue();
+                    if(BI.isEmptyString(month)) {
+                        month = parseInt(v, 10) === BI.parseDateTime(o.min, "%Y-%X-%d").getFullYear() ? BI.parseDateTime(o.min, "%Y-%X-%d").getMonth() + 1 : 1;
+                    } else {
+                        month = (v - 1) * 3 + 1;
+                    }
+                    return v === "" || (BI.isPositiveInteger(v) && !BI.checkDateVoid(v, month, 1, o.min, o.max)[0]);
                 }
                 var year = self.yearEditor.getValue();
 
