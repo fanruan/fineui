@@ -1,4 +1,4 @@
-/*! time: 2021-7-14 11:00:30 */
+/*! time: 2021-7-18 18:31:24 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -15868,7 +15868,11 @@ BI.TableAdaptLayout = BI.inherit(BI.Layout, {
         // 2、不能给多个td设置最大宽度，这样只会平分宽度
         // 3、多百分比宽度就算了
         if (columnSize > 0) {
-            td.element.css({"max-width": columnSize < 1 ? width : width / BI.pixRatio + BI.pixUnit});
+            columnSize = columnSize < 1 ? width : width / BI.pixRatio + BI.pixUnit;
+            td.element.css({
+                "max-width": columnSize,
+                "min-width": columnSize
+            });
         }
         if (i === 0) {
             td.element.addClass("first-element");
@@ -18954,13 +18958,14 @@ BI.TdLayout = BI.inherit(BI.Layout, {
         }
 
         var height = o.rowSize[idx] === "" ? "" : (o.rowSize[idx] < 1 ? ((o.rowSize[idx] * 100).toFixed(1) + "%") : o.rowSize[idx]);
-
+        var rowHeight = BI.isNumber(o.rowSize[idx]) ? (o.rowSize[idx] <= 1 ? height : height / BI.pixRatio + BI.pixUnit) : height;
         var tr = BI._lazyCreateWidget({
             type: "bi.default",
             tagName: "tr",
             height: height,
             css: {
-                "max-height": BI.isNumber(o.rowSize[idx]) ? (o.rowSize[idx] <= 1 ? height : height / BI.pixRatio + BI.pixUnit) : height
+                "max-height": rowHeight,
+                "min-height": rowHeight
             }
         });
 
@@ -19010,7 +19015,11 @@ BI.TdLayout = BI.inherit(BI.Layout, {
             // 2、不能给多个td设置最大宽度，这样只会平分宽度
             // 3、多百分比宽度就算了
             if (columnSize > 0) {
-                td.element.css({"max-width": columnSize < 1 ? width : width / BI.pixRatio + BI.pixUnit});
+                columnSize = columnSize < 1 ? width : width / BI.pixRatio + BI.pixUnit;
+                td.element.css({
+                    "max-width": columnSize,
+                    "min-width": columnSize
+                });
             }
             td.element.css({
                 position: "relative",
@@ -19801,6 +19810,11 @@ BI.Pane = BI.inherit(BI.Widget, {
         } else {
             this._tipText && this._tipText.setVisible(false);
         }
+    },
+
+    setTipText: function (text) {
+        this._assertTip();
+        this._tipText.setText(text);
     },
 
     populate: function (items) {
@@ -38436,6 +38450,9 @@ BI.ListPane = BI.inherit(BI.Pane, {
             return;
         }
         BI.ListPane.superclass.populate.apply(this, arguments);
+        var context = BI.get(arguments, [2], {});
+        var tipText = context.tipText || '';
+        BI.isNotEmptyString(tipText) && this.setTipText(tipText);
         this.button_group.populate.apply(this.button_group, arguments);
     },
 
@@ -54815,7 +54832,10 @@ BI.MultiSelectSearchLoader = BI.inherit(BI.Widget, {
                         var json = self._filterValues(self.storeValue);
                         firstItems = self._createItems(json);
                     }
-                    callback(firstItems.concat(self._createItems(ob.items)), keyword);
+                    var context = {
+                        tipText: ob.tipText,
+                    };
+                    callback(firstItems.concat(self._createItems(ob.items)), keyword, context);
                     if (op.times === 1 && self.storeValue) {
                         self.setValue(self.storeValue);
                     }
@@ -61872,7 +61892,10 @@ BI.SingleSelectSearchLoader = BI.inherit(BI.Widget, {
                         var json = self._filterValues(self.storeValue);
                         firstItems = self._createItems(json);
                     }
-                    callback(firstItems.concat(self._createItems(ob.items)), keyword || "");
+                    var context = {
+                        tipText: ob.tipText,
+                    };
+                    callback(firstItems.concat(self._createItems(ob.items)), keyword || "", context);
                     if (op.times === 1 && self.storeValue) {
                         self.setValue(self.storeValue);
                     }
