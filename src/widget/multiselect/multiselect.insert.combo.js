@@ -352,10 +352,16 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
         this.requesting = true;
         if (this.storeValue.type === res.type) {
             var result = BI.Func.getSearchResult(this.storeValue.value, this.trigger.getKey());
-            var resultArray = BI.concat(result.match, result.find);
-            this.storeValue.value = BI.filter(this.storeValue.value, function (i, value) {
-                return !BI.contains(resultArray, value);
-            }) || [];
+            var change = false;
+            var map = this._makeMap(this.storeValue.value);
+            BI.each(BI.concat(result.match, result.find), function (i, v) {
+                if (BI.isNotNull(map[v])) {
+                    change = true;
+                    self.storeValue.assist && self.storeValue.assist.push(map[v]);
+                    delete map[v];
+                }
+            });
+            change && (this.storeValue.value = BI.values(map));
             this._adjust(callback);
             return;
         }
