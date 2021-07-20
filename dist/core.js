@@ -1,4 +1,4 @@
-/*! time: 2021-7-19 20:20:30 */
+/*! time: 2021-7-20 9:20:27 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -42493,9 +42493,10 @@ BI.AllCountPager = BI.inherit(BI.Widget, {
 
         BI.createWidget(o.showRowCount ? {
             type: "bi.vertical_adapt",
-            columnSize: ["fill", ""],
             element: this,
             scrollx: false,
+            columnSize: ["fill", ""],
+            horizontalAlign: BI.HorizontalAlign.Right,
             items: [
                 this._getRowCountObject(),
                 this.editor, this.allPages, this.pager
