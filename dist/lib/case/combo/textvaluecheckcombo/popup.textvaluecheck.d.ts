@@ -4,5 +4,5 @@ export declare class TextValueCheckComboPopup extends Pane {
     static EVENT_CHANGE: string;
     populate(items: any[]): void;
     getValue(): any;
-    setValue(): void;
+    setValue(v: any): void;
 }

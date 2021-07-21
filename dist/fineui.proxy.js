@@ -1,4 +1,4 @@
-/*! time: 2021-7-12 20:10:46 */
+/*! time: 2021-7-21 10:30:28 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -82,7 +82,7 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 1195);
+/******/ 	return __webpack_require__(__webpack_require__.s = 1196);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -6816,10 +6816,8 @@ BI.Req = {
             this._isMounted = true;
             for (var key in this._children) {
                 var child = this._children[key];
-                if (layer === 0) {
-                    !self.isEnabled() && child._setEnable(false);
-                    !self.isValid() && child._setValid(false);
-                }
+                !self.isEnabled() && child._setEnable(false);
+                !self.isValid() && child._setValid(false);
                 child._mount && child._mount(deep ? force : false, deep, lifeHook, predicate, layer + 1);
             }
             this._mountChildren && this._mountChildren();
@@ -8477,7 +8475,7 @@ BI.Plugin = BI.Plugin || {};
     var propsModule = { create: updateProps, update: updateProps };
 
     // Bindig `requestAnimationFrame` like this fixes a bug in IE/Edge. See #360 and #409.
-    var raf$1 = typeof window !== "undefined" && window.requestAnimationFrame.bind(window) || setTimeout;
+    var raf$1 = typeof window !== "undefined" && (window.requestAnimationFrame && window.requestAnimationFrame.bind(window)) || setTimeout;
     var nextFrame$1 = function nextFrame$1(fn) {
         raf$1(function () {
             raf$1(fn);
@@ -16098,6 +16096,7 @@ BI.LeftVerticalAdaptLayout = BI.inherit(BI.Layout, {
         return BI.extend(BI.LeftRightVerticalAdaptLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-l-v-a",
             items: [],
+            columnSize: [],
             lgap: 0,
             rgap: 0,
             hgap: 0,
@@ -16115,6 +16114,7 @@ BI.LeftVerticalAdaptLayout = BI.inherit(BI.Layout, {
                 self.layout = _ref;
             },
             items: o.items,
+            columnSize: o.columnSize,
             hgap: o.hgap,
             lgap: o.lgap,
             rgap: o.rgap,
@@ -16147,6 +16147,7 @@ BI.RightVerticalAdaptLayout = BI.inherit(BI.Layout, {
         return BI.extend(BI.RightVerticalAdaptLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-r-v-a",
             items: [],
+            columnSize: [],
             lgap: 0,
             rgap: 0,
             hgap: 0,
@@ -16165,6 +16166,7 @@ BI.RightVerticalAdaptLayout = BI.inherit(BI.Layout, {
             },
             horizontalAlign: BI.HorizontalAlign.Right,
             items: o.items,
+            columnSize: o.columnSize,
             hgap: o.hgap,
             lgap: o.lgap,
             rgap: o.rgap,
@@ -16260,7 +16262,11 @@ BI.TableAdaptLayout = BI.inherit(BI.Layout, {
         // 2、不能给多个td设置最大宽度，这样只会平分宽度
         // 3、多百分比宽度就算了
         if (columnSize > 0) {
-            td.element.css({"max-width": columnSize < 1 ? width : width / BI.pixRatio + BI.pixUnit});
+            columnSize = columnSize < 1 ? width : width / BI.pixRatio + BI.pixUnit;
+            td.element.css({
+                "max-width": columnSize,
+                "min-width": columnSize
+            });
         }
         if (i === 0) {
             td.element.addClass("first-element");
@@ -19346,13 +19352,14 @@ BI.TdLayout = BI.inherit(BI.Layout, {
         }
 
         var height = o.rowSize[idx] === "" ? "" : (o.rowSize[idx] < 1 ? ((o.rowSize[idx] * 100).toFixed(1) + "%") : o.rowSize[idx]);
-
+        var rowHeight = BI.isNumber(o.rowSize[idx]) ? (o.rowSize[idx] <= 1 ? height : height / BI.pixRatio + BI.pixUnit) : height;
         var tr = BI._lazyCreateWidget({
             type: "bi.default",
             tagName: "tr",
             height: height,
             css: {
-                "max-height": BI.isNumber(o.rowSize[idx]) ? (o.rowSize[idx] <= 1 ? height : height / BI.pixRatio + BI.pixUnit) : height
+                "max-height": rowHeight,
+                "min-height": rowHeight
             }
         });
 
@@ -19402,7 +19409,11 @@ BI.TdLayout = BI.inherit(BI.Layout, {
             // 2、不能给多个td设置最大宽度，这样只会平分宽度
             // 3、多百分比宽度就算了
             if (columnSize > 0) {
-                td.element.css({"max-width": columnSize < 1 ? width : width / BI.pixRatio + BI.pixUnit});
+                columnSize = columnSize < 1 ? width : width / BI.pixRatio + BI.pixUnit;
+                td.element.css({
+                    "max-width": columnSize,
+                    "min-width": columnSize
+                });
             }
             td.element.css({
                 position: "relative",
@@ -20193,6 +20204,11 @@ BI.Pane = BI.inherit(BI.Widget, {
         } else {
             this._tipText && this._tipText.setVisible(false);
         }
+    },
+
+    setTipText: function (text) {
+        this._assertTip();
+        this._tipText.setText(text);
     },
 
     populate: function (items) {
@@ -38827,8 +38843,16 @@ BI.ListPane = BI.inherit(BI.Pane, {
             }]);
             return;
         }
-        BI.ListPane.superclass.populate.apply(this, arguments);
-        this.button_group.populate.apply(this.button_group, arguments);
+
+        var context = BI.get(arguments, [2], {});
+        var tipText = context.tipText || '';
+        if (BI.isNotEmptyString(tipText)) {
+            BI.ListPane.superclass.populate.apply(this, []);
+            this.setTipText(tipText);
+        } else {
+            BI.ListPane.superclass.populate.apply(this, arguments);
+            this.button_group.populate.apply(this.button_group, arguments);
+        }
     },
 
     empty: function () {
@@ -39136,11 +39160,13 @@ BI.SelectList = BI.inherit(BI.Widget, {
             items: o.items,
             itemsCreator: function (op, callback) {
                 op.times === 1 && self.toolbar.setVisible(false);
-                o.itemsCreator(op, function (items) {
+                o.itemsCreator(op, function (items, keywords, context) {
                     callback.apply(self, arguments);
                     if (op.times === 1) {
-                        self.toolbar.setVisible(items && items.length > 0);
-                        self.toolbar.setEnable(self.isEnabled() && items && items.length > 0);
+                        var tipText = BI.get(context, 'tipText', '');
+                        var visible = BI.isEmptyString(tipText) && items && items.length > 0;
+                        self.toolbar.setVisible(visible);
+                        self.toolbar.setEnable(self.isEnabled() && visible);
                     }
                     self._checkAllSelected();
                 });
@@ -39935,9 +39961,10 @@ BI.AllCountPager = BI.inherit(BI.Widget, {
 
         BI.createWidget(o.showRowCount ? {
             type: "bi.vertical_adapt",
-            columnSize: ["fill", ""],
             element: this,
             scrollx: false,
+            columnSize: ["fill", ""],
+            horizontalAlign: BI.HorizontalAlign.Right,
             items: [
                 this._getRowCountObject(),
                 this.editor, this.allPages, this.pager
@@ -52218,12 +52245,12 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
             valueFormatter: BI.emptyFn,
             itemHeight: BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT,
             height: 24,
-            allowEdit: true
+            allowEdit: true,
         });
     },
 
     _init: function () {
-        var self = this, o = this.options;
+        var self = this; var o = this.options;
         BI.MultiSelectCombo.superclass._init.apply(this, arguments);
         var assertShowValue = function () {
             if (BI.isKey(self._startValue)) {
@@ -52258,13 +52285,13 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
                     left: 0,
                     top: 0,
                     right: 0,
-                    bottom: 25
-                }
+                    bottom: 25,
+                },
             },
             valueFormatter: o.valueFormatter,
             itemsCreator: BI.bind(this._itemsCreator4Trigger, this),
             itemHeight: o.itemHeight,
-            value: this.storeValue
+            value: this.storeValue,
         });
 
         this.trigger.on(BI.MultiSelectTrigger.EVENT_FOCUS, function () {
@@ -52349,22 +52376,22 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
                             assertShowValue();
                         });
                         self.fireEvent(BI.MultiSelectCombo.EVENT_CLICK_ITEM);
-                    }
+                    },
                 }, {
                     eventName: BI.MultiSelectPopupView.EVENT_CLICK_CONFIRM,
                     action: function () {
                         self._defaultState();
-                    }
+                    },
                 }, {
                     eventName: BI.MultiSelectPopupView.EVENT_CLICK_CLEAR,
                     action: function () {
                         self._dataChange = true;
                         self.setValue();
                         self._defaultState();
-                    }
+                    },
                 }],
                 itemsCreator: o.itemsCreator,
-                itemsHeight: o.itemsHeight,
+                itemHeight: o.itemHeight,
                 valueFormatter: o.valueFormatter,
                 onLoaded: function () {
                     BI.nextTick(function () {
@@ -52373,12 +52400,12 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
                         self.numberCounter.adjustView();
                         self.trigger.getSearcher().adjustView();
                     });
-                }
+                },
             },
             value: o.value,
             hideChecker: function (e) {
                 return triggerBtn.element.find(e.target).length === 0 && self.numberCounter.element.find(e.target).length === 0;
-            }
+            },
         });
 
         this.combo.on(BI.Combo.EVENT_BEFORE_POPUPVIEW, function () {
@@ -52406,7 +52433,7 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
             type: "bi.trigger_icon_button",
             width: o.height,
             height: o.height,
-            cls: "multi-select-trigger-icon-button"
+            cls: "multi-select-trigger-icon-button",
         });
         triggerBtn.on(BI.TriggerIconButton.EVENT_CHANGE, function () {
             self.numberCounter.hideView();
@@ -52424,12 +52451,12 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
                     left: 0,
                     top: 0,
                     right: 0,
-                    bottom: 25
-                }
+                    bottom: 25,
+                },
             },
             valueFormatter: o.valueFormatter,
             itemsCreator: BI.bind(this._itemsCreator4Trigger, this),
-            value: this.storeValue
+            value: this.storeValue,
         });
         this.numberCounter.on(BI.MultiSelectCheckSelectedSwitcher.EVENT_TRIGGER_CHANGE, function () {
             if (!self.combo.isViewVisible()) {
@@ -52466,26 +52493,26 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
                 left: 0,
                 right: 0,
                 top: 0,
-                bottom: 0
+                bottom: 0,
             }, {
                 el: triggerBtn,
                 right: 0,
                 top: 0,
-                bottom: 0
+                bottom: 0,
             }, {
                 el: {
                     type: "bi.vertical_adapt",
-                    items: [this.numberCounter]
+                    items: [this.numberCounter],
                 },
                 right: o.height,
                 top: 0,
-                height: o.height
-            }]
+                height: o.height,
+            }],
         });
     },
 
     _itemsCreator4Trigger: function (op, callback) {
-        var self = this, o = this.options;
+        var self = this; var o = this.options;
         o.itemsCreator(op, function (res) {
             if (op.times === 1 && BI.isNotNull(op.keywords)) {
                 // 预防trigger内部把当前的storeValue改掉
@@ -52516,12 +52543,12 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
     },
 
     _joinKeywords: function (keywords, callback) {
-        var self = this, o = this.options;
+        var self = this; var o = this.options;
         this._assertValue(this.storeValue);
         this.requesting = true;
         o.itemsCreator({
             type: BI.MultiSelectCombo.REQ_GET_ALL_DATA,
-            keywords: keywords
+            keywords: keywords,
         }, function (ob) {
             var values = BI.map(ob.items, "value");
             digest(values);
@@ -52539,28 +52566,30 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
     },
 
     _joinAll: function (res, callback) {
-        var self = this, o = this.options;
+        var self = this; var o = this.options;
         this._assertValue(res);
         this.requesting = true;
+        if (this.storeValue.type === res.type) {
+            var result = BI.Func.getSearchResult(this.storeValue.value, this.trigger.getKey());
+            var change = false;
+            var map = this._makeMap(this.storeValue.value);
+            BI.each(BI.concat(result.match, result.find), function (i, v) {
+                if (BI.isNotNull(map[v])) {
+                    change = true;
+                    self.storeValue.assist && self.storeValue.assist.push(map[v]);
+                    delete map[v];
+                }
+            });
+            change && (this.storeValue.value = BI.values(map));
+            this._adjust(callback);
+            return;
+        }
         o.itemsCreator({
             type: BI.MultiSelectCombo.REQ_GET_ALL_DATA,
-            keywords: [this.trigger.getKey()]
+            keywords: [this.trigger.getKey()],
+            selectedValues: this.storeValue.value,
         }, function (ob) {
             var items = BI.map(ob.items, "value");
-            if (self.storeValue.type === res.type) {
-                var change = false;
-                var map = self._makeMap(self.storeValue.value);
-                BI.each(items, function (i, v) {
-                    if (BI.isNotNull(map[v])) {
-                        change = true;
-                        self.storeValue.assist && self.storeValue.assist.push(map[v]);
-                        delete map[v];
-                    }
-                });
-                change && (self.storeValue.value = BI.values(map));
-                self._adjust(callback);
-                return;
-            }
             var selectedMap = self._makeMap(self.storeValue.value);
             var notSelectedMap = self._makeMap(res.value);
             var newItems = [];
@@ -52580,7 +52609,7 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
     },
 
     _adjust: function (callback) {
-        var self = this, o = this.options;
+        var self = this; var o = this.options;
         adjust();
         callback();
 
@@ -52594,7 +52623,7 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
     },
 
     _join: function (res, callback) {
-        var self = this, o = this.options;
+        var self = this; var o = this.options;
         this._assertValue(res);
         this._assertValue(this.storeValue);
         if (this.storeValue.type === res.type) {
@@ -52616,7 +52645,8 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
             });
             change && (this.storeValue.value = BI.values(map));
             self._adjust(callback);
-            return;
+            
+return;
         }
         this._joinAll(res, callback);
     },
@@ -52652,12 +52682,12 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
     populate: function () {
         this._populate.apply(this, arguments);
         this.numberCounter.populateSwitcher.apply(this.numberCounter, arguments);
-    }
+    },
 });
 
 BI.extend(BI.MultiSelectCombo, {
     REQ_GET_DATA_LENGTH: 1,
-    REQ_GET_ALL_DATA: -1
+    REQ_GET_ALL_DATA: -1,
 });
 
 BI.MultiSelectCombo.EVENT_BLUR = "EVENT_BLUR";
@@ -53039,25 +53069,27 @@ BI.MultiSelectNoBarCombo = BI.inherit(BI.Single, {
         var self = this, o = this.options;
         this._assertValue(res);
         this.requesting = true;
+        if (this.storeValue.type === res.type) {
+            var result = BI.Func.getSearchResult(this.storeValue.value, this.trigger.getKey());
+            var change = false;
+            var map = self._makeMap(this.storeValue.value);
+            BI.each(BI.concat(result.match, result.find), function (i, v) {
+                if (BI.isNotNull(map[v])) {
+                    change = true;
+                    self.storeValue.assist && self.storeValue.assist.push(map[v]);
+                    delete map[v];
+                }
+            });
+            change && (this.storeValue.value = BI.values(map));
+            this._adjust(callback);
+            return;
+        }
         o.itemsCreator({
             type: BI.MultiSelectNoBarCombo.REQ_GET_ALL_DATA,
-            keywords: [this.trigger.getKey()]
+            keywords: [this.trigger.getKey()],
+            selectedValues: this.storeValue.value,
         }, function (ob) {
             var items = BI.map(ob.items, "value");
-            if (self.storeValue.type === res.type) {
-                var change = false;
-                var map = self._makeMap(self.storeValue.value);
-                BI.each(items, function (i, v) {
-                    if (BI.isNotNull(map[v])) {
-                        change = true;
-                        self.storeValue.assist && self.storeValue.assist.push(map[v]);
-                        delete map[v];
-                    }
-                });
-                change && (self.storeValue.value = BI.values(map));
-                self._adjust(callback);
-                return;
-            }
             var selectedMap = self._makeMap(self.storeValue.value);
             var notSelectedMap = self._makeMap(res.value);
             var newItems = [];
@@ -53525,25 +53557,27 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
         var self = this, o = this.options;
         this._assertValue(res);
         this.requesting = true;
+        if (this.storeValue.type === res.type) {
+            var result = BI.Func.getSearchResult(this.storeValue.value, this.trigger.getKey());
+            var change = false;
+            var map = this._makeMap(this.storeValue.value);
+            BI.each(BI.concat(result.match, result.find), function (i, v) {
+                if (BI.isNotNull(map[v])) {
+                    change = true;
+                    self.storeValue.assist && self.storeValue.assist.push(map[v]);
+                    delete map[v];
+                }
+            });
+            change && (this.storeValue.value = BI.values(map));
+            this._adjust(callback);
+            return;
+        }
         o.itemsCreator({
             type: BI.MultiSelectInsertCombo.REQ_GET_ALL_DATA,
-            keywords: [this.trigger.getKey()]
+            keywords: [this.trigger.getKey()],
+            selectedValues: this.storeValue.value,
         }, function (ob) {
             var items = BI.map(ob.items, "value");
-            if (self.storeValue.type === res.type) {
-                var change = false;
-                var map = self._makeMap(self.storeValue.value);
-                BI.each(items, function (i, v) {
-                    if (BI.isNotNull(map[v])) {
-                        change = true;
-                        self.storeValue.assist && self.storeValue.assist.push(map[v]);
-                        delete map[v];
-                    }
-                });
-                change && (self.storeValue.value = BI.values(map));
-                self._adjust(callback);
-                return;
-            }
             var selectedMap = self._makeMap(self.storeValue.value);
             var notSelectedMap = self._makeMap(res.value);
             var newItems = [];
@@ -54008,25 +54042,27 @@ BI.MultiSelectInsertNoBarCombo = BI.inherit(BI.Single, {
         var self = this, o = this.options;
         this._assertValue(res);
         this.requesting = true;
+        if (this.storeValue.type === res.type) {
+            var result = BI.Func.getSearchResult(this.storeValue.value, this.trigger.getKey());
+            var change = false;
+            var map = this._makeMap(this.storeValue.value);
+            BI.each(BI.concat(result.match, result.find), function (i, v) {
+                if (BI.isNotNull(map[v])) {
+                    change = true;
+                    self.storeValue.assist && self.storeValue.assist.push(map[v]);
+                    delete map[v];
+                }
+            });
+            change && (this.storeValue.value = BI.values(map));
+            this._adjust(callback);
+            return;
+        }
         o.itemsCreator({
             type: BI.MultiSelectInsertNoBarCombo.REQ_GET_ALL_DATA,
-            keywords: [this.trigger.getKey()]
+            keywords: [this.trigger.getKey()],
+            selectedValues: this.storeValue.value,
         }, function (ob) {
             var items = BI.map(ob.items, "value");
-            if (self.storeValue.type === res.type) {
-                var change = false;
-                var map = self._makeMap(self.storeValue.value);
-                BI.each(items, function (i, v) {
-                    if (BI.isNotNull(map[v])) {
-                        change = true;
-                        self.storeValue.assist && self.storeValue.assist.push(map[v]);
-                        delete map[v];
-                    }
-                });
-                change && (self.storeValue.value = BI.values(map));
-                self._adjust(callback);
-                return;
-            }
             var selectedMap = self._makeMap(self.storeValue.value);
             var notSelectedMap = self._makeMap(res.value);
             var newItems = [];
@@ -55205,7 +55241,10 @@ BI.MultiSelectSearchLoader = BI.inherit(BI.Widget, {
                         var json = self._filterValues(self.storeValue);
                         firstItems = self._createItems(json);
                     }
-                    callback(firstItems.concat(self._createItems(ob.items)), keyword);
+                    var context = {
+                        tipText: ob.tipText,
+                    };
+                    callback(firstItems.concat(self._createItems(ob.items)), keyword, context);
                     if (op.times === 1 && self.storeValue) {
                         self.setValue(self.storeValue);
                     }
@@ -56584,24 +56623,26 @@ BI.MultiSelectInsertList = BI.inherit(BI.Single, {
     _joinAll: function (res, callback) {
         var self = this, o = this.options;
         this._assertValue(res);
+        if (this.storeValue.type === res.type) {
+            var result = BI.Func.getSearchResult(this.storeValue.value, this.trigger.getKey());
+            var change = false;
+            var map = this._makeMap(this.storeValue.value);
+            BI.each(BI.concat(result.match, result.find), function (i, v) {
+                if (BI.isNotNull(map[v])) {
+                    change = true;
+                    delete map[v];
+                }
+            });
+            change && (this.storeValue.value = BI.values(map));
+            callback();
+            return;
+        }
         o.itemsCreator({
             type: BI.MultiSelectInsertList.REQ_GET_ALL_DATA,
-            keywords: [self.trigger.getKeyword()]
+            keywords: [this.trigger.getKeyword()],
+            selectedValues: this.storeValue.value,
         }, function (ob) {
             var items = BI.map(ob.items, "value");
-            if (self.storeValue.type === res.type) {
-                var change = false;
-                var map = self._makeMap(self.storeValue.value);
-                BI.each(items, function (i, v) {
-                    if (BI.isNotNull(map[v])) {
-                        change = true;
-                        delete map[v];
-                    }
-                });
-                change && (self.storeValue.value = BI.values(map));
-                callback();
-                return;
-            }
             var selectedMap = self._makeMap(self.storeValue.value);
             var notSelectedMap = self._makeMap(res.value);
             var newItems = [];
@@ -56932,24 +56973,26 @@ BI.MultiSelectInsertNoBarList = BI.inherit(BI.Single, {
     _joinAll: function (res, callback) {
         var self = this, o = this.options;
         this._assertValue(res);
+        if (this.storeValue.type === res.type) {
+            var result = BI.Func.getSearchResult(this.storeValue.value, this.trigger.getKey());
+            var change = false;
+            var map = this._makeMap(this.storeValue.value);
+            BI.each(BI.concat(result.match, result.find), function (i, v) {
+                if (BI.isNotNull(map[v])) {
+                    change = true;
+                    delete map[v];
+                }
+            });
+            change && (this.storeValue.value = BI.values(map));
+            callback();
+            return;
+        }
         o.itemsCreator({
             type: BI.MultiSelectInsertNoBarList.REQ_GET_ALL_DATA,
-            keywords: [self.trigger.getKeyword()]
+            keywords: [this.trigger.getKeyword()],
+            selectedValues: this.storeValue.value,
         }, function (ob) {
             var items = BI.map(ob.items, "value");
-            if (self.storeValue.type === res.type) {
-                var change = false;
-                var map = self._makeMap(self.storeValue.value);
-                BI.each(items, function (i, v) {
-                    if (BI.isNotNull(map[v])) {
-                        change = true;
-                        delete map[v];
-                    }
-                });
-                change && (self.storeValue.value = BI.values(map));
-                callback();
-                return;
-            }
             var selectedMap = self._makeMap(self.storeValue.value);
             var notSelectedMap = self._makeMap(res.value);
             var newItems = [];
@@ -57267,24 +57310,26 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
     _joinAll: function (res, callback) {
         var self = this, o = this.options;
         this._assertValue(res);
+        if (this.storeValue.type === res.type) {
+            var result = BI.Func.getSearchResult(this.storeValue.value, this.trigger.getKey());
+            var change = false;
+            var map = this._makeMap(this.storeValue.value);
+            BI.each(BI.concat(result.match, result.find), function (i, v) {
+                if (BI.isNotNull(map[v])) {
+                    change = true;
+                    delete map[v];
+                }
+            });
+            change && (this.storeValue.value = BI.values(map));
+            this._adjust(callback);
+            return;
+        }
         o.itemsCreator({
             type: BI.MultiSelectList.REQ_GET_ALL_DATA,
-            keywords: [this.trigger.getKey()]
+            keywords: [this.trigger.getKey()],
+            selectedValues: this.storeValue.value,
         }, function (ob) {
             var items = BI.map(ob.items, "value");
-            if (self.storeValue.type === res.type) {
-                var change = false;
-                var map = self._makeMap(self.storeValue.value);
-                BI.each(items, function (i, v) {
-                    if (BI.isNotNull(map[v])) {
-                        change = true;
-                        delete map[v];
-                    }
-                });
-                change && (self.storeValue.value = BI.values(map));
-                self._adjust(callback);
-                return;
-            }
             var selectedMap = self._makeMap(self.storeValue.value);
             var notSelectedMap = self._makeMap(res.value);
             var newItems = [];
@@ -62262,7 +62307,10 @@ BI.SingleSelectSearchLoader = BI.inherit(BI.Widget, {
                         var json = self._filterValues(self.storeValue);
                         firstItems = self._createItems(json);
                     }
-                    callback(firstItems.concat(self._createItems(ob.items)), keyword || "");
+                    var context = {
+                        tipText: ob.tipText,
+                    };
+                    callback(firstItems.concat(self._createItems(ob.items)), keyword || "", context);
                     if (op.times === 1 && self.storeValue) {
                         self.setValue(self.storeValue);
                     }
@@ -68874,7 +68922,11 @@ BI.DynamicYearMonthTrigger = BI.inherit(BI.Trigger, {
             height: o.height,
             validationChecker: function (v) {
                 if (isYear) {
-                    return v === "" || (BI.isPositiveInteger(v) && !BI.checkDateVoid(v, parseInt(v, 10) === BI.parseDateTime(o.min, "%Y-%X-%d").getFullYear() ? BI.parseDateTime(o.min, "%Y-%X-%d").getMonth() + 1 : 1, 1, o.min, o.max)[0]);
+                    var month = self.monthEditor.getValue();
+                    if(BI.isEmptyString(month)) {
+                        month = parseInt(v, 10) === BI.parseDateTime(o.min, "%Y-%X-%d").getFullYear() ? (BI.parseDateTime(o.min, "%Y-%X-%d").getMonth() + 1) : 1;
+                    }
+                    return v === "" || (BI.isPositiveInteger(v) && !BI.checkDateVoid(v, month, 1, o.min, o.max)[0]);
                 }
                 var year = self.yearEditor.getValue();
 
@@ -70175,7 +70227,13 @@ BI.DynamicYearQuarterTrigger = BI.inherit(BI.Trigger, {
             height: o.height,
             validationChecker: function (v) {
                 if(isYear) {
-                    return v === "" || (BI.isPositiveInteger(v) && !BI.checkDateVoid(v, parseInt(v, 10) === BI.parseDateTime(o.min, "%Y-%X-%d").getFullYear() ? BI.parseDateTime(o.min, "%Y-%X-%d").getMonth() + 1 : 1, 1, o.min, o.max)[0]);
+                    var month = self.quarterEditor.getValue();
+                    if(BI.isEmptyString(month)) {
+                        month = parseInt(v, 10) === BI.parseDateTime(o.min, "%Y-%X-%d").getFullYear() ? BI.parseDateTime(o.min, "%Y-%X-%d").getMonth() + 1 : 1;
+                    } else {
+                        month = (v - 1) * 3 + 1;
+                    }
+                    return v === "" || (BI.isPositiveInteger(v) && !BI.checkDateVoid(v, month, 1, o.min, o.max)[0]);
                 }
                 var year = self.yearEditor.getValue();
 
@@ -74088,6 +74146,12 @@ Object.defineProperty(exports, "TreeValueChooserPane", {
     return _pane3.TreeValueChooserPane;
   }
 });
+Object.defineProperty(exports, "TdLayout", {
+  enumerable: true,
+  get: function get() {
+    return _layout11.TdLayout;
+  }
+});
 exports["default"] = void 0;
 
 var _combo = __webpack_require__(710);
@@ -74419,6 +74483,8 @@ var _multiselecttree = __webpack_require__(850);
 var _html2 = __webpack_require__(851);
 
 var _pane3 = __webpack_require__(852);
+
+var _layout11 = __webpack_require__(853);
 
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
@@ -75917,13 +75983,16 @@ var _abstract = __webpack_require__(47);
 var _abstract = __webpack_require__(30);
 
 /***/ }),
-/* 853 */,
-/* 854 */
+/* 853 */
 /***/ (function(module, exports, __webpack_require__) {
 
-// extracted by mini-css-extract-plugin
+"use strict";
+
+
+var _layout = __webpack_require__(3);
 
 /***/ }),
+/* 854 */,
 /* 855 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -75931,6 +76000,12 @@ var _abstract = __webpack_require__(30);
 
 /***/ }),
 /* 856 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
+/* 857 */
 /***/ (function(module, exports) {
 
 // 工程配置
@@ -76073,7 +76148,7 @@ BI.prepares.push(function () {
 
 
 /***/ }),
-/* 857 */
+/* 858 */
 /***/ (function(module, exports) {
 
 /**
@@ -76240,7 +76315,7 @@ BI.prepares.push(function () {
 
 
 /***/ }),
-/* 858 */
+/* 859 */
 /***/ (function(module, exports) {
 
 /**
@@ -77080,7 +77155,7 @@ BI.prepares.push(function () {
 
 
 /***/ }),
-/* 859 */
+/* 860 */
 /***/ (function(module, exports) {
 
 // 浏览器相关方法
@@ -77214,7 +77289,7 @@ _.extend(BI, {
 });
 
 /***/ }),
-/* 860 */
+/* 861 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -88243,7 +88318,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
 
 
 /***/ }),
-/* 861 */
+/* 862 */
 /***/ (function(module, exports) {
 
 /*
@@ -88258,7 +88333,7 @@ BI.$.extend(BI.$.Event.prototype, {
 });
 
 /***/ }),
-/* 862 */
+/* 863 */
 /***/ (function(module, exports) {
 
 if (BI.jQuery) {
@@ -88511,7 +88586,7 @@ if (BI.jQuery) {
 
 
 /***/ }),
-/* 863 */
+/* 864 */
 /***/ (function(module, exports) {
 
 /* !
@@ -88720,7 +88795,7 @@ if (BI.jQuery) {
 }));
 
 /***/ }),
-/* 864 */
+/* 865 */
 /***/ (function(module, exports) {
 
 _.extend(BI, {
@@ -88780,7 +88855,7 @@ _.extend(BI, {
 });
 
 /***/ }),
-/* 865 */
+/* 866 */
 /***/ (function(module, exports) {
 
 (function () {
@@ -89412,7 +89487,7 @@ _.extend(BI, {
 }());
 
 /***/ }),
-/* 866 */
+/* 867 */
 /***/ (function(module, exports) {
 
 !(function () {
@@ -89424,7 +89499,7 @@ _.extend(BI, {
 })();
 
 /***/ }),
-/* 867 */
+/* 868 */
 /***/ (function(module, exports) {
 
 /**
@@ -90129,7 +90204,7 @@ _.extend(BI, {
 
 
 /***/ }),
-/* 868 */
+/* 869 */
 /***/ (function(module, exports) {
 
 /**
@@ -90685,7 +90760,7 @@ BI.shortcut("bi.tree_view", BI.TreeView);
 
 
 /***/ }),
-/* 869 */
+/* 870 */
 /***/ (function(module, exports) {
 
 /**
@@ -90938,7 +91013,7 @@ BI.AsyncTree = BI.inherit(BI.TreeView, {
 BI.shortcut("bi.async_tree", BI.AsyncTree);
 
 /***/ }),
-/* 870 */
+/* 871 */
 /***/ (function(module, exports) {
 
 /*
@@ -92658,7 +92733,7 @@ BI.shortcut("bi.async_tree", BI.AsyncTree);
 })(BI.jQuery);
 
 /***/ }),
-/* 871 */
+/* 872 */
 /***/ (function(module, exports) {
 
 /*
@@ -93293,7 +93368,7 @@ BI.shortcut("bi.async_tree", BI.AsyncTree);
 })(BI.jQuery);
 
 /***/ }),
-/* 872 */
+/* 873 */
 /***/ (function(module, exports) {
 
 /**
@@ -93416,7 +93491,7 @@ BI.ListTreeView = BI.inherit(BI.TreeView, {
 BI.shortcut("bi.list_tree_view", BI.ListTreeView);
 
 /***/ }),
-/* 873 */
+/* 874 */
 /***/ (function(module, exports) {
 
 /**
@@ -93544,7 +93619,7 @@ BI.ListAsyncTree = BI.inherit(BI.ListTreeView, {
 BI.shortcut("bi.list_async_tree", BI.ListAsyncTree);
 
 /***/ }),
-/* 874 */
+/* 875 */
 /***/ (function(module, exports) {
 
 /**
@@ -93641,7 +93716,7 @@ BI.ListPartTree = BI.inherit(BI.ListAsyncTree, {
 BI.shortcut("bi.list_part_tree", BI.ListPartTree);
 
 /***/ }),
-/* 875 */
+/* 876 */
 /***/ (function(module, exports) {
 
 /**
@@ -93847,7 +93922,7 @@ BI.shortcut("bi.part_tree", BI.PartTree);
 
 
 /***/ }),
-/* 876 */
+/* 877 */
 /***/ (function(module, exports) {
 
 /**
@@ -93919,7 +93994,7 @@ BI.shortcut("bi.display_tree", BI.DisplayTree);
 
 
 /***/ }),
-/* 877 */
+/* 878 */
 /***/ (function(module, exports) {
 
 /**
@@ -94002,7 +94077,7 @@ BI.ListDisplayTree.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.list_display_tree", BI.ListDisplayTree);
 
 /***/ }),
-/* 878 */
+/* 879 */
 /***/ (function(module, exports) {
 
 /**
@@ -94135,7 +94210,7 @@ BI.shortcut("bi.simple_tree", BI.SimpleTreeView);
 
 
 /***/ }),
-/* 879 */
+/* 880 */
 /***/ (function(module, exports) {
 
 /**
@@ -94264,7 +94339,7 @@ BI.shortcut("bi.simple_tree", BI.SimpleTreeView);
 })();
 
 /***/ }),
-/* 880 */
+/* 881 */
 /***/ (function(module, exports) {
 
 /**
@@ -94345,7 +94420,7 @@ BI.shortcut("bi.simple_tree", BI.SimpleTreeView);
 })();
 
 /***/ }),
-/* 881 */
+/* 882 */
 /***/ (function(module, exports) {
 
 ;(function () {
@@ -94508,7 +94583,6 @@ BI.shortcut("bi.simple_tree", BI.SimpleTreeView);
 
 
 /***/ }),
-/* 882 */,
 /* 883 */,
 /* 884 */,
 /* 885 */,
@@ -94542,7 +94616,8 @@ BI.shortcut("bi.simple_tree", BI.SimpleTreeView);
 /* 913 */,
 /* 914 */,
 /* 915 */,
-/* 916 */
+/* 916 */,
+/* 917 */
 /***/ (function(module, exports) {
 
 ;(function () {
@@ -94818,7 +94893,6 @@ BI.shortcut("bi.simple_tree", BI.SimpleTreeView);
 
 
 /***/ }),
-/* 917 */,
 /* 918 */,
 /* 919 */,
 /* 920 */,
@@ -95029,25 +95103,20 @@ BI.shortcut("bi.simple_tree", BI.SimpleTreeView);
 /* 1125 */,
 /* 1126 */,
 /* 1127 */,
-/* 1128 */
+/* 1128 */,
+/* 1129 */
 /***/ (function(module, exports) {
 
 
 
 /***/ }),
-/* 1129 */,
 /* 1130 */,
 /* 1131 */,
 /* 1132 */,
 /* 1133 */,
 /* 1134 */,
 /* 1135 */,
-/* 1136 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
-
-/***/ }),
+/* 1136 */,
 /* 1137 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -95072,7 +95141,12 @@ BI.shortcut("bi.simple_tree", BI.SimpleTreeView);
 // extracted by mini-css-extract-plugin
 
 /***/ }),
-/* 1141 */,
+/* 1141 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
 /* 1142 */,
 /* 1143 */,
 /* 1144 */,
@@ -95126,11 +95200,12 @@ BI.shortcut("bi.simple_tree", BI.SimpleTreeView);
 /* 1192 */,
 /* 1193 */,
 /* 1194 */,
-/* 1195 */
+/* 1195 */,
+/* 1196 */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(854);
 __webpack_require__(855);
+__webpack_require__(856);
 __webpack_require__(202);
 __webpack_require__(203);
 __webpack_require__(204);
@@ -95188,7 +95263,6 @@ __webpack_require__(302);
 __webpack_require__(303);
 __webpack_require__(304);
 __webpack_require__(305);
-__webpack_require__(856);
 __webpack_require__(857);
 __webpack_require__(858);
 __webpack_require__(859);
@@ -95197,6 +95271,7 @@ __webpack_require__(861);
 __webpack_require__(862);
 __webpack_require__(863);
 __webpack_require__(864);
+__webpack_require__(865);
 __webpack_require__(306);
 __webpack_require__(307);
 __webpack_require__(308);
@@ -95268,7 +95343,7 @@ __webpack_require__(371);
 __webpack_require__(110);
 __webpack_require__(111);
 __webpack_require__(112);
-__webpack_require__(1196);
+__webpack_require__(1197);
 __webpack_require__(222);
 __webpack_require__(223);
 __webpack_require__(224);
@@ -95327,7 +95402,7 @@ __webpack_require__(276);
 __webpack_require__(277);
 __webpack_require__(278);
 __webpack_require__(279);
-__webpack_require__(866);
+__webpack_require__(867);
 __webpack_require__(372);
 __webpack_require__(373);
 __webpack_require__(374);
@@ -95381,7 +95456,7 @@ __webpack_require__(421);
 __webpack_require__(422);
 __webpack_require__(423);
 __webpack_require__(424);
-__webpack_require__(867);
+__webpack_require__(868);
 __webpack_require__(425);
 __webpack_require__(426);
 __webpack_require__(427);
@@ -95494,7 +95569,6 @@ __webpack_require__(533);
 __webpack_require__(534);
 __webpack_require__(535);
 __webpack_require__(536);
-__webpack_require__(868);
 __webpack_require__(869);
 __webpack_require__(870);
 __webpack_require__(871);
@@ -95507,6 +95581,7 @@ __webpack_require__(877);
 __webpack_require__(878);
 __webpack_require__(879);
 __webpack_require__(880);
+__webpack_require__(881);
 __webpack_require__(113);
 __webpack_require__(114);
 __webpack_require__(115);
@@ -95738,27 +95813,27 @@ __webpack_require__(704);
 __webpack_require__(705);
 __webpack_require__(706);
 __webpack_require__(707);
-__webpack_require__(865);
-__webpack_require__(916);
-__webpack_require__(881);
-__webpack_require__(1136);
+__webpack_require__(866);
+__webpack_require__(917);
+__webpack_require__(882);
 __webpack_require__(1137);
 __webpack_require__(1138);
 __webpack_require__(1139);
 __webpack_require__(1140);
-__webpack_require__(1128);
+__webpack_require__(1141);
+__webpack_require__(1129);
 module.exports = __webpack_require__(708);
 
 
 /***/ }),
-/* 1196 */
+/* 1197 */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(global) {module.exports = global["Fix"] = __webpack_require__(1197);
+/* WEBPACK VAR INJECTION */(function(global) {module.exports = global["Fix"] = __webpack_require__(1198);
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(14)))
 
 /***/ }),
-/* 1197 */
+/* 1198 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(setImmediate) {(function (global, factory) {
