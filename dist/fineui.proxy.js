@@ -1,4 +1,4 @@
-/*! time: 2021-7-20 19:00:32 */
+/*! time: 2021-7-21 9:00:30 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -38843,11 +38843,16 @@ BI.ListPane = BI.inherit(BI.Pane, {
             }]);
             return;
         }
-        BI.ListPane.superclass.populate.apply(this, arguments);
+
         var context = BI.get(arguments, [2], {});
         var tipText = context.tipText || '';
-        BI.isNotEmptyString(tipText) && this.setTipText(tipText);
-        this.button_group.populate.apply(this.button_group, arguments);
+        if (BI.isNotEmptyString(tipText)) {
+            BI.ListPane.superclass.populate.apply(this, []);
+            this.setTipText(tipText);
+        } else {
+            BI.ListPane.superclass.populate.apply(this, arguments);
+            this.button_group.populate.apply(this.button_group, arguments);
+        }
     },
 
     empty: function () {
@@ -39155,11 +39160,13 @@ BI.SelectList = BI.inherit(BI.Widget, {
             items: o.items,
             itemsCreator: function (op, callback) {
                 op.times === 1 && self.toolbar.setVisible(false);
-                o.itemsCreator(op, function (items) {
+                o.itemsCreator(op, function (items, keywords, context) {
                     callback.apply(self, arguments);
                     if (op.times === 1) {
-                        self.toolbar.setVisible(items && items.length > 0);
-                        self.toolbar.setEnable(self.isEnabled() && items && items.length > 0);
+                        var tipText = BI.get(context, 'tipText', '');
+                        var visible = BI.isEmptyString(tipText) && items && items.length > 0;
+                        self.toolbar.setVisible(visible);
+                        self.toolbar.setEnable(self.isEnabled() && visible);
                     }
                     self._checkAllSelected();
                 });
