@@ -20,7 +20,7 @@ BI.BubblesController = BI.inherit(BI.Controller, {
      */
     show: function (name, text, context, opt) {
         opt || (opt = {});
-        var container = opt.container || "body";
+        var container = opt.container || context;
         var offsetStyle = opt.offsetStyle || "left";
         var level = opt.level || "error";
         var adjustYOffset = opt.adjustYOffset || 0;
@@ -76,9 +76,7 @@ BI.BubblesController = BI.inherit(BI.Controller, {
         if (!this.has(name)) {
             return this;
         }
-        BI.each(this.storeBubbles, function (dir, bubble) {
-            bubble.destroy();
-        });
+        this.storeBubbles[name].destroy();
         delete this.storeBubbles[name];
         return this;
     }
