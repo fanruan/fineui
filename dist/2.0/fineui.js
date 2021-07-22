@@ -1,4 +1,4 @@
-/*! time: 2021-7-22 16:20:42 */
+/*! time: 2021-7-22 18:50:59 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -2495,7 +2495,7 @@ if (!_global.BI) {
 
         createWidgets: function (items, options, context) {
             if (!BI.isArray(items)) {
-                throw new Error("cannot create Widgets");
+                throw new Error("items必须是数组", items);
             }
             if (BI.isWidget(options)) {
                 context = options;
@@ -4149,7 +4149,7 @@ if (!_global.BI) {
     var moduleInjection = {};
     BI.module = BI.module || function (xtype, cls) {
         if (moduleInjection[xtype] != null) {
-            _global.console && console.error("module:[" + xtype + "] has been registed");
+            _global.console && console.error("module： [" + xtype + "] 已经注册过了");
         }
         moduleInjection[xtype] = cls;
     };
@@ -4157,7 +4157,7 @@ if (!_global.BI) {
     var constantInjection = {};
     BI.constant = BI.constant || function (xtype, cls) {
         if (constantInjection[xtype] != null) {
-            _global.console && console.error("constant:[" + xtype + "] has been registed");
+            _global.console && console.error("constant: [" + xtype + "]已经注册过了");
         }
         constantInjection[xtype] = cls;
     };
@@ -4165,7 +4165,7 @@ if (!_global.BI) {
     var modelInjection = {};
     BI.model = BI.model || function (xtype, cls) {
         if (modelInjection[xtype] != null) {
-            _global.console && console.error("model:[" + xtype + "] has been registed");
+            _global.console && console.error("model: [" + xtype + "] 已经注册过了");
         }
         modelInjection[xtype] = cls;
     };
@@ -4173,7 +4173,7 @@ if (!_global.BI) {
     var storeInjection = {};
     BI.store = BI.store || function (xtype, cls) {
         if (storeInjection[xtype] != null) {
-            _global.console && console.error("store:[" + xtype + "] has been registed");
+            _global.console && console.error("store: [" + xtype + "] 已经注册过了");
         }
         storeInjection[xtype] = cls;
     };
@@ -4181,7 +4181,7 @@ if (!_global.BI) {
     var serviceInjection = {};
     BI.service = BI.service || function (xtype, cls) {
         if (serviceInjection[xtype] != null) {
-            _global.console && console.error("service:[" + xtype + "] has been registed");
+            _global.console && console.error("service: [" + xtype + "] 已经注册过了");
         }
         serviceInjection[xtype] = cls;
     };
@@ -4189,7 +4189,7 @@ if (!_global.BI) {
     var providerInjection = {};
     BI.provider = BI.provider || function (xtype, cls) {
         if (providerInjection[xtype] != null) {
-            _global.console && console.error("provider:[" + xtype + "] has been registed");
+            _global.console && console.error("provider: [" + xtype + "] 已经注册过了");
         }
         providerInjection[xtype] = cls;
     };
@@ -4285,8 +4285,7 @@ if (!_global.BI) {
     BI.Modules = BI.Modules || {
         getModule: function (type) {
             if (!moduleInjection[type]) {
-                _global.console && console.error("module:[" + type + "] does not exists");
-                return false;
+                throw new Error("module: [" + type + "] 未定义");
             }
             return moduleInjection[type];
         },
@@ -4297,6 +4296,9 @@ if (!_global.BI) {
 
     BI.Constants = BI.Constants || {
         getConstant: function (type) {
+            if (!constantInjection[type]) {
+                throw new Error("constant: [" + type + "] 未定义");
+            }
             return constantInjection[type];
         }
     };
@@ -4341,6 +4343,9 @@ if (!_global.BI) {
 
     BI.Models = BI.Models || {
         getModel: function (type, config) {
+            if (!modelInjection[type]) {
+                throw new Error("model: [" + type + "] 未定义");
+            }
             var inst = new modelInjection[type](config);
             inst._constructor && inst._constructor(config);
             inst.mixins && callPoint(inst, inst.mixins);
@@ -4353,6 +4358,9 @@ if (!_global.BI) {
 
     BI.Stores = BI.Stores || {
         getStore: function (type, config) {
+            if (!storeInjection[type]) {
+                throw new Error("store: [" + type + "] 未定义");
+            }
             if (stores[type]) {
                 return stores[type];
             }
@@ -4369,6 +4377,9 @@ if (!_global.BI) {
 
     BI.Services = BI.Services || {
         getService: function (type, config) {
+            if (!serviceInjection[type]) {
+                throw new Error("service: [" + type + "] 未定义");
+            }
             if (services[type]) {
                 return services[type];
             }
@@ -4383,6 +4394,9 @@ if (!_global.BI) {
 
     BI.Providers = BI.Providers || {
         getProvider: function (type, config) {
+            if (!providerInjection[type]) {
+                throw new Error("provider: [" + type + "] 未定义");
+            }
             if (!providers[type]) {
                 providers[type] = new providerInjection[type]();
             }
@@ -4431,6 +4445,7 @@ if (!_global.BI) {
         if (providerInjection[type]) {
             return BI.Providers.getProvider(type, config);
         }
+        throw new Error("未知类型: [" + type + "] 未定义");
     };
 })();
 
@@ -7277,7 +7292,7 @@ _.extend(BI, {
     BI.BufferPool = {
         put: function (name, cache) {
             if (BI.isNotNull(Buffer[name])) {
-                throw new Error("Buffer Pool has the key already!");
+                throw new Error("key值：[" + name + "] 已存在!", Buffer);
             }
             Buffer[name] = cache;
         },
@@ -7287,6 +7302,7 @@ _.extend(BI, {
         }
     };
 })();
+
 
 /***/ }),
 /* 111 */
@@ -9053,6 +9069,59 @@ module.exports = !__webpack_require__(916)(function () {
 /* 283 */
 /***/ (function(module, exports) {
 
+!(function () {
+    BI.initWorker = function () {
+        function createWatcher (model, keyOrFn, cb, options) {
+            options = options || {};
+            return Fix.watch(model, keyOrFn, cb, BI.extend(options, {
+                store: model
+            }));
+        }
+
+        var models = {}, watches = {};
+        addEventListener("message", function (e) {
+            var data = e.data;
+            switch (data.eventType) {
+                case "action":
+                    models[data.name][data.action].apply(models[data.name], data.args);
+                    break;
+                case "destroy":
+                    BI.each(watches[data.name], function (i, unwatches) {
+                        unwatches = BI.isArray(unwatches) ? unwatches : [unwatches];
+                        BI.each(unwatches, function (j, unwatch) {
+                            unwatch();
+                        });
+                    });
+                    delete models[data.name];
+                    delete watches[data.name];
+                    break;
+                case "create":
+                    var store = models[data.name] = BI.Models.getModel(data.type, data.options);
+                    watches[data.name] = [];
+                    BI.each(data.watches, function (i, key) {
+                        watches[data.name].push(createWatcher(store.model, key, function (newValue, oldValue) {
+                            postMessage(BI.extend({}, data, {
+                                eventType: "watch",
+                                currentWatchType: key
+                            }, {args: [newValue, oldValue]}));
+                        }));
+                    });
+                    postMessage(BI.extend({}, data, {
+                        eventType: "create"
+                    }, {msg: store.model}));
+                    break;
+                default:
+                    break;
+            }
+        }, false);
+    };
+}());
+
+
+/***/ }),
+/* 284 */
+/***/ (function(module, exports) {
+
 /**
  * Widget超类
  * @class BI.Widget
@@ -9504,7 +9573,7 @@ module.exports = !__webpack_require__(916)(function () {
             }
             name = name || widget.getName() || BI.uniqueId("widget");
             if (this._children[name]) {
-                throw new Error("name has already been existed");
+                throw new Error("组件：组件名已存在，不能进行添加");
             }
             widget._setParent && widget._setParent(this);
             widget.on(BI.Events.DESTROY, function () {
@@ -9863,14 +9932,14 @@ module.exports = !__webpack_require__(916)(function () {
 
 
 /***/ }),
-/* 284 */
+/* 285 */
 /***/ (function(module, exports) {
 
 (function () {
     var kv = {};
     BI.shortcut = BI.component = BI.shortcut || function (xtype, cls) {
         if (kv[xtype] != null) {
-            _global.console && console.error("shortcut:[" + xtype + "] has been registed");
+            _global.console && console.error("组件： [" + xtype + "] 已经注册过了");
         }
         if (cls) {
             cls["xtype"] = xtype;
@@ -9883,7 +9952,7 @@ module.exports = !__webpack_require__(916)(function () {
         var cls = kv[config.type];
 
         if (!cls) {
-            throw new Error("组件" + config.type + "未定义");
+            throw new Error("组件： [" + config.type + "] 未定义");
         }
         var pushed = false;
         var widget = new cls();
@@ -9956,7 +10025,7 @@ module.exports = !__webpack_require__(916)(function () {
         if (BI.isWidget(item.el)) {
             return item.el;
         }
-        throw new Error("无法根据item创建组件");
+        throw new Error("组件：无法根据item创建组件", item);
     };
 
     BI._lazyCreateWidget = BI._lazyCreateWidget || function (item, options, context) {
@@ -9972,7 +10041,7 @@ module.exports = !__webpack_require__(916)(function () {
 
 
 /***/ }),
-/* 285 */
+/* 286 */
 /***/ (function(module, exports) {
 
 BI.Plugin = BI.Plugin || {};
@@ -10080,7 +10149,7 @@ BI.Plugin = BI.Plugin || {};
 
 
 /***/ }),
-/* 286 */
+/* 287 */
 /***/ (function(module, exports) {
 
 (function (global, factory) {
@@ -11138,7 +11207,1921 @@ BI.Plugin = BI.Plugin || {};
 
 
 /***/ }),
-/* 287 */
+/* 288 */
+/***/ (function(module, exports) {
+
+/**
+ * @popperjs/core v2.9.2 - MIT License
+ */
+
+(function (global, factory) {
+  factory(BI.Popper = {});
+}(this, (function (exports) { 'use strict';
+
+  function getBoundingClientRect(element) {
+    var rect = element.getBoundingClientRect();
+    return {
+      width: rect.width,
+      height: rect.height,
+      top: rect.top,
+      right: rect.right,
+      bottom: rect.bottom,
+      left: rect.left,
+      x: rect.left,
+      y: rect.top
+    };
+  }
+
+  function getWindow(node) {
+    if (node == null) {
+      return window;
+    }
+
+    if (node.toString() !== '[object Window]') {
+      var ownerDocument = node.ownerDocument;
+      return ownerDocument ? ownerDocument.defaultView || window : window;
+    }
+
+    return node;
+  }
+
+  function getWindowScroll(node) {
+    var win = getWindow(node);
+    var scrollLeft = win.pageXOffset;
+    var scrollTop = win.pageYOffset;
+    return {
+      scrollLeft: scrollLeft,
+      scrollTop: scrollTop
+    };
+  }
+
+  function isElement(node) {
+    var OwnElement = getWindow(node).Element;
+    return node instanceof OwnElement || node instanceof Element;
+  }
+
+  function isHTMLElement(node) {
+    var OwnElement = getWindow(node).HTMLElement;
+    return node instanceof OwnElement || node instanceof HTMLElement;
+  }
+
+  function isShadowRoot(node) {
+    // IE 11 has no ShadowRoot
+    if (typeof ShadowRoot === 'undefined') {
+      return false;
+    }
+
+    var OwnElement = getWindow(node).ShadowRoot;
+    return node instanceof OwnElement || node instanceof ShadowRoot;
+  }
+
+  function getHTMLElementScroll(element) {
+    return {
+      scrollLeft: element.scrollLeft,
+      scrollTop: element.scrollTop
+    };
+  }
+
+  function getNodeScroll(node) {
+    if (node === getWindow(node) || !isHTMLElement(node)) {
+      return getWindowScroll(node);
+    } else {
+      return getHTMLElementScroll(node);
+    }
+  }
+
+  function getNodeName(element) {
+    return element ? (element.nodeName || '').toLowerCase() : null;
+  }
+
+  function getDocumentElement(element) {
+    // $FlowFixMe[incompatible-return]: assume body is always available
+    return ((isElement(element) ? element.ownerDocument : // $FlowFixMe[prop-missing]
+    element.document) || window.document).documentElement;
+  }
+
+  function getWindowScrollBarX(element) {
+    // If <html> has a CSS width greater than the viewport, then this will be
+    // incorrect for RTL.
+    // Popper 1 is broken in this case and never had a bug report so let's assume
+    // it's not an issue. I don't think anyone ever specifies width on <html>
+    // anyway.
+    // Browsers where the left scrollbar doesn't cause an issue report `0` for
+    // this (e.g. Edge 2019, IE11, Safari)
+    return getBoundingClientRect(getDocumentElement(element)).left + getWindowScroll(element).scrollLeft;
+  }
+
+  function getComputedStyle(element) {
+    return getWindow(element).getComputedStyle(element);
+  }
+
+  function isScrollParent(element) {
+    // Firefox wants us to check `-x` and `-y` variations as well
+    var _getComputedStyle = getComputedStyle(element),
+        overflow = _getComputedStyle.overflow,
+        overflowX = _getComputedStyle.overflowX,
+        overflowY = _getComputedStyle.overflowY;
+
+    return /auto|scroll|overlay|hidden/.test(overflow + overflowY + overflowX);
+  }
+
+  // Composite means it takes into account transforms as well as layout.
+
+  function getCompositeRect(elementOrVirtualElement, offsetParent, isFixed) {
+    if (isFixed === void 0) {
+      isFixed = false;
+    }
+
+    var documentElement = getDocumentElement(offsetParent);
+    var rect = getBoundingClientRect(elementOrVirtualElement);
+    var isOffsetParentAnElement = isHTMLElement(offsetParent);
+    var scroll = {
+      scrollLeft: 0,
+      scrollTop: 0
+    };
+    var offsets = {
+      x: 0,
+      y: 0
+    };
+
+    if (isOffsetParentAnElement || !isOffsetParentAnElement && !isFixed) {
+      if (getNodeName(offsetParent) !== 'body' || // https://github.com/popperjs/popper-core/issues/1078
+      isScrollParent(documentElement)) {
+        scroll = getNodeScroll(offsetParent);
+      }
+
+      if (isHTMLElement(offsetParent)) {
+        offsets = getBoundingClientRect(offsetParent);
+        offsets.x += offsetParent.clientLeft;
+        offsets.y += offsetParent.clientTop;
+      } else if (documentElement) {
+        offsets.x = getWindowScrollBarX(documentElement);
+      }
+    }
+
+    return {
+      x: rect.left + scroll.scrollLeft - offsets.x,
+      y: rect.top + scroll.scrollTop - offsets.y,
+      width: rect.width,
+      height: rect.height
+    };
+  }
+
+  // means it doesn't take into account transforms.
+
+  function getLayoutRect(element) {
+    var clientRect = getBoundingClientRect(element); // Use the clientRect sizes if it's not been transformed.
+    // Fixes https://github.com/popperjs/popper-core/issues/1223
+
+    var width = element.offsetWidth;
+    var height = element.offsetHeight;
+
+    if (Math.abs(clientRect.width - width) <= 1) {
+      width = clientRect.width;
+    }
+
+    if (Math.abs(clientRect.height - height) <= 1) {
+      height = clientRect.height;
+    }
+
+    return {
+      x: element.offsetLeft,
+      y: element.offsetTop,
+      width: width,
+      height: height
+    };
+  }
+
+  function getParentNode(element) {
+    if (getNodeName(element) === 'html') {
+      return element;
+    }
+
+    return (// this is a quicker (but less type safe) way to save quite some bytes from the bundle
+      // $FlowFixMe[incompatible-return]
+      // $FlowFixMe[prop-missing]
+      element.assignedSlot || // step into the shadow DOM of the parent of a slotted node
+      element.parentNode || ( // DOM Element detected
+      isShadowRoot(element) ? element.host : null) || // ShadowRoot detected
+      // $FlowFixMe[incompatible-call]: HTMLElement is a Node
+      getDocumentElement(element) // fallback
+
+    );
+  }
+
+  function getScrollParent(node) {
+    if (['html', 'body', '#document'].indexOf(getNodeName(node)) >= 0) {
+      // $FlowFixMe[incompatible-return]: assume body is always available
+      return node.ownerDocument.body;
+    }
+
+    if (isHTMLElement(node) && isScrollParent(node)) {
+      return node;
+    }
+
+    return getScrollParent(getParentNode(node));
+  }
+
+  /*
+  given a DOM element, return the list of all scroll parents, up the list of ancesors
+  until we get to the top window object. This list is what we attach scroll listeners
+  to, because if any of these parent elements scroll, we'll need to re-calculate the
+  reference element's position.
+  */
+
+  function listScrollParents(element, list) {
+    var _element$ownerDocumen;
+
+    if (list === void 0) {
+      list = [];
+    }
+
+    var scrollParent = getScrollParent(element);
+    var isBody = scrollParent === ((_element$ownerDocumen = element.ownerDocument) == null ? void 0 : _element$ownerDocumen.body);
+    var win = getWindow(scrollParent);
+    var target = isBody ? [win].concat(win.visualViewport || [], isScrollParent(scrollParent) ? scrollParent : []) : scrollParent;
+    var updatedList = list.concat(target);
+    return isBody ? updatedList : // $FlowFixMe[incompatible-call]: isBody tells us target will be an HTMLElement here
+    updatedList.concat(listScrollParents(getParentNode(target)));
+  }
+
+  function isTableElement(element) {
+    return ['table', 'td', 'th'].indexOf(getNodeName(element)) >= 0;
+  }
+
+  function getTrueOffsetParent(element) {
+    if (!isHTMLElement(element) || // https://github.com/popperjs/popper-core/issues/837
+    getComputedStyle(element).position === 'fixed') {
+      return null;
+    }
+
+    return element.offsetParent;
+  } // `.offsetParent` reports `null` for fixed elements, while absolute elements
+  // return the containing block
+
+
+  function getContainingBlock(element) {
+    var isFirefox = navigator.userAgent.toLowerCase().indexOf('firefox') !== -1;
+    var isIE = navigator.userAgent.indexOf('Trident') !== -1;
+
+    if (isIE && isHTMLElement(element)) {
+      // In IE 9, 10 and 11 fixed elements containing block is always established by the viewport
+      var elementCss = getComputedStyle(element);
+
+      if (elementCss.position === 'fixed') {
+        return null;
+      }
+    }
+
+    var currentNode = getParentNode(element);
+
+    while (isHTMLElement(currentNode) && ['html', 'body'].indexOf(getNodeName(currentNode)) < 0) {
+      var css = getComputedStyle(currentNode); // This is non-exhaustive but covers the most common CSS properties that
+      // create a containing block.
+      // https://developer.mozilla.org/en-US/docs/Web/CSS/Containing_block#identifying_the_containing_block
+
+      if (css.transform !== 'none' || css.perspective !== 'none' || css.contain === 'paint' || ['transform', 'perspective'].indexOf(css.willChange) !== -1 || isFirefox && css.willChange === 'filter' || isFirefox && css.filter && css.filter !== 'none') {
+        return currentNode;
+      } else {
+        currentNode = currentNode.parentNode;
+      }
+    }
+
+    return null;
+  } // Gets the closest ancestor positioned element. Handles some edge cases,
+  // such as table ancestors and cross browser bugs.
+
+
+  function getOffsetParent(element) {
+    var window = getWindow(element);
+    var offsetParent = getTrueOffsetParent(element);
+
+    while (offsetParent && isTableElement(offsetParent) && getComputedStyle(offsetParent).position === 'static') {
+      offsetParent = getTrueOffsetParent(offsetParent);
+    }
+
+    if (offsetParent && (getNodeName(offsetParent) === 'html' || getNodeName(offsetParent) === 'body' && getComputedStyle(offsetParent).position === 'static')) {
+      return window;
+    }
+
+    return offsetParent || getContainingBlock(element) || window;
+  }
+
+  var top = 'top';
+  var bottom = 'bottom';
+  var right = 'right';
+  var left = 'left';
+  var auto = 'auto';
+  var basePlacements = [top, bottom, right, left];
+  var start = 'start';
+  var end = 'end';
+  var clippingParents = 'clippingParents';
+  var viewport = 'viewport';
+  var popper = 'popper';
+  var reference = 'reference';
+  var variationPlacements = /*#__PURE__*/basePlacements.reduce(function (acc, placement) {
+    return acc.concat([placement + "-" + start, placement + "-" + end]);
+  }, []);
+  var placements = /*#__PURE__*/[].concat(basePlacements, [auto]).reduce(function (acc, placement) {
+    return acc.concat([placement, placement + "-" + start, placement + "-" + end]);
+  }, []); // modifiers that need to read the DOM
+
+  var beforeRead = 'beforeRead';
+  var read = 'read';
+  var afterRead = 'afterRead'; // pure-logic modifiers
+
+  var beforeMain = 'beforeMain';
+  var main = 'main';
+  var afterMain = 'afterMain'; // modifier with the purpose to write to the DOM (or write into a framework state)
+
+  var beforeWrite = 'beforeWrite';
+  var write = 'write';
+  var afterWrite = 'afterWrite';
+  var modifierPhases = [beforeRead, read, afterRead, beforeMain, main, afterMain, beforeWrite, write, afterWrite];
+
+  function order(modifiers) {
+    var map = new Map();
+    var visited = new Set();
+    var result = [];
+    modifiers.forEach(function (modifier) {
+      map.set(modifier.name, modifier);
+    }); // On visiting object, check for its dependencies and visit them recursively
+
+    function sort(modifier) {
+      visited.add(modifier.name);
+      var requires = [].concat(modifier.requires || [], modifier.requiresIfExists || []);
+      requires.forEach(function (dep) {
+        if (!visited.has(dep)) {
+          var depModifier = map.get(dep);
+
+          if (depModifier) {
+            sort(depModifier);
+          }
+        }
+      });
+      result.push(modifier);
+    }
+
+    modifiers.forEach(function (modifier) {
+      if (!visited.has(modifier.name)) {
+        // check for visited object
+        sort(modifier);
+      }
+    });
+    return result;
+  }
+
+  function orderModifiers(modifiers) {
+    // order based on dependencies
+    var orderedModifiers = order(modifiers); // order based on phase
+
+    return modifierPhases.reduce(function (acc, phase) {
+      return acc.concat(orderedModifiers.filter(function (modifier) {
+        return modifier.phase === phase;
+      }));
+    }, []);
+  }
+
+  function debounce(fn) {
+    var pending;
+    return function () {
+      if (!pending) {
+        pending = new Promise(function (resolve) {
+          Promise.resolve().then(function () {
+            pending = undefined;
+            resolve(fn());
+          });
+        });
+      }
+
+      return pending;
+    };
+  }
+
+  function format(str) {
+    for (var _len = arguments.length, args = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+      args[_key - 1] = arguments[_key];
+    }
+
+    return [].concat(args).reduce(function (p, c) {
+      return p.replace(/%s/, c);
+    }, str);
+  }
+
+  var INVALID_MODIFIER_ERROR = 'Popper: modifier "%s" provided an invalid %s property, expected %s but got %s';
+  var MISSING_DEPENDENCY_ERROR = 'Popper: modifier "%s" requires "%s", but "%s" modifier is not available';
+  var VALID_PROPERTIES = ['name', 'enabled', 'phase', 'fn', 'effect', 'requires', 'options'];
+  function validateModifiers(modifiers) {
+    modifiers.forEach(function (modifier) {
+      Object.keys(modifier).forEach(function (key) {
+        switch (key) {
+          case 'name':
+            if (typeof modifier.name !== 'string') {
+              console.error(format(INVALID_MODIFIER_ERROR, String(modifier.name), '"name"', '"string"', "\"" + String(modifier.name) + "\""));
+            }
+
+            break;
+
+          case 'enabled':
+            if (typeof modifier.enabled !== 'boolean') {
+              console.error(format(INVALID_MODIFIER_ERROR, modifier.name, '"enabled"', '"boolean"', "\"" + String(modifier.enabled) + "\""));
+            }
+
+          case 'phase':
+            if (modifierPhases.indexOf(modifier.phase) < 0) {
+              console.error(format(INVALID_MODIFIER_ERROR, modifier.name, '"phase"', "either " + modifierPhases.join(', '), "\"" + String(modifier.phase) + "\""));
+            }
+
+            break;
+
+          case 'fn':
+            if (typeof modifier.fn !== 'function') {
+              console.error(format(INVALID_MODIFIER_ERROR, modifier.name, '"fn"', '"function"', "\"" + String(modifier.fn) + "\""));
+            }
+
+            break;
+
+          case 'effect':
+            if (typeof modifier.effect !== 'function') {
+              console.error(format(INVALID_MODIFIER_ERROR, modifier.name, '"effect"', '"function"', "\"" + String(modifier.fn) + "\""));
+            }
+
+            break;
+
+          case 'requires':
+            if (!Array.isArray(modifier.requires)) {
+              console.error(format(INVALID_MODIFIER_ERROR, modifier.name, '"requires"', '"array"', "\"" + String(modifier.requires) + "\""));
+            }
+
+            break;
+
+          case 'requiresIfExists':
+            if (!Array.isArray(modifier.requiresIfExists)) {
+              console.error(format(INVALID_MODIFIER_ERROR, modifier.name, '"requiresIfExists"', '"array"', "\"" + String(modifier.requiresIfExists) + "\""));
+            }
+
+            break;
+
+          case 'options':
+          case 'data':
+            break;
+
+          default:
+            console.error("PopperJS: an invalid property has been provided to the \"" + modifier.name + "\" modifier, valid properties are " + VALID_PROPERTIES.map(function (s) {
+              return "\"" + s + "\"";
+            }).join(', ') + "; but \"" + key + "\" was provided.");
+        }
+
+        modifier.requires && modifier.requires.forEach(function (requirement) {
+          if (modifiers.find(function (mod) {
+            return mod.name === requirement;
+          }) == null) {
+            console.error(format(MISSING_DEPENDENCY_ERROR, String(modifier.name), requirement, requirement));
+          }
+        });
+      });
+    });
+  }
+
+  function uniqueBy(arr, fn) {
+    var identifiers = new Set();
+    return arr.filter(function (item) {
+      var identifier = fn(item);
+
+      if (!identifiers.has(identifier)) {
+        identifiers.add(identifier);
+        return true;
+      }
+    });
+  }
+
+  function getBasePlacement(placement) {
+    return placement.split('-')[0];
+  }
+
+  function mergeByName(modifiers) {
+    var merged = modifiers.reduce(function (merged, current) {
+      var existing = merged[current.name];
+      merged[current.name] = existing ? Object.assign({}, existing, current, {
+        options: Object.assign({}, existing.options, current.options),
+        data: Object.assign({}, existing.data, current.data)
+      }) : current;
+      return merged;
+    }, {}); // IE11 does not support Object.values
+
+    return Object.keys(merged).map(function (key) {
+      return merged[key];
+    });
+  }
+
+  function getViewportRect(element) {
+    var win = getWindow(element);
+    var html = getDocumentElement(element);
+    var visualViewport = win.visualViewport;
+    var width = html.clientWidth;
+    var height = html.clientHeight;
+    var x = 0;
+    var y = 0; // NB: This isn't supported on iOS <= 12. If the keyboard is open, the popper
+    // can be obscured underneath it.
+    // Also, `html.clientHeight` adds the bottom bar height in Safari iOS, even
+    // if it isn't open, so if this isn't available, the popper will be detected
+    // to overflow the bottom of the screen too early.
+
+    if (visualViewport) {
+      width = visualViewport.width;
+      height = visualViewport.height; // Uses Layout Viewport (like Chrome; Safari does not currently)
+      // In Chrome, it returns a value very close to 0 (+/-) but contains rounding
+      // errors due to floating point numbers, so we need to check precision.
+      // Safari returns a number <= 0, usually < -1 when pinch-zoomed
+      // Feature detection fails in mobile emulation mode in Chrome.
+      // Math.abs(win.innerWidth / visualViewport.scale - visualViewport.width) <
+      // 0.001
+      // Fallback here: "Not Safari" userAgent
+
+      if (!/^((?!chrome|android).)*safari/i.test(navigator.userAgent)) {
+        x = visualViewport.offsetLeft;
+        y = visualViewport.offsetTop;
+      }
+    }
+
+    return {
+      width: width,
+      height: height,
+      x: x + getWindowScrollBarX(element),
+      y: y
+    };
+  }
+
+  var max = Math.max;
+  var min = Math.min;
+  var round = Math.round;
+
+  // of the `<html>` and `<body>` rect bounds if horizontally scrollable
+
+  function getDocumentRect(element) {
+    var _element$ownerDocumen;
+
+    var html = getDocumentElement(element);
+    var winScroll = getWindowScroll(element);
+    var body = (_element$ownerDocumen = element.ownerDocument) == null ? void 0 : _element$ownerDocumen.body;
+    var width = max(html.scrollWidth, html.clientWidth, body ? body.scrollWidth : 0, body ? body.clientWidth : 0);
+    var height = max(html.scrollHeight, html.clientHeight, body ? body.scrollHeight : 0, body ? body.clientHeight : 0);
+    var x = -winScroll.scrollLeft + getWindowScrollBarX(element);
+    var y = -winScroll.scrollTop;
+
+    if (getComputedStyle(body || html).direction === 'rtl') {
+      x += max(html.clientWidth, body ? body.clientWidth : 0) - width;
+    }
+
+    return {
+      width: width,
+      height: height,
+      x: x,
+      y: y
+    };
+  }
+
+  function contains(parent, child) {
+    var rootNode = child.getRootNode && child.getRootNode(); // First, attempt with faster native method
+
+    if (parent.contains(child)) {
+      return true;
+    } // then fallback to custom implementation with Shadow DOM support
+    else if (rootNode && isShadowRoot(rootNode)) {
+        var next = child;
+
+        do {
+          if (next && parent.isSameNode(next)) {
+            return true;
+          } // $FlowFixMe[prop-missing]: need a better way to handle this...
+
+
+          next = next.parentNode || next.host;
+        } while (next);
+      } // Give up, the result is false
+
+
+    return false;
+  }
+
+  function rectToClientRect(rect) {
+    return Object.assign({}, rect, {
+      left: rect.x,
+      top: rect.y,
+      right: rect.x + rect.width,
+      bottom: rect.y + rect.height
+    });
+  }
+
+  function getInnerBoundingClientRect(element) {
+    var rect = getBoundingClientRect(element);
+    rect.top = rect.top + element.clientTop;
+    rect.left = rect.left + element.clientLeft;
+    rect.bottom = rect.top + element.clientHeight;
+    rect.right = rect.left + element.clientWidth;
+    rect.width = element.clientWidth;
+    rect.height = element.clientHeight;
+    rect.x = rect.left;
+    rect.y = rect.top;
+    return rect;
+  }
+
+  function getClientRectFromMixedType(element, clippingParent) {
+    return clippingParent === viewport ? rectToClientRect(getViewportRect(element)) : isHTMLElement(clippingParent) ? getInnerBoundingClientRect(clippingParent) : rectToClientRect(getDocumentRect(getDocumentElement(element)));
+  } // A "clipping parent" is an overflowable container with the characteristic of
+  // clipping (or hiding) overflowing elements with a position different from
+  // `initial`
+
+
+  function getClippingParents(element) {
+    var clippingParents = listScrollParents(getParentNode(element));
+    var canEscapeClipping = ['absolute', 'fixed'].indexOf(getComputedStyle(element).position) >= 0;
+    var clipperElement = canEscapeClipping && isHTMLElement(element) ? getOffsetParent(element) : element;
+
+    if (!isElement(clipperElement)) {
+      return [];
+    } // $FlowFixMe[incompatible-return]: https://github.com/facebook/flow/issues/1414
+
+
+    return clippingParents.filter(function (clippingParent) {
+      return isElement(clippingParent) && contains(clippingParent, clipperElement) && getNodeName(clippingParent) !== 'body';
+    });
+  } // Gets the maximum area that the element is visible in due to any number of
+  // clipping parents
+
+
+  function getClippingRect(element, boundary, rootBoundary) {
+    var mainClippingParents = boundary === 'clippingParents' ? getClippingParents(element) : [].concat(boundary);
+    var clippingParents = [].concat(mainClippingParents, [rootBoundary]);
+    var firstClippingParent = clippingParents[0];
+    var clippingRect = clippingParents.reduce(function (accRect, clippingParent) {
+      var rect = getClientRectFromMixedType(element, clippingParent);
+      accRect.top = max(rect.top, accRect.top);
+      accRect.right = min(rect.right, accRect.right);
+      accRect.bottom = min(rect.bottom, accRect.bottom);
+      accRect.left = max(rect.left, accRect.left);
+      return accRect;
+    }, getClientRectFromMixedType(element, firstClippingParent));
+    clippingRect.width = clippingRect.right - clippingRect.left;
+    clippingRect.height = clippingRect.bottom - clippingRect.top;
+    clippingRect.x = clippingRect.left;
+    clippingRect.y = clippingRect.top;
+    return clippingRect;
+  }
+
+  function getVariation(placement) {
+    return placement.split('-')[1];
+  }
+
+  function getMainAxisFromPlacement(placement) {
+    return ['top', 'bottom'].indexOf(placement) >= 0 ? 'x' : 'y';
+  }
+
+  function computeOffsets(_ref) {
+    var reference = _ref.reference,
+        element = _ref.element,
+        placement = _ref.placement;
+    var basePlacement = placement ? getBasePlacement(placement) : null;
+    var variation = placement ? getVariation(placement) : null;
+    var commonX = reference.x + reference.width / 2 - element.width / 2;
+    var commonY = reference.y + reference.height / 2 - element.height / 2;
+    var offsets;
+
+    switch (basePlacement) {
+      case top:
+        offsets = {
+          x: commonX,
+          y: reference.y - element.height
+        };
+        break;
+
+      case bottom:
+        offsets = {
+          x: commonX,
+          y: reference.y + reference.height
+        };
+        break;
+
+      case right:
+        offsets = {
+          x: reference.x + reference.width,
+          y: commonY
+        };
+        break;
+
+      case left:
+        offsets = {
+          x: reference.x - element.width,
+          y: commonY
+        };
+        break;
+
+      default:
+        offsets = {
+          x: reference.x,
+          y: reference.y
+        };
+    }
+
+    var mainAxis = basePlacement ? getMainAxisFromPlacement(basePlacement) : null;
+
+    if (mainAxis != null) {
+      var len = mainAxis === 'y' ? 'height' : 'width';
+
+      switch (variation) {
+        case start:
+          offsets[mainAxis] = offsets[mainAxis] - (reference[len] / 2 - element[len] / 2);
+          break;
+
+        case end:
+          offsets[mainAxis] = offsets[mainAxis] + (reference[len] / 2 - element[len] / 2);
+          break;
+      }
+    }
+
+    return offsets;
+  }
+
+  function getFreshSideObject() {
+    return {
+      top: 0,
+      right: 0,
+      bottom: 0,
+      left: 0
+    };
+  }
+
+  function mergePaddingObject(paddingObject) {
+    return Object.assign({}, getFreshSideObject(), paddingObject);
+  }
+
+  function expandToHashMap(value, keys) {
+    return keys.reduce(function (hashMap, key) {
+      hashMap[key] = value;
+      return hashMap;
+    }, {});
+  }
+
+  function detectOverflow(state, options) {
+    if (options === void 0) {
+      options = {};
+    }
+
+    var _options = options,
+        _options$placement = _options.placement,
+        placement = _options$placement === void 0 ? state.placement : _options$placement,
+        _options$boundary = _options.boundary,
+        boundary = _options$boundary === void 0 ? clippingParents : _options$boundary,
+        _options$rootBoundary = _options.rootBoundary,
+        rootBoundary = _options$rootBoundary === void 0 ? viewport : _options$rootBoundary,
+        _options$elementConte = _options.elementContext,
+        elementContext = _options$elementConte === void 0 ? popper : _options$elementConte,
+        _options$altBoundary = _options.altBoundary,
+        altBoundary = _options$altBoundary === void 0 ? false : _options$altBoundary,
+        _options$padding = _options.padding,
+        padding = _options$padding === void 0 ? 0 : _options$padding;
+    var paddingObject = mergePaddingObject(typeof padding !== 'number' ? padding : expandToHashMap(padding, basePlacements));
+    var altContext = elementContext === popper ? reference : popper;
+    var referenceElement = state.elements.reference;
+    var popperRect = state.rects.popper;
+    var element = state.elements[altBoundary ? altContext : elementContext];
+    var clippingClientRect = getClippingRect(isElement(element) ? element : element.contextElement || getDocumentElement(state.elements.popper), boundary, rootBoundary);
+    var referenceClientRect = getBoundingClientRect(referenceElement);
+    var popperOffsets = computeOffsets({
+      reference: referenceClientRect,
+      element: popperRect,
+      strategy: 'absolute',
+      placement: placement
+    });
+    var popperClientRect = rectToClientRect(Object.assign({}, popperRect, popperOffsets));
+    var elementClientRect = elementContext === popper ? popperClientRect : referenceClientRect; // positive = overflowing the clipping rect
+    // 0 or negative = within the clipping rect
+
+    var overflowOffsets = {
+      top: clippingClientRect.top - elementClientRect.top + paddingObject.top,
+      bottom: elementClientRect.bottom - clippingClientRect.bottom + paddingObject.bottom,
+      left: clippingClientRect.left - elementClientRect.left + paddingObject.left,
+      right: elementClientRect.right - clippingClientRect.right + paddingObject.right
+    };
+    var offsetData = state.modifiersData.offset; // Offsets can be applied only to the popper element
+
+    if (elementContext === popper && offsetData) {
+      var offset = offsetData[placement];
+      Object.keys(overflowOffsets).forEach(function (key) {
+        var multiply = [right, bottom].indexOf(key) >= 0 ? 1 : -1;
+        var axis = [top, bottom].indexOf(key) >= 0 ? 'y' : 'x';
+        overflowOffsets[key] += offset[axis] * multiply;
+      });
+    }
+
+    return overflowOffsets;
+  }
+
+  var INVALID_ELEMENT_ERROR = 'Popper: Invalid reference or popper argument provided. They must be either a DOM element or virtual element.';
+  var INFINITE_LOOP_ERROR = 'Popper: An infinite loop in the modifiers cycle has been detected! The cycle has been interrupted to prevent a browser crash.';
+  var DEFAULT_OPTIONS = {
+    placement: 'bottom',
+    modifiers: [],
+    strategy: 'absolute'
+  };
+
+  function areValidElements() {
+    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    return !args.some(function (element) {
+      return !(element && typeof element.getBoundingClientRect === 'function');
+    });
+  }
+
+  function popperGenerator(generatorOptions) {
+    if (generatorOptions === void 0) {
+      generatorOptions = {};
+    }
+
+    var _generatorOptions = generatorOptions,
+        _generatorOptions$def = _generatorOptions.defaultModifiers,
+        defaultModifiers = _generatorOptions$def === void 0 ? [] : _generatorOptions$def,
+        _generatorOptions$def2 = _generatorOptions.defaultOptions,
+        defaultOptions = _generatorOptions$def2 === void 0 ? DEFAULT_OPTIONS : _generatorOptions$def2;
+    return function createPopper(reference, popper, options) {
+      if (options === void 0) {
+        options = defaultOptions;
+      }
+
+      var state = {
+        placement: 'bottom',
+        orderedModifiers: [],
+        options: Object.assign({}, DEFAULT_OPTIONS, defaultOptions),
+        modifiersData: {},
+        elements: {
+          reference: reference,
+          popper: popper
+        },
+        attributes: {},
+        styles: {}
+      };
+      var effectCleanupFns = [];
+      var isDestroyed = false;
+      var instance = {
+        state: state,
+        setOptions: function setOptions(options) {
+          cleanupModifierEffects();
+          state.options = Object.assign({}, defaultOptions, state.options, options);
+          state.scrollParents = {
+            reference: isElement(reference) ? listScrollParents(reference) : reference.contextElement ? listScrollParents(reference.contextElement) : [],
+            popper: listScrollParents(popper)
+          }; // Orders the modifiers based on their dependencies and `phase`
+          // properties
+
+          var orderedModifiers = orderModifiers(mergeByName([].concat(defaultModifiers, state.options.modifiers))); // Strip out disabled modifiers
+
+          state.orderedModifiers = orderedModifiers.filter(function (m) {
+            return m.enabled;
+          }); // Validate the provided modifiers so that the consumer will get warned
+          // if one of the modifiers is invalid for any reason
+
+          {
+            var modifiers = uniqueBy([].concat(orderedModifiers, state.options.modifiers), function (_ref) {
+              var name = _ref.name;
+              return name;
+            });
+            validateModifiers(modifiers);
+
+            if (getBasePlacement(state.options.placement) === auto) {
+              var flipModifier = state.orderedModifiers.find(function (_ref2) {
+                var name = _ref2.name;
+                return name === 'flip';
+              });
+
+              if (!flipModifier) {
+                console.error(['Popper: "auto" placements require the "flip" modifier be', 'present and enabled to work.'].join(' '));
+              }
+            }
+
+            var _getComputedStyle = getComputedStyle(popper),
+                marginTop = _getComputedStyle.marginTop,
+                marginRight = _getComputedStyle.marginRight,
+                marginBottom = _getComputedStyle.marginBottom,
+                marginLeft = _getComputedStyle.marginLeft; // We no longer take into account `margins` on the popper, and it can
+            // cause bugs with positioning, so we'll warn the consumer
+
+
+            if ([marginTop, marginRight, marginBottom, marginLeft].some(function (margin) {
+              return parseFloat(margin);
+            })) {
+              console.warn(['Popper: CSS "margin" styles cannot be used to apply padding', 'between the popper and its reference element or boundary.', 'To replicate margin, use the `offset` modifier, as well as', 'the `padding` option in the `preventOverflow` and `flip`', 'modifiers.'].join(' '));
+            }
+          }
+
+          runModifierEffects();
+          return instance.update();
+        },
+        // Sync update – it will always be executed, even if not necessary. This
+        // is useful for low frequency updates where sync behavior simplifies the
+        // logic.
+        // For high frequency updates (e.g. `resize` and `scroll` events), always
+        // prefer the async Popper#update method
+        forceUpdate: function forceUpdate() {
+          if (isDestroyed) {
+            return;
+          }
+
+          var _state$elements = state.elements,
+              reference = _state$elements.reference,
+              popper = _state$elements.popper; // Don't proceed if `reference` or `popper` are not valid elements
+          // anymore
+
+          if (!areValidElements(reference, popper)) {
+            {
+              console.error(INVALID_ELEMENT_ERROR);
+            }
+
+            return;
+          } // Store the reference and popper rects to be read by modifiers
+
+
+          state.rects = {
+            reference: getCompositeRect(reference, getOffsetParent(popper), state.options.strategy === 'fixed'),
+            popper: getLayoutRect(popper)
+          }; // Modifiers have the ability to reset the current update cycle. The
+          // most common use case for this is the `flip` modifier changing the
+          // placement, which then needs to re-run all the modifiers, because the
+          // logic was previously ran for the previous placement and is therefore
+          // stale/incorrect
+
+          state.reset = false;
+          state.placement = state.options.placement; // On each update cycle, the `modifiersData` property for each modifier
+          // is filled with the initial data specified by the modifier. This means
+          // it doesn't persist and is fresh on each update.
+          // To ensure persistent data, use `${name}#persistent`
+
+          state.orderedModifiers.forEach(function (modifier) {
+            return state.modifiersData[modifier.name] = Object.assign({}, modifier.data);
+          });
+          var __debug_loops__ = 0;
+
+          for (var index = 0; index < state.orderedModifiers.length; index++) {
+            {
+              __debug_loops__ += 1;
+
+              if (__debug_loops__ > 100) {
+                console.error(INFINITE_LOOP_ERROR);
+                break;
+              }
+            }
+
+            if (state.reset === true) {
+              state.reset = false;
+              index = -1;
+              continue;
+            }
+
+            var _state$orderedModifie = state.orderedModifiers[index],
+                fn = _state$orderedModifie.fn,
+                _state$orderedModifie2 = _state$orderedModifie.options,
+                _options = _state$orderedModifie2 === void 0 ? {} : _state$orderedModifie2,
+                name = _state$orderedModifie.name;
+
+            if (typeof fn === 'function') {
+              state = fn({
+                state: state,
+                options: _options,
+                name: name,
+                instance: instance
+              }) || state;
+            }
+          }
+        },
+        // Async and optimistically optimized update – it will not be executed if
+        // not necessary (debounced to run at most once-per-tick)
+        update: debounce(function () {
+          return new Promise(function (resolve) {
+            instance.forceUpdate();
+            resolve(state);
+          });
+        }),
+        destroy: function destroy() {
+          cleanupModifierEffects();
+          isDestroyed = true;
+        }
+      };
+
+      if (!areValidElements(reference, popper)) {
+        {
+          console.error(INVALID_ELEMENT_ERROR);
+        }
+
+        return instance;
+      }
+
+      instance.setOptions(options).then(function (state) {
+        if (!isDestroyed && options.onFirstUpdate) {
+          options.onFirstUpdate(state);
+        }
+      }); // Modifiers have the ability to execute arbitrary code before the first
+      // update cycle runs. They will be executed in the same order as the update
+      // cycle. This is useful when a modifier adds some persistent data that
+      // other modifiers need to use, but the modifier is run after the dependent
+      // one.
+
+      function runModifierEffects() {
+        state.orderedModifiers.forEach(function (_ref3) {
+          var name = _ref3.name,
+              _ref3$options = _ref3.options,
+              options = _ref3$options === void 0 ? {} : _ref3$options,
+              effect = _ref3.effect;
+
+          if (typeof effect === 'function') {
+            var cleanupFn = effect({
+              state: state,
+              name: name,
+              instance: instance,
+              options: options
+            });
+
+            var noopFn = function noopFn() {};
+
+            effectCleanupFns.push(cleanupFn || noopFn);
+          }
+        });
+      }
+
+      function cleanupModifierEffects() {
+        effectCleanupFns.forEach(function (fn) {
+          return fn();
+        });
+        effectCleanupFns = [];
+      }
+
+      return instance;
+    };
+  }
+
+  var passive = {
+    passive: true
+  };
+
+  function effect$2(_ref) {
+    var state = _ref.state,
+        instance = _ref.instance,
+        options = _ref.options;
+    var _options$scroll = options.scroll,
+        scroll = _options$scroll === void 0 ? true : _options$scroll,
+        _options$resize = options.resize,
+        resize = _options$resize === void 0 ? true : _options$resize;
+    var window = getWindow(state.elements.popper);
+    var scrollParents = [].concat(state.scrollParents.reference, state.scrollParents.popper);
+
+    if (scroll) {
+      scrollParents.forEach(function (scrollParent) {
+        scrollParent.addEventListener('scroll', instance.update, passive);
+      });
+    }
+
+    if (resize) {
+      window.addEventListener('resize', instance.update, passive);
+    }
+
+    return function () {
+      if (scroll) {
+        scrollParents.forEach(function (scrollParent) {
+          scrollParent.removeEventListener('scroll', instance.update, passive);
+        });
+      }
+
+      if (resize) {
+        window.removeEventListener('resize', instance.update, passive);
+      }
+    };
+  } // eslint-disable-next-line import/no-unused-modules
+
+
+  var eventListeners = {
+    name: 'eventListeners',
+    enabled: true,
+    phase: 'write',
+    fn: function fn() {},
+    effect: effect$2,
+    data: {}
+  };
+
+  function popperOffsets(_ref) {
+    var state = _ref.state,
+        name = _ref.name;
+    // Offsets are the actual position the popper needs to have to be
+    // properly positioned near its reference element
+    // This is the most basic placement, and will be adjusted by
+    // the modifiers in the next step
+    state.modifiersData[name] = computeOffsets({
+      reference: state.rects.reference,
+      element: state.rects.popper,
+      strategy: 'absolute',
+      placement: state.placement
+    });
+  } // eslint-disable-next-line import/no-unused-modules
+
+
+  var popperOffsets$1 = {
+    name: 'popperOffsets',
+    enabled: true,
+    phase: 'read',
+    fn: popperOffsets,
+    data: {}
+  };
+
+  var unsetSides = {
+    top: 'auto',
+    right: 'auto',
+    bottom: 'auto',
+    left: 'auto'
+  }; // Round the offsets to the nearest suitable subpixel based on the DPR.
+  // Zooming can change the DPR, but it seems to report a value that will
+  // cleanly divide the values into the appropriate subpixels.
+
+  function roundOffsetsByDPR(_ref) {
+    var x = _ref.x,
+        y = _ref.y;
+    var win = window;
+    var dpr = win.devicePixelRatio || 1;
+    return {
+      x: round(round(x * dpr) / dpr) || 0,
+      y: round(round(y * dpr) / dpr) || 0
+    };
+  }
+
+  function mapToStyles(_ref2) {
+    var _Object$assign2;
+
+    var popper = _ref2.popper,
+        popperRect = _ref2.popperRect,
+        placement = _ref2.placement,
+        offsets = _ref2.offsets,
+        position = _ref2.position,
+        gpuAcceleration = _ref2.gpuAcceleration,
+        adaptive = _ref2.adaptive,
+        roundOffsets = _ref2.roundOffsets;
+
+    var _ref3 = roundOffsets === true ? roundOffsetsByDPR(offsets) : typeof roundOffsets === 'function' ? roundOffsets(offsets) : offsets,
+        _ref3$x = _ref3.x,
+        x = _ref3$x === void 0 ? 0 : _ref3$x,
+        _ref3$y = _ref3.y,
+        y = _ref3$y === void 0 ? 0 : _ref3$y;
+
+    var hasX = offsets.hasOwnProperty('x');
+    var hasY = offsets.hasOwnProperty('y');
+    var sideX = left;
+    var sideY = top;
+    var win = window;
+
+    if (adaptive) {
+      var offsetParent = getOffsetParent(popper);
+      var heightProp = 'clientHeight';
+      var widthProp = 'clientWidth';
+
+      if (offsetParent === getWindow(popper)) {
+        offsetParent = getDocumentElement(popper);
+
+        if (getComputedStyle(offsetParent).position !== 'static') {
+          heightProp = 'scrollHeight';
+          widthProp = 'scrollWidth';
+        }
+      } // $FlowFixMe[incompatible-cast]: force type refinement, we compare offsetParent with window above, but Flow doesn't detect it
+
+
+      offsetParent = offsetParent;
+
+      if (placement === top) {
+        sideY = bottom; // $FlowFixMe[prop-missing]
+
+        y -= offsetParent[heightProp] - popperRect.height;
+        y *= gpuAcceleration ? 1 : -1;
+      }
+
+      if (placement === left) {
+        sideX = right; // $FlowFixMe[prop-missing]
+
+        x -= offsetParent[widthProp] - popperRect.width;
+        x *= gpuAcceleration ? 1 : -1;
+      }
+    }
+
+    var commonStyles = Object.assign({
+      position: position
+    }, adaptive && unsetSides);
+
+    if (gpuAcceleration) {
+      var _Object$assign;
+
+      return Object.assign({}, commonStyles, (_Object$assign = {}, _Object$assign[sideY] = hasY ? '0' : '', _Object$assign[sideX] = hasX ? '0' : '', _Object$assign.transform = (win.devicePixelRatio || 1) < 2 ? "translate(" + x + "px, " + y + "px)" : "translate3d(" + x + "px, " + y + "px, 0)", _Object$assign));
+    }
+
+    return Object.assign({}, commonStyles, (_Object$assign2 = {}, _Object$assign2[sideY] = hasY ? y + "px" : '', _Object$assign2[sideX] = hasX ? x + "px" : '', _Object$assign2.transform = '', _Object$assign2));
+  }
+
+  function computeStyles(_ref4) {
+    var state = _ref4.state,
+        options = _ref4.options;
+    var _options$gpuAccelerat = options.gpuAcceleration,
+        gpuAcceleration = _options$gpuAccelerat === void 0 ? true : _options$gpuAccelerat,
+        _options$adaptive = options.adaptive,
+        adaptive = _options$adaptive === void 0 ? true : _options$adaptive,
+        _options$roundOffsets = options.roundOffsets,
+        roundOffsets = _options$roundOffsets === void 0 ? true : _options$roundOffsets;
+
+    {
+      var transitionProperty = getComputedStyle(state.elements.popper).transitionProperty || '';
+
+      if (adaptive && ['transform', 'top', 'right', 'bottom', 'left'].some(function (property) {
+        return transitionProperty.indexOf(property) >= 0;
+      })) {
+        console.warn(['Popper: Detected CSS transitions on at least one of the following', 'CSS properties: "transform", "top", "right", "bottom", "left".', '\n\n', 'Disable the "computeStyles" modifier\'s `adaptive` option to allow', 'for smooth transitions, or remove these properties from the CSS', 'transition declaration on the popper element if only transitioning', 'opacity or background-color for example.', '\n\n', 'We recommend using the popper element as a wrapper around an inner', 'element that can have any CSS property transitioned for animations.'].join(' '));
+      }
+    }
+
+    var commonStyles = {
+      placement: getBasePlacement(state.placement),
+      popper: state.elements.popper,
+      popperRect: state.rects.popper,
+      gpuAcceleration: gpuAcceleration
+    };
+
+    if (state.modifiersData.popperOffsets != null) {
+      state.styles.popper = Object.assign({}, state.styles.popper, mapToStyles(Object.assign({}, commonStyles, {
+        offsets: state.modifiersData.popperOffsets,
+        position: state.options.strategy,
+        adaptive: adaptive,
+        roundOffsets: roundOffsets
+      })));
+    }
+
+    if (state.modifiersData.arrow != null) {
+      state.styles.arrow = Object.assign({}, state.styles.arrow, mapToStyles(Object.assign({}, commonStyles, {
+        offsets: state.modifiersData.arrow,
+        position: 'absolute',
+        adaptive: false,
+        roundOffsets: roundOffsets
+      })));
+    }
+
+    state.attributes.popper = Object.assign({}, state.attributes.popper, {
+      'data-popper-placement': state.placement
+    });
+  } // eslint-disable-next-line import/no-unused-modules
+
+
+  var computeStyles$1 = {
+    name: 'computeStyles',
+    enabled: true,
+    phase: 'beforeWrite',
+    fn: computeStyles,
+    data: {}
+  };
+
+  // and applies them to the HTMLElements such as popper and arrow
+
+  function applyStyles(_ref) {
+    var state = _ref.state;
+    Object.keys(state.elements).forEach(function (name) {
+      var style = state.styles[name] || {};
+      var attributes = state.attributes[name] || {};
+      var element = state.elements[name]; // arrow is optional + virtual elements
+
+      if (!isHTMLElement(element) || !getNodeName(element)) {
+        return;
+      } // Flow doesn't support to extend this property, but it's the most
+      // effective way to apply styles to an HTMLElement
+      // $FlowFixMe[cannot-write]
+
+
+      Object.assign(element.style, style);
+      Object.keys(attributes).forEach(function (name) {
+        var value = attributes[name];
+
+        if (value === false) {
+          element.removeAttribute(name);
+        } else {
+          element.setAttribute(name, value === true ? '' : value);
+        }
+      });
+    });
+  }
+
+  function effect$1(_ref2) {
+    var state = _ref2.state;
+    var initialStyles = {
+      popper: {
+        position: state.options.strategy,
+        left: '0',
+        top: '0',
+        margin: '0'
+      },
+      arrow: {
+        position: 'absolute'
+      },
+      reference: {}
+    };
+    Object.assign(state.elements.popper.style, initialStyles.popper);
+    state.styles = initialStyles;
+
+    if (state.elements.arrow) {
+      Object.assign(state.elements.arrow.style, initialStyles.arrow);
+    }
+
+    return function () {
+      Object.keys(state.elements).forEach(function (name) {
+        var element = state.elements[name];
+        var attributes = state.attributes[name] || {};
+        var styleProperties = Object.keys(state.styles.hasOwnProperty(name) ? state.styles[name] : initialStyles[name]); // Set all values to an empty string to unset them
+
+        var style = styleProperties.reduce(function (style, property) {
+          style[property] = '';
+          return style;
+        }, {}); // arrow is optional + virtual elements
+
+        if (!isHTMLElement(element) || !getNodeName(element)) {
+          return;
+        }
+
+        Object.assign(element.style, style);
+        Object.keys(attributes).forEach(function (attribute) {
+          element.removeAttribute(attribute);
+        });
+      });
+    };
+  } // eslint-disable-next-line import/no-unused-modules
+
+
+  var applyStyles$1 = {
+    name: 'applyStyles',
+    enabled: true,
+    phase: 'write',
+    fn: applyStyles,
+    effect: effect$1,
+    requires: ['computeStyles']
+  };
+
+  function distanceAndSkiddingToXY(placement, rects, offset) {
+    var basePlacement = getBasePlacement(placement);
+    var invertDistance = [left, top].indexOf(basePlacement) >= 0 ? -1 : 1;
+
+    var _ref = typeof offset === 'function' ? offset(Object.assign({}, rects, {
+      placement: placement
+    })) : offset,
+        skidding = _ref[0],
+        distance = _ref[1];
+
+    skidding = skidding || 0;
+    distance = (distance || 0) * invertDistance;
+    return [left, right].indexOf(basePlacement) >= 0 ? {
+      x: distance,
+      y: skidding
+    } : {
+      x: skidding,
+      y: distance
+    };
+  }
+
+  function offset(_ref2) {
+    var state = _ref2.state,
+        options = _ref2.options,
+        name = _ref2.name;
+    var _options$offset = options.offset,
+        offset = _options$offset === void 0 ? [0, 0] : _options$offset;
+    var data = placements.reduce(function (acc, placement) {
+      acc[placement] = distanceAndSkiddingToXY(placement, state.rects, offset);
+      return acc;
+    }, {});
+    var _data$state$placement = data[state.placement],
+        x = _data$state$placement.x,
+        y = _data$state$placement.y;
+
+    if (state.modifiersData.popperOffsets != null) {
+      state.modifiersData.popperOffsets.x += x;
+      state.modifiersData.popperOffsets.y += y;
+    }
+
+    state.modifiersData[name] = data;
+  } // eslint-disable-next-line import/no-unused-modules
+
+
+  var offset$1 = {
+    name: 'offset',
+    enabled: true,
+    phase: 'main',
+    requires: ['popperOffsets'],
+    fn: offset
+  };
+
+  var hash$1 = {
+    left: 'right',
+    right: 'left',
+    bottom: 'top',
+    top: 'bottom'
+  };
+  function getOppositePlacement(placement) {
+    return placement.replace(/left|right|bottom|top/g, function (matched) {
+      return hash$1[matched];
+    });
+  }
+
+  var hash = {
+    start: 'end',
+    end: 'start'
+  };
+  function getOppositeVariationPlacement(placement) {
+    return placement.replace(/start|end/g, function (matched) {
+      return hash[matched];
+    });
+  }
+
+  function computeAutoPlacement(state, options) {
+    if (options === void 0) {
+      options = {};
+    }
+
+    var _options = options,
+        placement = _options.placement,
+        boundary = _options.boundary,
+        rootBoundary = _options.rootBoundary,
+        padding = _options.padding,
+        flipVariations = _options.flipVariations,
+        _options$allowedAutoP = _options.allowedAutoPlacements,
+        allowedAutoPlacements = _options$allowedAutoP === void 0 ? placements : _options$allowedAutoP;
+    var variation = getVariation(placement);
+    var placements$1 = variation ? flipVariations ? variationPlacements : variationPlacements.filter(function (placement) {
+      return getVariation(placement) === variation;
+    }) : basePlacements;
+    var allowedPlacements = placements$1.filter(function (placement) {
+      return allowedAutoPlacements.indexOf(placement) >= 0;
+    });
+
+    if (allowedPlacements.length === 0) {
+      allowedPlacements = placements$1;
+
+      {
+        console.error(['Popper: The `allowedAutoPlacements` option did not allow any', 'placements. Ensure the `placement` option matches the variation', 'of the allowed placements.', 'For example, "auto" cannot be used to allow "bottom-start".', 'Use "auto-start" instead.'].join(' '));
+      }
+    } // $FlowFixMe[incompatible-type]: Flow seems to have problems with two array unions...
+
+
+    var overflows = allowedPlacements.reduce(function (acc, placement) {
+      acc[placement] = detectOverflow(state, {
+        placement: placement,
+        boundary: boundary,
+        rootBoundary: rootBoundary,
+        padding: padding
+      })[getBasePlacement(placement)];
+      return acc;
+    }, {});
+    return Object.keys(overflows).sort(function (a, b) {
+      return overflows[a] - overflows[b];
+    });
+  }
+
+  function getExpandedFallbackPlacements(placement) {
+    if (getBasePlacement(placement) === auto) {
+      return [];
+    }
+
+    var oppositePlacement = getOppositePlacement(placement);
+    return [getOppositeVariationPlacement(placement), oppositePlacement, getOppositeVariationPlacement(oppositePlacement)];
+  }
+
+  function flip(_ref) {
+    var state = _ref.state,
+        options = _ref.options,
+        name = _ref.name;
+
+    if (state.modifiersData[name]._skip) {
+      return;
+    }
+
+    var _options$mainAxis = options.mainAxis,
+        checkMainAxis = _options$mainAxis === void 0 ? true : _options$mainAxis,
+        _options$altAxis = options.altAxis,
+        checkAltAxis = _options$altAxis === void 0 ? true : _options$altAxis,
+        specifiedFallbackPlacements = options.fallbackPlacements,
+        padding = options.padding,
+        boundary = options.boundary,
+        rootBoundary = options.rootBoundary,
+        altBoundary = options.altBoundary,
+        _options$flipVariatio = options.flipVariations,
+        flipVariations = _options$flipVariatio === void 0 ? true : _options$flipVariatio,
+        allowedAutoPlacements = options.allowedAutoPlacements;
+    var preferredPlacement = state.options.placement;
+    var basePlacement = getBasePlacement(preferredPlacement);
+    var isBasePlacement = basePlacement === preferredPlacement;
+    var fallbackPlacements = specifiedFallbackPlacements || (isBasePlacement || !flipVariations ? [getOppositePlacement(preferredPlacement)] : getExpandedFallbackPlacements(preferredPlacement));
+    var placements = [preferredPlacement].concat(fallbackPlacements).reduce(function (acc, placement) {
+      return acc.concat(getBasePlacement(placement) === auto ? computeAutoPlacement(state, {
+        placement: placement,
+        boundary: boundary,
+        rootBoundary: rootBoundary,
+        padding: padding,
+        flipVariations: flipVariations,
+        allowedAutoPlacements: allowedAutoPlacements
+      }) : placement);
+    }, []);
+    var referenceRect = state.rects.reference;
+    var popperRect = state.rects.popper;
+    var checksMap = new Map();
+    var makeFallbackChecks = true;
+    var firstFittingPlacement = placements[0];
+
+    for (var i = 0; i < placements.length; i++) {
+      var placement = placements[i];
+
+      var _basePlacement = getBasePlacement(placement);
+
+      var isStartVariation = getVariation(placement) === start;
+      var isVertical = [top, bottom].indexOf(_basePlacement) >= 0;
+      var len = isVertical ? 'width' : 'height';
+      var overflow = detectOverflow(state, {
+        placement: placement,
+        boundary: boundary,
+        rootBoundary: rootBoundary,
+        altBoundary: altBoundary,
+        padding: padding
+      });
+      var mainVariationSide = isVertical ? isStartVariation ? right : left : isStartVariation ? bottom : top;
+
+      if (referenceRect[len] > popperRect[len]) {
+        mainVariationSide = getOppositePlacement(mainVariationSide);
+      }
+
+      var altVariationSide = getOppositePlacement(mainVariationSide);
+      var checks = [];
+
+      if (checkMainAxis) {
+        checks.push(overflow[_basePlacement] <= 0);
+      }
+
+      if (checkAltAxis) {
+        checks.push(overflow[mainVariationSide] <= 0, overflow[altVariationSide] <= 0);
+      }
+
+      if (checks.every(function (check) {
+        return check;
+      })) {
+        firstFittingPlacement = placement;
+        makeFallbackChecks = false;
+        break;
+      }
+
+      checksMap.set(placement, checks);
+    }
+
+    if (makeFallbackChecks) {
+      // `2` may be desired in some cases – research later
+      var numberOfChecks = flipVariations ? 3 : 1;
+
+      var _loop = function _loop(_i) {
+        var fittingPlacement = placements.find(function (placement) {
+          var checks = checksMap.get(placement);
+
+          if (checks) {
+            return checks.slice(0, _i).every(function (check) {
+              return check;
+            });
+          }
+        });
+
+        if (fittingPlacement) {
+          firstFittingPlacement = fittingPlacement;
+          return "break";
+        }
+      };
+
+      for (var _i = numberOfChecks; _i > 0; _i--) {
+        var _ret = _loop(_i);
+
+        if (_ret === "break") break;
+      }
+    }
+
+    if (state.placement !== firstFittingPlacement) {
+      state.modifiersData[name]._skip = true;
+      state.placement = firstFittingPlacement;
+      state.reset = true;
+    }
+  } // eslint-disable-next-line import/no-unused-modules
+
+
+  var flip$1 = {
+    name: 'flip',
+    enabled: true,
+    phase: 'main',
+    fn: flip,
+    requiresIfExists: ['offset'],
+    data: {
+      _skip: false
+    }
+  };
+
+  function getAltAxis(axis) {
+    return axis === 'x' ? 'y' : 'x';
+  }
+
+  function within(min$1, value, max$1) {
+    return max(min$1, min(value, max$1));
+  }
+
+  function preventOverflow(_ref) {
+    var state = _ref.state,
+        options = _ref.options,
+        name = _ref.name;
+    var _options$mainAxis = options.mainAxis,
+        checkMainAxis = _options$mainAxis === void 0 ? true : _options$mainAxis,
+        _options$altAxis = options.altAxis,
+        checkAltAxis = _options$altAxis === void 0 ? false : _options$altAxis,
+        boundary = options.boundary,
+        rootBoundary = options.rootBoundary,
+        altBoundary = options.altBoundary,
+        padding = options.padding,
+        _options$tether = options.tether,
+        tether = _options$tether === void 0 ? true : _options$tether,
+        _options$tetherOffset = options.tetherOffset,
+        tetherOffset = _options$tetherOffset === void 0 ? 0 : _options$tetherOffset;
+    var overflow = detectOverflow(state, {
+      boundary: boundary,
+      rootBoundary: rootBoundary,
+      padding: padding,
+      altBoundary: altBoundary
+    });
+    var basePlacement = getBasePlacement(state.placement);
+    var variation = getVariation(state.placement);
+    var isBasePlacement = !variation;
+    var mainAxis = getMainAxisFromPlacement(basePlacement);
+    var altAxis = getAltAxis(mainAxis);
+    var popperOffsets = state.modifiersData.popperOffsets;
+    var referenceRect = state.rects.reference;
+    var popperRect = state.rects.popper;
+    var tetherOffsetValue = typeof tetherOffset === 'function' ? tetherOffset(Object.assign({}, state.rects, {
+      placement: state.placement
+    })) : tetherOffset;
+    var data = {
+      x: 0,
+      y: 0
+    };
+
+    if (!popperOffsets) {
+      return;
+    }
+
+    if (checkMainAxis || checkAltAxis) {
+      var mainSide = mainAxis === 'y' ? top : left;
+      var altSide = mainAxis === 'y' ? bottom : right;
+      var len = mainAxis === 'y' ? 'height' : 'width';
+      var offset = popperOffsets[mainAxis];
+      var min$1 = popperOffsets[mainAxis] + overflow[mainSide];
+      var max$1 = popperOffsets[mainAxis] - overflow[altSide];
+      var additive = tether ? -popperRect[len] / 2 : 0;
+      var minLen = variation === start ? referenceRect[len] : popperRect[len];
+      var maxLen = variation === start ? -popperRect[len] : -referenceRect[len]; // We need to include the arrow in the calculation so the arrow doesn't go
+      // outside the reference bounds
+
+      var arrowElement = state.elements.arrow;
+      var arrowRect = tether && arrowElement ? getLayoutRect(arrowElement) : {
+        width: 0,
+        height: 0
+      };
+      var arrowPaddingObject = state.modifiersData['arrow#persistent'] ? state.modifiersData['arrow#persistent'].padding : getFreshSideObject();
+      var arrowPaddingMin = arrowPaddingObject[mainSide];
+      var arrowPaddingMax = arrowPaddingObject[altSide]; // If the reference length is smaller than the arrow length, we don't want
+      // to include its full size in the calculation. If the reference is small
+      // and near the edge of a boundary, the popper can overflow even if the
+      // reference is not overflowing as well (e.g. virtual elements with no
+      // width or height)
+
+      var arrowLen = within(0, referenceRect[len], arrowRect[len]);
+      var minOffset = isBasePlacement ? referenceRect[len] / 2 - additive - arrowLen - arrowPaddingMin - tetherOffsetValue : minLen - arrowLen - arrowPaddingMin - tetherOffsetValue;
+      var maxOffset = isBasePlacement ? -referenceRect[len] / 2 + additive + arrowLen + arrowPaddingMax + tetherOffsetValue : maxLen + arrowLen + arrowPaddingMax + tetherOffsetValue;
+      var arrowOffsetParent = state.elements.arrow && getOffsetParent(state.elements.arrow);
+      var clientOffset = arrowOffsetParent ? mainAxis === 'y' ? arrowOffsetParent.clientTop || 0 : arrowOffsetParent.clientLeft || 0 : 0;
+      var offsetModifierValue = state.modifiersData.offset ? state.modifiersData.offset[state.placement][mainAxis] : 0;
+      var tetherMin = popperOffsets[mainAxis] + minOffset - offsetModifierValue - clientOffset;
+      var tetherMax = popperOffsets[mainAxis] + maxOffset - offsetModifierValue;
+
+      if (checkMainAxis) {
+        var preventedOffset = within(tether ? min(min$1, tetherMin) : min$1, offset, tether ? max(max$1, tetherMax) : max$1);
+        popperOffsets[mainAxis] = preventedOffset;
+        data[mainAxis] = preventedOffset - offset;
+      }
+
+      if (checkAltAxis) {
+        var _mainSide = mainAxis === 'x' ? top : left;
+
+        var _altSide = mainAxis === 'x' ? bottom : right;
+
+        var _offset = popperOffsets[altAxis];
+
+        var _min = _offset + overflow[_mainSide];
+
+        var _max = _offset - overflow[_altSide];
+
+        var _preventedOffset = within(tether ? min(_min, tetherMin) : _min, _offset, tether ? max(_max, tetherMax) : _max);
+
+        popperOffsets[altAxis] = _preventedOffset;
+        data[altAxis] = _preventedOffset - _offset;
+      }
+    }
+
+    state.modifiersData[name] = data;
+  } // eslint-disable-next-line import/no-unused-modules
+
+
+  var preventOverflow$1 = {
+    name: 'preventOverflow',
+    enabled: true,
+    phase: 'main',
+    fn: preventOverflow,
+    requiresIfExists: ['offset']
+  };
+
+  var toPaddingObject = function toPaddingObject(padding, state) {
+    padding = typeof padding === 'function' ? padding(Object.assign({}, state.rects, {
+      placement: state.placement
+    })) : padding;
+    return mergePaddingObject(typeof padding !== 'number' ? padding : expandToHashMap(padding, basePlacements));
+  };
+
+  function arrow(_ref) {
+    var _state$modifiersData$;
+
+    var state = _ref.state,
+        name = _ref.name,
+        options = _ref.options;
+    var arrowElement = state.elements.arrow;
+    var popperOffsets = state.modifiersData.popperOffsets;
+    var basePlacement = getBasePlacement(state.placement);
+    var axis = getMainAxisFromPlacement(basePlacement);
+    var isVertical = [left, right].indexOf(basePlacement) >= 0;
+    var len = isVertical ? 'height' : 'width';
+
+    if (!arrowElement || !popperOffsets) {
+      return;
+    }
+
+    var paddingObject = toPaddingObject(options.padding, state);
+    var arrowRect = getLayoutRect(arrowElement);
+    var minProp = axis === 'y' ? top : left;
+    var maxProp = axis === 'y' ? bottom : right;
+    var endDiff = state.rects.reference[len] + state.rects.reference[axis] - popperOffsets[axis] - state.rects.popper[len];
+    var startDiff = popperOffsets[axis] - state.rects.reference[axis];
+    var arrowOffsetParent = getOffsetParent(arrowElement);
+    var clientSize = arrowOffsetParent ? axis === 'y' ? arrowOffsetParent.clientHeight || 0 : arrowOffsetParent.clientWidth || 0 : 0;
+    var centerToReference = endDiff / 2 - startDiff / 2; // Make sure the arrow doesn't overflow the popper if the center point is
+    // outside of the popper bounds
+
+    var min = paddingObject[minProp];
+    var max = clientSize - arrowRect[len] - paddingObject[maxProp];
+    var center = clientSize / 2 - arrowRect[len] / 2 + centerToReference;
+    var offset = within(min, center, max); // Prevents breaking syntax highlighting...
+
+    var axisProp = axis;
+    state.modifiersData[name] = (_state$modifiersData$ = {}, _state$modifiersData$[axisProp] = offset, _state$modifiersData$.centerOffset = offset - center, _state$modifiersData$);
+  }
+
+  function effect(_ref2) {
+    var state = _ref2.state,
+        options = _ref2.options;
+    var _options$element = options.element,
+        arrowElement = _options$element === void 0 ? '[data-popper-arrow]' : _options$element;
+
+    if (arrowElement == null) {
+      return;
+    } // CSS selector
+
+
+    if (typeof arrowElement === 'string') {
+      arrowElement = state.elements.popper.querySelector(arrowElement);
+
+      if (!arrowElement) {
+        return;
+      }
+    }
+
+    {
+      if (!isHTMLElement(arrowElement)) {
+        console.error(['Popper: "arrow" element must be an HTMLElement (not an SVGElement).', 'To use an SVG arrow, wrap it in an HTMLElement that will be used as', 'the arrow.'].join(' '));
+      }
+    }
+
+    if (!contains(state.elements.popper, arrowElement)) {
+      {
+        console.error(['Popper: "arrow" modifier\'s `element` must be a child of the popper', 'element.'].join(' '));
+      }
+
+      return;
+    }
+
+    state.elements.arrow = arrowElement;
+  } // eslint-disable-next-line import/no-unused-modules
+
+
+  var arrow$1 = {
+    name: 'arrow',
+    enabled: true,
+    phase: 'main',
+    fn: arrow,
+    effect: effect,
+    requires: ['popperOffsets'],
+    requiresIfExists: ['preventOverflow']
+  };
+
+  function getSideOffsets(overflow, rect, preventedOffsets) {
+    if (preventedOffsets === void 0) {
+      preventedOffsets = {
+        x: 0,
+        y: 0
+      };
+    }
+
+    return {
+      top: overflow.top - rect.height - preventedOffsets.y,
+      right: overflow.right - rect.width + preventedOffsets.x,
+      bottom: overflow.bottom - rect.height + preventedOffsets.y,
+      left: overflow.left - rect.width - preventedOffsets.x
+    };
+  }
+
+  function isAnySideFullyClipped(overflow) {
+    return [top, right, bottom, left].some(function (side) {
+      return overflow[side] >= 0;
+    });
+  }
+
+  function hide(_ref) {
+    var state = _ref.state,
+        name = _ref.name;
+    var referenceRect = state.rects.reference;
+    var popperRect = state.rects.popper;
+    var preventedOffsets = state.modifiersData.preventOverflow;
+    var referenceOverflow = detectOverflow(state, {
+      elementContext: 'reference'
+    });
+    var popperAltOverflow = detectOverflow(state, {
+      altBoundary: true
+    });
+    var referenceClippingOffsets = getSideOffsets(referenceOverflow, referenceRect);
+    var popperEscapeOffsets = getSideOffsets(popperAltOverflow, popperRect, preventedOffsets);
+    var isReferenceHidden = isAnySideFullyClipped(referenceClippingOffsets);
+    var hasPopperEscaped = isAnySideFullyClipped(popperEscapeOffsets);
+    state.modifiersData[name] = {
+      referenceClippingOffsets: referenceClippingOffsets,
+      popperEscapeOffsets: popperEscapeOffsets,
+      isReferenceHidden: isReferenceHidden,
+      hasPopperEscaped: hasPopperEscaped
+    };
+    state.attributes.popper = Object.assign({}, state.attributes.popper, {
+      'data-popper-reference-hidden': isReferenceHidden,
+      'data-popper-escaped': hasPopperEscaped
+    });
+  } // eslint-disable-next-line import/no-unused-modules
+
+
+  var hide$1 = {
+    name: 'hide',
+    enabled: true,
+    phase: 'main',
+    requiresIfExists: ['preventOverflow'],
+    fn: hide
+  };
+
+  var defaultModifiers$1 = [eventListeners, popperOffsets$1, computeStyles$1, applyStyles$1];
+  var createPopper$1 = /*#__PURE__*/popperGenerator({
+    defaultModifiers: defaultModifiers$1
+  }); // eslint-disable-next-line import/no-unused-modules
+
+  var defaultModifiers = [eventListeners, popperOffsets$1, computeStyles$1, applyStyles$1, offset$1, flip$1, preventOverflow$1, arrow$1, hide$1];
+  var createPopper = /*#__PURE__*/popperGenerator({
+    defaultModifiers: defaultModifiers
+  }); // eslint-disable-next-line import/no-unused-modules
+
+  exports.applyStyles = applyStyles$1;
+  exports.arrow = arrow$1;
+  exports.computeStyles = computeStyles$1;
+  exports.createPopper = createPopper;
+  exports.createPopperLite = createPopper$1;
+  exports.defaultModifiers = defaultModifiers;
+  exports.detectOverflow = detectOverflow;
+  exports.eventListeners = eventListeners;
+  exports.flip = flip$1;
+  exports.hide = hide$1;
+  exports.offset = offset$1;
+  exports.popperGenerator = popperGenerator;
+  exports.popperOffsets = popperOffsets$1;
+  exports.preventOverflow = preventOverflow$1;
+
+  Object.defineProperty(exports, '__esModule', { value: true });
+
+})));
+
+
+/***/ }),
+/* 289 */
 /***/ (function(module, exports) {
 
 /**
@@ -11149,15 +13132,11 @@ BI.Plugin = BI.Plugin || {};
  * @abstract
  */
 BI.Action = BI.inherit(BI.OB, {
-    _defaultConfig: function () {
-        return BI.extend(BI.Action.superclass._defaultConfig.apply(this, arguments), {
+    props: function () {
+        return {
             src: null,
             tar: null
-        });
-    },
-
-    _init: function () {
-        BI.Action.superclass._init.apply(this, arguments);
+        };
     },
 
     actionPerformed: function (src, tar, callback) {
@@ -11181,8 +13160,9 @@ BI.ActionFactory = {
     }
 };
 
+
 /***/ }),
-/* 288 */
+/* 290 */
 /***/ (function(module, exports) {
 
 /**
@@ -11192,10 +13172,6 @@ BI.ActionFactory = {
  * @extends BI.Action
  */
 BI.ShowAction = BI.inherit(BI.Action, {
-    _defaultConfig: function () {
-        return BI.extend(BI.ShowAction.superclass._defaultConfig.apply(this, arguments), {});
-    },
-
     actionPerformed: function (src, tar, callback) {
         tar = tar || this.options.tar;
         tar.setVisible(true);
@@ -11211,7 +13187,7 @@ BI.ShowAction = BI.inherit(BI.Action, {
 
 
 /***/ }),
-/* 289 */
+/* 291 */
 /***/ (function(module, exports) {
 
 BI.BehaviorFactory = {
@@ -11242,18 +13218,14 @@ BI.Behavior = BI.inherit(BI.OB, {
         });
     },
 
-    _init: function () {
-        BI.Behavior.superclass._init.apply(this, arguments);
-
-    },
-
     doBehavior: function () {
 
     }
 });
 
+
 /***/ }),
-/* 290 */
+/* 292 */
 /***/ (function(module, exports) {
 
 /**
@@ -11263,15 +13235,6 @@ BI.Behavior = BI.inherit(BI.OB, {
  * @extends BI.Behavior
  */
 BI.HighlightBehavior = BI.inherit(BI.Behavior, {
-    _defaultConfig: function () {
-        return BI.extend(BI.HighlightBehavior.superclass._defaultConfig.apply(this, arguments), {});
-    },
-
-    _init: function () {
-        BI.HighlightBehavior.superclass._init.apply(this, arguments);
-
-    },
-
     doBehavior: function (items) {
         var args = Array.prototype.slice.call(arguments, 1),
             o = this.options;
@@ -11299,8 +13262,9 @@ BI.HighlightBehavior = BI.inherit(BI.Behavior, {
     }
 });
 
+
 /***/ }),
-/* 291 */
+/* 293 */
 /***/ (function(module, exports) {
 
 /**
@@ -11310,17 +13274,6 @@ BI.HighlightBehavior = BI.inherit(BI.Behavior, {
  * @extends BI.Behavior
  */
 BI.RedMarkBehavior = BI.inherit(BI.Behavior, {
-    _defaultConfig: function () {
-        return BI.extend(BI.RedMarkBehavior.superclass._defaultConfig.apply(this, arguments), {
-
-        });
-    },
-
-    _init: function () {
-        BI.RedMarkBehavior.superclass._init.apply(this, arguments);
-
-    },
-
     doBehavior: function (items) {
         var args  = Array.prototype.slice.call(arguments, 1),
             o     = this.options;
@@ -11338,8 +13291,9 @@ BI.RedMarkBehavior = BI.inherit(BI.Behavior, {
     }
 });
 
+
 /***/ }),
-/* 292 */
+/* 294 */
 /***/ (function(module, exports) {
 
 /**
@@ -11351,17 +13305,12 @@ BI.RedMarkBehavior = BI.inherit(BI.Behavior, {
  * @abstract
  */
 BI.Controller = BI.inherit(BI.OB, {
-    _defaultConfig: function () {
-        return BI.extend(BI.Controller.superclass._defaultConfig.apply(this, arguments), {
-
-        });
-    }
 });
 BI.Controller.EVENT_CHANGE = "__EVENT_CHANGE__";
 
 
 /***/ }),
-/* 293 */
+/* 295 */
 /***/ (function(module, exports) {
 
 /**
@@ -11371,12 +13320,7 @@ BI.Controller.EVENT_CHANGE = "__EVENT_CHANGE__";
  * @class
  */
 BI.BroadcastController = BI.inherit(BI.Controller, {
-    _defaultConfig: function () {
-        return BI.extend(BI.BroadcastController.superclass._defaultConfig.apply(this, arguments), {});
-    },
-
-    _init: function () {
-        BI.BroadcastController.superclass._init.apply(this, arguments);
+    init: function () {
         this._broadcasts = {};
     },
 
@@ -11415,8 +13359,9 @@ BI.BroadcastController = BI.inherit(BI.Controller, {
     }
 });
 
+
 /***/ }),
-/* 294 */
+/* 296 */
 /***/ (function(module, exports) {
 
 /**
@@ -11427,99 +13372,8 @@ BI.BroadcastController = BI.inherit(BI.Controller, {
  * @class
  */
 BI.BubblesController = BI.inherit(BI.Controller, {
-    _defaultConfig: function () {
-        return BI.extend(BI.BubblesController.superclass._defaultConfig.apply(this, arguments), {});
-    },
-
-    _const: {
-        bubbleHeight: 18
-    },
-
-    _init: function () {
-        BI.BubblesController.superclass._init.apply(this, arguments);
-        var self = this;
-        this.fixedBubblesManager = {};
-        this.fixedStoreBubbles = {};
-        this.bubblesManager = {};
+    init: function () {
         this.storeBubbles = {};
-        BI.Resizers.add("bubbleController" + BI.uniqueId(), function () {
-            BI.each(self.fixedBubblesManager, function (name) {
-                self.remove(name);
-            });
-            self.fixedBubblesManager = {};
-            self.fixedStoreBubbles = {};
-        });
-    },
-
-    _createBubble: function (direct, text, level, height, fixed) {
-        return BI.createWidget({
-            type: fixed === false ? "bi.bubble_view" : "bi.bubble",
-            text: text,
-            level: level,
-            height: height || 18,
-            direction: direct
-        });
-    },
-
-    _getOffsetLeft: function (name, context, offsetStyle) {
-        var left = 0;
-        if ("center" === offsetStyle) {
-            left = context.element.offset().left + (context.element.bounds().width - this.get(name).element.bounds().width) / 2;
-            if (left < 0) {
-                left = 0;
-            }
-            return left;
-        }
-        if ("right" === offsetStyle) {
-            left = context.element.offset().left + context.element.bounds().width - this.get(name).element.bounds().width;
-            if (left < 0) {
-                left = 0;
-            }
-            return left;
-        }
-        return context.element.offset().left;
-    },
-
-    _getOffsetTop: function (name, context, offsetStyle) {
-        var top = 0;
-        if ("center" === offsetStyle) {
-            top = context.element.offset().top + (context.element.bounds().height - this.get(name).element.bounds().height) / 2;
-            if (top < 0) {
-                top = 0;
-            }
-            return top;
-        } else if ("right" === offsetStyle) {
-            top = context.element.offset().top + context.element.bounds().height - this.get(name).element.bounds().height;
-            if (top < 0) {
-                top = 0;
-            }
-            return top;
-        }
-        return context.element.offset().top;
-    },
-
-    _getLeftPosition: function (name, context, offsetStyle) {
-        var position = BI.DOM.getLeftPosition(context, this.get(name));
-        position.top = this._getOffsetTop(name, context, offsetStyle);
-        return position;
-    },
-
-    _getBottomPosition: function (name, context, offsetStyle) {
-        var position = BI.DOM.getBottomPosition(context, this.get(name));
-        position.left = this._getOffsetLeft(name, context, offsetStyle);
-        return position;
-    },
-
-    _getTopPosition: function (name, context, offsetStyle) {
-        var position = BI.DOM.getTopPosition(context, this.get(name));
-        position.left = this._getOffsetLeft(name, context, offsetStyle);
-        return position;
-    },
-
-    _getRightPosition: function (name, context, offsetStyle) {
-        var position = BI.DOM.getRightPosition(context, this.get(name));
-        position.top = this._getOffsetTop(name, context, offsetStyle);
-        return position;
     },
 
     /**
@@ -11532,201 +13386,73 @@ BI.BubblesController = BI.inherit(BI.Controller, {
      */
     show: function (name, text, context, opt) {
         opt || (opt = {});
-        var container = opt.container || context;
+        var container = opt.container || "body";
         var offsetStyle = opt.offsetStyle || "left";
         var level = opt.level || "error";
         var adjustYOffset = opt.adjustYOffset || 0;
         var adjustXOffset = opt.adjustXOffset || 0;
-        var fixed = opt.fixed !== false;
-        // 如果是非固定位置（fixed）的bubble
-        if (fixed === false) {
-            if (!this.storeBubbles[name]) {
-                this.storeBubbles[name] = {};
-            }
-            if (!this.storeBubbles[name]["top"]) {
-                this.storeBubbles[name]["top"] = this._createBubble("top", text, level, null, fixed);
-            }
-            BI.createWidget({
-                type: "bi.absolute",
-                element: container,
-                items: [{
-                    el: this.storeBubbles[name]["top"]
-                }]
+        // var fixed = opt.fixed !== false;
+
+        if (!this.storeBubbles[name]) {
+            this.storeBubbles[name] = BI.createWidget({
+                type: "bi.label",
+                cls: "bi-bubble" + " bubble-" + level,
+                text: text,
+                hgap: 5,
+                height: 18
             });
-            this.set(name, this.storeBubbles[name]["top"]);
-            var bubble = this.storeBubbles[name]["top"];
-            var bounds = bubble.element.bounds();
-            if (BI.DOM.isTopSpaceEnough(context, this.get(name), adjustYOffset)) {
-                var top = -(bounds.height + adjustYOffset);
-                switch (offsetStyle) {
-                    case "center":
-                        bubble.element.css({
-                            left: (context.element.bounds().width - bounds.width) / 2 + adjustXOffset,
-                            top: top
-                        });
-                        break;
-                    case "right":
-                        bubble.element.css({
-                            right: adjustXOffset,
-                            top: top
-                        });
-                        break;
-                    default:
-                        bubble.element.css({
-                            left: adjustXOffset,
-                            top: top
-                        });
-                        break;
-                }
-            } else {
-                var bottom = -(bounds.height + adjustYOffset);
-                switch (offsetStyle) {
-                    case "center":
-                        bubble.element.css({
-                            left: (context.element.bounds().width - bounds.width) / 2 + adjustXOffset,
-                            bottom: bottom
-                        });
-                        break;
-                    case "right":
-                        bubble.element.css({
-                            right: adjustXOffset,
-                            bottom: bottom
-                        });
-                        break;
-                    default:
-                        bubble.element.css({
-                            left: adjustXOffset,
-                            bottom: bottom
-                        });
-                        break;
-                }
-            }
-        } else {
-            if (!this.fixedStoreBubbles[name]) {
-                this.fixedStoreBubbles[name] = {};
-            }
-            if (!this.fixedStoreBubbles[name]["top"]) {
-                this.fixedStoreBubbles[name]["top"] = this._createBubble("top", text, level, null, fixed);
-            }
-            BI.createWidget({
-                type: "bi.absolute",
-                element: container,
-                items: [{
-                    el: this.fixedStoreBubbles[name]["top"]
-                }]
-            });
-            this.set(name, this.fixedStoreBubbles[name]["top"]);
-            var position = this._getTopPosition(name, context, offsetStyle);
-            this.get(name).element.css({left: position.left + adjustXOffset, top: position.top - adjustYOffset});
-            if (!BI.DOM.isTopSpaceEnough(context, this.get(name), adjustYOffset)) {
-                this.get(name).invisible();
-                if (!this.fixedStoreBubbles[name]["bottom"]) {
-                    this.fixedStoreBubbles[name]["bottom"] = this._createBubble("bottom", text, level);
-                }
-                BI.createWidget({
-                    type: "bi.absolute",
-                    element: container,
-                    items: [{
-                        el: this.fixedStoreBubbles[name]["bottom"]
-                    }]
-                });
-                this.set(name, this.fixedStoreBubbles[name]["bottom"]);
-                var position = this._getBottomPosition(name, context, offsetStyle);
-                this.get(name).element.css({left: position.left + adjustXOffset, top: position.top + adjustYOffset});
-                if (!BI.DOM.isBottomSpaceEnough(context, this.get(name), adjustYOffset)) {
-                    this.get(name).invisible();
-                    if (!this.fixedStoreBubbles[name]["right"]) {
-                        this.fixedStoreBubbles[name]["right"] = this._createBubble("right", text, level);
-                    }
-                    BI.createWidget({
-                        type: "bi.absolute",
-                        element: container,
-                        items: [{
-                            el: this.fixedStoreBubbles[name]["right"]
-                        }]
-                    });
-                    this.set(name, this.fixedStoreBubbles[name]["right"]);
-                    var position = this._getRightPosition(name, context, offsetStyle);
-                    this.get(name).element.css({
-                        left: position.left + adjustXOffset,
-                        top: position.top - adjustYOffset
-                    });
-                    if (!BI.DOM.isRightSpaceEnough(context, this.get(name), adjustXOffset)) {
-                        this.get(name).invisible();
-                        if (!this.fixedStoreBubbles[name]["left"]) {
-                            this.fixedStoreBubbles[name]["left"] = this._createBubble("left", text, level, 30);
-                        }
-                        BI.createWidget({
-                            type: "bi.absolute",
-                            element: container,
-                            items: [{
-                                el: this.fixedStoreBubbles[name]["left"]
-                            }]
-                        });
-                        this.set(name, this.fixedStoreBubbles[name]["left"]);
-                        var position = this._getLeftPosition(name, context, offsetStyle);
-                        this.get(name).element.css({
-                            left: position.left - adjustXOffset,
-                            top: position.top - adjustYOffset
-                        });
-                    }
-                }
-            }
         }
-        this.get(name).setText(text);
-        this.get(name).visible();
+        var bubble = this.storeBubbles[name];
+
+        BI.createWidget({
+            type: "bi.default",
+            element: container,
+            items: [{
+                el: bubble
+            }]
+        });
+        BI.Popper.createPopper(context.element[0], bubble.element[0], {
+            placement: ({
+                left: "top-start",
+                center: "top",
+                right: "top-end"
+            })[offsetStyle],
+            strategy: "fixed",
+            modifiers: [
+                {
+                    name: "offset",
+                    options: {
+                        offset: [adjustXOffset, adjustYOffset]
+                    }
+                }
+            ]
+        });
         return this;
     },
 
     hide: function (name) {
-        if (!this.has(name)) {
-            return this;
-        }
-        this.get(name).invisible();
-        return this;
-    },
-
-    add: function (name, bubble) {
-        if (this.has(name)) {
-            return this;
-        }
-        this.set(name, bubble);
-        return this;
-    },
-
-    get: function (name) {
-        return this.fixedBubblesManager[name] || this.bubblesManager[name];
-    },
-
-    set: function (name, bubble, fixed) {
-        fixed === false ? (this.bubblesManager[name] = bubble) : (this.fixedBubblesManager[name] = bubble);
+        this.remove(name);
     },
 
     has: function (name) {
-        return this.fixedBubblesManager[name] != null || this.bubblesManager[name] != null;
+        return this.storeBubbles[name] != null;
     },
 
     remove: function (name) {
         if (!this.has(name)) {
             return this;
         }
-        BI.each(this.fixedStoreBubbles[name], function (dir, bubble) {
-            bubble.destroy();
-        });
-        delete this.fixedStoreBubbles[name];
-        delete this.fixedBubblesManager[name];
-        BI.each(this.storeBubbles[name], function (dir, bubble) {
+        BI.each(this.storeBubbles, function (dir, bubble) {
             bubble.destroy();
         });
         delete this.storeBubbles[name];
-        delete this.bubblesManager[name];
         return this;
     }
 });
 
 
 /***/ }),
-/* 295 */
+/* 297 */
 /***/ (function(module, exports) {
 
 /**
@@ -11736,14 +13462,13 @@ BI.BubblesController = BI.inherit(BI.Controller, {
  * @class
  */
 BI.LayerController = BI.inherit(BI.Controller, {
-    _defaultConfig: function () {
-        return BI.extend(BI.LayerController.superclass._defaultConfig.apply(this, arguments), {
+    props: function () {
+        return {
             render: "body"
-        });
+        };
     },
 
-    _init: function () {
-        BI.LayerController.superclass._init.apply(this, arguments);
+    init: function () {
         this.layerManager = {};
         this.layouts = {};
         this.zindex = BI.zIndex_layer;
@@ -11856,7 +13581,7 @@ BI.LayerController = BI.inherit(BI.Controller, {
 
     add: function (name, layer, layout) {
         if (this.has(name)) {
-            throw new Error("name is already exist");
+            throw new Error("不能创建同名的Layer");
         }
         layout.setVisible(false);
         this.layerManager[name] = layer;
@@ -11900,8 +13625,9 @@ BI.LayerController = BI.inherit(BI.Controller, {
     }
 });
 
+
 /***/ }),
-/* 296 */
+/* 298 */
 /***/ (function(module, exports) {
 
 /**
@@ -11911,18 +13637,15 @@ BI.LayerController = BI.inherit(BI.Controller, {
  * @class
  */
 BI.MaskersController = BI.inherit(BI.LayerController, {
-    _defaultConfig: function () {
-        return BI.extend(BI.MaskersController.superclass._defaultConfig.apply(this, arguments), {});
-    },
-
-    _init: function () {
-        BI.MaskersController.superclass._init.apply(this, arguments);
+    init: function () {
+        BI.MaskersController.superclass.init.apply(this, arguments);
         this.zindex = BI.zIndex_masker;
     }
 });
 
+
 /***/ }),
-/* 297 */
+/* 299 */
 /***/ (function(module, exports) {
 
 /**
@@ -11932,15 +13655,14 @@ BI.MaskersController = BI.inherit(BI.LayerController, {
  * @extends BI.Controller
  */
 BI.PopoverController = BI.inherit(BI.Controller, {
-    _defaultConfig: function () {
-        return BI.extend(BI.PopoverController.superclass._defaultConfig.apply(this, arguments), {
+    props: function () {
+        return {
             modal: true, // 模态窗口
             render: "body"
-        });
+        };
     },
 
-    _init: function () {
-        BI.PopoverController.superclass._init.apply(this, arguments);
+    init: function () {
         this.modal = this.options.modal;
         this.floatManager = {};
         this.floatLayer = {};
@@ -12084,7 +13806,7 @@ BI.PopoverController = BI.inherit(BI.Controller, {
 
 
 /***/ }),
-/* 298 */
+/* 300 */
 /***/ (function(module, exports) {
 
 /**
@@ -12094,12 +13816,7 @@ BI.PopoverController = BI.inherit(BI.Controller, {
  * @class
  */
 BI.ResizeController = BI.inherit(BI.Controller, {
-    _defaultConfig: function () {
-        return BI.extend(BI.ResizeController.superclass._defaultConfig.apply(this, arguments), {});
-    },
-
-    _init: function () {
-        BI.ResizeController.superclass._init.apply(this, arguments);
+    init: function () {
         var self = this;
         this.resizerManger = {};
         var fn = BI.debounce(function (ev) {
@@ -12161,8 +13878,9 @@ BI.ResizeController = BI.inherit(BI.Controller, {
     }
 });
 
+
 /***/ }),
-/* 299 */
+/* 301 */
 /***/ (function(module, exports) {
 
 /**
@@ -12174,16 +13892,7 @@ BI.ResizeController = BI.inherit(BI.Controller, {
  * @extends BI.Controller
  */
 BI.TooltipsController = BI.inherit(BI.Controller, {
-    _defaultConfig: function () {
-        return BI.extend(BI.TooltipsController.superclass._defaultConfig.apply(this, arguments), {});
-    },
-
-    _const: {
-        height: 18
-    },
-
-    _init: function () {
-        BI.TooltipsController.superclass._init.apply(this, arguments);
+    init: function () {
         this.tooltipsManager = {};
         this.showingTips = {};// 存储正在显示的tooltip
     },
@@ -12308,7 +14017,7 @@ BI.TooltipsController = BI.inherit(BI.Controller, {
 
 
 /***/ }),
-/* 300 */
+/* 302 */
 /***/ (function(module, exports) {
 
 !function () {
@@ -12363,7 +14072,7 @@ BI.TooltipsController = BI.inherit(BI.Controller, {
 
 
 /***/ }),
-/* 301 */
+/* 303 */
 /***/ (function(module, exports) {
 
 BI.Fragment = function () {
@@ -12404,7 +14113,7 @@ BI.h = function (type, props, children) {
 
 
 /***/ }),
-/* 302 */
+/* 304 */
 /***/ (function(module, exports) {
 
 /**
@@ -12415,8 +14124,8 @@ BI.h = function (type, props, children) {
  * @extends BI.OB
  */
 BI.ShowListener = BI.inherit(BI.OB, {
-    _defaultConfig: function () {
-        return BI.extend(BI.ShowListener.superclass._defaultConfig.apply(this, arguments), {
+    props: function () {
+        return {
             eventObj: BI.createWidget(),
             cardLayout: null,
             cardNameCreator: function (v) {
@@ -12425,11 +14134,10 @@ BI.ShowListener = BI.inherit(BI.OB, {
             cardCreator: BI.emptyFn,
             afterCardCreated: BI.emptyFn,
             afterCardShow: BI.emptyFn
-        });
+        };
     },
 
-    _init: function () {
-        BI.ShowListener.superclass._init.apply(this, arguments);
+    init: function () {
         var self = this, o = this.options;
         if (o.eventObj) {
             o.eventObj.on(BI.Controller.EVENT_CHANGE, function (type, v, ob) {
@@ -12437,7 +14145,7 @@ BI.ShowListener = BI.inherit(BI.OB, {
                     v = v || o.eventObj.getValue();
                     v = BI.isArray(v) ? (v.length > 1 ? v.toString() : v[0]) : v;
                     if (BI.isNull(v)) {
-                        throw new Error("value cannot be null");
+                        throw new Error("不能为null");
                     }
                     var cardName = o.cardNameCreator(v);
                     if (!o.cardLayout.isCardExisted(cardName)) {
@@ -12457,8 +14165,9 @@ BI.ShowListener = BI.inherit(BI.OB, {
 });
 BI.ShowListener.EVENT_CHANGE = "EVENT_CHANGE";
 
+
 /***/ }),
-/* 303 */
+/* 305 */
 /***/ (function(module, exports) {
 
 /**
@@ -12513,7 +14222,7 @@ BI.StyleLoaderManager = BI.inherit(BI.OB, {
 });
 
 /***/ }),
-/* 304 */
+/* 306 */
 /***/ (function(module, exports) {
 
 /**
@@ -12599,7 +14308,7 @@ BI.LogicFactory = {
 };
 
 /***/ }),
-/* 305 */
+/* 307 */
 /***/ (function(module, exports) {
 
 /**
@@ -12611,8 +14320,8 @@ BI.LogicFactory = {
  * @extends BI.Logic
  */
 BI.VerticalLayoutLogic = BI.inherit(BI.Logic, {
-    _defaultConfig: function () {
-        return BI.extend(BI.VerticalLayoutLogic.superclass._defaultConfig.apply(this, arguments), {
+    props: function () {
+        return {
             dynamic: false,
             scrollable: null,
             scrolly: false,
@@ -12624,7 +14333,7 @@ BI.VerticalLayoutLogic = BI.inherit(BI.Logic, {
             rgap: 0,
             tgap: 0,
             bgap: 0
-        });
+        };
     },
 
     createLogic: function () {
@@ -12660,8 +14369,8 @@ BI.VerticalLayoutLogic = BI.inherit(BI.Logic, {
  * @extends BI.Logic
  */
 BI.HorizontalLayoutLogic = BI.inherit(BI.Logic, {
-    _defaultConfig: function () {
-        return BI.extend(BI.HorizontalLayoutLogic.superclass._defaultConfig.apply(this, arguments), {
+    props: function () {
+        return {
             dynamic: false,
             scrollable: null,
             scrolly: false,
@@ -12673,7 +14382,7 @@ BI.HorizontalLayoutLogic = BI.inherit(BI.Logic, {
             rgap: 0,
             tgap: 0,
             bgap: 0
-        });
+        };
     },
 
     createLogic: function () {
@@ -12708,8 +14417,8 @@ BI.HorizontalLayoutLogic = BI.inherit(BI.Logic, {
  * @extends BI.OB
  */
 BI.TableLayoutLogic = BI.inherit(BI.Logic, {
-    _defaultConfig: function () {
-        return BI.extend(BI.TableLayoutLogic.superclass._defaultConfig.apply(this, arguments), {
+    props: function () {
+        return {
             dynamic: false,
             scrollable: null,
             scrolly: false,
@@ -12721,7 +14430,7 @@ BI.TableLayoutLogic = BI.inherit(BI.Logic, {
             hgap: 0,
             vgap: 0,
             items: []
-        });
+        };
     },
 
     createLogic: function () {
@@ -12755,8 +14464,8 @@ BI.TableLayoutLogic = BI.inherit(BI.Logic, {
  * @extends BI.Logic
  */
 BI.HorizontalFillLayoutLogic = BI.inherit(BI.Logic, {
-    _defaultConfig: function () {
-        return BI.extend(BI.HorizontalFillLayoutLogic.superclass._defaultConfig.apply(this, arguments), {
+    props: function () {
+        return {
             dynamic: false,
             scrollable: null,
             scrolly: false,
@@ -12768,7 +14477,7 @@ BI.HorizontalFillLayoutLogic = BI.inherit(BI.Logic, {
             rgap: 0,
             tgap: 0,
             bgap: 0
-        });
+        };
     },
 
     createLogic: function () {
@@ -12801,7 +14510,7 @@ BI.HorizontalFillLayoutLogic = BI.inherit(BI.Logic, {
 
 
 /***/ }),
-/* 306 */
+/* 308 */
 /***/ (function(module, exports) {
 
 if (!Number.prototype.toFixed || (0.00008).toFixed(3) !== "0.000" ||
@@ -12948,7 +14657,7 @@ if (!Number.prototype.toFixed || (0.00008).toFixed(3) !== "0.000" ||
 }
 
 /***/ }),
-/* 307 */
+/* 309 */
 /***/ (function(module, exports) {
 
 !(function () {
@@ -15299,7 +17008,7 @@ if (!Number.prototype.toFixed || (0.00008).toFixed(3) !== "0.000" ||
 }());
 
 /***/ }),
-/* 308 */
+/* 310 */
 /***/ (function(module, exports) {
 
 !(function () {
@@ -15367,7 +17076,7 @@ if (!Number.prototype.toFixed || (0.00008).toFixed(3) !== "0.000" ||
 })();
 
 /***/ }),
-/* 309 */
+/* 311 */
 /***/ (function(module, exports) {
 
 
@@ -15502,7 +17211,7 @@ if (!Number.prototype.toFixed || (0.00008).toFixed(3) !== "0.000" ||
 })();
 
 /***/ }),
-/* 310 */
+/* 312 */
 /***/ (function(module, exports) {
 
 
@@ -15584,7 +17293,7 @@ BI.Cache = {
 };
 
 /***/ }),
-/* 311 */
+/* 313 */
 /***/ (function(module, exports) {
 
 BI.CellSizeAndPositionManager = function (cellCount, cellSizeGetter, estimatedCellSize) {
@@ -15860,7 +17569,7 @@ BI.ScalingCellSizeAndPositionManager.prototype = {
 };
 
 /***/ }),
-/* 312 */
+/* 314 */
 /***/ (function(module, exports) {
 
 
@@ -15981,7 +17690,7 @@ BI.ScalingCellSizeAndPositionManager.prototype = {
 
 
 /***/ }),
-/* 313 */
+/* 315 */
 /***/ (function(module, exports) {
 
 
@@ -16058,7 +17767,7 @@ BI.ScalingCellSizeAndPositionManager.prototype = {
 })();
 
 /***/ }),
-/* 314 */
+/* 316 */
 /***/ (function(module, exports) {
 
 
@@ -16149,7 +17858,7 @@ BI.ScalingCellSizeAndPositionManager.prototype = {
 })();
 
 /***/ }),
-/* 315 */
+/* 317 */
 /***/ (function(module, exports) {
 
 // 线段树
@@ -16335,7 +18044,7 @@ BI.ScalingCellSizeAndPositionManager.prototype = {
 
 
 /***/ }),
-/* 316 */
+/* 318 */
 /***/ (function(module, exports) {
 
 
@@ -16429,7 +18138,7 @@ BI.ScalingCellSizeAndPositionManager.prototype = {
 })();
 
 /***/ }),
-/* 317 */
+/* 319 */
 /***/ (function(module, exports) {
 
 !(function () {
@@ -16522,7 +18231,7 @@ BI.ScalingCellSizeAndPositionManager.prototype = {
 })();
 
 /***/ }),
-/* 318 */
+/* 320 */
 /***/ (function(module, exports) {
 
 (function () {
@@ -17044,7 +18753,7 @@ BI.ScalingCellSizeAndPositionManager.prototype = {
 
 
 /***/ }),
-/* 319 */
+/* 321 */
 /***/ (function(module, exports) {
 
 // 向量操作
@@ -17112,7 +18821,7 @@ BI.Region.prototype = {
 };
 
 /***/ }),
-/* 320 */
+/* 322 */
 /***/ (function(module, exports) {
 
 /**
@@ -17157,7 +18866,7 @@ BI.prepares.push(function () {
 
 
 /***/ }),
-/* 321 */
+/* 323 */
 /***/ (function(module, exports) {
 
 BI.EventListener = {
@@ -17199,7 +18908,7 @@ BI.EventListener = {
 };
 
 /***/ }),
-/* 322 */
+/* 324 */
 /***/ (function(module, exports) {
 
 !(function () {
@@ -17311,7 +19020,7 @@ BI.EventListener = {
 })();
 
 /***/ }),
-/* 323 */
+/* 325 */
 /***/ (function(module, exports) {
 
 !(function () {
@@ -17465,66 +19174,13 @@ BI.EventListener = {
 })();
 
 /***/ }),
-/* 324 */
+/* 326 */
 /***/ (function(module, exports) {
 
 BI.version = "2.0";
 
 /***/ }),
-/* 325 */
-/***/ (function(module, exports) {
-
-!(function () {
-    BI.initWorker = function () {
-        function createWatcher (model, keyOrFn, cb, options) {
-            options = options || {};
-            return Fix.watch(model, keyOrFn, cb, BI.extend(options, {
-                store: model
-            }));
-        }
-
-        var models = {}, watches = {};
-        addEventListener("message", function (e) {
-            var data = e.data;
-            switch (data.eventType) {
-                case "action":
-                    models[data.name][data.action].apply(models[data.name], data.args);
-                    break;
-                case "destroy":
-                    BI.each(watches[data.name], function (i, unwatches) {
-                        unwatches = BI.isArray(unwatches) ? unwatches : [unwatches];
-                        BI.each(unwatches, function (j, unwatch) {
-                            unwatch();
-                        });
-                    });
-                    delete models[data.name];
-                    delete watches[data.name];
-                    break;
-                case "create":
-                    var store = models[data.name] = BI.Models.getModel(data.type, data.options);
-                    watches[data.name] = [];
-                    BI.each(data.watches, function (i, key) {
-                        watches[data.name].push(createWatcher(store.model, key, function (newValue, oldValue) {
-                            postMessage(BI.extend({}, data, {
-                                eventType: "watch",
-                                currentWatchType: key
-                            }, {args: [newValue, oldValue]}));
-                        }));
-                    });
-                    postMessage(BI.extend({}, data, {
-                        eventType: "create"
-                    }, {msg: store.model}));
-                    break;
-                default:
-                    break;
-            }
-        }, false);
-    };
-}());
-
-
-/***/ }),
-/* 326 */
+/* 327 */
 /***/ (function(module, exports) {
 
 /**
@@ -18139,7 +19795,7 @@ BI.shortcut("bi.layout", BI.Layout);
 
 
 /***/ }),
-/* 327 */
+/* 328 */
 /***/ (function(module, exports) {
 
 /**
@@ -18192,7 +19848,7 @@ BI.shortcut("bi.absolute_center_adapt", BI.AbsoluteCenterLayout);
 
 
 /***/ }),
-/* 328 */
+/* 329 */
 /***/ (function(module, exports) {
 
 /**
@@ -18250,7 +19906,7 @@ BI.shortcut("bi.absolute_horizontal_adapt", BI.AbsoluteHorizontalLayout);
 
 
 /***/ }),
-/* 329 */
+/* 330 */
 /***/ (function(module, exports) {
 
 BI.AbsoluteLeftRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
@@ -18340,7 +19996,7 @@ BI.AbsoluteLeftRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
 
     addItem: function () {
         // do nothing
-        throw new Error("cannot be added");
+        throw new Error("不能添加子组件");
     },
 
     populate: function (items) {
@@ -18392,7 +20048,7 @@ BI.AbsoluteRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
 
     addItem: function () {
         // do nothing
-        throw new Error("cannot be added");
+        throw new Error("不能添加子组件");
     },
 
     populate: function (items) {
@@ -18401,8 +20057,9 @@ BI.AbsoluteRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
 });
 BI.shortcut("bi.absolute_right_vertical_adapt", BI.AbsoluteRightVerticalAdaptLayout);
 
+
 /***/ }),
-/* 330 */
+/* 331 */
 /***/ (function(module, exports) {
 
 /**
@@ -18460,7 +20117,7 @@ BI.shortcut("bi.absolute_vertical_adapt", BI.AbsoluteVerticalLayout);
 
 
 /***/ }),
-/* 331 */
+/* 332 */
 /***/ (function(module, exports) {
 
 /**
@@ -18519,7 +20176,7 @@ BI.shortcut("bi.center_adapt", BI.CenterAdaptLayout);
 
 
 /***/ }),
-/* 332 */
+/* 333 */
 /***/ (function(module, exports) {
 
 /**
@@ -18533,7 +20190,7 @@ BI.shortcut("bi.horizontal_adapt", BI.HorizontalAdaptLayout);
 
 
 /***/ }),
-/* 333 */
+/* 334 */
 /***/ (function(module, exports) {
 
 /**
@@ -18619,7 +20276,7 @@ BI.LeftRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
 
     addItem: function () {
         // do nothing
-        throw new Error("cannot be added");
+        throw new Error("不能添加子组件");
     },
 
     populate: function (items) {
@@ -18672,7 +20329,7 @@ BI.LeftVerticalAdaptLayout = BI.inherit(BI.Layout, {
 
     addItem: function () {
         // do nothing
-        throw new Error("cannot be added");
+        throw new Error("不能添加子组件");
     },
 
     populate: function (items) {
@@ -18724,7 +20381,7 @@ BI.RightVerticalAdaptLayout = BI.inherit(BI.Layout, {
 
     addItem: function () {
         // do nothing
-        throw new Error("cannot be added");
+        throw new Error("不能添加子组件");
     },
 
     populate: function (items) {
@@ -18735,7 +20392,7 @@ BI.shortcut("bi.right_vertical_adapt", BI.RightVerticalAdaptLayout);
 
 
 /***/ }),
-/* 334 */
+/* 335 */
 /***/ (function(module, exports) {
 
 /**
@@ -18857,7 +20514,7 @@ BI.shortcut("bi.table_adapt", BI.TableAdaptLayout);
 
 
 /***/ }),
-/* 335 */
+/* 336 */
 /***/ (function(module, exports) {
 
 /**
@@ -18916,7 +20573,7 @@ BI.shortcut("bi.vertical_adapt", BI.VerticalAdaptLayout);
 
 
 /***/ }),
-/* 336 */
+/* 337 */
 /***/ (function(module, exports) {
 
 /**
@@ -18985,7 +20642,7 @@ BI.shortcut("bi.horizontal_auto", BI.HorizontalAutoLayout);
 
 
 /***/ }),
-/* 337 */
+/* 338 */
 /***/ (function(module, exports) {
 
 /**
@@ -18997,7 +20654,7 @@ BI.shortcut("bi.horizontal_float", BI.FloatHorizontalLayout);
 
 
 /***/ }),
-/* 338 */
+/* 339 */
 /***/ (function(module, exports) {
 
 /**
@@ -19054,7 +20711,7 @@ BI.shortcut("bi.inline_center_adapt", BI.InlineCenterAdaptLayout);
 
 
 /***/ }),
-/* 339 */
+/* 340 */
 /***/ (function(module, exports) {
 
 /**
@@ -19111,7 +20768,7 @@ BI.shortcut("bi.inline_horizontal_adapt", BI.InlineHorizontalAdaptLayout);
 
 
 /***/ }),
-/* 340 */
+/* 341 */
 /***/ (function(module, exports) {
 
 /**
@@ -19168,7 +20825,7 @@ BI.shortcut("bi.inline_vertical_adapt", BI.InlineVerticalAdaptLayout);
 
 
 /***/ }),
-/* 341 */
+/* 342 */
 /***/ (function(module, exports) {
 
 /**
@@ -19230,7 +20887,7 @@ BI.shortcut("bi.flex_center_adapt", BI.FlexCenterLayout);
 
 
 /***/ }),
-/* 342 */
+/* 343 */
 /***/ (function(module, exports) {
 
 /**
@@ -19294,7 +20951,7 @@ BI.shortcut("bi.flex_horizontal_center_adapt", BI.FlexHorizontalCenter);
 
 
 /***/ }),
-/* 343 */
+/* 344 */
 /***/ (function(module, exports) {
 
 /**
@@ -19409,7 +21066,7 @@ BI.shortcut("bi.flex_horizontal", BI.FlexHorizontalLayout);
 
 
 /***/ }),
-/* 344 */
+/* 345 */
 /***/ (function(module, exports) {
 
 BI.FlexLeftRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
@@ -19489,7 +21146,7 @@ BI.FlexLeftRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
 
     addItem: function () {
         // do nothing
-        throw new Error("cannot be added");
+        throw new Error("不能添加子组件");
     },
 
     populate: function (items) {
@@ -19501,7 +21158,7 @@ BI.shortcut("bi.flex_left_right_vertical_adapt", BI.FlexLeftRightVerticalAdaptLa
 
 
 /***/ }),
-/* 345 */
+/* 346 */
 /***/ (function(module, exports) {
 
 /**
@@ -19566,7 +21223,7 @@ BI.shortcut("bi.flex_vertical_center_adapt", BI.FlexVerticalCenter);
 
 
 /***/ }),
-/* 346 */
+/* 347 */
 /***/ (function(module, exports) {
 
 /**
@@ -19680,7 +21337,7 @@ BI.shortcut("bi.flex_vertical", BI.FlexVerticalLayout);
 
 
 /***/ }),
-/* 347 */
+/* 348 */
 /***/ (function(module, exports) {
 
 /**
@@ -19741,7 +21398,7 @@ BI.shortcut("bi.flex_scrollable_center_adapt", BI.FlexWrapperCenterLayout);
 
 
 /***/ }),
-/* 348 */
+/* 349 */
 /***/ (function(module, exports) {
 
 /**
@@ -19803,7 +21460,7 @@ BI.shortcut("bi.flex_scrollable_horizontal_center_adapt", BI.FlexWrapperHorizont
 
 
 /***/ }),
-/* 349 */
+/* 350 */
 /***/ (function(module, exports) {
 
 /**
@@ -19924,7 +21581,7 @@ BI.shortcut("bi.flex_scrollable_horizontal", BI.FlexWrapperHorizontalLayout);
 
 
 /***/ }),
-/* 350 */
+/* 351 */
 /***/ (function(module, exports) {
 
 /**
@@ -19986,7 +21643,7 @@ BI.shortcut("bi.flex_scrollable_vertical_center_adapt", BI.FlexWrapperVerticalCe
 
 
 /***/ }),
-/* 351 */
+/* 352 */
 /***/ (function(module, exports) {
 
 /**
@@ -20107,7 +21764,7 @@ BI.shortcut("bi.flex_scrollable_vertical", BI.FlexWrapperVerticalLayout);
 
 
 /***/ }),
-/* 352 */
+/* 353 */
 /***/ (function(module, exports) {
 
 /**
@@ -20206,7 +21863,7 @@ BI.shortcut("bi.absolute", BI.AbsoluteLayout);
 
 
 /***/ }),
-/* 353 */
+/* 354 */
 /***/ (function(module, exports) {
 
 BI.AdaptiveLayout = BI.inherit(BI.Layout, {
@@ -20304,7 +21961,7 @@ BI.shortcut("bi.adaptive", BI.AdaptiveLayout);
 
 
 /***/ }),
-/* 354 */
+/* 355 */
 /***/ (function(module, exports) {
 
 /**
@@ -20331,7 +21988,7 @@ BI.BorderLayout = BI.inherit(BI.Layout, {
 
     addItem: function (item) {
         // do nothing
-        throw new Error("cannot be added");
+        throw new Error("不能添加子组件");
     },
 
     stroke: function (regions) {
@@ -20451,7 +22108,7 @@ BI.shortcut("bi.border", BI.BorderLayout);
 
 
 /***/ }),
-/* 355 */
+/* 356 */
 /***/ (function(module, exports) {
 
 /**
@@ -20526,7 +22183,7 @@ BI.CardLayout = BI.inherit(BI.Layout, {
 
     getCardByName: function (cardName) {
         if (!this.isCardExisted(cardName)) {
-            throw new Error("cardName is not exist");
+            throw new Error("cardName不存在", cardName);
         }
         return this._children[this._getChildName(cardName)];
     },
@@ -20543,7 +22200,7 @@ BI.CardLayout = BI.inherit(BI.Layout, {
 
     deleteCardByName: function (cardName) {
         if (!this.isCardExisted(cardName)) {
-            throw new Error("cardName is not exist");
+            throw new Error("cardName不存在", cardName);
         }
 
         var child = this._children[this._getChildName(cardName)];
@@ -20553,7 +22210,7 @@ BI.CardLayout = BI.inherit(BI.Layout, {
 
     addCardByName: function (cardName, cardItem) {
         if (this.isCardExisted(cardName)) {
-            throw new Error("cardName is already exist");
+            throw new Error("cardName 已存在", cardName);
         }
         var widget = BI._lazyCreateWidget(cardItem, this);
         widget.element.css({
@@ -20667,7 +22324,7 @@ BI.shortcut("bi.card", BI.CardLayout);
 
 
 /***/ }),
-/* 356 */
+/* 357 */
 /***/ (function(module, exports) {
 
 /**
@@ -20732,7 +22389,7 @@ BI.shortcut("bi.default", BI.DefaultLayout);
 
 
 /***/ }),
-/* 357 */
+/* 358 */
 /***/ (function(module, exports) {
 
 /**
@@ -20784,7 +22441,7 @@ BI.DivisionLayout = BI.inherit(BI.Layout, {
 
     addItem: function (item) {
         // do nothing
-        throw new Error("cannot be added");
+        throw new Error("不能添加子组件");
     },
 
     stroke: function (items) {
@@ -20849,7 +22506,7 @@ BI.DivisionLayout = BI.inherit(BI.Layout, {
             var totalW = 0;
             for (var j = 0; j < columns; j++) {
                 if (!map[i][j]) {
-                    throw new Error("item be required");
+                    throw new Error("item(" + i + "" + j + ") 必须", map);
                 }
                 if (!this.hasWidget(this._getChildName(i + "_" + j))) {
                     var w = BI._lazyCreateWidget(map[i][j]);
@@ -20900,7 +22557,7 @@ BI.shortcut("bi.division", BI.DivisionLayout);
 
 
 /***/ }),
-/* 358 */
+/* 359 */
 /***/ (function(module, exports) {
 
 /**
@@ -21059,7 +22716,7 @@ BI.shortcut("bi.right", BI.FloatRightLayout);
 
 
 /***/ }),
-/* 359 */
+/* 360 */
 /***/ (function(module, exports) {
 
 /**
@@ -21105,7 +22762,7 @@ BI.GridLayout = BI.inherit(BI.Layout, {
 
     addItem: function () {
         // do nothing
-        throw new Error("cannot be added");
+        throw new Error("不能添加子组件");
     },
 
     stroke: function (items) {
@@ -21195,7 +22852,7 @@ BI.shortcut("bi.grid", BI.GridLayout);
 
 
 /***/ }),
-/* 360 */
+/* 361 */
 /***/ (function(module, exports) {
 
 /**
@@ -21209,7 +22866,7 @@ BI.shortcut("bi.horizontal", BI.HorizontalLayout);
 
 
 /***/ }),
-/* 361 */
+/* 362 */
 /***/ (function(module, exports) {
 
 /**
@@ -21313,7 +22970,7 @@ BI.InlineLayout = BI.inherit(BI.Layout, {
     },
 
     addItem: function (item) {
-        throw new Error("不能添加元素");
+        throw new Error("不能添加子组件");
     },
 
     populate: function (items) {
@@ -21325,7 +22982,7 @@ BI.shortcut("bi.inline", BI.InlineLayout);
 
 
 /***/ }),
-/* 362 */
+/* 363 */
 /***/ (function(module, exports) {
 
 /**
@@ -21386,7 +23043,7 @@ BI.shortcut("bi.lattice", BI.LatticeLayout);
 
 
 /***/ }),
-/* 363 */
+/* 364 */
 /***/ (function(module, exports) {
 
 /**
@@ -21479,7 +23136,7 @@ BI.TableLayout = BI.inherit(BI.Layout, {
                 }, arr[j]));
                 right += o.columnSize[j] + (o.columnSize[j] < 1 ? 0 : o.hgap);
             } else {
-                throw new Error("item with fill can only be one");
+                throw new Error("构造错误", arr);
             }
         }
         if (i >= 0 && i < arr.length) {
@@ -21514,7 +23171,7 @@ BI.TableLayout = BI.inherit(BI.Layout, {
 
     addItem: function (arr) {
         if (!BI.isArray(arr)) {
-            throw new Error("item must be array");
+            throw new Error("必须是数组", arr);
         }
         return BI.TableLayout.superclass.addItem.apply(this, arguments);
     },
@@ -21531,7 +23188,7 @@ BI.shortcut("bi.table", BI.TableLayout);
 
 
 /***/ }),
-/* 364 */
+/* 365 */
 /***/ (function(module, exports) {
 
 /**
@@ -21564,7 +23221,7 @@ BI.HTapeLayout = BI.inherit(BI.Layout, {
     },
     addItem: function (item) {
         // do nothing
-        throw new Error("cannot be added");
+        throw new Error("不能添加子组件");
     },
 
     stroke: function (items) {
@@ -21704,7 +23361,7 @@ BI.VTapeLayout = BI.inherit(BI.Layout, {
 
     addItem: function (item) {
         // do nothing
-        throw new Error("cannot be added");
+        throw new Error("不能添加子组件");
     },
 
     stroke: function (items) {
@@ -21810,7 +23467,7 @@ BI.shortcut("bi.vtape", BI.VTapeLayout);
 
 
 /***/ }),
-/* 365 */
+/* 366 */
 /***/ (function(module, exports) {
 
 /**
@@ -21978,7 +23635,7 @@ BI.TdLayout = BI.inherit(BI.Layout, {
 
     addItem: function (arr) {
         if (!BI.isArray(arr)) {
-            throw new Error("item must be array");
+            throw new Error("必须是数组", arr);
         }
         return BI.TdLayout.superclass.addItem.apply(this, arguments);
     },
@@ -21995,7 +23652,7 @@ BI.shortcut("bi.td", BI.TdLayout);
 
 
 /***/ }),
-/* 366 */
+/* 367 */
 /***/ (function(module, exports) {
 
 /**
@@ -22074,7 +23731,7 @@ BI.shortcut("bi.vertical", BI.VerticalLayout);
 
 
 /***/ }),
-/* 367 */
+/* 368 */
 /***/ (function(module, exports) {
 
 /**
@@ -22110,7 +23767,7 @@ BI.WindowLayout = BI.inherit(BI.Layout, {
 
     addItem: function (item) {
         // do nothing
-        throw new Error("cannot be added");
+        throw new Error("不能添加子组件");
     },
 
     stroke: function (items) {
@@ -22162,7 +23819,7 @@ BI.WindowLayout = BI.inherit(BI.Layout, {
         for (var i = 0; i < o.rows; i++) {
             for (var j = 0; j < o.columns; j++) {
                 if (!o.items[i][j]) {
-                    throw new Error("item be required");
+                    throw new Error("构造错误", o.items);
                 }
                 if (!this.hasWidget(this._getChildName(i + "_" + j))) {
                     var w = BI._lazyCreateWidget(o.items[i][j]);
@@ -22262,7 +23919,7 @@ BI.shortcut("bi.window", BI.WindowLayout);
 
 
 /***/ }),
-/* 368 */
+/* 369 */
 /***/ (function(module, exports) {
 
 /**
@@ -22329,7 +23986,7 @@ BI.CenterLayout = BI.inherit(BI.Layout, {
 
     addItem: function (item) {
         // do nothing
-        throw new Error("cannot be added");
+        throw new Error("不能添加子组件");
     },
 
     update: function (opt) {
@@ -22344,7 +24001,7 @@ BI.shortcut("bi.center", BI.CenterLayout);
 
 
 /***/ }),
-/* 369 */
+/* 370 */
 /***/ (function(module, exports) {
 
 /**
@@ -22410,7 +24067,7 @@ BI.FloatCenterLayout = BI.inherit(BI.Layout, {
 
     addItem: function (item) {
         // do nothing
-        throw new Error("cannot be added");
+        throw new Error("不能添加子组件");
     },
 
     update: function (opt) {
@@ -22425,7 +24082,7 @@ BI.shortcut("bi.float_center", BI.FloatCenterLayout);
 
 
 /***/ }),
-/* 370 */
+/* 371 */
 /***/ (function(module, exports) {
 
 /**
@@ -22490,7 +24147,7 @@ BI.HorizontalCenterLayout = BI.inherit(BI.Layout, {
 
     addItem: function (item) {
         // do nothing
-        throw new Error("cannot be added");
+        throw new Error("不能添加子组件");
     },
 
     update: function (opt) {
@@ -22505,7 +24162,7 @@ BI.shortcut("bi.horizontal_center", BI.HorizontalCenterLayout);
 
 
 /***/ }),
-/* 371 */
+/* 372 */
 /***/ (function(module, exports) {
 
 /**
@@ -22571,7 +24228,7 @@ BI.VerticalCenterLayout = BI.inherit(BI.Layout, {
 
     addItem: function (item) {
         // do nothing
-        throw new Error("cannot be added");
+        throw new Error("不能添加子组件");
     },
 
     update: function (opt) {
@@ -22586,7 +24243,7 @@ BI.shortcut("bi.vertical_center", BI.VerticalCenterLayout);
 
 
 /***/ }),
-/* 372 */
+/* 373 */
 /***/ (function(module, exports) {
 
 BI.prepares.push(function () {
@@ -22602,7 +24259,7 @@ BI.prepares.push(function () {
 
 
 /***/ }),
-/* 373 */
+/* 374 */
 /***/ (function(module, exports) {
 
 /**
@@ -22760,7 +24417,7 @@ BI.Pane.EVENT_LOADING = "EVENT_LOADING";
 
 
 /***/ }),
-/* 374 */
+/* 375 */
 /***/ (function(module, exports) {
 
 /**
@@ -23147,7 +24804,7 @@ BI.shortcut("bi.collection_view", BI.CollectionView);
 
 
 /***/ }),
-/* 375 */
+/* 376 */
 /***/ (function(module, exports) {
 
 !(function () {
@@ -23715,7 +25372,7 @@ BI.shortcut("bi.collection_view", BI.CollectionView);
 
 
 /***/ }),
-/* 376 */
+/* 377 */
 /***/ (function(module, exports) {
 
 /**
@@ -24002,7 +25659,7 @@ BI.Expander.EVENT_AFTER_HIDEVIEW = "EVENT_AFTER_HIDEVIEW";
 BI.shortcut("bi.expander", BI.Expander);
 
 /***/ }),
-/* 377 */
+/* 378 */
 /***/ (function(module, exports) {
 
 /**
@@ -24337,7 +25994,7 @@ BI.ButtonGroup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.button_group", BI.ButtonGroup);
 
 /***/ }),
-/* 378 */
+/* 379 */
 /***/ (function(module, exports) {
 
 /**
@@ -24439,7 +26096,7 @@ BI.ComboGroup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.combo_group", BI.ComboGroup);
 
 /***/ }),
-/* 379 */
+/* 380 */
 /***/ (function(module, exports) {
 
 BI.VirtualGroup = BI.inherit(BI.Widget, {
@@ -24560,7 +26217,7 @@ BI.VirtualGroup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.virtual_group", BI.VirtualGroup);
 
 /***/ }),
-/* 380 */
+/* 381 */
 /***/ (function(module, exports) {
 
 /**
@@ -24734,7 +26391,7 @@ BI.Loader = BI.inherit(BI.Widget, {
         if (arguments.length === 0 && (BI.isFunction(o.itemsCreator))) {
             o.itemsCreator.apply(this, [{times: 1}, function () {
                 if (arguments.length === 0) {
-                    throw new Error("arguments can not be null!!!");
+                    throw new Error("参数不能为空");
                 }
                 self.populate.apply(self, arguments);
                 o.onLoaded();
@@ -24824,8 +26481,9 @@ BI.Loader = BI.inherit(BI.Widget, {
 BI.Loader.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.loader", BI.Loader);
 
+
 /***/ }),
-/* 381 */
+/* 382 */
 /***/ (function(module, exports) {
 
 /**
@@ -24993,7 +26651,7 @@ BI.shortcut("bi.navigation", BI.Navigation);
 
 
 /***/ }),
-/* 382 */
+/* 383 */
 /***/ (function(module, exports) {
 
 /**
@@ -25318,7 +26976,7 @@ BI.Searcher.EVENT_AFTER_INIT = "EVENT_AFTER_INIT";
 BI.shortcut("bi.searcher", BI.Searcher);
 
 /***/ }),
-/* 383 */
+/* 384 */
 /***/ (function(module, exports) {
 
 /**
@@ -25615,7 +27273,7 @@ BI.Switcher.EVENT_AFTER_HIDEVIEW = "EVENT_AFTER_HIDEVIEW";
 BI.shortcut("bi.switcher", BI.Switcher);
 
 /***/ }),
-/* 384 */
+/* 385 */
 /***/ (function(module, exports) {
 
 /**
@@ -25778,7 +27436,7 @@ BI.shortcut("bi.tab", BI.Tab);
 
 
 /***/ }),
-/* 385 */
+/* 386 */
 /***/ (function(module, exports) {
 
 /**
@@ -25965,7 +27623,7 @@ BI.ButtonTree.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.button_tree", BI.ButtonTree);
 
 /***/ }),
-/* 386 */
+/* 387 */
 /***/ (function(module, exports) {
 
 /**
@@ -26012,7 +27670,7 @@ BI.EL = BI.inherit(BI.Widget, {
 BI.shortcut("bi.el", BI.EL);
 
 /***/ }),
-/* 387 */
+/* 388 */
 /***/ (function(module, exports) {
 
 /**
@@ -26221,7 +27879,7 @@ BI.Msg = function () {
 
 
 /***/ }),
-/* 388 */
+/* 389 */
 /***/ (function(module, exports) {
 
 /**
@@ -26609,7 +28267,7 @@ BI.shortcut("bi.grid_view", BI.GridView);
 
 
 /***/ }),
-/* 389 */
+/* 390 */
 /***/ (function(module, exports) {
 
 /**
@@ -26887,7 +28545,7 @@ BI.Popover.EVENT_CONFIRM = "EVENT_CONFIRM";
 
 
 /***/ }),
-/* 390 */
+/* 391 */
 /***/ (function(module, exports) {
 
 /**
@@ -27074,7 +28732,7 @@ BI.shortcut("bi.popup_view", BI.PopupView);
 
 
 /***/ }),
-/* 391 */
+/* 392 */
 /***/ (function(module, exports) {
 
 /**
@@ -27220,7 +28878,7 @@ BI.SearcherView.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.searcher_view", BI.SearcherView);
 
 /***/ }),
-/* 392 */
+/* 393 */
 /***/ (function(module, exports) {
 
 /**
@@ -27345,7 +29003,7 @@ BI.shortcut("bi.list_view", BI.ListView);
 
 
 /***/ }),
-/* 393 */
+/* 394 */
 /***/ (function(module, exports) {
 
 /**
@@ -27537,7 +29195,7 @@ BI.shortcut("bi.virtual_list", BI.VirtualList);
 
 
 /***/ }),
-/* 394 */
+/* 395 */
 /***/ (function(module, exports) {
 
 /**
@@ -27831,7 +29489,7 @@ BI.Pager.EVENT_AFTER_POPULATE = "EVENT_AFTER_POPULATE";
 BI.shortcut("bi.pager", BI.Pager);
 
 /***/ }),
-/* 395 */
+/* 396 */
 /***/ (function(module, exports) {
 
 /**
@@ -28044,7 +29702,7 @@ BI.shortcut("bi.single", BI.Single);
 
 
 /***/ }),
-/* 396 */
+/* 397 */
 /***/ (function(module, exports) {
 
 /**
@@ -28221,7 +29879,7 @@ BI.shortcut("bi.single", BI.Single);
 
 
 /***/ }),
-/* 397 */
+/* 398 */
 /***/ (function(module, exports) {
 
 /**
@@ -28258,7 +29916,7 @@ BI.A = BI.inherit(BI.Text, {
 BI.shortcut("bi.a", BI.A);
 
 /***/ }),
-/* 398 */
+/* 399 */
 /***/ (function(module, exports) {
 
 /**
@@ -28343,7 +30001,7 @@ BI.LoadingBar = BI.inherit(BI.Single, {
 BI.shortcut("bi.loading_bar", BI.LoadingBar);
 
 /***/ }),
-/* 399 */
+/* 400 */
 /***/ (function(module, exports) {
 
 /**
@@ -28761,7 +30419,7 @@ BI.shortcut("bi.basic_button", BI.BasicButton);
 
 
 /***/ }),
-/* 400 */
+/* 401 */
 /***/ (function(module, exports) {
 
 /**
@@ -28822,7 +30480,7 @@ BI.NodeButton = BI.inherit(BI.BasicButton, {
 });
 
 /***/ }),
-/* 401 */
+/* 402 */
 /***/ (function(module, exports) {
 
 /**
@@ -28880,7 +30538,7 @@ BI.shortcut("bi.icon_button", BI.IconButton);
 
 
 /***/ }),
-/* 402 */
+/* 403 */
 /***/ (function(module, exports) {
 
 /**
@@ -28972,7 +30630,7 @@ BI.ImageButton.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.image_button", BI.ImageButton);
 
 /***/ }),
-/* 403 */
+/* 404 */
 /***/ (function(module, exports) {
 
 /**
@@ -29130,7 +30788,7 @@ BI.Button.EVENT_CHANGE = "EVENT_CHANGE";
 
 
 /***/ }),
-/* 404 */
+/* 405 */
 /***/ (function(module, exports) {
 
 /**
@@ -29225,7 +30883,7 @@ BI.TextButton.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.text_button", BI.TextButton);
 
 /***/ }),
-/* 405 */
+/* 406 */
 /***/ (function(module, exports) {
 
 /**
@@ -29349,7 +31007,7 @@ BI.BlankIconIconTextItem.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.blank_icon_icon_text_item", BI.BlankIconIconTextItem);
 
 /***/ }),
-/* 406 */
+/* 407 */
 /***/ (function(module, exports) {
 
 /**
@@ -29480,7 +31138,7 @@ BI.BlankIconTextIconItem.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.blank_icon_text_icon_item", BI.BlankIconTextIconItem);
 
 /***/ }),
-/* 407 */
+/* 408 */
 /***/ (function(module, exports) {
 
 /**
@@ -29589,7 +31247,7 @@ BI.BlankIconTextItem.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.blank_icon_text_item", BI.BlankIconTextItem);
 
 /***/ }),
-/* 408 */
+/* 409 */
 /***/ (function(module, exports) {
 
 /**
@@ -29717,7 +31375,7 @@ BI.IconTextIconItem.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.icon_text_icon_item", BI.IconTextIconItem);
 
 /***/ }),
-/* 409 */
+/* 410 */
 /***/ (function(module, exports) {
 
 /**
@@ -29822,7 +31480,7 @@ BI.IconTextItem.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.icon_text_item", BI.IconTextItem);
 
 /***/ }),
-/* 410 */
+/* 411 */
 /***/ (function(module, exports) {
 
 /**
@@ -29927,7 +31585,7 @@ BI.TextIconItem.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.text_icon_item", BI.TextIconItem);
 
 /***/ }),
-/* 411 */
+/* 412 */
 /***/ (function(module, exports) {
 
 /**
@@ -30018,7 +31676,7 @@ BI.TextItem.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.text_item", BI.TextItem);
 
 /***/ }),
-/* 412 */
+/* 413 */
 /***/ (function(module, exports) {
 
 /**
@@ -30136,7 +31794,7 @@ BI.IconTextIconNode.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.icon_text_icon_node", BI.IconTextIconNode);
 
 /***/ }),
-/* 413 */
+/* 414 */
 /***/ (function(module, exports) {
 
 /**
@@ -30231,7 +31889,7 @@ BI.IconTextNode.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.icon_text_node", BI.IconTextNode);
 
 /***/ }),
-/* 414 */
+/* 415 */
 /***/ (function(module, exports) {
 
 /**
@@ -30325,7 +31983,7 @@ BI.TextIconNode.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.text_icon_node", BI.TextIconNode);
 
 /***/ }),
-/* 415 */
+/* 416 */
 /***/ (function(module, exports) {
 
 /**
@@ -30407,7 +32065,7 @@ BI.TextNode.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.text_node", BI.TextNode);
 
 /***/ }),
-/* 416 */
+/* 417 */
 /***/ (function(module, exports) {
 
 /**
@@ -30785,7 +32443,7 @@ BI.shortcut("bi.editor", BI.Editor);
 
 
 /***/ }),
-/* 417 */
+/* 418 */
 /***/ (function(module, exports) {
 
 /**
@@ -30891,7 +32549,7 @@ BI.shortcut("bi.multifile_editor", BI.MultifileEditor);
 
 
 /***/ }),
-/* 418 */
+/* 419 */
 /***/ (function(module, exports) {
 
 /**
@@ -31150,7 +32808,7 @@ BI.shortcut("bi.textarea_editor", BI.TextAreaEditor);
 
 
 /***/ }),
-/* 419 */
+/* 420 */
 /***/ (function(module, exports) {
 
 /**
@@ -31270,7 +32928,7 @@ BI.shortcut("bi.html", BI.Html);
 
 
 /***/ }),
-/* 420 */
+/* 421 */
 /***/ (function(module, exports) {
 
 /**
@@ -31296,7 +32954,7 @@ BI.Icon = BI.inherit(BI.Single, {
 BI.shortcut("bi.icon", BI.Icon);
 
 /***/ }),
-/* 421 */
+/* 422 */
 /***/ (function(module, exports) {
 
 /**
@@ -31360,7 +33018,7 @@ BI.shortcut("bi.iframe", BI.Iframe);
 
 
 /***/ }),
-/* 422 */
+/* 423 */
 /***/ (function(module, exports) {
 
 /**
@@ -31406,7 +33064,7 @@ BI.shortcut("bi.img", BI.Img);
 
 
 /***/ }),
-/* 423 */
+/* 424 */
 /***/ (function(module, exports) {
 
 /**
@@ -31433,7 +33091,7 @@ BI.ImageCheckbox.EVENT_CHANGE = BI.IconButton.EVENT_CHANGE;
 BI.shortcut("bi.image_checkbox", BI.ImageCheckbox);
 
 /***/ }),
-/* 424 */
+/* 425 */
 /***/ (function(module, exports) {
 
 /**
@@ -31499,7 +33157,7 @@ BI.Checkbox.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.checkbox", BI.Checkbox);
 
 /***/ }),
-/* 425 */
+/* 426 */
 /***/ (function(module, exports) {
 
 /**
@@ -31821,7 +33479,7 @@ BI.shortcut("bi.input", BI.Input);
 
 
 /***/ }),
-/* 426 */
+/* 427 */
 /***/ (function(module, exports) {
 
 /**
@@ -31859,7 +33517,7 @@ BI.ImageRadio.EVENT_CHANGE = BI.IconButton.EVENT_CHANGE;
 BI.shortcut("bi.image_radio", BI.ImageRadio);
 
 /***/ }),
-/* 427 */
+/* 428 */
 /***/ (function(module, exports) {
 
 /**
@@ -31926,7 +33584,7 @@ BI.Radio.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.radio", BI.Radio);
 
 /***/ }),
-/* 428 */
+/* 429 */
 /***/ (function(module, exports) {
 
 /**
@@ -32318,7 +33976,7 @@ BI.shortcut("bi.radio", BI.Radio);
 
 
 /***/ }),
-/* 429 */
+/* 430 */
 /***/ (function(module, exports) {
 
 /**
@@ -32348,7 +34006,7 @@ BI.HtmlLabel = BI.inherit(BI.AbstractLabel, {
 BI.shortcut("bi.html_label", BI.HtmlLabel);
 
 /***/ }),
-/* 430 */
+/* 431 */
 /***/ (function(module, exports) {
 
 /**
@@ -32396,7 +34054,7 @@ BI.shortcut("bi.icon_label", BI.IconLabel);
 
 
 /***/ }),
-/* 431 */
+/* 432 */
 /***/ (function(module, exports) {
 
 /**
@@ -32424,7 +34082,7 @@ BI.shortcut("bi.label", BI.Label);
 
 
 /***/ }),
-/* 432 */
+/* 433 */
 /***/ (function(module, exports) {
 
 /**
@@ -32464,7 +34122,7 @@ BI.shortcut("bi.link", BI.Link);
 
 
 /***/ }),
-/* 433 */
+/* 434 */
 /***/ (function(module, exports) {
 
 /**
@@ -32513,7 +34171,7 @@ BI.shortcut("bi.link", BI.Link);
 
 
 /***/ }),
-/* 434 */
+/* 435 */
 /***/ (function(module, exports) {
 
 /**
@@ -32538,224 +34196,6 @@ BI.Tip = BI.inherit(BI.Single, {
         this.element.css({zIndex: this.options.zIndex});
     }
 });
-
-/***/ }),
-/* 435 */
-/***/ (function(module, exports) {
-
-/**
- * guy
- * 气泡提示
- * @class BI.Bubble
- * @extends BI.Tip
- * @type {*|void|Object}
- */
-BI.Bubble = BI.inherit(BI.Tip, {
-    _defaultConfig: function () {
-        return BI.extend(BI.Bubble.superclass._defaultConfig.apply(this, arguments), {
-            extraCls: "bi-bubble",
-            direction: "top",
-            text: "",
-            level: "error",
-            height: 18
-        });
-    },
-    _init: function () {
-        BI.Bubble.superclass._init.apply(this, arguments);
-        var fn = function (e) {
-            e.stopPropagation();
-            e.stopEvent();
-            return false;
-        };
-        this.element.bind({click: fn, mousedown: fn, mouseup: fn, mouseover: fn, mouseenter: fn, mouseleave: fn, mousemove: fn});
-        BI.createWidget({
-            type: "bi.adaptive",
-            element: this,
-            items: [this["_" + this.options.direction]()]
-        });
-    },
-
-    _createBubbleText: function () {
-        var o = this.options;
-        return (this.text = BI.createWidget({
-            type: "bi.label",
-            cls: "bubble-text" + " bubble-" + o.level,
-            text: o.text,
-            hgap: 5,
-            height: 18
-        }));
-    },
-
-    _top: function () {
-        return BI.createWidget({
-            type: "bi.vertical",
-            items: [{
-                el: this._createBubbleText(),
-                height: 18
-            }, {
-                el: {
-                    type: "bi.layout"
-                },
-                height: 3
-            }]
-        });
-    },
-
-    _bottom: function () {
-        return BI.createWidget({
-            type: "bi.vertical",
-            items: [{
-                el: {
-                    type: "bi.layout"
-                },
-                height: 3
-            }, {
-                el: this._createBubbleText(),
-                height: 18
-            }]
-        });
-    },
-
-    _left: function () {
-        return BI.createWidget({
-            type: "bi.right",
-            items: [{
-                el: {
-                    type: "bi.layout",
-                    width: 3,
-                    height: 18
-                }
-            }, {
-                el: this._createBubbleText()
-            }]
-        });
-    },
-
-    _right: function () {
-        return BI.createWidget({
-            type: "bi.left",
-            items: [{
-                el: {
-                    type: "bi.layout",
-                    width: 3,
-                    height: 18
-                }
-            }, {
-                el: this._createBubbleText()
-            }]
-        });
-    },
-
-    setText: function (text) {
-        this.text.setText(text);
-    }
-});
-
-BI.shortcut("bi.bubble", BI.Bubble);
-
-BI.BubbleView = BI.inherit(BI.Single, {
-    _defaultConfig: function () {
-        return BI.extend(BI.BubbleView.superclass._defaultConfig.apply(this, arguments), {
-            extraCls: "bi-bubble",
-            direction: "top",
-            text: "",
-            level: "error",
-            height: 18
-        });
-    },
-    _init: function () {
-        BI.BubbleView.superclass._init.apply(this, arguments);
-        var fn = function (e) {
-            e.stopPropagation();
-            e.stopEvent();
-            return false;
-        };
-        this.element.bind({click: fn, mousedown: fn, mouseup: fn, mouseover: fn, mouseenter: fn, mouseleave: fn, mousemove: fn});
-        BI.createWidget({
-            type: "bi.adaptive",
-            element: this,
-            items: [this["_" + this.options.direction]()]
-        });
-    },
-
-    _createBubbleText: function () {
-        var o = this.options;
-        return (this.text = BI.createWidget({
-            type: "bi.label",
-            cls: "bubble-text" + " bubble-" + o.level,
-            text: o.text,
-            hgap: 5,
-            height: 18
-        }));
-    },
-
-    _top: function () {
-        return BI.createWidget({
-            type: "bi.vertical",
-            items: [{
-                el: this._createBubbleText(),
-                height: 18
-            }, {
-                el: {
-                    type: "bi.layout"
-                },
-                height: 3
-            }]
-        });
-    },
-
-    _bottom: function () {
-        return BI.createWidget({
-            type: "bi.vertical",
-            items: [{
-                el: {
-                    type: "bi.layout"
-                },
-                height: 3
-            }, {
-                el: this._createBubbleText(),
-                height: 18
-            }]
-        });
-    },
-
-    _left: function () {
-        return BI.createWidget({
-            type: "bi.right",
-            items: [{
-                el: {
-                    type: "bi.layout",
-                    width: 3,
-                    height: 18
-                }
-            }, {
-                el: this._createBubbleText()
-            }]
-        });
-    },
-
-    _right: function () {
-        return BI.createWidget({
-            type: "bi.left",
-            items: [{
-                el: {
-                    type: "bi.layout",
-                    width: 3,
-                    height: 18
-                }
-            }, {
-                el: this._createBubbleText()
-            }]
-        });
-    },
-
-    setText: function (text) {
-        this.text.setText(text);
-    }
-});
-
-BI.shortcut("bi.bubble_view", BI.BubbleView);
-
 
 /***/ }),
 /* 436 */
@@ -106843,23 +108283,23 @@ __webpack_require__(219);
 __webpack_require__(220);
 __webpack_require__(221);
 __webpack_require__(92);
+__webpack_require__(283);
 __webpack_require__(95);
 __webpack_require__(97);
-__webpack_require__(283);
 __webpack_require__(284);
-__webpack_require__(98);
 __webpack_require__(285);
+__webpack_require__(98);
 __webpack_require__(286);
 __webpack_require__(287);
 __webpack_require__(288);
 __webpack_require__(289);
 __webpack_require__(290);
 __webpack_require__(291);
+__webpack_require__(292);
+__webpack_require__(293);
 __webpack_require__(99);
 __webpack_require__(100);
 __webpack_require__(101);
-__webpack_require__(292);
-__webpack_require__(293);
 __webpack_require__(294);
 __webpack_require__(295);
 __webpack_require__(296);
@@ -106867,17 +108307,19 @@ __webpack_require__(297);
 __webpack_require__(298);
 __webpack_require__(299);
 __webpack_require__(300);
+__webpack_require__(301);
+__webpack_require__(302);
 __webpack_require__(102);
 __webpack_require__(103);
 __webpack_require__(104);
 __webpack_require__(105);
 __webpack_require__(106);
 __webpack_require__(107);
-__webpack_require__(301);
-__webpack_require__(302);
 __webpack_require__(303);
 __webpack_require__(304);
 __webpack_require__(305);
+__webpack_require__(306);
+__webpack_require__(307);
 __webpack_require__(857);
 __webpack_require__(858);
 __webpack_require__(859);
@@ -106887,8 +108329,6 @@ __webpack_require__(862);
 __webpack_require__(863);
 __webpack_require__(864);
 __webpack_require__(865);
-__webpack_require__(306);
-__webpack_require__(307);
 __webpack_require__(308);
 __webpack_require__(309);
 __webpack_require__(310);
@@ -106902,13 +108342,13 @@ __webpack_require__(317);
 __webpack_require__(318);
 __webpack_require__(319);
 __webpack_require__(320);
-__webpack_require__(108);
 __webpack_require__(321);
 __webpack_require__(322);
+__webpack_require__(108);
 __webpack_require__(323);
-__webpack_require__(109);
 __webpack_require__(324);
 __webpack_require__(325);
+__webpack_require__(109);
 __webpack_require__(326);
 __webpack_require__(327);
 __webpack_require__(328);
@@ -106955,6 +108395,7 @@ __webpack_require__(368);
 __webpack_require__(369);
 __webpack_require__(370);
 __webpack_require__(371);
+__webpack_require__(372);
 __webpack_require__(110);
 __webpack_require__(111);
 __webpack_require__(112);
@@ -107018,7 +108459,6 @@ __webpack_require__(277);
 __webpack_require__(278);
 __webpack_require__(279);
 __webpack_require__(867);
-__webpack_require__(372);
 __webpack_require__(373);
 __webpack_require__(374);
 __webpack_require__(375);
@@ -107071,8 +108511,8 @@ __webpack_require__(421);
 __webpack_require__(422);
 __webpack_require__(423);
 __webpack_require__(424);
-__webpack_require__(868);
 __webpack_require__(425);
+__webpack_require__(868);
 __webpack_require__(426);
 __webpack_require__(427);
 __webpack_require__(428);
