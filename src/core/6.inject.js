@@ -138,7 +138,7 @@
     BI.Modules = BI.Modules || {
         getModule: function (type) {
             if (!moduleInjection[type]) {
-                throw new Error("module: [" + type + "] 未定义");
+                _global.console && console.error("module: [" + type + "] 未定义");
             }
             return moduleInjection[type];
         },
@@ -150,7 +150,7 @@
     BI.Constants = BI.Constants || {
         getConstant: function (type) {
             if (!constantInjection[type]) {
-                throw new Error("constant: [" + type + "] 未定义");
+                _global.console && console.error("constant: [" + type + "] 未定义");
             }
             return constantInjection[type];
         }
@@ -197,7 +197,7 @@
     BI.Models = BI.Models || {
         getModel: function (type, config) {
             if (!modelInjection[type]) {
-                throw new Error("model: [" + type + "] 未定义");
+                _global.console && console.error("model: [" + type + "] 未定义");
             }
             var inst = new modelInjection[type](config);
             inst._constructor && inst._constructor(config);
@@ -212,7 +212,7 @@
     BI.Stores = BI.Stores || {
         getStore: function (type, config) {
             if (!storeInjection[type]) {
-                throw new Error("store: [" + type + "] 未定义");
+                _global.console && console.error("store: [" + type + "] 未定义");
             }
             if (stores[type]) {
                 return stores[type];
@@ -231,7 +231,7 @@
     BI.Services = BI.Services || {
         getService: function (type, config) {
             if (!serviceInjection[type]) {
-                throw new Error("service: [" + type + "] 未定义");
+                _global.console && console.error("service: [" + type + "] 未定义");
             }
             if (services[type]) {
                 return services[type];
@@ -248,7 +248,7 @@
     BI.Providers = BI.Providers || {
         getProvider: function (type, config) {
             if (!providerInjection[type]) {
-                throw new Error("provider: [" + type + "] 未定义");
+                _global.console && console.error("provider: [" + type + "] 未定义");
             }
             if (!providers[type]) {
                 providers[type] = new providerInjection[type]();
