@@ -929,7 +929,7 @@
     var propsModule = { create: updateProps, update: updateProps };
 
     // Bindig `requestAnimationFrame` like this fixes a bug in IE/Edge. See #360 and #409.
-    var raf$1 = typeof window !== "undefined" && window.requestAnimationFrame.bind(window) || setTimeout;
+    var raf$1 = typeof window !== "undefined" && (window.requestAnimationFrame && window.requestAnimationFrame.bind(window)) || setTimeout;
     var nextFrame$1 = function nextFrame$1(fn) {
         raf$1(function () {
             raf$1(fn);

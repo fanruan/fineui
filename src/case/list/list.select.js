@@ -48,11 +48,13 @@ BI.SelectList = BI.inherit(BI.Widget, {
             items: o.items,
             itemsCreator: function (op, callback) {
                 op.times === 1 && self.toolbar.setVisible(false);
-                o.itemsCreator(op, function (items) {
+                o.itemsCreator(op, function (items, keywords, context) {
                     callback.apply(self, arguments);
                     if (op.times === 1) {
-                        self.toolbar.setVisible(items && items.length > 0);
-                        self.toolbar.setEnable(self.isEnabled() && items && items.length > 0);
+                        var tipText = BI.get(context, 'tipText', '');
+                        var visible = BI.isEmptyString(tipText) && items && items.length > 0;
+                        self.toolbar.setVisible(visible);
+                        self.toolbar.setEnable(self.isEnabled() && visible);
                     }
                     self._checkAllSelected();
                 });

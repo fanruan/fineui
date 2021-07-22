@@ -1,4 +1,4 @@
-/*! time: 2021-7-14 11:00:30 */
+/*! time: 2021-7-21 10:30:28 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -11014,7 +11014,7 @@ BI.Plugin = BI.Plugin || {};
     var propsModule = { create: updateProps, update: updateProps };
 
     // Bindig `requestAnimationFrame` like this fixes a bug in IE/Edge. See #360 and #409.
-    var raf$1 = typeof window !== "undefined" && window.requestAnimationFrame.bind(window) || setTimeout;
+    var raf$1 = typeof window !== "undefined" && (window.requestAnimationFrame && window.requestAnimationFrame.bind(window)) || setTimeout;
     var nextFrame$1 = function nextFrame$1(fn) {
         raf$1(function () {
             raf$1(fn);
@@ -18635,6 +18635,7 @@ BI.LeftVerticalAdaptLayout = BI.inherit(BI.Layout, {
         return BI.extend(BI.LeftRightVerticalAdaptLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-l-v-a",
             items: [],
+            columnSize: [],
             lgap: 0,
             rgap: 0,
             hgap: 0,
@@ -18652,6 +18653,7 @@ BI.LeftVerticalAdaptLayout = BI.inherit(BI.Layout, {
                 self.layout = _ref;
             },
             items: o.items,
+            columnSize: o.columnSize,
             hgap: o.hgap,
             lgap: o.lgap,
             rgap: o.rgap,
@@ -18684,6 +18686,7 @@ BI.RightVerticalAdaptLayout = BI.inherit(BI.Layout, {
         return BI.extend(BI.RightVerticalAdaptLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-r-v-a",
             items: [],
+            columnSize: [],
             lgap: 0,
             rgap: 0,
             hgap: 0,
@@ -18702,6 +18705,7 @@ BI.RightVerticalAdaptLayout = BI.inherit(BI.Layout, {
             },
             horizontalAlign: BI.HorizontalAlign.Right,
             items: o.items,
+            columnSize: o.columnSize,
             hgap: o.hgap,
             lgap: o.lgap,
             rgap: o.rgap,
@@ -18797,7 +18801,11 @@ BI.TableAdaptLayout = BI.inherit(BI.Layout, {
         // 2、不能给多个td设置最大宽度，这样只会平分宽度
         // 3、多百分比宽度就算了
         if (columnSize > 0) {
-            td.element.css({"max-width": columnSize < 1 ? width : width / BI.pixRatio + BI.pixUnit});
+            columnSize = columnSize < 1 ? width : width / BI.pixRatio + BI.pixUnit;
+            td.element.css({
+                "max-width": columnSize,
+                "min-width": columnSize
+            });
         }
         if (i === 0) {
             td.element.addClass("first-element");
@@ -21883,13 +21891,14 @@ BI.TdLayout = BI.inherit(BI.Layout, {
         }
 
         var height = o.rowSize[idx] === "" ? "" : (o.rowSize[idx] < 1 ? ((o.rowSize[idx] * 100).toFixed(1) + "%") : o.rowSize[idx]);
-
+        var rowHeight = BI.isNumber(o.rowSize[idx]) ? (o.rowSize[idx] <= 1 ? height : height / BI.pixRatio + BI.pixUnit) : height;
         var tr = BI._lazyCreateWidget({
             type: "bi.default",
             tagName: "tr",
             height: height,
             css: {
-                "max-height": BI.isNumber(o.rowSize[idx]) ? (o.rowSize[idx] <= 1 ? height : height / BI.pixRatio + BI.pixUnit) : height
+                "max-height": rowHeight,
+                "min-height": rowHeight
             }
         });
 
@@ -21939,7 +21948,11 @@ BI.TdLayout = BI.inherit(BI.Layout, {
             // 2、不能给多个td设置最大宽度，这样只会平分宽度
             // 3、多百分比宽度就算了
             if (columnSize > 0) {
-                td.element.css({"max-width": columnSize < 1 ? width : width / BI.pixRatio + BI.pixUnit});
+                columnSize = columnSize < 1 ? width : width / BI.pixRatio + BI.pixUnit;
+                td.element.css({
+                    "max-width": columnSize,
+                    "min-width": columnSize
+                });
             }
             td.element.css({
                 position: "relative",
@@ -22730,6 +22743,11 @@ BI.Pane = BI.inherit(BI.Widget, {
         } else {
             this._tipText && this._tipText.setVisible(false);
         }
+    },
+
+    setTipText: function (text) {
+        this._assertTip();
+        this._tipText.setText(text);
     },
 
     populate: function (items) {
@@ -41364,8 +41382,16 @@ BI.ListPane = BI.inherit(BI.Pane, {
             }]);
             return;
         }
-        BI.ListPane.superclass.populate.apply(this, arguments);
-        this.button_group.populate.apply(this.button_group, arguments);
+
+        var context = BI.get(arguments, [2], {});
+        var tipText = context.tipText || '';
+        if (BI.isNotEmptyString(tipText)) {
+            BI.ListPane.superclass.populate.apply(this, []);
+            this.setTipText(tipText);
+        } else {
+            BI.ListPane.superclass.populate.apply(this, arguments);
+            this.button_group.populate.apply(this.button_group, arguments);
+        }
     },
 
     empty: function () {
@@ -41673,11 +41699,13 @@ BI.SelectList = BI.inherit(BI.Widget, {
             items: o.items,
             itemsCreator: function (op, callback) {
                 op.times === 1 && self.toolbar.setVisible(false);
-                o.itemsCreator(op, function (items) {
+                o.itemsCreator(op, function (items, keywords, context) {
                     callback.apply(self, arguments);
                     if (op.times === 1) {
-                        self.toolbar.setVisible(items && items.length > 0);
-                        self.toolbar.setEnable(self.isEnabled() && items && items.length > 0);
+                        var tipText = BI.get(context, 'tipText', '');
+                        var visible = BI.isEmptyString(tipText) && items && items.length > 0;
+                        self.toolbar.setVisible(visible);
+                        self.toolbar.setEnable(self.isEnabled() && visible);
                     }
                     self._checkAllSelected();
                 });
@@ -42472,9 +42500,10 @@ BI.AllCountPager = BI.inherit(BI.Widget, {
 
         BI.createWidget(o.showRowCount ? {
             type: "bi.vertical_adapt",
-            columnSize: ["fill", ""],
             element: this,
             scrollx: false,
+            columnSize: ["fill", ""],
+            horizontalAlign: BI.HorizontalAlign.Right,
             items: [
                 this._getRowCountObject(),
                 this.editor, this.allPages, this.pager
@@ -55079,26 +55108,27 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
         var self = this; var o = this.options;
         this._assertValue(res);
         this.requesting = true;
+        if (this.storeValue.type === res.type) {
+            var result = BI.Func.getSearchResult(this.storeValue.value, this.trigger.getKey());
+            var change = false;
+            var map = this._makeMap(this.storeValue.value);
+            BI.each(BI.concat(result.match, result.find), function (i, v) {
+                if (BI.isNotNull(map[v])) {
+                    change = true;
+                    self.storeValue.assist && self.storeValue.assist.push(map[v]);
+                    delete map[v];
+                }
+            });
+            change && (this.storeValue.value = BI.values(map));
+            this._adjust(callback);
+            return;
+        }
         o.itemsCreator({
             type: BI.MultiSelectCombo.REQ_GET_ALL_DATA,
             keywords: [this.trigger.getKey()],
+            selectedValues: this.storeValue.value,
         }, function (ob) {
             var items = BI.map(ob.items, "value");
-            if (self.storeValue.type === res.type) {
-                var change = false;
-                var map = self._makeMap(self.storeValue.value);
-                BI.each(items, function (i, v) {
-                    if (BI.isNotNull(map[v])) {
-                        change = true;
-                        self.storeValue.assist && self.storeValue.assist.push(map[v]);
-                        delete map[v];
-                    }
-                });
-                change && (self.storeValue.value = BI.values(map));
-                self._adjust(callback);
-                
-return;
-            }
             var selectedMap = self._makeMap(self.storeValue.value);
             var notSelectedMap = self._makeMap(res.value);
             var newItems = [];
@@ -55578,25 +55608,27 @@ BI.MultiSelectNoBarCombo = BI.inherit(BI.Single, {
         var self = this, o = this.options;
         this._assertValue(res);
         this.requesting = true;
+        if (this.storeValue.type === res.type) {
+            var result = BI.Func.getSearchResult(this.storeValue.value, this.trigger.getKey());
+            var change = false;
+            var map = self._makeMap(this.storeValue.value);
+            BI.each(BI.concat(result.match, result.find), function (i, v) {
+                if (BI.isNotNull(map[v])) {
+                    change = true;
+                    self.storeValue.assist && self.storeValue.assist.push(map[v]);
+                    delete map[v];
+                }
+            });
+            change && (this.storeValue.value = BI.values(map));
+            this._adjust(callback);
+            return;
+        }
         o.itemsCreator({
             type: BI.MultiSelectNoBarCombo.REQ_GET_ALL_DATA,
-            keywords: [this.trigger.getKey()]
+            keywords: [this.trigger.getKey()],
+            selectedValues: this.storeValue.value,
         }, function (ob) {
             var items = BI.map(ob.items, "value");
-            if (self.storeValue.type === res.type) {
-                var change = false;
-                var map = self._makeMap(self.storeValue.value);
-                BI.each(items, function (i, v) {
-                    if (BI.isNotNull(map[v])) {
-                        change = true;
-                        self.storeValue.assist && self.storeValue.assist.push(map[v]);
-                        delete map[v];
-                    }
-                });
-                change && (self.storeValue.value = BI.values(map));
-                self._adjust(callback);
-                return;
-            }
             var selectedMap = self._makeMap(self.storeValue.value);
             var notSelectedMap = self._makeMap(res.value);
             var newItems = [];
@@ -56064,25 +56096,27 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
         var self = this, o = this.options;
         this._assertValue(res);
         this.requesting = true;
+        if (this.storeValue.type === res.type) {
+            var result = BI.Func.getSearchResult(this.storeValue.value, this.trigger.getKey());
+            var change = false;
+            var map = this._makeMap(this.storeValue.value);
+            BI.each(BI.concat(result.match, result.find), function (i, v) {
+                if (BI.isNotNull(map[v])) {
+                    change = true;
+                    self.storeValue.assist && self.storeValue.assist.push(map[v]);
+                    delete map[v];
+                }
+            });
+            change && (this.storeValue.value = BI.values(map));
+            this._adjust(callback);
+            return;
+        }
         o.itemsCreator({
             type: BI.MultiSelectInsertCombo.REQ_GET_ALL_DATA,
-            keywords: [this.trigger.getKey()]
+            keywords: [this.trigger.getKey()],
+            selectedValues: this.storeValue.value,
         }, function (ob) {
             var items = BI.map(ob.items, "value");
-            if (self.storeValue.type === res.type) {
-                var change = false;
-                var map = self._makeMap(self.storeValue.value);
-                BI.each(items, function (i, v) {
-                    if (BI.isNotNull(map[v])) {
-                        change = true;
-                        self.storeValue.assist && self.storeValue.assist.push(map[v]);
-                        delete map[v];
-                    }
-                });
-                change && (self.storeValue.value = BI.values(map));
-                self._adjust(callback);
-                return;
-            }
             var selectedMap = self._makeMap(self.storeValue.value);
             var notSelectedMap = self._makeMap(res.value);
             var newItems = [];
@@ -56547,25 +56581,27 @@ BI.MultiSelectInsertNoBarCombo = BI.inherit(BI.Single, {
         var self = this, o = this.options;
         this._assertValue(res);
         this.requesting = true;
+        if (this.storeValue.type === res.type) {
+            var result = BI.Func.getSearchResult(this.storeValue.value, this.trigger.getKey());
+            var change = false;
+            var map = this._makeMap(this.storeValue.value);
+            BI.each(BI.concat(result.match, result.find), function (i, v) {
+                if (BI.isNotNull(map[v])) {
+                    change = true;
+                    self.storeValue.assist && self.storeValue.assist.push(map[v]);
+                    delete map[v];
+                }
+            });
+            change && (this.storeValue.value = BI.values(map));
+            this._adjust(callback);
+            return;
+        }
         o.itemsCreator({
             type: BI.MultiSelectInsertNoBarCombo.REQ_GET_ALL_DATA,
-            keywords: [this.trigger.getKey()]
+            keywords: [this.trigger.getKey()],
+            selectedValues: this.storeValue.value,
         }, function (ob) {
             var items = BI.map(ob.items, "value");
-            if (self.storeValue.type === res.type) {
-                var change = false;
-                var map = self._makeMap(self.storeValue.value);
-                BI.each(items, function (i, v) {
-                    if (BI.isNotNull(map[v])) {
-                        change = true;
-                        self.storeValue.assist && self.storeValue.assist.push(map[v]);
-                        delete map[v];
-                    }
-                });
-                change && (self.storeValue.value = BI.values(map));
-                self._adjust(callback);
-                return;
-            }
             var selectedMap = self._makeMap(self.storeValue.value);
             var notSelectedMap = self._makeMap(res.value);
             var newItems = [];
@@ -57744,7 +57780,10 @@ BI.MultiSelectSearchLoader = BI.inherit(BI.Widget, {
                         var json = self._filterValues(self.storeValue);
                         firstItems = self._createItems(json);
                     }
-                    callback(firstItems.concat(self._createItems(ob.items)), keyword);
+                    var context = {
+                        tipText: ob.tipText,
+                    };
+                    callback(firstItems.concat(self._createItems(ob.items)), keyword, context);
                     if (op.times === 1 && self.storeValue) {
                         self.setValue(self.storeValue);
                     }
@@ -59123,24 +59162,26 @@ BI.MultiSelectInsertList = BI.inherit(BI.Single, {
     _joinAll: function (res, callback) {
         var self = this, o = this.options;
         this._assertValue(res);
+        if (this.storeValue.type === res.type) {
+            var result = BI.Func.getSearchResult(this.storeValue.value, this.trigger.getKey());
+            var change = false;
+            var map = this._makeMap(this.storeValue.value);
+            BI.each(BI.concat(result.match, result.find), function (i, v) {
+                if (BI.isNotNull(map[v])) {
+                    change = true;
+                    delete map[v];
+                }
+            });
+            change && (this.storeValue.value = BI.values(map));
+            callback();
+            return;
+        }
         o.itemsCreator({
             type: BI.MultiSelectInsertList.REQ_GET_ALL_DATA,
-            keywords: [self.trigger.getKeyword()]
+            keywords: [this.trigger.getKeyword()],
+            selectedValues: this.storeValue.value,
         }, function (ob) {
             var items = BI.map(ob.items, "value");
-            if (self.storeValue.type === res.type) {
-                var change = false;
-                var map = self._makeMap(self.storeValue.value);
-                BI.each(items, function (i, v) {
-                    if (BI.isNotNull(map[v])) {
-                        change = true;
-                        delete map[v];
-                    }
-                });
-                change && (self.storeValue.value = BI.values(map));
-                callback();
-                return;
-            }
             var selectedMap = self._makeMap(self.storeValue.value);
             var notSelectedMap = self._makeMap(res.value);
             var newItems = [];
@@ -59471,24 +59512,26 @@ BI.MultiSelectInsertNoBarList = BI.inherit(BI.Single, {
     _joinAll: function (res, callback) {
         var self = this, o = this.options;
         this._assertValue(res);
+        if (this.storeValue.type === res.type) {
+            var result = BI.Func.getSearchResult(this.storeValue.value, this.trigger.getKey());
+            var change = false;
+            var map = this._makeMap(this.storeValue.value);
+            BI.each(BI.concat(result.match, result.find), function (i, v) {
+                if (BI.isNotNull(map[v])) {
+                    change = true;
+                    delete map[v];
+                }
+            });
+            change && (this.storeValue.value = BI.values(map));
+            callback();
+            return;
+        }
         o.itemsCreator({
             type: BI.MultiSelectInsertNoBarList.REQ_GET_ALL_DATA,
-            keywords: [self.trigger.getKeyword()]
+            keywords: [this.trigger.getKeyword()],
+            selectedValues: this.storeValue.value,
         }, function (ob) {
             var items = BI.map(ob.items, "value");
-            if (self.storeValue.type === res.type) {
-                var change = false;
-                var map = self._makeMap(self.storeValue.value);
-                BI.each(items, function (i, v) {
-                    if (BI.isNotNull(map[v])) {
-                        change = true;
-                        delete map[v];
-                    }
-                });
-                change && (self.storeValue.value = BI.values(map));
-                callback();
-                return;
-            }
             var selectedMap = self._makeMap(self.storeValue.value);
             var notSelectedMap = self._makeMap(res.value);
             var newItems = [];
@@ -59806,24 +59849,26 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
     _joinAll: function (res, callback) {
         var self = this, o = this.options;
         this._assertValue(res);
+        if (this.storeValue.type === res.type) {
+            var result = BI.Func.getSearchResult(this.storeValue.value, this.trigger.getKey());
+            var change = false;
+            var map = this._makeMap(this.storeValue.value);
+            BI.each(BI.concat(result.match, result.find), function (i, v) {
+                if (BI.isNotNull(map[v])) {
+                    change = true;
+                    delete map[v];
+                }
+            });
+            change && (this.storeValue.value = BI.values(map));
+            this._adjust(callback);
+            return;
+        }
         o.itemsCreator({
             type: BI.MultiSelectList.REQ_GET_ALL_DATA,
-            keywords: [this.trigger.getKey()]
+            keywords: [this.trigger.getKey()],
+            selectedValues: this.storeValue.value,
         }, function (ob) {
             var items = BI.map(ob.items, "value");
-            if (self.storeValue.type === res.type) {
-                var change = false;
-                var map = self._makeMap(self.storeValue.value);
-                BI.each(items, function (i, v) {
-                    if (BI.isNotNull(map[v])) {
-                        change = true;
-                        delete map[v];
-                    }
-                });
-                change && (self.storeValue.value = BI.values(map));
-                self._adjust(callback);
-                return;
-            }
             var selectedMap = self._makeMap(self.storeValue.value);
             var notSelectedMap = self._makeMap(res.value);
             var newItems = [];
@@ -64801,7 +64846,10 @@ BI.SingleSelectSearchLoader = BI.inherit(BI.Widget, {
                         var json = self._filterValues(self.storeValue);
                         firstItems = self._createItems(json);
                     }
-                    callback(firstItems.concat(self._createItems(ob.items)), keyword || "");
+                    var context = {
+                        tipText: ob.tipText,
+                    };
+                    callback(firstItems.concat(self._createItems(ob.items)), keyword || "", context);
                     if (op.times === 1 && self.storeValue) {
                         self.setValue(self.storeValue);
                     }
@@ -71413,7 +71461,11 @@ BI.DynamicYearMonthTrigger = BI.inherit(BI.Trigger, {
             height: o.height,
             validationChecker: function (v) {
                 if (isYear) {
-                    return v === "" || (BI.isPositiveInteger(v) && !BI.checkDateVoid(v, parseInt(v, 10) === BI.parseDateTime(o.min, "%Y-%X-%d").getFullYear() ? BI.parseDateTime(o.min, "%Y-%X-%d").getMonth() + 1 : 1, 1, o.min, o.max)[0]);
+                    var month = self.monthEditor.getValue();
+                    if(BI.isEmptyString(month)) {
+                        month = parseInt(v, 10) === BI.parseDateTime(o.min, "%Y-%X-%d").getFullYear() ? (BI.parseDateTime(o.min, "%Y-%X-%d").getMonth() + 1) : 1;
+                    }
+                    return v === "" || (BI.isPositiveInteger(v) && !BI.checkDateVoid(v, month, 1, o.min, o.max)[0]);
                 }
                 var year = self.yearEditor.getValue();
 
@@ -72714,7 +72766,13 @@ BI.DynamicYearQuarterTrigger = BI.inherit(BI.Trigger, {
             height: o.height,
             validationChecker: function (v) {
                 if(isYear) {
-                    return v === "" || (BI.isPositiveInteger(v) && !BI.checkDateVoid(v, parseInt(v, 10) === BI.parseDateTime(o.min, "%Y-%X-%d").getFullYear() ? BI.parseDateTime(o.min, "%Y-%X-%d").getMonth() + 1 : 1, 1, o.min, o.max)[0]);
+                    var month = self.quarterEditor.getValue();
+                    if(BI.isEmptyString(month)) {
+                        month = parseInt(v, 10) === BI.parseDateTime(o.min, "%Y-%X-%d").getFullYear() ? BI.parseDateTime(o.min, "%Y-%X-%d").getMonth() + 1 : 1;
+                    } else {
+                        month = (v - 1) * 3 + 1;
+                    }
+                    return v === "" || (BI.isPositiveInteger(v) && !BI.checkDateVoid(v, month, 1, o.min, o.max)[0]);
                 }
                 var year = self.yearEditor.getValue();
 
