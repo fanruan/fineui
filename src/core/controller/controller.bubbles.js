@@ -30,7 +30,6 @@ BI.BubblesController = BI.inherit(BI.Controller, {
         if (!this.storeBubbles[name]) {
             this.storeBubbles[name] = BI.createWidget({
                 type: "bi.label",
-                root: true,
                 cls: "bi-bubble" + " bubble-" + level,
                 text: text,
                 hgap: 5,
@@ -52,6 +51,7 @@ BI.BubblesController = BI.inherit(BI.Controller, {
                 center: "top",
                 right: "top-end"
             })[offsetStyle],
+            strategy: "fixed",
             modifiers: [
                 {
                     name: "offset",
