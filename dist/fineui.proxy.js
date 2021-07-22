@@ -1,4 +1,4 @@
-/*! time: 2021-7-21 10:30:28 */
+/*! time: 2021-7-22 16:10:32 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -55101,7 +55101,7 @@ BI.MultiSelectSearchInsertPane = BI.inherit(BI.Widget, {
             type: "bi.label",
             text: BI.i18nText("BI-Basic_Click_To_Add_Text", ""),
             height: BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT,
-            cls: "bi-high-light",
+            cls: "bi-keyword-red-mark",
             hgap: 5,
         });
 
