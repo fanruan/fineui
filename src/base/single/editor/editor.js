@@ -175,7 +175,7 @@ BI.Editor = BI.inherit(BI.Single, {
             errorText = errorText(this.editor.getValue());
         }
         if (BI.isKey(errorText)) {
-            if (!this.isEnabled() || this.isValid() || (BI.Bubbles.has(this.getName()) && BI.Bubbles.get(this.getName()).isVisible())) {
+            if (!this.isEnabled() || this.isValid() || BI.Bubbles.has(this.getName())) {
                 this.setTitle("");
             } else {
                 this.setTitle(errorText);
@@ -273,7 +273,6 @@ BI.Editor = BI.inherit(BI.Single, {
                 adjustYOffset: 2
             });
             this._checkToolTip();
-            return BI.Bubbles.get(this.getName());
         }
     },
 
