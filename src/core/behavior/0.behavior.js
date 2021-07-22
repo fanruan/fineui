@@ -26,11 +26,6 @@ BI.Behavior = BI.inherit(BI.OB, {
         });
     },
 
-    _init: function () {
-        BI.Behavior.superclass._init.apply(this, arguments);
-
-    },
-
     doBehavior: function () {
 
     }

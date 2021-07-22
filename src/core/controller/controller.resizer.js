@@ -5,12 +5,7 @@
  * @class
  */
 BI.ResizeController = BI.inherit(BI.Controller, {
-    _defaultConfig: function () {
-        return BI.extend(BI.ResizeController.superclass._defaultConfig.apply(this, arguments), {});
-    },
-
-    _init: function () {
-        BI.ResizeController.superclass._init.apply(this, arguments);
+    init: function () {
         var self = this;
         this.resizerManger = {};
         var fn = BI.debounce(function (ev) {

@@ -5,12 +5,7 @@
  * @class
  */
 BI.BroadcastController = BI.inherit(BI.Controller, {
-    _defaultConfig: function () {
-        return BI.extend(BI.BroadcastController.superclass._defaultConfig.apply(this, arguments), {});
-    },
-
-    _init: function () {
-        BI.BroadcastController.superclass._init.apply(this, arguments);
+    init: function () {
         this._broadcasts = {};
     },
 
