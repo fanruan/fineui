@@ -99,7 +99,7 @@ BI.InlineLayout = BI.inherit(BI.Layout, {
     },
 
     addItem: function (item) {
-        throw new Error("不能添加元素");
+        throw new Error("不能添加子组件");
     },
 
     populate: function (items) {

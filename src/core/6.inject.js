@@ -2,7 +2,7 @@
     var moduleInjection = {};
     BI.module = BI.module || function (xtype, cls) {
         if (moduleInjection[xtype] != null) {
-            _global.console && console.error("module:[" + xtype + "] has been registed");
+            _global.console && console.error("module： [" + xtype + "] 已经注册过了");
         }
         moduleInjection[xtype] = cls;
     };
@@ -10,7 +10,7 @@
     var constantInjection = {};
     BI.constant = BI.constant || function (xtype, cls) {
         if (constantInjection[xtype] != null) {
-            _global.console && console.error("constant:[" + xtype + "] has been registed");
+            _global.console && console.error("constant: [" + xtype + "]已经注册过了");
         }
         constantInjection[xtype] = cls;
     };
@@ -18,7 +18,7 @@
     var modelInjection = {};
     BI.model = BI.model || function (xtype, cls) {
         if (modelInjection[xtype] != null) {
-            _global.console && console.error("model:[" + xtype + "] has been registed");
+            _global.console && console.error("model: [" + xtype + "] 已经注册过了");
         }
         modelInjection[xtype] = cls;
     };
@@ -26,7 +26,7 @@
     var storeInjection = {};
     BI.store = BI.store || function (xtype, cls) {
         if (storeInjection[xtype] != null) {
-            _global.console && console.error("store:[" + xtype + "] has been registed");
+            _global.console && console.error("store: [" + xtype + "] 已经注册过了");
         }
         storeInjection[xtype] = cls;
     };
@@ -34,7 +34,7 @@
     var serviceInjection = {};
     BI.service = BI.service || function (xtype, cls) {
         if (serviceInjection[xtype] != null) {
-            _global.console && console.error("service:[" + xtype + "] has been registed");
+            _global.console && console.error("service: [" + xtype + "] 已经注册过了");
         }
         serviceInjection[xtype] = cls;
     };
@@ -42,7 +42,7 @@
     var providerInjection = {};
     BI.provider = BI.provider || function (xtype, cls) {
         if (providerInjection[xtype] != null) {
-            _global.console && console.error("provider:[" + xtype + "] has been registed");
+            _global.console && console.error("provider: [" + xtype + "] 已经注册过了");
         }
         providerInjection[xtype] = cls;
     };
@@ -138,8 +138,7 @@
     BI.Modules = BI.Modules || {
         getModule: function (type) {
             if (!moduleInjection[type]) {
-                _global.console && console.error("module:[" + type + "] does not exists");
-                return false;
+                throw new Error("module: [" + type + "] 未定义");
             }
             return moduleInjection[type];
         },
@@ -150,6 +149,9 @@
 
     BI.Constants = BI.Constants || {
         getConstant: function (type) {
+            if (!constantInjection[type]) {
+                throw new Error("constant: [" + type + "] 未定义");
+            }
             return constantInjection[type];
         }
     };
@@ -194,6 +196,9 @@
 
     BI.Models = BI.Models || {
         getModel: function (type, config) {
+            if (!modelInjection[type]) {
+                throw new Error("model: [" + type + "] 未定义");
+            }
             var inst = new modelInjection[type](config);
             inst._constructor && inst._constructor(config);
             inst.mixins && callPoint(inst, inst.mixins);
@@ -206,6 +211,9 @@
 
     BI.Stores = BI.Stores || {
         getStore: function (type, config) {
+            if (!storeInjection[type]) {
+                throw new Error("store: [" + type + "] 未定义");
+            }
             if (stores[type]) {
                 return stores[type];
             }
@@ -222,6 +230,9 @@
 
     BI.Services = BI.Services || {
         getService: function (type, config) {
+            if (!serviceInjection[type]) {
+                throw new Error("service: [" + type + "] 未定义");
+            }
             if (services[type]) {
                 return services[type];
             }
@@ -236,6 +247,9 @@
 
     BI.Providers = BI.Providers || {
         getProvider: function (type, config) {
+            if (!providerInjection[type]) {
+                throw new Error("provider: [" + type + "] 未定义");
+            }
             if (!providers[type]) {
                 providers[type] = new providerInjection[type]();
             }
@@ -284,5 +298,6 @@
         if (providerInjection[type]) {
             return BI.Providers.getProvider(type, config);
         }
+        throw new Error("未知类型: [" + type + "] 未定义");
     };
 })();

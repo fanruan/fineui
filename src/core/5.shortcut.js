@@ -2,7 +2,7 @@
     var kv = {};
     BI.shortcut = BI.component = BI.shortcut || function (xtype, cls) {
         if (kv[xtype] != null) {
-            _global.console && console.error("shortcut:[" + xtype + "] has been registed");
+            _global.console && console.error("组件： [" + xtype + "] 已经注册过了");
         }
         if (cls) {
             cls["xtype"] = xtype;
@@ -15,7 +15,7 @@
         var cls = kv[config.type];
 
         if (!cls) {
-            throw new Error("组件" + config.type + "未定义");
+            throw new Error("组件： [" + config.type + "] 未定义");
         }
         var pushed = false;
         var widget = new cls();
@@ -88,7 +88,7 @@
         if (BI.isWidget(item.el)) {
             return item.el;
         }
-        throw new Error("无法根据item创建组件");
+        throw new Error("组件：无法根据item创建组件", item);
     };
 
     BI._lazyCreateWidget = BI._lazyCreateWidget || function (item, options, context) {

@@ -5,15 +5,14 @@
  * @extends BI.Controller
  */
 BI.PopoverController = BI.inherit(BI.Controller, {
-    _defaultConfig: function () {
-        return BI.extend(BI.PopoverController.superclass._defaultConfig.apply(this, arguments), {
+    props: function () {
+        return {
             modal: true, // 模态窗口
             render: "body"
-        });
+        };
     },
 
-    _init: function () {
-        BI.PopoverController.superclass._init.apply(this, arguments);
+    init: function () {
         this.modal = this.options.modal;
         this.floatManager = {};
         this.floatLayer = {};

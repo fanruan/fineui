@@ -81,7 +81,7 @@ BI.LeftRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
 
     addItem: function () {
         // do nothing
-        throw new Error("cannot be added");
+        throw new Error("不能添加子组件");
     },
 
     populate: function (items) {
@@ -134,7 +134,7 @@ BI.LeftVerticalAdaptLayout = BI.inherit(BI.Layout, {
 
     addItem: function () {
         // do nothing
-        throw new Error("cannot be added");
+        throw new Error("不能添加子组件");
     },
 
     populate: function (items) {
@@ -186,7 +186,7 @@ BI.RightVerticalAdaptLayout = BI.inherit(BI.Layout, {
 
     addItem: function () {
         // do nothing
-        throw new Error("cannot be added");
+        throw new Error("不能添加子组件");
     },
 
     populate: function (items) {

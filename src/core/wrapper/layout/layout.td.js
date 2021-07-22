@@ -163,7 +163,7 @@ BI.TdLayout = BI.inherit(BI.Layout, {
 
     addItem: function (arr) {
         if (!BI.isArray(arr)) {
-            throw new Error("item must be array");
+            throw new Error("必须是数组", arr);
         }
         return BI.TdLayout.superclass.addItem.apply(this, arguments);
     },

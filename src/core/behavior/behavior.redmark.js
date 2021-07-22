@@ -5,17 +5,6 @@
  * @extends BI.Behavior
  */
 BI.RedMarkBehavior = BI.inherit(BI.Behavior, {
-    _defaultConfig: function () {
-        return BI.extend(BI.RedMarkBehavior.superclass._defaultConfig.apply(this, arguments), {
-
-        });
-    },
-
-    _init: function () {
-        BI.RedMarkBehavior.superclass._init.apply(this, arguments);
-
-    },
-
     doBehavior: function (items) {
         var args  = Array.prototype.slice.call(arguments, 1),
             o     = this.options;
