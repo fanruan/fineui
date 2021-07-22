@@ -124,7 +124,7 @@ BI.LayerController = BI.inherit(BI.Controller, {
 
     add: function (name, layer, layout) {
         if (this.has(name)) {
-            throw new Error("name is already exist");
+            throw new Error("不能创建同名的Layer");
         }
         layout.setVisible(false);
         this.layerManager[name] = layer;

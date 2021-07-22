@@ -88,7 +88,7 @@
         if (BI.isWidget(item.el)) {
             return item.el;
         }
-        throw new Error("组件创建：无法根据item创建组件", item);
+        throw new Error("组件：无法根据item创建组件", item);
     };
 
     BI._lazyCreateWidget = BI._lazyCreateWidget || function (item, options, context) {

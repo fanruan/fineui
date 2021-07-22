@@ -31,7 +31,7 @@ BI.WindowLayout = BI.inherit(BI.Layout, {
 
     addItem: function (item) {
         // do nothing
-        throw new Error("cannot be added");
+        throw new Error("不能添加子组件");
     },
 
     stroke: function (items) {
@@ -83,7 +83,7 @@ BI.WindowLayout = BI.inherit(BI.Layout, {
         for (var i = 0; i < o.rows; i++) {
             for (var j = 0; j < o.columns; j++) {
                 if (!o.items[i][j]) {
-                    throw new Error("item be required");
+                    throw new Error("构造错误", o.items);
                 }
                 if (!this.hasWidget(this._getChildName(i + "_" + j))) {
                     var w = BI._lazyCreateWidget(o.items[i][j]);

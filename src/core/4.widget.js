@@ -449,7 +449,7 @@
             }
             name = name || widget.getName() || BI.uniqueId("widget");
             if (this._children[name]) {
-                throw new Error("name has already been existed");
+                throw new Error("组件：组件名已存在，不能进行添加");
             }
             widget._setParent && widget._setParent(this);
             widget.on(BI.Events.DESTROY, function () {

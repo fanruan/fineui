@@ -10,7 +10,7 @@
     BI.BufferPool = {
         put: function (name, cache) {
             if (BI.isNotNull(Buffer[name])) {
-                throw new Error("Buffer Pool has the key already!");
+                throw new Error("key值：[" + name + "] 已存在!", Buffer);
             }
             Buffer[name] = cache;
         },

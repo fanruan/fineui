@@ -47,7 +47,7 @@ BI.DivisionLayout = BI.inherit(BI.Layout, {
 
     addItem: function (item) {
         // do nothing
-        throw new Error("cannot be added");
+        throw new Error("不能添加子组件");
     },
 
     stroke: function (items) {
@@ -112,7 +112,7 @@ BI.DivisionLayout = BI.inherit(BI.Layout, {
             var totalW = 0;
             for (var j = 0; j < columns; j++) {
                 if (!map[i][j]) {
-                    throw new Error("item be required");
+                    throw new Error("item(" + i + "" + j + ") 必须", map);
                 }
                 if (!this.hasWidget(this._getChildName(i + "_" + j))) {
                     var w = BI._lazyCreateWidget(map[i][j]);

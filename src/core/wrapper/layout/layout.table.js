@@ -88,7 +88,7 @@ BI.TableLayout = BI.inherit(BI.Layout, {
                 }, arr[j]));
                 right += o.columnSize[j] + (o.columnSize[j] < 1 ? 0 : o.hgap);
             } else {
-                throw new Error("item with fill can only be one");
+                throw new Error("构造错误", arr);
             }
         }
         if (i >= 0 && i < arr.length) {
@@ -123,7 +123,7 @@ BI.TableLayout = BI.inherit(BI.Layout, {
 
     addItem: function (arr) {
         if (!BI.isArray(arr)) {
-            throw new Error("item must be array");
+            throw new Error("必须是数组", arr);
         }
         return BI.TableLayout.superclass.addItem.apply(this, arguments);
     },
