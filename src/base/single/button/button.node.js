@@ -54,3 +54,4 @@ BI.NodeButton = BI.inherit(BI.BasicButton, {
         }
     }
 });
+BI.shortcut("bi.node_button", BI.NodeButton);
