@@ -82,6 +82,7 @@ import { SimpleColorChooser } from "./case/colorchooser/colorchooser.simple";
 import { A } from "./base/a/a";
 import { Html } from "./base/single/html/html";
 import { Switcher } from "./base/combination/switcher";
+import { Expander } from './base/combination/expander';
 import { Loader } from "./base/combination/loader";
 import { ListPane } from "./case/layer/pane.list";
 import { MultiPopupView } from './case/layer/layer.multipopup';
@@ -267,6 +268,7 @@ export interface BI extends _func, _i18n, _base, _inject, _var, _web, _utils {
     A: typeof A;
     Html: typeof Html;
     Switcher: typeof Switcher;
+    Expander: typeof Expander;
     Loader: typeof Loader;
     ListPane: typeof ListPane;
     MultiPopupView: typeof MultiPopupView;
@@ -415,6 +417,7 @@ export {
     A,
     Html,
     Switcher,
+    Expander,
     BubbleCombo,
     Loader,
     ListPane,
