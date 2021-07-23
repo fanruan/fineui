@@ -27,7 +27,7 @@ export declare class Expander extends Widget {
 
     hideView(): void;
 
-    getView(): any;
+    getView<T>(): T;
 
     getAllLeaves<T>(): T[];
 
