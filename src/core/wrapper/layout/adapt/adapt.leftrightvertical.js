@@ -81,7 +81,7 @@ BI.LeftRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
 
     addItem: function () {
         // do nothing
-        throw new Error("cannot be added");
+        throw new Error("不能添加子组件");
     },
 
     populate: function (items) {
@@ -97,6 +97,7 @@ BI.LeftVerticalAdaptLayout = BI.inherit(BI.Layout, {
         return BI.extend(BI.LeftRightVerticalAdaptLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-l-v-a",
             items: [],
+            columnSize: [],
             lgap: 0,
             rgap: 0,
             hgap: 0,
@@ -114,6 +115,7 @@ BI.LeftVerticalAdaptLayout = BI.inherit(BI.Layout, {
                 self.layout = _ref;
             },
             items: o.items,
+            columnSize: o.columnSize,
             hgap: o.hgap,
             lgap: o.lgap,
             rgap: o.rgap,
@@ -132,7 +134,7 @@ BI.LeftVerticalAdaptLayout = BI.inherit(BI.Layout, {
 
     addItem: function () {
         // do nothing
-        throw new Error("cannot be added");
+        throw new Error("不能添加子组件");
     },
 
     populate: function (items) {
@@ -146,6 +148,7 @@ BI.RightVerticalAdaptLayout = BI.inherit(BI.Layout, {
         return BI.extend(BI.RightVerticalAdaptLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-r-v-a",
             items: [],
+            columnSize: [],
             lgap: 0,
             rgap: 0,
             hgap: 0,
@@ -164,6 +167,7 @@ BI.RightVerticalAdaptLayout = BI.inherit(BI.Layout, {
             },
             horizontalAlign: BI.HorizontalAlign.Right,
             items: o.items,
+            columnSize: o.columnSize,
             hgap: o.hgap,
             lgap: o.lgap,
             rgap: o.rgap,
@@ -182,7 +186,7 @@ BI.RightVerticalAdaptLayout = BI.inherit(BI.Layout, {
 
     addItem: function () {
         // do nothing
-        throw new Error("cannot be added");
+        throw new Error("不能添加子组件");
     },
 
     populate: function (items) {

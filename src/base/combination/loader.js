@@ -169,7 +169,7 @@ BI.Loader = BI.inherit(BI.Widget, {
         if (arguments.length === 0 && (BI.isFunction(o.itemsCreator))) {
             o.itemsCreator.apply(this, [{times: 1}, function () {
                 if (arguments.length === 0) {
-                    throw new Error("arguments can not be null!!!");
+                    throw new Error("参数不能为空");
                 }
                 self.populate.apply(self, arguments);
                 o.onLoaded();

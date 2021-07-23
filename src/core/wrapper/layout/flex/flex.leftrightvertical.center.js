@@ -75,7 +75,7 @@ BI.FlexLeftRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
 
     addItem: function () {
         // do nothing
-        throw new Error("cannot be added");
+        throw new Error("不能添加子组件");
     },
 
     populate: function (items) {

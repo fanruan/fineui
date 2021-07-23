@@ -75,7 +75,7 @@ if (!_global.BI) {
 
         createWidgets: function (items, options, context) {
             if (!BI.isArray(items)) {
-                throw new Error("cannot create Widgets");
+                throw new Error("items必须是数组", items);
             }
             if (BI.isWidget(options)) {
                 context = options;

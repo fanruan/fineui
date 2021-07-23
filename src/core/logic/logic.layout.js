@@ -7,8 +7,8 @@
  * @extends BI.Logic
  */
 BI.VerticalLayoutLogic = BI.inherit(BI.Logic, {
-    _defaultConfig: function () {
-        return BI.extend(BI.VerticalLayoutLogic.superclass._defaultConfig.apply(this, arguments), {
+    props: function () {
+        return {
             dynamic: false,
             scrollable: null,
             scrolly: false,
@@ -20,7 +20,7 @@ BI.VerticalLayoutLogic = BI.inherit(BI.Logic, {
             rgap: 0,
             tgap: 0,
             bgap: 0
-        });
+        };
     },
 
     createLogic: function () {
@@ -56,8 +56,8 @@ BI.VerticalLayoutLogic = BI.inherit(BI.Logic, {
  * @extends BI.Logic
  */
 BI.HorizontalLayoutLogic = BI.inherit(BI.Logic, {
-    _defaultConfig: function () {
-        return BI.extend(BI.HorizontalLayoutLogic.superclass._defaultConfig.apply(this, arguments), {
+    props: function () {
+        return {
             dynamic: false,
             scrollable: null,
             scrolly: false,
@@ -69,7 +69,7 @@ BI.HorizontalLayoutLogic = BI.inherit(BI.Logic, {
             rgap: 0,
             tgap: 0,
             bgap: 0
-        });
+        };
     },
 
     createLogic: function () {
@@ -104,8 +104,8 @@ BI.HorizontalLayoutLogic = BI.inherit(BI.Logic, {
  * @extends BI.OB
  */
 BI.TableLayoutLogic = BI.inherit(BI.Logic, {
-    _defaultConfig: function () {
-        return BI.extend(BI.TableLayoutLogic.superclass._defaultConfig.apply(this, arguments), {
+    props: function () {
+        return {
             dynamic: false,
             scrollable: null,
             scrolly: false,
@@ -117,7 +117,7 @@ BI.TableLayoutLogic = BI.inherit(BI.Logic, {
             hgap: 0,
             vgap: 0,
             items: []
-        });
+        };
     },
 
     createLogic: function () {
@@ -151,8 +151,8 @@ BI.TableLayoutLogic = BI.inherit(BI.Logic, {
  * @extends BI.Logic
  */
 BI.HorizontalFillLayoutLogic = BI.inherit(BI.Logic, {
-    _defaultConfig: function () {
-        return BI.extend(BI.HorizontalFillLayoutLogic.superclass._defaultConfig.apply(this, arguments), {
+    props: function () {
+        return {
             dynamic: false,
             scrollable: null,
             scrolly: false,
@@ -164,7 +164,7 @@ BI.HorizontalFillLayoutLogic = BI.inherit(BI.Logic, {
             rgap: 0,
             tgap: 0,
             bgap: 0
-        });
+        };
     },
 
     createLogic: function () {

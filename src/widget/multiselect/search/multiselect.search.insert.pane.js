@@ -31,7 +31,7 @@ BI.MultiSelectSearchInsertPane = BI.inherit(BI.Widget, {
             type: "bi.label",
             text: BI.i18nText("BI-Basic_Click_To_Add_Text", ""),
             height: BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT,
-            cls: "bi-high-light",
+            cls: "bi-keyword-red-mark",
             hgap: 5,
         });
 

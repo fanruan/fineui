@@ -1,30 +1,29 @@
 @import "../../../index";
 
-.bi-bubble{
-  & .bubble-text{
-    .border-radius(2px);
-  }
+.bi-bubble {
+  z-index: @zIndex-tip;
+  .border-radius(2px);
 
-  & .bubble-error{
+  &.bubble-error{
     background: @color-bi-background-light-failure;
     color: @color-bi-text-failure;
   }
 
-  .bi-theme-dark & .bubble-error {
+  .bi-theme-dark &.bubble-error {
     background: @color-bi-background-dark-failure;
   }
 
-  & .bubble-common{
+  &.bubble-common{
     background: @color-bi-background-light-highlight;
     color: @color-bi-text-highlight;
   }
 
-  & .bubble-success{
+  &.bubble-success{
     background: @color-bi-background-light-success;
     color: @color-bi-text-success;
   }
 
-  & .bubble-warning{
+  &.bubble-warning{
     background: @color-bi-background-light-warning;
     color: @color-bi-text-redmark;
   }

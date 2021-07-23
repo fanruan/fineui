@@ -7,16 +7,7 @@
  * @extends BI.Controller
  */
 BI.TooltipsController = BI.inherit(BI.Controller, {
-    _defaultConfig: function () {
-        return BI.extend(BI.TooltipsController.superclass._defaultConfig.apply(this, arguments), {});
-    },
-
-    _const: {
-        height: 18
-    },
-
-    _init: function () {
-        BI.TooltipsController.superclass._init.apply(this, arguments);
+    init: function () {
         this.tooltipsManager = {};
         this.showingTips = {};// 存储正在显示的tooltip
     },

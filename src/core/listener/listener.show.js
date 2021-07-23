@@ -6,8 +6,8 @@
  * @extends BI.OB
  */
 BI.ShowListener = BI.inherit(BI.OB, {
-    _defaultConfig: function () {
-        return BI.extend(BI.ShowListener.superclass._defaultConfig.apply(this, arguments), {
+    props: function () {
+        return {
             eventObj: BI.createWidget(),
             cardLayout: null,
             cardNameCreator: function (v) {
@@ -16,11 +16,10 @@ BI.ShowListener = BI.inherit(BI.OB, {
             cardCreator: BI.emptyFn,
             afterCardCreated: BI.emptyFn,
             afterCardShow: BI.emptyFn
-        });
+        };
     },
 
-    _init: function () {
-        BI.ShowListener.superclass._init.apply(this, arguments);
+    init: function () {
         var self = this, o = this.options;
         if (o.eventObj) {
             o.eventObj.on(BI.Controller.EVENT_CHANGE, function (type, v, ob) {
@@ -28,7 +27,7 @@ BI.ShowListener = BI.inherit(BI.OB, {
                     v = v || o.eventObj.getValue();
                     v = BI.isArray(v) ? (v.length > 1 ? v.toString() : v[0]) : v;
                     if (BI.isNull(v)) {
-                        throw new Error("value cannot be null");
+                        throw new Error("不能为null");
                     }
                     var cardName = o.cardNameCreator(v);
                     if (!o.cardLayout.isCardExisted(cardName)) {

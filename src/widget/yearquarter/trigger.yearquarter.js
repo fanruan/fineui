@@ -65,7 +65,13 @@ BI.DynamicYearQuarterTrigger = BI.inherit(BI.Trigger, {
             height: o.height,
             validationChecker: function (v) {
                 if(isYear) {
-                    return v === "" || (BI.isPositiveInteger(v) && !BI.checkDateVoid(v, parseInt(v, 10) === BI.parseDateTime(o.min, "%Y-%X-%d").getFullYear() ? BI.parseDateTime(o.min, "%Y-%X-%d").getMonth() + 1 : 1, 1, o.min, o.max)[0]);
+                    var month = self.quarterEditor.getValue();
+                    if(BI.isEmptyString(month)) {
+                        month = parseInt(v, 10) === BI.parseDateTime(o.min, "%Y-%X-%d").getFullYear() ? BI.parseDateTime(o.min, "%Y-%X-%d").getMonth() + 1 : 1;
+                    } else {
+                        month = (v - 1) * 3 + 1;
+                    }
+                    return v === "" || (BI.isPositiveInteger(v) && !BI.checkDateVoid(v, month, 1, o.min, o.max)[0]);
                 }
                 var year = self.yearEditor.getValue();
 
@@ -75,12 +81,25 @@ BI.DynamicYearQuarterTrigger = BI.inherit(BI.Trigger, {
                 return false;
             },
             errorText: function (v) {
-                return BI.i18nText("BI-Year_Trigger_Invalid_Text");
+                var year = isYear ? v : self.yearEditor.getValue();
+                var quarter = isYear ? self.quarterEditor.getValue() : v;
+                if (!BI.isPositiveInteger(year) || !BI.isPositiveInteger(quarter) || quarter > 4) {
+                    return BI.i18nText("BI-Year_Trigger_Invalid_Text");
+                }
+
+                var start = BI.parseDateTime(o.min, "%Y-%X-%d");
+                var end = BI.parseDateTime(o.max, "%Y-%X-%d");
+
+                return BI.i18nText("BI-Basic_Year_Quarter_Range_Error",
+                    start.getFullYear(),
+                    BI.getQuarter(start),
+                    end.getFullYear(),
+                    BI.getQuarter(end)
+                );
             },
             watermark: BI.i18nText("BI-Basic_Unrestricted"),
             hgap: c.hgap,
             vgap: c.vgap,
-            title: "",
             allowBlank: true
         });
         editor.on(BI.SignEditor.EVENT_KEY_DOWN, function () {
