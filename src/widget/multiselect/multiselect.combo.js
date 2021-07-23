@@ -414,7 +414,7 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
             change && (this.storeValue.value = BI.values(map));
             self._adjust(callback);
 
-return;
+            return;
         }
         this._joinAll(res, callback);
     },
