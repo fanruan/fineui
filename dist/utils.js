@@ -1,4 +1,4 @@
-/*! time: 2021-7-18 18:31:24 */
+/*! time: 2021-7-23 9:50:32 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -2867,7 +2867,7 @@ _.extend(BI, {
     BI.BufferPool = {
         put: function (name, cache) {
             if (BI.isNotNull(Buffer[name])) {
-                throw new Error("Buffer Pool has the key already!");
+                throw new Error("key值：[" + name + "] 已存在!", Buffer);
             }
             Buffer[name] = cache;
         },
@@ -2877,6 +2877,7 @@ _.extend(BI, {
         }
     };
 })();
+
 
 /***/ }),
 
@@ -3705,7 +3706,7 @@ if (!_global.BI) {
 
         createWidgets: function (items, options, context) {
             if (!BI.isArray(items)) {
-                throw new Error("cannot create Widgets");
+                throw new Error("items必须是数组", items);
             }
             if (BI.isWidget(options)) {
                 context = options;
@@ -5362,7 +5363,7 @@ if (!_global.BI) {
     var moduleInjection = {};
     BI.module = BI.module || function (xtype, cls) {
         if (moduleInjection[xtype] != null) {
-            _global.console && console.error("module:[" + xtype + "] has been registed");
+            _global.console && console.error("module： [" + xtype + "] 已经注册过了");
         }
         moduleInjection[xtype] = cls;
     };
@@ -5370,7 +5371,7 @@ if (!_global.BI) {
     var constantInjection = {};
     BI.constant = BI.constant || function (xtype, cls) {
         if (constantInjection[xtype] != null) {
-            _global.console && console.error("constant:[" + xtype + "] has been registed");
+            _global.console && console.error("constant: [" + xtype + "]已经注册过了");
         }
         constantInjection[xtype] = cls;
     };
@@ -5378,7 +5379,7 @@ if (!_global.BI) {
     var modelInjection = {};
     BI.model = BI.model || function (xtype, cls) {
         if (modelInjection[xtype] != null) {
-            _global.console && console.error("model:[" + xtype + "] has been registed");
+            _global.console && console.error("model: [" + xtype + "] 已经注册过了");
         }
         modelInjection[xtype] = cls;
     };
@@ -5386,7 +5387,7 @@ if (!_global.BI) {
     var storeInjection = {};
     BI.store = BI.store || function (xtype, cls) {
         if (storeInjection[xtype] != null) {
-            _global.console && console.error("store:[" + xtype + "] has been registed");
+            _global.console && console.error("store: [" + xtype + "] 已经注册过了");
         }
         storeInjection[xtype] = cls;
     };
@@ -5394,7 +5395,7 @@ if (!_global.BI) {
     var serviceInjection = {};
     BI.service = BI.service || function (xtype, cls) {
         if (serviceInjection[xtype] != null) {
-            _global.console && console.error("service:[" + xtype + "] has been registed");
+            _global.console && console.error("service: [" + xtype + "] 已经注册过了");
         }
         serviceInjection[xtype] = cls;
     };
@@ -5402,7 +5403,7 @@ if (!_global.BI) {
     var providerInjection = {};
     BI.provider = BI.provider || function (xtype, cls) {
         if (providerInjection[xtype] != null) {
-            _global.console && console.error("provider:[" + xtype + "] has been registed");
+            _global.console && console.error("provider: [" + xtype + "] 已经注册过了");
         }
         providerInjection[xtype] = cls;
     };
@@ -5498,8 +5499,7 @@ if (!_global.BI) {
     BI.Modules = BI.Modules || {
         getModule: function (type) {
             if (!moduleInjection[type]) {
-                _global.console && console.error("module:[" + type + "] does not exists");
-                return false;
+                _global.console && console.error("module: [" + type + "] 未定义");
             }
             return moduleInjection[type];
         },
@@ -5510,6 +5510,9 @@ if (!_global.BI) {
 
     BI.Constants = BI.Constants || {
         getConstant: function (type) {
+            if (!constantInjection[type]) {
+                _global.console && console.error("constant: [" + type + "] 未定义");
+            }
             return constantInjection[type];
         }
     };
@@ -5554,6 +5557,9 @@ if (!_global.BI) {
 
     BI.Models = BI.Models || {
         getModel: function (type, config) {
+            if (!modelInjection[type]) {
+                _global.console && console.error("model: [" + type + "] 未定义");
+            }
             var inst = new modelInjection[type](config);
             inst._constructor && inst._constructor(config);
             inst.mixins && callPoint(inst, inst.mixins);
@@ -5566,6 +5572,9 @@ if (!_global.BI) {
 
     BI.Stores = BI.Stores || {
         getStore: function (type, config) {
+            if (!storeInjection[type]) {
+                _global.console && console.error("store: [" + type + "] 未定义");
+            }
             if (stores[type]) {
                 return stores[type];
             }
@@ -5582,6 +5591,9 @@ if (!_global.BI) {
 
     BI.Services = BI.Services || {
         getService: function (type, config) {
+            if (!serviceInjection[type]) {
+                _global.console && console.error("service: [" + type + "] 未定义");
+            }
             if (services[type]) {
                 return services[type];
             }
@@ -5596,6 +5608,9 @@ if (!_global.BI) {
 
     BI.Providers = BI.Providers || {
         getProvider: function (type, config) {
+            if (!providerInjection[type]) {
+                _global.console && console.error("provider: [" + type + "] 未定义");
+            }
             if (!providers[type]) {
                 providers[type] = new providerInjection[type]();
             }
@@ -5644,6 +5659,7 @@ if (!_global.BI) {
         if (providerInjection[type]) {
             return BI.Providers.getProvider(type, config);
         }
+        throw new Error("未知类型: [" + type + "] 未定义");
     };
 })();
 

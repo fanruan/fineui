@@ -5,15 +5,6 @@
  * @extends BI.Behavior
  */
 BI.HighlightBehavior = BI.inherit(BI.Behavior, {
-    _defaultConfig: function () {
-        return BI.extend(BI.HighlightBehavior.superclass._defaultConfig.apply(this, arguments), {});
-    },
-
-    _init: function () {
-        BI.HighlightBehavior.superclass._init.apply(this, arguments);
-
-    },
-
     doBehavior: function (items) {
         var args = Array.prototype.slice.call(arguments, 1),
             o = this.options;

@@ -70,7 +70,7 @@ BI.CardLayout = BI.inherit(BI.Layout, {
 
     getCardByName: function (cardName) {
         if (!this.isCardExisted(cardName)) {
-            throw new Error("cardName is not exist");
+            throw new Error("cardName不存在", cardName);
         }
         return this._children[this._getChildName(cardName)];
     },
@@ -87,7 +87,7 @@ BI.CardLayout = BI.inherit(BI.Layout, {
 
     deleteCardByName: function (cardName) {
         if (!this.isCardExisted(cardName)) {
-            throw new Error("cardName is not exist");
+            throw new Error("cardName不存在", cardName);
         }
 
         var child = this._children[this._getChildName(cardName)];
@@ -97,7 +97,7 @@ BI.CardLayout = BI.inherit(BI.Layout, {
 
     addCardByName: function (cardName, cardItem) {
         if (this.isCardExisted(cardName)) {
-            throw new Error("cardName is already exist");
+            throw new Error("cardName 已存在", cardName);
         }
         var widget = BI._lazyCreateWidget(cardItem, this);
         widget.element.css({

@@ -184,7 +184,6 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
                 adjustXOffset: o.adjustXOffset,
                 offsetStyle: o.offsetStyle,
             });
-            return BI.Bubbles.get(this.getName());
         }
     },
 
