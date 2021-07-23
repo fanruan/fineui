@@ -3,11 +3,11 @@ import { Widget } from "../../core/widget";
 export declare class Expander extends Widget {
     static xtype: string;
 
-    static EVENT_EXPAND: number;
-    static EVENT_COLLAPSE: number;
-    static EVENT_TRIGGER_CHANGE: number;
-    static EVENT_CHANGE: number;
-    static EVENT_AFTER_INIT: number;
+    static EVENT_EXPAND: string;
+    static EVENT_COLLAPSE: string;
+    static EVENT_TRIGGER_CHANGE: string;
+    static EVENT_CHANGE: string;
+    static EVENT_AFTER_INIT: string;
     static EVENT_BEFORE_POPUPVIEW: string;
     static EVENT_AFTER_POPUPVIEW: string;
     static EVENT_BEFORE_HIDEVIEW: string;
