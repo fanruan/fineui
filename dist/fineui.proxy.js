@@ -1,4 +1,4 @@
-/*! time: 2021-7-22 20:00:47 */
+/*! time: 2021-7-23 9:50:32 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -29705,7 +29705,7 @@ BI.Editor = BI.inherit(BI.Single, {
             errorText = errorText(this.editor.getValue());
         }
         if (BI.isKey(errorText)) {
-            if (!this.isEnabled() || this.isValid() || (BI.Bubbles.has(this.getName()) && BI.Bubbles.get(this.getName()).isVisible())) {
+            if (!this.isEnabled() || this.isValid() || BI.Bubbles.has(this.getName())) {
                 this.setTitle("");
             } else {
                 this.setTitle(errorText);
@@ -29803,7 +29803,6 @@ BI.Editor = BI.inherit(BI.Single, {
                 adjustYOffset: 2
             });
             this._checkToolTip();
-            return BI.Bubbles.get(this.getName());
         }
     },
 
@@ -30198,7 +30197,6 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
                 adjustXOffset: o.adjustXOffset,
                 offsetStyle: o.offsetStyle,
             });
-            return BI.Bubbles.get(this.getName());
         }
     },
 
