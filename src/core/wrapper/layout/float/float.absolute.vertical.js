@@ -6,7 +6,7 @@
 BI.FloatAbsoluteVerticalLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.FloatAbsoluteVerticalLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-abs-h-a",
+            baseCls: "bi-abs-h-fl",
             verticalAlign: BI.VerticalAlign.Middle,
             columnSize: [],
             hgap: 0,

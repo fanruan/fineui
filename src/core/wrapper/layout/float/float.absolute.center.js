@@ -6,7 +6,7 @@
 BI.FloatAbsoluteCenterLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.FloatAbsoluteCenterLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-fl-abs-c-a",
+            baseCls: "bi-abs-c-fl",
         });
     },
 

@@ -6,7 +6,7 @@
 BI.FloatAbsoluteHorizontalLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.FloatAbsoluteHorizontalLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-abs-h-a",
+            baseCls: "bi-abs-h-fl",
             horizontalAlign: BI.HorizontalAlign.Center,
             rowSize: [],
             vgap: 0,
