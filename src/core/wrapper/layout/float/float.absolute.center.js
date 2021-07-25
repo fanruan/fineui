@@ -33,4 +33,4 @@ BI.FloatAbsoluteCenterLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-BI.shortcut("bi.float_absolute_center_adapt", BI.FloatAbsoluteCenterLayout);
+BI.shortcut("bi.absolute_center_float", BI.FloatAbsoluteCenterLayout);

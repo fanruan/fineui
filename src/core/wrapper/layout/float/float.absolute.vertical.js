@@ -61,4 +61,4 @@ BI.FloatAbsoluteVerticalLayout = BI.inherit(BI.Layout, {
         this.layout.populate.apply(this, arguments);
     }
 });
-BI.shortcut("bi.float_absolute_vertical_adapt", BI.FloatAbsoluteVerticalLayout);
+BI.shortcut("bi.absolute_vertical_float", BI.FloatAbsoluteVerticalLayout);
