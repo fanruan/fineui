@@ -61,4 +61,4 @@ BI.FloatAbsoluteHorizontalLayout = BI.inherit(BI.Layout, {
         this.layout.populate.apply(this, arguments);
     }
 });
-BI.shortcut("bi.float_absolute_horizontal_adapt", BI.FloatAbsoluteHorizontalLayout);
+BI.shortcut("bi.absolute_horizontal_float", BI.FloatAbsoluteHorizontalLayout);
