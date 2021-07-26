@@ -36,6 +36,8 @@ export declare class Combo extends Widget {
         hoverClass: string;
         belowMouse: boolean;
     };
+    resetListHeight(h: number): void;
+    resetListWidth(w: number): void;
     populate(...args: any[]): void;
     _setEnable(v: boolean): void;
     isViewVisible(): boolean;
