@@ -1,4 +1,4 @@
-/*! time: 2021-7-26 22:10:49 */
+/*! time: 2021-7-26 23:20:35 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -4146,10 +4146,31 @@ if (!_global.BI) {
 /***/ (function(module, exports) {
 
 (function () {
-    var moduleInjection = {};
+    var moduleInjection = {}, moduleInjectionMap = {
+        components: {},
+        constants: {},
+        stores: {},
+        services: {},
+        models: {},
+        providers: {}
+    };
     BI.module = BI.module || function (xtype, cls) {
         if (moduleInjection[xtype] != null) {
             _global.console && console.error("module： [" + xtype + "] 已经注册过了");
+        }
+        var key;
+        for (var k in moduleInjectionMap) {
+            if(cls[k]){
+                for (key in cls[k]) {
+                    if (!moduleInjectionMap[k][key]) {
+                        moduleInjectionMap[k][key] = [];
+                    }
+                    moduleInjectionMap[k][key].push({
+                        version: cls[k][key],
+                        moduleId: xtype
+                    });
+                }
+            }
         }
         moduleInjection[xtype] = cls;
     };
@@ -4196,7 +4217,9 @@ if (!_global.BI) {
 
     var configFunctions = {};
     BI.config = BI.config || function (type, configFn, opt) {
-        if (BI.initialized) {
+        opt = opt || {};
+        // 初始化过或者系统配置需要立刻执行
+        if (BI.initialized || "bi.provider.system" === type) {
             if (constantInjection[type]) {
                 return (constantInjection[type] = configFn(constantInjection[type]));
             }
@@ -4216,9 +4239,40 @@ if (!_global.BI) {
             configFunctions[type] = [];
             BI.prepares.push(function () {
                 var queue = configFunctions[type];
+                var dependencies = BI.Providers.getProvider("bi.provider.system").getDependencies();
+                var modules = moduleInjectionMap.components[type]
+                    || moduleInjectionMap.constants[type]
+                    || moduleInjectionMap.services[type]
+                    || moduleInjectionMap.stores[type]
+                    || moduleInjectionMap.models[type]
+                    || moduleInjectionMap.providers[type];
                 for (var i = 0; i < queue.length; i++) {
+                    var conf = queue[i];
+                    var version = conf.opt.version;
+                    var fn = conf.fn;
+                    if(modules && version) {
+                        var findVersion = false;
+                        for (var j = 0; j < modules.length; j++) {
+                            var module = modules[i];
+                            if (module && dependencies[module.moduleId] && module.version === version) {
+                                var min = dependencies[module.moduleId].min, max = dependencies[module.moduleId].max;
+                                if (min && module.version < min){
+                                    findVersion = true;
+                                    break;
+                                }
+                                if(max && module.version > max){
+                                    findVersion = true;
+                                    break;
+                                }
+                            }
+                        }
+                        if(findVersion === true){
+                            _global.console && console.error("module: [" + type + "] 版本: [" + module.version + "] 已过期");
+                            continue;
+                        }
+                    }
                     if (constantInjection[type]) {
-                        constantInjection[type] = queue[i](constantInjection[type]);
+                        constantInjection[type] = fn(constantInjection[type]);
                         continue;
                     }
                     if (providerInjection[type]) {
@@ -4228,15 +4282,18 @@ if (!_global.BI) {
                         if (providerInstance[type]) {
                             delete providerInstance[type];
                         }
-                        queue[i](providers[type]);
+                        fn(providers[type]);
                         continue;
                     }
-                    BI.Plugin.configWidget(type, queue[i]);
+                    BI.Plugin.configWidget(type, fn);
                 }
                 configFunctions[type] = null;
             });
         }
-        configFunctions[type].push(configFn);
+        configFunctions[type].push({
+            fn: configFn,
+            opt: opt
+        });
     };
 
     BI.getReference = BI.getReference || function (type, fn) {
@@ -18840,6 +18897,7 @@ BI.Region.prototype = {
 // 系统参数常量
 !(function () {
     var system = {
+        dependencies: {},
         size: { // 尺寸
             TOOL_BAR_HEIGHT: 24,
             LIST_ITEM_HEIGHT: 24,
@@ -18855,12 +18913,27 @@ BI.Region.prototype = {
             BI.deepExtend(system, { size: opt });
         };
 
+        this.addDependency = function (moduleId, minVersion, maxVersion) {
+            system.dependencies[moduleId] = {
+                min: minVersion,
+                max: maxVersion
+            };
+        };
+
+        this.addDependencies = function (moduleConfig) {
+            BI.extend(system.dependencies, moduleConfig);
+        };
+
         this.$get = function () {
             return BI.inherit(BI.OB, {
 
                 getSize: function () {
                     return system.size;
                 },
+
+                getDependencies: function () {
+                    return system.dependencies;
+                }
             });
         };
     };
