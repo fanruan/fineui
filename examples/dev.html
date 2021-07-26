@@ -17,11 +17,14 @@
     });
 
     BI.module("my.module", {
+        // version不设置的话默认就用接口的version作为判断条件
+        version: "1.0",
         components: {
             "demo.parent": "1.0"
         }
     })
 
+    // 主线代码里加这个
     BI.config("bi.provider.system", function (provider) {
         provider.addDependencies({
             "my.module": {
