@@ -144,6 +144,9 @@ BI.FloatAbsoluteRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
     },
 
     _formatItems: function (items) {
+        if (this.options.verticalAlign !== BI.VerticalAlign.Middle) {
+            return items;
+        }
         return BI.map(items, function (i, item) {
             if (!item || BI.isEmptyObject(item)) {
                 return item;
