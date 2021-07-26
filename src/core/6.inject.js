@@ -1,8 +1,67 @@
 (function () {
-    var moduleInjection = {};
+    var moduleInjection = {}, moduleInjectionMap = {
+        components: {},
+        constants: {},
+        stores: {},
+        services: {},
+        models: {},
+        providers: {}
+    };
     BI.module = BI.module || function (xtype, cls) {
         if (moduleInjection[xtype] != null) {
             _global.console && console.error("module： [" + xtype + "] 已经注册过了");
+        }
+        var i, len, value = {
+            version: cls.version,
+            moduleId: xtype
+        };
+        if (cls.components) {
+            for (i = 0, len = cls.components.length; i < len; i++) {
+                if (!moduleInjectionMap.components[cls.components[i]]) {
+                    moduleInjectionMap.components[cls.components[i]] = [];
+                }
+                moduleInjectionMap.components[cls.components[i]].push(value);
+            }
+        }
+        if (cls.constants) {
+            for (i = 0, len = cls.constants.length; i < len; i++) {
+                if (!moduleInjectionMap.constants[cls.constants[i]]) {
+                    moduleInjectionMap.constants[cls.constants[i]] = [];
+                }
+                moduleInjectionMap.constants[cls.constants[i]].push(value);
+            }
+        }
+        if (cls.stores) {
+            for (i = 0, len = cls.stores.length; i < len; i++) {
+                if (!moduleInjectionMap.stores[cls.stores[i]]) {
+                    moduleInjectionMap.stores[cls.stores[i]] = [];
+                }
+                moduleInjectionMap.stores[cls.stores[i]].push(value);
+            }
+        }
+        if (cls.services) {
+            for (i = 0, len = cls.services.length; i < len; i++) {
+                if (!moduleInjectionMap.services[cls.services[i]]) {
+                    moduleInjectionMap.services[cls.services[i]] = [];
+                }
+                moduleInjectionMap.services[cls.services[i]].push(value);
+            }
+        }
+        if (cls.models) {
+            for (i = 0, len = cls.models.length; i < len; i++) {
+                if (!moduleInjectionMap.models[cls.models[i]]) {
+                    moduleInjectionMap.models[cls.models[i]] = [];
+                }
+                moduleInjectionMap.models[cls.models[i]].push(value);
+            }
+        }
+        if (cls.providers) {
+            for (i = 0, len = cls.providers.length; i < len; i++) {
+                if (!moduleInjectionMap.providers[cls.providers[i]]) {
+                    moduleInjectionMap.providers[cls.providers[i]] = [];
+                }
+                moduleInjectionMap.providers[cls.providers[i]].push(value);
+            }
         }
         moduleInjection[xtype] = cls;
     };
@@ -49,6 +108,7 @@
 
     var configFunctions = {};
     BI.config = BI.config || function (type, configFn, opt) {
+        opt = opt || {};
         if (BI.initialized) {
             if (constantInjection[type]) {
                 return (constantInjection[type] = configFn(constantInjection[type]));
@@ -69,7 +129,31 @@
             configFunctions[type] = [];
             BI.prepares.push(function () {
                 var queue = configFunctions[type];
+                var dependencies = BI.Providers.getProvider("bi.provider.system").getDependencies();
+                var modules = moduleInjectionMap.components[type]
+                    || moduleInjectionMap.constants[type]
+                    || moduleInjectionMap.services[type]
+                    || moduleInjectionMap.stores[type]
+                    || moduleInjectionMap.models[type]
+                    || moduleInjectionMap.providers[type];
                 for (var i = 0; i < queue.length; i++) {
+                    if(modules) {
+                        for (var j = 0; j < modules.length; j++) {
+                            var module = modules[i];
+                            if (module && dependencies[module.moduleId]) {
+                                if (module.version < dependencies[module.moduleId].min || module.version > dependencies[module.moduleId].max) {
+                                    _global.console && console.error("module: [" + type + "] 版本: [" + module.version + "] 已过期");
+                                    continue;
+                                }
+                            }
+                        }
+                    }
+                    if (module && dependencies[module.moduleId]) {
+                        if (module.version < dependencies[module.moduleId].min || module.version > dependencies[module.moduleId].max) {
+                            _global.console && console.error("module: [" + type + "] 版本: [" + module.version + "] 已过期");
+                            continue;
+                        }
+                    }
                     if (constantInjection[type]) {
                         constantInjection[type] = queue[i](constantInjection[type]);
                         continue;
@@ -89,7 +173,10 @@
                 configFunctions[type] = null;
             });
         }
-        configFunctions[type].push(configFn);
+        configFunctions[type].push({
+            fn: configFn,
+            opt: opt
+        });
     };
 
     BI.getReference = BI.getReference || function (type, fn) {

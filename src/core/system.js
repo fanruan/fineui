@@ -6,6 +6,7 @@
 // 系统参数常量
 !(function () {
     var system = {
+        dependencies: {},
         size: { // 尺寸
             TOOL_BAR_HEIGHT: 24,
             LIST_ITEM_HEIGHT: 24,
@@ -21,12 +22,27 @@
             BI.deepExtend(system, { size: opt });
         };
 
+        this.addDependency = function (moduleId, minVersion, maxVersion) {
+            system.dependencies[moduleId] = {
+                min: minVersion,
+                max: maxVersion
+            };
+        };
+
+        this.addDependencies = function (moduleConfig) {
+            BI.extend(system.dependencies, moduleConfig);
+        };
+
         this.$get = function () {
             return BI.inherit(BI.OB, {
 
                 getSize: function () {
                     return system.size;
                 },
+
+                getDependencies: function () {
+                    return system.dependencies;
+                }
             });
         };
     };
