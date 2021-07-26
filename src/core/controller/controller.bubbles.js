@@ -37,6 +37,7 @@ BI.BubblesController = BI.inherit(BI.Controller, {
             });
         }
         var bubble = this.storeBubbles[name];
+        bubble.setValue("text");
 
         BI.createWidget({
             type: "bi.default",
