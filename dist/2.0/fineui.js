@@ -1,4 +1,4 @@
-/*! time: 2021-7-26 13:50:29 */
+/*! time: 2021-7-26 22:10:49 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -13409,6 +13409,9 @@ BI.BubblesController = BI.inherit(BI.Controller, {
             });
         }
         var bubble = this.storeBubbles[name];
+        if (bubble.getText() !== text) {
+            bubble.setText(text);
+        }
 
         BI.createWidget({
             type: "bi.default",
