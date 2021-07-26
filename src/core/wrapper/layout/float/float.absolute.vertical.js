@@ -39,12 +39,15 @@ BI.FloatAbsoluteVerticalLayout = BI.inherit(BI.Layout, {
     },
 
     _formatItems: function (items) {
+        if (this.options.verticalAlign !== BI.VerticalAlign.Middle) {
+            return items;
+        }
         return BI.map(items, function (i, item) {
-            if(!item || BI.isEmptyObject(item)){
+            if (!item || BI.isEmptyObject(item)) {
                 return item;
             }
             var el = BI.stripEL(item);
-            if(BI.isWidget(el)){
+            if (BI.isWidget(el)) {
                 el.element.addClass("bi-abs-c-y-item");
             } else {
                 el.cls = (el.cls || "") + "bi-abs-c-y-item";

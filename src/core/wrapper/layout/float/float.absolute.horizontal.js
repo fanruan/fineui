@@ -39,12 +39,15 @@ BI.FloatAbsoluteHorizontalLayout = BI.inherit(BI.Layout, {
     },
 
     _formatItems: function (items) {
+        if (this.options.horizontalAlign !== BI.HorizontalAlign.Center) {
+            return items;
+        }
         return BI.map(items, function (i, item) {
-            if(!item || BI.isEmptyObject(item)){
+            if (!item || BI.isEmptyObject(item)) {
                 return item;
             }
             var el = BI.stripEL(item);
-            if(BI.isWidget(el)){
+            if (BI.isWidget(el)) {
                 el.element.addClass("bi-abs-c-x-item");
             } else {
                 el.cls = (el.cls || "") + "bi-abs-c-x-item";
