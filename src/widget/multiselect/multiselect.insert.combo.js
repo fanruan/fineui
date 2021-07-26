@@ -101,14 +101,15 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
             if (obj instanceof BI.MultiSelectBar) {
                 self._joinAll(this.getValue(), function () {
                     assertShowValue();
+                    self.fireEvent(BI.MultiSelectInsertCombo.EVENT_CLICK_ITEM);
                 });
             } else {
                 self._join(this.getValue(), function () {
                     assertShowValue();
+                    self.fireEvent(BI.MultiSelectInsertCombo.EVENT_CLICK_ITEM);
                 });
             }
             self._dataChange = true;
-            self.fireEvent(BI.MultiSelectInsertCombo.EVENT_CLICK_ITEM);
         });
         this.trigger.on(BI.MultiSelectInsertTrigger.EVENT_BEFORE_COUNTER_POPUPVIEW, function () {
             // counter的值随点击项的改变而改变, 点击counter的时候不需要setValue(counter会请求刷新计数)
