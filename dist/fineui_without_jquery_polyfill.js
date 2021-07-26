@@ -1,4 +1,4 @@
-/*! time: 2021-7-26 9:40:31 */
+/*! time: 2021-7-26 13:50:29 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -18909,12 +18909,15 @@ BI.FloatAbsoluteHorizontalLayout = BI.inherit(BI.Layout, {
     },
 
     _formatItems: function (items) {
+        if (this.options.horizontalAlign !== BI.HorizontalAlign.Center) {
+            return items;
+        }
         return BI.map(items, function (i, item) {
-            if(!item || BI.isEmptyObject(item)){
+            if (!item || BI.isEmptyObject(item)) {
                 return item;
             }
             var el = BI.stripEL(item);
-            if(BI.isWidget(el)){
+            if (BI.isWidget(el)) {
                 el.element.addClass("bi-abs-c-x-item");
             } else {
                 el.cls = (el.cls || "") + "bi-abs-c-x-item";
@@ -18981,10 +18984,12 @@ BI.FloatAbsoluteLeftRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
         var rightItems = o.items.right || [];
         leftItems = BI.map(leftItems, function (i, item) {
             var el = BI.stripEL(item);
-            if(BI.isWidget(el)){
-                el.element.addClass("bi-abs-c-y-item");
-            } else {
-                el.cls = (el.cls || "") + "bi-abs-c-y-item";
+            if (o.verticalAlign === BI.VerticalAlign.Middle) {
+                if (BI.isWidget(el)) {
+                    el.element.addClass("bi-abs-c-y-item");
+                } else {
+                    el.cls = (el.cls || "") + "bi-abs-c-y-item";
+                }
             }
             var json = {
                 el: el,
@@ -19006,10 +19011,12 @@ BI.FloatAbsoluteLeftRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
         });
         rightItems = BI.map(rightItems, function (i, item) {
             var el = BI.stripEL(item);
-            if(BI.isWidget(el)){
-                el.element.addClass("bi-abs-c-y-item");
-            } else {
-                el.cls = (el.cls || "") + "bi-abs-c-y-item";
+            if (o.verticalAlign === BI.VerticalAlign.Middle) {
+                if (BI.isWidget(el)) {
+                    el.element.addClass("bi-abs-c-y-item");
+                } else {
+                    el.cls = (el.cls || "") + "bi-abs-c-y-item";
+                }
             }
             var json = {
                 el: el,
@@ -19056,7 +19063,7 @@ BI.FloatAbsoluteRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
             items: [],
             lgap: 0,
             rgap: 0,
-            hgap: 0,
+            hgap: 0
         });
     },
     render: function () {
@@ -19080,12 +19087,15 @@ BI.FloatAbsoluteRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
     },
 
     _formatItems: function (items) {
+        if (this.options.verticalAlign !== BI.VerticalAlign.Middle) {
+            return items;
+        }
         return BI.map(items, function (i, item) {
-            if(!item || BI.isEmptyObject(item)){
+            if (!item || BI.isEmptyObject(item)) {
                 return item;
             }
             var el = BI.stripEL(item);
-            if(BI.isWidget(el)){
+            if (BI.isWidget(el)) {
                 el.element.addClass("bi-abs-c-y-item");
             } else {
                 el.cls = (el.cls || "") + "bi-abs-c-y-item";
@@ -19155,12 +19165,15 @@ BI.FloatAbsoluteVerticalLayout = BI.inherit(BI.Layout, {
     },
 
     _formatItems: function (items) {
+        if (this.options.verticalAlign !== BI.VerticalAlign.Middle) {
+            return items;
+        }
         return BI.map(items, function (i, item) {
-            if(!item || BI.isEmptyObject(item)){
+            if (!item || BI.isEmptyObject(item)) {
                 return item;
             }
             var el = BI.stripEL(item);
-            if(BI.isWidget(el)){
+            if (BI.isWidget(el)) {
                 el.element.addClass("bi-abs-c-y-item");
             } else {
                 el.cls = (el.cls || "") + "bi-abs-c-y-item";
