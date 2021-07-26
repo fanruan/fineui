@@ -1,4 +1,4 @@
-/*! time: 2021-7-25 22:10:27 */
+/*! time: 2021-7-26 9:40:31 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -53741,14 +53741,15 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
             if (obj instanceof BI.MultiSelectBar) {
                 self._joinAll(this.getValue(), function () {
                     assertShowValue();
+                    self.fireEvent(BI.MultiSelectCombo.EVENT_CLICK_ITEM);
                 });
             } else {
                 self._join(this.getValue(), function () {
                     assertShowValue();
+                    self.fireEvent(BI.MultiSelectCombo.EVENT_CLICK_ITEM);
                 });
             }
             self._dataChange = true;
-            self.fireEvent(BI.MultiSelectCombo.EVENT_CLICK_ITEM);
         });
         this.trigger.on(BI.MultiSelectTrigger.EVENT_BEFORE_COUNTER_POPUPVIEW, function () {
             // counter的值随点击项的改变而改变, 点击counter的时候不需要setValue(counter会请求刷新计数)
@@ -54053,8 +54054,8 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
             });
             change && (this.storeValue.value = BI.values(map));
             self._adjust(callback);
-            
-return;
+
+            return;
         }
         this._joinAll(res, callback);
     },
@@ -54716,14 +54717,15 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
             if (obj instanceof BI.MultiSelectBar) {
                 self._joinAll(this.getValue(), function () {
                     assertShowValue();
+                    self.fireEvent(BI.MultiSelectInsertCombo.EVENT_CLICK_ITEM);
                 });
             } else {
                 self._join(this.getValue(), function () {
                     assertShowValue();
+                    self.fireEvent(BI.MultiSelectInsertCombo.EVENT_CLICK_ITEM);
                 });
             }
             self._dataChange = true;
-            self.fireEvent(BI.MultiSelectInsertCombo.EVENT_CLICK_ITEM);
         });
         this.trigger.on(BI.MultiSelectInsertTrigger.EVENT_BEFORE_COUNTER_POPUPVIEW, function () {
             // counter的值随点击项的改变而改变, 点击counter的时候不需要setValue(counter会请求刷新计数)
