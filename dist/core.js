@@ -1,4 +1,4 @@
-/*! time: 2021-7-26 23:20:35 */
+/*! time: 2021-7-26 23:30:33 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -4255,12 +4255,12 @@ if (!_global.BI) {
                         for (var j = 0; j < modules.length; j++) {
                             var module = modules[i];
                             if (module && dependencies[module.moduleId] && module.version === version) {
-                                var min = dependencies[module.moduleId].min, max = dependencies[module.moduleId].max;
-                                if (min && module.version < min){
+                                var minVersion = dependencies[module.moduleId].minVersion, maxVersion = dependencies[module.moduleId].maxVersion;
+                                if (minVersion && module.version < minVersion){
                                     findVersion = true;
                                     break;
                                 }
-                                if(max && module.version > max){
+                                if(maxVersion && module.version > maxVersion){
                                     findVersion = true;
                                     break;
                                 }
