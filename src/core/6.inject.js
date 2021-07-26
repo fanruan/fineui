@@ -108,11 +108,11 @@
                             var module = modules[i];
                             if (module && dependencies[module.moduleId] && module.version === version) {
                                 var minVersion = dependencies[module.moduleId].minVersion, maxVersion = dependencies[module.moduleId].maxVersion;
-                                if (minVersion && module.version < minVersion){
+                                if (minVersion && (moduleInjection[module.moduleId].version || version) < minVersion){
                                     findVersion = true;
                                     break;
                                 }
-                                if(maxVersion && module.version > maxVersion){
+                                if(maxVersion && (moduleInjection[module.moduleId].version || version) > maxVersion){
                                     findVersion = true;
                                     break;
                                 }
