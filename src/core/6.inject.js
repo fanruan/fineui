@@ -11,56 +11,18 @@
         if (moduleInjection[xtype] != null) {
             _global.console && console.error("module： [" + xtype + "] 已经注册过了");
         }
-        var i, len, value = {
-            version: cls.version,
-            moduleId: xtype
-        };
-        if (cls.components) {
-            for (i = 0, len = cls.components.length; i < len; i++) {
-                if (!moduleInjectionMap.components[cls.components[i]]) {
-                    moduleInjectionMap.components[cls.components[i]] = [];
+        var key;
+        for (var k in moduleInjectionMap) {
+            if(cls[k]){
+                for (key in cls[k]) {
+                    if (!moduleInjectionMap[k][key]) {
+                        moduleInjectionMap[k][key] = [];
+                    }
+                    moduleInjectionMap[k][key].push({
+                        version: cls[k][key],
+                        moduleId: xtype
+                    });
                 }
-                moduleInjectionMap.components[cls.components[i]].push(value);
-            }
-        }
-        if (cls.constants) {
-            for (i = 0, len = cls.constants.length; i < len; i++) {
-                if (!moduleInjectionMap.constants[cls.constants[i]]) {
-                    moduleInjectionMap.constants[cls.constants[i]] = [];
-                }
-                moduleInjectionMap.constants[cls.constants[i]].push(value);
-            }
-        }
-        if (cls.stores) {
-            for (i = 0, len = cls.stores.length; i < len; i++) {
-                if (!moduleInjectionMap.stores[cls.stores[i]]) {
-                    moduleInjectionMap.stores[cls.stores[i]] = [];
-                }
-                moduleInjectionMap.stores[cls.stores[i]].push(value);
-            }
-        }
-        if (cls.services) {
-            for (i = 0, len = cls.services.length; i < len; i++) {
-                if (!moduleInjectionMap.services[cls.services[i]]) {
-                    moduleInjectionMap.services[cls.services[i]] = [];
-                }
-                moduleInjectionMap.services[cls.services[i]].push(value);
-            }
-        }
-        if (cls.models) {
-            for (i = 0, len = cls.models.length; i < len; i++) {
-                if (!moduleInjectionMap.models[cls.models[i]]) {
-                    moduleInjectionMap.models[cls.models[i]] = [];
-                }
-                moduleInjectionMap.models[cls.models[i]].push(value);
-            }
-        }
-        if (cls.providers) {
-            for (i = 0, len = cls.providers.length; i < len; i++) {
-                if (!moduleInjectionMap.providers[cls.providers[i]]) {
-                    moduleInjectionMap.providers[cls.providers[i]] = [];
-                }
-                moduleInjectionMap.providers[cls.providers[i]].push(value);
             }
         }
         moduleInjection[xtype] = cls;
@@ -137,25 +99,32 @@
                     || moduleInjectionMap.models[type]
                     || moduleInjectionMap.providers[type];
                 for (var i = 0; i < queue.length; i++) {
-                    if(modules) {
+                    var conf = queue[i];
+                    var version = conf.opt.version;
+                    var fn = conf.fn;
+                    if(modules && version) {
+                        var findVersion = false;
                         for (var j = 0; j < modules.length; j++) {
                             var module = modules[i];
-                            if (module && dependencies[module.moduleId]) {
-                                if (module.version < dependencies[module.moduleId].min || module.version > dependencies[module.moduleId].max) {
-                                    _global.console && console.error("module: [" + type + "] 版本: [" + module.version + "] 已过期");
-                                    continue;
+                            if (module && dependencies[module.moduleId] && module.version === version) {
+                                var min = dependencies[module.moduleId].min, max = dependencies[module.moduleId].max;
+                                if (min && module.version < min){
+                                    findVersion = true;
+                                    break;
+                                }
+                                if(max && module.version > max){
+                                    findVersion = true;
+                                    break;
                                 }
                             }
                         }
-                    }
-                    if (module && dependencies[module.moduleId]) {
-                        if (module.version < dependencies[module.moduleId].min || module.version > dependencies[module.moduleId].max) {
+                        if(findVersion === true){
                             _global.console && console.error("module: [" + type + "] 版本: [" + module.version + "] 已过期");
                             continue;
                         }
                     }
                     if (constantInjection[type]) {
-                        constantInjection[type] = queue[i](constantInjection[type]);
+                        constantInjection[type] = fn(constantInjection[type]);
                         continue;
                     }
                     if (providerInjection[type]) {
@@ -165,10 +134,10 @@
                         if (providerInstance[type]) {
                             delete providerInstance[type];
                         }
-                        queue[i](providers[type]);
+                        fn(providers[type]);
                         continue;
                     }
-                    BI.Plugin.configWidget(type, queue[i]);
+                    BI.Plugin.configWidget(type, fn);
                 }
                 configFunctions[type] = null;
             });
