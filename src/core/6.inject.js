@@ -71,7 +71,8 @@
     var configFunctions = {};
     BI.config = BI.config || function (type, configFn, opt) {
         opt = opt || {};
-        if (BI.initialized) {
+        // 初始化过或者系统配置需要立刻执行
+        if (BI.initialized || "bi.provider.system" === type) {
             if (constantInjection[type]) {
                 return (constantInjection[type] = configFn(constantInjection[type]));
             }

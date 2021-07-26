@@ -9,6 +9,29 @@
 <body>
 <div id="wrapper"></div>
 <script>
+    BI.config("demo.parent", function (config){
+        console.log("123");
+        return config;
+    }, {
+        version: "1.0"
+    });
+
+    BI.module("my.module", {
+        components: {
+            "demo.parent": "1.0"
+        }
+    })
+
+    BI.config("bi.provider.system", function (provider) {
+        provider.addDependencies({
+            "my.module": {
+                min: "2.0",
+                max: "4.0"
+            }
+        })
+    })
+</script>
+<script>
     var Model = BI.inherit(Fix.Model, {
         state: function () {
             return {
