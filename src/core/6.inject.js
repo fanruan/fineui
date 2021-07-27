@@ -11,10 +11,15 @@
         if (moduleInjection[xtype] != null) {
             _global.console && console.error("module： [" + xtype + "] 已经注册过了");
         }
-        var key;
+        if (BI.isFunction(cls)) {
+            cls = cls();
+        }
         for (var k in moduleInjectionMap) {
-            if(cls[k]){
-                for (key in cls[k]) {
+            if (cls[k]) {
+                for (var key in cls[k]) {
+                    if (!moduleInjectionMap[k]) {
+                        continue;
+                    }
                     if (!moduleInjectionMap[k][key]) {
                         moduleInjectionMap[k][key] = [];
                     }
@@ -103,24 +108,25 @@
                     var conf = queue[i];
                     var version = conf.opt.version;
                     var fn = conf.fn;
-                    if(modules && version) {
+                    if (modules && version) {
                         var findVersion = false;
                         for (var j = 0; j < modules.length; j++) {
                             var module = modules[i];
                             if (module && dependencies[module.moduleId] && module.version === version) {
-                                var minVersion = dependencies[module.moduleId].minVersion, maxVersion = dependencies[module.moduleId].maxVersion;
-                                if (minVersion && (moduleInjection[module.moduleId].version || version) < minVersion){
+                                var minVersion = dependencies[module.moduleId].minVersion,
+                                    maxVersion = dependencies[module.moduleId].maxVersion;
+                                if (minVersion && (moduleInjection[module.moduleId].version || version) < minVersion) {
                                     findVersion = true;
                                     break;
                                 }
-                                if(maxVersion && (moduleInjection[module.moduleId].version || version) > maxVersion){
+                                if (maxVersion && (moduleInjection[module.moduleId].version || version) > maxVersion) {
                                     findVersion = true;
                                     break;
                                 }
                             }
                         }
-                        if(findVersion === true){
-                            _global.console && console.error("module: [" + type + "] 版本: [" + module.version + "] 已过期");
+                        if (findVersion === true) {
+                            _global.console && console.error("moduleId: [" + module.moduleId + "] 接口: [" + type + "] 接口版本: [" + version + "] 已过期，版本要求为：", dependencies[module.moduleId], "=>",  moduleInjection[module.moduleId]);
                             continue;
                         }
                     }
