@@ -14,7 +14,6 @@ BI.BlankIconTextItem = BI.inherit(BI.BasicButton, {
             logic: {
                 dynamic: false
             },
-            cls: "close-ha-font",
             blankWidth: 0,
             iconHeight: null,
             iconWidth: null,
