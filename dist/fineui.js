@@ -1,4 +1,4 @@
-/*! time: 2021-7-27 10:10:30 */
+/*! time: 2021-7-27 10:30:32 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -4158,10 +4158,12 @@ if (!_global.BI) {
         if (moduleInjection[xtype] != null) {
             _global.console && console.error("module： [" + xtype + "] 已经注册过了");
         }
-        var key;
+        if (BI.isFunction(cls)) {
+            cls = cls();
+        }
         for (var k in moduleInjectionMap) {
             if (cls[k]) {
-                for (key in cls[k]) {
+                for (var key in cls[k]) {
                     if (!moduleInjectionMap[k]) {
                         continue;
                     }
@@ -4271,7 +4273,7 @@ if (!_global.BI) {
                             }
                         }
                         if (findVersion === true) {
-                            _global.console && console.error("moduleId: [" + module.moduleId + "] 服务: [" + type + "] 版本: [" + module.version + "] 已过期", modelInjection[module.moduleId]);
+                            _global.console && console.error("moduleId: [" + module.moduleId + "] 接口: [" + type + "] 接口版本: [" + version + "] 已过期，版本要求为：", dependencies[module.moduleId], "=>",  moduleInjection[module.moduleId]);
                             continue;
                         }
                     }
