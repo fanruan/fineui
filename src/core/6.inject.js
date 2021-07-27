@@ -11,10 +11,12 @@
         if (moduleInjection[xtype] != null) {
             _global.console && console.error("module： [" + xtype + "] 已经注册过了");
         }
-        var key;
+        if (BI.isFunction(cls)) {
+            cls = cls();
+        }
         for (var k in moduleInjectionMap) {
             if (cls[k]) {
-                for (key in cls[k]) {
+                for (var key in cls[k]) {
                     if (!moduleInjectionMap[k]) {
                         continue;
                     }
