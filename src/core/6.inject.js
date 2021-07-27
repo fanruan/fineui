@@ -126,7 +126,7 @@
                             }
                         }
                         if (findVersion === true) {
-                            _global.console && console.error("moduleId: [" + module.moduleId + "] 接口: [" + type + "] 接口版本: [" + version + "] 已过期，版本要求为：", dependencies[module.moduleId], modelInjection[module.moduleId]);
+                            _global.console && console.error("moduleId: [" + module.moduleId + "] 接口: [" + type + "] 接口版本: [" + version + "] 已过期，版本要求为：", dependencies[module.moduleId], "=>",  moduleInjection[module.moduleId]);
                             continue;
                         }
                     }
