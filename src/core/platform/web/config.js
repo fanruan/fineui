@@ -90,6 +90,27 @@ BI.prepares.push(function () {
         return BI.extend({}, ob, {type: "bi.inline_horizontal_adapt"});
     });
 
+    BI.Plugin.configWidget("bi.horizontal_fill", function (ob) {
+        if (isSupportFlex()) {
+            return BI.extend({
+                horizontalAlign: BI.HorizontalAlign.Stretch,
+                verticalAlign: BI.VerticalAlign.Stretch,
+                scrollx: false
+            }, ob, {type: "bi.flex_horizontal"});
+        }
+        return BI.extend({}, ob, {type: "bi.htape"});
+    });
+    BI.Plugin.configWidget("bi.vertical_fill", function (ob) {
+        if (isSupportFlex()) {
+            return BI.extend({
+                horizontalAlign: BI.HorizontalAlign.Stretch,
+                verticalAlign: BI.VerticalAlign.Stretch,
+                scrolly: false
+            }, ob, {type: "bi.flex_vertical"});
+        }
+        return BI.extend({}, ob, {type: "bi.vtape"});
+    });
+
     BI.Plugin.configWidget("bi.left_right_vertical_adapt", function (ob) {
         if (isSupportFlex()) {
             // IE下其实也是可以使用flex布局的，只要排除掉出现滚动条的情况
