@@ -37,7 +37,7 @@ export declare class BasicButton extends Single {
         isShadowShowingOnSelected?: boolean;
         trigger?: string | null;
         handler?: Function;
-        bubble?: Function | null;
+        bubble?: Function | null | string;
     } & Single['props'];
 
     _createShadow(): void;

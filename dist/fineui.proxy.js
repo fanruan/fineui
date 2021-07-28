@@ -1,4 +1,4 @@
-/*! time: 2021-7-27 10:30:32 */
+/*! time: 2021-7-28 11:10:31 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -28823,8 +28823,8 @@ BI.BlankIconIconTextItem = BI.inherit(BI.BasicButton, {
             logic: {
                 dynamic: false
             },
-            iconCls1: "close-ha-font",
-            iconCls2: "close-ha-font",
+            iconCls1: "",
+            iconCls2: "",
             blankWidth: 0,
             iconHeight: null,
             iconWidth: null,
@@ -28927,6 +28927,7 @@ BI.BlankIconIconTextItem = BI.inherit(BI.BasicButton, {
 BI.BlankIconIconTextItem.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.blank_icon_icon_text_item", BI.BlankIconIconTextItem);
 
+
 /***/ }),
 /* 412 */
 /***/ (function(module, exports) {
@@ -28948,8 +28949,8 @@ BI.BlankIconTextIconItem = BI.inherit(BI.BasicButton, {
             logic: {
                 dynamic: false
             },
-            iconCls1: "close-ha-font",
-            iconCls2: "close-ha-font",
+            iconCls1: "",
+            iconCls2: "",
             blankWidth: 0,
             iconHeight: null,
             iconWidth: null,
@@ -29058,6 +29059,7 @@ BI.BlankIconTextIconItem = BI.inherit(BI.BasicButton, {
 BI.BlankIconTextIconItem.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.blank_icon_text_icon_item", BI.BlankIconTextIconItem);
 
+
 /***/ }),
 /* 413 */
 /***/ (function(module, exports) {
@@ -29078,10 +29080,10 @@ BI.BlankIconTextItem = BI.inherit(BI.BasicButton, {
             logic: {
                 dynamic: false
             },
-            cls: "close-ha-font",
             blankWidth: 0,
             iconHeight: null,
             iconWidth: null,
+            iconCls: "",
             textHgap: 0,
             textVgap: 0,
             textLgap: 0,
@@ -29110,6 +29112,7 @@ BI.BlankIconTextItem = BI.inherit(BI.BasicButton, {
         });
         this.icon = BI.createWidget({
             type: "bi.icon_label",
+            cls: o.iconCls,
             width: o.height,
             height: o.height,
             iconWidth: o.iconWidth,
@@ -29167,6 +29170,7 @@ BI.BlankIconTextItem = BI.inherit(BI.BasicButton, {
 BI.BlankIconTextItem.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.blank_icon_text_item", BI.BlankIconTextItem);
 
+
 /***/ }),
 /* 414 */
 /***/ (function(module, exports) {
@@ -29188,8 +29192,8 @@ BI.IconTextIconItem = BI.inherit(BI.BasicButton, {
             logic: {
                 dynamic: false
             },
-            iconCls1: "close-ha-font",
-            iconCls2: "close-ha-font",
+            iconCls1: "",
+            iconCls2: "",
             iconHeight: null,
             iconWidth: null,
             textHgap: 0,
@@ -29295,6 +29299,7 @@ BI.IconTextIconItem = BI.inherit(BI.BasicButton, {
 BI.IconTextIconItem.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.icon_text_icon_item", BI.IconTextIconItem);
 
+
 /***/ }),
 /* 415 */
 /***/ (function(module, exports) {
@@ -29319,6 +29324,7 @@ BI.IconTextItem = BI.inherit(BI.BasicButton, {
             iconWrapperWidth: null,
             iconHeight: null,
             iconWidth: null,
+            iconCls: "",
             textHgap: 0,
             textVgap: 0,
             textLgap: 0,
@@ -29343,6 +29349,7 @@ BI.IconTextItem = BI.inherit(BI.BasicButton, {
         });
         this.icon = BI.createWidget({
             type: "bi.icon_label",
+            cls: o.iconCls,
             width: o.iconWrapperWidth || o.height,
             height: o.height,
             iconWidth: o.iconWidth,
@@ -29400,6 +29407,7 @@ BI.IconTextItem = BI.inherit(BI.BasicButton, {
 BI.IconTextItem.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.icon_text_item", BI.IconTextItem);
 
+
 /***/ }),
 /* 416 */
 /***/ (function(module, exports) {
@@ -29421,9 +29429,9 @@ BI.TextIconItem = BI.inherit(BI.BasicButton, {
             logic: {
                 dynamic: false
             },
-            cls: "close-ha-font",
             iconHeight: null,
             iconWidth: null,
+            iconCls: "",
             textHgap: 0,
             textVgap: 0,
             textLgap: 0,
@@ -29448,6 +29456,7 @@ BI.TextIconItem = BI.inherit(BI.BasicButton, {
         });
         this.icon = BI.createWidget({
             type: "bi.icon_label",
+            cls: o.iconCls,
             width: o.height,
             height: o.height,
             iconWidth: o.iconWidth,
@@ -29504,6 +29513,7 @@ BI.TextIconItem = BI.inherit(BI.BasicButton, {
 });
 BI.TextIconItem.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.text_icon_item", BI.TextIconItem);
+
 
 /***/ }),
 /* 417 */
