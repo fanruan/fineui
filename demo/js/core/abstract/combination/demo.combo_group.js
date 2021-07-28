@@ -22,6 +22,8 @@ Demo.Func = BI.inherit(BI.Widget, {
             height: 25,
             text: "二月",
             value: 12,
+            iconCls1: "close-ha-font",
+            iconCls2: "close-ha-font",
             children: [{type: "bi.single_select_item", text: "一号", value: 101, height: 25}]
         }]
     }, {
