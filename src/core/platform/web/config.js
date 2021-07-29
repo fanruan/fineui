@@ -98,7 +98,7 @@ BI.prepares.push(function () {
                 scrollx: false
             }, ob, {type: "bi.flex_horizontal"});
         }
-        return BI.extend({}, ob, {type: "bi.htape"});
+        return BI.extend({}, ob, {type: "bi.horizontal_float_fill"});
     });
     BI.Plugin.configWidget("bi.vertical_fill", function (ob) {
         if (isSupportFlex()) {

@@ -20,7 +20,8 @@ BI.InlineLayout = BI.inherit(BI.Layout, {
             lgap: 0,
             rgap: 0,
             tgap: 0,
-            bgap: 0
+            bgap: 0,
+            items: []
         });
     },
 
