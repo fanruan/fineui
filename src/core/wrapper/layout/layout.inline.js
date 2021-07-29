@@ -56,7 +56,7 @@ BI.InlineLayout = BI.inherit(BI.Layout, {
             for (var k = 0; k < i; k++) {
                 left += o.hgap + o.lgap + o.rgap + (o.columnSize[k] || o.items[k].width);
             }
-            for (var k = i + 1; k < o.columnSize.length; k++) {
+            for (var k = i + 1, len = o.columnSize.length || o.items.length; k < len; k++) {
                 right += o.hgap + o.lgap + o.rgap + (o.columnSize[k] || o.items[k].width);
             }
             if (columnSize === "fill") {
