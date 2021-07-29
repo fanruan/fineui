@@ -16,7 +16,6 @@ BI.ColorChooserShowButton = BI.inherit(BI.BasicButton, {
             items: [{
                 el: {
                     type: "bi.icon_label",
-                    cls: o.iconCls,
                     ref: function (_ref) {
                         self.icon = _ref;
                     },
@@ -37,15 +36,6 @@ BI.ColorChooserShowButton = BI.inherit(BI.BasicButton, {
         BI.ColorChooserShowButton.superclass.doClick.apply(this, arguments);
         if (this.isValid()) {
             this.fireEvent(BI.ColorChooserShowButton.EVENT_CHANGE, this);
-        }
-    },
-
-    setSelected: function (b) {
-        BI.ColorChooserShowButton.superclass.setSelected.apply(this, arguments);
-        if (b) {
-            this.icon.element.addClass("active");
-        } else {
-            this.icon.element.removeClass("active");
         }
     },
 });

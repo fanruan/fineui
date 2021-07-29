@@ -65,7 +65,7 @@ BI.HexColorPickerEditor = BI.inherit(BI.Widget, {
                         height: 24,
                         items: [{
                             type: "bi.color_picker_show_button",
-                            iconCls: "trans-color-icon",
+                            cls: "trans-color-icon",
                             height: 22,
                             title: BI.i18nText("BI-Transparent_Color"),
                             text: BI.i18nText("BI-Transparent_Color"),
@@ -94,7 +94,7 @@ BI.HexColorPickerEditor = BI.inherit(BI.Widget, {
                         }, {
                             el: {
                                 type: "bi.color_picker_show_button",
-                                iconCls: "auto-color-icon",
+                                cls: "auto-color-icon",
                                 height: 22,
                                 title: BI.i18nText("BI-Basic_Auto"),
                                 text: BI.i18nText("BI-Basic_Auto"),
