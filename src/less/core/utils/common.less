@@ -496,6 +496,10 @@
 
 // hover-visible的原子化形式
 .bi-hover-visible-container {
+  &:where(:not(&:hover)) .bi-hover-visible-item {
+    display: none;
+  }
+
   & .bi-hover-visible-item {
     visibility: hidden;
   }
