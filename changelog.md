@@ -1,5 +1,6 @@
 # 更新日志
 2.0(2021-07)
+- 修改了颜色选择器交互
 - 新增bi.horizontal_fill、bi.vertical_fill布局
 - 增加module定义插件版本号
 - bubble使用popper.js实现

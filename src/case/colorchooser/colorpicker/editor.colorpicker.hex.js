@@ -8,15 +8,14 @@
 BI.HexColorPickerEditor = BI.inherit(BI.Widget, {
 
     constants: {
-        RGB_WIDTH: 32,
+        RGB_WIDTH: 36,
         HEX_WIDTH: 70,
         HEX_PREFIX_POSITION: 1
     },
 
     props: {
         baseCls: "bi-color-picker-editor",
-        // width: 200,
-        height: 50
+        height: 30
     },
 
     render: function () {
@@ -59,8 +58,68 @@ BI.HexColorPickerEditor = BI.inherit(BI.Widget, {
             items: [{
                 el: {
                     type: "bi.vertical",
-                    tgap: 5,
+                    tgap: 10,
                     items: [{
+                        type: 'bi.vertical_adapt',
+                        columnSize: [0.5, 'fill'],
+                        height: 24,
+                        items: [{
+                            type: "bi.color_picker_show_button",
+                            iconCls: "trans-color-icon",
+                            height: 22,
+                            title: BI.i18nText("BI-Transparent_Color"),
+                            text: BI.i18nText("BI-Transparent_Color"),
+                            listeners: [{
+                                eventName: BI.ColorChooserShowButton.EVENT_CHANGE,
+                                action: function () {
+                                    if (this.isSelected()) {
+                                        self.lastColor = self.getValue();
+                                        self.setValue("transparent");
+                                    } else {
+                                        if (self.lastColor === "transparent") {
+                                            self.lastColor = "";
+                                        }
+                                        self.setValue(self.lastColor || "#ffffff");
+                                    }
+                                    if ((self.R.isValid() && self.G.isValid() && self.B.isValid()) ||
+                                        self._isEmptyRGB()) {
+                                        self.colorShow.element.css("background-color", self.getValue());
+                                        self.fireEvent(BI.ColorPickerEditor.EVENT_CHANGE);
+                                    }
+                                }
+                            }],
+                            ref: function (_ref) {
+                                self.transparent = _ref;
+                            }
+                        }, {
+                            el: {
+                                type: "bi.color_picker_show_button",
+                                iconCls: "auto-color-icon",
+                                height: 22,
+                                title: BI.i18nText("BI-Basic_Auto"),
+                                text: BI.i18nText("BI-Basic_Auto"),
+                                listeners: [{
+                                    eventName: BI.ColorChooserShowButton.EVENT_CHANGE,
+                                    action: function () {
+                                        if (this.isSelected()) {
+                                            self.lastColor = self.getValue();
+                                            self.setValue("");
+                                        } else {
+                                            self.setValue(self.lastColor || "#ffffff");
+                                        }
+                                        if ((self.R.isValid() && self.G.isValid() && self.B.isValid()) || self._isEmptyRGB()) {
+                                            self.colorShow.element.css("background-color", self.getValue());
+                                            self.fireEvent(BI.ColorPickerEditor.EVENT_CHANGE);
+                                        }
+                                    }
+                                }],
+                                ref: function (_ref) {
+                                    self.none = _ref;
+                                }
+                            },
+                            lgap: 10,
+                        }]
+                    }, {
                         type: "bi.vertical_adapt",
                         rgap: 5,
                         items: [{
@@ -100,116 +159,32 @@ BI.HexColorPickerEditor = BI.inherit(BI.Widget, {
 
                                 }
                             }]
-                        }, {
+                        }, RGB[0], {
                             el: BI.extend(Ws[0], {
                                 ref: function (_ref) {
                                     self.R = _ref
                                 }
                             }),
                             width: c.RGB_WIDTH
-                        }, {
+                        }, RGB[1], {
                             el: BI.extend(Ws[1], {
                                 ref: function (_ref) {
                                     self.G = _ref
                                 }
                             }),
                             width: c.RGB_WIDTH
-                        }, {
+                        }, RGB[2], {
                             el: BI.extend(Ws[2], {
                                 ref: function (_ref) {
                                     self.B = _ref
                                 }
                             }),
                             width: c.RGB_WIDTH
-                        }, {
-                            el: {
-                                type: "bi.icon_button",
-                                cls: "trans-color-icon",
-                                width: 16,
-                                height: 16,
-                                iconWidth: 16,
-                                iconHeight: 16,
-                                title: BI.i18nText("BI-Transparent_Color"),
-                                listeners: [{
-                                    eventName: BI.IconButton.EVENT_CHANGE,
-                                    action: function () {
-                                        if (this.isSelected()) {
-                                            self.lastColor = self.getValue();
-                                            self.setValue("transparent");
-                                        } else {
-                                            if (self.lastColor === "transparent") {
-                                                self.lastColor = "";
-                                            }
-                                            self.setValue(self.lastColor || "#ffffff");
-                                        }
-                                        if ((self.R.isValid() && self.G.isValid() && self.B.isValid()) ||
-                                            self._isEmptyRGB()) {
-                                            self.colorShow.element.css("background-color", self.getValue());
-                                            self.fireEvent(BI.ColorPickerEditor.EVENT_CHANGE);
-                                        }
-                                    }
-                                }],
-                                ref: function (_ref) {
-                                    self.transparent = _ref;
-                                }
-                            },
-                            width: 16,
-                            lgap: 5
-                        }, {
-                            el: {
-                                type: "bi.icon_button",
-                                cls: "auto-color-icon",
-                                width: 16,
-                                height: 16,
-                                iconWidth: 16,
-                                iconHeight: 16,
-                                title: BI.i18nText("BI-Basic_Auto"),
-                                listeners: [{
-                                    eventName: BI.IconButton.EVENT_CHANGE,
-                                    action: function () {
-                                        if (this.isSelected()) {
-                                            self.lastColor = self.getValue();
-                                            self.setValue("");
-                                        } else {
-                                            self.setValue(self.lastColor || "#ffffff");
-                                        }
-                                        if ((self.R.isValid() && self.G.isValid() && self.B.isValid()) || self._isEmptyRGB()) {
-                                            self.colorShow.element.css("background-color", self.getValue());
-                                            self.fireEvent(BI.ColorPickerEditor.EVENT_CHANGE);
-                                        }
-                                    }
-                                }],
-                                ref: function (_ref) {
-                                    self.none = _ref;
-                                }
-                            },
-                            width: 16,
-                            lgap: 5
-                        }]
-                    }, {
-                        type: "bi.vertical_adapt",
-                        items: [{
-                            el: {
-                                type: "bi.label",
-                                cls: "color-picker-editor-label",
-                                height: 20,
-                                text: "HEX"
-                            },
-                            lgap: 60
-                        },{
-                            el: RGB[0].el,
-                            lgap: 44
-                        }, {
-                            el: RGB[1].el,
-                            lgap: 28
-                        }, {
-                            el: RGB[2].el,
-                            lgap: 28
                         }]
                     }]
                 },
-                left: 10,
-                right: 10,
+                left: 0,
+                right: 0,
                 top: 0,
                 bottom: 0
             }]

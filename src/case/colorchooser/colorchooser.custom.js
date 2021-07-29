@@ -38,9 +38,9 @@ BI.CustomColorChooser = BI.inherit(BI.Widget, {
                 type: "bi.absolute",
                 items: [{
                     el: this.editor,
-                    left: 0,
+                    left: 10,
                     top: 0,
-                    right: 0
+                    right: 10
                 }],
                 height: 50
             }, {

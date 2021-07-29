@@ -6,15 +6,14 @@
 BI.SimpleHexColorPickerEditor = BI.inherit(BI.Widget, {
 
     constants: {
-        RGB_WIDTH: 40,
+        RGB_WIDTH: 36,
         HEX_WIDTH: 70,
         HEX_PREFIX_POSITION: 1
     },
 
     props: {
         baseCls: "bi-color-picker-editor",
-        // width: 200,
-        height: 50
+        height: 30
     },
 
     render: function () {
@@ -54,10 +53,10 @@ BI.SimpleHexColorPickerEditor = BI.inherit(BI.Widget, {
 
         return {
             type: "bi.vertical",
-            tgap: 5,
+            tgap: 10,
             items: [{
                 type: "bi.vertical_adapt",
-                rgap: 10,
+                rgap: 5,
                 items: [{
                     el: {
                         type: "bi.layout",
@@ -69,8 +68,6 @@ BI.SimpleHexColorPickerEditor = BI.inherit(BI.Widget, {
                         }
                     },
                     width: 16,
-                    lgap: 10,
-                    rgap: 5
                 }, {
                     type: "bi.label",
                     text: "#",
@@ -96,47 +93,27 @@ BI.SimpleHexColorPickerEditor = BI.inherit(BI.Widget, {
                             }
                         }
                     }]
-                }, {
+                }, RGB[0], {
                     el: BI.extend(Ws[0], {
                         ref: function (_ref) {
                             self.R = _ref
                         }
                     }),
                     width: c.RGB_WIDTH
-                }, {
+                }, RGB[1], {
                     el: BI.extend(Ws[1], {
                         ref: function (_ref) {
                             self.G = _ref
                         }
                     }),
                     width: c.RGB_WIDTH
-                }, {
+                }, RGB[2], {
                     el: BI.extend(Ws[2], {
                         ref: function (_ref) {
                             self.B = _ref
                         }
                     }),
                     width: c.RGB_WIDTH
-                }]
-            }, {
-                type: "bi.vertical_adapt",
-                items: [{
-                    el: {
-                        type: "bi.label",
-                        cls: "color-picker-editor-label",
-                        height: 20,
-                        text: "HEX"
-                    },
-                    lgap: 86
-                },{
-                    el: RGB[0].el,
-                    lgap: 50
-                }, {
-                    el: RGB[1].el,
-                    lgap: 40
-                }, {
-                    el: RGB[2].el,
-                    lgap: 40
                 }]
             }]
 
