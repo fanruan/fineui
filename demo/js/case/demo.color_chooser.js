@@ -9,6 +9,9 @@ Demo.Func = BI.inherit(BI.Widget, {
             items: [{
                 el: {
                     type: "bi.color_chooser",
+                    recommendColorsGetter: function () {
+                        return ["#ffffff", "#9d775f", "#dd4b4b", "#ef8b07", "#fcc800"]
+                    },
                     width: 24,
                     height: 24
                 },
