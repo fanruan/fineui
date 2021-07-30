@@ -1,4 +1,4 @@
-/*! time: 2021-7-30 16:21:29 */
+/*! time: 2021-7-30 16:50:15 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -20500,9 +20500,9 @@ BI.shortcut("bi.right_vertical_adapt", BI.RightVerticalAdaptLayout);
  * @extends BI.Layout
  */
 BI.TableAdaptLayout = BI.inherit(BI.Layout, {
-    props: function () {
+    props: function (props) {
         return BI.extend(BI.TableAdaptLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-t-a",
+            baseCls: "bi-t-a" + (props.verticalAlign === BI.VerticalAlign.Stretch ? " bi-h-fill" : ""),
             columnSize: [],
             verticalAlign: BI.VerticalAlign.Top,
             horizontalAlign: BI.HorizontalAlign.Left,
@@ -20542,6 +20542,9 @@ BI.TableAdaptLayout = BI.inherit(BI.Layout, {
         if (!this.hasWidget(this._getChildName(i))) {
             var w = BI._lazyCreateWidget(item);
             w.element.css({position: "relative", top: "0", left: "0", margin: "0px auto"});
+            if (o.verticalAlign === BI.VerticalAlign.Stretch) {
+                w.element.addClass("h-fill-item");
+            }
             td = BI._lazyCreateWidget({
                 type: "bi.default",
                 width: width,
@@ -20942,8 +20945,9 @@ BI.shortcut("bi.vertical_fill", BI.VerticalFillLayout);
 BI.FloatHorizontalFillLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.FloatHorizontalFillLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-h-float-fill",
-            verticalAlign: BI.VerticalAlign.Top,
+            baseCls: "bi-h-float-fill bi-h-fill",
+            horizontalAlign: BI.HorizontalAlign.Stretch,
+            verticalAlign: BI.VerticalAlign.Stretch,
             hgap: 0,
             vgap: 0,
             lgap: 0,
@@ -20971,6 +20975,54 @@ BI.FloatHorizontalFillLayout = BI.inherit(BI.Layout, {
         var self = this, o = this.options;
         items = BI.compact(items);
         var rank = 0;
+
+        function createWidget (i, item, desc) {
+            if (o.verticalAlign !== BI.VerticalAlign.Stretch) {
+                var w = BI._lazyCreateWidget({
+                    type: "bi.vertical_adapt",
+                    horizontalAlign: BI.HorizontalAlign.Stretch,
+                    verticalAlign: o.verticalAlign,
+                    items: [item]
+                });
+            } else {
+                var w = BI._lazyCreateWidget(item);
+            }
+            if (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
+                w.element.css({
+                    "margin-top": (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0)) / BI.pixRatio + BI.pixUnit
+                });
+            }
+            if (desc) {
+                if (o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0) !== 0) {
+                    w.element.css({
+                        "margin-right": ((i === o.items.length - 1 ? o.hgap : 0) + o.rgap + (item.rgap || 0) + (item.hgap || 0)) / BI.pixRatio + BI.pixUnit
+                    });
+                }
+                if (o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0) !== 0) {
+                    w.element.css({
+                        "margin-left": (o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0)) / BI.pixRatio + BI.pixUnit
+                    });
+                }
+            } else {
+                if (o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0) !== 0) {
+                    w.element.css({
+                        "margin-left": ((i === 0 ? o.hgap : 0) + o.lgap + (item.lgap || 0) + (item.hgap || 0)) / BI.pixRatio + BI.pixUnit
+                    });
+                }
+                if (o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0) !== 0) {
+                    w.element.css({
+                        "margin-right": (o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0)) / BI.pixRatio + BI.pixUnit
+                    });
+                }
+            }
+            if (o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0) !== 0) {
+                w.element.css({
+                    "margin-bottom": (o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0)) / BI.pixRatio + BI.pixUnit
+                });
+            }
+            return w;
+        }
+
         BI.any(items, function (i, item) {
             if (BI.isEmptyObject(item)) {
                 return true;
@@ -20979,9 +21031,9 @@ BI.FloatHorizontalFillLayout = BI.inherit(BI.Layout, {
             if (columnSize === "fill") {
                 return true;
             }
-            var w = BI._lazyCreateWidget(item);
+            var w = createWidget(i, item);
             self.addWidget(self._getChildName(rank++), w);
-            w.element.addClass("h-float-fill-item");
+            w.element.addClass("h-fill-item");
             w.element.css({
                 float: "left",
                 position: "relative"
@@ -20995,9 +21047,9 @@ BI.FloatHorizontalFillLayout = BI.inherit(BI.Layout, {
             if (columnSize === "fill") {
                 return true;
             }
-            var w = BI._lazyCreateWidget(item);
+            var w = createWidget(i, item, true);
             self.addWidget(self._getChildName(rank++), w);
-            w.element.addClass("h-float-fill-item");
+            w.element.addClass("h-fill-item");
             w.element.css({
                 float: "right",
                 position: "relative"
@@ -21006,9 +21058,9 @@ BI.FloatHorizontalFillLayout = BI.inherit(BI.Layout, {
         BI.each(items, function (i, item) {
             var columnSize = o.columnSize.length > 0 ? o.columnSize[i] : item.width;
             if (columnSize === "fill") {
-                var w = BI._lazyCreateWidget(item);
+                var w = createWidget(i, item);
                 self.addWidget(self._getChildName(rank++), w);
-                w.element.addClass("h-float-fill-item").css({
+                w.element.addClass("h-fill-item").css({
                     position: "relative"
                 });
             }
@@ -24059,9 +24111,9 @@ BI.shortcut("bi.vtape", BI.VTapeLayout);
  * @extends BI.Layout
  */
 BI.TdLayout = BI.inherit(BI.Layout, {
-    props: function () {
+    props: function (props) {
         return BI.extend(BI.TdLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-td",
+            baseCls: "bi-td" + (props.verticalAlign === BI.VerticalAlign.Stretch ? " bi-h-fill" : ""),
             columnSize: [],
             rowSize: [],
             verticalAlign: BI.VerticalAlign.Middle,
@@ -24144,6 +24196,9 @@ BI.TdLayout = BI.inherit(BI.Layout, {
 
         for (var i = 0; i < arr.length; i++) {
             var w = BI._lazyCreateWidget(arr[i]);
+            if (o.verticalAlign === BI.VerticalAlign.Stretch) {
+                w.element.addClass("h-fill-item");
+            }
             w.element.css({position: "relative", top: "0", left: "0", margin: "0px auto"});
             var item = arr[i];
             if (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
@@ -80846,7 +80901,26 @@ BI.prepares.push(function () {
     });
     BI.Plugin.configWidget("bi.inline", function (ob) {
         // 当列宽既需要自动列宽又需要自适应列宽时，inline布局也处理不了了，降级table处理吧
+        var hasAutoAndFillColumnSize;
         if (ob.columnSize && ob.columnSize.indexOf("") >= 0 && ob.columnSize.indexOf("fill") >= 0) {
+            hasAutoAndFillColumnSize = true;
+        } else {
+            var hasAuto = false, hasFill = false;
+            BI.each(ob.items, function (i, item) {
+                if (item.width === "fill") {
+                    hasFill = true;
+                } else if (BI.isNull(item.width) || item.width === "") {
+                    hasAuto = true;
+                }
+            });
+            hasAutoAndFillColumnSize = hasAuto && hasFill;
+        }
+
+        if (hasAutoAndFillColumnSize) {
+            // 宽度是不是受限
+            if ((ob.scrollable !== true && ob.scrollx !== true) || ob.horizontalAlign === BI.HorizontalAlign.Stretch) {
+                return BI.extend({}, ob, {type: "bi.horizontal_float_fill"});
+            }
             return BI.extend({
                 horizontalAlign: BI.HorizontalAlign.Stretch
             }, ob, {type: "bi.table_adapt"});
@@ -80914,6 +80988,12 @@ BI.prepares.push(function () {
                 verticalAlign: BI.VerticalAlign.Stretch,
                 scrollx: false
             }, ob, {type: "bi.flex_horizontal"});
+        }
+        if ((ob.horizontalAlign && ob.horizontalAlign !== BI.HorizontalAlign.Stretch) || (ob.scrollable === true || ob.scrollx === true)) {
+            // 宽度不受限，要用table布局
+            return BI.extend({
+                horizontalAlign: BI.HorizontalAlign.Stretch
+            }, ob, {type: "bi.table_adapt"});
         }
         return BI.extend({}, ob, {type: "bi.horizontal_float_fill"});
     });
