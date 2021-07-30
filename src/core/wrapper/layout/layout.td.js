@@ -4,9 +4,9 @@
  * @extends BI.Layout
  */
 BI.TdLayout = BI.inherit(BI.Layout, {
-    props: function () {
+    props: function (props) {
         return BI.extend(BI.TdLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-td",
+            baseCls: "bi-td" + (props.verticalAlign === BI.VerticalAlign.Stretch ? " bi-h-fill" : ""),
             columnSize: [],
             rowSize: [],
             verticalAlign: BI.VerticalAlign.Middle,
@@ -89,6 +89,9 @@ BI.TdLayout = BI.inherit(BI.Layout, {
 
         for (var i = 0; i < arr.length; i++) {
             var w = BI._lazyCreateWidget(arr[i]);
+            if (o.verticalAlign === BI.VerticalAlign.Stretch) {
+                w.element.addClass("h-fill-item");
+            }
             w.element.css({position: "relative", top: "0", left: "0", margin: "0px auto"});
             var item = arr[i];
             if (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
