@@ -1,4 +1,4 @@
-/*! time: 2021-7-28 22:50:57 */
+/*! time: 2021-7-30 16:21:29 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -82,7 +82,7 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 1278);
+/******/ 	return __webpack_require__(__webpack_require__.s = 1283);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -2928,7 +2928,7 @@ BI.Req = {
 
 /***/ }),
 
-/***/ 1136:
+/***/ 1141:
 /***/ (function(module, exports) {
 
 BI.i18n = {
@@ -3128,12 +3128,13 @@ BI.i18n = {
     "BI-Basic_Year_Range_Error": "请选择{R1}年-{R2}年的日期",
     "BI-Basic_Year_Month_Range_Error": "请选择{R1}年{R2}月-{R3}年{R4}月的日期",
     "BI-Basic_Year_Quarter_Range_Error": "请选择{R1}年{R2}季度-{R3}年{R4}季度的日期",
-    "BI-Basic_Search_And_Patch_Paste": "搜索，支持批量粘贴、粘贴值通过换行识别"
+    "BI-Basic_Search_And_Patch_Paste": "搜索，支持批量粘贴、粘贴值通过换行识别",
+    "BI-Basic_Recommend_Color": "推荐色"
 };
 
 /***/ }),
 
-/***/ 1278:
+/***/ 1283:
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(91);
@@ -3152,8 +3153,8 @@ __webpack_require__(97);
 __webpack_require__(98);
 __webpack_require__(108);
 __webpack_require__(109);
-__webpack_require__(1136);
-__webpack_require__(1279);
+__webpack_require__(1141);
+__webpack_require__(1284);
 __webpack_require__(110);
 __webpack_require__(111);
 module.exports = __webpack_require__(112);
@@ -3161,7 +3162,7 @@ module.exports = __webpack_require__(112);
 
 /***/ }),
 
-/***/ 1279:
+/***/ 1284:
 /***/ (function(module, exports) {
 
 /**
@@ -5487,7 +5488,7 @@ if (!_global.BI) {
                             }
                         }
                         if (findVersion === true) {
-                            _global.console && console.error("moduleId: [" + module.moduleId + "] 接口: [" + type + "] 接口版本: [" + version + "] 已过期，版本要求为：", dependencies[module.moduleId], "=>",  moduleInjection[module.moduleId]);
+                            _global.console && console.error("moduleId: [" + module.moduleId + "] 接口: [" + type + "] 接口版本: [" + version + "] 已过期，版本要求为：", dependencies[module.moduleId], "=>", moduleInjection[module.moduleId]);
                             continue;
                         }
                     }
@@ -5573,7 +5574,7 @@ if (!_global.BI) {
 
     BI.Constants = BI.Constants || {
         getConstant: function (type) {
-            if (!constantInjection[type]) {
+            if (BI.isNull(constantInjection[type])) {
                 _global.console && console.error("constant: [" + type + "] 未定义");
             }
             return constantInjection[type];
@@ -5707,7 +5708,7 @@ if (!_global.BI) {
     };
 
     BI.getResource = BI.getResource || function (type, config) {
-        if (constantInjection[type]) {
+        if (BI.isNotNull(constantInjection[type])) {
             return BI.Constants.getConstant(type);
         }
         if (modelInjection[type]) {
