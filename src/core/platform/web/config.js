@@ -120,7 +120,8 @@ BI.prepares.push(function () {
         if ((ob.horizontalAlign && ob.horizontalAlign !== BI.HorizontalAlign.Stretch) || (ob.scrollable === true || ob.scrollx === true)) {
             // 宽度不受限，要用table布局
             return BI.extend({
-                horizontalAlign: BI.HorizontalAlign.Stretch
+                horizontalAlign: BI.HorizontalAlign.Stretch,
+                verticalAlign: BI.VerticalAlign.Stretch,
             }, ob, {type: "bi.table_adapt"});
         }
         return BI.extend({}, ob, {type: "bi.horizontal_float_fill"});
