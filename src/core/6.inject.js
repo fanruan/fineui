@@ -126,7 +126,7 @@
                             }
                         }
                         if (findVersion === true) {
-                            _global.console && console.error("moduleId: [" + module.moduleId + "] 接口: [" + type + "] 接口版本: [" + version + "] 已过期，版本要求为：", dependencies[module.moduleId], "=>",  moduleInjection[module.moduleId]);
+                            _global.console && console.error("moduleId: [" + module.moduleId + "] 接口: [" + type + "] 接口版本: [" + version + "] 已过期，版本要求为：", dependencies[module.moduleId], "=>", moduleInjection[module.moduleId]);
                             continue;
                         }
                     }
@@ -212,7 +212,7 @@
 
     BI.Constants = BI.Constants || {
         getConstant: function (type) {
-            if (!constantInjection[type]) {
+            if (BI.isNull(constantInjection[type])) {
                 _global.console && console.error("constant: [" + type + "] 未定义");
             }
             return constantInjection[type];
@@ -346,7 +346,7 @@
     };
 
     BI.getResource = BI.getResource || function (type, config) {
-        if (constantInjection[type]) {
+        if (BI.isNotNull(constantInjection[type])) {
             return BI.Constants.getConstant(type);
         }
         if (modelInjection[type]) {
