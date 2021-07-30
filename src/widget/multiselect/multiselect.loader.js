@@ -37,6 +37,7 @@ BI.MultiSelectLoader = BI.inherit(BI.Widget, {
             toolbar: {
                 type: "bi.multi_select_bar",
                 cls: "bi-list-item-active",
+                height: this.options.itemHeight || BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT,
                 iconWrapperWidth: 36
             },
             el: BI.extend({
