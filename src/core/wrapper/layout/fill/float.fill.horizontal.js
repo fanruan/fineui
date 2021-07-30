@@ -43,7 +43,7 @@ BI.FloatHorizontalFillLayout = BI.inherit(BI.Layout, {
             w.element.addClass("h-float-fill-item");
             w.element.css({
                 float: "left",
-                position: "relative",
+                position: "relative"
             });
         });
         BI.backAny(items, function (i, item) {
@@ -59,7 +59,7 @@ BI.FloatHorizontalFillLayout = BI.inherit(BI.Layout, {
             w.element.addClass("h-float-fill-item");
             w.element.css({
                 float: "right",
-                position: "relative",
+                position: "relative"
             });
         });
         BI.each(items, function (i, item) {
@@ -68,7 +68,7 @@ BI.FloatHorizontalFillLayout = BI.inherit(BI.Layout, {
                 var w = BI._lazyCreateWidget(item);
                 self.addWidget(self._getChildName(rank++), w);
                 w.element.addClass("h-float-fill-item").css({
-                    position: "relative",
+                    position: "relative"
                 });
             }
         });
