@@ -1,4 +1,4 @@
-/*! time: 2021-7-30 16:50:15 */
+/*! time: 2021-7-30 20:20:29 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -78453,7 +78453,8 @@ BI.prepares.push(function () {
         if ((ob.horizontalAlign && ob.horizontalAlign !== BI.HorizontalAlign.Stretch) || (ob.scrollable === true || ob.scrollx === true)) {
             // 宽度不受限，要用table布局
             return BI.extend({
-                horizontalAlign: BI.HorizontalAlign.Stretch
+                horizontalAlign: BI.HorizontalAlign.Stretch,
+                verticalAlign: BI.VerticalAlign.Stretch,
             }, ob, {type: "bi.table_adapt"});
         }
         return BI.extend({}, ob, {type: "bi.horizontal_float_fill"});
