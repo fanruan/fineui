@@ -1,4 +1,4 @@
-/*! time: 2021-7-30 21:00:15 */
+/*! time: 2021-7-30 23:30:15 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -78382,9 +78382,11 @@ BI.prepares.push(function () {
     });
     BI.Plugin.configWidget("bi.inline", function (ob) {
         // 当列宽既需要自动列宽又需要自适应列宽时，inline布局也处理不了了，降级table处理吧
-        var hasAutoAndFillColumnSize;
-        if (ob.columnSize && ob.columnSize.indexOf("") >= 0 && ob.columnSize.indexOf("fill") >= 0) {
-            hasAutoAndFillColumnSize = true;
+        var hasAutoAndFillColumnSize = false;
+        if (ob.columnSize && ob.columnSize.length > 0) {
+            if (ob.columnSize && ob.columnSize.indexOf("") >= 0 && ob.columnSize.indexOf("fill") >= 0) {
+                hasAutoAndFillColumnSize = true;
+            }
         } else {
             var hasAuto = false, hasFill = false;
             BI.each(ob.items, function (i, item) {
@@ -78474,7 +78476,7 @@ BI.prepares.push(function () {
             // 宽度不受限，要用table布局
             return BI.extend({
                 horizontalAlign: BI.HorizontalAlign.Stretch,
-                verticalAlign: BI.VerticalAlign.Stretch,
+                verticalAlign: BI.VerticalAlign.Stretch
             }, ob, {type: "bi.table_adapt"});
         }
         return BI.extend({}, ob, {type: "bi.horizontal_float_fill"});
