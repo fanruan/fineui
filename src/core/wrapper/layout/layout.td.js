@@ -122,7 +122,7 @@ BI.TdLayout = BI.inherit(BI.Layout, {
                     ((columnSize * 100).toFixed(1) + "%")
                     : (columnSize + (i === 0 ? o.hgap : 0) + o.hgap + o.lgap + o.rgap);
             }
-            if (columnSize === "" && o.columnSize.indexOf("fill") >= 0) {
+            if ((BI.isNull(columnSize) || columnSize === "") && o.columnSize.indexOf("fill") >= 0) {
                 width = 2;
             }
             var td = BI._lazyCreateWidget({
