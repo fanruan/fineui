@@ -122,7 +122,17 @@ BI.TdLayout = BI.inherit(BI.Layout, {
                     ((columnSize * 100).toFixed(1) + "%")
                     : (columnSize + (i === 0 ? o.hgap : 0) + o.hgap + o.lgap + o.rgap);
             }
-            if ((BI.isNull(columnSize) || columnSize === "") && o.columnSize.indexOf("fill") >= 0) {
+            function hasFill() {
+                if (o.columnSize.length > 0) {
+                    return o.columnSize.indexOf("fill") >= 0;
+                }
+                return BI.some(arr, function (i, item) {
+                    if (item.width === "fill") {
+                        return true;
+                    }
+                });
+            }
+            if ((BI.isNull(columnSize) || columnSize === "") && hasFill()) {
                 width = 2;
             }
             var td = BI._lazyCreateWidget({
