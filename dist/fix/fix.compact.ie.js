@@ -93,15 +93,15 @@
         }
     }
 
-    _.each(["populate", "addItems", "prependItems"], function (name) {
-        var old = BI.Loader.prototype[name];
-        BI.Loader.prototype[name] = function () {
-            BI.Widget.pushContext(this);
-            var result = old.apply(this, arguments);
-            BI.Widget.popContext();
-            return result;
-        };
-    });
+    // _.each(["populate", "addItems", "prependItems"], function (name) {
+    //     var old = BI.Loader.prototype[name];
+    //     BI.Loader.prototype[name] = function () {
+    //         BI.Widget.pushContext(this);
+    //         var result = old.apply(this, arguments);
+    //         BI.Widget.popContext();
+    //         return result;
+    //     };
+    // });
 
     function createStore () {
         var needPop = false;

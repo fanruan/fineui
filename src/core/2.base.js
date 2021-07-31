@@ -84,7 +84,7 @@ if (!_global.BI) {
                 options || (options = {});
             }
             return BI.map(BI.flatten(items), function (i, item) {
-                return BI.createWidget(item, BI.deepClone(options));
+                return BI.createWidget(item, BI.deepClone(options), context);
             });
         },
 

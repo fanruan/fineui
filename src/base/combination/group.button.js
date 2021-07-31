@@ -40,7 +40,7 @@ BI.ButtonGroup = BI.inherit(BI.Widget, {
         var o = this.options;
         return BI.createWidgets(BI.createItems(items, {
             type: "bi.text_button"
-        }));
+        }), this);
     },
 
     _btnsCreator: function (items) {
