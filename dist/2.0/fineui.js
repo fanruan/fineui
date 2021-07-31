@@ -1,4 +1,4 @@
-/*! time: 2021-7-31 12:10:43 */
+/*! time: 2021-7-31 21:10:39 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -20992,6 +20992,7 @@ BI.FloatHorizontalFillLayout = BI.inherit(BI.Layout, {
                     type: "bi.vertical_adapt",
                     horizontalAlign: BI.HorizontalAlign.Stretch,
                     verticalAlign: o.verticalAlign,
+                    columnSize: ["fill"],
                     items: [item]
                 });
             } else {
@@ -80923,7 +80924,7 @@ BI.prepares.push(function () {
         // 当列宽既需要自动列宽又需要自适应列宽时，inline布局也处理不了了，降级table处理吧
         var hasAutoAndFillColumnSize = false;
         if (ob.columnSize && ob.columnSize.length > 0) {
-            if (ob.columnSize && ob.columnSize.indexOf("") >= 0 && ob.columnSize.indexOf("fill") >= 0) {
+            if (ob.columnSize.indexOf("") >= 0 && ob.columnSize.indexOf("fill") >= 0) {
                 hasAutoAndFillColumnSize = true;
             }
         } else {
