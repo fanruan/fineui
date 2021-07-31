@@ -38,6 +38,7 @@ BI.FloatHorizontalFillLayout = BI.inherit(BI.Layout, {
                     type: "bi.vertical_adapt",
                     horizontalAlign: BI.HorizontalAlign.Stretch,
                     verticalAlign: o.verticalAlign,
+                    columnSize: ["fill"],
                     items: [item]
                 });
             } else {
