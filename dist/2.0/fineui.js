@@ -1,4 +1,4 @@
-/*! time: 2021-7-30 23:30:15 */
+/*! time: 2021-7-31 12:10:43 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -2504,7 +2504,7 @@ if (!_global.BI) {
                 options || (options = {});
             }
             return BI.map(BI.flatten(items), function (i, item) {
-                return BI.createWidget(item, BI.deepClone(options));
+                return BI.createWidget(item, BI.deepClone(options), context);
             });
         },
 
@@ -26362,7 +26362,7 @@ BI.ButtonGroup = BI.inherit(BI.Widget, {
         var o = this.options;
         return BI.createWidgets(BI.createItems(items, {
             type: "bi.text_button"
-        }));
+        }), this);
     },
 
     _btnsCreator: function (items) {
@@ -100714,19 +100714,19 @@ module.exports = function (exec) {
         }
     }
 
-    _.each(["populate", "addItems", "prependItems"], function (name) {
-        var old = BI.Loader.prototype[name];
-        BI.Loader.prototype[name] = function () {
-            BI.Widget.pushContext(this);
-            try {
-                var result = old.apply(this, arguments);
-            } catch (e) {
-                console.error(e);
-            }
-            BI.Widget.popContext();
-            return result;
-        };
-    });
+    // _.each(["populate", "addItems", "prependItems"], function (name) {
+    //     var old = BI.Loader.prototype[name];
+    //     BI.Loader.prototype[name] = function () {
+    //         BI.Widget.pushContext(this);
+    //         try {
+    //             var result = old.apply(this, arguments);
+    //         } catch (e) {
+    //             console.error(e);
+    //         }
+    //         BI.Widget.popContext();
+    //         return result;
+    //     };
+    // });
 
     function createStore () {
         var needPop = false;

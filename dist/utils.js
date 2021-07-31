@@ -1,4 +1,4 @@
-/*! time: 2021-7-30 23:30:15 */
+/*! time: 2021-7-31 12:10:43 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -3716,7 +3716,7 @@ if (!_global.BI) {
                 options || (options = {});
             }
             return BI.map(BI.flatten(items), function (i, item) {
-                return BI.createWidget(item, BI.deepClone(options));
+                return BI.createWidget(item, BI.deepClone(options), context);
             });
         },
 
