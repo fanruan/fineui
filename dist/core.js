@@ -1,4 +1,4 @@
-/*! time: 2021-8-1 9:30:16 */
+/*! time: 2021-8-1 21:38:19 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -14570,7 +14570,7 @@ BI.HorizontalFillLayoutLogic = BI.inherit(BI.Logic, {
             columnSize.push(item.width || 0);
         });
         if (o.dynamic) {
-            layout = "bi.horizontal_adapt";
+            layout = "bi.horizontal_fill";
         } else {
             layout = "bi.htape";
         }
