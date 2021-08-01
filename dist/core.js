@@ -1,4 +1,4 @@
-/*! time: 2021-7-31 21:10:39 */
+/*! time: 2021-8-1 9:00:15 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -59236,6 +59236,7 @@ BI.MultiSelectLoader = BI.inherit(BI.Widget, {
             toolbar: {
                 type: "bi.multi_select_bar",
                 cls: "bi-list-item-active",
+                height: this.options.itemHeight || BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT,
                 iconWrapperWidth: 36
             },
             el: BI.extend({
@@ -74017,7 +74018,6 @@ BI.shortcut("bi.dynamic_year_month_trigger", BI.DynamicYearMonthTrigger);
 
 BI.YearMonthInterval = BI.inherit(BI.Single, {
     constants: {
-        height: 24,
         width: 25,
         lgap: 15,
         offset: -15,
@@ -74029,6 +74029,7 @@ BI.YearMonthInterval = BI.inherit(BI.Single, {
         minDate: "1900-01-01",
         maxDate: "2099-12-31",
         supportDynamic: true,
+        height: 24
     },
 
     _init: function () {
@@ -74040,7 +74041,7 @@ BI.YearMonthInterval = BI.inherit(BI.Single, {
         this.right = this._createCombo(o.value.end);
         this.label = BI.createWidget({
             type: "bi.label",
-            height: this.constants.height,
+            height: o.height,
             width: this.constants.width,
             text: "-"
         });
@@ -74048,7 +74049,7 @@ BI.YearMonthInterval = BI.inherit(BI.Single, {
             element: self,
             type: "bi.center",
             hgap: 15,
-            height: this.constants.height,
+            height: o.height,
             items: [{
                 type: "bi.absolute",
                 items: [{
@@ -74083,6 +74084,7 @@ BI.YearMonthInterval = BI.inherit(BI.Single, {
         var combo = BI.createWidget({
             type: "bi.dynamic_year_month_combo",
             supportDynamic: o.supportDynamic,
+            height: o.height,
             minDate: o.minDate,
             maxDate: o.maxDate,
             behaviors: o.behaviors,
