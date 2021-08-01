@@ -1,4 +1,4 @@
-/*! time: 2021-8-1 9:00:15 */
+/*! time: 2021-8-1 9:30:16 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -78464,7 +78464,22 @@ BI.prepares.push(function () {
         if (isSupportFlex()) {
             return BI.extend({}, ob, {type: "bi.flex_horizontal_adapt"});
         }
-        return BI.extend({}, ob, {type: "bi.inline_horizontal_adapt"});
+        if (ob.items && ob.items.length <= 1) {
+            return BI.extend({}, ob, {type: "bi.inline_horizontal_adapt"});
+        }
+        return BI.extend({}, ob, {
+            type: "bi.inline_horizontal_adapt",
+            vgap: 0,
+            tgap: 0,
+            bgap: 0,
+            items: [{
+                type: "bi.vertical",
+                vgap: ob.vgap,
+                tgap: ob.tgap,
+                bgap: ob.bgap,
+                items: ob.items
+            }]
+        });
     });
 
     BI.Plugin.configWidget("bi.horizontal_fill", function (ob) {
