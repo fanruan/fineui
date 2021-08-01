@@ -39,13 +39,20 @@
 
     var Child = BI.inherit(BI.Widget, {
         setup: function () {
+            var label
             var store = BI.useStore(function () {
                 return BI.Models.getModel("demo.child_model");
+            });
+            BI.watch("text", function (text) {
+                label.setText(text)
             });
             return {
                 render: function () {
                     return {
                         type: "bi.label",
+                        ref: function (_ref) {
+                            label = _ref;
+                        },
                         text: store.model.text
                     };
                 }

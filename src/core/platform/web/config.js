@@ -29,9 +29,11 @@ BI.prepares.push(function () {
     });
     BI.Plugin.configWidget("bi.inline", function (ob) {
         // 当列宽既需要自动列宽又需要自适应列宽时，inline布局也处理不了了，降级table处理吧
-        var hasAutoAndFillColumnSize;
-        if (ob.columnSize && ob.columnSize.indexOf("") >= 0 && ob.columnSize.indexOf("fill") >= 0) {
-            hasAutoAndFillColumnSize = true;
+        var hasAutoAndFillColumnSize = false;
+        if (ob.columnSize && ob.columnSize.length > 0) {
+            if (ob.columnSize.indexOf("") >= 0 && ob.columnSize.indexOf("fill") >= 0) {
+                hasAutoAndFillColumnSize = true;
+            }
         } else {
             var hasAuto = false, hasFill = false;
             BI.each(ob.items, function (i, item) {
@@ -106,7 +108,22 @@ BI.prepares.push(function () {
         if (isSupportFlex()) {
             return BI.extend({}, ob, {type: "bi.flex_horizontal_adapt"});
         }
-        return BI.extend({}, ob, {type: "bi.inline_horizontal_adapt"});
+        if (ob.items && ob.items.length <= 1) {
+            return BI.extend({}, ob, {type: "bi.inline_horizontal_adapt"});
+        }
+        return BI.extend({}, ob, {
+            type: "bi.inline_horizontal_adapt",
+            vgap: 0,
+            tgap: 0,
+            bgap: 0,
+            items: [{
+                type: "bi.vertical",
+                vgap: ob.vgap,
+                tgap: ob.tgap,
+                bgap: ob.bgap,
+                items: ob.items
+            }]
+        });
     });
 
     BI.Plugin.configWidget("bi.horizontal_fill", function (ob) {
@@ -120,7 +137,8 @@ BI.prepares.push(function () {
         if ((ob.horizontalAlign && ob.horizontalAlign !== BI.HorizontalAlign.Stretch) || (ob.scrollable === true || ob.scrollx === true)) {
             // 宽度不受限，要用table布局
             return BI.extend({
-                horizontalAlign: BI.HorizontalAlign.Stretch
+                horizontalAlign: BI.HorizontalAlign.Stretch,
+                verticalAlign: BI.VerticalAlign.Stretch
             }, ob, {type: "bi.table_adapt"});
         }
         return BI.extend({}, ob, {type: "bi.horizontal_float_fill"});

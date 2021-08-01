@@ -1,4 +1,4 @@
-/*! time: 2021-7-30 16:50:15 */
+/*! time: 2021-8-1 9:30:16 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -821,7 +821,7 @@ if (!_global.BI) {
                 options || (options = {});
             }
             return BI.map(BI.flatten(items), function (i, item) {
-                return BI.createWidget(item, BI.deepClone(options));
+                return BI.createWidget(item, BI.deepClone(options), context);
             });
         },
 
@@ -17997,7 +17997,17 @@ BI.TableAdaptLayout = BI.inherit(BI.Layout, {
                 ((columnSize * 100).toFixed(1) + "%")
                 : (columnSize + (i === 0 ? o.hgap : 0) + o.hgap + o.lgap + o.rgap);
         }
-        if (columnSize === "" && o.columnSize.indexOf("fill") >= 0) {
+        function hasFill() {
+            if (o.columnSize.length > 0) {
+                return o.columnSize.indexOf("fill") >= 0;
+            }
+            return BI.some(o.items, function (i, item) {
+                if (item.width === "fill") {
+                    return true;
+                }
+            });
+        }
+        if ((BI.isNull(columnSize) || columnSize === "") && hasFill()) {
             width = 2;
         }
         if (!this.hasWidget(this._getChildName(i))) {
@@ -18443,6 +18453,7 @@ BI.FloatHorizontalFillLayout = BI.inherit(BI.Layout, {
                     type: "bi.vertical_adapt",
                     horizontalAlign: BI.HorizontalAlign.Stretch,
                     verticalAlign: o.verticalAlign,
+                    columnSize: ["fill"],
                     items: [item]
                 });
             } else {
@@ -21690,7 +21701,17 @@ BI.TdLayout = BI.inherit(BI.Layout, {
                     ((columnSize * 100).toFixed(1) + "%")
                     : (columnSize + (i === 0 ? o.hgap : 0) + o.hgap + o.lgap + o.rgap);
             }
-            if (columnSize === "" && o.columnSize.indexOf("fill") >= 0) {
+            function hasFill() {
+                if (o.columnSize.length > 0) {
+                    return o.columnSize.indexOf("fill") >= 0;
+                }
+                return BI.some(arr, function (i, item) {
+                    if (item.width === "fill") {
+                        return true;
+                    }
+                });
+            }
+            if ((BI.isNull(columnSize) || columnSize === "") && hasFill()) {
                 width = 2;
             }
             var td = BI._lazyCreateWidget({
@@ -23803,7 +23824,7 @@ BI.ButtonGroup = BI.inherit(BI.Widget, {
         var o = this.options;
         return BI.createWidgets(BI.createItems(items, {
             type: "bi.text_button"
-        }));
+        }), this);
     },
 
     _btnsCreator: function (items) {
@@ -56676,6 +56697,7 @@ BI.MultiSelectLoader = BI.inherit(BI.Widget, {
             toolbar: {
                 type: "bi.multi_select_bar",
                 cls: "bi-list-item-active",
+                height: this.options.itemHeight || BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT,
                 iconWrapperWidth: 36
             },
             el: BI.extend({
@@ -71457,7 +71479,6 @@ BI.shortcut("bi.dynamic_year_month_trigger", BI.DynamicYearMonthTrigger);
 
 BI.YearMonthInterval = BI.inherit(BI.Single, {
     constants: {
-        height: 24,
         width: 25,
         lgap: 15,
         offset: -15,
@@ -71469,6 +71490,7 @@ BI.YearMonthInterval = BI.inherit(BI.Single, {
         minDate: "1900-01-01",
         maxDate: "2099-12-31",
         supportDynamic: true,
+        height: 24
     },
 
     _init: function () {
@@ -71480,7 +71502,7 @@ BI.YearMonthInterval = BI.inherit(BI.Single, {
         this.right = this._createCombo(o.value.end);
         this.label = BI.createWidget({
             type: "bi.label",
-            height: this.constants.height,
+            height: o.height,
             width: this.constants.width,
             text: "-"
         });
@@ -71488,7 +71510,7 @@ BI.YearMonthInterval = BI.inherit(BI.Single, {
             element: self,
             type: "bi.center",
             hgap: 15,
-            height: this.constants.height,
+            height: o.height,
             items: [{
                 type: "bi.absolute",
                 items: [{
@@ -71523,6 +71545,7 @@ BI.YearMonthInterval = BI.inherit(BI.Single, {
         var combo = BI.createWidget({
             type: "bi.dynamic_year_month_combo",
             supportDynamic: o.supportDynamic,
+            height: o.height,
             minDate: o.minDate,
             maxDate: o.maxDate,
             behaviors: o.behaviors,
@@ -78362,9 +78385,11 @@ BI.prepares.push(function () {
     });
     BI.Plugin.configWidget("bi.inline", function (ob) {
         // 当列宽既需要自动列宽又需要自适应列宽时，inline布局也处理不了了，降级table处理吧
-        var hasAutoAndFillColumnSize;
-        if (ob.columnSize && ob.columnSize.indexOf("") >= 0 && ob.columnSize.indexOf("fill") >= 0) {
-            hasAutoAndFillColumnSize = true;
+        var hasAutoAndFillColumnSize = false;
+        if (ob.columnSize && ob.columnSize.length > 0) {
+            if (ob.columnSize.indexOf("") >= 0 && ob.columnSize.indexOf("fill") >= 0) {
+                hasAutoAndFillColumnSize = true;
+            }
         } else {
             var hasAuto = false, hasFill = false;
             BI.each(ob.items, function (i, item) {
@@ -78439,7 +78464,22 @@ BI.prepares.push(function () {
         if (isSupportFlex()) {
             return BI.extend({}, ob, {type: "bi.flex_horizontal_adapt"});
         }
-        return BI.extend({}, ob, {type: "bi.inline_horizontal_adapt"});
+        if (ob.items && ob.items.length <= 1) {
+            return BI.extend({}, ob, {type: "bi.inline_horizontal_adapt"});
+        }
+        return BI.extend({}, ob, {
+            type: "bi.inline_horizontal_adapt",
+            vgap: 0,
+            tgap: 0,
+            bgap: 0,
+            items: [{
+                type: "bi.vertical",
+                vgap: ob.vgap,
+                tgap: ob.tgap,
+                bgap: ob.bgap,
+                items: ob.items
+            }]
+        });
     });
 
     BI.Plugin.configWidget("bi.horizontal_fill", function (ob) {
@@ -78453,7 +78493,8 @@ BI.prepares.push(function () {
         if ((ob.horizontalAlign && ob.horizontalAlign !== BI.HorizontalAlign.Stretch) || (ob.scrollable === true || ob.scrollx === true)) {
             // 宽度不受限，要用table布局
             return BI.extend({
-                horizontalAlign: BI.HorizontalAlign.Stretch
+                horizontalAlign: BI.HorizontalAlign.Stretch,
+                verticalAlign: BI.VerticalAlign.Stretch
             }, ob, {type: "bi.table_adapt"});
         }
         return BI.extend({}, ob, {type: "bi.horizontal_float_fill"});
@@ -97088,19 +97129,19 @@ BI.shortcut("bi.simple_tree", BI.SimpleTreeView);
         }
     }
 
-    _.each(["populate", "addItems", "prependItems"], function (name) {
-        var old = BI.Loader.prototype[name];
-        BI.Loader.prototype[name] = function () {
-            BI.Widget.pushContext(this);
-            try {
-                var result = old.apply(this, arguments);
-            } catch (e) {
-                console.error(e);
-            }
-            BI.Widget.popContext();
-            return result;
-        };
-    });
+    // _.each(["populate", "addItems", "prependItems"], function (name) {
+    //     var old = BI.Loader.prototype[name];
+    //     BI.Loader.prototype[name] = function () {
+    //         BI.Widget.pushContext(this);
+    //         try {
+    //             var result = old.apply(this, arguments);
+    //         } catch (e) {
+    //             console.error(e);
+    //         }
+    //         BI.Widget.popContext();
+    //         return result;
+    //     };
+    // });
 
     function createStore () {
         var needPop = false;
