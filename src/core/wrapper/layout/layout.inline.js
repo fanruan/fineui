@@ -52,13 +52,13 @@ BI.InlineLayout = BI.inherit(BI.Layout, {
         });
         w.element.addClass("i-item");
         if (columnSize === "fill" || columnSize === "") {
-            var left = o.hgap + (item.lgap || 0) + (item.hgap || 0),
-                right = o.hgap + (item.rgap || 0) + (item.hgap || 0);
+            var left = o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0),
+                right = o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0);
             for (var k = 0; k < i; k++) {
-                left += o.hgap + o.lgap + o.rgap + (o.columnSize[k] || o.items[k].width);
+                left += o.hgap + o.lgap + o.rgap + (o.items[k].lgap || 0) + (o.items[k].rgap || 0) + (o.items[k].hgap || 0) + (o.columnSize[k] || o.items[k].width);
             }
             for (var k = i + 1, len = o.columnSize.length || o.items.length; k < len; k++) {
-                right += o.hgap + o.lgap + o.rgap + (o.columnSize[k] || o.items[k].width);
+                right += o.hgap + o.lgap + o.rgap + (o.items[k].lgap || 0) + (o.items[k].rgap || 0) + (o.items[k].hgap || 0) + (o.columnSize[k] || o.items[k].width);
             }
             if (columnSize === "fill") {
                 w.element.css("min-width", "calc(100% - " + ((left + right) / BI.pixRatio + BI.pixUnit) + ")");
@@ -68,8 +68,8 @@ BI.InlineLayout = BI.inherit(BI.Layout, {
             }
         }
         if (o.verticalAlign === BI.VerticalAlign.Stretch) {
-            var top = o.vgap + (item.tgap || 0) + (item.vgap || 0),
-                bottom = o.vgap + (item.bgap || 0) + (item.vgap || 0);
+            var top = o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0),
+                bottom = o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0);
             w.element.css("height", "calc(100% - " + ((top + bottom) / BI.pixRatio + BI.pixUnit) + ")");
         }
         if (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {

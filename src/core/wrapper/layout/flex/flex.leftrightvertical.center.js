@@ -57,7 +57,9 @@ BI.FlexLeftRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
         return leftItems.concat({
             el: {
                 type: "bi.flex_vertical_adapt",
-                cls: "flex-left-auto",
+                css: {
+                    "margin-left": "auto"
+                },
                 hgap: o.rhgap,
                 vgap: o.rvgap,
                 lgap: o.rlgap,
