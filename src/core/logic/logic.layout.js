@@ -174,7 +174,7 @@ BI.HorizontalFillLayoutLogic = BI.inherit(BI.Logic, {
             columnSize.push(item.width || 0);
         });
         if (o.dynamic) {
-            layout = "bi.horizontal_adapt";
+            layout = "bi.horizontal_fill";
         } else {
             layout = "bi.htape";
         }

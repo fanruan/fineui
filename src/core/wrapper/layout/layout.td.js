@@ -4,9 +4,9 @@
  * @extends BI.Layout
  */
 BI.TdLayout = BI.inherit(BI.Layout, {
-    props: function (props) {
+    props: function () {
         return BI.extend(BI.TdLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-td" + (props.verticalAlign === BI.VerticalAlign.Stretch ? " bi-h-fill" : ""),
+            baseCls: "bi-td",
             columnSize: [],
             rowSize: [],
             verticalAlign: BI.VerticalAlign.Middle,
@@ -90,7 +90,9 @@ BI.TdLayout = BI.inherit(BI.Layout, {
         for (var i = 0; i < arr.length; i++) {
             var w = BI._lazyCreateWidget(arr[i]);
             if (o.verticalAlign === BI.VerticalAlign.Stretch) {
-                w.element.addClass("h-fill-item");
+                var top = o.vgap + o.tgap + (arr[i].tgap || 0) + (arr[i].vgap || 0),
+                    bottom = o.vgap + o.bgap + (arr[i].bgap || 0) + (arr[i].vgap || 0);
+                w.element.css("height", "calc(100% - " + ((top + bottom) / BI.pixRatio + BI.pixUnit) + ")");
             }
             w.element.css({position: "relative", top: "0", left: "0", margin: "0px auto"});
             var item = arr[i];
