@@ -1,7 +1,7 @@
 BI.FloatHorizontalFillLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.FloatHorizontalFillLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-h-float-fill bi-h-fill",
+            baseCls: "bi-h-float-fill",
             horizontalAlign: BI.HorizontalAlign.Stretch,
             verticalAlign: BI.VerticalAlign.Stretch,
             hgap: 0,
@@ -77,6 +77,12 @@ BI.FloatHorizontalFillLayout = BI.inherit(BI.Layout, {
                     "margin-bottom": (o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0)) / BI.pixRatio + BI.pixUnit
                 });
             }
+            var top = o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0),
+                bottom = o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0);
+            w.element.css({
+                height: "calc(100% - " + ((top + bottom) / BI.pixRatio + BI.pixUnit) + ")",
+                position: "relative"
+            });
             return w;
         }
 
@@ -90,10 +96,8 @@ BI.FloatHorizontalFillLayout = BI.inherit(BI.Layout, {
             }
             var w = createWidget(i, item);
             self.addWidget(self._getChildName(rank++), w);
-            w.element.addClass("h-fill-item");
             w.element.css({
-                float: "left",
-                position: "relative"
+                float: "left"
             });
         });
         BI.backAny(items, function (i, item) {
@@ -106,10 +110,8 @@ BI.FloatHorizontalFillLayout = BI.inherit(BI.Layout, {
             }
             var w = createWidget(i, item, true);
             self.addWidget(self._getChildName(rank++), w);
-            w.element.addClass("h-fill-item");
             w.element.css({
-                float: "right",
-                position: "relative"
+                float: "right"
             });
         });
         BI.each(items, function (i, item) {
@@ -117,9 +119,6 @@ BI.FloatHorizontalFillLayout = BI.inherit(BI.Layout, {
             if (columnSize === "fill") {
                 var w = createWidget(i, item);
                 self.addWidget(self._getChildName(rank++), w);
-                w.element.addClass("h-fill-item").css({
-                    position: "relative"
-                });
             }
         });
     },

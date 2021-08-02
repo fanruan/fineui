@@ -4,9 +4,9 @@
  * @extends BI.Layout
  */
 BI.TableAdaptLayout = BI.inherit(BI.Layout, {
-    props: function (props) {
+    props: function () {
         return BI.extend(BI.TableAdaptLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-t-a" + (props.verticalAlign === BI.VerticalAlign.Stretch ? " bi-h-fill" : ""),
+            baseCls: "bi-t-a",
             columnSize: [],
             verticalAlign: BI.VerticalAlign.Top,
             horizontalAlign: BI.HorizontalAlign.Left,
@@ -57,7 +57,9 @@ BI.TableAdaptLayout = BI.inherit(BI.Layout, {
             var w = BI._lazyCreateWidget(item);
             w.element.css({position: "relative", top: "0", left: "0", margin: "0px auto"});
             if (o.verticalAlign === BI.VerticalAlign.Stretch) {
-                w.element.addClass("h-fill-item");
+                var top = o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0),
+                    bottom = o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0);
+                w.element.css("height", "calc(100% - " + ((top + bottom) / BI.pixRatio + BI.pixUnit) + ")");
             }
             td = BI._lazyCreateWidget({
                 type: "bi.default",
