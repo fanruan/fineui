@@ -16,14 +16,12 @@ BI.DownListGroupItem = BI.inherit(BI.BasicButton, {
         var o = this.options;
         var self = this;
         this.text = BI.createWidget({
-            type: "bi.text_button",
+            type: "bi.label",
             cls: "list-group-item-text",
             textAlign: "left",
             text: o.text,
             value: o.value,
-            height: o.height,
-            disableSelected: true,
-            selected: this._digest(o.value)
+            height: o.height
         });
 
         this.icon1 = BI.createWidget({
@@ -116,9 +114,7 @@ BI.DownListGroupItem = BI.inherit(BI.BasicButton, {
     },
 
     setValue: function (v) {
-        const selected = this._digest(v);
-        this.icon1.setSelected(selected);
-        this.text.setSelected(selected);
+        this.icon1.setSelected(this._digest(v));
     }
 });
 BI.DownListGroupItem.EVENT_CHANGE = "EVENT_CHANGE";
