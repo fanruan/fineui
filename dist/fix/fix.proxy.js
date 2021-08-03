@@ -1795,7 +1795,7 @@
     }
 
     function initMixins(vm, mixins) {
-        mixins = mixins || [];
+        mixins = (mixins || []).slice(0);
 
         _.each(mixins.reverse(), function (mixinType) {
             var mixin = getMixins(mixinType);
