@@ -66,9 +66,7 @@ export declare class Model<U extends {
 } = {}> extends Fix.Model {
     model: Pick<{
         [key in keyof U["types"]]: U["types"][key];
-    }, U["context"][number]> & {
-        [key in keyof ReturnType<this["state"]>]: ReturnType<this["state"]>[key];
-    } & {
+    }, U["context"][number]> & ReturnType<this["state"]> & {
         [key in keyof this["computed"]]: ReturnType<this["computed"][key]>;
     };
     store: this["actions"];

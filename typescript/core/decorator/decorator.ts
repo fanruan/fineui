@@ -90,7 +90,7 @@ export function mixins(...Mixins: ({ new (...args: any[]): {} } & { xtype: strin
  */
 export class Model<U extends {types?: {[key: string]: unknown} | {}, context?: ReadonlyArray<string>} = {}> extends Fix.Model {
     // @ts-ignore this["computed"][key]为空
-    model: Pick<{[key in keyof U["types"]]: U["types"][key]}, U["context"][number]> & {[key in keyof ReturnType<this["state"]>]: ReturnType<this["state"]>[key]} & {[key in keyof this["computed"]]: ReturnType<this["computed"][key]>};
+    model: Pick<{[key in keyof U["types"]]: U["types"][key]}, U["context"][number]> & ReturnType<this["state"]> & {[key in keyof this["computed"]]: ReturnType<this["computed"][key]>};
 
     store: this["actions"];
 
