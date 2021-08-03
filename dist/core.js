@@ -1,4 +1,4 @@
-/*! time: 2021-8-2 13:20:15 */
+/*! time: 2021-8-3 14:40:40 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -102261,7 +102261,7 @@ if (typeof Set !== "undefined" && Set.toString().match(/native code/)) {
     }
 
     function initMixins(vm, mixins) {
-        mixins = mixins || [];
+        mixins = (mixins || []).slice(0);
 
         _.each(mixins.reverse(), function (mixinType) {
             var mixin$$1 = getMixins(mixinType);
