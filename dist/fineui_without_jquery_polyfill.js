@@ -1,4 +1,4 @@
-/*! time: 2021-8-4 9:11:03 */
+/*! time: 2021-8-4 9:40:14 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -38403,6 +38403,7 @@ BI.SearchTextValueCombo = BI.inherit(BI.Widget, {
         baseCls: "bi-search-text-value-combo",
         height: 24,
         text: "",
+        defaultText: "",
         items: [],
         tipType: "",
         warningTitle: "",
@@ -38432,6 +38433,7 @@ BI.SearchTextValueCombo = BI.inherit(BI.Widget, {
                         items: o.items,
                         height: o.height - 2,
                         text: o.text,
+                        defaultText: o.defaultText,
                         value: o.value,
                         tipType: o.tipType,
                         warningTitle: o.warningTitle,
@@ -38513,13 +38515,13 @@ BI.SearchTextValueCombo = BI.inherit(BI.Widget, {
 
     created: function () {
         var o = this.options;
-        if(BI.isKey(o.value)) {
+        if (BI.isKey(o.value)) {
             this._checkError(o.value);
         }
     },
 
     _checkError: function (v) {
-        if(BI.isNull(v) || BI.isEmptyArray(v) || BI.isEmptyString(v)) {
+        if (BI.isNull(v) || BI.isEmptyArray(v) || BI.isEmptyString(v)) {
             this.trigger.options.tipType = "success";
             this.element.removeClass("combo-error");
         } else {
@@ -38671,7 +38673,7 @@ BI.SearchTextValueTrigger = BI.inherit(BI.Trigger, {
                                 self.editor = this;
                             },
                             watermark: o.watermark,
-                            defaultText: o.text,
+                            defaultText: o.defaultText,
                             text: this._digest(o.value, o.items),
                             value: o.value,
                             height: o.height,
@@ -38711,7 +38713,7 @@ BI.SearchTextValueTrigger = BI.inherit(BI.Trigger, {
         this.editor.setState(v);
     },
 
-    _digest: function(vals, items){
+    _digest: function (vals, items) {
         var o = this.options;
         vals = BI.isArray(vals) ? vals : [vals];
         var result = [];
@@ -38754,6 +38756,7 @@ BI.SearchTextValueTrigger.EVENT_STOP = "EVENT_STOP";
 BI.SearchTextValueTrigger.EVENT_START = "EVENT_START";
 BI.SearchTextValueTrigger.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.search_text_value_trigger", BI.SearchTextValueTrigger);
+
 
 /***/ }),
 /* 507 */
