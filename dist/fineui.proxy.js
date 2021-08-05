@@ -1,4 +1,4 @@
-/*! time: 2021-8-5 13:10:45 */
+/*! time: 2021-8-5 14:30:20 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -11316,7 +11316,7 @@ BI.PopoverController = BI.inherit(BI.Controller, {
     },
 
     remove: function (name) {
-        if (!this._check(name)) {
+        if (!this.has(name)) {
             return this;
         }
         this.floatContainer[name].destroy();
