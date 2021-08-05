@@ -29,7 +29,7 @@ BI.SearchTextValueTrigger = BI.inherit(BI.Trigger, {
                                 self.editor = this;
                             },
                             watermark: o.watermark,
-                            defaultText: o.text,
+                            defaultText: o.defaultText,
                             text: this._digest(o.value, o.items),
                             value: o.value,
                             height: o.height,
@@ -69,7 +69,7 @@ BI.SearchTextValueTrigger = BI.inherit(BI.Trigger, {
         this.editor.setState(v);
     },
 
-    _digest: function(vals, items){
+    _digest: function (vals, items) {
         var o = this.options;
         vals = BI.isArray(vals) ? vals : [vals];
         var result = [];

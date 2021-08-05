@@ -1259,7 +1259,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     }
 
     function initMixins(vm, mixins) {
-        mixins = mixins || [];
+        mixins = (mixins || []).slice(0);
 
         _.each(mixins.reverse(), function (mixinType) {
             var mixin$$1 = getMixins(mixinType);

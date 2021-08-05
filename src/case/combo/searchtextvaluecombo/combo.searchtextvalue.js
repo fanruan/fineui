@@ -7,6 +7,7 @@ BI.SearchTextValueCombo = BI.inherit(BI.Widget, {
         baseCls: "bi-search-text-value-combo",
         height: 24,
         text: "",
+        defaultText: "",
         items: [],
         tipType: "",
         warningTitle: "",
@@ -36,6 +37,7 @@ BI.SearchTextValueCombo = BI.inherit(BI.Widget, {
                         items: o.items,
                         height: o.height - 2,
                         text: o.text,
+                        defaultText: o.defaultText,
                         value: o.value,
                         tipType: o.tipType,
                         warningTitle: o.warningTitle,
@@ -117,13 +119,13 @@ BI.SearchTextValueCombo = BI.inherit(BI.Widget, {
 
     created: function () {
         var o = this.options;
-        if(BI.isKey(o.value)) {
+        if (BI.isKey(o.value)) {
             this._checkError(o.value);
         }
     },
 
     _checkError: function (v) {
-        if(BI.isNull(v) || BI.isEmptyArray(v) || BI.isEmptyString(v)) {
+        if (BI.isNull(v) || BI.isEmptyArray(v) || BI.isEmptyString(v)) {
             this.trigger.options.tipType = "success";
             this.element.removeClass("combo-error");
         } else {

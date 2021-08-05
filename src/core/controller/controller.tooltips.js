@@ -21,32 +21,6 @@ BI.TooltipsController = BI.inherit(BI.Controller, {
         });
     },
 
-    hide: function (name, callback) {
-        if (!this.has(name)) {
-            return this;
-        }
-        delete this.showingTips[name];
-        this.get(name).element.hide(0, callback);
-        this.get(name).invisible();
-        return this;
-    },
-
-    create: function (name, text, level, context) {
-        if (!this.has(name)) {
-            var tooltip = this._createTooltip(text, level);
-            this.add(name, tooltip);
-            BI.createWidget({
-                type: "bi.absolute",
-                element: context || "body",
-                items: [{
-                    el: tooltip
-                }]
-            });
-            tooltip.invisible();
-        }
-        return this.get(name);
-    },
-
     // opt: {container: '', belowMouse: false}
     show: function (e, name, text, level, context, opt) {
         opt || (opt = {});
@@ -100,6 +74,32 @@ BI.TooltipsController = BI.inherit(BI.Controller, {
         return this;
     },
 
+    hide: function (name, callback) {
+        if (!this.has(name)) {
+            return this;
+        }
+        delete this.showingTips[name];
+        this.get(name).element.hide(0, callback);
+        this.get(name).invisible();
+        return this;
+    },
+
+    create: function (name, text, level, context) {
+        if (!this.has(name)) {
+            var tooltip = this._createTooltip(text, level);
+            this.add(name, tooltip);
+            BI.createWidget({
+                type: "bi.absolute",
+                element: context || "body",
+                items: [{
+                    el: tooltip
+                }]
+            });
+            tooltip.invisible();
+        }
+        return this.get(name);
+    },
+
     add: function (name, bubble) {
         if (this.has(name)) {
             return this;
@@ -126,6 +126,15 @@ BI.TooltipsController = BI.inherit(BI.Controller, {
         }
         this.tooltipsManager[name].destroy();
         delete this.tooltipsManager[name];
+        return this;
+    },
+
+    removeAll: function () {
+        BI.each(this.tooltipsManager, function (name, tooltip) {
+            tooltip.destroy();
+        });
+        this.tooltipsManager = {};
+        this.showingTips = {};
         return this;
     }
 });
