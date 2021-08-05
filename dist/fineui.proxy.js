@@ -1,4 +1,4 @@
-/*! time: 2021-8-3 16:10:14 */
+/*! time: 2021-8-5 14:30:20 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -10967,6 +10967,14 @@ BI.BubblesController = BI.inherit(BI.Controller, {
         this.storeBubbles[name].destroy();
         delete this.storeBubbles[name];
         return this;
+    },
+
+    removeAll: function () {
+        BI.each(this.storeBubbles, function (name, bubble) {
+            bubble.destroy();
+        });
+        this.storeBubbles = {};
+        return this;
     }
 });
 
@@ -11077,21 +11085,21 @@ BI.LayerController = BI.inherit(BI.Controller, {
         return widget;
     },
 
-    hide: function (name, callback) {
-        if (!this.has(name)) {
-            return this;
-        }
-        this._getLayout(name).invisible();
-        this._getLayout(name).element.hide(0, callback);
-        return this;
-    },
-
     show: function (name, callback) {
         if (!this.has(name)) {
             return this;
         }
         this._getLayout(name).visible();
         this._getLayout(name).element.css("z-index", this.zindex++).show(0, callback).trigger("__resize__");
+        return this;
+    },
+
+    hide: function (name, callback) {
+        if (!this.has(name)) {
+            return this;
+        }
+        this._getLayout(name).invisible();
+        this._getLayout(name).element.hide(0, callback);
         return this;
     },
 
@@ -11192,12 +11200,8 @@ BI.PopoverController = BI.inherit(BI.Controller, {
         this.zindexMap = {};
     },
 
-    _check: function (name) {
-        return BI.isNotNull(this.floatManager[name]);
-    },
-
     create: function (name, options, context) {
-        if (this._check(name)) {
+        if (this.has(name)) {
             return this;
         }
         var popover = BI.createWidget(options || {}, {
@@ -11207,10 +11211,66 @@ BI.PopoverController = BI.inherit(BI.Controller, {
         return this;
     },
 
+    open: function (name) {
+        if (!this.has(name)) {
+            return this;
+        }
+        if (!this.floatOpened[name]) {
+            this.floatOpened[name] = true;
+            var container = this.floatContainer[name];
+            container.element.css("zIndex", this.zindex++);
+            this.modal && container.element.__hasZIndexMask__(this.zindexMap[name]) && container.element.__releaseZIndexMask__(this.zindexMap[name]);
+            this.zindexMap[name] = this.zindex;
+            this.modal && container.element.__buildZIndexMask__(this.zindex++);
+            this.get(name).setZindex(this.zindex++);
+            this.floatContainer[name].visible();
+            var popover = this.get(name);
+            popover.show && popover.show();
+            var W = BI.Widget._renderEngine.createElement(this.options.render).width(), H = BI.Widget._renderEngine.createElement(this.options.render).height();
+            var w = popover.element.width(), h = popover.element.height();
+            var left = (W - w) / 2, top = (H - h) / 2;
+            if (left < 0) {
+                left = 0;
+            }
+            if (top < 0) {
+                top = 0;
+            }
+            popover.element.css({
+                left: left / BI.pixRatio + BI.pixUnit,
+                top: top / BI.pixRatio + BI.pixUnit
+            });
+        }
+        return this;
+    },
+
+    close: function (name) {
+        if (!this.has(name)) {
+            return this;
+        }
+        if (this.floatOpened[name]) {
+            delete this.floatOpened[name];
+            this.floatContainer[name].invisible();
+            this.modal && this.floatContainer[name].element.__releaseZIndexMask__(this.zindexMap[name]);
+        }
+        return this;
+    },
+
+    show: function (name) {
+        return this.open(name);
+    },
+
+    hide: function (name) {
+        return this.close(name);
+    },
+
+    isVisible: function (name) {
+        return this.has(name) && this.floatOpened[name] === true;
+    },
+
     add: function (name, popover, options, context) {
         var self = this;
         options || (options = {});
-        if (this._check(name)) {
+        if (this.has(name)) {
             return this;
         }
         this.floatContainer[name] = BI.createWidget({
@@ -11247,56 +11307,16 @@ BI.PopoverController = BI.inherit(BI.Controller, {
         return this;
     },
 
-    open: function (name) {
-        if (!this._check(name)) {
-            return this;
-        }
-        if (!this.floatOpened[name]) {
-            this.floatOpened[name] = true;
-            var container = this.floatContainer[name];
-            container.element.css("zIndex", this.zindex++);
-            this.modal && container.element.__hasZIndexMask__(this.zindexMap[name]) && container.element.__releaseZIndexMask__(this.zindexMap[name]);
-            this.zindexMap[name] = this.zindex;
-            this.modal && container.element.__buildZIndexMask__(this.zindex++);
-            this.get(name).setZindex(this.zindex++);
-            this.floatContainer[name].visible();
-            var popover = this.get(name);
-            popover.show && popover.show();
-            var W = BI.Widget._renderEngine.createElement(this.options.render).width(), H = BI.Widget._renderEngine.createElement(this.options.render).height();
-            var w = popover.element.width(), h = popover.element.height();
-            var left = (W - w) / 2, top = (H - h) / 2;
-            if (left < 0) {
-                left = 0;
-            }
-            if (top < 0) {
-                top = 0;
-            }
-            popover.element.css({
-                left: left / BI.pixRatio + BI.pixUnit,
-                top: top / BI.pixRatio + BI.pixUnit
-            });
-        }
-        return this;
-    },
-
-    close: function (name) {
-        if (!this._check(name)) {
-            return this;
-        }
-        if (this.floatOpened[name]) {
-            delete this.floatOpened[name];
-            this.floatContainer[name].invisible();
-            this.modal && this.floatContainer[name].element.__releaseZIndexMask__(this.zindexMap[name]);
-        }
-        return this;
-    },
-
     get: function (name) {
         return this.floatManager[name];
     },
 
+    has: function (name) {
+        return BI.isNotNull(this.floatManager[name]);
+    },
+
     remove: function (name) {
-        if (!this._check(name)) {
+        if (!this.has(name)) {
             return this;
         }
         this.floatContainer[name].destroy();
@@ -11426,32 +11446,6 @@ BI.TooltipsController = BI.inherit(BI.Controller, {
         });
     },
 
-    hide: function (name, callback) {
-        if (!this.has(name)) {
-            return this;
-        }
-        delete this.showingTips[name];
-        this.get(name).element.hide(0, callback);
-        this.get(name).invisible();
-        return this;
-    },
-
-    create: function (name, text, level, context) {
-        if (!this.has(name)) {
-            var tooltip = this._createTooltip(text, level);
-            this.add(name, tooltip);
-            BI.createWidget({
-                type: "bi.absolute",
-                element: context || "body",
-                items: [{
-                    el: tooltip
-                }]
-            });
-            tooltip.invisible();
-        }
-        return this.get(name);
-    },
-
     // opt: {container: '', belowMouse: false}
     show: function (e, name, text, level, context, opt) {
         opt || (opt = {});
@@ -11505,6 +11499,32 @@ BI.TooltipsController = BI.inherit(BI.Controller, {
         return this;
     },
 
+    hide: function (name, callback) {
+        if (!this.has(name)) {
+            return this;
+        }
+        delete this.showingTips[name];
+        this.get(name).element.hide(0, callback);
+        this.get(name).invisible();
+        return this;
+    },
+
+    create: function (name, text, level, context) {
+        if (!this.has(name)) {
+            var tooltip = this._createTooltip(text, level);
+            this.add(name, tooltip);
+            BI.createWidget({
+                type: "bi.absolute",
+                element: context || "body",
+                items: [{
+                    el: tooltip
+                }]
+            });
+            tooltip.invisible();
+        }
+        return this.get(name);
+    },
+
     add: function (name, bubble) {
         if (this.has(name)) {
             return this;
@@ -11531,6 +11551,15 @@ BI.TooltipsController = BI.inherit(BI.Controller, {
         }
         this.tooltipsManager[name].destroy();
         delete this.tooltipsManager[name];
+        return this;
+    },
+
+    removeAll: function () {
+        BI.each(this.tooltipsManager, function (name, tooltip) {
+            tooltip.destroy();
+        });
+        this.tooltipsManager = {};
+        this.showingTips = {};
         return this;
     }
 });
@@ -38788,6 +38817,7 @@ BI.SearchTextValueCombo = BI.inherit(BI.Widget, {
         baseCls: "bi-search-text-value-combo",
         height: 24,
         text: "",
+        defaultText: "",
         items: [],
         tipType: "",
         warningTitle: "",
@@ -38817,6 +38847,7 @@ BI.SearchTextValueCombo = BI.inherit(BI.Widget, {
                         items: o.items,
                         height: o.height - 2,
                         text: o.text,
+                        defaultText: o.defaultText,
                         value: o.value,
                         tipType: o.tipType,
                         warningTitle: o.warningTitle,
@@ -38898,13 +38929,13 @@ BI.SearchTextValueCombo = BI.inherit(BI.Widget, {
 
     created: function () {
         var o = this.options;
-        if(BI.isKey(o.value)) {
+        if (BI.isKey(o.value)) {
             this._checkError(o.value);
         }
     },
 
     _checkError: function (v) {
-        if(BI.isNull(v) || BI.isEmptyArray(v) || BI.isEmptyString(v)) {
+        if (BI.isNull(v) || BI.isEmptyArray(v) || BI.isEmptyString(v)) {
             this.trigger.options.tipType = "success";
             this.element.removeClass("combo-error");
         } else {
@@ -39056,7 +39087,7 @@ BI.SearchTextValueTrigger = BI.inherit(BI.Trigger, {
                                 self.editor = this;
                             },
                             watermark: o.watermark,
-                            defaultText: o.text,
+                            defaultText: o.defaultText,
                             text: this._digest(o.value, o.items),
                             value: o.value,
                             height: o.height,
@@ -39096,7 +39127,7 @@ BI.SearchTextValueTrigger = BI.inherit(BI.Trigger, {
         this.editor.setState(v);
     },
 
-    _digest: function(vals, items){
+    _digest: function (vals, items) {
         var o = this.options;
         vals = BI.isArray(vals) ? vals : [vals];
         var result = [];
@@ -39139,6 +39170,7 @@ BI.SearchTextValueTrigger.EVENT_STOP = "EVENT_STOP";
 BI.SearchTextValueTrigger.EVENT_START = "EVENT_START";
 BI.SearchTextValueTrigger.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.search_text_value_trigger", BI.SearchTextValueTrigger);
+
 
 /***/ }),
 /* 507 */

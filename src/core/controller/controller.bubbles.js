@@ -83,5 +83,13 @@ BI.BubblesController = BI.inherit(BI.Controller, {
         this.storeBubbles[name].destroy();
         delete this.storeBubbles[name];
         return this;
+    },
+
+    removeAll: function () {
+        BI.each(this.storeBubbles, function (name, bubble) {
+            bubble.destroy();
+        });
+        this.storeBubbles = {};
+        return this;
     }
 });
