@@ -100,21 +100,21 @@ BI.LayerController = BI.inherit(BI.Controller, {
         return widget;
     },
 
-    hide: function (name, callback) {
-        if (!this.has(name)) {
-            return this;
-        }
-        this._getLayout(name).invisible();
-        this._getLayout(name).element.hide(0, callback);
-        return this;
-    },
-
     show: function (name, callback) {
         if (!this.has(name)) {
             return this;
         }
         this._getLayout(name).visible();
         this._getLayout(name).element.css("z-index", this.zindex++).show(0, callback).trigger("__resize__");
+        return this;
+    },
+
+    hide: function (name, callback) {
+        if (!this.has(name)) {
+            return this;
+        }
+        this._getLayout(name).invisible();
+        this._getLayout(name).element.hide(0, callback);
         return this;
     },
 
