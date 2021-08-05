@@ -500,7 +500,7 @@ if (!_global.BI) {
             if (typeof w === "number") {
                 return w >= 0;
             } else if (typeof w === "string") {
-                return /^\d{1,3}(\.\d)?%$/.exec(w) || w == "auto" || /^\d+px$/.exec(w);
+                return /^\d{1,3}(\.\d)?%$/.test(w) || w == "auto" || /^\d+px$/.test(w) || /^calc/.test(w);
             }
         },
 
