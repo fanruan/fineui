@@ -138,7 +138,7 @@ BI.PopoverController = BI.inherit(BI.Controller, {
     },
 
     remove: function (name) {
-        if (!this._check(name)) {
+        if (!this.has(name)) {
             return this;
         }
         this.floatContainer[name].destroy();
