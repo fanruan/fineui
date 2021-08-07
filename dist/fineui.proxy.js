@@ -1,4 +1,4 @@
-/*! time: 2021-8-5 14:30:20 */
+/*! time: 2021-8-7 15:21:29 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -1237,7 +1237,7 @@ if (!_global.BI) {
             if (typeof w === "number") {
                 return w >= 0;
             } else if (typeof w === "string") {
-                return /^\d{1,3}(\.\d)?%$/.exec(w) || w == "auto" || /^\d+px$/.exec(w);
+                return /^\d{1,3}(\.\d)?%$/.test(w) || w === "auto" || /^\d+px$/.test(w) || /^calc/.test(w);
             }
         },
 
@@ -37877,6 +37877,7 @@ BI.BubbleCombo = BI.inherit(BI.Widget, {
             element: this,
             trigger: o.trigger,
             toggle: o.toggle,
+            logic: o.logic,
             container: o.container,
             direction: o.direction,
             isDefaultInit: o.isDefaultInit,
