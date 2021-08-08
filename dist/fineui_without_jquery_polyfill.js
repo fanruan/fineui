@@ -1,4 +1,4 @@
-/*! time: 2021-8-7 15:21:29 */
+/*! time: 2021-8-8 13:40:34 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -10507,6 +10507,7 @@ BI.BroadcastController = BI.inherit(BI.Controller, {
 BI.BubblesController = BI.inherit(BI.Controller, {
     init: function () {
         this.storeBubbles = {};
+        this.storePoppers = {};
     },
 
     /**
@@ -10547,7 +10548,10 @@ BI.BubblesController = BI.inherit(BI.Controller, {
                 el: bubble
             }]
         });
-        BI.Popper.createPopper(context.element[0], bubble.element[0], {
+        if (this.storePoppers[name]) {
+            this.storePoppers[name].destroy();
+        }
+        this.storePoppers[name] = BI.Popper.createPopper(context.element[0], bubble.element[0], {
             placement: ({
                 left: "top-start",
                 center: "top",
@@ -10580,6 +10584,7 @@ BI.BubblesController = BI.inherit(BI.Controller, {
             return this;
         }
         this.storeBubbles[name].destroy();
+        this.storePoppers[name] && this.storePoppers[name].destroy();
         delete this.storeBubbles[name];
         return this;
     },
@@ -10588,7 +10593,11 @@ BI.BubblesController = BI.inherit(BI.Controller, {
         BI.each(this.storeBubbles, function (name, bubble) {
             bubble.destroy();
         });
+        BI.each(this.storePoppers, function (name, popper) {
+            popper.destroy();
+        });
         this.storeBubbles = {};
+        this.storePoppers = {};
         return this;
     }
 });
