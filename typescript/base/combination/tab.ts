@@ -14,7 +14,7 @@ export declare class Tab extends Widget {
         logic?: {
             dynamic: boolean;
         };
-        tab?: any[];
+        tab?: Obj;
     }
 
     setSelect(v: string | number, action?: Action, callback?: Function): void;
