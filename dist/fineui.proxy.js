@@ -1,4 +1,4 @@
-/*! time: 2021-8-11 11:02:09 */
+/*! time: 2021-8-12 21:32:20 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -6746,11 +6746,28 @@ BI.Req = {
 
         _initRender: function () {
             var self = this;
+            var initCallbackCalled = false;
+            var renderCallbackCalled = false;
 
-            function render () {
+            function init () {
+                // 加个保险
+                if (initCallbackCalled === true) {
+                    _global.console && console.error("组件： 请检查beforeInit内部的写法，callback只能执行一次");
+                    return;
+                }
+                initCallbackCalled = true;
+                function render () {
+                    // 加个保险
+                    if (renderCallbackCalled === true) {
+                        _global.console && console.error("组件： 请检查beforeRender内部的写法，callback只能执行一次");
+                        return;
+                    }
+                    renderCallbackCalled = true;
+                    self._render();
+                }
                 if (self.options.beforeRender || self.beforeRender) {
                     self.__async = true;
-                    (self.options.beforeRender || self.beforeRender).call(self, BI.bind(self._render, self));
+                    (self.options.beforeRender || self.beforeRender).call(self, render);
                 } else {
                     self._render();
                 }
@@ -6758,9 +6775,9 @@ BI.Req = {
 
             if (this.options.beforeInit || this.beforeInit) {
                 this.__asking = true;
-                (this.options.beforeInit || this.beforeInit).call(this, render);
+                (this.options.beforeInit || this.beforeInit).call(this, init);
             } else {
-                render();
+                init();
             }
         },
 
