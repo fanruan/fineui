@@ -22,28 +22,8 @@ BI.DefaultLayout = BI.inherit(BI.Layout, {
     },
 
     _addElement: function (i, item) {
-        var o = this.options;
         var w = BI.DefaultLayout.superclass._addElement.apply(this, arguments);
-        if (o.vgap + o.tgap + (item.tgap || 0) !== 0) {
-            w.element.css({
-                "margin-top": (o.vgap + o.tgap + (item.tgap || 0)) / BI.pixRatio + BI.pixUnit
-            });
-        }
-        if (o.hgap + o.lgap + (item.lgap || 0) !== 0) {
-            w.element.css({
-                "margin-left": (o.hgap + o.lgap + (item.lgap || 0)) / BI.pixRatio + BI.pixUnit
-            });
-        }
-        if (o.hgap + o.rgap + (item.rgap || 0) !== 0) {
-            w.element.css({
-                "margin-right": (o.hgap + o.rgap + (item.rgap || 0)) / BI.pixRatio + BI.pixUnit
-            });
-        }
-        if (o.vgap + o.bgap + (item.bgap || 0) !== 0) {
-            w.element.css({
-                "margin-bottom": (o.vgap + o.bgap + (item.bgap || 0)) / BI.pixRatio + BI.pixUnit
-            });
-        }
+        this._handleGap(w, item);
         return w;
     },
 

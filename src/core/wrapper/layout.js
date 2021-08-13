@@ -214,6 +214,30 @@ BI.Layout = BI.inherit(BI.Widget, {
         this.options.items.splice(index, 1);
     },
 
+    _handleGap: function (w, item, hIndex, vIndex) {
+        var o = this.options;
+        if (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
+            w.element.css({
+                "margin-top": (((BI.isNull(vIndex) || vIndex === 0) ? o.vgap : 0) + o.tgap + (item.tgap || 0) + (item.vgap || 0)) / BI.pixRatio + BI.pixUnit
+            });
+        }
+        if (o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0) !== 0) {
+            w.element.css({
+                "margin-left": (((BI.isNull(hIndex) || hIndex === 0) ? o.hgap : 0) + o.lgap + (item.lgap || 0) + (item.hgap || 0)) / BI.pixRatio + BI.pixUnit
+            });
+        }
+        if (o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0) !== 0) {
+            w.element.css({
+                "margin-right": (o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0)) / BI.pixRatio + BI.pixUnit
+            });
+        }
+        if (o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0) !== 0) {
+            w.element.css({
+                "margin-bottom": (o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0)) / BI.pixRatio + BI.pixUnit
+            });
+        }
+    },
+
     /**
      * 添加一个子组件到容器中
      * @param {JSON/BI.Widget} item 子组件
