@@ -1,4 +1,4 @@
-/*! time: 2021-8-5 13:10:45 */
+/*! time: 2021-8-12 21:32:20 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -1237,7 +1237,7 @@ if (!_global.BI) {
             if (typeof w === "number") {
                 return w >= 0;
             } else if (typeof w === "string") {
-                return /^\d{1,3}(\.\d)?%$/.exec(w) || w == "auto" || /^\d+px$/.exec(w);
+                return /^\d{1,3}(\.\d)?%$/.test(w) || w === "auto" || /^\d+px$/.test(w) || /^calc/.test(w);
             }
         },
 
@@ -6746,11 +6746,28 @@ BI.Req = {
 
         _initRender: function () {
             var self = this;
+            var initCallbackCalled = false;
+            var renderCallbackCalled = false;
 
-            function render () {
+            function init () {
+                // 加个保险
+                if (initCallbackCalled === true) {
+                    _global.console && console.error("组件： 请检查beforeInit内部的写法，callback只能执行一次");
+                    return;
+                }
+                initCallbackCalled = true;
+                function render () {
+                    // 加个保险
+                    if (renderCallbackCalled === true) {
+                        _global.console && console.error("组件： 请检查beforeRender内部的写法，callback只能执行一次");
+                        return;
+                    }
+                    renderCallbackCalled = true;
+                    self._render();
+                }
                 if (self.options.beforeRender || self.beforeRender) {
                     self.__async = true;
-                    (self.options.beforeRender || self.beforeRender).call(self, BI.bind(self._render, self));
+                    (self.options.beforeRender || self.beforeRender).call(self, render);
                 } else {
                     self._render();
                 }
@@ -6758,9 +6775,9 @@ BI.Req = {
 
             if (this.options.beforeInit || this.beforeInit) {
                 this.__asking = true;
-                (this.options.beforeInit || this.beforeInit).call(this, render);
+                (this.options.beforeInit || this.beforeInit).call(this, init);
             } else {
-                render();
+                init();
             }
         },
 
@@ -10892,6 +10909,7 @@ BI.BroadcastController = BI.inherit(BI.Controller, {
 BI.BubblesController = BI.inherit(BI.Controller, {
     init: function () {
         this.storeBubbles = {};
+        this.storePoppers = {};
     },
 
     /**
@@ -10932,7 +10950,10 @@ BI.BubblesController = BI.inherit(BI.Controller, {
                 el: bubble
             }]
         });
-        BI.Popper.createPopper(context.element[0], bubble.element[0], {
+        if (this.storePoppers[name]) {
+            this.storePoppers[name].destroy();
+        }
+        this.storePoppers[name] = BI.Popper.createPopper(context.element[0], bubble.element[0], {
             placement: ({
                 left: "top-start",
                 center: "top",
@@ -10965,6 +10986,7 @@ BI.BubblesController = BI.inherit(BI.Controller, {
             return this;
         }
         this.storeBubbles[name].destroy();
+        this.storePoppers[name] && this.storePoppers[name].destroy();
         delete this.storeBubbles[name];
         return this;
     },
@@ -10973,7 +10995,11 @@ BI.BubblesController = BI.inherit(BI.Controller, {
         BI.each(this.storeBubbles, function (name, bubble) {
             bubble.destroy();
         });
+        BI.each(this.storePoppers, function (name, popper) {
+            popper.destroy();
+        });
         this.storeBubbles = {};
+        this.storePoppers = {};
         return this;
     }
 });
@@ -11316,7 +11342,7 @@ BI.PopoverController = BI.inherit(BI.Controller, {
     },
 
     remove: function (name) {
-        if (!this._check(name)) {
+        if (!this.has(name)) {
             return this;
         }
         this.floatContainer[name].destroy();
@@ -16964,6 +16990,30 @@ BI.Layout = BI.inherit(BI.Widget, {
         this.options.items.splice(index, 1);
     },
 
+    _handleGap: function (w, item, hIndex, vIndex) {
+        var o = this.options;
+        if (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
+            w.element.css({
+                "margin-top": (((BI.isNull(vIndex) || vIndex === 0) ? o.vgap : 0) + o.tgap + (item.tgap || 0) + (item.vgap || 0)) / BI.pixRatio + BI.pixUnit
+            });
+        }
+        if (o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0) !== 0) {
+            w.element.css({
+                "margin-left": (((BI.isNull(hIndex) || hIndex === 0) ? o.hgap : 0) + o.lgap + (item.lgap || 0) + (item.hgap || 0)) / BI.pixRatio + BI.pixUnit
+            });
+        }
+        if (o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0) !== 0) {
+            w.element.css({
+                "margin-right": (o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0)) / BI.pixRatio + BI.pixUnit
+            });
+        }
+        if (o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0) !== 0) {
+            w.element.css({
+                "margin-bottom": (o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0)) / BI.pixRatio + BI.pixUnit
+            });
+        }
+    },
+
     /**
      * 添加一个子组件到容器中
      * @param {JSON/BI.Widget} item 子组件
@@ -18053,26 +18103,7 @@ BI.TableAdaptLayout = BI.inherit(BI.Layout, {
             "vertical-align": o.verticalAlign,
             height: "100%"
         });
-        if (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
-            w.element.css({
-                "margin-top": (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0)) / BI.pixRatio + BI.pixUnit
-            });
-        }
-        if (o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0) !== 0) {
-            w.element.css({
-                "margin-left": ((i === 0 ? o.hgap : 0) + o.lgap + (item.lgap || 0) + (item.hgap || 0)) / BI.pixRatio + BI.pixUnit
-            });
-        }
-        if (o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0) !== 0) {
-            w.element.css({
-                "margin-right": (o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0)) / BI.pixRatio + BI.pixUnit
-            });
-        }
-        if (o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0) !== 0) {
-            w.element.css({
-                "margin-bottom": (o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0)) / BI.pixRatio + BI.pixUnit
-            });
-        }
+        this._handleGap(w, item, i);
         return td;
     },
 
@@ -18186,26 +18217,7 @@ BI.HorizontalAutoLayout = BI.inherit(BI.Layout, {
             position: "relative",
             margin: "0px auto"
         });
-        if (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
-            w.element.css({
-                "margin-top": ((i === 0 ? o.vgap : 0) + o.tgap + (item.tgap || 0) + (item.vgap || 0)) / BI.pixRatio + BI.pixUnit
-            });
-        }
-        if (o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0) !== 0) {
-            w.element.css({
-                "margin-left": (o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0)) / BI.pixRatio + BI.pixUnit
-            });
-        }
-        if (o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0) !== 0) {
-            w.element.css({
-                "margin-right": (o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0)) / BI.pixRatio + BI.pixUnit
-            });
-        }
-        if (o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0) !== 0) {
-            w.element.css({
-                "margin-bottom": (o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0)) / BI.pixRatio + BI.pixUnit
-            });
-        }
+        this._handleGap(w, item, null, i);
         return w;
     },
 
@@ -18759,26 +18771,7 @@ BI.FlexHorizontalLayout = BI.inherit(BI.Layout, {
         if (i === o.items.length - 1) {
             w.element.addClass("l-c");
         }
-        if (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
-            w.element.css({
-                "margin-top": (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0)) / BI.pixRatio + BI.pixUnit
-            });
-        }
-        if (o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0) !== 0) {
-            w.element.css({
-                "margin-left": ((i === 0 ? o.hgap : 0) + o.lgap + (item.lgap || 0) + (item.hgap || 0)) / BI.pixRatio + BI.pixUnit
-            });
-        }
-        if (o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0) !== 0) {
-            w.element.css({
-                "margin-right": (o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0)) / BI.pixRatio + BI.pixUnit
-            });
-        }
-        if (o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0) !== 0) {
-            w.element.css({
-                "margin-bottom": (o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0)) / BI.pixRatio + BI.pixUnit
-            });
-        }
+        this._handleGap(w, item, i);
         return w;
     },
 
@@ -19032,26 +19025,7 @@ BI.FlexVerticalLayout = BI.inherit(BI.Layout, {
         if (i === o.items.length - 1) {
             w.element.addClass("l-c");
         }
-        if (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
-            w.element.css({
-                "margin-top": ((i === 0 ? o.vgap : 0) + o.tgap + (item.tgap || 0) + (item.vgap || 0)) / BI.pixRatio + BI.pixUnit
-            });
-        }
-        if (o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0) !== 0) {
-            w.element.css({
-                "margin-left": (o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0)) / BI.pixRatio + BI.pixUnit
-            });
-        }
-        if (o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0) !== 0) {
-            w.element.css({
-                "margin-right": (o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0)) / BI.pixRatio + BI.pixUnit
-            });
-        }
-        if (o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0) !== 0) {
-            w.element.css({
-                "margin-bottom": (o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0)) / BI.pixRatio + BI.pixUnit
-            });
-        }
+        this._handleGap(w, item, null, i);
         return w;
     },
 
@@ -19267,26 +19241,7 @@ BI.FlexWrapperHorizontalLayout = BI.inherit(BI.Layout, {
         if (i === o.items.length - 1) {
             w.element.addClass("l-c");
         }
-        if (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
-            w.element.css({
-                "margin-top": (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0)) / BI.pixRatio + BI.pixUnit
-            });
-        }
-        if (o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0) !== 0) {
-            w.element.css({
-                "margin-left": ((i === 0 ? o.hgap : 0) + o.lgap + (item.lgap || 0) + (item.hgap || 0)) / BI.pixRatio + BI.pixUnit
-            });
-        }
-        if (o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0) !== 0) {
-            w.element.css({
-                "margin-right": (o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0)) / BI.pixRatio + BI.pixUnit
-            });
-        }
-        if (o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0) !== 0) {
-            w.element.css({
-                "margin-bottom": (o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0)) / BI.pixRatio + BI.pixUnit
-            });
-        }
+        this._handleGap(w, item, i);
         return w;
     },
 
@@ -19450,26 +19405,7 @@ BI.FlexWrapperVerticalLayout = BI.inherit(BI.Layout, {
         if (i === o.items.length - 1) {
             w.element.addClass("l-c");
         }
-        if (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
-            w.element.css({
-                "margin-top": ((i === 0 ? o.vgap : 0) + o.tgap + (item.tgap || 0) + (item.vgap || 0)) / BI.pixRatio + BI.pixUnit
-            });
-        }
-        if (o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0) !== 0) {
-            w.element.css({
-                "margin-left": (o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0)) / BI.pixRatio + BI.pixUnit
-            });
-        }
-        if (o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0) !== 0) {
-            w.element.css({
-                "margin-right": (o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0)) / BI.pixRatio + BI.pixUnit
-            });
-        }
-        if (o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0) !== 0) {
-            w.element.css({
-                "margin-bottom": (o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0)) / BI.pixRatio + BI.pixUnit
-            });
-        }
+        this._handleGap(w, item, null, i);
         return w;
     },
 
@@ -20001,7 +19937,6 @@ BI.AdaptiveLayout = BI.inherit(BI.Layout, {
         var o = this.options;
         var w = BI.AdaptiveLayout.superclass._addElement.apply(this, arguments);
         w.element.css({position: "relative"});
-        var left = 0, right = 0, top = 0, bottom = 0;
         if (BI.isNotNull(item.left)) {
             w.element.css({
                 left: BI.isNumber(item.left) ? item.left / BI.pixRatio + BI.pixUnit : item.left
@@ -20023,35 +19958,7 @@ BI.AdaptiveLayout = BI.inherit(BI.Layout, {
             });
         }
 
-        if (BI.isNotNull(o.hgap)) {
-            left += o.hgap;
-            w.element.css({"margin-left": left / BI.pixRatio + BI.pixUnit});
-            right += o.hgap;
-            w.element.css({"margin-right": right / BI.pixRatio + BI.pixUnit});
-        }
-        if (BI.isNotNull(o.vgap)) {
-            top += o.vgap;
-            w.element.css({"margin-top": top / BI.pixRatio + BI.pixUnit});
-            bottom += o.vgap;
-            w.element.css({"margin-bottom": bottom / BI.pixRatio + BI.pixUnit});
-        }
-
-        if (BI.isNotNull(o.lgap)) {
-            left += o.lgap;
-            w.element.css({"margin-left": left / BI.pixRatio + BI.pixUnit});
-        }
-        if (BI.isNotNull(o.rgap)) {
-            right += o.rgap;
-            w.element.css({"margin-right": right / BI.pixRatio + BI.pixUnit});
-        }
-        if (BI.isNotNull(o.tgap)) {
-            top += o.tgap;
-            w.element.css({"margin-top": top / BI.pixRatio + BI.pixUnit});
-        }
-        if (BI.isNotNull(o.bgap)) {
-            bottom += o.bgap;
-            w.element.css({"margin-bottom": bottom / BI.pixRatio + BI.pixUnit});
-        }
+        this._handleGap(w, item);
 
         if (BI.isNotNull(item.width)) {
             w.element.css({width: BI.isNumber(item.width) ? item.width / BI.pixRatio + BI.pixUnit : item.width});
@@ -20465,28 +20372,8 @@ BI.DefaultLayout = BI.inherit(BI.Layout, {
     },
 
     _addElement: function (i, item) {
-        var o = this.options;
         var w = BI.DefaultLayout.superclass._addElement.apply(this, arguments);
-        if (o.vgap + o.tgap + (item.tgap || 0) !== 0) {
-            w.element.css({
-                "margin-top": (o.vgap + o.tgap + (item.tgap || 0)) / BI.pixRatio + BI.pixUnit
-            });
-        }
-        if (o.hgap + o.lgap + (item.lgap || 0) !== 0) {
-            w.element.css({
-                "margin-left": (o.hgap + o.lgap + (item.lgap || 0)) / BI.pixRatio + BI.pixUnit
-            });
-        }
-        if (o.hgap + o.rgap + (item.rgap || 0) !== 0) {
-            w.element.css({
-                "margin-right": (o.hgap + o.rgap + (item.rgap || 0)) / BI.pixRatio + BI.pixUnit
-            });
-        }
-        if (o.vgap + o.bgap + (item.bgap || 0) !== 0) {
-            w.element.css({
-                "margin-bottom": (o.vgap + o.bgap + (item.bgap || 0)) / BI.pixRatio + BI.pixUnit
-            });
-        }
+        this._handleGap(w, item);
         return w;
     },
 
@@ -21052,30 +20939,11 @@ BI.InlineLayout = BI.inherit(BI.Layout, {
                 w.element.css("max-width", "calc(100% - " + ((left + right) / BI.pixRatio + BI.pixUnit) + ")");
             }
         }
+        this._handleGap(w, item, i);
         if (o.verticalAlign === BI.VerticalAlign.Stretch) {
             var top = o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0),
                 bottom = o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0);
             w.element.css("height", "calc(100% - " + ((top + bottom) / BI.pixRatio + BI.pixUnit) + ")");
-        }
-        if (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
-            w.element.css({
-                "margin-top": (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0)) / BI.pixRatio + BI.pixUnit
-            });
-        }
-        if (o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0) !== 0) {
-            w.element.css({
-                "margin-left": ((i === 0 ? o.hgap : 0) + o.lgap + (item.lgap || 0) + (item.hgap || 0)) / BI.pixRatio + BI.pixUnit
-            });
-        }
-        if (o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0) !== 0) {
-            w.element.css({
-                "margin-right": (o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0)) / BI.pixRatio + BI.pixUnit
-            });
-        }
-        if (o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0) !== 0) {
-            w.element.css({
-                "margin-bottom": (o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0)) / BI.pixRatio + BI.pixUnit
-            });
         }
         return w;
     },
@@ -21815,26 +21683,7 @@ BI.VerticalLayout = BI.inherit(BI.Layout, {
         w.element.css({
             position: "relative"
         });
-        if (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
-            w.element.css({
-                "margin-top": ((i === 0 ? o.vgap : 0) + o.tgap + (item.tgap || 0) + (item.vgap || 0)) / BI.pixRatio + BI.pixUnit
-            });
-        }
-        if (o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0) !== 0) {
-            w.element.css({
-                "margin-left": (o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0)) / BI.pixRatio + BI.pixUnit
-            });
-        }
-        if (o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0) !== 0) {
-            w.element.css({
-                "margin-right": (o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0)) / BI.pixRatio + BI.pixUnit
-            });
-        }
-        if (o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0) !== 0) {
-            w.element.css({
-                "margin-bottom": (o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0)) / BI.pixRatio + BI.pixUnit
-            });
-        }
+        this._handleGap(w, item, null, i);
         if (o.horizontalAlign === BI.HorizontalAlign.Center) {
             w.element.css({
                 marginLeft: "auto",
@@ -37877,6 +37726,7 @@ BI.BubbleCombo = BI.inherit(BI.Widget, {
             element: this,
             trigger: o.trigger,
             toggle: o.toggle,
+            logic: o.logic,
             container: o.container,
             direction: o.direction,
             isDefaultInit: o.isDefaultInit,

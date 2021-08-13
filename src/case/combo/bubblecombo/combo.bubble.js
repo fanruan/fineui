@@ -36,6 +36,7 @@ BI.BubbleCombo = BI.inherit(BI.Widget, {
             element: this,
             trigger: o.trigger,
             toggle: o.toggle,
+            logic: o.logic,
             container: o.container,
             direction: o.direction,
             isDefaultInit: o.isDefaultInit,
