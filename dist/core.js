@@ -1,4 +1,4 @@
-/*! time: 2021-8-12 21:32:20 */
+/*! time: 2021-8-16 14:51:01 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -81318,9 +81318,9 @@ BI.prepares.push(function () {
                 return "";
             }
             if (this.isDarkColor(color)) {
-                return "#ffffff";
+                return "#FFFFFF";
             }
-            return "#1a1a1a";
+            return "#3D4D66";
         },
 
         rgb2hex: function (rgbColour) {
