@@ -1,4 +1,4 @@
-/*! time: 2021-8-19 20:00:26 */
+/*! time: 2021-8-19 20:20:26 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -17490,10 +17490,6 @@ BI.AbsoluteHorizontalLayout = BI.inherit(BI.Layout, {
         this.layout.resize();
     },
 
-    update: function (opt) {
-        return this.layout.update(opt);
-    },
-
     populate: function (items) {
         this.layout.populate.apply(this, arguments);
     }
@@ -17642,10 +17638,6 @@ BI.AbsoluteRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
         this.layout.stroke([{}].concat(this.options.items))
     },
 
-    update: function (opt) {
-        return this.layout.update(opt);
-    },
-
     addItem: function () {
         // do nothing
         throw new Error("不能添加子组件");
@@ -17709,10 +17701,6 @@ BI.AbsoluteVerticalLayout = BI.inherit(BI.Layout, {
         this.layout.resize();
     },
 
-    update: function (opt) {
-        return this.layout.update(opt);
-    },
-
     populate: function (items) {
         this.layout.populate.apply(this, arguments);
     }
@@ -17770,10 +17758,6 @@ BI.CenterAdaptLayout = BI.inherit(BI.Layout, {
 
     resize: function () {
         this.layout.resize();
-    },
-
-    update: function (opt) {
-        return this.layout.update(opt);
     },
 
     populate: function (items) {
@@ -18002,10 +17986,6 @@ BI.RightVerticalAdaptLayout = BI.inherit(BI.Layout, {
         this.layout.resize();
     },
 
-    update: function (opt) {
-        return this.layout.update(opt);
-    },
-
     addItem: function () {
         // do nothing
         throw new Error("不能添加子组件");
@@ -18184,10 +18164,6 @@ BI.VerticalAdaptLayout = BI.inherit(BI.Layout, {
         this.layout.resize();
     },
 
-    update: function (opt) {
-        return this.layout.update(opt);
-    },
-
     populate: function (items) {
         this.layout.populate.apply(this, arguments);
     }
@@ -18295,10 +18271,6 @@ BI.InlineCenterAdaptLayout = BI.inherit(BI.Layout, {
         this.layout.resize();
     },
 
-    update: function (opt) {
-        return this.layout.update(opt);
-    },
-
     populate: function (items) {
         this.layout.populate.apply(this.layout, arguments);
     }
@@ -18360,10 +18332,6 @@ BI.InlineHorizontalAdaptLayout = BI.inherit(BI.Layout, {
         this.layout.resize();
     },
 
-    update: function (opt) {
-        return this.layout.update(opt);
-    },
-
     populate: function (items) {
         this.layout.populate.apply(this.layout, arguments);
     }
@@ -18423,10 +18391,6 @@ BI.InlineVerticalAdaptLayout = BI.inherit(BI.Layout, {
 
     resize: function () {
         this.layout.resize();
-    },
-
-    update: function (opt) {
-        return this.layout.update(opt);
     },
 
     populate: function (items) {
@@ -18657,10 +18621,6 @@ BI.FlexCenterLayout = BI.inherit(BI.Layout, {
         this.layout.resize();
     },
 
-    update: function (opt) {
-        return this.layout.update(opt);
-    },
-
     populate: function (items) {
         this.layout.populate(items);
     }
@@ -18718,10 +18678,6 @@ BI.FlexHorizontalCenter = BI.inherit(BI.Layout, {
 
     resize: function () {
         this.layout.resize();
-    },
-
-    update: function (opt) {
-        return this.layout.update(opt);
     },
 
     populate: function (items) {
@@ -18855,17 +18811,17 @@ BI.FlexLeftRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
             ref: function (_ref) {
                 self.layout = _ref;
             },
-            items: this._formatItems(),
+            items: this._formatItems(o.items),
             scrollx: o.scrollx,
             scrolly: o.scrolly,
             scrollable: o.scrollable
         };
     },
 
-    _formatItems: function () {
+    _formatItems: function (items) {
         var o = this.options;
-        var leftItems = o.items.left || [];
-        var rightItems = o.items.right || [];
+        var leftItems = items.left || [];
+        var rightItems = items.right || [];
         leftItems = BI.map(leftItems, function (i, item) {
             var json = {
                 el: BI.stripEL(item)
@@ -18902,11 +18858,7 @@ BI.FlexLeftRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
     },
 
     resize: function () {
-        this.layout.stroke(this._formatItems());
-    },
-
-    update: function (opt) {
-        return this.layout.update(opt);
+        this.layout.stroke(this._formatItems(this.options.items));
     },
 
     addItem: function () {
@@ -18915,8 +18867,7 @@ BI.FlexLeftRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
     },
 
     populate: function (items) {
-        this.options.items = items;
-        this.layout.populate(this._formatItems());
+        this.layout.populate(this._formatItems(items));
     }
 });
 BI.shortcut("bi.flex_left_right_vertical_adapt", BI.FlexLeftRightVerticalAdaptLayout);
@@ -18973,10 +18924,6 @@ BI.FlexVerticalCenter = BI.inherit(BI.Layout, {
 
     resize: function () {
         this.layout.resize();
-    },
-
-    update: function (opt) {
-        return this.layout.update(opt);
     },
 
     populate: function (items) {
@@ -19132,10 +19079,6 @@ BI.FlexWrapperCenterLayout = BI.inherit(BI.Layout, {
         this.layout.resize();
     },
 
-    update: function (opt) {
-        return this.layout.update(opt);
-    },
-
     populate: function (items) {
         this.layout.populate(items);
     }
@@ -19195,10 +19138,6 @@ BI.FlexWrapperHorizontalCenter = BI.inherit(BI.Layout, {
 
     resize: function () {
         this.layout.resize();
-    },
-
-    update: function (opt) {
-        return this.layout.update(opt);
     },
 
     populate: function (items) {
@@ -19359,10 +19298,6 @@ BI.FlexWrapperVerticalCenter = BI.inherit(BI.Layout, {
 
     resize: function () {
         this.layout.resize();
-    },
-
-    update: function (opt) {
-        return this.layout.update(opt);
     },
 
     populate: function (items) {
@@ -19575,10 +19510,6 @@ BI.FloatAbsoluteHorizontalLayout = BI.inherit(BI.Layout, {
         this.layout.stroke(this._formatItems(this.options.items));
     },
 
-    update: function (opt) {
-        return this.layout.update(opt);
-    },
-
     populate: function (items) {
         this.layout.populate(this._formatItems(items));
     }
@@ -19619,7 +19550,7 @@ BI.FloatAbsoluteLeftRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
                 self.layout = _ref;
             },
             verticalAlign: o.verticalAlign,
-            items: this._formatItems(),
+            items: this._formatItems(o.items),
             vgap: "50%",
             scrollx: o.scrollx,
             scrolly: o.scrolly,
@@ -19627,10 +19558,10 @@ BI.FloatAbsoluteLeftRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
         };
     },
 
-    _formatItems: function () {
+    _formatItems: function (items) {
         var o = this.options;
-        var leftItems = o.items.left || [];
-        var rightItems = o.items.right || [];
+        var leftItems = items.left || [];
+        var rightItems = items.right || [];
         leftItems = BI.map(leftItems, function (i, item) {
             var el = BI.stripEL(item);
             if (o.verticalAlign === BI.VerticalAlign.Middle) {
@@ -19689,11 +19620,7 @@ BI.FloatAbsoluteLeftRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
     },
 
     resize: function () {
-        this.layout.stroke(this._formatItems());
-    },
-
-    update: function (opt) {
-        return this.layout.update(opt);
+        this.layout.stroke(this._formatItems(this.options.items));
     },
 
     addItem: function () {
@@ -19702,8 +19629,7 @@ BI.FloatAbsoluteLeftRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
     },
 
     populate: function (items) {
-        this.options.items = items;
-        this.layout.populate(this._formatItems());
+        this.layout.populate(this._formatItems(items));
     }
 });
 BI.shortcut("bi.absolute_left_right_vertical_float", BI.FloatAbsoluteLeftRightVerticalAdaptLayout);
@@ -19759,10 +19685,6 @@ BI.FloatAbsoluteRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
 
     resize: function () {
         this.layout.stroke([{}].concat(this._formatItems(this.options.items)));
-    },
-
-    update: function (opt) {
-        return this.layout.update(opt);
     },
 
     addItem: function () {
@@ -19841,10 +19763,6 @@ BI.FloatAbsoluteVerticalLayout = BI.inherit(BI.Layout, {
 
     resize: function () {
         this.layout.stroke(this._formatItems(this.options.items));
-    },
-
-    update: function (opt) {
-        return this.layout.update(opt);
     },
 
     populate: function (items) {
@@ -20746,6 +20664,7 @@ BI.GridLayout = BI.inherit(BI.Layout, {
     },
 
     addItem: function () {
+        // do nothing
         throw new Error("不能添加子组件");
     },
 
@@ -21916,10 +21835,6 @@ BI.CenterLayout = BI.inherit(BI.Layout, {
         throw new Error("不能添加子组件");
     },
 
-    update: function (opt) {
-        return this.layout.update(opt);
-    },
-
     populate: function (items) {
         this.layout.populate.apply(this.layout, arguments);
     }
@@ -21995,10 +21910,6 @@ BI.FloatCenterLayout = BI.inherit(BI.Layout, {
     addItem: function (item) {
         // do nothing
         throw new Error("不能添加子组件");
-    },
-
-    update: function (opt) {
-        return this.layout.update(opt);
     },
 
     populate: function (items) {
@@ -22077,10 +21988,6 @@ BI.HorizontalCenterLayout = BI.inherit(BI.Layout, {
         throw new Error("不能添加子组件");
     },
 
-    update: function (opt) {
-        return this.layout.update(opt);
-    },
-
     populate: function (items) {
         this.layout.populate.apply(this.layout, arguments);
     }
@@ -22156,10 +22063,6 @@ BI.VerticalCenterLayout = BI.inherit(BI.Layout, {
     addItem: function (item) {
         // do nothing
         throw new Error("不能添加子组件");
-    },
-
-    update: function (opt) {
-        return this.layout.update(opt);
     },
 
     populate: function (items) {
