@@ -145,7 +145,7 @@ BI.AbsoluteRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
     },
 
     populate: function (items) {
-        this.layout.populate(items);
+        this.layout.populate([{}].concat(items));
     }
 });
 BI.shortcut("bi.absolute_right_vertical_adapt", BI.AbsoluteRightVerticalAdaptLayout);
