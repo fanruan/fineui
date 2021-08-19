@@ -1,4 +1,4 @@
-/*! time: 2021-8-19 15:40:33 */
+/*! time: 2021-8-19 18:31:31 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -19513,6 +19513,21 @@ BI.Layout = BI.inherit(BI.Widget, {
         return this.element;
     },
 
+    // 不依赖于this.options.items进行更新
+    _updateItemAt: function (index, item) {
+        var del = this._children[this._getChildName(index)];
+        delete this._children[this._getChildName(index)];
+        var w = this._addElement(index, item);
+        this._children[this._getChildName(index)] = w;
+        if (index > 0) {
+            this._children[this._getChildName(index - 1)].element.after(w.element);
+        } else {
+            w.element.prependTo(this._getWrapper());
+        }
+        del._destroy();
+        w._mount();
+    },
+
     _addItemAt: function (index, item) {
         for (var i = this.options.items.length; i > index; i--) {
             this._children[this._getChildName(i)] = this._children[this._getChildName(i - 1)];
@@ -19601,33 +19616,11 @@ BI.Layout = BI.inherit(BI.Widget, {
     },
 
     shouldUpdateItem: function (index, item) {
-        if (index < 0 || index > this.options.items.length - 1) {
-            return false;
-        }
         var child = this._children[this._getChildName(index)];
-        if (!child.shouldUpdate) {
+        if (!child || !child.shouldUpdate) {
             return null;
         }
         return child.shouldUpdate(this._getOptions(item));
-    },
-
-    updateItemAt: function (index, item) {
-        if (index < 0 || index > this.options.items.length - 1) {
-            return;
-        }
-        var del = this._children[this._getChildName(index)];
-        delete this._children[this._getChildName(index)];
-        this.options.items.splice(index, 1);
-        var w = this._addElement(index, item);
-        this.options.items.splice(index, 0, item);
-        this._children[this._getChildName(index)] = w;
-        if (index > 0) {
-            this._children[this._getChildName(index - 1)].element.after(w.element);
-        } else {
-            w.element.prependTo(this._getWrapper());
-        }
-        del._destroy();
-        w._mount();
     },
 
     addItems: function (items, context) {
@@ -19709,7 +19702,7 @@ BI.Layout = BI.inherit(BI.Widget, {
             // if (child.update) {
             //     return child.update(this._getOptions(vnode));
             // }
-            return this.updateItemAt(index, vnode);
+            return this._updateItemAt(index, vnode);
         }
     },
 
@@ -19865,34 +19858,23 @@ BI.Layout = BI.inherit(BI.Widget, {
         return updated;
     },
 
+    forceUpdate: function (opt) {
+        if (this._isMounted) {
+            BI.each(this._children, function (i, c) {
+                c.destroy();
+            });
+            this._children = {};
+        }
+        this.options.items = opt.items;
+        this.stroke(opt.items);
+    },
+
     update: function (opt) {
         var o = this.options;
         var items = opt.items || [];
-        var updated = this.updateChildren(o.items, items);
+        var oldItems = o.items;
         this.options.items = items;
-        return updated;
-        // var updated, i, len;
-        // for (i = 0, len = Math.min(o.items.length, items.length); i < len; i++) {
-        //     if (!this._compare(o.items[i], items[i])) {
-        //         updated = this.updateItemAt(i, items[i]) || updated;
-        //     }
-        // }
-        // if (o.items.length > items.length) {
-        //     var deleted = [];
-        //     for (i = items.length; i < o.items.length; i++) {
-        //         deleted.push(this._children[this._getChildName(i)]);
-        //         delete this._children[this._getChildName(i)];
-        //     }
-        //     o.items.splice(items.length);
-        //     BI.each(deleted, function (i, w) {
-        //         w._destroy();
-        //     })
-        // } else if (items.length > o.items.length) {
-        //     for (i = o.items.length; i < items.length; i++) {
-        //         this.addItemAt(i, items[i]);
-        //     }
-        // }
-        // return updated;
+        return this.updateChildren(oldItems, items);
     },
 
     stroke: function (items) {
@@ -19931,7 +19913,6 @@ BI.Layout = BI.inherit(BI.Widget, {
     },
 
     populate: function (items) {
-        var self = this, o = this.options;
         items = items || [];
         if (this._isMounted) {
             this.update({items: items});
@@ -19942,7 +19923,7 @@ BI.Layout = BI.inherit(BI.Widget, {
     },
 
     resize: function () {
-
+        this.stroke(this.options.items);
     }
 });
 BI.shortcut("bi.layout", BI.Layout);
@@ -19987,10 +19968,6 @@ BI.AbsoluteCenterLayout = BI.inherit(BI.Layout, {
             margin: "auto"
         });
         return w;
-    },
-
-    resize: function () {
-        // console.log("absolute_center_adapt布局不需要resize");
     },
 
     populate: function (items) {
@@ -20049,7 +20026,11 @@ BI.AbsoluteHorizontalLayout = BI.inherit(BI.Layout, {
     },
 
     resize: function () {
-        // console.log("absolute_horizontal_adapt布局不需要resize");
+        this.layout.resize();
+    },
+
+    update: function (opt) {
+        return this.layout.update(opt);
     },
 
     populate: function (items) {
@@ -20145,7 +20126,7 @@ BI.AbsoluteLeftRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
     },
 
     resize: function () {
-        // console.log("absolute_left_right_vertical_adapt布局不需要resize");
+        this.layout.stroke(this._formatItems())
     },
 
     addItem: function () {
@@ -20197,7 +20178,11 @@ BI.AbsoluteRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
     },
 
     resize: function () {
+        this.layout.stroke([{}].concat(this.options.items))
+    },
 
+    update: function (opt) {
+        return this.layout.update(opt);
     },
 
     addItem: function () {
@@ -20206,7 +20191,7 @@ BI.AbsoluteRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
     },
 
     populate: function (items) {
-        this.layout.populate(items);
+        this.layout.populate([{}].concat(items));
     }
 });
 BI.shortcut("bi.absolute_right_vertical_adapt", BI.AbsoluteRightVerticalAdaptLayout);
@@ -20260,7 +20245,11 @@ BI.AbsoluteVerticalLayout = BI.inherit(BI.Layout, {
     },
 
     resize: function () {
-        // console.log("absolute_vertical_adapt布局不需要resize");
+        this.layout.resize();
+    },
+
+    update: function (opt) {
+        return this.layout.update(opt);
     },
 
     populate: function (items) {
@@ -20319,7 +20308,11 @@ BI.CenterAdaptLayout = BI.inherit(BI.Layout, {
     },
 
     resize: function () {
-        // console.log("center_adapt布局不需要resize");
+        this.layout.resize();
+    },
+
+    update: function (opt) {
+        return this.layout.update(opt);
     },
 
     populate: function (items) {
@@ -20425,7 +20418,18 @@ BI.LeftRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
     },
 
     resize: function () {
-        // console.log("left_right_vertical_adapt布局不需要resize");
+        this.left.stroke(this.options.items.left);
+        this.right.stroke(this.options.items.right);
+    },
+
+    update: function (opt) {
+        this.left.update({
+            items: opt.items.left
+        });
+        this.right.update({
+            items: opt.items.right
+        });
+        return true;
     },
 
     addItem: function () {
@@ -20478,7 +20482,11 @@ BI.LeftVerticalAdaptLayout = BI.inherit(BI.Layout, {
     },
 
     resize: function () {
-        // console.log("left_vertical_adapt布局不需要resize");
+        this.layout.resize();
+    },
+
+    update: function (opt) {
+        return this.layout.update(opt);
     },
 
     addItem: function () {
@@ -20530,7 +20538,11 @@ BI.RightVerticalAdaptLayout = BI.inherit(BI.Layout, {
     },
 
     resize: function () {
+        this.layout.resize();
+    },
 
+    update: function (opt) {
+        return this.layout.update(opt);
     },
 
     addItem: function () {
@@ -20651,10 +20663,6 @@ BI.TableAdaptLayout = BI.inherit(BI.Layout, {
         this.element.append(this.$table);
     },
 
-    resize: function () {
-        // console.log("center_adapt布局不需要resize");
-    },
-
     populate: function (items) {
         BI.TableAdaptLayout.superclass.populate.apply(this, arguments);
         this._mount();
@@ -20712,7 +20720,11 @@ BI.VerticalAdaptLayout = BI.inherit(BI.Layout, {
     },
 
     resize: function () {
-        // console.log("vertical_adapt布局不需要resize");
+        this.layout.resize();
+    },
+
+    update: function (opt) {
+        return this.layout.update(opt);
     },
 
     populate: function (items) {
@@ -20758,10 +20770,6 @@ BI.HorizontalAutoLayout = BI.inherit(BI.Layout, {
         });
         this._handleGap(w, item, null, i);
         return w;
-    },
-
-    resize: function () {
-        // console.log("horizontal_adapt布局不需要resize");
     },
 
     populate: function (items) {
@@ -20822,6 +20830,14 @@ BI.InlineCenterAdaptLayout = BI.inherit(BI.Layout, {
         };
     },
 
+    resize: function () {
+        this.layout.resize();
+    },
+
+    update: function (opt) {
+        return this.layout.update(opt);
+    },
+
     populate: function (items) {
         this.layout.populate.apply(this.layout, arguments);
     }
@@ -20879,6 +20895,14 @@ BI.InlineHorizontalAdaptLayout = BI.inherit(BI.Layout, {
         };
     },
 
+    resize: function () {
+        this.layout.resize();
+    },
+
+    update: function (opt) {
+        return this.layout.update(opt);
+    },
+
     populate: function (items) {
         this.layout.populate.apply(this.layout, arguments);
     }
@@ -20934,6 +20958,14 @@ BI.InlineVerticalAdaptLayout = BI.inherit(BI.Layout, {
             tgap: o.tgap,
             bgap: o.bgap
         };
+    },
+
+    resize: function () {
+        this.layout.resize();
+    },
+
+    update: function (opt) {
+        return this.layout.update(opt);
     },
 
     populate: function (items) {
@@ -21096,6 +21128,10 @@ BI.FloatHorizontalFillLayout = BI.inherit(BI.Layout, {
         });
     },
 
+    update: function (opt) {
+        return this.forceUpdate(opt);
+    },
+
     populate: function (items) {
         BI.FloatHorizontalFillLayout.superclass.populate.apply(this, arguments);
         this._mount();
@@ -21134,7 +21170,7 @@ BI.FlexCenterLayout = BI.inherit(BI.Layout, {
         return {
             type: "bi.flex_horizontal",
             ref: function (_ref) {
-                self.wrapper = _ref;
+                self.layout = _ref;
             },
             horizontalAlign: o.horizontalAlign,
             verticalAlign: o.verticalAlign,
@@ -21152,15 +21188,15 @@ BI.FlexCenterLayout = BI.inherit(BI.Layout, {
     },
 
     resize: function () {
-        // console.log("flex_center_adapt布局不需要resize");
+        this.layout.resize();
     },
 
     update: function (opt) {
-        return this.wrapper.update(opt);
+        return this.layout.update(opt);
     },
 
     populate: function (items) {
-        this.wrapper.populate(items);
+        this.layout.populate(items);
     }
 });
 BI.shortcut("bi.flex_center_adapt", BI.FlexCenterLayout);
@@ -21197,7 +21233,7 @@ BI.FlexHorizontalCenter = BI.inherit(BI.Layout, {
         return {
             type: "bi.flex_vertical",
             ref: function (_ref) {
-                self.wrapper = _ref;
+                self.layout = _ref;
             },
             horizontalAlign: o.horizontalAlign,
             verticalAlign: o.verticalAlign,
@@ -21215,15 +21251,15 @@ BI.FlexHorizontalCenter = BI.inherit(BI.Layout, {
     },
 
     resize: function () {
-        // console.log("flex_vertical_center_adapt布局不需要resize");
+        this.layout.resize();
     },
 
     update: function (opt) {
-        return this.wrapper.update(opt);
+        return this.layout.update(opt);
     },
 
     populate: function (items) {
-        this.wrapper.populate(items);
+        this.layout.populate(items);
     }
 });
 BI.shortcut("bi.flex_horizontal_adapt", BI.FlexHorizontalCenter);
@@ -21314,10 +21350,6 @@ BI.FlexHorizontalLayout = BI.inherit(BI.Layout, {
         return w;
     },
 
-    resize: function () {
-        // console.log("flex_horizontal布局不需要resize");
-    },
-
     populate: function (items) {
         BI.FlexHorizontalLayout.superclass.populate.apply(this, arguments);
         this._mount();
@@ -21404,7 +21436,11 @@ BI.FlexLeftRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
     },
 
     resize: function () {
-        // console.log("left_right_vertical_adapt布局不需要resize");
+        this.layout.stroke(this._formatItems());
+    },
+
+    update: function (opt) {
+        return this.layout.update(opt);
     },
 
     addItem: function () {
@@ -21452,7 +21488,7 @@ BI.FlexVerticalCenter = BI.inherit(BI.Layout, {
         return {
             type: "bi.flex_horizontal",
             ref: function (_ref) {
-                self.wrapper = _ref;
+                self.layout = _ref;
             },
             verticalAlign: o.verticalAlign,
             horizontalAlign: o.horizontalAlign,
@@ -21470,15 +21506,15 @@ BI.FlexVerticalCenter = BI.inherit(BI.Layout, {
     },
 
     resize: function () {
-        // console.log("flex_vertical_center_adapt布局不需要resize");
+        this.layout.resize();
     },
 
     update: function (opt) {
-        return this.wrapper.update(opt);
+        return this.layout.update(opt);
     },
 
     populate: function (items) {
-        this.wrapper.populate(items);
+        this.layout.populate(items);
     }
 });
 BI.shortcut("bi.flex_vertical_adapt", BI.FlexVerticalCenter);
@@ -21568,10 +21604,6 @@ BI.FlexVerticalLayout = BI.inherit(BI.Layout, {
         return w;
     },
 
-    resize: function () {
-        // console.log("flex_vertical布局不需要resize");
-    },
-
     populate: function (items) {
         BI.FlexVerticalLayout.superclass.populate.apply(this, arguments);
         this._mount();
@@ -21613,7 +21645,7 @@ BI.FlexWrapperCenterLayout = BI.inherit(BI.Layout, {
         return {
             type: "bi.flex_scrollable_horizontal",
             ref: function (_ref) {
-                self.wrapper = _ref;
+                self.layout = _ref;
             },
             horizontalAlign: o.horizontalAlign,
             verticalAlign: o.verticalAlign,
@@ -21630,12 +21662,16 @@ BI.FlexWrapperCenterLayout = BI.inherit(BI.Layout, {
         };
     },
 
+    resize: function () {
+        this.layout.resize();
+    },
+
     update: function (opt) {
-        return this.wrapper.update(opt);
+        return this.layout.update(opt);
     },
 
     populate: function (items) {
-        this.wrapper.populate(items);
+        this.layout.populate(items);
     }
 });
 BI.shortcut("bi.flex_scrollable_center_adapt", BI.FlexWrapperCenterLayout);
@@ -21674,7 +21710,7 @@ BI.FlexWrapperHorizontalCenter = BI.inherit(BI.Layout, {
         return {
             type: "bi.flex_scrollable_vertical",
             ref: function (_ref) {
-                self.wrapper = _ref;
+                self.layout = _ref;
             },
             horizontalAlign: o.horizontalAlign,
             verticalAlign: o.verticalAlign,
@@ -21691,12 +21727,16 @@ BI.FlexWrapperHorizontalCenter = BI.inherit(BI.Layout, {
         };
     },
 
+    resize: function () {
+        this.layout.resize();
+    },
+
     update: function (opt) {
-        return this.wrapper.update(opt);
+        return this.layout.update(opt);
     },
 
     populate: function (items) {
-        this.wrapper.populate(items);
+        this.layout.populate(items);
     }
 });
 BI.shortcut("bi.flex_scrollable_horizontal_adapt", BI.FlexWrapperHorizontalCenter);
@@ -21793,10 +21833,6 @@ BI.FlexWrapperHorizontalLayout = BI.inherit(BI.Layout, {
         return this.$wrapper;
     },
 
-    resize: function () {
-        // console.log("flex_wrapper_horizontal布局不需要resize");
-    },
-
     populate: function (items) {
         BI.FlexWrapperHorizontalLayout.superclass.populate.apply(this, arguments);
         this._mount();
@@ -21838,7 +21874,7 @@ BI.FlexWrapperVerticalCenter = BI.inherit(BI.Layout, {
         return {
             type: "bi.flex_scrollable_horizontal",
             ref: function (_ref) {
-                self.wrapper = _ref;
+                self.layout = _ref;
             },
             verticalAlign: o.verticalAlign,
             horizontalAlign: o.horizontalAlign,
@@ -21855,12 +21891,16 @@ BI.FlexWrapperVerticalCenter = BI.inherit(BI.Layout, {
         };
     },
 
+    resize: function () {
+        this.layout.resize();
+    },
+
     update: function (opt) {
-        return this.wrapper.update(opt);
+        return this.layout.update(opt);
     },
 
     populate: function (items) {
-        this.wrapper.populate(items);
+        this.layout.populate(items);
     }
 });
 BI.shortcut("bi.flex_scrollable_vertical_adapt", BI.FlexWrapperVerticalCenter);
@@ -21957,10 +21997,6 @@ BI.FlexWrapperVerticalLayout = BI.inherit(BI.Layout, {
         return this.$wrapper;
     },
 
-    resize: function () {
-        // console.log("flex_wrapper_vertical布局不需要resize");
-    },
-
     populate: function (items) {
         BI.FlexWrapperVerticalLayout.superclass.populate.apply(this, arguments);
         this._mount();
@@ -21997,10 +22033,6 @@ BI.FloatAbsoluteCenterLayout = BI.inherit(BI.Layout, {
             position: "absolute",
         });
         return w;
-    },
-
-    resize: function () {
-        // console.log("float_absolute_center_adapt布局不需要resize");
     },
 
     populate: function (items) {
@@ -22074,11 +22106,15 @@ BI.FloatAbsoluteHorizontalLayout = BI.inherit(BI.Layout, {
     },
 
     resize: function () {
-        // console.log("float_absolute_horizontal_adapt布局不需要resize");
+        this.layout.stroke(this._formatItems(this.options.items));
+    },
+
+    update: function (opt) {
+        return this.layout.update(opt);
     },
 
     populate: function (items) {
-        this.layout.populate.apply(this, arguments);
+        this.layout.populate(this._formatItems(items));
     }
 });
 BI.shortcut("bi.absolute_horizontal_float", BI.FloatAbsoluteHorizontalLayout);
@@ -22187,7 +22223,11 @@ BI.FloatAbsoluteLeftRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
     },
 
     resize: function () {
-        // console.log("absolute_left_right_vertical_adapt布局不需要resize");
+        this.layout.stroke(this._formatItems());
+    },
+
+    update: function (opt) {
+        return this.layout.update(opt);
     },
 
     addItem: function () {
@@ -22252,7 +22292,11 @@ BI.FloatAbsoluteRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
     },
 
     resize: function () {
+        this.layout.stroke([{}].concat(this._formatItems(this.options.items)));
+    },
 
+    update: function (opt) {
+        return this.layout.update(opt);
     },
 
     addItem: function () {
@@ -22261,7 +22305,7 @@ BI.FloatAbsoluteRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
     },
 
     populate: function (items) {
-        this.layout.populate(items);
+        this.layout.populate([{}].concat(this._formatItems(items)));
     }
 });
 BI.shortcut("bi.absolute_right_vertical_float", BI.FloatAbsoluteRightVerticalAdaptLayout);
@@ -22330,11 +22374,15 @@ BI.FloatAbsoluteVerticalLayout = BI.inherit(BI.Layout, {
     },
 
     resize: function () {
-        // console.log("float_absolute_vertical_adapt布局不需要resize");
+        this.layout.stroke(this._formatItems(this.options.items));
+    },
+
+    update: function (opt) {
+        return this.layout.update(opt);
     },
 
     populate: function (items) {
-        this.layout.populate.apply(this, arguments);
+        this.layout.populate(this._formatItems(items));
     }
 });
 BI.shortcut("bi.absolute_vertical_float", BI.FloatAbsoluteVerticalLayout);
@@ -22439,10 +22487,6 @@ BI.AbsoluteLayout = BI.inherit(BI.Layout, {
         return w;
     },
 
-    resize: function () {
-        this.stroke(this.options.items);
-    },
-
     populate: function (items) {
         BI.AbsoluteLayout.superclass.populate.apply(this, arguments);
         this._mount();
@@ -22508,10 +22552,6 @@ BI.AdaptiveLayout = BI.inherit(BI.Layout, {
         return w;
     },
 
-    resize: function () {
-        this.stroke(this.options.items);
-    },
-
     populate: function (items) {
         BI.AbsoluteLayout.superclass.populate.apply(this, arguments);
         this._mount();
@@ -22540,10 +22580,6 @@ BI.BorderLayout = BI.inherit(BI.Layout, {
     render: function () {
         BI.BorderLayout.superclass.render.apply(this, arguments);
         this.populate(this.options.items);
-    },
-
-    resize: function () {
-        this.stroke(this.options.items);
     },
 
     addItem: function (item) {
@@ -22657,6 +22693,7 @@ BI.BorderLayout = BI.inherit(BI.Layout, {
     },
 
     update: function (opt) {
+        return this.forceUpdate(opt);
     },
 
     populate: function (items) {
@@ -22692,10 +22729,6 @@ BI.CardLayout = BI.inherit(BI.Layout, {
         this.populate(this.options.items);
     },
 
-    resize: function () {
-        // console.log("default布局不需要resize");
-    },
-
     stroke: function (items) {
         var self = this, o = this.options;
         this.showIndex = void 0;
@@ -22721,7 +22754,12 @@ BI.CardLayout = BI.inherit(BI.Layout, {
         });
     },
 
-    update: function () {
+    resize: function () {
+        // console.log("Card布局不需要resize");
+    },
+
+    update: function (opt) {
+        return this.forceUpdate(opt);
     },
 
     empty: function () {
@@ -22916,10 +22954,6 @@ BI.DefaultLayout = BI.inherit(BI.Layout, {
         return w;
     },
 
-    resize: function () {
-        // console.log("default布局不需要resize")
-    },
-
     populate: function (items) {
         BI.DefaultLayout.superclass.populate.apply(this, arguments);
         this._mount();
@@ -22945,38 +22979,11 @@ BI.DivisionLayout = BI.inherit(BI.Layout, {
             columns: null,
             rows: null,
             items: []
-            //    [
-            //    {
-            //        column: 0,
-            //        row: 0,
-            //        width: 0.25,
-            //        height: 0.33,
-            //        el: {type: 'bi.button', text: 'button1'}
-            //    },
-            //    {
-            //        column: 1,
-            //        row: 1,
-            //        width: 0.25,
-            //        height: 0.33,
-            //        el: {type: 'bi.button', text: 'button2'}
-            //    },
-            //    {
-            //        column: 3,
-            //        row: 2,
-            //        width: 0.25,
-            //        height: 0.33,
-            //        el: {type: 'bi.button', text: 'button3'}
-            //    }
-            // ]
         });
     },
     render: function () {
         BI.DivisionLayout.superclass.render.apply(this, arguments);
         this.populate(this.options.items);
-    },
-
-    resize: function () {
-        this.stroke(this.opitons.items);
     },
 
     addItem: function (item) {
@@ -23085,7 +23092,8 @@ BI.DivisionLayout = BI.inherit(BI.Layout, {
         }
     },
 
-    update: function () {
+    update: function (opt) {
+        return this.forceUpdate(opt);
     },
 
     populate: function (items) {
@@ -23166,10 +23174,6 @@ BI.FloatLeftLayout = BI.inherit(BI.Layout, {
         return w;
     },
 
-    resize: function () {
-        this.stroke(this.options.items);
-    },
-
     populate: function (items) {
         BI.FloatLeftLayout.superclass.populate.apply(this, arguments);
         this._mount();
@@ -23243,10 +23247,6 @@ BI.FloatRightLayout = BI.inherit(BI.Layout, {
         return w;
     },
 
-    resize: function () {
-        this.stroke(this.options.items);
-    },
-
     populate: function (items) {
         BI.FloatRightLayout.superclass.populate.apply(this, arguments);
         this._mount();
@@ -23272,23 +23272,6 @@ BI.GridLayout = BI.inherit(BI.Layout, {
             columns: null,
             rows: null,
             items: []
-            /* [
-             {
-             column: 0,
-             row: 0,
-             el: {type: 'bi.button', text: 'button1'}
-             },
-             {
-             column: 1,
-             row: 1,
-             el: {type: 'bi.button', text: 'button2'}
-             },
-             {
-             column: 3,
-             row: 2,
-             el: {type: 'bi.button', text: 'button3'}
-             }
-             ]*/
         });
     },
     render: function () {
@@ -23296,12 +23279,7 @@ BI.GridLayout = BI.inherit(BI.Layout, {
         this.populate(this.options.items);
     },
 
-    resize: function () {
-        // console.log("grid布局不需要resize")
-    },
-
     addItem: function () {
-        // do nothing
         throw new Error("不能添加子组件");
     },
 
@@ -23380,7 +23358,12 @@ BI.GridLayout = BI.inherit(BI.Layout, {
         }
     },
 
-    update: function () {
+    resize: function () {
+        // console.log("grid布局不需要resize")
+    },
+
+    update: function (opt) {
+        return this.forceUpdate(opt);
     },
 
     populate: function (items) {
@@ -23463,19 +23446,28 @@ BI.InlineLayout = BI.inherit(BI.Layout, {
         });
         w.element.addClass("i-item");
         if (columnSize === "fill" || columnSize === "") {
-            var left = o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0),
-                right = o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0);
-            for (var k = 0; k < i; k++) {
-                left += o.hgap + o.lgap + o.rgap + (o.items[k].lgap || 0) + (o.items[k].rgap || 0) + (o.items[k].hgap || 0) + (o.columnSize[k] || o.items[k].width);
-            }
-            for (var k = i + 1, len = o.columnSize.length || o.items.length; k < len; k++) {
-                right += o.hgap + o.lgap + o.rgap + (o.items[k].lgap || 0) + (o.items[k].rgap || 0) + (o.items[k].hgap || 0) + (o.columnSize[k] || o.items[k].width);
+            var length = o.hgap;
+            var fillCount = 0, autoCount = 0;
+            for (var k = 0, len = o.columnSize.length || o.items.length; k < len; k++) {
+                var cz = o.columnSize.length > 0 ? o.columnSize[k] : o.items[k].width;
+                if (cz === "fill") {
+                    fillCount++;
+                    cz = 0;
+                } else if (cz === "" || BI.isNull(cz)) {
+                    autoCount++;
+                    cz = 0;
+                }
+                length += o.hgap + o.lgap + o.rgap + (o.items[k].lgap || 0) + (o.items[k].rgap || 0) + (o.items[k].hgap || 0) + cz;
             }
             if (columnSize === "fill") {
-                w.element.css("min-width", "calc(100% - " + ((left + right) / BI.pixRatio + BI.pixUnit) + ")");
+                w.element.css("min-width", "calc((100% - " + (length / BI.pixRatio + BI.pixUnit) + ")" + (fillCount > 1 ? "/" + fillCount : "") + ")");
             }
             if (o.horizontalAlign === BI.HorizontalAlign.Stretch || !(o.scrollable === true || o.scrollx === true)) {
-                w.element.css("max-width", "calc(100% - " + ((left + right) / BI.pixRatio + BI.pixUnit) + ")");
+                if (columnSize === "fill") {
+                    w.element.css("max-width", "calc((100% - " + (length / BI.pixRatio + BI.pixUnit) + ")" + (fillCount > 1 ? "/" + fillCount : "") + ")");
+                } else {
+                    w.element.css("max-width", "calc((100% - " + (length / BI.pixRatio + BI.pixUnit) + ")" + (autoCount > 1 ? "/" + autoCount : "") + ")");
+                }
             }
         }
         this._handleGap(w, item, i);
@@ -23485,14 +23477,6 @@ BI.InlineLayout = BI.inherit(BI.Layout, {
             w.element.css("height", "calc(100% - " + ((top + bottom) / BI.pixRatio + BI.pixUnit) + ")");
         }
         return w;
-    },
-
-    resize: function () {
-        this.stroke(this.options.items);
-    },
-
-    addItem: function (item) {
-        throw new Error("不能添加子组件");
     },
 
     populate: function (items) {
@@ -23538,22 +23522,6 @@ BI.LatticeLayout = BI.inherit(BI.Layout, {
         }
         w.element.css({position: "relative", float: "left", width: width});
         return w;
-    },
-
-    addItem: function (item) {
-        var w = BI.LatticeLayout.superclass.addItem.apply(this, arguments);
-        this.resize();
-        return w;
-    },
-
-    addItemAt: function (item) {
-        var w = BI.LatticeLayout.superclass.addItemAt.apply(this, arguments);
-        this.resize();
-        return w;
-    },
-
-    resize: function () {
-        this.stroke(this.options.items);
     },
 
     populate: function (items) {
@@ -23691,14 +23659,8 @@ BI.TableLayout = BI.inherit(BI.Layout, {
         // console.log("table布局不需要resize");
     },
 
-    addItem: function (arr) {
-        if (!BI.isArray(arr)) {
-            throw new Error("必须是数组", arr);
-        }
-        return BI.TableLayout.superclass.addItem.apply(this, arguments);
-    },
-
-    update: function () {
+    update: function (opt) {
+        return this.forceUpdate(opt);
     },
 
     populate: function (items) {
@@ -23738,9 +23700,6 @@ BI.HTapeLayout = BI.inherit(BI.Layout, {
         this.populate(this.options.items);
     },
 
-    resize: function () {
-        this.stroke(this.options.items);
-    },
     addItem: function (item) {
         // do nothing
         throw new Error("不能添加子组件");
@@ -23837,12 +23796,8 @@ BI.HTapeLayout = BI.inherit(BI.Layout, {
         });
     },
 
-    update: function () {
-        var updated;
-        BI.each(this._children, function (i, child) {
-            updated = child.update() || updated;
-        });
-        return updated;
+    update: function (opt) {
+        return this.forceUpdate(opt);
     },
 
     populate: function (items) {
@@ -23875,10 +23830,6 @@ BI.VTapeLayout = BI.inherit(BI.Layout, {
     render: function () {
         BI.VTapeLayout.superclass.render.apply(this, arguments);
         this.populate(this.options.items);
-    },
-
-    resize: function () {
-        this.stroke(this.options.items);
     },
 
     addItem: function (item) {
@@ -23977,7 +23928,8 @@ BI.VTapeLayout = BI.inherit(BI.Layout, {
         });
     },
 
-    update: function () {
+    update: function (opt) {
+        return this.forceUpdate(opt);
     },
 
     populate: function (items) {
@@ -24170,14 +24122,8 @@ BI.TdLayout = BI.inherit(BI.Layout, {
         // console.log("td布局不需要resize");
     },
 
-    addItem: function (arr) {
-        if (!BI.isArray(arr)) {
-            throw new Error("必须是数组", arr);
-        }
-        return BI.TdLayout.superclass.addItem.apply(this, arguments);
-    },
-
-    update: function () {
+    update: function (opt) {
+        return this.forceUpdate(opt);
     },
 
     populate: function (items) {
@@ -24236,10 +24182,6 @@ BI.VerticalLayout = BI.inherit(BI.Layout, {
         return w;
     },
 
-    resize: function () {
-        this.stroke(this.options.items);
-    },
-
     populate: function (items) {
         BI.VerticalLayout.superclass.populate.apply(this, arguments);
         this._mount();
@@ -24277,10 +24219,6 @@ BI.WindowLayout = BI.inherit(BI.Layout, {
     render: function () {
         BI.WindowLayout.superclass.render.apply(this, arguments);
         this.populate(this.options.items);
-    },
-
-    resize: function () {
-        this.stroke(this.options.items);
     },
 
     addItem: function (item) {
@@ -24425,7 +24363,12 @@ BI.WindowLayout = BI.inherit(BI.Layout, {
         }
     },
 
-    update: function () {
+    resize: function () {
+        // console.log("window布局不需要resize");
+    },
+
+    update: function (opt) {
+        return this.forceUpdate(opt);
     },
 
     populate: function (items) {
@@ -24490,7 +24433,7 @@ BI.CenterLayout = BI.inherit(BI.Layout, {
         return {
             type: "bi.grid",
             ref: function (_ref) {
-                self.wrapper = _ref;
+                self.layout = _ref;
             },
             columns: list.length,
             rows: 1,
@@ -24508,11 +24451,11 @@ BI.CenterLayout = BI.inherit(BI.Layout, {
     },
 
     update: function (opt) {
-        return this.wrapper.update(opt);
+        return this.layout.update(opt);
     },
 
     populate: function (items) {
-        this.wrapper.populate.apply(this.wrapper, arguments);
+        this.layout.populate.apply(this.layout, arguments);
     }
 });
 BI.shortcut("bi.center", BI.CenterLayout);
@@ -24573,7 +24516,7 @@ BI.FloatCenterLayout = BI.inherit(BI.Layout, {
         return {
             type: "bi.left",
             ref: function (_ref) {
-                self.wrapper = _ref;
+                self.layout = _ref;
             },
             items: list
         };
@@ -24589,11 +24532,11 @@ BI.FloatCenterLayout = BI.inherit(BI.Layout, {
     },
 
     update: function (opt) {
-        return this.wrapper.update(opt);
+        return this.layout.update(opt);
     },
 
     populate: function (items) {
-        this.wrapper.populate.apply(this.wrapper, arguments);
+        this.layout.populate.apply(this.layout, arguments);
     }
 });
 BI.shortcut("bi.float_center", BI.FloatCenterLayout);
@@ -24651,7 +24594,7 @@ BI.HorizontalCenterLayout = BI.inherit(BI.Layout, {
         return {
             type: "bi.grid",
             ref: function (_ref) {
-                self.wrapper = _ref;
+                self.layout = _ref;
             },
             columns: list.length,
             rows: 1,
@@ -24669,11 +24612,11 @@ BI.HorizontalCenterLayout = BI.inherit(BI.Layout, {
     },
 
     update: function (opt) {
-        return this.wrapper.update(opt);
+        return this.layout.update(opt);
     },
 
     populate: function (items) {
-        this.wrapper.populate.apply(this.wrapper, arguments);
+        this.layout.populate.apply(this.layout, arguments);
     }
 });
 BI.shortcut("bi.horizontal_center", BI.HorizontalCenterLayout);
@@ -24732,7 +24675,7 @@ BI.VerticalCenterLayout = BI.inherit(BI.Layout, {
         return {
             type: "bi.grid",
             ref: function (_ref) {
-                self.wrapper = _ref;
+                self.layout = _ref;
             },
             columns: 1,
             rows: list.length,
@@ -24750,11 +24693,11 @@ BI.VerticalCenterLayout = BI.inherit(BI.Layout, {
     },
 
     update: function (opt) {
-        return this.wrapper.update(opt);
+        return this.layout.update(opt);
     },
 
     populate: function (items) {
-        this.wrapper.populate.apply(this.wrapper, arguments);
+        this.layout.populate.apply(this.layout, arguments);
     }
 });
 BI.shortcut("bi.vertical_center", BI.VerticalCenterLayout);
