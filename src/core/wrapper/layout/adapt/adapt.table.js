@@ -24,11 +24,23 @@ BI.TableAdaptLayout = BI.inherit(BI.Layout, {
         this.$table = BI.Widget._renderEngine.createElement("<div>").css({
             position: "relative",
             display: "table",
-            width: (o.horizontalAlign === BI.HorizontalAlign.Center || o.horizontalAlign === BI.HorizontalAlign.Stretch) ? "100%" : "auto",
+            width: (o.horizontalAlign === BI.HorizontalAlign.Center || o.horizontalAlign === BI.HorizontalAlign.Stretch || this._hasFill()) ? "100%" : "auto",
             height: (o.verticalAlign !== BI.VerticalAlign.Top) ? "100%" : "auto",
             "white-space": "nowrap"
         });
         this.populate(this.options.items);
+    },
+
+    _hasFill: function () {
+        var o = this.options;
+        if (o.columnSize.length > 0) {
+            return o.columnSize.indexOf("fill") >= 0;
+        }
+        return BI.some(o.items, function (i, item) {
+            if (item.width === "fill") {
+                return true;
+            }
+        });
     },
 
     _addElement: function (i, item) {
@@ -40,17 +52,7 @@ BI.TableAdaptLayout = BI.inherit(BI.Layout, {
                 ((columnSize * 100).toFixed(1) + "%")
                 : (columnSize + (i === 0 ? o.hgap : 0) + o.hgap + o.lgap + o.rgap);
         }
-        function hasFill() {
-            if (o.columnSize.length > 0) {
-                return o.columnSize.indexOf("fill") >= 0;
-            }
-            return BI.some(o.items, function (i, item) {
-                if (item.width === "fill") {
-                    return true;
-                }
-            });
-        }
-        if ((BI.isNull(columnSize) || columnSize === "") && hasFill()) {
+        if ((BI.isNull(columnSize) || columnSize === "") && this._hasFill()) {
             width = 2;
         }
         if (!this.hasWidget(this._getChildName(i))) {

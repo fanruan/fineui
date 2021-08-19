@@ -76,7 +76,7 @@ BI.FloatHorizontalFillLayout = BI.inherit(BI.Layout, {
             }
             var top = o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0),
                 bottom = o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0);
-            if (BI.isNull(item.height)) {
+            if (o.verticalAlign === BI.VerticalAlign.Stretch && BI.isNull(item.height)) {
                 w.element.css({
                     height: "calc(100% - " + ((top + bottom) / BI.pixRatio + BI.pixUnit) + ")"
                 });

@@ -48,7 +48,9 @@ BI.InlineLayout = BI.inherit(BI.Layout, {
         }
         w.element.css({
             position: "relative",
-            "vertical-align": o.verticalAlign
+            "vertical-align": o.verticalAlign,
+            "min-width": "auto",
+            "max-width": "auto"
         });
         w.element.addClass("i-item");
         if (columnSize === "fill" || columnSize === "") {
@@ -77,7 +79,7 @@ BI.InlineLayout = BI.inherit(BI.Layout, {
             }
         }
         this._handleGap(w, item, i);
-        if (o.verticalAlign === BI.VerticalAlign.Stretch) {
+        if (o.verticalAlign === BI.VerticalAlign.Stretch && BI.isNull(item.height)) {
             var top = o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0),
                 bottom = o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0);
             w.element.css("height", "calc(100% - " + ((top + bottom) / BI.pixRatio + BI.pixUnit) + ")");
