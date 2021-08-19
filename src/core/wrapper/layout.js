@@ -199,13 +199,13 @@ BI.Layout = BI.inherit(BI.Widget, {
     },
 
     // 不依赖于this.options.items进行更新
-    _updateItemAt: function (index, item) {
-        var del = this._children[this._getChildName(index)];
-        delete this._children[this._getChildName(index)];
-        var w = this._addElement(index, item);
-        this._children[this._getChildName(index)] = w;
-        if (index > 0) {
-            this._children[this._getChildName(index - 1)].element.after(w.element);
+    _updateItemAt: function (oldIndex, newIndex, item) {
+        var del = this._children[this._getChildName(oldIndex)];
+        delete this._children[this._getChildName(oldIndex)];
+        var w = this._addElement(newIndex, item);
+        this._children[this._getChildName(newIndex)] = w;
+        if (oldIndex > 0) {
+            this._children[this._getChildName(oldIndex - 1)].element.after(w.element);
         } else {
             w.element.prependTo(this._getWrapper());
         }
@@ -377,9 +377,9 @@ BI.Layout = BI.inherit(BI.Widget, {
         });
     },
 
-    patchItem: function (oldVnode, vnode, index) {
-        var shouldUpdate = this.shouldUpdateItem(index, vnode);
-        var child = this._children[this._getChildName(index)];
+    patchItem: function (oldVnode, vnode, oldIndex, newIndex) {
+        var shouldUpdate = this.shouldUpdateItem(oldIndex, vnode);
+        var child = this._children[this._getChildName(oldIndex)];
         if (shouldUpdate) {
             return child._update(this._getOptions(vnode), shouldUpdate);
         }
@@ -387,7 +387,7 @@ BI.Layout = BI.inherit(BI.Widget, {
             // if (child.update) {
             //     return child.update(this._getOptions(vnode));
             // }
-            return this._updateItemAt(index, vnode);
+            return this._updateItemAt(oldIndex, newIndex, vnode);
         }
     },
 
@@ -417,23 +417,23 @@ BI.Layout = BI.inherit(BI.Widget, {
             } else if (BI.isNull(oldEndVnode)) {
                 oldEndVnode = oldCh[--oldEndIdx];
             } else if (sameVnode(oldStartVnode, newStartVnode, oldStartIdx, newStartIdx)) {
-                updated = this.patchItem(oldStartVnode, newStartVnode, oldStartIdx) || updated;
+                updated = this.patchItem(oldStartVnode, newStartVnode, oldStartIdx, newStartIdx) || updated;
                 children[oldStartVnode.key == null ? oldStartIdx : oldStartVnode.key] = this._children[this._getChildName(oldStartIdx)];
                 oldStartVnode = oldCh[++oldStartIdx];
                 newStartVnode = newCh[++newStartIdx];
             } else if (sameVnode(oldEndVnode, newEndVnode, oldEndIdx, newEndIdx)) {
-                updated = this.patchItem(oldEndVnode, newEndVnode, oldEndIdx) || updated;
+                updated = this.patchItem(oldEndVnode, newEndVnode, oldEndIdx, newEndIdx) || updated;
                 children[oldEndVnode.key == null ? oldEndIdx : oldEndVnode.key] = this._children[this._getChildName(oldEndIdx)];
                 oldEndVnode = oldCh[--oldEndIdx];
                 newEndVnode = newCh[--newEndIdx];
             } else if (sameVnode(oldStartVnode, newEndVnode)) {
-                updated = this.patchItem(oldStartVnode, newEndVnode, oldStartIdx) || updated;
+                updated = this.patchItem(oldStartVnode, newEndVnode, oldStartIdx, newStartIdx) || updated;
                 children[oldStartVnode.key == null ? oldStartIdx : oldStartVnode.key] = this._children[this._getChildName(oldStartIdx)];
                 insertBefore(oldStartVnode, oldEndVnode, true);
                 oldStartVnode = oldCh[++oldStartIdx];
                 newEndVnode = newCh[--newEndIdx];
             } else if (sameVnode(oldEndVnode, newStartVnode)) {
-                updated = this.patchItem(oldEndVnode, newStartVnode, oldEndIdx) || updated;
+                updated = this.patchItem(oldEndVnode, newStartVnode, oldEndIdx, newEndIdx) || updated;
                 children[oldEndVnode.key == null ? oldEndIdx : oldEndVnode.key] = this._children[this._getChildName(oldEndIdx)];
                 insertBefore(oldEndVnode, oldStartVnode);
                 oldEndVnode = oldCh[--oldEndIdx];
@@ -447,7 +447,7 @@ BI.Layout = BI.inherit(BI.Widget, {
                 } else {   //  如果新节点在就旧节点区间中存在就复用一下
                     BI.each(oldCh, function (index, child) {
                         if (child && sameVnode(child, newStartVnode)) {
-                            updated = self.patchItem(sameOldVnode, newStartVnode, index) || updated;
+                            updated = self.patchItem(sameOldVnode, newStartVnode, index, index) || updated;
                             children[sameOldVnode.key == null ? index : sameOldVnode.key] = self._children[self._getChildName(index)];
                             oldCh[index] = undefined;
                             insertBefore(sameOldVnode, oldStartVnode);
