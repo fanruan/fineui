@@ -1,4 +1,4 @@
-/*! time: 2021-8-19 18:31:31 */
+/*! time: 2021-8-19 20:00:26 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -21024,9 +21024,6 @@ BI.FloatHorizontalFillLayout = BI.inherit(BI.Layout, {
         this.populate(this.options.items);
     },
 
-    resize: function () {
-        // console.log("填充布局不需要resize");
-    },
     addItem: function (item) {
         // do nothing
         throw new Error("不能添加子组件");
@@ -21084,8 +21081,12 @@ BI.FloatHorizontalFillLayout = BI.inherit(BI.Layout, {
             }
             var top = o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0),
                 bottom = o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0);
+            if (BI.isNull(item.height)) {
+                w.element.css({
+                    height: "calc(100% - " + ((top + bottom) / BI.pixRatio + BI.pixUnit) + ")"
+                });
+            }
             w.element.css({
-                height: "calc(100% - " + ((top + bottom) / BI.pixRatio + BI.pixUnit) + ")",
                 position: "relative"
             });
             return w;
@@ -21126,6 +21127,10 @@ BI.FloatHorizontalFillLayout = BI.inherit(BI.Layout, {
                 self.addWidget(self._getChildName(rank++), w);
             }
         });
+    },
+
+    resize: function () {
+        // console.log("填充布局不需要resize");
     },
 
     update: function (opt) {
