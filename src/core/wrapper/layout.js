@@ -550,8 +550,15 @@ BI.Layout = BI.inherit(BI.Widget, {
         return updated;
     },
 
-    shouldUpdate: function () {
-        return true;
+    forceUpdate: function (opt) {
+        if (this._isMounted) {
+            BI.each(this._children, function (i, c) {
+                c.destroy();
+            });
+            this._children = {};
+        }
+        this.options.items = opt.items;
+        this.stroke(opt.items);
     },
 
     update: function (opt) {
@@ -560,28 +567,6 @@ BI.Layout = BI.inherit(BI.Widget, {
         var updated = this.updateChildren(o.items, items);
         this.options.items = items;
         return updated;
-        // var updated, i, len;
-        // for (i = 0, len = Math.min(o.items.length, items.length); i < len; i++) {
-        //     if (!this._compare(o.items[i], items[i])) {
-        //         updated = this.updateItemAt(i, items[i]) || updated;
-        //     }
-        // }
-        // if (o.items.length > items.length) {
-        //     var deleted = [];
-        //     for (i = items.length; i < o.items.length; i++) {
-        //         deleted.push(this._children[this._getChildName(i)]);
-        //         delete this._children[this._getChildName(i)];
-        //     }
-        //     o.items.splice(items.length);
-        //     BI.each(deleted, function (i, w) {
-        //         w._destroy();
-        //     })
-        // } else if (items.length > o.items.length) {
-        //     for (i = o.items.length; i < items.length; i++) {
-        //         this.addItemAt(i, items[i]);
-        //     }
-        // }
-        // return updated;
     },
 
     stroke: function (items) {
@@ -620,18 +605,10 @@ BI.Layout = BI.inherit(BI.Widget, {
     },
 
     populate: function (items) {
-        var self = this, o = this.options;
         items = items || [];
-        var shouldUpdate = this.shouldUpdate();
-        if (this._isMounted && shouldUpdate) {
+        if (this._isMounted) {
             this.update({items: items});
             return;
-        }
-        if (this._isMounted && !shouldUpdate){
-            BI.each(this._children, function (i, c) {
-                c.destroy();
-            });
-            this._children = {};
         }
         this.options.items = items;
         this.stroke(items);

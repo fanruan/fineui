@@ -126,8 +126,8 @@ BI.BorderLayout = BI.inherit(BI.Layout, {
         }
     },
 
-    shouldUpdate: function () {
-        return false;
+    update: function (opt) {
+        return this.forceUpdate(opt);
     },
 
     populate: function (items) {

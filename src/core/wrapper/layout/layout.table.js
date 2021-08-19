@@ -121,8 +121,8 @@ BI.TableLayout = BI.inherit(BI.Layout, {
         // console.log("table布局不需要resize");
     },
 
-    shouldUpdate: function () {
-        return false;
+    update: function (opt) {
+        return this.forceUpdate(opt);
     },
 
     populate: function (items) {

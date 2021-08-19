@@ -49,7 +49,7 @@ BI.FloatCenterLayout = BI.inherit(BI.Layout, {
         return {
             type: "bi.left",
             ref: function (_ref) {
-                self.wrapper = _ref;
+                self.layout = _ref;
             },
             items: list
         };
@@ -65,11 +65,11 @@ BI.FloatCenterLayout = BI.inherit(BI.Layout, {
     },
 
     update: function (opt) {
-        return this.wrapper.update(opt);
+        return this.layout.update(opt);
     },
 
     populate: function (items) {
-        this.wrapper.populate.apply(this.wrapper, arguments);
+        this.layout.populate.apply(this.layout, arguments);
     }
 });
 BI.shortcut("bi.float_center", BI.FloatCenterLayout);

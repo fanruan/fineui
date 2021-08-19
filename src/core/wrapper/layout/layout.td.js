@@ -172,8 +172,8 @@ BI.TdLayout = BI.inherit(BI.Layout, {
         this.element.append(this.$table);
     },
 
-    shouldUpdate: function () {
-        return false;
+    update: function (opt) {
+        return this.forceUpdate(opt);
     },
 
     populate: function (items) {
