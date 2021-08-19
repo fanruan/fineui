@@ -502,7 +502,7 @@ BI.Layout = BI.inherit(BI.Widget, {
                 if (BI.isNotNull(ch)) {
                     var node = self._getOptions(ch);
                     var key = node.key == null ? startIdx : node.key;
-                    delete self._children[self._getChildName(key)];
+                    delete self._children[self._getChildName(startIdx)];
                     children[key]._destroy();
                 }
             }
