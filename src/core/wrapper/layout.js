@@ -389,7 +389,6 @@ BI.Layout = BI.inherit(BI.Widget, {
             // }
             return this._updateItemAt(index, vnode);
         }
-
     },
 
     updateChildren: function (oldCh, newCh) {
