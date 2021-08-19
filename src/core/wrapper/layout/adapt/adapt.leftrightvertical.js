@@ -80,16 +80,6 @@ BI.LeftRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
         this.right.stroke(this.options.items.right);
     },
 
-    update: function (opt) {
-        this.left.update({
-            items: opt.items.left
-        });
-        this.right.update({
-            items: opt.items.right
-        });
-        return true;
-    },
-
     addItem: function () {
         // do nothing
         throw new Error("不能添加子组件");
@@ -141,10 +131,6 @@ BI.LeftVerticalAdaptLayout = BI.inherit(BI.Layout, {
 
     resize: function () {
         this.layout.resize();
-    },
-
-    update: function (opt) {
-        return this.layout.update(opt);
     },
 
     addItem: function () {
