@@ -43,18 +43,14 @@ BI.InlineLayout = BI.inherit(BI.Layout, {
                 columnSize = null;
             }
         }
-        w.element.css({
-            position: "relative",
-            "vertical-align": o.verticalAlign,
-            width: "auto",
-            "min-width": "auto",
-            "max-width": "none"
-        });
-        w.element.addClass("i-item");
-
         if (columnSize > 0) {
             w.element.width(columnSize < 1 ? ((columnSize * 100).toFixed(1) + "%") : (columnSize / BI.pixRatio + BI.pixUnit));
         }
+        w.element.css({
+            position: "relative",
+            "vertical-align": o.verticalAlign
+        });
+        w.element.addClass("i-item");
         if (columnSize === "fill" || columnSize === "") {
             var length = o.hgap;
             var fillCount = 0, autoCount = 0;
