@@ -167,6 +167,10 @@ BI.WindowLayout = BI.inherit(BI.Layout, {
         }
     },
 
+    resize: function () {
+        // console.log("window布局不需要resize");
+    },
+
     update: function (opt) {
         return this.forceUpdate(opt);
     },

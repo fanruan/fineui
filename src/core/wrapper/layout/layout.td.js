@@ -172,6 +172,10 @@ BI.TdLayout = BI.inherit(BI.Layout, {
         this.element.append(this.$table);
     },
 
+    resize: function () {
+        // console.log("td布局不需要resize");
+    },
+
     update: function (opt) {
         return this.forceUpdate(opt);
     },

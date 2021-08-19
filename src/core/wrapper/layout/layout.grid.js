@@ -18,10 +18,6 @@ BI.GridLayout = BI.inherit(BI.Layout, {
         this.populate(this.options.items);
     },
 
-    resize: function () {
-        // console.log("grid布局不需要resize")
-    },
-
     addItem: function () {
         throw new Error("不能添加子组件");
     },
@@ -99,6 +95,10 @@ BI.GridLayout = BI.inherit(BI.Layout, {
                 this.addWidget(this._getChildName(i + "_" + j), els[i][j]);
             }
         }
+    },
+
+    resize: function () {
+        // console.log("grid布局不需要resize")
     },
 
     update: function (opt) {
