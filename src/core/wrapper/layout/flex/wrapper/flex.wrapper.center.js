@@ -27,7 +27,7 @@ BI.FlexWrapperCenterLayout = BI.inherit(BI.Layout, {
         return {
             type: "bi.flex_scrollable_horizontal",
             ref: function (_ref) {
-                self.wrapper = _ref;
+                self.layout = _ref;
             },
             horizontalAlign: o.horizontalAlign,
             verticalAlign: o.verticalAlign,
@@ -45,15 +45,15 @@ BI.FlexWrapperCenterLayout = BI.inherit(BI.Layout, {
     },
 
     resize: function () {
-        this.wrapper.resize();
+        this.layout.resize();
     },
 
     update: function (opt) {
-        return this.wrapper.update(opt);
+        return this.layout.update(opt);
     },
 
     populate: function (items) {
-        this.wrapper.populate(items);
+        this.layout.populate(items);
     }
 });
 BI.shortcut("bi.flex_scrollable_center_adapt", BI.FlexWrapperCenterLayout);
