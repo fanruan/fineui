@@ -441,7 +441,7 @@ BI.Layout = BI.inherit(BI.Widget, {
             } else {
                 var sameOldVnode = findOldVnode(oldCh, newStartVnode, oldStartIdx, oldEndIdx);
                 if (BI.isNull(sameOldVnode)) {  //  不存在就把新的放到左边
-                    var node = addNode(newStartVnode);
+                    var node = addNode(newStartVnode, newStartIdx);
                     insertBefore(node, oldStartVnode);
                     newStartVnode = newCh[++newStartIdx];
                 } else {   //  如果新节点在就旧节点区间中存在就复用一下
@@ -486,7 +486,7 @@ BI.Layout = BI.inherit(BI.Widget, {
         function addNode (vnode, index) {
             var opt = self._getOptions(vnode);
             var key = opt.key == null ? index : opt.key;
-            return children[key] = self._addElement(key, vnode);
+            return children[key] = self._addElement(index, vnode);
         }
 
         function addVnodes (before, vnodes, startIdx, endIdx) {
