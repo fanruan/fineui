@@ -179,7 +179,7 @@ BI.FloatAbsoluteRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
     },
 
     populate: function (items) {
-        this.layout.populate(items);
+        this.layout.populate([{}].concat(this._formatItems(items)));
     }
 });
 BI.shortcut("bi.absolute_right_vertical_float", BI.FloatAbsoluteRightVerticalAdaptLayout);
