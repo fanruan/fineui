@@ -60,10 +60,6 @@ BI.FloatAbsoluteHorizontalLayout = BI.inherit(BI.Layout, {
         this.layout.stroke(this._formatItems(this.options.items));
     },
 
-    update: function (opt) {
-        return this.layout.update(opt);
-    },
-
     populate: function (items) {
         this.layout.populate(this._formatItems(items));
     }

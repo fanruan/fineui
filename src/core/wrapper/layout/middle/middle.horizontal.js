@@ -63,10 +63,6 @@ BI.HorizontalCenterLayout = BI.inherit(BI.Layout, {
         throw new Error("不能添加子组件");
     },
 
-    update: function (opt) {
-        return this.layout.update(opt);
-    },
-
     populate: function (items) {
         this.layout.populate.apply(this.layout, arguments);
     }

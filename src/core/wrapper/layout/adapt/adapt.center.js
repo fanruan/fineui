@@ -46,10 +46,6 @@ BI.CenterAdaptLayout = BI.inherit(BI.Layout, {
         this.layout.resize();
     },
 
-    update: function (opt) {
-        return this.layout.update(opt);
-    },
-
     populate: function (items) {
         this.layout.populate.apply(this, arguments);
     }

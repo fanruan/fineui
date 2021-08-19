@@ -135,10 +135,6 @@ BI.AbsoluteRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
         this.layout.stroke([{}].concat(this.options.items))
     },
 
-    update: function (opt) {
-        return this.layout.update(opt);
-    },
-
     addItem: function () {
         // do nothing
         throw new Error("不能添加子组件");
