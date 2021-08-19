@@ -76,14 +76,6 @@ BI.InlineLayout = BI.inherit(BI.Layout, {
         return w;
     },
 
-    resize: function () {
-        this.stroke(this.options.items);
-    },
-
-    addItem: function (item) {
-        throw new Error("不能添加子组件");
-    },
-
     populate: function (items) {
         BI.InlineLayout.superclass.populate.apply(this, arguments);
         this._mount();

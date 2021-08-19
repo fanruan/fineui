@@ -44,6 +44,10 @@ BI.FlexWrapperCenterLayout = BI.inherit(BI.Layout, {
         };
     },
 
+    resize: function () {
+        this.wrapper.resize();
+    },
+
     update: function (opt) {
         return this.wrapper.update(opt);
     },

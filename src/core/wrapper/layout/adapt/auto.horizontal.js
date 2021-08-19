@@ -32,10 +32,6 @@ BI.HorizontalAutoLayout = BI.inherit(BI.Layout, {
         return w;
     },
 
-    resize: function () {
-        // console.log("horizontal_adapt布局不需要resize");
-    },
-
     populate: function (items) {
         BI.HorizontalAutoLayout.superclass.populate.apply(this, arguments);
         this._mount();

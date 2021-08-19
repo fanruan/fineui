@@ -119,7 +119,8 @@ BI.GridLayout = BI.inherit(BI.Layout, {
         }
     },
 
-    update: function () {
+    shouldUpdate: function () {
+        return false;
     },
 
     populate: function (items) {

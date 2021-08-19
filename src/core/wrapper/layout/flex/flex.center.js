@@ -42,7 +42,7 @@ BI.FlexCenterLayout = BI.inherit(BI.Layout, {
     },
 
     resize: function () {
-        // console.log("flex_center_adapt布局不需要resize");
+        this.wrapper.resize();
     },
 
     update: function (opt) {

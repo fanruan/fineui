@@ -172,18 +172,8 @@ BI.TdLayout = BI.inherit(BI.Layout, {
         this.element.append(this.$table);
     },
 
-    resize: function () {
-        // console.log("td布局不需要resize");
-    },
-
-    addItem: function (arr) {
-        if (!BI.isArray(arr)) {
-            throw new Error("必须是数组", arr);
-        }
-        return BI.TdLayout.superclass.addItem.apply(this, arguments);
-    },
-
-    update: function () {
+    shouldUpdate: function () {
+        return false;
     },
 
     populate: function (items) {

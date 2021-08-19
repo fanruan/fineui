@@ -550,6 +550,10 @@ BI.Layout = BI.inherit(BI.Widget, {
         return updated;
     },
 
+    shouldUpdate: function () {
+        return true;
+    },
+
     update: function (opt) {
         var o = this.options;
         var items = opt.items || [];
@@ -618,16 +622,23 @@ BI.Layout = BI.inherit(BI.Widget, {
     populate: function (items) {
         var self = this, o = this.options;
         items = items || [];
-        if (this._isMounted) {
+        var shouldUpdate = this.shouldUpdate();
+        if (this._isMounted && shouldUpdate) {
             this.update({items: items});
             return;
+        }
+        if (this._isMounted && !shouldUpdate){
+            BI.each(this._children, function (i, c) {
+                c.destroy();
+            });
+            this._children = {};
         }
         this.options.items = items;
         this.stroke(items);
     },
 
     resize: function () {
-
+        this.stroke(this.options.items);
     }
 });
 BI.shortcut("bi.layout", BI.Layout);

@@ -44,7 +44,7 @@ BI.FlexVerticalCenter = BI.inherit(BI.Layout, {
     },
 
     resize: function () {
-        // console.log("flex_vertical_center_adapt布局不需要resize");
+        this.wrapper.resize();
     },
 
     update: function (opt) {

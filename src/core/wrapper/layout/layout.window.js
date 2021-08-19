@@ -25,10 +25,6 @@ BI.WindowLayout = BI.inherit(BI.Layout, {
         this.populate(this.options.items);
     },
 
-    resize: function () {
-        this.stroke(this.options.items);
-    },
-
     addItem: function (item) {
         // do nothing
         throw new Error("不能添加子组件");
@@ -171,7 +167,8 @@ BI.WindowLayout = BI.inherit(BI.Layout, {
         }
     },
 
-    update: function () {
+    shouldUpdate: function () {
+        return false;
     },
 
     populate: function (items) {

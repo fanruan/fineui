@@ -20,7 +20,7 @@ BI.CardLayout = BI.inherit(BI.Layout, {
     },
 
     resize: function () {
-        // console.log("default布局不需要resize");
+        // console.log("Card布局不需要resize");
     },
 
     stroke: function (items) {
@@ -48,7 +48,8 @@ BI.CardLayout = BI.inherit(BI.Layout, {
         });
     },
 
-    update: function () {
+    shouldUpdate: function () {
+        return false;
     },
 
     empty: function () {
