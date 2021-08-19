@@ -198,6 +198,21 @@ BI.Layout = BI.inherit(BI.Widget, {
         return this.element;
     },
 
+    // 不依赖于this.options.items进行更新
+    _updateItemAt: function (index, item) {
+        var del = this._children[this._getChildName(index)];
+        delete this._children[this._getChildName(index)];
+        var w = this._addElement(index, item);
+        this._children[this._getChildName(index)] = w;
+        if (index > 0) {
+            this._children[this._getChildName(index - 1)].element.after(w.element);
+        } else {
+            w.element.prependTo(this._getWrapper());
+        }
+        del._destroy();
+        w._mount();
+    },
+
     _addItemAt: function (index, item) {
         for (var i = this.options.items.length; i > index; i--) {
             this._children[this._getChildName(i)] = this._children[this._getChildName(i - 1)];
@@ -286,33 +301,11 @@ BI.Layout = BI.inherit(BI.Widget, {
     },
 
     shouldUpdateItem: function (index, item) {
-        if (index < 0 || index > this.options.items.length - 1) {
-            return false;
-        }
         var child = this._children[this._getChildName(index)];
-        if (!child.shouldUpdate) {
+        if (!child || !child.shouldUpdate) {
             return null;
         }
         return child.shouldUpdate(this._getOptions(item));
-    },
-
-    updateItemAt: function (index, item) {
-        if (index < 0 || index > this.options.items.length - 1) {
-            return;
-        }
-        var del = this._children[this._getChildName(index)];
-        delete this._children[this._getChildName(index)];
-        this.options.items.splice(index, 1);
-        var w = this._addElement(index, item);
-        this.options.items.splice(index, 0, item);
-        this._children[this._getChildName(index)] = w;
-        if (index > 0) {
-            this._children[this._getChildName(index - 1)].element.after(w.element);
-        } else {
-            w.element.prependTo(this._getWrapper());
-        }
-        del._destroy();
-        w._mount();
     },
 
     addItems: function (items, context) {
@@ -394,7 +387,7 @@ BI.Layout = BI.inherit(BI.Widget, {
             // if (child.update) {
             //     return child.update(this._getOptions(vnode));
             // }
-            return this.updateItemAt(index, vnode);
+            return this._updateItemAt(index, vnode);
         }
     },
 
@@ -550,34 +543,23 @@ BI.Layout = BI.inherit(BI.Widget, {
         return updated;
     },
 
+    forceUpdate: function (opt) {
+        if (this._isMounted) {
+            BI.each(this._children, function (i, c) {
+                c.destroy();
+            });
+            this._children = {};
+        }
+        this.options.items = opt.items;
+        this.stroke(opt.items);
+    },
+
     update: function (opt) {
         var o = this.options;
         var items = opt.items || [];
-        var updated = this.updateChildren(o.items, items);
+        var oldItems = o.items;
         this.options.items = items;
-        return updated;
-        // var updated, i, len;
-        // for (i = 0, len = Math.min(o.items.length, items.length); i < len; i++) {
-        //     if (!this._compare(o.items[i], items[i])) {
-        //         updated = this.updateItemAt(i, items[i]) || updated;
-        //     }
-        // }
-        // if (o.items.length > items.length) {
-        //     var deleted = [];
-        //     for (i = items.length; i < o.items.length; i++) {
-        //         deleted.push(this._children[this._getChildName(i)]);
-        //         delete this._children[this._getChildName(i)];
-        //     }
-        //     o.items.splice(items.length);
-        //     BI.each(deleted, function (i, w) {
-        //         w._destroy();
-        //     })
-        // } else if (items.length > o.items.length) {
-        //     for (i = o.items.length; i < items.length; i++) {
-        //         this.addItemAt(i, items[i]);
-        //     }
-        // }
-        // return updated;
+        return this.updateChildren(oldItems, items);
     },
 
     stroke: function (items) {
@@ -616,7 +598,6 @@ BI.Layout = BI.inherit(BI.Widget, {
     },
 
     populate: function (items) {
-        var self = this, o = this.options;
         items = items || [];
         if (this._isMounted) {
             this.update({items: items});
@@ -627,7 +608,7 @@ BI.Layout = BI.inherit(BI.Widget, {
     },
 
     resize: function () {
-
+        this.stroke(this.options.items);
     }
 });
 BI.shortcut("bi.layout", BI.Layout);

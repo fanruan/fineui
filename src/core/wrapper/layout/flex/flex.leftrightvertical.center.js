@@ -72,7 +72,11 @@ BI.FlexLeftRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
     },
 
     resize: function () {
-        // console.log("left_right_vertical_adapt布局不需要resize");
+        this.layout.stroke(this._formatItems());
+    },
+
+    update: function (opt) {
+        return this.layout.update(opt);
     },
 
     addItem: function () {

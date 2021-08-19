@@ -23,9 +23,6 @@ BI.HTapeLayout = BI.inherit(BI.Layout, {
         this.populate(this.options.items);
     },
 
-    resize: function () {
-        this.stroke(this.options.items);
-    },
     addItem: function (item) {
         // do nothing
         throw new Error("不能添加子组件");
@@ -122,12 +119,8 @@ BI.HTapeLayout = BI.inherit(BI.Layout, {
         });
     },
 
-    update: function () {
-        var updated;
-        BI.each(this._children, function (i, child) {
-            updated = child.update() || updated;
-        });
-        return updated;
+    update: function (opt) {
+        return this.forceUpdate(opt);
     },
 
     populate: function (items) {
@@ -160,10 +153,6 @@ BI.VTapeLayout = BI.inherit(BI.Layout, {
     render: function () {
         BI.VTapeLayout.superclass.render.apply(this, arguments);
         this.populate(this.options.items);
-    },
-
-    resize: function () {
-        this.stroke(this.options.items);
     },
 
     addItem: function (item) {
@@ -262,7 +251,8 @@ BI.VTapeLayout = BI.inherit(BI.Layout, {
         });
     },
 
-    update: function () {
+    update: function (opt) {
+        return this.forceUpdate(opt);
     },
 
     populate: function (items) {

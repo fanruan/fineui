@@ -46,7 +46,7 @@ BI.HorizontalCenterLayout = BI.inherit(BI.Layout, {
         return {
             type: "bi.grid",
             ref: function (_ref) {
-                self.wrapper = _ref;
+                self.layout = _ref;
             },
             columns: list.length,
             rows: 1,
@@ -64,11 +64,11 @@ BI.HorizontalCenterLayout = BI.inherit(BI.Layout, {
     },
 
     update: function (opt) {
-        return this.wrapper.update(opt);
+        return this.layout.update(opt);
     },
 
     populate: function (items) {
-        this.wrapper.populate.apply(this.wrapper, arguments);
+        this.layout.populate.apply(this.layout, arguments);
     }
 });
 BI.shortcut("bi.horizontal_center", BI.HorizontalCenterLayout);

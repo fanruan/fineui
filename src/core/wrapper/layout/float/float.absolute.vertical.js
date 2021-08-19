@@ -57,11 +57,15 @@ BI.FloatAbsoluteVerticalLayout = BI.inherit(BI.Layout, {
     },
 
     resize: function () {
-        // console.log("float_absolute_vertical_adapt布局不需要resize");
+        this.layout.stroke(this._formatItems(this.options.items));
+    },
+
+    update: function (opt) {
+        return this.layout.update(opt);
     },
 
     populate: function (items) {
-        this.layout.populate.apply(this, arguments);
+        this.layout.populate(this._formatItems(items));
     }
 });
 BI.shortcut("bi.absolute_vertical_float", BI.FloatAbsoluteVerticalLayout);

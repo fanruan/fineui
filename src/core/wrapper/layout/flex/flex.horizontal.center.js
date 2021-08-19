@@ -25,7 +25,7 @@ BI.FlexHorizontalCenter = BI.inherit(BI.Layout, {
         return {
             type: "bi.flex_vertical",
             ref: function (_ref) {
-                self.wrapper = _ref;
+                self.layout = _ref;
             },
             horizontalAlign: o.horizontalAlign,
             verticalAlign: o.verticalAlign,
@@ -43,15 +43,15 @@ BI.FlexHorizontalCenter = BI.inherit(BI.Layout, {
     },
 
     resize: function () {
-        // console.log("flex_vertical_center_adapt布局不需要resize");
+        this.layout.resize();
     },
 
     update: function (opt) {
-        return this.wrapper.update(opt);
+        return this.layout.update(opt);
     },
 
     populate: function (items) {
-        this.wrapper.populate(items);
+        this.layout.populate(items);
     }
 });
 BI.shortcut("bi.flex_horizontal_adapt", BI.FlexHorizontalCenter);

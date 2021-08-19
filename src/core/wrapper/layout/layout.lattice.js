@@ -31,22 +31,6 @@ BI.LatticeLayout = BI.inherit(BI.Layout, {
         return w;
     },
 
-    addItem: function (item) {
-        var w = BI.LatticeLayout.superclass.addItem.apply(this, arguments);
-        this.resize();
-        return w;
-    },
-
-    addItemAt: function (item) {
-        var w = BI.LatticeLayout.superclass.addItemAt.apply(this, arguments);
-        this.resize();
-        return w;
-    },
-
-    resize: function () {
-        this.stroke(this.options.items);
-    },
-
     populate: function (items) {
         BI.LatticeLayout.superclass.populate.apply(this, arguments);
         this._mount();

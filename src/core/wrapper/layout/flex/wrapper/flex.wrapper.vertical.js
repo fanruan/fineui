@@ -84,10 +84,6 @@ BI.FlexWrapperVerticalLayout = BI.inherit(BI.Layout, {
         return this.$wrapper;
     },
 
-    resize: function () {
-        // console.log("flex_wrapper_vertical布局不需要resize");
-    },
-
     populate: function (items) {
         BI.FlexWrapperVerticalLayout.superclass.populate.apply(this, arguments);
         this._mount();

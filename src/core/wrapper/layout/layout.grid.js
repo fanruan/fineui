@@ -11,23 +11,6 @@ BI.GridLayout = BI.inherit(BI.Layout, {
             columns: null,
             rows: null,
             items: []
-            /* [
-             {
-             column: 0,
-             row: 0,
-             el: {type: 'bi.button', text: 'button1'}
-             },
-             {
-             column: 1,
-             row: 1,
-             el: {type: 'bi.button', text: 'button2'}
-             },
-             {
-             column: 3,
-             row: 2,
-             el: {type: 'bi.button', text: 'button3'}
-             }
-             ]*/
         });
     },
     render: function () {
@@ -35,12 +18,7 @@ BI.GridLayout = BI.inherit(BI.Layout, {
         this.populate(this.options.items);
     },
 
-    resize: function () {
-        // console.log("grid布局不需要resize")
-    },
-
     addItem: function () {
-        // do nothing
         throw new Error("不能添加子组件");
     },
 
@@ -119,7 +97,12 @@ BI.GridLayout = BI.inherit(BI.Layout, {
         }
     },
 
-    update: function () {
+    resize: function () {
+        // console.log("grid布局不需要resize")
+    },
+
+    update: function (opt) {
+        return this.forceUpdate(opt);
     },
 
     populate: function (items) {

@@ -52,19 +52,28 @@ BI.InlineLayout = BI.inherit(BI.Layout, {
         });
         w.element.addClass("i-item");
         if (columnSize === "fill" || columnSize === "") {
-            var left = o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0),
-                right = o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0);
-            for (var k = 0; k < i; k++) {
-                left += o.hgap + o.lgap + o.rgap + (o.items[k].lgap || 0) + (o.items[k].rgap || 0) + (o.items[k].hgap || 0) + (o.columnSize[k] || o.items[k].width);
-            }
-            for (var k = i + 1, len = o.columnSize.length || o.items.length; k < len; k++) {
-                right += o.hgap + o.lgap + o.rgap + (o.items[k].lgap || 0) + (o.items[k].rgap || 0) + (o.items[k].hgap || 0) + (o.columnSize[k] || o.items[k].width);
+            var length = o.hgap;
+            var fillCount = 0, autoCount = 0;
+            for (var k = 0, len = o.columnSize.length || o.items.length; k < len; k++) {
+                var cz = o.columnSize.length > 0 ? o.columnSize[k] : o.items[k].width;
+                if (cz === "fill") {
+                    fillCount++;
+                    cz = 0;
+                } else if (cz === "" || BI.isNull(cz)) {
+                    autoCount++;
+                    cz = 0;
+                }
+                length += o.hgap + o.lgap + o.rgap + (o.items[k].lgap || 0) + (o.items[k].rgap || 0) + (o.items[k].hgap || 0) + cz;
             }
             if (columnSize === "fill") {
-                w.element.css("min-width", "calc(100% - " + ((left + right) / BI.pixRatio + BI.pixUnit) + ")");
+                w.element.css("min-width", "calc((100% - " + (length / BI.pixRatio + BI.pixUnit) + ")" + (fillCount > 1 ? "/" + fillCount : "") + ")");
             }
             if (o.horizontalAlign === BI.HorizontalAlign.Stretch || !(o.scrollable === true || o.scrollx === true)) {
-                w.element.css("max-width", "calc(100% - " + ((left + right) / BI.pixRatio + BI.pixUnit) + ")");
+                if (columnSize === "fill") {
+                    w.element.css("max-width", "calc((100% - " + (length / BI.pixRatio + BI.pixUnit) + ")" + (fillCount > 1 ? "/" + fillCount : "") + ")");
+                } else {
+                    w.element.css("max-width", "calc((100% - " + (length / BI.pixRatio + BI.pixUnit) + ")" + (autoCount > 1 ? "/" + autoCount : "") + ")");
+                }
             }
         }
         this._handleGap(w, item, i);
@@ -74,14 +83,6 @@ BI.InlineLayout = BI.inherit(BI.Layout, {
             w.element.css("height", "calc(100% - " + ((top + bottom) / BI.pixRatio + BI.pixUnit) + ")");
         }
         return w;
-    },
-
-    resize: function () {
-        this.stroke(this.options.items);
-    },
-
-    addItem: function (item) {
-        throw new Error("不能添加子组件");
     },
 
     populate: function (items) {

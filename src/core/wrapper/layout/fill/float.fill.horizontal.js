@@ -123,6 +123,10 @@ BI.FloatHorizontalFillLayout = BI.inherit(BI.Layout, {
         });
     },
 
+    update: function (opt) {
+        return this.forceUpdate(opt);
+    },
+
     populate: function (items) {
         BI.FloatHorizontalFillLayout.superclass.populate.apply(this, arguments);
         this._mount();

@@ -84,10 +84,6 @@ BI.FlexWrapperHorizontalLayout = BI.inherit(BI.Layout, {
         return this.$wrapper;
     },
 
-    resize: function () {
-        // console.log("flex_wrapper_horizontal布局不需要resize");
-    },
-
     populate: function (items) {
         BI.FlexWrapperHorizontalLayout.superclass.populate.apply(this, arguments);
         this._mount();

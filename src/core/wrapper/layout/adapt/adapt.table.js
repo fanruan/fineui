@@ -100,10 +100,6 @@ BI.TableAdaptLayout = BI.inherit(BI.Layout, {
         this.element.append(this.$table);
     },
 
-    resize: function () {
-        // console.log("center_adapt布局不需要resize");
-    },
-
     populate: function (items) {
         BI.TableAdaptLayout.superclass.populate.apply(this, arguments);
         this._mount();
