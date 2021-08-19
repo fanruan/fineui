@@ -198,6 +198,21 @@ BI.Layout = BI.inherit(BI.Widget, {
         return this.element;
     },
 
+    // 不依赖于this.options.items进行更新
+    _updateItemAt: function (index, item) {
+        var del = this._children[this._getChildName(index)];
+        delete this._children[this._getChildName(index)];
+        var w = this._addElement(index, item);
+        this._children[this._getChildName(index)] = w;
+        if (index > 0) {
+            this._children[this._getChildName(index - 1)].element.after(w.element);
+        } else {
+            w.element.prependTo(this._getWrapper());
+        }
+        del._destroy();
+        w._mount();
+    },
+
     _addItemAt: function (index, item) {
         for (var i = this.options.items.length; i > index; i--) {
             this._children[this._getChildName(i)] = this._children[this._getChildName(i - 1)];
@@ -286,33 +301,11 @@ BI.Layout = BI.inherit(BI.Widget, {
     },
 
     shouldUpdateItem: function (index, item) {
-        if (index < 0 || index > this.options.items.length - 1) {
-            return false;
-        }
         var child = this._children[this._getChildName(index)];
-        if (!child.shouldUpdate) {
+        if (!child || !child.shouldUpdate) {
             return null;
         }
         return child.shouldUpdate(this._getOptions(item));
-    },
-
-    updateItemAt: function (index, item) {
-        if (index < 0 || index > this.options.items.length - 1) {
-            return;
-        }
-        var del = this._children[this._getChildName(index)];
-        delete this._children[this._getChildName(index)];
-        this.options.items.splice(index, 1);
-        var w = this._addElement(index, item);
-        this.options.items.splice(index, 0, item);
-        this._children[this._getChildName(index)] = w;
-        if (index > 0) {
-            this._children[this._getChildName(index - 1)].element.after(w.element);
-        } else {
-            w.element.prependTo(this._getWrapper());
-        }
-        del._destroy();
-        w._mount();
     },
 
     addItems: function (items, context) {
@@ -394,8 +387,9 @@ BI.Layout = BI.inherit(BI.Widget, {
             // if (child.update) {
             //     return child.update(this._getOptions(vnode));
             // }
-            return this.updateItemAt(index, vnode);
+            return this._updateItemAt(index, vnode);
         }
+
     },
 
     updateChildren: function (oldCh, newCh) {
@@ -564,9 +558,9 @@ BI.Layout = BI.inherit(BI.Widget, {
     update: function (opt) {
         var o = this.options;
         var items = opt.items || [];
-        var updated = this.updateChildren(o.items, items);
+        var oldItems = o.items;
         this.options.items = items;
-        return updated;
+        return this.updateChildren(oldItems, items);
     },
 
     stroke: function (items) {
