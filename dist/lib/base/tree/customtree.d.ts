@@ -4,7 +4,7 @@ export declare class CustomTree extends Widget {
     static EVENT_CHANGE: string;
     initTree(nodes: any, ...args: any[]): void;
     stroke(...args: any[]): void;
-    populate(nodes: any, ...args: any[]): void;
+    populate(nodes?: any, ...args: any[]): void;
     getAllButtons<T>(): T[];
     getAllLeaves<T>(): T[];
     getNodeById(id: any): any;
