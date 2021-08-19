@@ -50,7 +50,7 @@ BI.InlineLayout = BI.inherit(BI.Layout, {
             position: "relative",
             "vertical-align": o.verticalAlign,
             "min-width": "auto",
-            "max-width": "auto"
+            "max-width": "none"
         });
         w.element.addClass("i-item");
         if (columnSize === "fill" || columnSize === "") {
