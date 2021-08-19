@@ -1,4 +1,4 @@
-/*! time: 2021-8-19 20:50:28 */
+/*! time: 2021-8-19 23:10:26 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -17482,16 +17482,6 @@ BI.LeftRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
         this.right.stroke(this.options.items.right);
     },
 
-    update: function (opt) {
-        this.left.update({
-            items: opt.items.left
-        });
-        this.right.update({
-            items: opt.items.right
-        });
-        return true;
-    },
-
     addItem: function () {
         // do nothing
         throw new Error("不能添加子组件");
@@ -17543,10 +17533,6 @@ BI.LeftVerticalAdaptLayout = BI.inherit(BI.Layout, {
 
     resize: function () {
         this.layout.resize();
-    },
-
-    update: function (opt) {
-        return this.layout.update(opt);
     },
 
     addItem: function () {
@@ -17643,11 +17629,23 @@ BI.TableAdaptLayout = BI.inherit(BI.Layout, {
         this.$table = BI.Widget._renderEngine.createElement("<div>").css({
             position: "relative",
             display: "table",
-            width: (o.horizontalAlign === BI.HorizontalAlign.Center || o.horizontalAlign === BI.HorizontalAlign.Stretch) ? "100%" : "auto",
+            width: (o.horizontalAlign === BI.HorizontalAlign.Center || o.horizontalAlign === BI.HorizontalAlign.Stretch || this._hasFill()) ? "100%" : "auto",
             height: (o.verticalAlign !== BI.VerticalAlign.Top) ? "100%" : "auto",
             "white-space": "nowrap"
         });
         this.populate(this.options.items);
+    },
+
+    _hasFill: function () {
+        var o = this.options;
+        if (o.columnSize.length > 0) {
+            return o.columnSize.indexOf("fill") >= 0;
+        }
+        return BI.some(o.items, function (i, item) {
+            if (item.width === "fill") {
+                return true;
+            }
+        });
     },
 
     _addElement: function (i, item) {
@@ -17659,17 +17657,7 @@ BI.TableAdaptLayout = BI.inherit(BI.Layout, {
                 ((columnSize * 100).toFixed(1) + "%")
                 : (columnSize + (i === 0 ? o.hgap : 0) + o.hgap + o.lgap + o.rgap);
         }
-        function hasFill() {
-            if (o.columnSize.length > 0) {
-                return o.columnSize.indexOf("fill") >= 0;
-            }
-            return BI.some(o.items, function (i, item) {
-                if (item.width === "fill") {
-                    return true;
-                }
-            });
-        }
-        if ((BI.isNull(columnSize) || columnSize === "") && hasFill()) {
+        if ((BI.isNull(columnSize) || columnSize === "") && this._hasFill()) {
             width = 2;
         }
         if (!this.hasWidget(this._getChildName(i))) {
@@ -18121,7 +18109,7 @@ BI.FloatHorizontalFillLayout = BI.inherit(BI.Layout, {
             }
             var top = o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0),
                 bottom = o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0);
-            if (BI.isNull(item.height)) {
+            if (o.verticalAlign === BI.VerticalAlign.Stretch && BI.isNull(item.height)) {
                 w.element.css({
                     height: "calc(100% - " + ((top + bottom) / BI.pixRatio + BI.pixUnit) + ")"
                 });
@@ -20477,7 +20465,7 @@ BI.InlineLayout = BI.inherit(BI.Layout, {
             }
         }
         this._handleGap(w, item, i);
-        if (o.verticalAlign === BI.VerticalAlign.Stretch) {
+        if (o.verticalAlign === BI.VerticalAlign.Stretch && BI.isNull(item.height)) {
             var top = o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0),
                 bottom = o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0);
             w.element.css("height", "calc(100% - " + ((top + bottom) / BI.pixRatio + BI.pixUnit) + ")");
