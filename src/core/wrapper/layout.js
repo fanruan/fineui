@@ -486,7 +486,7 @@ BI.Layout = BI.inherit(BI.Widget, {
         function addNode (vnode, index) {
             var opt = self._getOptions(vnode);
             var key = opt.key == null ? index : opt.key;
-            return children[key] = self._addElement(index, vnode);
+            return children[key] = self._addElement(key, vnode);
         }
 
         function addVnodes (before, vnodes, startIdx, endIdx) {
@@ -502,7 +502,7 @@ BI.Layout = BI.inherit(BI.Widget, {
                 if (BI.isNotNull(ch)) {
                     var node = self._getOptions(ch);
                     var key = node.key == null ? startIdx : node.key;
-                    delete self._children[self._getChildName(startIdx)];
+                    delete self._children[self._getChildName(key)];
                     children[key]._destroy();
                 }
             }
