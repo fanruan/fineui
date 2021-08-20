@@ -80,7 +80,7 @@ BI.AbsoluteLeftRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
     },
 
     resize: function () {
-        // console.log("absolute_left_right_vertical_adapt布局不需要resize");
+        this.layout.stroke(this._formatItems())
     },
 
     addItem: function () {
@@ -132,7 +132,7 @@ BI.AbsoluteRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
     },
 
     resize: function () {
-
+        this.layout.stroke([{}].concat(this.options.items))
     },
 
     addItem: function () {
@@ -141,7 +141,7 @@ BI.AbsoluteRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
     },
 
     populate: function (items) {
-        this.layout.populate(items);
+        this.layout.populate([{}].concat(items));
     }
 });
 BI.shortcut("bi.absolute_right_vertical_adapt", BI.AbsoluteRightVerticalAdaptLayout);

@@ -198,6 +198,21 @@ BI.Layout = BI.inherit(BI.Widget, {
         return this.element;
     },
 
+    // 不依赖于this.options.items进行更新
+    _updateItemAt: function (oldIndex, newIndex, item) {
+        var del = this._children[this._getChildName(oldIndex)];
+        delete this._children[this._getChildName(oldIndex)];
+        var w = this._addElement(newIndex, item);
+        this._children[this._getChildName(newIndex)] = w;
+        if (oldIndex > 0) {
+            this._children[this._getChildName(oldIndex - 1)].element.after(w.element);
+        } else {
+            w.element.prependTo(this._getWrapper());
+        }
+        del._destroy();
+        w._mount();
+    },
+
     _addItemAt: function (index, item) {
         for (var i = this.options.items.length; i > index; i--) {
             this._children[this._getChildName(i)] = this._children[this._getChildName(i - 1)];
@@ -286,33 +301,11 @@ BI.Layout = BI.inherit(BI.Widget, {
     },
 
     shouldUpdateItem: function (index, item) {
-        if (index < 0 || index > this.options.items.length - 1) {
-            return false;
-        }
         var child = this._children[this._getChildName(index)];
-        if (!child.shouldUpdate) {
+        if (!child || !child.shouldUpdate) {
             return null;
         }
         return child.shouldUpdate(this._getOptions(item));
-    },
-
-    updateItemAt: function (index, item) {
-        if (index < 0 || index > this.options.items.length - 1) {
-            return;
-        }
-        var del = this._children[this._getChildName(index)];
-        delete this._children[this._getChildName(index)];
-        this.options.items.splice(index, 1);
-        var w = this._addElement(index, item);
-        this.options.items.splice(index, 0, item);
-        this._children[this._getChildName(index)] = w;
-        if (index > 0) {
-            this._children[this._getChildName(index - 1)].element.after(w.element);
-        } else {
-            w.element.prependTo(this._getWrapper());
-        }
-        del._destroy();
-        w._mount();
     },
 
     addItems: function (items, context) {
@@ -384,9 +377,9 @@ BI.Layout = BI.inherit(BI.Widget, {
         });
     },
 
-    patchItem: function (oldVnode, vnode, index) {
-        var shouldUpdate = this.shouldUpdateItem(index, vnode);
-        var child = this._children[this._getChildName(index)];
+    patchItem: function (oldVnode, vnode, oldIndex, newIndex) {
+        var shouldUpdate = this.shouldUpdateItem(oldIndex, vnode);
+        var child = this._children[this._getChildName(oldIndex)];
         if (shouldUpdate) {
             return child._update(this._getOptions(vnode), shouldUpdate);
         }
@@ -394,7 +387,7 @@ BI.Layout = BI.inherit(BI.Widget, {
             // if (child.update) {
             //     return child.update(this._getOptions(vnode));
             // }
-            return this.updateItemAt(index, vnode);
+            return this._updateItemAt(oldIndex, newIndex, vnode);
         }
     },
 
@@ -424,23 +417,23 @@ BI.Layout = BI.inherit(BI.Widget, {
             } else if (BI.isNull(oldEndVnode)) {
                 oldEndVnode = oldCh[--oldEndIdx];
             } else if (sameVnode(oldStartVnode, newStartVnode, oldStartIdx, newStartIdx)) {
-                updated = this.patchItem(oldStartVnode, newStartVnode, oldStartIdx) || updated;
+                updated = this.patchItem(oldStartVnode, newStartVnode, oldStartIdx, newStartIdx) || updated;
                 children[oldStartVnode.key == null ? oldStartIdx : oldStartVnode.key] = this._children[this._getChildName(oldStartIdx)];
                 oldStartVnode = oldCh[++oldStartIdx];
                 newStartVnode = newCh[++newStartIdx];
             } else if (sameVnode(oldEndVnode, newEndVnode, oldEndIdx, newEndIdx)) {
-                updated = this.patchItem(oldEndVnode, newEndVnode, oldEndIdx) || updated;
+                updated = this.patchItem(oldEndVnode, newEndVnode, oldEndIdx, newEndIdx) || updated;
                 children[oldEndVnode.key == null ? oldEndIdx : oldEndVnode.key] = this._children[this._getChildName(oldEndIdx)];
                 oldEndVnode = oldCh[--oldEndIdx];
                 newEndVnode = newCh[--newEndIdx];
             } else if (sameVnode(oldStartVnode, newEndVnode)) {
-                updated = this.patchItem(oldStartVnode, newEndVnode, oldStartIdx) || updated;
+                updated = this.patchItem(oldStartVnode, newEndVnode, oldStartIdx, newStartIdx) || updated;
                 children[oldStartVnode.key == null ? oldStartIdx : oldStartVnode.key] = this._children[this._getChildName(oldStartIdx)];
                 insertBefore(oldStartVnode, oldEndVnode, true);
                 oldStartVnode = oldCh[++oldStartIdx];
                 newEndVnode = newCh[--newEndIdx];
             } else if (sameVnode(oldEndVnode, newStartVnode)) {
-                updated = this.patchItem(oldEndVnode, newStartVnode, oldEndIdx) || updated;
+                updated = this.patchItem(oldEndVnode, newStartVnode, oldEndIdx, newEndIdx) || updated;
                 children[oldEndVnode.key == null ? oldEndIdx : oldEndVnode.key] = this._children[this._getChildName(oldEndIdx)];
                 insertBefore(oldEndVnode, oldStartVnode);
                 oldEndVnode = oldCh[--oldEndIdx];
@@ -448,13 +441,13 @@ BI.Layout = BI.inherit(BI.Widget, {
             } else {
                 var sameOldVnode = findOldVnode(oldCh, newStartVnode, oldStartIdx, oldEndIdx);
                 if (BI.isNull(sameOldVnode)) {  //  不存在就把新的放到左边
-                    var node = addNode(newStartVnode);
+                    var node = addNode(newStartVnode, newStartIdx);
                     insertBefore(node, oldStartVnode);
                     newStartVnode = newCh[++newStartIdx];
                 } else {   //  如果新节点在就旧节点区间中存在就复用一下
                     BI.each(oldCh, function (index, child) {
                         if (child && sameVnode(child, newStartVnode)) {
-                            updated = self.patchItem(sameOldVnode, newStartVnode, index) || updated;
+                            updated = self.patchItem(sameOldVnode, newStartVnode, index, index) || updated;
                             children[sameOldVnode.key == null ? index : sameOldVnode.key] = self._children[self._getChildName(index)];
                             oldCh[index] = undefined;
                             insertBefore(sameOldVnode, oldStartVnode);
@@ -493,7 +486,7 @@ BI.Layout = BI.inherit(BI.Widget, {
         function addNode (vnode, index) {
             var opt = self._getOptions(vnode);
             var key = opt.key == null ? index : opt.key;
-            return children[key] = self._addElement(key, vnode);
+            return children[key] = self._addElement(index, vnode);
         }
 
         function addVnodes (before, vnodes, startIdx, endIdx) {
@@ -509,7 +502,7 @@ BI.Layout = BI.inherit(BI.Widget, {
                 if (BI.isNotNull(ch)) {
                     var node = self._getOptions(ch);
                     var key = node.key == null ? startIdx : node.key;
-                    delete self._children[self._getChildName(key)];
+                    delete self._children[self._getChildName(startIdx)];
                     children[key]._destroy();
                 }
             }
@@ -550,34 +543,23 @@ BI.Layout = BI.inherit(BI.Widget, {
         return updated;
     },
 
+    forceUpdate: function (opt) {
+        if (this._isMounted) {
+            BI.each(this._children, function (i, c) {
+                c.destroy();
+            });
+            this._children = {};
+        }
+        this.options.items = opt.items;
+        this.stroke(opt.items);
+    },
+
     update: function (opt) {
         var o = this.options;
         var items = opt.items || [];
-        var updated = this.updateChildren(o.items, items);
+        var oldItems = o.items;
         this.options.items = items;
-        return updated;
-        // var updated, i, len;
-        // for (i = 0, len = Math.min(o.items.length, items.length); i < len; i++) {
-        //     if (!this._compare(o.items[i], items[i])) {
-        //         updated = this.updateItemAt(i, items[i]) || updated;
-        //     }
-        // }
-        // if (o.items.length > items.length) {
-        //     var deleted = [];
-        //     for (i = items.length; i < o.items.length; i++) {
-        //         deleted.push(this._children[this._getChildName(i)]);
-        //         delete this._children[this._getChildName(i)];
-        //     }
-        //     o.items.splice(items.length);
-        //     BI.each(deleted, function (i, w) {
-        //         w._destroy();
-        //     })
-        // } else if (items.length > o.items.length) {
-        //     for (i = o.items.length; i < items.length; i++) {
-        //         this.addItemAt(i, items[i]);
-        //     }
-        // }
-        // return updated;
+        return this.updateChildren(oldItems, items);
     },
 
     stroke: function (items) {
@@ -616,7 +598,6 @@ BI.Layout = BI.inherit(BI.Widget, {
     },
 
     populate: function (items) {
-        var self = this, o = this.options;
         items = items || [];
         if (this._isMounted) {
             this.update({items: items});
@@ -627,7 +608,7 @@ BI.Layout = BI.inherit(BI.Widget, {
     },
 
     resize: function () {
-
+        this.stroke(this.options.items);
     }
 });
 BI.shortcut("bi.layout", BI.Layout);

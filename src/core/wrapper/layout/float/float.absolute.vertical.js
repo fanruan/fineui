@@ -33,35 +33,38 @@ BI.FloatAbsoluteVerticalLayout = BI.inherit(BI.Layout, {
             hgap: o.hgap,
             lgap: o.lgap,
             rgap: o.rgap,
+            // tgap和bgap不传的话内部不会设置top和bottom
             tgap: o.tgap,
             bgap: o.bgap
         };
     },
 
     _formatItems: function (items) {
-        if (this.options.verticalAlign !== BI.VerticalAlign.Middle) {
+        var o = this.options;
+        if (o.verticalAlign === BI.VerticalAlign.Top) {
             return items;
         }
+        var cls = o.verticalAlign === BI.VerticalAlign.Bottom ? "bi-abs-b-y-item" : "bi-abs-c-y-item";
         return BI.map(items, function (i, item) {
             if (!item || BI.isEmptyObject(item)) {
                 return item;
             }
             var el = BI.stripEL(item);
             if (BI.isWidget(el)) {
-                el.element.addClass("bi-abs-c-y-item");
+                el.element.addClass(cls);
             } else {
-                el.cls = (el.cls || "") + "bi-abs-c-y-item";
+                el.cls = (el.cls || "") + cls;
             }
             return item;
         });
     },
 
     resize: function () {
-        // console.log("float_absolute_vertical_adapt布局不需要resize");
+        this.layout.stroke(this._formatItems(this.options.items));
     },
 
     populate: function (items) {
-        this.layout.populate.apply(this, arguments);
+        this.layout.populate(this._formatItems(items));
     }
 });
 BI.shortcut("bi.absolute_vertical_float", BI.FloatAbsoluteVerticalLayout);

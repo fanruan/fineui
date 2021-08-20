@@ -64,10 +64,6 @@ BI.FloatLeftLayout = BI.inherit(BI.Layout, {
         return w;
     },
 
-    resize: function () {
-        this.stroke(this.options.items);
-    },
-
     populate: function (items) {
         BI.FloatLeftLayout.superclass.populate.apply(this, arguments);
         this._mount();
@@ -139,10 +135,6 @@ BI.FloatRightLayout = BI.inherit(BI.Layout, {
             });
         }
         return w;
-    },
-
-    resize: function () {
-        this.stroke(this.options.items);
     },
 
     populate: function (items) {

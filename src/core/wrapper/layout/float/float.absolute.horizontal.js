@@ -31,37 +31,40 @@ BI.FloatAbsoluteHorizontalLayout = BI.inherit(BI.Layout, {
             },
             hgap: "50%",
             vgap: o.vgap,
-            lgap: o.lgap,
-            rgap: o.rgap,
             tgap: o.tgap,
-            bgap: o.bgap
+            bgap: o.bgap,
+            // lgap和rgap不传的话内部不会设置left和right
+            lgap: o.lgap,
+            rgap: o.rgap
         };
     },
 
     _formatItems: function (items) {
-        if (this.options.horizontalAlign !== BI.HorizontalAlign.Center) {
+        var o = this.options;
+        if (o.horizontalAlign === BI.HorizontalAlign.Left) {
             return items;
         }
+        var cls = o.horizontalAlign === BI.HorizontalAlign.Right ? "bi-abs-r-x-item" : "bi-abs-c-x-item";
         return BI.map(items, function (i, item) {
             if (!item || BI.isEmptyObject(item)) {
                 return item;
             }
             var el = BI.stripEL(item);
             if (BI.isWidget(el)) {
-                el.element.addClass("bi-abs-c-x-item");
+                el.element.addClass(cls);
             } else {
-                el.cls = (el.cls || "") + "bi-abs-c-x-item";
+                el.cls = (el.cls || "") + cls;
             }
             return item;
         });
     },
 
     resize: function () {
-        // console.log("float_absolute_horizontal_adapt布局不需要resize");
+        this.layout.stroke(this._formatItems(this.options.items));
     },
 
     populate: function (items) {
-        this.layout.populate.apply(this, arguments);
+        this.layout.populate(this._formatItems(items));
     }
 });
 BI.shortcut("bi.absolute_horizontal_float", BI.FloatAbsoluteHorizontalLayout);

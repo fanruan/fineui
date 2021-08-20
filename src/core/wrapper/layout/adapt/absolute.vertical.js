@@ -42,7 +42,7 @@ BI.AbsoluteVerticalLayout = BI.inherit(BI.Layout, {
     },
 
     resize: function () {
-        // console.log("absolute_vertical_adapt布局不需要resize");
+        this.layout.resize();
     },
 
     populate: function (items) {

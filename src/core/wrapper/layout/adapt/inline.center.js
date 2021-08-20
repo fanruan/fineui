@@ -44,6 +44,10 @@ BI.InlineCenterAdaptLayout = BI.inherit(BI.Layout, {
         };
     },
 
+    resize: function () {
+        this.layout.resize();
+    },
+
     populate: function (items) {
         this.layout.populate.apply(this.layout, arguments);
     }

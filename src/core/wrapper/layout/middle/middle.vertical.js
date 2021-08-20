@@ -47,7 +47,7 @@ BI.VerticalCenterLayout = BI.inherit(BI.Layout, {
         return {
             type: "bi.grid",
             ref: function (_ref) {
-                self.wrapper = _ref;
+                self.layout = _ref;
             },
             columns: 1,
             rows: list.length,
@@ -64,12 +64,8 @@ BI.VerticalCenterLayout = BI.inherit(BI.Layout, {
         throw new Error("不能添加子组件");
     },
 
-    update: function (opt) {
-        return this.wrapper.update(opt);
-    },
-
     populate: function (items) {
-        this.wrapper.populate.apply(this.wrapper, arguments);
+        this.layout.populate.apply(this.layout, arguments);
     }
 });
 BI.shortcut("bi.vertical_center", BI.VerticalCenterLayout);

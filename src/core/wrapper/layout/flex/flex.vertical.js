@@ -77,10 +77,6 @@ BI.FlexVerticalLayout = BI.inherit(BI.Layout, {
         return w;
     },
 
-    resize: function () {
-        // console.log("flex_vertical布局不需要resize");
-    },
-
     populate: function (items) {
         BI.FlexVerticalLayout.superclass.populate.apply(this, arguments);
         this._mount();

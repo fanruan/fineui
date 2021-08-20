@@ -43,7 +43,7 @@ BI.VerticalAdaptLayout = BI.inherit(BI.Layout, {
     },
 
     resize: function () {
-        // console.log("vertical_adapt布局不需要resize");
+        this.layout.resize();
     },
 
     populate: function (items) {

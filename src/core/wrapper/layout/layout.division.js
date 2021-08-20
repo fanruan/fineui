@@ -11,38 +11,11 @@ BI.DivisionLayout = BI.inherit(BI.Layout, {
             columns: null,
             rows: null,
             items: []
-            //    [
-            //    {
-            //        column: 0,
-            //        row: 0,
-            //        width: 0.25,
-            //        height: 0.33,
-            //        el: {type: 'bi.button', text: 'button1'}
-            //    },
-            //    {
-            //        column: 1,
-            //        row: 1,
-            //        width: 0.25,
-            //        height: 0.33,
-            //        el: {type: 'bi.button', text: 'button2'}
-            //    },
-            //    {
-            //        column: 3,
-            //        row: 2,
-            //        width: 0.25,
-            //        height: 0.33,
-            //        el: {type: 'bi.button', text: 'button3'}
-            //    }
-            // ]
         });
     },
     render: function () {
         BI.DivisionLayout.superclass.render.apply(this, arguments);
         this.populate(this.options.items);
-    },
-
-    resize: function () {
-        this.stroke(this.opitons.items);
     },
 
     addItem: function (item) {
@@ -151,7 +124,8 @@ BI.DivisionLayout = BI.inherit(BI.Layout, {
         }
     },
 
-    update: function () {
+    update: function (opt) {
+        return this.forceUpdate(opt);
     },
 
     populate: function (items) {

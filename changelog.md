@@ -1,5 +1,6 @@
 # 更新日志
 2.0(2021-07)
+- layout支持forceUpdate刷新方式
 - width属性支持calc()
 - 修改了颜色选择器交互
 - 新增bi.horizontal_fill、bi.vertical_fill布局

@@ -19,10 +19,6 @@ BI.CardLayout = BI.inherit(BI.Layout, {
         this.populate(this.options.items);
     },
 
-    resize: function () {
-        // console.log("default布局不需要resize");
-    },
-
     stroke: function (items) {
         var self = this, o = this.options;
         this.showIndex = void 0;
@@ -48,7 +44,12 @@ BI.CardLayout = BI.inherit(BI.Layout, {
         });
     },
 
-    update: function () {
+    resize: function () {
+        // console.log("Card布局不需要resize");
+    },
+
+    update: function (opt) {
+        return this.forceUpdate(opt);
     },
 
     empty: function () {
