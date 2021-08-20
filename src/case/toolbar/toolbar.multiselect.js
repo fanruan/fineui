@@ -90,6 +90,7 @@ BI.MultiSelectBar = BI.inherit(BI.BasicButton, {
 
     _setSelected: function (v) {
         this.checkbox.setSelected(!!v);
+        this.setHalfSelected(!v);
     },
 
     // 自己手动控制选中
