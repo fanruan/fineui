@@ -3125,13 +3125,13 @@
   var $router, cbs = [];
   var RouterWidget = BI.inherit(BI.Widget, {
     init: function () {
-      this._router = $router = new VueRouter({
+      this.$router = BI.Router.$router = $router = new VueRouter({
         routes: this.options.routes
       });
-      this._router.afterEach(function () {
+      this.$router.afterEach(function () {
         cbs.forEach(function (cb) {cb();});
       });
-      this._router.init(this);
+      this.$router.init(this);
     }
   });
   BI.shortcut("bi.router", RouterWidget);
