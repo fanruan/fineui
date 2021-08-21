@@ -27,10 +27,6 @@ BI.DefaultLayout = BI.inherit(BI.Layout, {
         return w;
     },
 
-    resize: function () {
-        // console.log("default布局不需要resize")
-    },
-
     populate: function (items) {
         BI.DefaultLayout.superclass.populate.apply(this, arguments);
         this._mount();

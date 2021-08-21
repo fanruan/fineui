@@ -25,17 +25,17 @@ BI.FlexLeftRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
             ref: function (_ref) {
                 self.layout = _ref;
             },
-            items: this._formatItems(),
+            items: this._formatItems(o.items),
             scrollx: o.scrollx,
             scrolly: o.scrolly,
             scrollable: o.scrollable
         };
     },
 
-    _formatItems: function () {
+    _formatItems: function (items) {
         var o = this.options;
-        var leftItems = o.items.left || [];
-        var rightItems = o.items.right || [];
+        var leftItems = items.left || [];
+        var rightItems = items.right || [];
         leftItems = BI.map(leftItems, function (i, item) {
             var json = {
                 el: BI.stripEL(item)
@@ -72,7 +72,7 @@ BI.FlexLeftRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
     },
 
     resize: function () {
-        // console.log("left_right_vertical_adapt布局不需要resize");
+        this.layout.stroke(this._formatItems(this.options.items));
     },
 
     addItem: function () {
@@ -81,8 +81,7 @@ BI.FlexLeftRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
     },
 
     populate: function (items) {
-        this.options.items = items;
-        this.layout.populate(this._formatItems());
+        this.layout.populate(this._formatItems(items));
     }
 });
 BI.shortcut("bi.flex_left_right_vertical_adapt", BI.FlexLeftRightVerticalAdaptLayout);

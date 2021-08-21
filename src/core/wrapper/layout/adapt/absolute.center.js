@@ -35,10 +35,6 @@ BI.AbsoluteCenterLayout = BI.inherit(BI.Layout, {
         return w;
     },
 
-    resize: function () {
-        // console.log("absolute_center_adapt布局不需要resize");
-    },
-
     populate: function (items) {
         BI.AbsoluteCenterLayout.superclass.populate.apply(this, arguments);
         this._mount();

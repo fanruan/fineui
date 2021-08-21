@@ -76,7 +76,8 @@ BI.LeftRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
     },
 
     resize: function () {
-        // console.log("left_right_vertical_adapt布局不需要resize");
+        this.left.stroke(this.options.items.left);
+        this.right.stroke(this.options.items.right);
     },
 
     addItem: function () {
@@ -129,7 +130,7 @@ BI.LeftVerticalAdaptLayout = BI.inherit(BI.Layout, {
     },
 
     resize: function () {
-        // console.log("left_vertical_adapt布局不需要resize");
+        this.layout.resize();
     },
 
     addItem: function () {
@@ -181,7 +182,7 @@ BI.RightVerticalAdaptLayout = BI.inherit(BI.Layout, {
     },
 
     resize: function () {
-
+        this.layout.resize();
     },
 
     addItem: function () {

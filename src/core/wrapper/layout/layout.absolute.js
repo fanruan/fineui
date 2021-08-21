@@ -81,10 +81,6 @@ BI.AbsoluteLayout = BI.inherit(BI.Layout, {
         return w;
     },
 
-    resize: function () {
-        this.stroke(this.options.items);
-    },
-
     populate: function (items) {
         BI.AbsoluteLayout.superclass.populate.apply(this, arguments);
         this._mount();

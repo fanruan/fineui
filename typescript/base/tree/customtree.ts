@@ -8,7 +8,7 @@ export declare class CustomTree extends Widget {
 
     stroke(...args: any[]): void;
 
-    populate(nodes: any, ...args: any[]): void;
+    populate(nodes?: any, ...args: any[]): void;
 
     getAllButtons<T>(): T[];
 

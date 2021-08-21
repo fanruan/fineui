@@ -27,7 +27,7 @@ BI.FloatAbsoluteLeftRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
                 self.layout = _ref;
             },
             verticalAlign: o.verticalAlign,
-            items: this._formatItems(),
+            items: this._formatItems(o.items),
             vgap: "50%",
             scrollx: o.scrollx,
             scrolly: o.scrolly,
@@ -35,10 +35,10 @@ BI.FloatAbsoluteLeftRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
         };
     },
 
-    _formatItems: function () {
+    _formatItems: function (items) {
         var o = this.options;
-        var leftItems = o.items.left || [];
-        var rightItems = o.items.right || [];
+        var leftItems = items.left || [];
+        var rightItems = items.right || [];
         leftItems = BI.map(leftItems, function (i, item) {
             var el = BI.stripEL(item);
             if (o.verticalAlign === BI.VerticalAlign.Middle) {
@@ -97,7 +97,7 @@ BI.FloatAbsoluteLeftRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
     },
 
     resize: function () {
-        // console.log("absolute_left_right_vertical_adapt布局不需要resize");
+        this.layout.stroke(this._formatItems(this.options.items));
     },
 
     addItem: function () {
@@ -106,8 +106,7 @@ BI.FloatAbsoluteLeftRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
     },
 
     populate: function (items) {
-        this.options.items = items;
-        this.layout.populate(this._formatItems());
+        this.layout.populate(this._formatItems(items));
     }
 });
 BI.shortcut("bi.absolute_left_right_vertical_float", BI.FloatAbsoluteLeftRightVerticalAdaptLayout);
@@ -162,7 +161,7 @@ BI.FloatAbsoluteRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
     },
 
     resize: function () {
-
+        this.layout.stroke([{}].concat(this._formatItems(this.options.items)));
     },
 
     addItem: function () {
@@ -171,7 +170,7 @@ BI.FloatAbsoluteRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
     },
 
     populate: function (items) {
-        this.layout.populate(items);
+        this.layout.populate([{}].concat(this._formatItems(items)));
     }
 });
 BI.shortcut("bi.absolute_right_vertical_float", BI.FloatAbsoluteRightVerticalAdaptLayout);

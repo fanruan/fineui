@@ -121,14 +121,8 @@ BI.TableLayout = BI.inherit(BI.Layout, {
         // console.log("table布局不需要resize");
     },
 
-    addItem: function (arr) {
-        if (!BI.isArray(arr)) {
-            throw new Error("必须是数组", arr);
-        }
-        return BI.TableLayout.superclass.addItem.apply(this, arguments);
-    },
-
-    update: function () {
+    update: function (opt) {
+        return this.forceUpdate(opt);
     },
 
     populate: function (items) {

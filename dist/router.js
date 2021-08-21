@@ -1242,39 +1242,39 @@
   //   }
   // };
 
-  // function guardEvent (e) {
-  //   // don't redirect with control keys
-  //   if (e.metaKey || e.altKey || e.ctrlKey || e.shiftKey) { return }
-  //   // don't redirect when preventDefault called
-  //   if (e.defaultPrevented) { return }
-  //   // don't redirect on right click
-  //   if (e.button !== undefined && e.button !== 0) { return }
-  //   // don't redirect if `target="_blank"`
-  //   if (e.currentTarget && e.currentTarget.getAttribute) {
-  //     var target = e.currentTarget.getAttribute('target');
-  //     if (/\b_blank\b/i.test(target)) { return }
-  //   }
-  //   // this may be a Weex event which doesn't have this method
-  //   if (e.preventDefault) {
-  //     e.preventDefault();
-  //   }
-  //   return true
-  // }
+  function guardEvent (e) {
+    // don't redirect with control keys
+    if (e.metaKey || e.altKey || e.ctrlKey || e.shiftKey) { return }
+    // don't redirect when preventDefault called
+    if (e.defaultPrevented) { return }
+    // don't redirect on right click
+    if (e.button !== undefined && e.button !== 0) { return }
+    // don't redirect if `target="_blank"`
+    if (e.currentTarget && e.currentTarget.getAttribute) {
+      var target = e.currentTarget.getAttribute('target');
+      if (/\b_blank\b/i.test(target)) { return }
+    }
+    // this may be a Weex event which doesn't have this method
+    if (e.preventDefault) {
+      e.preventDefault();
+    }
+    return true
+  }
 
-  // function findAnchor (children) {
-  //   if (children) {
-  //     var child;
-  //     for (var i = 0; i < children.length; i++) {
-  //       child = children[i];
-  //       if (child.tag === 'a') {
-  //         return child
-  //       }
-  //       if (child.children && (child = findAnchor(child.children))) {
-  //         return child
-  //       }
-  //     }
-  //   }
-  // }
+  function findAnchor (children) {
+    if (children) {
+      var child;
+      for (var i = 0; i < children.length; i++) {
+        child = children[i];
+        if (child.tag === 'a') {
+          return child
+        }
+        if (child.children && (child = findAnchor(child.children))) {
+          return child
+        }
+      }
+    }
+  }
 
   // var _Vue;
 
@@ -3125,13 +3125,13 @@
   var $router, cbs = [];
   var RouterWidget = BI.inherit(BI.Widget, {
     init: function () {
-      this._router = $router = new VueRouter({
+      this.$router = BI.Router.$router = $router = new VueRouter({
         routes: this.options.routes
       });
-      this._router.afterEach(function () {
+      this.$router.afterEach(function () {
         cbs.forEach(function (cb) {cb();});
       });
-      this._router.init(this);
+      this.$router.init(this);
     }
   });
   BI.shortcut("bi.router", RouterWidget);
@@ -3169,6 +3169,8 @@
   });
   BI.shortcut("bi.router_view", RouterView);
 
+  BI.Router = VueRouter;
+  BI.Router.isSameRoute = isSameRoute;
   return VueRouter;
 
 })));

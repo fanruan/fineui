@@ -186,9 +186,9 @@
                 return "";
             }
             if (this.isDarkColor(color)) {
-                return "#ffffff";
+                return "#FFFFFF";
             }
-            return "#1a1a1a";
+            return "#3D4D66";
         },
 
         rgb2hex: function (rgbColour) {
