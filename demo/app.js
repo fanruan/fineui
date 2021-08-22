@@ -10,26 +10,34 @@ BI.$(function () {
     var tree = BI.Tree.transformToTreeFormat(Demo.CONFIG);
 
     var routes = [{
-        path: '/',
-        component: function(){
+        path: "/",
+        component: function () {
             return Promise.resolve({
                 type: "demo.face"
-            })
+            });
+        }
+    }, {
+        name: "component",
+        path: "/component/:componentId",
+        component: function () {
+            return Promise.resolve({
+                type: "demo.router"
+            });
         }
     }];
 
-    BI.Tree.traversal(tree, function (index, node) {
-        if (!node.children || BI.isEmptyArray(node.children)) {
-            routes.push({
-                path: '/' + node.text,
-                component: function(){
-                    return Promise.resolve({
-                        type: node.value
-                    })
-                }
-            });
-        }
-    });
+    // BI.Tree.traversal(tree, function (index, node) {
+    //     if (!node.children || BI.isEmptyArray(node.children)) {
+    //         routes.push({
+    //             path: "/",
+    //             component: function () {
+    //                 return Promise.resolve({
+    //                     type: node.value
+    //                 });
+    //             }
+    //         });
+    //     }
+    // });
 
     // var AppRouter = BI.inherit(BI.Router, obj);
     // new AppRouter;
@@ -49,7 +57,7 @@ BI.$(function () {
                     console.log(_ref);
                     ref = _ref;
                 }
-            }
+            };
         }
     });
 });

@@ -3143,7 +3143,7 @@
     created: function () {
       var self = this, o = this.options;
       cbs.push(this._callbackListener = function () {
-        self.tab.setSelect($router.history.current.matched[o.deps].path || "/");
+        self.tab.setSelect($router.history.current.fullPath || "/");
       });
     },
     render: function () {
