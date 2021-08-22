@@ -3169,7 +3169,7 @@
   });
   BI.shortcut("bi.router_view", RouterView);
 
-  BI.Router = VueRouter;
+  BI.Router = BI.Router || VueRouter;
   BI.Router.isSameRoute = isSameRoute;
   return VueRouter;
 
