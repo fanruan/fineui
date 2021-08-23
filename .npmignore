@@ -36,6 +36,7 @@
 !dist/font/**/*
 !dist/images/*
 !dist/images/**/*
+!dist/router.js
 !babel.config.js
 !babel.config.ie8.js
 !.eslintrc

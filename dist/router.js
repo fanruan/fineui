@@ -3123,10 +3123,19 @@
 
 
   var $router, cbs = [];
-  var RouterWidget = BI.inherit(BI.Widget, {
+  BI.RouterWidget = BI.inherit(BI.Widget, {
     init: function () {
       this.$router = this._router = BI.Router.$router = $router = new VueRouter({
         routes: this.options.routes
+      });
+      this.$router.beforeEach(function (to, from, next) {
+        if (to.matched.length === 0) {
+          //如果上级也未匹配到路由则跳转主页面，如果上级能匹配到则转上级路由
+          from.path ? next({ path: from.path }) : next('/');
+        } else {
+          //如果匹配到正确跳转
+          next();
+        }
       });
       this.$router.afterEach(function () {
         cbs.forEach(function (cb) {cb();});
@@ -3134,9 +3143,9 @@
       this.$router.init(this);
     }
   });
-  BI.shortcut("bi.router", RouterWidget);
+  BI.shortcut("bi.router", BI.RouterWidget);
 
-  var RouterView = BI.inherit(BI.Widget, {
+  BI.RouterView = BI.inherit(BI.Widget, {
     props: {
       deps: 0
     },
@@ -3167,7 +3176,7 @@
       BI.remove(cbs, this._callbackListener);
     }
   });
-  BI.shortcut("bi.router_view", RouterView);
+  BI.shortcut("bi.router_view", BI.RouterView);
 
   BI.Router = BI.Router || VueRouter;
   BI.Router.isSameRoute = isSameRoute;
