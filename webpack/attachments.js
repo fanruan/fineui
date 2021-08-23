@@ -182,8 +182,7 @@ const fineuiIE = [].concat(
 
 const fineuiWithoutJqueryAndPolyfillJs = [].concat(
     sync([
-        "src/core/0.foundation.js",
-        "src/core/h.js",
+        "src/core/foundation.js",
         lodashJs,
         "src/core/**/*.js",
         "src/data/**/*.js",
