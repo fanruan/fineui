@@ -1,4 +1,4 @@
-/*! time: 2021-8-21 9:00:30 */
+/*! time: 2021-8-22 21:30:32 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -34618,7 +34618,7 @@ BI.ColorChooser = BI.inherit(BI.Widget, {
     },
 
     setValue: function (color) {
-        this.combo.setValue(color || "");
+        this.combo.setValue((color || "").toLowerCase());
     },
 
     getValue: function () {
@@ -36371,66 +36371,70 @@ BI.SimpleHexColorPickerEditor = BI.inherit(BI.Widget, {
             type: "bi.vertical",
             tgap: 10,
             items: [{
-                type: "bi.vertical_adapt",
-                rgap: 5,
-                items: [{
-                    el: {
-                        type: "bi.layout",
-                        cls: "color-picker-editor-display bi-card bi-border",
-                        height: 16,
-                        width: 16,
-                        ref: function (_ref) {
-                            self.colorShow = _ref;
-                        }
-                    },
-                    width: 16,
-                }, {
-                    type: "bi.label",
-                    text: "#",
-                    width: 10
-                }, {
-                    type: "bi.small_text_editor",
-                    ref: function (_ref) {
-                        self.hexEditor = _ref;
-                    },
-                    cls: "color-picker-editor-input",
-                    validationChecker: this._hexChecker,
-                    allowBlank: true,
-                    errorText: BI.i18nText("BI-Color_Picker_Error_Text_Hex"),
-                    width: c.HEX_WIDTH,
-                    height: 20,
-                    listeners: [{
-                        eventName: "EVENT_CHANGE",
-                        action: function () {
-                            self._checkHexEditor();
-                            if (checker(self.storeValue.r) && checker(self.storeValue.g) && checker(self.storeValue.b)) {
-                                self.colorShow.element.css("background-color", self.getValue());
-                                self.fireEvent(BI.ColorPickerEditor.EVENT_CHANGE);
+                el: {
+                    type: "bi.vertical_adapt",
+                    rgap: 5,
+                    columnSize: [16, 10, 'fill', 12, c.RGB_WIDTH, 12, c.RGB_WIDTH, 12, c.RGB_WIDTH],
+                    items: [{
+                        el: {
+                            type: "bi.layout",
+                            cls: "color-picker-editor-display bi-card bi-border",
+                            height: 16,
+                            width: 16,
+                            ref: function (_ref) {
+                                self.colorShow = _ref;
                             }
-                        }
+                        },
+                        width: 16,
+                    }, {
+                        type: "bi.label",
+                        text: "#",
+                        width: 10
+                    }, {
+                        type: "bi.small_text_editor",
+                        ref: function (_ref) {
+                            self.hexEditor = _ref;
+                        },
+                        cls: "color-picker-editor-input",
+                        validationChecker: this._hexChecker,
+                        allowBlank: true,
+                        errorText: BI.i18nText("BI-Color_Picker_Error_Text_Hex"),
+                        width: c.HEX_WIDTH,
+                        height: 20,
+                        listeners: [{
+                            eventName: "EVENT_CHANGE",
+                            action: function () {
+                                self._checkHexEditor();
+                                if (checker(self.storeValue.r) && checker(self.storeValue.g) && checker(self.storeValue.b)) {
+                                    self.colorShow.element.css("background-color", self.getValue());
+                                    self.fireEvent(BI.ColorPickerEditor.EVENT_CHANGE);
+                                }
+                            }
+                        }]
+                    }, RGB[0], {
+                        el: BI.extend(Ws[0], {
+                            ref: function (_ref) {
+                                self.R = _ref
+                            }
+                        }),
+                        width: c.RGB_WIDTH
+                    }, RGB[1], {
+                        el: BI.extend(Ws[1], {
+                            ref: function (_ref) {
+                                self.G = _ref
+                            }
+                        }),
+                        width: c.RGB_WIDTH
+                    }, RGB[2], {
+                        el: BI.extend(Ws[2], {
+                            ref: function (_ref) {
+                                self.B = _ref
+                            }
+                        }),
+                        rgap: -5,
+                        width: c.RGB_WIDTH
                     }]
-                }, RGB[0], {
-                    el: BI.extend(Ws[0], {
-                        ref: function (_ref) {
-                            self.R = _ref
-                        }
-                    }),
-                    width: c.RGB_WIDTH
-                }, RGB[1], {
-                    el: BI.extend(Ws[1], {
-                        ref: function (_ref) {
-                            self.G = _ref
-                        }
-                    }),
-                    width: c.RGB_WIDTH
-                }, RGB[2], {
-                    el: BI.extend(Ws[2], {
-                        ref: function (_ref) {
-                            self.B = _ref
-                        }
-                    }),
-                    width: c.RGB_WIDTH
-                }]
+                }
             }]
 
         }

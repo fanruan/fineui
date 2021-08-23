@@ -3125,7 +3125,7 @@
   var $router, cbs = [];
   var RouterWidget = BI.inherit(BI.Widget, {
     init: function () {
-      this.$router = BI.Router.$router = $router = new VueRouter({
+      this.$router = this._router = BI.Router.$router = $router = new VueRouter({
         routes: this.options.routes
       });
       this.$router.afterEach(function () {
@@ -3143,7 +3143,7 @@
     created: function () {
       var self = this, o = this.options;
       cbs.push(this._callbackListener = function () {
-        self.tab.setSelect($router.history.current.matched[o.deps].path || "/");
+        self.tab.setSelect($router.history.current.fullPath || "/");
       });
     },
     render: function () {
@@ -3169,7 +3169,7 @@
   });
   BI.shortcut("bi.router_view", RouterView);
 
-  BI.Router = VueRouter;
+  BI.Router = BI.Router || VueRouter;
   BI.Router.isSameRoute = isSameRoute;
   return VueRouter;
 

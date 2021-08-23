@@ -44,13 +44,18 @@
             handleTreeSelectChange: function (v) {
                 var matched = BI.some(Demo.CONFIG, function (index, item) {
                     if (item.value === v) {
-                        BI.router.push(item.text);
+                        BI.Router.$router.push({
+                            name: "component",
+                            params: {
+                                componentId: item.value
+                            }
+                        });
                         // BI.history.navigate(item.text, {trigger: true});
                         return true;
                     }
                 });
                 if (!matched) {
-                    BI.router.push("/");
+                    BI.Router.$router.push("/");
                     // BI.history.navigate("", {trigger: true});
                 }
             }

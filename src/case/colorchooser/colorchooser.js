@@ -91,7 +91,7 @@ BI.ColorChooser = BI.inherit(BI.Widget, {
     },
 
     setValue: function (color) {
-        this.combo.setValue(color || "");
+        this.combo.setValue((color || "").toLowerCase());
     },
 
     getValue: function () {
