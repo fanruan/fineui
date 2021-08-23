@@ -1,4 +1,4 @@
-/*! time: 2021-8-23 14:50:32 */
+/*! time: 2021-8-23 17:40:30 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -37471,7 +37471,7 @@ BI.ColorChooser = BI.inherit(BI.Widget, {
     _init: function () {
         var self = this, o = this.options;
         BI.ColorChooser.superclass._init.apply(this, arguments);
-        o.value = o.value || "";
+        o.value = (o.value || "").toLowerCase();
         this.combo = BI.createWidget({
             type: "bi.combo",
             element: this,
@@ -45510,7 +45510,7 @@ BI.MultiSelectBar = BI.inherit(BI.BasicButton, {
     setValue: function (selectedValues) {
         BI.MultiSelectBar.superclass.setValue.apply(this, arguments);
         var isAllChecked = this.options.isAllCheckedBySelectedValue.apply(this, arguments);
-        this._setSelected(isAllChecked);
+        this.setSelected(isAllChecked);
         !isAllChecked && this.setHalfSelected(this.options.isHalfCheckedBySelectedValue.apply(this, arguments));
     },
 
