@@ -1,4 +1,4 @@
-/*! time: 2021-8-23 11:50:28 */
+/*! time: 2021-8-23 14:50:32 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -17262,6 +17262,7 @@ BI.Layout = BI.inherit(BI.Widget, {
         function addNode (vnode, index) {
             var opt = self._getOptions(vnode);
             var key = opt.key == null ? index : opt.key;
+            delete self._children[self._getChildName(index)];
             return children[key] = self._addElement(index, vnode);
         }
 
@@ -92152,22 +92153,21 @@ _.extend(BI, {
                 setTimeout(function () {
                     self_.clean(); // remove files from list
                     self_.hide(); // hide progress bars and enable input file
-
-                    if (200 > xhr.status || xhr.status > 399) {
-                        BI.Msg.toast(BI.i18nText("BI-Upload_File_Error"), { level: "error" });
-                        self.fireEvent(BI.File.EVENT_ERROR);
-                        return;
-                    }
-                    var error = BI.some(_wrap.attach_array, function (index, attach) {
-                        if (attach.errorCode) {
-                            BI.Msg.toast(BI.i18nText(attach.errorMsg), { level: "error" });
-                            self.fireEvent(BI.File.EVENT_ERROR, attach);
-                            return true;
-                        }
-                    });
-                    !error && self.fireEvent(BI.File.EVENT_UPLOADED);
                     // enable again the submit button/element
-                }, 1000);
+                }, 100);
+                if (200 > xhr.status || xhr.status > 399) {
+                    BI.Msg.toast(BI.i18nText("BI-Upload_File_Error"), { level: "error" });
+                    self.fireEvent(BI.File.EVENT_ERROR);
+                    return;
+                }
+                var error = BI.some(_wrap.attach_array, function (index, attach) {
+                    if (attach.errorCode) {
+                        BI.Msg.toast(BI.i18nText(attach.errorMsg), { level: "error" });
+                        self.fireEvent(BI.File.EVENT_ERROR, attach);
+                        return true;
+                    }
+                });
+                !error && self.fireEvent(BI.File.EVENT_UPLOADED);
             };
             _wrap.url = o.url;
             _wrap.fileType = o.accept;   // 文件类型限制
