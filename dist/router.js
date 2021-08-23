@@ -3123,7 +3123,7 @@
 
 
   var $router, cbs = [];
-  var RouterWidget = BI.inherit(BI.Widget, {
+  BI.RouterWidget = BI.inherit(BI.Widget, {
     init: function () {
       this.$router = this._router = BI.Router.$router = $router = new VueRouter({
         routes: this.options.routes
@@ -3143,9 +3143,9 @@
       this.$router.init(this);
     }
   });
-  BI.shortcut("bi.router", RouterWidget);
+  BI.shortcut("bi.router", BI.RouterWidget);
 
-  var RouterView = BI.inherit(BI.Widget, {
+  BI.RouterView = BI.inherit(BI.Widget, {
     props: {
       deps: 0
     },
@@ -3176,7 +3176,7 @@
       BI.remove(cbs, this._callbackListener);
     }
   });
-  BI.shortcut("bi.router_view", RouterView);
+  BI.shortcut("bi.router_view", BI.RouterView);
 
   BI.Router = BI.Router || VueRouter;
   BI.Router.isSameRoute = isSameRoute;
