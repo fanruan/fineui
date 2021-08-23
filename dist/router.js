@@ -3128,6 +3128,15 @@
       this.$router = this._router = BI.Router.$router = $router = new VueRouter({
         routes: this.options.routes
       });
+      this.$router.beforeEach(function (to, from, next) {
+        if (to.matched.length === 0) {
+          //如果上级也未匹配到路由则跳转主页面，如果上级能匹配到则转上级路由
+          from.path ? next({ path: from.path }) : next('/');
+        } else {
+          //如果匹配到正确跳转
+          next();
+        }
+      });
       this.$router.afterEach(function () {
         cbs.forEach(function (cb) {cb();});
       });
