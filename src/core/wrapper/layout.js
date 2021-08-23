@@ -486,6 +486,7 @@ BI.Layout = BI.inherit(BI.Widget, {
         function addNode (vnode, index) {
             var opt = self._getOptions(vnode);
             var key = opt.key == null ? index : opt.key;
+            delete self._children[self._getChildName(index)];
             return children[key] = self._addElement(index, vnode);
         }
 
