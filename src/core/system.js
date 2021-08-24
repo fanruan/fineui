@@ -11,7 +11,7 @@
             TOOL_BAR_HEIGHT: 24,
             LIST_ITEM_HEIGHT: 24,
             TRIGGER_HEIGHT: 24,
-            TOAST_TOP: 40
+            TOAST_TOP: 10
         },
     };
 
