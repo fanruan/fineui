@@ -1,4 +1,4 @@
-/*! time: 2021-8-24 14:00:32 */
+/*! time: 2021-8-24 15:40:30 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -18424,7 +18424,7 @@ BI.shortcut("bi.vertical_fill", BI.VerticalFillLayout);
 BI.FloatHorizontalFillLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.FloatHorizontalFillLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-h-float-fill",
+            baseCls: "bi-h-float-fill clearfix",
             horizontalAlign: BI.HorizontalAlign.Stretch,
             verticalAlign: BI.VerticalAlign.Stretch,
             hgap: 0,
@@ -78203,7 +78203,9 @@ BI.prepares.push(function () {
         if (hasAutoAndFillColumnSize) {
             // 宽度是不是受限
             if ((ob.scrollable !== true && ob.scrollx !== true) || ob.horizontalAlign === BI.HorizontalAlign.Stretch) {
-                return BI.extend({}, ob, {type: "bi.horizontal_float_fill"});
+                return BI.extend({
+                    verticalAlign: BI.VerticalAlign.Top
+                }, ob, {type: "bi.horizontal_float_fill"});
             }
             return BI.extend({
                 horizontalAlign: BI.HorizontalAlign.Stretch

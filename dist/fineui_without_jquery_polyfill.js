@@ -1,4 +1,4 @@
-/*! time: 2021-8-24 14:00:32 */
+/*! time: 2021-8-24 15:40:30 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -18039,7 +18039,7 @@ BI.shortcut("bi.vertical_fill", BI.VerticalFillLayout);
 BI.FloatHorizontalFillLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.FloatHorizontalFillLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-h-float-fill",
+            baseCls: "bi-h-float-fill clearfix",
             horizontalAlign: BI.HorizontalAlign.Stretch,
             verticalAlign: BI.VerticalAlign.Stretch,
             hgap: 0,
