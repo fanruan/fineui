@@ -37,7 +37,7 @@ BI.Msg = function () {
                     eventName: BI.Toast.EVENT_DESTORY,
                     action: function () {
                         BI.remove(toastStack, toast.element);
-                        var _height = 10;
+                        var _height = BI.SIZE_CONSANTS.TOAST_TOP;
                         BI.each(toastStack, function (i, element) {
                             element.css({"top": _height});
                             _height += element.outerHeight() + 10;
@@ -46,7 +46,7 @@ BI.Msg = function () {
                     }
                 }]
             });
-            var height = 10;
+            var height = BI.SIZE_CONSANTS.TOAST_TOP;
             BI.each(toastStack, function (i, element) {
                 height += element.outerHeight() + 10;
             });
