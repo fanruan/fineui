@@ -1,4 +1,4 @@
-/*! time: 2021-8-24 10:50:27 */
+/*! time: 2021-8-24 11:00:38 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -54616,10 +54616,16 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
         this._assertValue(res);
         this.requesting = true;
         if (this.storeValue.type === res.type) {
-            var result = BI.Func.getSearchResult(this.storeValue.value, this.trigger.getKey());
+            var result = BI.Func.getSearchResult(BI.map(this.storeValue.value, function (_i, v) {
+                return {
+                    text: o.valueFormatter(v) || v,
+                    value: v
+                };
+            }), this.trigger.getKey());
             var change = false;
             var map = this._makeMap(this.storeValue.value);
-            BI.each(BI.concat(result.match, result.find), function (i, v) {
+            BI.each(BI.concat(result.match, result.find), function (i, obj) {
+                var v = obj.value;
                 if (BI.isNotNull(map[v])) {
                     change = true;
                     self.storeValue.assist && self.storeValue.assist.push(map[v]);
@@ -55116,10 +55122,16 @@ BI.MultiSelectNoBarCombo = BI.inherit(BI.Single, {
         this._assertValue(res);
         this.requesting = true;
         if (this.storeValue.type === res.type) {
-            var result = BI.Func.getSearchResult(this.storeValue.value, this.trigger.getKey());
+            var result = BI.Func.getSearchResult(BI.map(this.storeValue.value, function (_i, v) {
+                return {
+                    text: o.valueFormatter(v) || v,
+                    value: v
+                };
+            }), this.trigger.getKey());
             var change = false;
-            var map = self._makeMap(this.storeValue.value);
-            BI.each(BI.concat(result.match, result.find), function (i, v) {
+            var map = this._makeMap(this.storeValue.value);
+            BI.each(BI.concat(result.match, result.find), function (i, obj) {
+                var v = obj.value;
                 if (BI.isNotNull(map[v])) {
                     change = true;
                     self.storeValue.assist && self.storeValue.assist.push(map[v]);
@@ -55605,10 +55617,16 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
         this._assertValue(res);
         this.requesting = true;
         if (this.storeValue.type === res.type) {
-            var result = BI.Func.getSearchResult(this.storeValue.value, this.trigger.getKey());
+            var result = BI.Func.getSearchResult(BI.map(this.storeValue.value, function (_i, v) {
+                return {
+                    text: o.valueFormatter(v) || v,
+                    value: v
+                };
+            }), this.trigger.getKey());
             var change = false;
             var map = this._makeMap(this.storeValue.value);
-            BI.each(BI.concat(result.match, result.find), function (i, v) {
+            BI.each(BI.concat(result.match, result.find), function (i, obj) {
+                var v = obj.value;
                 if (BI.isNotNull(map[v])) {
                     change = true;
                     self.storeValue.assist && self.storeValue.assist.push(map[v]);
@@ -56090,10 +56108,16 @@ BI.MultiSelectInsertNoBarCombo = BI.inherit(BI.Single, {
         this._assertValue(res);
         this.requesting = true;
         if (this.storeValue.type === res.type) {
-            var result = BI.Func.getSearchResult(this.storeValue.value, this.trigger.getKey());
+            var result = BI.Func.getSearchResult(BI.map(this.storeValue.value, function (_i, v) {
+                return {
+                    text: o.valueFormatter(v) || v,
+                    value: v
+                };
+            }), this.trigger.getKey());
             var change = false;
             var map = this._makeMap(this.storeValue.value);
-            BI.each(BI.concat(result.match, result.find), function (i, v) {
+            BI.each(BI.concat(result.match, result.find), function (i, obj) {
+                var v = obj.value;
                 if (BI.isNotNull(map[v])) {
                     change = true;
                     self.storeValue.assist && self.storeValue.assist.push(map[v]);
@@ -58672,10 +58696,16 @@ BI.MultiSelectInsertList = BI.inherit(BI.Single, {
         var self = this, o = this.options;
         this._assertValue(res);
         if (this.storeValue.type === res.type) {
-            var result = BI.Func.getSearchResult(this.storeValue.value, this.trigger.getKey());
+            var result = BI.Func.getSearchResult(BI.map(this.storeValue.value, function (_i, v) {
+                return {
+                    text: o.valueFormatter(v) || v,
+                    value: v
+                };
+            }), this.trigger.getKey());
             var change = false;
             var map = this._makeMap(this.storeValue.value);
-            BI.each(BI.concat(result.match, result.find), function (i, v) {
+            BI.each(BI.concat(result.match, result.find), function (i, obj) {
+                var v = obj.value;
                 if (BI.isNotNull(map[v])) {
                     change = true;
                     delete map[v];
@@ -59022,10 +59052,16 @@ BI.MultiSelectInsertNoBarList = BI.inherit(BI.Single, {
         var self = this, o = this.options;
         this._assertValue(res);
         if (this.storeValue.type === res.type) {
-            var result = BI.Func.getSearchResult(this.storeValue.value, this.trigger.getKey());
+            var result = BI.Func.getSearchResult(BI.map(this.storeValue.value, function (_i, v) {
+                return {
+                    text: o.valueFormatter(v) || v,
+                    value: v
+                };
+            }), this.trigger.getKey());
             var change = false;
             var map = this._makeMap(this.storeValue.value);
-            BI.each(BI.concat(result.match, result.find), function (i, v) {
+            BI.each(BI.concat(result.match, result.find), function (i, obj) {
+                var v = obj.value;
                 if (BI.isNotNull(map[v])) {
                     change = true;
                     delete map[v];
@@ -59359,10 +59395,16 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
         this._assertValue(res);
         if (this.storeValue.type === res.type) {
-            var result = BI.Func.getSearchResult(this.storeValue.value, this.trigger.getKey());
+            var result = BI.Func.getSearchResult(BI.map(this.storeValue.value, function (_i, v) {
+                return {
+                    text: o.valueFormatter(v) || v,
+                    value: v
+                };
+            }), this.trigger.getKey());
             var change = false;
             var map = this._makeMap(this.storeValue.value);
-            BI.each(BI.concat(result.match, result.find), function (i, v) {
+            BI.each(BI.concat(result.match, result.find), function (i, obj) {
+                var v = obj.value;
                 if (BI.isNotNull(map[v])) {
                     change = true;
                     delete map[v];
