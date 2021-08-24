@@ -1,4 +1,4 @@
-/*! time: 2021-8-24 16:00:29 */
+/*! time: 2021-8-24 21:21:01 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -54641,7 +54641,9 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
         o.itemsCreator({
             type: BI.MultiSelectCombo.REQ_GET_ALL_DATA,
             keywords: [this.trigger.getKey()],
-            selectedValues: this.storeValue.value,
+            selectedValues: BI.filter(this.storeValue.value, function (_i, v) {
+                return !BI.contains(res.value, v);
+            }),
         }, function (ob) {
             var items = BI.map(ob.items, "value");
             var selectedMap = self._makeMap(self.storeValue.value);
@@ -55147,7 +55149,9 @@ BI.MultiSelectNoBarCombo = BI.inherit(BI.Single, {
         o.itemsCreator({
             type: BI.MultiSelectNoBarCombo.REQ_GET_ALL_DATA,
             keywords: [this.trigger.getKey()],
-            selectedValues: this.storeValue.value,
+            selectedValues: BI.filter(this.storeValue.value, function (_i, v) {
+                return !BI.contains(res.value, v);
+            }),
         }, function (ob) {
             var items = BI.map(ob.items, "value");
             var selectedMap = self._makeMap(self.storeValue.value);
@@ -55642,7 +55646,9 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
         o.itemsCreator({
             type: BI.MultiSelectInsertCombo.REQ_GET_ALL_DATA,
             keywords: [this.trigger.getKey()],
-            selectedValues: this.storeValue.value,
+            selectedValues: BI.filter(this.storeValue.value, function (_i, v) {
+                return !BI.contains(res.value, v);
+            }),
         }, function (ob) {
             var items = BI.map(ob.items, "value");
             var selectedMap = self._makeMap(self.storeValue.value);
@@ -56133,7 +56139,9 @@ BI.MultiSelectInsertNoBarCombo = BI.inherit(BI.Single, {
         o.itemsCreator({
             type: BI.MultiSelectInsertNoBarCombo.REQ_GET_ALL_DATA,
             keywords: [this.trigger.getKey()],
-            selectedValues: this.storeValue.value,
+            selectedValues: BI.filter(this.storeValue.value, function (_i, v) {
+                return !BI.contains(res.value, v);
+            }),
         }, function (ob) {
             var items = BI.map(ob.items, "value");
             var selectedMap = self._makeMap(self.storeValue.value);
@@ -58703,7 +58711,7 @@ BI.MultiSelectInsertList = BI.inherit(BI.Single, {
                     text: o.valueFormatter(v) || v,
                     value: v
                 };
-            }), this.trigger.getKey());
+            }), this.trigger.getKeyword());
             var change = false;
             var map = this._makeMap(this.storeValue.value);
             BI.each(BI.concat(result.match, result.find), function (i, obj) {
@@ -58720,7 +58728,9 @@ BI.MultiSelectInsertList = BI.inherit(BI.Single, {
         o.itemsCreator({
             type: BI.MultiSelectInsertList.REQ_GET_ALL_DATA,
             keywords: [this.trigger.getKeyword()],
-            selectedValues: this.storeValue.value,
+            selectedValues: BI.filter(this.storeValue.value, function (_i, v) {
+                return !BI.contains(res.value, v);
+            }),
         }, function (ob) {
             var items = BI.map(ob.items, "value");
             var selectedMap = self._makeMap(self.storeValue.value);
@@ -59059,7 +59069,7 @@ BI.MultiSelectInsertNoBarList = BI.inherit(BI.Single, {
                     text: o.valueFormatter(v) || v,
                     value: v
                 };
-            }), this.trigger.getKey());
+            }), this.trigger.getKeyword());
             var change = false;
             var map = this._makeMap(this.storeValue.value);
             BI.each(BI.concat(result.match, result.find), function (i, obj) {
@@ -59076,7 +59086,9 @@ BI.MultiSelectInsertNoBarList = BI.inherit(BI.Single, {
         o.itemsCreator({
             type: BI.MultiSelectInsertNoBarList.REQ_GET_ALL_DATA,
             keywords: [this.trigger.getKeyword()],
-            selectedValues: this.storeValue.value,
+            selectedValues: BI.filter(this.storeValue.value, function (_i, v) {
+                return !BI.contains(res.value, v);
+            }),
         }, function (ob) {
             var items = BI.map(ob.items, "value");
             var selectedMap = self._makeMap(self.storeValue.value);
@@ -59419,7 +59431,9 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
         o.itemsCreator({
             type: BI.MultiSelectList.REQ_GET_ALL_DATA,
             keywords: [this.trigger.getKey()],
-            selectedValues: this.storeValue.value,
+            selectedValues: BI.filter(this.storeValue.value, function (_i, v) {
+                return !BI.contains(res.value, v);
+            }),
         }, function (ob) {
             var items = BI.map(ob.items, "value");
             var selectedMap = self._makeMap(self.storeValue.value);
