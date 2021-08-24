@@ -49,7 +49,9 @@ BI.prepares.push(function () {
         if (hasAutoAndFillColumnSize) {
             // 宽度是不是受限
             if ((ob.scrollable !== true && ob.scrollx !== true) || ob.horizontalAlign === BI.HorizontalAlign.Stretch) {
-                return BI.extend({}, ob, {type: "bi.horizontal_float_fill"});
+                return BI.extend({
+                    verticalAlign: BI.VerticalAlign.Top
+                }, ob, {type: "bi.horizontal_float_fill"});
             }
             return BI.extend({
                 horizontalAlign: BI.HorizontalAlign.Stretch
