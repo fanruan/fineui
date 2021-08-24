@@ -1,4 +1,4 @@
-/*! time: 2021-8-23 17:40:30 */
+/*! time: 2021-8-24 16:00:29 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -82,7 +82,7 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 1456);
+/******/ 	return __webpack_require__(__webpack_require__.s = 1458);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -138,6 +138,15 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
+var _widget = __webpack_require__(0);
+
+/***/ }),
+/* 15 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 var g; // This works in non-strict mode
@@ -160,16 +169,7 @@ try {
 module.exports = g;
 
 /***/ }),
-/* 15 */,
-/* 16 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _widget = __webpack_require__(0);
-
-/***/ }),
+/* 16 */,
 /* 17 */,
 /* 18 */,
 /* 19 */,
@@ -273,7 +273,7 @@ var _widget = __webpack_require__(0);
 "use strict";
 
 
-var _pane = __webpack_require__(16);
+var _pane = __webpack_require__(14);
 
 /***/ }),
 /* 53 */
@@ -356,7 +356,7 @@ __webpack_require__(96); // On some exotic environments, it's not clear which ob
 
 exports.setImmediate = typeof self !== "undefined" && self.setImmediate || typeof global !== "undefined" && global.setImmediate || void 0 && (void 0).setImmediate;
 exports.clearImmediate = typeof self !== "undefined" && self.clearImmediate || typeof global !== "undefined" && global.clearImmediate || void 0 && (void 0).clearImmediate;
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(14)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(15)))
 
 /***/ }),
 /* 62 */,
@@ -684,7 +684,7 @@ if (_global.BI == null) {
 if(_global.BI.prepares == null) {
     _global.BI.prepares = [];
 }
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(14)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(15)))
 
 /***/ }),
 /* 92 */
@@ -2040,7 +2040,7 @@ if (!_global.BI) {
     });
 })();
 
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(14), __webpack_require__(61).setImmediate))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(15), __webpack_require__(61).setImmediate))
 
 /***/ }),
 /* 96 */
@@ -2250,7 +2250,7 @@ if (!_global.BI) {
   attachTo.setImmediate = setImmediate;
   attachTo.clearImmediate = clearImmediate;
 })(typeof self === "undefined" ? typeof global === "undefined" ? void 0 : global : self);
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(14), __webpack_require__(75)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(15), __webpack_require__(75)))
 
 /***/ }),
 /* 97 */
@@ -4429,7 +4429,7 @@ _.extend(BI, {
     };
 })();
 
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(14)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(15)))
 
 /***/ }),
 /* 103 */
@@ -16027,6 +16027,7 @@ BI.Region.prototype = {
             TOOL_BAR_HEIGHT: 24,
             LIST_ITEM_HEIGHT: 24,
             TRIGGER_HEIGHT: 24,
+            TOAST_TOP: 10
         },
     };
 
@@ -16942,9 +16943,11 @@ BI.Layout = BI.inherit(BI.Widget, {
                 c.destroy();
             });
             this._children = {};
+            this._isMounted = false;
         }
         this.options.items = opt.items;
         this.stroke(opt.items);
+        this._mount();
     },
 
     update: function (opt) {
@@ -18036,7 +18039,7 @@ BI.shortcut("bi.vertical_fill", BI.VerticalFillLayout);
 BI.FloatHorizontalFillLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.FloatHorizontalFillLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-h-float-fill",
+            baseCls: "bi-h-float-fill clearfix",
             horizontalAlign: BI.HorizontalAlign.Stretch,
             verticalAlign: BI.VerticalAlign.Stretch,
             hgap: 0,
@@ -25153,7 +25156,7 @@ BI.Msg = function () {
                     eventName: BI.Toast.EVENT_DESTORY,
                     action: function () {
                         BI.remove(toastStack, toast.element);
-                        var _height = 10;
+                        var _height = BI.SIZE_CONSANTS.TOAST_TOP;
                         BI.each(toastStack, function (i, element) {
                             element.css({"top": _height});
                             _height += element.outerHeight() + 10;
@@ -25162,7 +25165,7 @@ BI.Msg = function () {
                     }
                 }]
             });
-            var height = 10;
+            var height = BI.SIZE_CONSANTS.TOAST_TOP;
             BI.each(toastStack, function (i, element) {
                 height += element.outerHeight() + 10;
             });
@@ -36013,7 +36016,7 @@ BI.shortcut("bi.color_picker", BI.ColorPicker);
 BI.HexColorPickerEditor = BI.inherit(BI.Widget, {
 
     constants: {
-        RGB_WIDTH: 36,
+        RGB_WIDTH: 32,
         HEX_WIDTH: 70,
         HEX_PREFIX_POSITION: 1
     },
@@ -36323,7 +36326,7 @@ BI.shortcut("bi.hex_color_picker_editor", BI.HexColorPickerEditor);
 BI.SimpleHexColorPickerEditor = BI.inherit(BI.Widget, {
 
     constants: {
-        RGB_WIDTH: 36,
+        RGB_WIDTH: 32,
         HEX_WIDTH: 70,
         HEX_PREFIX_POSITION: 1
     },
@@ -54230,10 +54233,16 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
         this._assertValue(res);
         this.requesting = true;
         if (this.storeValue.type === res.type) {
-            var result = BI.Func.getSearchResult(this.storeValue.value, this.trigger.getKey());
+            var result = BI.Func.getSearchResult(BI.map(this.storeValue.value, function (_i, v) {
+                return {
+                    text: o.valueFormatter(v) || v,
+                    value: v
+                };
+            }), this.trigger.getKey());
             var change = false;
             var map = this._makeMap(this.storeValue.value);
-            BI.each(BI.concat(result.match, result.find), function (i, v) {
+            BI.each(BI.concat(result.match, result.find), function (i, obj) {
+                var v = obj.value;
                 if (BI.isNotNull(map[v])) {
                     change = true;
                     self.storeValue.assist && self.storeValue.assist.push(map[v]);
@@ -54730,10 +54739,16 @@ BI.MultiSelectNoBarCombo = BI.inherit(BI.Single, {
         this._assertValue(res);
         this.requesting = true;
         if (this.storeValue.type === res.type) {
-            var result = BI.Func.getSearchResult(this.storeValue.value, this.trigger.getKey());
+            var result = BI.Func.getSearchResult(BI.map(this.storeValue.value, function (_i, v) {
+                return {
+                    text: o.valueFormatter(v) || v,
+                    value: v
+                };
+            }), this.trigger.getKey());
             var change = false;
-            var map = self._makeMap(this.storeValue.value);
-            BI.each(BI.concat(result.match, result.find), function (i, v) {
+            var map = this._makeMap(this.storeValue.value);
+            BI.each(BI.concat(result.match, result.find), function (i, obj) {
+                var v = obj.value;
                 if (BI.isNotNull(map[v])) {
                     change = true;
                     self.storeValue.assist && self.storeValue.assist.push(map[v]);
@@ -55219,10 +55234,16 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
         this._assertValue(res);
         this.requesting = true;
         if (this.storeValue.type === res.type) {
-            var result = BI.Func.getSearchResult(this.storeValue.value, this.trigger.getKey());
+            var result = BI.Func.getSearchResult(BI.map(this.storeValue.value, function (_i, v) {
+                return {
+                    text: o.valueFormatter(v) || v,
+                    value: v
+                };
+            }), this.trigger.getKey());
             var change = false;
             var map = this._makeMap(this.storeValue.value);
-            BI.each(BI.concat(result.match, result.find), function (i, v) {
+            BI.each(BI.concat(result.match, result.find), function (i, obj) {
+                var v = obj.value;
                 if (BI.isNotNull(map[v])) {
                     change = true;
                     self.storeValue.assist && self.storeValue.assist.push(map[v]);
@@ -55704,10 +55725,16 @@ BI.MultiSelectInsertNoBarCombo = BI.inherit(BI.Single, {
         this._assertValue(res);
         this.requesting = true;
         if (this.storeValue.type === res.type) {
-            var result = BI.Func.getSearchResult(this.storeValue.value, this.trigger.getKey());
+            var result = BI.Func.getSearchResult(BI.map(this.storeValue.value, function (_i, v) {
+                return {
+                    text: o.valueFormatter(v) || v,
+                    value: v
+                };
+            }), this.trigger.getKey());
             var change = false;
             var map = this._makeMap(this.storeValue.value);
-            BI.each(BI.concat(result.match, result.find), function (i, v) {
+            BI.each(BI.concat(result.match, result.find), function (i, obj) {
+                var v = obj.value;
                 if (BI.isNotNull(map[v])) {
                     change = true;
                     self.storeValue.assist && self.storeValue.assist.push(map[v]);
@@ -58286,10 +58313,16 @@ BI.MultiSelectInsertList = BI.inherit(BI.Single, {
         var self = this, o = this.options;
         this._assertValue(res);
         if (this.storeValue.type === res.type) {
-            var result = BI.Func.getSearchResult(this.storeValue.value, this.trigger.getKey());
+            var result = BI.Func.getSearchResult(BI.map(this.storeValue.value, function (_i, v) {
+                return {
+                    text: o.valueFormatter(v) || v,
+                    value: v
+                };
+            }), this.trigger.getKey());
             var change = false;
             var map = this._makeMap(this.storeValue.value);
-            BI.each(BI.concat(result.match, result.find), function (i, v) {
+            BI.each(BI.concat(result.match, result.find), function (i, obj) {
+                var v = obj.value;
                 if (BI.isNotNull(map[v])) {
                     change = true;
                     delete map[v];
@@ -58636,10 +58669,16 @@ BI.MultiSelectInsertNoBarList = BI.inherit(BI.Single, {
         var self = this, o = this.options;
         this._assertValue(res);
         if (this.storeValue.type === res.type) {
-            var result = BI.Func.getSearchResult(this.storeValue.value, this.trigger.getKey());
+            var result = BI.Func.getSearchResult(BI.map(this.storeValue.value, function (_i, v) {
+                return {
+                    text: o.valueFormatter(v) || v,
+                    value: v
+                };
+            }), this.trigger.getKey());
             var change = false;
             var map = this._makeMap(this.storeValue.value);
-            BI.each(BI.concat(result.match, result.find), function (i, v) {
+            BI.each(BI.concat(result.match, result.find), function (i, obj) {
+                var v = obj.value;
                 if (BI.isNotNull(map[v])) {
                     change = true;
                     delete map[v];
@@ -58973,10 +59012,16 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
         this._assertValue(res);
         if (this.storeValue.type === res.type) {
-            var result = BI.Func.getSearchResult(this.storeValue.value, this.trigger.getKey());
+            var result = BI.Func.getSearchResult(BI.map(this.storeValue.value, function (_i, v) {
+                return {
+                    text: o.valueFormatter(v) || v,
+                    value: v
+                };
+            }), this.trigger.getKey());
             var change = false;
             var map = this._makeMap(this.storeValue.value);
-            BI.each(BI.concat(result.match, result.find), function (i, v) {
+            BI.each(BI.concat(result.match, result.find), function (i, obj) {
+                var v = obj.value;
                 if (BI.isNotNull(map[v])) {
                     change = true;
                     delete map[v];
@@ -75821,6 +75866,18 @@ Object.defineProperty(exports, "TdLayout", {
     return _layout11.TdLayout;
   }
 });
+Object.defineProperty(exports, "MultiLayerSelectLevelTree", {
+  enumerable: true,
+  get: function get() {
+    return _multilayerselecttree3.MultiLayerSelectLevelTree;
+  }
+});
+Object.defineProperty(exports, "SelectTreeExpander", {
+  enumerable: true,
+  get: function get() {
+    return _selecttree.SelectTreeExpander;
+  }
+});
 exports["default"] = void 0;
 
 var _combo = __webpack_require__(718);
@@ -75829,7 +75886,7 @@ var _group = __webpack_require__(68);
 
 var _tab = __webpack_require__(719);
 
-var _pane = __webpack_require__(16);
+var _pane = __webpack_require__(14);
 
 var _button = __webpack_require__(4);
 
@@ -76157,6 +76214,10 @@ var _pane3 = __webpack_require__(861);
 
 var _layout11 = __webpack_require__(862);
 
+var _multilayerselecttree3 = __webpack_require__(863);
+
+var _selecttree = __webpack_require__(864);
+
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
@@ -76335,7 +76396,7 @@ var _widget = __webpack_require__(0);
 "use strict";
 
 
-var _pane = __webpack_require__(16);
+var _pane = __webpack_require__(14);
 
 /***/ }),
 /* 737 */
@@ -76879,7 +76940,7 @@ var _widget = __webpack_require__(0);
 "use strict";
 
 
-var _pane = __webpack_require__(16);
+var _pane = __webpack_require__(14);
 
 /***/ }),
 /* 775 */
@@ -76942,7 +77003,7 @@ var _widget = __webpack_require__(0);
 "use strict";
 
 
-var _pane = __webpack_require__(16);
+var _pane = __webpack_require__(14);
 
 /***/ }),
 /* 782 */
@@ -77131,7 +77192,7 @@ var _widget = __webpack_require__(0);
 "use strict";
 
 
-var _pane = __webpack_require__(16);
+var _pane = __webpack_require__(14);
 
 /***/ }),
 /* 803 */
@@ -77527,7 +77588,7 @@ var _button = __webpack_require__(46);
 "use strict";
 
 
-var _pane = __webpack_require__(16);
+var _pane = __webpack_require__(14);
 
 /***/ }),
 /* 847 */
@@ -77672,8 +77733,24 @@ var _abstract = __webpack_require__(30);
 var _layout = __webpack_require__(3);
 
 /***/ }),
-/* 863 */,
-/* 864 */,
+/* 863 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _pane = __webpack_require__(14);
+
+/***/ }),
+/* 864 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _widget = __webpack_require__(0);
+
+/***/ }),
 /* 865 */,
 /* 866 */,
 /* 867 */,
@@ -77700,7 +77777,9 @@ var _layout = __webpack_require__(3);
 /* 888 */,
 /* 889 */,
 /* 890 */,
-/* 891 */
+/* 891 */,
+/* 892 */,
+/* 893 */
 /***/ (function(module, exports) {
 
 ;(function () {
@@ -77863,8 +77942,6 @@ var _layout = __webpack_require__(3);
 
 
 /***/ }),
-/* 892 */,
-/* 893 */,
 /* 894 */,
 /* 895 */,
 /* 896 */,
@@ -77897,7 +77974,9 @@ var _layout = __webpack_require__(3);
 /* 923 */,
 /* 924 */,
 /* 925 */,
-/* 926 */
+/* 926 */,
+/* 927 */,
+/* 928 */
 /***/ (function(module, exports) {
 
 ;(function () {
@@ -78173,8 +78252,6 @@ var _layout = __webpack_require__(3);
 
 
 /***/ }),
-/* 927 */,
-/* 928 */,
 /* 929 */,
 /* 930 */,
 /* 931 */,
@@ -78182,14 +78259,16 @@ var _layout = __webpack_require__(3);
 /* 933 */,
 /* 934 */,
 /* 935 */,
-/* 936 */
+/* 936 */,
+/* 937 */,
+/* 938 */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(global) {module.exports = global["Fix"] = __webpack_require__(937);
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(14)))
+/* WEBPACK VAR INJECTION */(function(global) {module.exports = global["Fix"] = __webpack_require__(939);
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(15)))
 
 /***/ }),
-/* 937 */
+/* 939 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(setImmediate) {function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -79722,8 +79801,6 @@ var _layout = __webpack_require__(3);
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(61).setImmediate))
 
 /***/ }),
-/* 938 */,
-/* 939 */,
 /* 940 */,
 /* 941 */,
 /* 942 */,
@@ -79922,14 +79999,14 @@ var _layout = __webpack_require__(3);
 /* 1135 */,
 /* 1136 */,
 /* 1137 */,
-/* 1138 */
+/* 1138 */,
+/* 1139 */,
+/* 1140 */
 /***/ (function(module, exports) {
 
 
 
 /***/ }),
-/* 1139 */,
-/* 1140 */,
 /* 1141 */,
 /* 1142 */,
 /* 1143 */,
@@ -80245,7 +80322,9 @@ var _layout = __webpack_require__(3);
 /* 1453 */,
 /* 1454 */,
 /* 1455 */,
-/* 1456 */
+/* 1456 */,
+/* 1457 */,
+/* 1458 */
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(92);
@@ -80364,7 +80443,7 @@ __webpack_require__(378);
 __webpack_require__(110);
 __webpack_require__(111);
 __webpack_require__(112);
-__webpack_require__(936);
+__webpack_require__(938);
 __webpack_require__(379);
 __webpack_require__(380);
 __webpack_require__(381);
@@ -80762,9 +80841,9 @@ __webpack_require__(712);
 __webpack_require__(713);
 __webpack_require__(714);
 __webpack_require__(715);
-__webpack_require__(926);
-__webpack_require__(891);
-__webpack_require__(1138);
+__webpack_require__(928);
+__webpack_require__(893);
+__webpack_require__(1140);
 module.exports = __webpack_require__(716);
 
 
