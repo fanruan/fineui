@@ -6,7 +6,7 @@
 BI.SimpleHexColorPickerEditor = BI.inherit(BI.Widget, {
 
     constants: {
-        RGB_WIDTH: 36,
+        RGB_WIDTH: 32,
         HEX_WIDTH: 70,
         HEX_PREFIX_POSITION: 1
     },
