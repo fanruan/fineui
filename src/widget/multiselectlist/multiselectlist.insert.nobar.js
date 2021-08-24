@@ -249,7 +249,7 @@ BI.MultiSelectInsertNoBarList = BI.inherit(BI.Single, {
                     text: o.valueFormatter(v) || v,
                     value: v
                 };
-            }), this.trigger.getKey());
+            }), this.trigger.getKeyword());
             var change = false;
             var map = this._makeMap(this.storeValue.value);
             BI.each(BI.concat(result.match, result.find), function (i, obj) {
@@ -266,7 +266,9 @@ BI.MultiSelectInsertNoBarList = BI.inherit(BI.Single, {
         o.itemsCreator({
             type: BI.MultiSelectInsertNoBarList.REQ_GET_ALL_DATA,
             keywords: [this.trigger.getKeyword()],
-            selectedValues: this.storeValue.value,
+            selectedValues: BI.filter(this.storeValue.value, function (_i, v) {
+                return !BI.contains(res.value, v);
+            }),
         }, function (ob) {
             var items = BI.map(ob.items, "value");
             var selectedMap = self._makeMap(self.storeValue.value);

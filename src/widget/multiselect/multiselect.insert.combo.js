@@ -375,7 +375,9 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
         o.itemsCreator({
             type: BI.MultiSelectInsertCombo.REQ_GET_ALL_DATA,
             keywords: [this.trigger.getKey()],
-            selectedValues: this.storeValue.value,
+            selectedValues: BI.filter(this.storeValue.value, function (_i, v) {
+                return !BI.contains(res.value, v);
+            }),
         }, function (ob) {
             var items = BI.map(ob.items, "value");
             var selectedMap = self._makeMap(self.storeValue.value);
