@@ -551,9 +551,11 @@ BI.Layout = BI.inherit(BI.Widget, {
                 c.destroy();
             });
             this._children = {};
+            this._isMounted = false;
         }
         this.options.items = opt.items;
         this.stroke(opt.items);
+        this._mount();
     },
 
     update: function (opt) {
