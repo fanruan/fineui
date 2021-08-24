@@ -1,4 +1,4 @@
-/*! time: 2021-8-24 15:40:30 */
+/*! time: 2021-8-24 16:00:29 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -38940,7 +38940,7 @@ BI.shortcut("bi.color_picker", BI.ColorPicker);
 BI.HexColorPickerEditor = BI.inherit(BI.Widget, {
 
     constants: {
-        RGB_WIDTH: 36,
+        RGB_WIDTH: 32,
         HEX_WIDTH: 70,
         HEX_PREFIX_POSITION: 1
     },
@@ -39250,7 +39250,7 @@ BI.shortcut("bi.hex_color_picker_editor", BI.HexColorPickerEditor);
 BI.SimpleHexColorPickerEditor = BI.inherit(BI.Widget, {
 
     constants: {
-        RGB_WIDTH: 36,
+        RGB_WIDTH: 32,
         HEX_WIDTH: 70,
         HEX_PREFIX_POSITION: 1
     },
