@@ -1,4 +1,4 @@
-/*! time: 2021-8-24 9:40:48 */
+/*! time: 2021-8-24 10:50:27 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -16027,6 +16027,7 @@ BI.Region.prototype = {
             TOOL_BAR_HEIGHT: 24,
             LIST_ITEM_HEIGHT: 24,
             TRIGGER_HEIGHT: 24,
+            TOAST_TOP: 10
         },
     };
 
@@ -25153,7 +25154,7 @@ BI.Msg = function () {
                     eventName: BI.Toast.EVENT_DESTORY,
                     action: function () {
                         BI.remove(toastStack, toast.element);
-                        var _height = 10;
+                        var _height = BI.SIZE_CONSANTS.TOAST_TOP;
                         BI.each(toastStack, function (i, element) {
                             element.css({"top": _height});
                             _height += element.outerHeight() + 10;
@@ -25162,7 +25163,7 @@ BI.Msg = function () {
                     }
                 }]
             });
-            var height = 10;
+            var height = BI.SIZE_CONSANTS.TOAST_TOP;
             BI.each(toastStack, function (i, element) {
                 height += element.outerHeight() + 10;
             });
