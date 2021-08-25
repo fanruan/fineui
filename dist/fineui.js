@@ -1,4 +1,4 @@
-/*! time: 2021-8-24 21:21:01 */
+/*! time: 2021-8-25 10:30:28 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -64292,7 +64292,7 @@ BI.MultiTreeSearcher = BI.inherit(BI.Widget, {
             var names = BI.Func.getSortedResult(BI.keys(value));
             BI.each(names, function (idx, name) {
                 var childNodes = getChildrenNode(value[name]);
-                text += (name === "null" ? "" : (o.valueFormatter(name + "") || name)) + (childNodes === "" ? "" : (":" + childNodes)) + "; ";
+                text += (name === "null" ? "" : (o.valueFormatter(name + "") || name)) + (childNodes === "" ? (BI.isEmptyObject(value[name]) ? "" : ":") : (":" + childNodes)) + "; ";
                 if (childNodes === "") {
                     count++;
                 }
