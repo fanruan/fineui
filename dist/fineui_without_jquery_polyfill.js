@@ -1,4 +1,4 @@
-/*! time: 2021-8-24 21:21:01 */
+/*! time: 2021-8-25 11:30:29 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -17668,11 +17668,6 @@ BI.TableAdaptLayout = BI.inherit(BI.Layout, {
         if (!this.hasWidget(this._getChildName(i))) {
             var w = BI._lazyCreateWidget(item);
             w.element.css({position: "relative", top: "0", left: "0", margin: "0px auto"});
-            if (o.verticalAlign === BI.VerticalAlign.Stretch) {
-                var top = o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0),
-                    bottom = o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0);
-                w.element.css("height", "calc(100% - " + ((top + bottom) / BI.pixRatio + BI.pixUnit) + ")");
-            }
             td = BI._lazyCreateWidget({
                 type: "bi.default",
                 width: width,
@@ -17682,6 +17677,11 @@ BI.TableAdaptLayout = BI.inherit(BI.Layout, {
         } else {
             td = this.getWidgetByName(this._getChildName(i));
             td.element.width(width);
+        }
+        if (o.verticalAlign === BI.VerticalAlign.Stretch) {
+            var top = o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0),
+                bottom = o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0);
+            w.element.css("height", "calc(100% - " + ((top + bottom) / BI.pixRatio + BI.pixUnit) + ")");
         }
         // 对于表现为td的元素设置最大宽度，有几点需要注意
         // 1、由于直接对td设置最大宽度是在规范中未定义的, 所以要使用类似td:firstChild来迂回实现
@@ -18336,6 +18336,18 @@ BI.FlexHorizontalLayout = BI.inherit(BI.Layout, {
         this.populate(this.options.items);
     },
 
+    _hasFill: function () {
+        var o = this.options;
+        if (o.columnSize.length > 0) {
+            return o.columnSize.indexOf("fill") >= 0;
+        }
+        return BI.some(o.items, function (i, item) {
+            if (item.width === "fill") {
+                return true;
+            }
+        });
+    },
+
     _addElement: function (i, item) {
         var o = this.options;
         var w = BI.FlexHorizontalLayout.superclass._addElement.apply(this, arguments);
@@ -18356,7 +18368,7 @@ BI.FlexHorizontalLayout = BI.inherit(BI.Layout, {
                     }
                 }
                 // 当既有动态宽度和自适应宽度的时候只压缩自适应
-                if (columnSize === "" && o.columnSize.indexOf("fill") >= 0) {
+                if (columnSize === "" && this._hasFill()) {
                     w.element.addClass("f-s-n");
                 }
             } else {
@@ -18581,6 +18593,18 @@ BI.FlexVerticalLayout = BI.inherit(BI.Layout, {
         this.populate(this.options.items);
     },
 
+    _hasFill: function () {
+        var o = this.options;
+        if (o.rowSize.length > 0) {
+            return o.rowSize.indexOf("fill") >= 0;
+        }
+        return BI.some(o.items, function (i, item) {
+            if (item.height === "fill") {
+                return true;
+            }
+        });
+    },
+
     _addElement: function (i, item) {
         var o = this.options;
         var w = BI.FlexVerticalLayout.superclass._addElement.apply(this, arguments);
@@ -18601,7 +18625,7 @@ BI.FlexVerticalLayout = BI.inherit(BI.Layout, {
                     }
                 }
                 // 当既有动态宽度和自适应宽度的时候只压缩自适应
-                if (rowSize === "" && o.rowSize.indexOf("fill") >= 0) {
+                if (rowSize === "" && this._hasFill()) {
                     w.element.addClass("f-s-n");
                 }
             } else {
@@ -18792,6 +18816,18 @@ BI.FlexWrapperHorizontalLayout = BI.inherit(BI.Layout, {
         this.populate(this.options.items);
     },
 
+    _hasFill: function () {
+        var o = this.options;
+        if (o.columnSize.length > 0) {
+            return o.columnSize.indexOf("fill") >= 0;
+        }
+        return BI.some(o.items, function (i, item) {
+            if (item.width === "fill") {
+                return true;
+            }
+        });
+    },
+
     _addElement: function (i, item) {
         var o = this.options;
         var w = BI.FlexWrapperHorizontalLayout.superclass._addElement.apply(this, arguments);
@@ -18812,7 +18848,7 @@ BI.FlexWrapperHorizontalLayout = BI.inherit(BI.Layout, {
                     }
                 }
                 // 当既有动态宽度和自适应宽度的时候只压缩自适应
-                if (columnSize === "" && o.columnSize.indexOf("fill") >= 0) {
+                if (columnSize === "" && this._hasFill()) {
                     w.element.addClass("f-s-n");
                 }
             } else {
@@ -18952,6 +18988,18 @@ BI.FlexWrapperVerticalLayout = BI.inherit(BI.Layout, {
         this.populate(this.options.items);
     },
 
+    _hasFill: function () {
+        var o = this.options;
+        if (o.rowSize.length > 0) {
+            return o.rowSize.indexOf("fill") >= 0;
+        }
+        return BI.some(o.items, function (i, item) {
+            if (item.height === "fill") {
+                return true;
+            }
+        });
+    },
+
     _addElement: function (i, item) {
         var o = this.options;
         var w = BI.FlexWrapperVerticalLayout.superclass._addElement.apply(this, arguments);
@@ -18972,7 +19020,7 @@ BI.FlexWrapperVerticalLayout = BI.inherit(BI.Layout, {
                     }
                 }
                 // 当既有动态宽度和自适应宽度的时候只压缩自适应
-                if (rowSize === "" && o.rowSize.indexOf("fill") >= 0) {
+                if (rowSize === "" && this._hasFill()) {
                     w.element.addClass("f-s-n");
                 }
             } else {
@@ -61368,7 +61416,7 @@ BI.MultiTreeSearcher = BI.inherit(BI.Widget, {
             var names = BI.Func.getSortedResult(BI.keys(value));
             BI.each(names, function (idx, name) {
                 var childNodes = getChildrenNode(value[name]);
-                text += (name === "null" ? "" : (o.valueFormatter(name + "") || name)) + (childNodes === "" ? "" : (":" + childNodes)) + "; ";
+                text += (name === "null" ? "" : (o.valueFormatter(name + "") || name)) + (childNodes === "" ? (BI.isEmptyObject(value[name]) ? "" : ":") : (":" + childNodes)) + "; ";
                 if (childNodes === "") {
                     count++;
                 }
