@@ -1,4 +1,4 @@
-/*! time: 2021-8-25 11:30:29 */
+/*! time: 2021-8-25 16:00:31 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -64207,7 +64207,7 @@ BI.SingleSelectSearchInsertPane = BI.inherit(BI.Widget, {
             type: "bi.label",
             text: BI.i18nText("BI-Basic_Click_To_Add_Text", ""),
             height: this.constants.height,
-            cls: "bi-high-light",
+            cls: "bi-keyword-red-mark",
             hgap: 5,
         });
 
