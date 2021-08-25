@@ -13,6 +13,7 @@ BI.SimpleHexColorChooserPopup = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
         return {
             type: "bi.hex_color_chooser_popup",
+            recommendColorsGetter: o.recommendColorsGetter,
             value: o.value,
             simple: true, // 是否有自动
             listeners: [{
