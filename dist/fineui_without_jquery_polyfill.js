@@ -1,4 +1,4 @@
-/*! time: 2021-8-25 11:10:28 */
+/*! time: 2021-8-25 11:30:29 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -17668,11 +17668,6 @@ BI.TableAdaptLayout = BI.inherit(BI.Layout, {
         if (!this.hasWidget(this._getChildName(i))) {
             var w = BI._lazyCreateWidget(item);
             w.element.css({position: "relative", top: "0", left: "0", margin: "0px auto"});
-            if (o.verticalAlign === BI.VerticalAlign.Stretch) {
-                var top = o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0),
-                    bottom = o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0);
-                w.element.css("height", "calc(100% - " + ((top + bottom) / BI.pixRatio + BI.pixUnit) + ")");
-            }
             td = BI._lazyCreateWidget({
                 type: "bi.default",
                 width: width,
@@ -17682,6 +17677,11 @@ BI.TableAdaptLayout = BI.inherit(BI.Layout, {
         } else {
             td = this.getWidgetByName(this._getChildName(i));
             td.element.width(width);
+        }
+        if (o.verticalAlign === BI.VerticalAlign.Stretch) {
+            var top = o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0),
+                bottom = o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0);
+            w.element.css("height", "calc(100% - " + ((top + bottom) / BI.pixRatio + BI.pixUnit) + ")");
         }
         // 对于表现为td的元素设置最大宽度，有几点需要注意
         // 1、由于直接对td设置最大宽度是在规范中未定义的, 所以要使用类似td:firstChild来迂回实现
