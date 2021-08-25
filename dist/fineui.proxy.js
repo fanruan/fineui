@@ -1,4 +1,4 @@
-/*! time: 2021-8-22 21:30:32 */
+/*! time: 2021-8-25 17:20:32 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -82,7 +82,7 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 1205);
+/******/ 	return __webpack_require__(__webpack_require__.s = 1207);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -138,6 +138,15 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
+var _widget = __webpack_require__(0);
+
+/***/ }),
+/* 15 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 var g; // This works in non-strict mode
@@ -160,16 +169,7 @@ try {
 module.exports = g;
 
 /***/ }),
-/* 15 */,
-/* 16 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _widget = __webpack_require__(0);
-
-/***/ }),
+/* 16 */,
 /* 17 */,
 /* 18 */,
 /* 19 */,
@@ -273,7 +273,7 @@ var _widget = __webpack_require__(0);
 "use strict";
 
 
-var _pane = __webpack_require__(16);
+var _pane = __webpack_require__(14);
 
 /***/ }),
 /* 53 */
@@ -356,7 +356,7 @@ __webpack_require__(96); // On some exotic environments, it's not clear which ob
 
 exports.setImmediate = typeof self !== "undefined" && self.setImmediate || typeof global !== "undefined" && global.setImmediate || void 0 && (void 0).setImmediate;
 exports.clearImmediate = typeof self !== "undefined" && self.clearImmediate || typeof global !== "undefined" && global.clearImmediate || void 0 && (void 0).clearImmediate;
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(14)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(15)))
 
 /***/ }),
 /* 62 */,
@@ -684,7 +684,7 @@ if (_global.BI == null) {
 if(_global.BI.prepares == null) {
     _global.BI.prepares = [];
 }
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(14)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(15)))
 
 /***/ }),
 /* 92 */
@@ -2040,7 +2040,7 @@ if (!_global.BI) {
     });
 })();
 
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(14), __webpack_require__(61).setImmediate))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(15), __webpack_require__(61).setImmediate))
 
 /***/ }),
 /* 96 */
@@ -2250,7 +2250,7 @@ if (!_global.BI) {
   attachTo.setImmediate = setImmediate;
   attachTo.clearImmediate = clearImmediate;
 })(typeof self === "undefined" ? typeof global === "undefined" ? void 0 : global : self);
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(14), __webpack_require__(75)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(15), __webpack_require__(75)))
 
 /***/ }),
 /* 97 */
@@ -4429,7 +4429,7 @@ _.extend(BI, {
     };
 })();
 
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(14)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(15)))
 
 /***/ }),
 /* 103 */
@@ -16412,6 +16412,7 @@ BI.Region.prototype = {
             TOOL_BAR_HEIGHT: 24,
             LIST_ITEM_HEIGHT: 24,
             TRIGGER_HEIGHT: 24,
+            TOAST_TOP: 10
         },
     };
 
@@ -17223,7 +17224,7 @@ BI.Layout = BI.inherit(BI.Widget, {
                 } else {   //  如果新节点在旧节点区间中存在就复用一下
                     var sameOldIndex = sameOldVnode[1];
                     updated = self.patchItem(sameOldVnode[0], newStartVnode, sameOldIndex, newStartIdx) || updated;
-                    children[sameOldVnode[0].key == null ? newStartIdx : sameOldVnode[0].key] = self._children[self._getChildName(newStartIdx)] = self._children[self._getChildName(sameOldIndex)];
+                    children[sameOldVnode[0].key == null ? newStartIdx : sameOldVnode[0].key] = self._children[self._getChildName(sameOldIndex)];
                     if (newStartIdx !== sameOldIndex) {
                         delete self._children[self._getChildName(sameOldIndex)];
                     }
@@ -17262,6 +17263,7 @@ BI.Layout = BI.inherit(BI.Widget, {
         function addNode (vnode, index) {
             var opt = self._getOptions(vnode);
             var key = opt.key == null ? index : opt.key;
+            delete self._children[self._getChildName(index)];
             return children[key] = self._addElement(index, vnode);
         }
 
@@ -17326,9 +17328,11 @@ BI.Layout = BI.inherit(BI.Widget, {
                 c.destroy();
             });
             this._children = {};
+            this._isMounted = false;
         }
         this.options.items = opt.items;
         this.stroke(opt.items);
+        this._mount();
     },
 
     update: function (opt) {
@@ -18049,11 +18053,6 @@ BI.TableAdaptLayout = BI.inherit(BI.Layout, {
         if (!this.hasWidget(this._getChildName(i))) {
             var w = BI._lazyCreateWidget(item);
             w.element.css({position: "relative", top: "0", left: "0", margin: "0px auto"});
-            if (o.verticalAlign === BI.VerticalAlign.Stretch) {
-                var top = o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0),
-                    bottom = o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0);
-                w.element.css("height", "calc(100% - " + ((top + bottom) / BI.pixRatio + BI.pixUnit) + ")");
-            }
             td = BI._lazyCreateWidget({
                 type: "bi.default",
                 width: width,
@@ -18063,6 +18062,11 @@ BI.TableAdaptLayout = BI.inherit(BI.Layout, {
         } else {
             td = this.getWidgetByName(this._getChildName(i));
             td.element.width(width);
+        }
+        if (o.verticalAlign === BI.VerticalAlign.Stretch) {
+            var top = o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0),
+                bottom = o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0);
+            w.element.css("height", "calc(100% - " + ((top + bottom) / BI.pixRatio + BI.pixUnit) + ")");
         }
         // 对于表现为td的元素设置最大宽度，有几点需要注意
         // 1、由于直接对td设置最大宽度是在规范中未定义的, 所以要使用类似td:firstChild来迂回实现
@@ -18420,7 +18424,7 @@ BI.shortcut("bi.vertical_fill", BI.VerticalFillLayout);
 BI.FloatHorizontalFillLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.FloatHorizontalFillLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-h-float-fill",
+            baseCls: "bi-h-float-fill clearfix",
             horizontalAlign: BI.HorizontalAlign.Stretch,
             verticalAlign: BI.VerticalAlign.Stretch,
             hgap: 0,
@@ -18717,6 +18721,18 @@ BI.FlexHorizontalLayout = BI.inherit(BI.Layout, {
         this.populate(this.options.items);
     },
 
+    _hasFill: function () {
+        var o = this.options;
+        if (o.columnSize.length > 0) {
+            return o.columnSize.indexOf("fill") >= 0;
+        }
+        return BI.some(o.items, function (i, item) {
+            if (item.width === "fill") {
+                return true;
+            }
+        });
+    },
+
     _addElement: function (i, item) {
         var o = this.options;
         var w = BI.FlexHorizontalLayout.superclass._addElement.apply(this, arguments);
@@ -18737,7 +18753,7 @@ BI.FlexHorizontalLayout = BI.inherit(BI.Layout, {
                     }
                 }
                 // 当既有动态宽度和自适应宽度的时候只压缩自适应
-                if (columnSize === "" && o.columnSize.indexOf("fill") >= 0) {
+                if (columnSize === "" && this._hasFill()) {
                     w.element.addClass("f-s-n");
                 }
             } else {
@@ -18962,6 +18978,18 @@ BI.FlexVerticalLayout = BI.inherit(BI.Layout, {
         this.populate(this.options.items);
     },
 
+    _hasFill: function () {
+        var o = this.options;
+        if (o.rowSize.length > 0) {
+            return o.rowSize.indexOf("fill") >= 0;
+        }
+        return BI.some(o.items, function (i, item) {
+            if (item.height === "fill") {
+                return true;
+            }
+        });
+    },
+
     _addElement: function (i, item) {
         var o = this.options;
         var w = BI.FlexVerticalLayout.superclass._addElement.apply(this, arguments);
@@ -18982,7 +19010,7 @@ BI.FlexVerticalLayout = BI.inherit(BI.Layout, {
                     }
                 }
                 // 当既有动态宽度和自适应宽度的时候只压缩自适应
-                if (rowSize === "" && o.rowSize.indexOf("fill") >= 0) {
+                if (rowSize === "" && this._hasFill()) {
                     w.element.addClass("f-s-n");
                 }
             } else {
@@ -19173,6 +19201,18 @@ BI.FlexWrapperHorizontalLayout = BI.inherit(BI.Layout, {
         this.populate(this.options.items);
     },
 
+    _hasFill: function () {
+        var o = this.options;
+        if (o.columnSize.length > 0) {
+            return o.columnSize.indexOf("fill") >= 0;
+        }
+        return BI.some(o.items, function (i, item) {
+            if (item.width === "fill") {
+                return true;
+            }
+        });
+    },
+
     _addElement: function (i, item) {
         var o = this.options;
         var w = BI.FlexWrapperHorizontalLayout.superclass._addElement.apply(this, arguments);
@@ -19193,7 +19233,7 @@ BI.FlexWrapperHorizontalLayout = BI.inherit(BI.Layout, {
                     }
                 }
                 // 当既有动态宽度和自适应宽度的时候只压缩自适应
-                if (columnSize === "" && o.columnSize.indexOf("fill") >= 0) {
+                if (columnSize === "" && this._hasFill()) {
                     w.element.addClass("f-s-n");
                 }
             } else {
@@ -19333,6 +19373,18 @@ BI.FlexWrapperVerticalLayout = BI.inherit(BI.Layout, {
         this.populate(this.options.items);
     },
 
+    _hasFill: function () {
+        var o = this.options;
+        if (o.rowSize.length > 0) {
+            return o.rowSize.indexOf("fill") >= 0;
+        }
+        return BI.some(o.items, function (i, item) {
+            if (item.height === "fill") {
+                return true;
+            }
+        });
+    },
+
     _addElement: function (i, item) {
         var o = this.options;
         var w = BI.FlexWrapperVerticalLayout.superclass._addElement.apply(this, arguments);
@@ -19353,7 +19405,7 @@ BI.FlexWrapperVerticalLayout = BI.inherit(BI.Layout, {
                     }
                 }
                 // 当既有动态宽度和自适应宽度的时候只压缩自适应
-                if (rowSize === "" && o.rowSize.indexOf("fill") >= 0) {
+                if (rowSize === "" && this._hasFill()) {
                     w.element.addClass("f-s-n");
                 }
             } else {
@@ -25537,7 +25589,7 @@ BI.Msg = function () {
                     eventName: BI.Toast.EVENT_DESTORY,
                     action: function () {
                         BI.remove(toastStack, toast.element);
-                        var _height = 10;
+                        var _height = BI.SIZE_CONSANTS.TOAST_TOP;
                         BI.each(toastStack, function (i, element) {
                             element.css({"top": _height});
                             _height += element.outerHeight() + 10;
@@ -25546,7 +25598,7 @@ BI.Msg = function () {
                     }
                 }]
             });
-            var height = 10;
+            var height = BI.SIZE_CONSANTS.TOAST_TOP;
             BI.each(toastStack, function (i, element) {
                 height += element.outerHeight() + 10;
             });
@@ -34931,7 +34983,7 @@ BI.ColorChooser = BI.inherit(BI.Widget, {
     _init: function () {
         var self = this, o = this.options;
         BI.ColorChooser.superclass._init.apply(this, arguments);
-        o.value = o.value || "";
+        o.value = (o.value || "").toLowerCase();
         this.combo = BI.createWidget({
             type: "bi.combo",
             element: this,
@@ -35326,6 +35378,7 @@ BI.SimpleHexColorChooserPopup = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
         return {
             type: "bi.hex_color_chooser_popup",
+            recommendColorsGetter: o.recommendColorsGetter,
             value: o.value,
             simple: true, // 是否有自动
             listeners: [{
@@ -35688,7 +35741,8 @@ BI.SimpleColorChooser = BI.inherit(BI.Widget, {
             width: o.width,
             height: o.height,
             popup: {
-                type: "bi.simple_hex_color_chooser_popup"
+                type: "bi.simple_hex_color_chooser_popup",
+                recommendColorsGetter: o.recommendColorsGetter,
             }
         });
         this.combo.on(BI.ColorChooser.EVENT_CHANGE, function () {
@@ -36397,7 +36451,7 @@ BI.shortcut("bi.color_picker", BI.ColorPicker);
 BI.HexColorPickerEditor = BI.inherit(BI.Widget, {
 
     constants: {
-        RGB_WIDTH: 36,
+        RGB_WIDTH: 32,
         HEX_WIDTH: 70,
         HEX_PREFIX_POSITION: 1
     },
@@ -36707,7 +36761,7 @@ BI.shortcut("bi.hex_color_picker_editor", BI.HexColorPickerEditor);
 BI.SimpleHexColorPickerEditor = BI.inherit(BI.Widget, {
 
     constants: {
-        RGB_WIDTH: 36,
+        RGB_WIDTH: 32,
         HEX_WIDTH: 70,
         HEX_PREFIX_POSITION: 1
     },
@@ -42970,7 +43024,7 @@ BI.MultiSelectBar = BI.inherit(BI.BasicButton, {
     setValue: function (selectedValues) {
         BI.MultiSelectBar.superclass.setValue.apply(this, arguments);
         var isAllChecked = this.options.isAllCheckedBySelectedValue.apply(this, arguments);
-        this._setSelected(isAllChecked);
+        this.setSelected(isAllChecked);
         !isAllChecked && this.setHalfSelected(this.options.isHalfCheckedBySelectedValue.apply(this, arguments));
     },
 
@@ -54614,10 +54668,16 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
         this._assertValue(res);
         this.requesting = true;
         if (this.storeValue.type === res.type) {
-            var result = BI.Func.getSearchResult(this.storeValue.value, this.trigger.getKey());
+            var result = BI.Func.getSearchResult(BI.map(this.storeValue.value, function (_i, v) {
+                return {
+                    text: o.valueFormatter(v) || v,
+                    value: v
+                };
+            }), this.trigger.getKey());
             var change = false;
             var map = this._makeMap(this.storeValue.value);
-            BI.each(BI.concat(result.match, result.find), function (i, v) {
+            BI.each(BI.concat(result.match, result.find), function (i, obj) {
+                var v = obj.value;
                 if (BI.isNotNull(map[v])) {
                     change = true;
                     self.storeValue.assist && self.storeValue.assist.push(map[v]);
@@ -54631,7 +54691,9 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
         o.itemsCreator({
             type: BI.MultiSelectCombo.REQ_GET_ALL_DATA,
             keywords: [this.trigger.getKey()],
-            selectedValues: this.storeValue.value,
+            selectedValues: BI.filter(this.storeValue.value, function (_i, v) {
+                return !BI.contains(res.value, v);
+            }),
         }, function (ob) {
             var items = BI.map(ob.items, "value");
             var selectedMap = self._makeMap(self.storeValue.value);
@@ -55114,10 +55176,16 @@ BI.MultiSelectNoBarCombo = BI.inherit(BI.Single, {
         this._assertValue(res);
         this.requesting = true;
         if (this.storeValue.type === res.type) {
-            var result = BI.Func.getSearchResult(this.storeValue.value, this.trigger.getKey());
+            var result = BI.Func.getSearchResult(BI.map(this.storeValue.value, function (_i, v) {
+                return {
+                    text: o.valueFormatter(v) || v,
+                    value: v
+                };
+            }), this.trigger.getKey());
             var change = false;
-            var map = self._makeMap(this.storeValue.value);
-            BI.each(BI.concat(result.match, result.find), function (i, v) {
+            var map = this._makeMap(this.storeValue.value);
+            BI.each(BI.concat(result.match, result.find), function (i, obj) {
+                var v = obj.value;
                 if (BI.isNotNull(map[v])) {
                     change = true;
                     self.storeValue.assist && self.storeValue.assist.push(map[v]);
@@ -55131,7 +55199,9 @@ BI.MultiSelectNoBarCombo = BI.inherit(BI.Single, {
         o.itemsCreator({
             type: BI.MultiSelectNoBarCombo.REQ_GET_ALL_DATA,
             keywords: [this.trigger.getKey()],
-            selectedValues: this.storeValue.value,
+            selectedValues: BI.filter(this.storeValue.value, function (_i, v) {
+                return !BI.contains(res.value, v);
+            }),
         }, function (ob) {
             var items = BI.map(ob.items, "value");
             var selectedMap = self._makeMap(self.storeValue.value);
@@ -55603,10 +55673,16 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
         this._assertValue(res);
         this.requesting = true;
         if (this.storeValue.type === res.type) {
-            var result = BI.Func.getSearchResult(this.storeValue.value, this.trigger.getKey());
+            var result = BI.Func.getSearchResult(BI.map(this.storeValue.value, function (_i, v) {
+                return {
+                    text: o.valueFormatter(v) || v,
+                    value: v
+                };
+            }), this.trigger.getKey());
             var change = false;
             var map = this._makeMap(this.storeValue.value);
-            BI.each(BI.concat(result.match, result.find), function (i, v) {
+            BI.each(BI.concat(result.match, result.find), function (i, obj) {
+                var v = obj.value;
                 if (BI.isNotNull(map[v])) {
                     change = true;
                     self.storeValue.assist && self.storeValue.assist.push(map[v]);
@@ -55620,7 +55696,9 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
         o.itemsCreator({
             type: BI.MultiSelectInsertCombo.REQ_GET_ALL_DATA,
             keywords: [this.trigger.getKey()],
-            selectedValues: this.storeValue.value,
+            selectedValues: BI.filter(this.storeValue.value, function (_i, v) {
+                return !BI.contains(res.value, v);
+            }),
         }, function (ob) {
             var items = BI.map(ob.items, "value");
             var selectedMap = self._makeMap(self.storeValue.value);
@@ -56088,10 +56166,16 @@ BI.MultiSelectInsertNoBarCombo = BI.inherit(BI.Single, {
         this._assertValue(res);
         this.requesting = true;
         if (this.storeValue.type === res.type) {
-            var result = BI.Func.getSearchResult(this.storeValue.value, this.trigger.getKey());
+            var result = BI.Func.getSearchResult(BI.map(this.storeValue.value, function (_i, v) {
+                return {
+                    text: o.valueFormatter(v) || v,
+                    value: v
+                };
+            }), this.trigger.getKey());
             var change = false;
             var map = this._makeMap(this.storeValue.value);
-            BI.each(BI.concat(result.match, result.find), function (i, v) {
+            BI.each(BI.concat(result.match, result.find), function (i, obj) {
+                var v = obj.value;
                 if (BI.isNotNull(map[v])) {
                     change = true;
                     self.storeValue.assist && self.storeValue.assist.push(map[v]);
@@ -56105,7 +56189,9 @@ BI.MultiSelectInsertNoBarCombo = BI.inherit(BI.Single, {
         o.itemsCreator({
             type: BI.MultiSelectInsertNoBarCombo.REQ_GET_ALL_DATA,
             keywords: [this.trigger.getKey()],
-            selectedValues: this.storeValue.value,
+            selectedValues: BI.filter(this.storeValue.value, function (_i, v) {
+                return !BI.contains(res.value, v);
+            }),
         }, function (ob) {
             var items = BI.map(ob.items, "value");
             var selectedMap = self._makeMap(self.storeValue.value);
@@ -58670,10 +58756,16 @@ BI.MultiSelectInsertList = BI.inherit(BI.Single, {
         var self = this, o = this.options;
         this._assertValue(res);
         if (this.storeValue.type === res.type) {
-            var result = BI.Func.getSearchResult(this.storeValue.value, this.trigger.getKey());
+            var result = BI.Func.getSearchResult(BI.map(this.storeValue.value, function (_i, v) {
+                return {
+                    text: o.valueFormatter(v) || v,
+                    value: v
+                };
+            }), this.trigger.getKeyword());
             var change = false;
             var map = this._makeMap(this.storeValue.value);
-            BI.each(BI.concat(result.match, result.find), function (i, v) {
+            BI.each(BI.concat(result.match, result.find), function (i, obj) {
+                var v = obj.value;
                 if (BI.isNotNull(map[v])) {
                     change = true;
                     delete map[v];
@@ -58686,7 +58778,9 @@ BI.MultiSelectInsertList = BI.inherit(BI.Single, {
         o.itemsCreator({
             type: BI.MultiSelectInsertList.REQ_GET_ALL_DATA,
             keywords: [this.trigger.getKeyword()],
-            selectedValues: this.storeValue.value,
+            selectedValues: BI.filter(this.storeValue.value, function (_i, v) {
+                return !BI.contains(res.value, v);
+            }),
         }, function (ob) {
             var items = BI.map(ob.items, "value");
             var selectedMap = self._makeMap(self.storeValue.value);
@@ -59020,10 +59114,16 @@ BI.MultiSelectInsertNoBarList = BI.inherit(BI.Single, {
         var self = this, o = this.options;
         this._assertValue(res);
         if (this.storeValue.type === res.type) {
-            var result = BI.Func.getSearchResult(this.storeValue.value, this.trigger.getKey());
+            var result = BI.Func.getSearchResult(BI.map(this.storeValue.value, function (_i, v) {
+                return {
+                    text: o.valueFormatter(v) || v,
+                    value: v
+                };
+            }), this.trigger.getKeyword());
             var change = false;
             var map = this._makeMap(this.storeValue.value);
-            BI.each(BI.concat(result.match, result.find), function (i, v) {
+            BI.each(BI.concat(result.match, result.find), function (i, obj) {
+                var v = obj.value;
                 if (BI.isNotNull(map[v])) {
                     change = true;
                     delete map[v];
@@ -59036,7 +59136,9 @@ BI.MultiSelectInsertNoBarList = BI.inherit(BI.Single, {
         o.itemsCreator({
             type: BI.MultiSelectInsertNoBarList.REQ_GET_ALL_DATA,
             keywords: [this.trigger.getKeyword()],
-            selectedValues: this.storeValue.value,
+            selectedValues: BI.filter(this.storeValue.value, function (_i, v) {
+                return !BI.contains(res.value, v);
+            }),
         }, function (ob) {
             var items = BI.map(ob.items, "value");
             var selectedMap = self._makeMap(self.storeValue.value);
@@ -59357,10 +59459,16 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
         this._assertValue(res);
         if (this.storeValue.type === res.type) {
-            var result = BI.Func.getSearchResult(this.storeValue.value, this.trigger.getKey());
+            var result = BI.Func.getSearchResult(BI.map(this.storeValue.value, function (_i, v) {
+                return {
+                    text: o.valueFormatter(v) || v,
+                    value: v
+                };
+            }), this.trigger.getKey());
             var change = false;
             var map = this._makeMap(this.storeValue.value);
-            BI.each(BI.concat(result.match, result.find), function (i, v) {
+            BI.each(BI.concat(result.match, result.find), function (i, obj) {
+                var v = obj.value;
                 if (BI.isNotNull(map[v])) {
                     change = true;
                     delete map[v];
@@ -59373,7 +59481,9 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
         o.itemsCreator({
             type: BI.MultiSelectList.REQ_GET_ALL_DATA,
             keywords: [this.trigger.getKey()],
-            selectedValues: this.storeValue.value,
+            selectedValues: BI.filter(this.storeValue.value, function (_i, v) {
+                return !BI.contains(res.value, v);
+            }),
         }, function (ob) {
             var items = BI.map(ob.items, "value");
             var selectedMap = self._makeMap(self.storeValue.value);
@@ -61693,7 +61803,7 @@ BI.MultiTreeSearcher = BI.inherit(BI.Widget, {
             var names = BI.Func.getSortedResult(BI.keys(value));
             BI.each(names, function (idx, name) {
                 var childNodes = getChildrenNode(value[name]);
-                text += (name === "null" ? "" : (o.valueFormatter(name + "") || name)) + (childNodes === "" ? "" : (":" + childNodes)) + "; ";
+                text += (name === "null" ? "" : (o.valueFormatter(name + "") || name)) + (childNodes === "" ? (BI.isEmptyObject(value[name]) ? "" : ":") : (":" + childNodes)) + "; ";
                 if (childNodes === "") {
                     count++;
                 }
@@ -64484,7 +64594,7 @@ BI.SingleSelectSearchInsertPane = BI.inherit(BI.Widget, {
             type: "bi.label",
             text: BI.i18nText("BI-Basic_Click_To_Add_Text", ""),
             height: this.constants.height,
-            cls: "bi-high-light",
+            cls: "bi-keyword-red-mark",
             hgap: 5,
         });
 
@@ -76205,6 +76315,18 @@ Object.defineProperty(exports, "TdLayout", {
     return _layout11.TdLayout;
   }
 });
+Object.defineProperty(exports, "MultiLayerSelectLevelTree", {
+  enumerable: true,
+  get: function get() {
+    return _multilayerselecttree3.MultiLayerSelectLevelTree;
+  }
+});
+Object.defineProperty(exports, "SelectTreeExpander", {
+  enumerable: true,
+  get: function get() {
+    return _selecttree.SelectTreeExpander;
+  }
+});
 exports["default"] = void 0;
 
 var _combo = __webpack_require__(718);
@@ -76213,7 +76335,7 @@ var _group = __webpack_require__(68);
 
 var _tab = __webpack_require__(719);
 
-var _pane = __webpack_require__(16);
+var _pane = __webpack_require__(14);
 
 var _button = __webpack_require__(4);
 
@@ -76541,6 +76663,10 @@ var _pane3 = __webpack_require__(861);
 
 var _layout11 = __webpack_require__(862);
 
+var _multilayerselecttree3 = __webpack_require__(863);
+
+var _selecttree = __webpack_require__(864);
+
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
@@ -76719,7 +76845,7 @@ var _widget = __webpack_require__(0);
 "use strict";
 
 
-var _pane = __webpack_require__(16);
+var _pane = __webpack_require__(14);
 
 /***/ }),
 /* 737 */
@@ -77263,7 +77389,7 @@ var _widget = __webpack_require__(0);
 "use strict";
 
 
-var _pane = __webpack_require__(16);
+var _pane = __webpack_require__(14);
 
 /***/ }),
 /* 775 */
@@ -77326,7 +77452,7 @@ var _widget = __webpack_require__(0);
 "use strict";
 
 
-var _pane = __webpack_require__(16);
+var _pane = __webpack_require__(14);
 
 /***/ }),
 /* 782 */
@@ -77515,7 +77641,7 @@ var _widget = __webpack_require__(0);
 "use strict";
 
 
-var _pane = __webpack_require__(16);
+var _pane = __webpack_require__(14);
 
 /***/ }),
 /* 803 */
@@ -77911,7 +78037,7 @@ var _button = __webpack_require__(46);
 "use strict";
 
 
-var _pane = __webpack_require__(16);
+var _pane = __webpack_require__(14);
 
 /***/ }),
 /* 847 */
@@ -78056,20 +78182,38 @@ var _abstract = __webpack_require__(30);
 var _layout = __webpack_require__(3);
 
 /***/ }),
-/* 863 */,
+/* 863 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _pane = __webpack_require__(14);
+
+/***/ }),
 /* 864 */
 /***/ (function(module, exports, __webpack_require__) {
 
-// extracted by mini-css-extract-plugin
+"use strict";
+
+
+var _widget = __webpack_require__(0);
 
 /***/ }),
-/* 865 */
+/* 865 */,
+/* 866 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // extracted by mini-css-extract-plugin
 
 /***/ }),
-/* 866 */
+/* 867 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
+/* 868 */
 /***/ (function(module, exports) {
 
 // 工程配置
@@ -78123,7 +78267,9 @@ BI.prepares.push(function () {
         if (hasAutoAndFillColumnSize) {
             // 宽度是不是受限
             if ((ob.scrollable !== true && ob.scrollx !== true) || ob.horizontalAlign === BI.HorizontalAlign.Stretch) {
-                return BI.extend({}, ob, {type: "bi.horizontal_float_fill"});
+                return BI.extend({
+                    verticalAlign: BI.VerticalAlign.Top
+                }, ob, {type: "bi.horizontal_float_fill"});
             }
             return BI.extend({
                 horizontalAlign: BI.HorizontalAlign.Stretch
@@ -78276,7 +78422,7 @@ BI.prepares.push(function () {
 
 
 /***/ }),
-/* 867 */
+/* 869 */
 /***/ (function(module, exports) {
 
 /**
@@ -78443,7 +78589,7 @@ BI.prepares.push(function () {
 
 
 /***/ }),
-/* 868 */
+/* 870 */
 /***/ (function(module, exports) {
 
 /**
@@ -79283,7 +79429,7 @@ BI.prepares.push(function () {
 
 
 /***/ }),
-/* 869 */
+/* 871 */
 /***/ (function(module, exports) {
 
 // 浏览器相关方法
@@ -79417,7 +79563,7 @@ _.extend(BI, {
 });
 
 /***/ }),
-/* 870 */
+/* 872 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -90446,7 +90592,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
 
 
 /***/ }),
-/* 871 */
+/* 873 */
 /***/ (function(module, exports) {
 
 /*
@@ -90461,7 +90607,7 @@ BI.$.extend(BI.$.Event.prototype, {
 });
 
 /***/ }),
-/* 872 */
+/* 874 */
 /***/ (function(module, exports) {
 
 if (BI.jQuery) {
@@ -90714,7 +90860,7 @@ if (BI.jQuery) {
 
 
 /***/ }),
-/* 873 */
+/* 875 */
 /***/ (function(module, exports) {
 
 /* !
@@ -90923,7 +91069,7 @@ if (BI.jQuery) {
 }));
 
 /***/ }),
-/* 874 */
+/* 876 */
 /***/ (function(module, exports) {
 
 _.extend(BI, {
@@ -90983,7 +91129,7 @@ _.extend(BI, {
 });
 
 /***/ }),
-/* 875 */
+/* 877 */
 /***/ (function(module, exports) {
 
 (function () {
@@ -91615,7 +91761,7 @@ _.extend(BI, {
 }());
 
 /***/ }),
-/* 876 */
+/* 878 */
 /***/ (function(module, exports) {
 
 !(function () {
@@ -91627,7 +91773,7 @@ _.extend(BI, {
 })();
 
 /***/ }),
-/* 877 */
+/* 879 */
 /***/ (function(module, exports) {
 
 /**
@@ -92152,22 +92298,21 @@ _.extend(BI, {
                 setTimeout(function () {
                     self_.clean(); // remove files from list
                     self_.hide(); // hide progress bars and enable input file
-
-                    if (200 > xhr.status || xhr.status > 399) {
-                        BI.Msg.toast(BI.i18nText("BI-Upload_File_Error"), { level: "error" });
-                        self.fireEvent(BI.File.EVENT_ERROR);
-                        return;
-                    }
-                    var error = BI.some(_wrap.attach_array, function (index, attach) {
-                        if (attach.errorCode) {
-                            BI.Msg.toast(BI.i18nText(attach.errorMsg), { level: "error" });
-                            self.fireEvent(BI.File.EVENT_ERROR, attach);
-                            return true;
-                        }
-                    });
-                    !error && self.fireEvent(BI.File.EVENT_UPLOADED);
                     // enable again the submit button/element
-                }, 1000);
+                }, 100);
+                if (200 > xhr.status || xhr.status > 399) {
+                    BI.Msg.toast(BI.i18nText("BI-Upload_File_Error"), { level: "error" });
+                    self.fireEvent(BI.File.EVENT_ERROR);
+                    return;
+                }
+                var error = BI.some(_wrap.attach_array, function (index, attach) {
+                    if (attach.errorCode) {
+                        BI.Msg.toast(BI.i18nText(attach.errorMsg), { level: "error" });
+                        self.fireEvent(BI.File.EVENT_ERROR, attach);
+                        return true;
+                    }
+                });
+                !error && self.fireEvent(BI.File.EVENT_UPLOADED);
             };
             _wrap.url = o.url;
             _wrap.fileType = o.accept;   // 文件类型限制
@@ -92332,7 +92477,7 @@ _.extend(BI, {
 
 
 /***/ }),
-/* 878 */
+/* 880 */
 /***/ (function(module, exports) {
 
 /**
@@ -92888,7 +93033,7 @@ BI.shortcut("bi.tree_view", BI.TreeView);
 
 
 /***/ }),
-/* 879 */
+/* 881 */
 /***/ (function(module, exports) {
 
 /**
@@ -93141,7 +93286,7 @@ BI.AsyncTree = BI.inherit(BI.TreeView, {
 BI.shortcut("bi.async_tree", BI.AsyncTree);
 
 /***/ }),
-/* 880 */
+/* 882 */
 /***/ (function(module, exports) {
 
 /*
@@ -94861,7 +95006,7 @@ BI.shortcut("bi.async_tree", BI.AsyncTree);
 })(BI.jQuery);
 
 /***/ }),
-/* 881 */
+/* 883 */
 /***/ (function(module, exports) {
 
 /*
@@ -95496,7 +95641,7 @@ BI.shortcut("bi.async_tree", BI.AsyncTree);
 })(BI.jQuery);
 
 /***/ }),
-/* 882 */
+/* 884 */
 /***/ (function(module, exports) {
 
 /**
@@ -95619,7 +95764,7 @@ BI.ListTreeView = BI.inherit(BI.TreeView, {
 BI.shortcut("bi.list_tree_view", BI.ListTreeView);
 
 /***/ }),
-/* 883 */
+/* 885 */
 /***/ (function(module, exports) {
 
 /**
@@ -95747,7 +95892,7 @@ BI.ListAsyncTree = BI.inherit(BI.ListTreeView, {
 BI.shortcut("bi.list_async_tree", BI.ListAsyncTree);
 
 /***/ }),
-/* 884 */
+/* 886 */
 /***/ (function(module, exports) {
 
 /**
@@ -95844,7 +95989,7 @@ BI.ListPartTree = BI.inherit(BI.ListAsyncTree, {
 BI.shortcut("bi.list_part_tree", BI.ListPartTree);
 
 /***/ }),
-/* 885 */
+/* 887 */
 /***/ (function(module, exports) {
 
 /**
@@ -96050,7 +96195,7 @@ BI.shortcut("bi.part_tree", BI.PartTree);
 
 
 /***/ }),
-/* 886 */
+/* 888 */
 /***/ (function(module, exports) {
 
 /**
@@ -96122,7 +96267,7 @@ BI.shortcut("bi.display_tree", BI.DisplayTree);
 
 
 /***/ }),
-/* 887 */
+/* 889 */
 /***/ (function(module, exports) {
 
 /**
@@ -96205,7 +96350,7 @@ BI.ListDisplayTree.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.list_display_tree", BI.ListDisplayTree);
 
 /***/ }),
-/* 888 */
+/* 890 */
 /***/ (function(module, exports) {
 
 /**
@@ -96338,7 +96483,7 @@ BI.shortcut("bi.simple_tree", BI.SimpleTreeView);
 
 
 /***/ }),
-/* 889 */
+/* 891 */
 /***/ (function(module, exports) {
 
 /**
@@ -96467,7 +96612,7 @@ BI.shortcut("bi.simple_tree", BI.SimpleTreeView);
 })();
 
 /***/ }),
-/* 890 */
+/* 892 */
 /***/ (function(module, exports) {
 
 /**
@@ -96548,7 +96693,7 @@ BI.shortcut("bi.simple_tree", BI.SimpleTreeView);
 })();
 
 /***/ }),
-/* 891 */
+/* 893 */
 /***/ (function(module, exports) {
 
 ;(function () {
@@ -96711,8 +96856,6 @@ BI.shortcut("bi.simple_tree", BI.SimpleTreeView);
 
 
 /***/ }),
-/* 892 */,
-/* 893 */,
 /* 894 */,
 /* 895 */,
 /* 896 */,
@@ -96745,7 +96888,9 @@ BI.shortcut("bi.simple_tree", BI.SimpleTreeView);
 /* 923 */,
 /* 924 */,
 /* 925 */,
-/* 926 */
+/* 926 */,
+/* 927 */,
+/* 928 */
 /***/ (function(module, exports) {
 
 ;(function () {
@@ -97021,8 +97166,6 @@ BI.shortcut("bi.simple_tree", BI.SimpleTreeView);
 
 
 /***/ }),
-/* 927 */,
-/* 928 */,
 /* 929 */,
 /* 930 */,
 /* 931 */,
@@ -97232,31 +97375,21 @@ BI.shortcut("bi.simple_tree", BI.SimpleTreeView);
 /* 1135 */,
 /* 1136 */,
 /* 1137 */,
-/* 1138 */
+/* 1138 */,
+/* 1139 */,
+/* 1140 */
 /***/ (function(module, exports) {
 
 
 
 /***/ }),
-/* 1139 */,
-/* 1140 */,
 /* 1141 */,
 /* 1142 */,
 /* 1143 */,
 /* 1144 */,
 /* 1145 */,
-/* 1146 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
-
-/***/ }),
-/* 1147 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
-
-/***/ }),
+/* 1146 */,
+/* 1147 */,
 /* 1148 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -97275,8 +97408,18 @@ BI.shortcut("bi.simple_tree", BI.SimpleTreeView);
 // extracted by mini-css-extract-plugin
 
 /***/ }),
-/* 1151 */,
-/* 1152 */,
+/* 1151 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
+/* 1152 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
 /* 1153 */,
 /* 1154 */,
 /* 1155 */,
@@ -97329,11 +97472,13 @@ BI.shortcut("bi.simple_tree", BI.SimpleTreeView);
 /* 1202 */,
 /* 1203 */,
 /* 1204 */,
-/* 1205 */
+/* 1205 */,
+/* 1206 */,
+/* 1207 */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(864);
-__webpack_require__(865);
+__webpack_require__(866);
+__webpack_require__(867);
 __webpack_require__(202);
 __webpack_require__(203);
 __webpack_require__(204);
@@ -97391,8 +97536,6 @@ __webpack_require__(303);
 __webpack_require__(304);
 __webpack_require__(305);
 __webpack_require__(306);
-__webpack_require__(866);
-__webpack_require__(867);
 __webpack_require__(868);
 __webpack_require__(869);
 __webpack_require__(870);
@@ -97400,6 +97543,8 @@ __webpack_require__(871);
 __webpack_require__(872);
 __webpack_require__(873);
 __webpack_require__(874);
+__webpack_require__(875);
+__webpack_require__(876);
 __webpack_require__(307);
 __webpack_require__(308);
 __webpack_require__(309);
@@ -97477,7 +97622,7 @@ __webpack_require__(378);
 __webpack_require__(110);
 __webpack_require__(111);
 __webpack_require__(112);
-__webpack_require__(1206);
+__webpack_require__(1208);
 __webpack_require__(220);
 __webpack_require__(221);
 __webpack_require__(222);
@@ -97537,7 +97682,7 @@ __webpack_require__(275);
 __webpack_require__(276);
 __webpack_require__(277);
 __webpack_require__(278);
-__webpack_require__(876);
+__webpack_require__(878);
 __webpack_require__(379);
 __webpack_require__(380);
 __webpack_require__(381);
@@ -97591,7 +97736,7 @@ __webpack_require__(428);
 __webpack_require__(429);
 __webpack_require__(430);
 __webpack_require__(431);
-__webpack_require__(877);
+__webpack_require__(879);
 __webpack_require__(432);
 __webpack_require__(433);
 __webpack_require__(434);
@@ -97705,8 +97850,6 @@ __webpack_require__(541);
 __webpack_require__(542);
 __webpack_require__(543);
 __webpack_require__(544);
-__webpack_require__(878);
-__webpack_require__(879);
 __webpack_require__(880);
 __webpack_require__(881);
 __webpack_require__(882);
@@ -97718,6 +97861,8 @@ __webpack_require__(887);
 __webpack_require__(888);
 __webpack_require__(889);
 __webpack_require__(890);
+__webpack_require__(891);
+__webpack_require__(892);
 __webpack_require__(113);
 __webpack_require__(114);
 __webpack_require__(115);
@@ -97949,27 +98094,27 @@ __webpack_require__(712);
 __webpack_require__(713);
 __webpack_require__(714);
 __webpack_require__(715);
-__webpack_require__(875);
-__webpack_require__(926);
-__webpack_require__(891);
-__webpack_require__(1146);
-__webpack_require__(1147);
+__webpack_require__(877);
+__webpack_require__(928);
+__webpack_require__(893);
 __webpack_require__(1148);
 __webpack_require__(1149);
 __webpack_require__(1150);
-__webpack_require__(1138);
+__webpack_require__(1151);
+__webpack_require__(1152);
+__webpack_require__(1140);
 module.exports = __webpack_require__(716);
 
 
 /***/ }),
-/* 1206 */
+/* 1208 */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(global) {module.exports = global["Fix"] = __webpack_require__(1207);
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(14)))
+/* WEBPACK VAR INJECTION */(function(global) {module.exports = global["Fix"] = __webpack_require__(1209);
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(15)))
 
 /***/ }),
-/* 1207 */
+/* 1209 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(setImmediate) {(function (global, factory) {

@@ -31,7 +31,7 @@ BI.SingleSelectSearchInsertPane = BI.inherit(BI.Widget, {
             type: "bi.label",
             text: BI.i18nText("BI-Basic_Click_To_Add_Text", ""),
             height: this.constants.height,
-            cls: "bi-high-light",
+            cls: "bi-keyword-red-mark",
             hgap: 5,
         });
 

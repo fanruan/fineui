@@ -175,6 +175,8 @@ import { MultiSelectTree } from './widget/multiselecttree/multiselecttree';
 import { HtmlLabel } from "./base/single/label/html.label";
 import { TreeValueChooserPane } from './component/treevaluechooser/pane.treevaluechooser';
 import { TdLayout } from './core/wrapper/layout/layout.td';
+import { MultiLayerSelectLevelTree } from './widget/multilayerselecttree/multilayerselecttree.leveltree';
+import { SelectTreeExpander } from './widget/selecttree/selecttree.expander';
 
 
 export interface BI extends _func, _i18n, _base, _inject, _var, _web, _utils {
@@ -357,6 +359,8 @@ export interface BI extends _func, _i18n, _base, _inject, _var, _web, _utils {
     HtmlLabel: typeof HtmlLabel;
     TreeValueChooserPane: typeof TreeValueChooserPane;
     TdLayout: typeof TdLayout;
+    MultiLayerSelectLevelTree: typeof MultiLayerSelectLevelTree;
+    SelectTreeExpander: typeof SelectTreeExpander;
 }
 
 export default {
@@ -539,4 +543,6 @@ export {
     HtmlLabel,
     TreeValueChooserPane,
     TdLayout,
+    MultiLayerSelectLevelTree,
+    SelectTreeExpander,
 };

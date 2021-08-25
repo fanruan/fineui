@@ -352,10 +352,16 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
         this._assertValue(res);
         this.requesting = true;
         if (this.storeValue.type === res.type) {
-            var result = BI.Func.getSearchResult(this.storeValue.value, this.trigger.getKey());
+            var result = BI.Func.getSearchResult(BI.map(this.storeValue.value, function (_i, v) {
+                return {
+                    text: o.valueFormatter(v) || v,
+                    value: v
+                };
+            }), this.trigger.getKey());
             var change = false;
             var map = this._makeMap(this.storeValue.value);
-            BI.each(BI.concat(result.match, result.find), function (i, v) {
+            BI.each(BI.concat(result.match, result.find), function (i, obj) {
+                var v = obj.value;
                 if (BI.isNotNull(map[v])) {
                     change = true;
                     self.storeValue.assist && self.storeValue.assist.push(map[v]);
@@ -369,7 +375,9 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
         o.itemsCreator({
             type: BI.MultiSelectInsertCombo.REQ_GET_ALL_DATA,
             keywords: [this.trigger.getKey()],
-            selectedValues: this.storeValue.value,
+            selectedValues: BI.filter(this.storeValue.value, function (_i, v) {
+                return !BI.contains(res.value, v);
+            }),
         }, function (ob) {
             var items = BI.map(ob.items, "value");
             var selectedMap = self._makeMap(self.storeValue.value);

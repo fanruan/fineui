@@ -33,6 +33,18 @@ BI.FlexVerticalLayout = BI.inherit(BI.Layout, {
         this.populate(this.options.items);
     },
 
+    _hasFill: function () {
+        var o = this.options;
+        if (o.rowSize.length > 0) {
+            return o.rowSize.indexOf("fill") >= 0;
+        }
+        return BI.some(o.items, function (i, item) {
+            if (item.height === "fill") {
+                return true;
+            }
+        });
+    },
+
     _addElement: function (i, item) {
         var o = this.options;
         var w = BI.FlexVerticalLayout.superclass._addElement.apply(this, arguments);
@@ -53,7 +65,7 @@ BI.FlexVerticalLayout = BI.inherit(BI.Layout, {
                     }
                 }
                 // 当既有动态宽度和自适应宽度的时候只压缩自适应
-                if (rowSize === "" && o.rowSize.indexOf("fill") >= 0) {
+                if (rowSize === "" && this._hasFill()) {
                     w.element.addClass("f-s-n");
                 }
             } else {

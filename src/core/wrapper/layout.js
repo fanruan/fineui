@@ -447,7 +447,7 @@ BI.Layout = BI.inherit(BI.Widget, {
                 } else {   //  如果新节点在旧节点区间中存在就复用一下
                     var sameOldIndex = sameOldVnode[1];
                     updated = self.patchItem(sameOldVnode[0], newStartVnode, sameOldIndex, newStartIdx) || updated;
-                    children[sameOldVnode[0].key == null ? newStartIdx : sameOldVnode[0].key] = self._children[self._getChildName(newStartIdx)] = self._children[self._getChildName(sameOldIndex)];
+                    children[sameOldVnode[0].key == null ? newStartIdx : sameOldVnode[0].key] = self._children[self._getChildName(sameOldIndex)];
                     if (newStartIdx !== sameOldIndex) {
                         delete self._children[self._getChildName(sameOldIndex)];
                     }
@@ -486,6 +486,7 @@ BI.Layout = BI.inherit(BI.Widget, {
         function addNode (vnode, index) {
             var opt = self._getOptions(vnode);
             var key = opt.key == null ? index : opt.key;
+            delete self._children[self._getChildName(index)];
             return children[key] = self._addElement(index, vnode);
         }
 
@@ -550,9 +551,11 @@ BI.Layout = BI.inherit(BI.Widget, {
                 c.destroy();
             });
             this._children = {};
+            this._isMounted = false;
         }
         this.options.items = opt.items;
         this.stroke(opt.items);
+        this._mount();
     },
 
     update: function (opt) {
