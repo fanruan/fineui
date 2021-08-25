@@ -1,4 +1,4 @@
-/*! time: 2021-8-25 16:00:31 */
+/*! time: 2021-8-25 16:40:33 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -19763,7 +19763,7 @@ BI.Layout = BI.inherit(BI.Widget, {
                 } else {   //  如果新节点在旧节点区间中存在就复用一下
                     var sameOldIndex = sameOldVnode[1];
                     updated = self.patchItem(sameOldVnode[0], newStartVnode, sameOldIndex, newStartIdx) || updated;
-                    children[sameOldVnode[0].key == null ? newStartIdx : sameOldVnode[0].key] = self._children[self._getChildName(newStartIdx)] = self._children[self._getChildName(sameOldIndex)];
+                    children[sameOldVnode[0].key == null ? newStartIdx : sameOldVnode[0].key] = self._children[self._getChildName(sameOldIndex)];
                     if (newStartIdx !== sameOldIndex) {
                         delete self._children[self._getChildName(sameOldIndex)];
                     }
