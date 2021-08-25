@@ -1,4 +1,4 @@
-/*! time: 2021-8-25 16:40:33 */
+/*! time: 2021-8-25 17:20:32 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -34993,6 +34993,7 @@ BI.SimpleHexColorChooserPopup = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
         return {
             type: "bi.hex_color_chooser_popup",
+            recommendColorsGetter: o.recommendColorsGetter,
             value: o.value,
             simple: true, // 是否有自动
             listeners: [{
@@ -35355,7 +35356,8 @@ BI.SimpleColorChooser = BI.inherit(BI.Widget, {
             width: o.width,
             height: o.height,
             popup: {
-                type: "bi.simple_hex_color_chooser_popup"
+                type: "bi.simple_hex_color_chooser_popup",
+                recommendColorsGetter: o.recommendColorsGetter,
             }
         });
         this.combo.on(BI.ColorChooser.EVENT_CHANGE, function () {
