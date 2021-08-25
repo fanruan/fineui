@@ -1,4 +1,4 @@
-/*! time: 2021-8-25 10:30:28 */
+/*! time: 2021-8-25 11:10:28 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -21260,6 +21260,18 @@ BI.FlexHorizontalLayout = BI.inherit(BI.Layout, {
         this.populate(this.options.items);
     },
 
+    _hasFill: function () {
+        var o = this.options;
+        if (o.columnSize.length > 0) {
+            return o.columnSize.indexOf("fill") >= 0;
+        }
+        return BI.some(o.items, function (i, item) {
+            if (item.width === "fill") {
+                return true;
+            }
+        });
+    },
+
     _addElement: function (i, item) {
         var o = this.options;
         var w = BI.FlexHorizontalLayout.superclass._addElement.apply(this, arguments);
@@ -21280,7 +21292,7 @@ BI.FlexHorizontalLayout = BI.inherit(BI.Layout, {
                     }
                 }
                 // 当既有动态宽度和自适应宽度的时候只压缩自适应
-                if (columnSize === "" && o.columnSize.indexOf("fill") >= 0) {
+                if (columnSize === "" && this._hasFill()) {
                     w.element.addClass("f-s-n");
                 }
             } else {
@@ -21505,6 +21517,18 @@ BI.FlexVerticalLayout = BI.inherit(BI.Layout, {
         this.populate(this.options.items);
     },
 
+    _hasFill: function () {
+        var o = this.options;
+        if (o.rowSize.length > 0) {
+            return o.rowSize.indexOf("fill") >= 0;
+        }
+        return BI.some(o.items, function (i, item) {
+            if (item.height === "fill") {
+                return true;
+            }
+        });
+    },
+
     _addElement: function (i, item) {
         var o = this.options;
         var w = BI.FlexVerticalLayout.superclass._addElement.apply(this, arguments);
@@ -21525,7 +21549,7 @@ BI.FlexVerticalLayout = BI.inherit(BI.Layout, {
                     }
                 }
                 // 当既有动态宽度和自适应宽度的时候只压缩自适应
-                if (rowSize === "" && o.rowSize.indexOf("fill") >= 0) {
+                if (rowSize === "" && this._hasFill()) {
                     w.element.addClass("f-s-n");
                 }
             } else {
@@ -21716,6 +21740,18 @@ BI.FlexWrapperHorizontalLayout = BI.inherit(BI.Layout, {
         this.populate(this.options.items);
     },
 
+    _hasFill: function () {
+        var o = this.options;
+        if (o.columnSize.length > 0) {
+            return o.columnSize.indexOf("fill") >= 0;
+        }
+        return BI.some(o.items, function (i, item) {
+            if (item.width === "fill") {
+                return true;
+            }
+        });
+    },
+
     _addElement: function (i, item) {
         var o = this.options;
         var w = BI.FlexWrapperHorizontalLayout.superclass._addElement.apply(this, arguments);
@@ -21736,7 +21772,7 @@ BI.FlexWrapperHorizontalLayout = BI.inherit(BI.Layout, {
                     }
                 }
                 // 当既有动态宽度和自适应宽度的时候只压缩自适应
-                if (columnSize === "" && o.columnSize.indexOf("fill") >= 0) {
+                if (columnSize === "" && this._hasFill()) {
                     w.element.addClass("f-s-n");
                 }
             } else {
@@ -21876,6 +21912,18 @@ BI.FlexWrapperVerticalLayout = BI.inherit(BI.Layout, {
         this.populate(this.options.items);
     },
 
+    _hasFill: function () {
+        var o = this.options;
+        if (o.rowSize.length > 0) {
+            return o.rowSize.indexOf("fill") >= 0;
+        }
+        return BI.some(o.items, function (i, item) {
+            if (item.height === "fill") {
+                return true;
+            }
+        });
+    },
+
     _addElement: function (i, item) {
         var o = this.options;
         var w = BI.FlexWrapperVerticalLayout.superclass._addElement.apply(this, arguments);
@@ -21896,7 +21944,7 @@ BI.FlexWrapperVerticalLayout = BI.inherit(BI.Layout, {
                     }
                 }
                 // 当既有动态宽度和自适应宽度的时候只压缩自适应
-                if (rowSize === "" && o.rowSize.indexOf("fill") >= 0) {
+                if (rowSize === "" && this._hasFill()) {
                     w.element.addClass("f-s-n");
                 }
             } else {
