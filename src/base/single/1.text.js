@@ -45,13 +45,13 @@
                 });
             }
             if (BI.isWidthOrHeight(o.height)) {
-                this.element.css({ lineHeight: BI.isNumber(o.height) ? (o.height / BI.pixRatio + BI.pixUnit) : o.height });
+                this.element.css({lineHeight: BI.isNumber(o.height) ? (o.height / BI.pixRatio + BI.pixUnit) : o.height});
             }
             if (BI.isWidthOrHeight(o.lineHeight)) {
-                this.element.css({ lineHeight: BI.isNumber(o.lineHeight) ? (o.lineHeight / BI.pixRatio + BI.pixUnit) : o.lineHeight });
+                this.element.css({lineHeight: BI.isNumber(o.lineHeight) ? (o.lineHeight / BI.pixRatio + BI.pixUnit) : o.lineHeight});
             }
             if (BI.isWidthOrHeight(o.maxWidth)) {
-                this.element.css({ maxWidth: BI.isNumber(o.maxWidth) ? (o.maxWidth / BI.pixRatio + BI.pixUnit) : o.maxWidth });
+                this.element.css({maxWidth: BI.isNumber(o.maxWidth) ? (o.maxWidth / BI.pixRatio + BI.pixUnit) : o.maxWidth});
             }
             this.element.css({
                 textAlign: o.textAlign,
@@ -106,7 +106,9 @@
         _getShowText: function () {
             var o = this.options;
             var text = BI.isFunction(o.text) ? o.text() : o.text;
-
+            if (text && text.addWidget) {
+                text.addWidget(this);
+            }
             return BI.isKey(text) ? BI.Text.formatText(text + "") : text;
         },
 
@@ -152,6 +154,11 @@
             BI.Text.superclass.setText.apply(this, arguments);
             this.options.text = text;
             this._doRedMark(this.options.keyword);
+        },
+
+        __d: function () {
+            BI.Text.superclass.__d.call(this);
+            BI.i18nProvider.removeWidget(this);
         }
     });
     var formatters = [];
