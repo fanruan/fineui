@@ -7,6 +7,17 @@ export declare class NumberInterval extends Single {
     static EVENT_VALID: string;
     static EVENT_ERROR: string;
 
+    props: {
+        watermark?: string;
+        allowBlank?: boolean;
+        min?: string | number;
+        max?: string | number;
+        closeMin?: boolean;
+        closeMax?: boolean;
+        validation?: 'invalid' | 'valid';
+        numTip?: string;
+    } & Single['props'];
+
     isStateValid(): boolean;
 
     setMinEnable(v: boolean): void;
