@@ -1,4 +1,4 @@
-/*! time: 2021-8-26 17:33:17 */
+/*! time: 2021-8-26 19:40:42 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -37528,6 +37528,7 @@ BI.ColorChooser = BI.inherit(BI.Widget, {
             element: this,
             container: o.container,
             adjustLength: 1,
+            destroyWhenHide: o.destroyWhenHide,
             isNeedAdjustWidth: false,
             isNeedAdjustHeight: false,
             el: BI.extend({
@@ -38279,6 +38280,7 @@ BI.SimpleColorChooser = BI.inherit(BI.Widget, {
             value: o.value,
             width: o.width,
             height: o.height,
+            destroyWhenHide: o.destroyWhenHide,
             popup: {
                 type: "bi.simple_hex_color_chooser_popup",
                 recommendColorsGetter: o.recommendColorsGetter,
