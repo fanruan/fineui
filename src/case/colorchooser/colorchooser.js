@@ -25,6 +25,7 @@ BI.ColorChooser = BI.inherit(BI.Widget, {
             element: this,
             container: o.container,
             adjustLength: 1,
+            destroyWhenHide: o.destroyWhenHide,
             isNeedAdjustWidth: false,
             isNeedAdjustHeight: false,
             el: BI.extend({

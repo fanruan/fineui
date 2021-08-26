@@ -25,6 +25,7 @@ BI.SimpleColorChooser = BI.inherit(BI.Widget, {
             value: o.value,
             width: o.width,
             height: o.height,
+            destroyWhenHide: o.destroyWhenHide,
             popup: {
                 type: "bi.simple_hex_color_chooser_popup",
                 recommendColorsGetter: o.recommendColorsGetter,
