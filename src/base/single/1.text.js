@@ -106,9 +106,6 @@
         _getShowText: function () {
             var o = this.options;
             var text = BI.isFunction(o.text) ? o.text() : o.text;
-            if (text && text.addWidget) {
-                text.addWidget(this);
-            }
             return BI.isKey(text) ? BI.Text.formatText(text + "") : text;
         },
 
@@ -158,7 +155,6 @@
 
         __d: function () {
             BI.Text.superclass.__d.call(this);
-            BI.i18nProvider.removeWidget(this);
         }
     });
     var formatters = [];
