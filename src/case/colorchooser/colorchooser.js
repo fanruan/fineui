@@ -70,7 +70,7 @@ BI.ColorChooser = BI.inherit(BI.Widget, {
             self.trigger.setValue(color);
         };
 
-        this.combo.on(BI.Combo.EVENT_AFTER_HIDEVIEW, function () {
+        this.combo.on(BI.Combo.EVENT_BEFORE_HIDEVIEW, function () {
             self.fireEvent(BI.ColorChooser.EVENT_CHANGE, arguments);
         });
     },
