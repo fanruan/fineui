@@ -1,4 +1,4 @@
-/*! time: 2021-8-27 11:50:28 */
+/*! time: 2021-8-27 12:30:29 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -35118,7 +35118,7 @@ BI.ColorChooser = BI.inherit(BI.Widget, {
             self.trigger.setValue(color);
         };
 
-        this.combo.on(BI.Combo.EVENT_AFTER_HIDEVIEW, function () {
+        this.combo.on(BI.Combo.EVENT_BEFORE_HIDEVIEW, function () {
             self.fireEvent(BI.ColorChooser.EVENT_CHANGE, arguments);
         });
     },
