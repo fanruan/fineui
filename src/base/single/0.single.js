@@ -196,7 +196,8 @@ BI.Single = BI.inherit(BI.Widget, {
         return this.options.value;
     },
 
-    destroyed: function () {
+    __d: function () {
+        BI.Single.superclass.__d.call(this);
         if (BI.isNotNull(this.showTimeout)) {
             clearTimeout(this.showTimeout);
             this.showTimeout = null;
