@@ -151,10 +151,6 @@
             BI.Text.superclass.setText.apply(this, arguments);
             this.options.text = text;
             this._doRedMark(this.options.keyword);
-        },
-
-        __d: function () {
-            BI.Text.superclass.__d.call(this);
         }
     });
     var formatters = [];
