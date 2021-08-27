@@ -23,7 +23,50 @@ BI.$(function () {
             return Promise.resolve({
                 type: "demo.router"
             });
-        }
+        },
+    }, {
+        name: "user",
+        path: "/user/:name",
+        component: function () {
+            return Promise.resolve({
+                type: "bi.vtape",
+                items: [{
+                    type: "bi.label",
+                    text: "user",
+                    height: 50
+                }, {
+                    type: "bi.router_view",
+                    deps: 1
+                }]
+            });
+        },
+        children: [{
+            path: '',
+            component: function () {
+                return Promise.resolve({
+                    type: "bi.label",
+                    text: 'home'
+                })
+            }
+        }, {
+            name: 'dashboard',
+            path: 'dashboard',
+            component: function () {
+                return Promise.resolve({
+                    type: "bi.label",
+                    text: 'dashboard'
+                })
+            }
+        }, {
+            name: 'tables',
+            path: 'tables/:id',
+            component: function () {
+                return Promise.resolve({
+                    type: "bi.label",
+                    text: 'tables'
+                })
+            }
+        }]
     }];
 
     // BI.Tree.traversal(tree, function (index, node) {

@@ -3152,7 +3152,16 @@
     created: function () {
       var self = this, o = this.options;
       cbs.push(this._callbackListener = function () {
-        self.tab.setSelect($router.history.current.fullPath || "/");
+        var current = $router.history.current;
+        // 匹配的路径名(/component/:id)
+        var matchedPath = current.matched[o.deps] && current.matched[o.deps].path;
+        if (matchedPath) {
+          BI.each(current.params, function (key, value) {
+            // 把  :id  替换成具体的值(/component/demo.td)
+            matchedPath = matchedPath.replace(`:${key}`, value);
+          });
+        }
+        self.tab.setSelect(matchedPath || "/");
       });
     },
     render: function () {
@@ -3168,12 +3177,12 @@
         },
         showIndex: false,
         cardCreator: function (v) {
-            return $router.history.current.matched[o.deps].components.default;
+          return $router.history.current.matched[o.deps].components.default;
         }
       };
     },
     destroyed: function () {
-      BI.remove(cbs, this._callbackListener);
+      cbs.remove(this._callbackListener);
     }
   });
   BI.shortcut("bi.router_view", BI.RouterView);
