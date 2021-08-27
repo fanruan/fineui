@@ -7,7 +7,7 @@ export declare class Layout extends Widget {
 
     prependItem(item: any): any;
 
-    addItemAt(index: string, item: any): any;
+    addItemAt(index: number, item: any): any;
 
     removeItemAt(indexes: any): void;
 
