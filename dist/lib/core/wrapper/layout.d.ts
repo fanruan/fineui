@@ -3,7 +3,7 @@ export declare class Layout extends Widget {
     static xtype: string;
     addItem(item: any): any;
     prependItem(item: any): any;
-    addItemAt(index: string, item: any): any;
+    addItemAt(index: number, item: any): any;
     removeItemAt(indexes: any): void;
     shouldUpdateItem(index: number, item: any): boolean;
     updateItemAt(index: number, item: any): any;
