@@ -1,4 +1,4 @@
-/*! time: 2021-8-26 19:40:42 */
+/*! time: 2021-8-27 10:00:31 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -5628,6 +5628,11 @@ _.extend(BI, {
 !(function () {
     var i18nStore = {};
     _.extend(BI, {
+        changeI18n: function (i18n) {
+            if (i18n) {
+                i18nStore = i18n;
+            }
+        },
         addI18n: function (i18n) {
             BI.extend(i18nStore, i18n);
         },
@@ -5655,6 +5660,7 @@ _.extend(BI, {
         }
     });
 })();
+
 
 /***/ }),
 /* 110 */
@@ -27182,7 +27188,8 @@ BI.Single = BI.inherit(BI.Widget, {
         return this.options.value;
     },
 
-    destroyed: function () {
+    __d: function () {
+        BI.Single.superclass.__d.call(this);
         if (BI.isNotNull(this.showTimeout)) {
             clearTimeout(this.showTimeout);
             this.showTimeout = null;
@@ -27244,13 +27251,13 @@ BI.shortcut("bi.single", BI.Single);
                 });
             }
             if (BI.isWidthOrHeight(o.height)) {
-                this.element.css({ lineHeight: BI.isNumber(o.height) ? (o.height / BI.pixRatio + BI.pixUnit) : o.height });
+                this.element.css({lineHeight: BI.isNumber(o.height) ? (o.height / BI.pixRatio + BI.pixUnit) : o.height});
             }
             if (BI.isWidthOrHeight(o.lineHeight)) {
-                this.element.css({ lineHeight: BI.isNumber(o.lineHeight) ? (o.lineHeight / BI.pixRatio + BI.pixUnit) : o.lineHeight });
+                this.element.css({lineHeight: BI.isNumber(o.lineHeight) ? (o.lineHeight / BI.pixRatio + BI.pixUnit) : o.lineHeight});
             }
             if (BI.isWidthOrHeight(o.maxWidth)) {
-                this.element.css({ maxWidth: BI.isNumber(o.maxWidth) ? (o.maxWidth / BI.pixRatio + BI.pixUnit) : o.maxWidth });
+                this.element.css({maxWidth: BI.isNumber(o.maxWidth) ? (o.maxWidth / BI.pixRatio + BI.pixUnit) : o.maxWidth});
             }
             this.element.css({
                 textAlign: o.textAlign,
@@ -27305,7 +27312,6 @@ BI.shortcut("bi.single", BI.Single);
         _getShowText: function () {
             var o = this.options;
             var text = BI.isFunction(o.text) ? o.text() : o.text;
-
             return BI.isKey(text) ? BI.Text.formatText(text + "") : text;
         },
 
