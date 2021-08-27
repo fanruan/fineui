@@ -1,4 +1,4 @@
-/*! time: 2021-8-27 17:50:14 */
+/*! time: 2021-8-27 18:50:43 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -35394,7 +35394,7 @@ BI.HexColorChooserPopup = BI.inherit(BI.Widget, {
     },
 
     _digestStoreColors: function (colors) {
-        var items = BI.map(colors, function (i, color) {
+        var items = BI.map(colors.slice(0, 12), function (i, color) {
             return {
                 value: color
             };
