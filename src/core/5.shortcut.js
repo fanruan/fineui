@@ -35,9 +35,6 @@
     };
 
     BI.createWidget = BI.createWidget || function (item, options, context, lazy) {
-        // 先把准备环境准备好
-        BI.init();
-        var el, w;
         item || (item = {});
         if (BI.isWidget(options)) {
             context = options;
@@ -45,6 +42,21 @@
         } else {
             options || (options = {});
         }
+
+        var el, w;
+        if (item.type || options.type) {
+            el = BI.extend({}, options, item);
+        } else if (item.el && (item.el.type || options.type)) {
+            el = BI.extend({}, options, item.el);
+        }
+
+        if (el) {
+            BI.runConfigFunction(el.type);
+        }
+
+        // 先把准备环境准备好
+        BI.init();
+
         if (BI.isEmpty(item) && BI.isEmpty(options)) {
             return BI.createWidget({
                 type: "bi.layout"
@@ -53,24 +65,7 @@
         if (BI.isWidget(item)) {
             return item;
         }
-        if (item.type || options.type) {
-            el = BI.extend({}, options, item);
-            w = BI.Plugin.getWidget(el.type, el);
-            if (w.type === el.type) {
-                if (BI.Plugin.hasObject(el.type)) {
-                    w.listeners = (w.listeners || []).concat([{
-                        eventName: BI.Events.MOUNT,
-                        action: function () {
-                            BI.Plugin.getObject(el.type, this);
-                        }
-                    }]);
-                }
-                return createWidget(w, context, lazy);
-            }
-            return BI.createWidget(w, options, context, lazy);
-        }
-        if (item.el && (item.el.type || options.type)) {
-            el = BI.extend({}, options, item.el);
+        if (el) {
             w = BI.Plugin.getWidget(el.type, el);
             if (w.type === el.type) {
                 if (BI.Plugin.hasObject(el.type)) {
