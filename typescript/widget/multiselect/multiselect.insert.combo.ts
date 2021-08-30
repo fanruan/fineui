@@ -12,6 +12,16 @@ export declare class MultiSelectInsertCombo extends Single {
     static REQ_GET_DATA_LENGTH: 1;
     static REQ_GET_ALL_DATA: -1;
 
+    props: {
+        itemsCreator?: Function;
+        valueFormatter?: Function;
+        itemHeight?: number;
+        allowEdit?: boolean;
+        text?: string;
+        watermark?: string;
+        container?: any;
+    } & Single['props'];
+
     _itemsCreator4Trigger(op: any, callback: Function): void;
 
     _addItem(assertShowValue: () => void, matched: boolean): void;
