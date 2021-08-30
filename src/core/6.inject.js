@@ -74,85 +74,163 @@
     };
 
     var configFunctions = {};
-    BI.config = BI.config || function (type, configFn, opt) {
-        opt = opt || {};
-        // 初始化过或者系统配置需要立刻执行
-        if (BI.initialized || "bi.provider.system" === type) {
+    var runConfigFunction = BI.runConfigFunction = function (type) {
+        if (!type || !configFunctions[type]) {
+            return false;
+        }
+        var queue = configFunctions[type];
+        delete configFunctions[type];
+
+        var dependencies = BI.Providers.getProvider("bi.provider.system").getDependencies();
+        var modules = moduleInjectionMap.components[type]
+            || moduleInjectionMap.constants[type]
+            || moduleInjectionMap.services[type]
+            || moduleInjectionMap.stores[type]
+            || moduleInjectionMap.models[type]
+            || moduleInjectionMap.providers[type];
+        for (var i = 0; i < queue.length; i++) {
+            var conf = queue[i];
+            var version = conf.opt.version;
+            var fn = conf.fn;
+            if (modules && version) {
+                var findVersion = false;
+                for (var j = 0; j < modules.length; j++) {
+                    var module = modules[j];
+                    if (module && dependencies[module.moduleId] && module.version === version) {
+                        var minVersion = dependencies[module.moduleId].minVersion,
+                            maxVersion = dependencies[module.moduleId].maxVersion;
+                        if (minVersion && (moduleInjection[module.moduleId].version || version) < minVersion) {
+                            findVersion = true;
+                            break;
+                        }
+                        if (maxVersion && (moduleInjection[module.moduleId].version || version) > maxVersion) {
+                            findVersion = true;
+                            break;
+                        }
+                    }
+                }
+                if (findVersion === true) {
+                    _global.console && console.error("moduleId: [" + module.moduleId + "] 接口: [" + type + "] 接口版本: [" + version + "] 已过期，版本要求为：", dependencies[module.moduleId], "=>", moduleInjection[module.moduleId]);
+                    continue;
+                }
+            }
             if (constantInjection[type]) {
-                return (constantInjection[type] = configFn(constantInjection[type]));
+                constantInjection[type] = fn(constantInjection[type]);
+                continue;
             }
             if (providerInjection[type]) {
                 if (!providers[type]) {
                     providers[type] = new providerInjection[type]();
                 }
-                // 如果config被重新配置的话，需要删除掉之前的实例
                 if (providerInstance[type]) {
                     delete providerInstance[type];
                 }
-                return configFn(providers[type]);
+                fn(providers[type]);
+                continue;
             }
-            return BI.Plugin.configWidget(type, configFn, opt);
+            BI.Plugin.configWidget(type, fn);
         }
+    };
+    BI.config = BI.config || function (type, configFn, opt) {
+        opt = opt || {};
+
+        // 系统配置直接执行
+        if ("bi.provider.system" === type) {
+            if (!providers[type]) {
+                providers[type] = new providerInjection[type]();
+            }
+            // 如果config被重新配置的话，需要删除掉之前的实例
+            if (providerInstance[type]) {
+                delete providerInstance[type];
+            }
+            return configFn(providers[type]);
+        }
+
         if (!configFunctions[type]) {
             configFunctions[type] = [];
-            BI.prepares.push(function () {
-                var queue = configFunctions[type];
-                var dependencies = BI.Providers.getProvider("bi.provider.system").getDependencies();
-                var modules = moduleInjectionMap.components[type]
-                    || moduleInjectionMap.constants[type]
-                    || moduleInjectionMap.services[type]
-                    || moduleInjectionMap.stores[type]
-                    || moduleInjectionMap.models[type]
-                    || moduleInjectionMap.providers[type];
-                for (var i = 0; i < queue.length; i++) {
-                    var conf = queue[i];
-                    var version = conf.opt.version;
-                    var fn = conf.fn;
-                    if (modules && version) {
-                        var findVersion = false;
-                        for (var j = 0; j < modules.length; j++) {
-                            var module = modules[i];
-                            if (module && dependencies[module.moduleId] && module.version === version) {
-                                var minVersion = dependencies[module.moduleId].minVersion,
-                                    maxVersion = dependencies[module.moduleId].maxVersion;
-                                if (minVersion && (moduleInjection[module.moduleId].version || version) < minVersion) {
-                                    findVersion = true;
-                                    break;
-                                }
-                                if (maxVersion && (moduleInjection[module.moduleId].version || version) > maxVersion) {
-                                    findVersion = true;
-                                    break;
-                                }
-                            }
-                        }
-                        if (findVersion === true) {
-                            _global.console && console.error("moduleId: [" + module.moduleId + "] 接口: [" + type + "] 接口版本: [" + version + "] 已过期，版本要求为：", dependencies[module.moduleId], "=>", moduleInjection[module.moduleId]);
-                            continue;
-                        }
-                    }
-                    if (constantInjection[type]) {
-                        constantInjection[type] = fn(constantInjection[type]);
-                        continue;
-                    }
-                    if (providerInjection[type]) {
-                        if (!providers[type]) {
-                            providers[type] = new providerInjection[type]();
-                        }
-                        if (providerInstance[type]) {
-                            delete providerInstance[type];
-                        }
-                        fn(providers[type]);
-                        continue;
-                    }
-                    BI.Plugin.configWidget(type, fn);
-                }
-                configFunctions[type] = null;
-            });
         }
         configFunctions[type].push({
             fn: configFn,
             opt: opt
         });
+
+        // // 初始化过或者系统配置需要立刻执行
+        // if (BI.initialized || "bi.provider.system" === type) {
+        //     if (constantInjection[type]) {
+        //         return (constantInjection[type] = configFn(constantInjection[type]));
+        //     }
+        //     if (providerInjection[type]) {
+        //         if (!providers[type]) {
+        //             providers[type] = new providerInjection[type]();
+        //         }
+        //         // 如果config被重新配置的话，需要删除掉之前的实例
+        //         if (providerInstance[type]) {
+        //             delete providerInstance[type];
+        //         }
+        //         return configFn(providers[type]);
+        //     }
+        //     return BI.Plugin.configWidget(type, configFn, opt);
+        // }
+        // if (!configFunctions[type]) {
+        //     configFunctions[type] = [];
+        //     BI.prepares.push(function () {
+        //         var queue = configFunctions[type];
+        //         var dependencies = BI.Providers.getProvider("bi.provider.system").getDependencies();
+        //         var modules = moduleInjectionMap.components[type]
+        //             || moduleInjectionMap.constants[type]
+        //             || moduleInjectionMap.services[type]
+        //             || moduleInjectionMap.stores[type]
+        //             || moduleInjectionMap.models[type]
+        //             || moduleInjectionMap.providers[type];
+        //         for (var i = 0; i < queue.length; i++) {
+        //             var conf = queue[i];
+        //             var version = conf.opt.version;
+        //             var fn = conf.fn;
+        //             if (modules && version) {
+        //                 var findVersion = false;
+        //                 for (var j = 0; j < modules.length; j++) {
+        //                     var module = modules[i];
+        //                     if (module && dependencies[module.moduleId] && module.version === version) {
+        //                         var minVersion = dependencies[module.moduleId].minVersion,
+        //                             maxVersion = dependencies[module.moduleId].maxVersion;
+        //                         if (minVersion && (moduleInjection[module.moduleId].version || version) < minVersion) {
+        //                             findVersion = true;
+        //                             break;
+        //                         }
+        //                         if (maxVersion && (moduleInjection[module.moduleId].version || version) > maxVersion) {
+        //                             findVersion = true;
+        //                             break;
+        //                         }
+        //                     }
+        //                 }
+        //                 if (findVersion === true) {
+        //                     _global.console && console.error("moduleId: [" + module.moduleId + "] 接口: [" + type + "] 接口版本: [" + version + "] 已过期，版本要求为：", dependencies[module.moduleId], "=>", moduleInjection[module.moduleId]);
+        //                     continue;
+        //                 }
+        //             }
+        //             if (constantInjection[type]) {
+        //                 constantInjection[type] = fn(constantInjection[type]);
+        //                 continue;
+        //             }
+        //             if (providerInjection[type]) {
+        //                 if (!providers[type]) {
+        //                     providers[type] = new providerInjection[type]();
+        //                 }
+        //                 if (providerInstance[type]) {
+        //                     delete providerInstance[type];
+        //                 }
+        //                 fn(providers[type]);
+        //                 continue;
+        //             }
+        //             BI.Plugin.configWidget(type, fn);
+        //         }
+        //         configFunctions[type] = null;
+        //     });
+        // }
+        // configFunctions[type].push({
+        //     fn: configFn,
+        //     opt: opt
+        // });
     };
 
     BI.getReference = BI.getReference || function (type, fn) {
@@ -215,6 +293,7 @@
             if (BI.isNull(constantInjection[type])) {
                 _global.console && console.error("constant: [" + type + "] 未定义");
             }
+            runConfigFunction(type);
             return constantInjection[type];
         }
     };
@@ -262,6 +341,7 @@
             if (!modelInjection[type]) {
                 _global.console && console.error("model: [" + type + "] 未定义");
             }
+            runConfigFunction(type);
             var inst = new modelInjection[type](config);
             inst._constructor && inst._constructor(config);
             inst.mixins && callPoint(inst, inst.mixins);
@@ -313,6 +393,7 @@
             if (!providerInjection[type]) {
                 _global.console && console.error("provider: [" + type + "] 未定义");
             }
+            runConfigFunction(type);
             if (!providers[type]) {
                 providers[type] = new providerInjection[type]();
             }

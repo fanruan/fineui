@@ -114,6 +114,7 @@
                     return;
                 }
                 initCallbackCalled = true;
+
                 function render () {
                     // 加个保险
                     if (renderCallbackCalled === true) {
@@ -123,6 +124,7 @@
                     renderCallbackCalled = true;
                     self._render();
                 }
+
                 if (self.options.beforeRender || self.beforeRender) {
                     self.__async = true;
                     (self.options.beforeRender || self.beforeRender).call(self, render);
@@ -235,27 +237,14 @@
             var self = this;
             var isMounted = this._isMounted;
             this.__async === true && isMounted && callLifeHook(this, "beforeMount");
-            var render = BI.isFunction(this.options.render) ? this.options.render : this.render;
-            var els = render && render.call(this);
-            if (BI.isPlainObject(els)) {
-                els = [els];
-            }
-            if (BI.isArray(els)) {
-                if (this.options.vdom) {
-                    var div = document.createElement("div");
-                    var element = this.element;
-                    element.append(div);
-                    this.vnode = this._renderVNode();
-                    BI.patchVNode(div, this.vnode);
-                    // 去除这个临时的div
-                    BI.DOM.hang([div]);
-                    element.attr("style", self.vnode.elm.getAttribute("style"));
-                    element.addClass(self.vnode.elm.getAttribute("class"));
-                    element.empty();
-                    BI.each(BI.jQuery(self.vnode.elm).children(), function (i, node) {
-                        element.append(node);
-                    });
-                } else {
+            if (!this._initVNode()) {
+                var render = BI.isFunction(this.options.render) ? this.options.render : this.render;
+                var els = render && render.call(this);
+                els = BI.Plugin.getRender(this.options.type, els);
+                if (BI.isPlainObject(els)) {
+                    els = [els];
+                }
+                if (BI.isArray(els)) {
                     BI.each(els, function (i, el) {
                         if (el) {
                             BI._lazyCreateWidget(el, {
@@ -272,10 +261,31 @@
             }
         },
 
+        _initVNode: function () {
+            if (this.options.vdom) {
+                var div = document.createElement("div");
+                var element = this.element;
+                element.append(div);
+                this.vnode = this._renderVNode();
+                BI.patchVNode(div, this.vnode);
+                // 去除这个临时的div
+                BI.DOM.hang([div]);
+                element.attr("style", self.vnode.elm.getAttribute("style"));
+                element.addClass(self.vnode.elm.getAttribute("class"));
+                element.empty();
+                BI.each(BI.jQuery(self.vnode.elm).children(), function (i, node) {
+                    element.append(node);
+                });
+                return true;
+            }
+            return false;
+        },
+
         _renderVNode: function () {
             var self = this;
             var render = BI.isFunction(this.options.render) ? this.options.render : this.render;
             var els = render && render.call(this);
+            els = BI.Plugin.getRender(this.options.type, els);
             if (BI.isPlainObject(els)) {
                 els = [els];
             }
