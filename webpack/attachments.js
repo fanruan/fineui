@@ -142,6 +142,14 @@ const bundleWithoutNormalize = [].concat(
     ]),
 );
 
+const fineuiWithoutNormalize = [].concat(
+    basicAttachmentMap.core_without_normalize,
+    sync([
+        "src/less/base/**/*.less",
+        "src/less/widget/**/*.less",
+    ]),
+);
+
 const fineui = [].concat(
     basicAttachmentMap.polyfill,
     basicAttachmentMap.core,
@@ -222,6 +230,7 @@ module.exports = {
     font: basicAttachmentMap.font,
     bundle: uniq(bundle),
     bundleIE: uniq(bundleIE),
+    fineuiWithoutNormalize: uniq(fineuiWithoutNormalize),
     bundleWithoutNormalize: uniq(bundleWithoutNormalize),
     fineui: uniq(fineui),
     fineuiProxy: uniq(fineuiProxy),
