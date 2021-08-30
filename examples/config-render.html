@@ -3,12 +3,16 @@
     <meta charset="utf-8">
     <title></title>
     <link rel="stylesheet" type="text/css" href="../dist/2.0/fineui.css"/>
-    <!--    <script src="../dist/2.0/fineui.js"></script>-->
-    <script src="http://localhost:9001/fineui.js"></script>
+    <script src="../dist/2.0/fineui.js"></script>
 </head>
 <body>
 <div id="wrapper"></div>
 <script>
+
+    BI.Plugin.configRender("demo.parent", function (rendered) {
+        console.log(rendered);
+        return rendered;
+    });
 
     var Widget = BI.inherit(BI.Widget, {
         setup: function () {
