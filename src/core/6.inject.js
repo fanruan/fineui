@@ -95,7 +95,7 @@
             if (modules && version) {
                 var findVersion = false;
                 for (var j = 0; j < modules.length; j++) {
-                    var module = modules[i];
+                    var module = modules[j];
                     if (module && dependencies[module.moduleId] && module.version === version) {
                         var minVersion = dependencies[module.moduleId].minVersion,
                             maxVersion = dependencies[module.moduleId].maxVersion;

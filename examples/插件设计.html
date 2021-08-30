@@ -11,7 +11,10 @@
 <script>
     BI.config("demo.parent", function (config){
         console.log("123");
-        return config;
+        return {
+            type: "bi.button",
+            text: "被替换的组件"
+        };
     }, {
         version: "1.0"
     });
@@ -22,7 +25,7 @@
         components: {
             "demo.parent": "1.0"
         }
-    })
+    });
 
     // 主线代码里加这个
     BI.config("bi.provider.system", function (provider) {
@@ -32,7 +35,7 @@
                 maxVersion: "4.0"
             }
         })
-    })
+    });
 </script>
 <script>
     var Model = BI.inherit(Fix.Model, {
