@@ -1,4 +1,4 @@
-/*! time: 2021-8-27 18:50:43 */
+/*! time: 2021-8-30 14:50:48 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -16204,17 +16204,18 @@ BI.ScalingCellSizeAndPositionManager.prototype = {
     };
 
     BI.extend(BI.Tree, {
-        transformToArrayFormat: function (nodes, pId) {
+        transformToArrayFormat: function (nodes, pId, childKey) {
             if (!nodes) return [];
             var r = [];
+            childKey = childKey || "children";
             if (BI.isArray(nodes)) {
                 for (var i = 0, l = nodes.length; i < l; i++) {
                     var node = BI.clone(nodes[i]);
                     node.pId = node.pId == null ? pId : node.pId;
                     delete node.children;
                     r.push(node);
-                    if (nodes[i]["children"]) {
-                        r = r.concat(BI.Tree.transformToArrayFormat(nodes[i]["children"], node.id));
+                    if (nodes[i][childKey]) {
+                        r = r.concat(BI.Tree.transformToArrayFormat(nodes[i][childKey], node.id));
                     }
                 }
             } else {
@@ -16222,8 +16223,8 @@ BI.ScalingCellSizeAndPositionManager.prototype = {
                 newNodes.pId = newNodes.pId == null ? pId : newNodes.pId;
                 delete newNodes.children;
                 r.push(newNodes);
-                if (nodes["children"]) {
-                    r = r.concat(BI.Tree.transformToArrayFormat(nodes["children"], newNodes.id));
+                if (nodes[childKey]) {
+                    r = r.concat(BI.Tree.transformToArrayFormat(nodes[childKey], newNodes.id));
                 }
             }
             return r;
@@ -16283,7 +16284,7 @@ BI.ScalingCellSizeAndPositionManager.prototype = {
                 return r;
             }
             return [sNodes];
-            
+
         },
 
         treeFormat: function (sNodes) {
@@ -16314,7 +16315,7 @@ BI.ScalingCellSizeAndPositionManager.prototype = {
                 return r;
             }
             return [sNodes];
-            
+
         },
 
         traversal: function (array, callback, pNode) {
