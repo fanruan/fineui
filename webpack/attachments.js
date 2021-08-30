@@ -147,6 +147,8 @@ const fineuiWithoutNormalize = [].concat(
     sync([
         "src/less/base/**/*.less",
         "src/less/widget/**/*.less",
+        'ui/less/app.less',
+        'ui/less/**/*.less',
     ]),
 );
 
