@@ -39,7 +39,7 @@ BI.MultiLayerSingleTreeCombo = BI.inherit(BI.Widget, {
 
         return this._shouldWrapper() ? combo : {
             type: "bi.absolute",
-            height: o.height - 2,
+            height: o.height,
             items: [{
                 el: combo,
                 left: 0,
