@@ -1,4 +1,4 @@
-/*! time: 2021-8-25 17:20:32 */
+/*! time: 2021-8-30 14:50:48 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -2822,6 +2822,11 @@ _.extend(BI, {
 !(function () {
     var i18nStore = {};
     _.extend(BI, {
+        changeI18n: function (i18n) {
+            if (i18n) {
+                i18nStore = i18n;
+            }
+        },
         addI18n: function (i18n) {
             BI.extend(i18nStore, i18n);
         },
@@ -2849,6 +2854,7 @@ _.extend(BI, {
         }
     });
 })();
+
 
 /***/ }),
 

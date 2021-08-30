@@ -1,4 +1,4 @@
-/*! time: 2021-8-25 17:20:32 */
+/*! time: 2021-8-30 14:50:48 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -7311,6 +7311,11 @@ _.extend(BI, {
 !(function () {
     var i18nStore = {};
     _.extend(BI, {
+        changeI18n: function (i18n) {
+            if (i18n) {
+                i18nStore = i18n;
+            }
+        },
         addI18n: function (i18n) {
             BI.extend(i18nStore, i18n);
         },
@@ -7338,6 +7343,7 @@ _.extend(BI, {
         }
     });
 })();
+
 
 /***/ }),
 /* 110 */
@@ -18737,17 +18743,18 @@ BI.ScalingCellSizeAndPositionManager.prototype = {
     };
 
     BI.extend(BI.Tree, {
-        transformToArrayFormat: function (nodes, pId) {
+        transformToArrayFormat: function (nodes, pId, childKey) {
             if (!nodes) return [];
             var r = [];
+            childKey = childKey || "children";
             if (BI.isArray(nodes)) {
                 for (var i = 0, l = nodes.length; i < l; i++) {
                     var node = BI.clone(nodes[i]);
                     node.pId = node.pId == null ? pId : node.pId;
                     delete node.children;
                     r.push(node);
-                    if (nodes[i]["children"]) {
-                        r = r.concat(BI.Tree.transformToArrayFormat(nodes[i]["children"], node.id));
+                    if (nodes[i][childKey]) {
+                        r = r.concat(BI.Tree.transformToArrayFormat(nodes[i][childKey], node.id));
                     }
                 }
             } else {
@@ -18755,8 +18762,8 @@ BI.ScalingCellSizeAndPositionManager.prototype = {
                 newNodes.pId = newNodes.pId == null ? pId : newNodes.pId;
                 delete newNodes.children;
                 r.push(newNodes);
-                if (nodes["children"]) {
-                    r = r.concat(BI.Tree.transformToArrayFormat(nodes["children"], newNodes.id));
+                if (nodes[childKey]) {
+                    r = r.concat(BI.Tree.transformToArrayFormat(nodes[childKey], newNodes.id));
                 }
             }
             return r;
@@ -18816,7 +18823,7 @@ BI.ScalingCellSizeAndPositionManager.prototype = {
                 return r;
             }
             return [sNodes];
-            
+
         },
 
         treeFormat: function (sNodes) {
@@ -18847,7 +18854,7 @@ BI.ScalingCellSizeAndPositionManager.prototype = {
                 return r;
             }
             return [sNodes];
-            
+
         },
 
         traversal: function (array, callback, pNode) {
@@ -22365,8 +22372,86 @@ BI.shortcut("bi.absolute_vertical_float", BI.FloatAbsoluteVerticalLayout);
 /**
  * 浮动的水平居中布局
  */
-BI.FloatHorizontalLayout = function () {
-};
+BI.FloatHorizontalLayout = BI.inherit(BI.Layout, {
+
+    props: function () {
+        return BI.extend(BI.InlineHorizontalAdaptLayout.superclass.props.apply(this, arguments), {
+            baseCls: "bi-h-fl",
+            horizontalAlign: BI.HorizontalAlign.Center,
+            verticalAlign: BI.VerticalAlign.Top,
+            rowSize: [],
+            hgap: 0,
+            vgap: 0,
+            lgap: 0,
+            rgap: 0,
+            tgap: 0,
+            bgap: 0
+        });
+    },
+
+    render: function () {
+        var self = this, o = this.options;
+        if (o.verticalAlign === BI.VerticalAlign.Top) {
+            return {
+                type: "bi.vertical",
+                ref: function (_ref) {
+                    self.layout = _ref;
+                },
+                items: this._formatItems(o.items),
+                vgap: o.vgap,
+                tgap: o.tgap,
+                bgap: o.bgap,
+                scrollx: o.scrollx,
+                scrolly: o.scrolly,
+                scrollable: o.scrollable
+            };
+        }
+        return {
+            type: "bi.inline",
+            items: [{
+                el: {
+                    type: "bi.vertical",
+                    ref: function (_ref) {
+                        self.layout = _ref;
+                    },
+                    items: this._formatItems(o.items),
+                    vgap: o.vgap,
+                    tgap: o.tgap,
+                    bgap: o.bgap
+                }
+            }],
+            horizontalAlign: o.horizontalAlign,
+            verticalAlign: o.verticalAlign,
+            scrollx: o.scrollx,
+            scrolly: o.scrolly,
+            scrollable: o.scrollable
+        };
+    },
+
+    _formatItems: function (items) {
+        var o = this.options;
+        return BI.map(items, function (i, item) {
+            return {
+                el: {
+                    type: "bi.inline_horizontal_adapt",
+                    horizontalAlign: o.horizontalAlign,
+                    items: [item],
+                    hgap: o.hgap,
+                    lgap: o.lgap,
+                    rgap: o.rgap
+                }
+            };
+        });
+    },
+
+    resize: function () {
+        this.layout.stroke(this._formatItems(this.options.items));
+    },
+
+    populate: function (items) {
+        this.layout.populate(this._formatItems(items));
+    }
+});
 BI.shortcut("bi.horizontal_float", BI.FloatHorizontalLayout);
 
 
@@ -30106,7 +30191,8 @@ BI.Single = BI.inherit(BI.Widget, {
         return this.options.value;
     },
 
-    destroyed: function () {
+    __d: function () {
+        BI.Single.superclass.__d.call(this);
         if (BI.isNotNull(this.showTimeout)) {
             clearTimeout(this.showTimeout);
             this.showTimeout = null;
@@ -30168,13 +30254,13 @@ BI.shortcut("bi.single", BI.Single);
                 });
             }
             if (BI.isWidthOrHeight(o.height)) {
-                this.element.css({ lineHeight: BI.isNumber(o.height) ? (o.height / BI.pixRatio + BI.pixUnit) : o.height });
+                this.element.css({lineHeight: BI.isNumber(o.height) ? (o.height / BI.pixRatio + BI.pixUnit) : o.height});
             }
             if (BI.isWidthOrHeight(o.lineHeight)) {
-                this.element.css({ lineHeight: BI.isNumber(o.lineHeight) ? (o.lineHeight / BI.pixRatio + BI.pixUnit) : o.lineHeight });
+                this.element.css({lineHeight: BI.isNumber(o.lineHeight) ? (o.lineHeight / BI.pixRatio + BI.pixUnit) : o.lineHeight});
             }
             if (BI.isWidthOrHeight(o.maxWidth)) {
-                this.element.css({ maxWidth: BI.isNumber(o.maxWidth) ? (o.maxWidth / BI.pixRatio + BI.pixUnit) : o.maxWidth });
+                this.element.css({maxWidth: BI.isNumber(o.maxWidth) ? (o.maxWidth / BI.pixRatio + BI.pixUnit) : o.maxWidth});
             }
             this.element.css({
                 textAlign: o.textAlign,
@@ -30229,7 +30315,6 @@ BI.shortcut("bi.single", BI.Single);
         _getShowText: function () {
             var o = this.options;
             var text = BI.isFunction(o.text) ? o.text() : o.text;
-
             return BI.isKey(text) ? BI.Text.formatText(text + "") : text;
         },
 
@@ -37528,6 +37613,7 @@ BI.ColorChooser = BI.inherit(BI.Widget, {
             element: this,
             container: o.container,
             adjustLength: 1,
+            destroyWhenHide: o.destroyWhenHide,
             isNeedAdjustWidth: false,
             isNeedAdjustHeight: false,
             el: BI.extend({
@@ -37572,7 +37658,7 @@ BI.ColorChooser = BI.inherit(BI.Widget, {
             self.trigger.setValue(color);
         };
 
-        this.combo.on(BI.Combo.EVENT_AFTER_HIDEVIEW, function () {
+        this.combo.on(BI.Combo.EVENT_BEFORE_HIDEVIEW, function () {
             self.fireEvent(BI.ColorChooser.EVENT_CHANGE, arguments);
         });
     },
@@ -37848,7 +37934,7 @@ BI.HexColorChooserPopup = BI.inherit(BI.Widget, {
     },
 
     _digestStoreColors: function (colors) {
-        var items = BI.map(colors, function (i, color) {
+        var items = BI.map(colors.slice(0, 12), function (i, color) {
             return {
                 value: color
             };
@@ -38279,6 +38365,7 @@ BI.SimpleColorChooser = BI.inherit(BI.Widget, {
             value: o.value,
             width: o.width,
             height: o.height,
+            destroyWhenHide: o.destroyWhenHide,
             popup: {
                 type: "bi.simple_hex_color_chooser_popup",
                 recommendColorsGetter: o.recommendColorsGetter,
@@ -80870,19 +80957,7 @@ BI.prepares.push(function () {
         if (ob.items && ob.items.length <= 1) {
             return BI.extend({}, ob, {type: "bi.inline_horizontal_adapt"});
         }
-        return BI.extend({}, ob, {
-            type: "bi.inline_horizontal_adapt",
-            vgap: 0,
-            tgap: 0,
-            bgap: 0,
-            items: [{
-                type: "bi.vertical",
-                vgap: ob.vgap,
-                tgap: ob.tgap,
-                bgap: ob.bgap,
-                items: ob.items
-            }]
-        });
+        return ob;
     });
 
     BI.Plugin.configWidget("bi.horizontal_fill", function (ob) {

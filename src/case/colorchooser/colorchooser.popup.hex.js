@@ -237,7 +237,7 @@ BI.HexColorChooserPopup = BI.inherit(BI.Widget, {
     },
 
     _digestStoreColors: function (colors) {
-        var items = BI.map(colors, function (i, color) {
+        var items = BI.map(colors.slice(0, 12), function (i, color) {
             return {
                 value: color
             };

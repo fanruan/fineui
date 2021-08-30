@@ -113,19 +113,7 @@ BI.prepares.push(function () {
         if (ob.items && ob.items.length <= 1) {
             return BI.extend({}, ob, {type: "bi.inline_horizontal_adapt"});
         }
-        return BI.extend({}, ob, {
-            type: "bi.inline_horizontal_adapt",
-            vgap: 0,
-            tgap: 0,
-            bgap: 0,
-            items: [{
-                type: "bi.vertical",
-                vgap: ob.vgap,
-                tgap: ob.tgap,
-                bgap: ob.bgap,
-                items: ob.items
-            }]
-        });
+        return ob;
     });
 
     BI.Plugin.configWidget("bi.horizontal_fill", function (ob) {

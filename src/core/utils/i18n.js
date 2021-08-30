@@ -1,6 +1,11 @@
 !(function () {
     var i18nStore = {};
     _.extend(BI, {
+        changeI18n: function (i18n) {
+            if (i18n) {
+                i18nStore = i18n;
+            }
+        },
         addI18n: function (i18n) {
             BI.extend(i18nStore, i18n);
         },
