@@ -9,6 +9,7 @@
 !dist/fineui.js
 !dist/fineui.js.map
 !dist/fineui.min.css
+!dist/fineui_without_normalize.min.css
 !dist/fineui.min.js
 !dist/fineui.min.js.map
 !dist/fineui.ie.min.js
