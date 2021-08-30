@@ -1,4 +1,4 @@
-/*! time: 2021-8-30 19:40:31 */
+/*! time: 2021-8-30 21:40:13 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -4689,85 +4689,163 @@ if (!_global.BI) {
     };
 
     var configFunctions = {};
-    BI.config = BI.config || function (type, configFn, opt) {
-        opt = opt || {};
-        // 初始化过或者系统配置需要立刻执行
-        if (BI.initialized || "bi.provider.system" === type) {
+    var runConfigFunction = BI.runConfigFunction = function (type) {
+        if (!type || !configFunctions[type]) {
+            return false;
+        }
+        var queue = configFunctions[type];
+        delete configFunctions[type];
+
+        var dependencies = BI.Providers.getProvider("bi.provider.system").getDependencies();
+        var modules = moduleInjectionMap.components[type]
+            || moduleInjectionMap.constants[type]
+            || moduleInjectionMap.services[type]
+            || moduleInjectionMap.stores[type]
+            || moduleInjectionMap.models[type]
+            || moduleInjectionMap.providers[type];
+        for (var i = 0; i < queue.length; i++) {
+            var conf = queue[i];
+            var version = conf.opt.version;
+            var fn = conf.fn;
+            if (modules && version) {
+                var findVersion = false;
+                for (var j = 0; j < modules.length; j++) {
+                    var module = modules[j];
+                    if (module && dependencies[module.moduleId] && module.version === version) {
+                        var minVersion = dependencies[module.moduleId].minVersion,
+                            maxVersion = dependencies[module.moduleId].maxVersion;
+                        if (minVersion && (moduleInjection[module.moduleId].version || version) < minVersion) {
+                            findVersion = true;
+                            break;
+                        }
+                        if (maxVersion && (moduleInjection[module.moduleId].version || version) > maxVersion) {
+                            findVersion = true;
+                            break;
+                        }
+                    }
+                }
+                if (findVersion === true) {
+                    _global.console && console.error("moduleId: [" + module.moduleId + "] 接口: [" + type + "] 接口版本: [" + version + "] 已过期，版本要求为：", dependencies[module.moduleId], "=>", moduleInjection[module.moduleId]);
+                    continue;
+                }
+            }
             if (constantInjection[type]) {
-                return (constantInjection[type] = configFn(constantInjection[type]));
+                constantInjection[type] = fn(constantInjection[type]);
+                continue;
             }
             if (providerInjection[type]) {
                 if (!providers[type]) {
                     providers[type] = new providerInjection[type]();
                 }
-                // 如果config被重新配置的话，需要删除掉之前的实例
                 if (providerInstance[type]) {
                     delete providerInstance[type];
                 }
-                return configFn(providers[type]);
+                fn(providers[type]);
+                continue;
             }
-            return BI.Plugin.configWidget(type, configFn, opt);
+            BI.Plugin.configWidget(type, fn);
         }
+    };
+    BI.config = BI.config || function (type, configFn, opt) {
+        opt = opt || {};
+
+        // 系统配置直接执行
+        if ("bi.provider.system" === type) {
+            if (!providers[type]) {
+                providers[type] = new providerInjection[type]();
+            }
+            // 如果config被重新配置的话，需要删除掉之前的实例
+            if (providerInstance[type]) {
+                delete providerInstance[type];
+            }
+            return configFn(providers[type]);
+        }
+
         if (!configFunctions[type]) {
             configFunctions[type] = [];
-            BI.prepares.push(function () {
-                var queue = configFunctions[type];
-                var dependencies = BI.Providers.getProvider("bi.provider.system").getDependencies();
-                var modules = moduleInjectionMap.components[type]
-                    || moduleInjectionMap.constants[type]
-                    || moduleInjectionMap.services[type]
-                    || moduleInjectionMap.stores[type]
-                    || moduleInjectionMap.models[type]
-                    || moduleInjectionMap.providers[type];
-                for (var i = 0; i < queue.length; i++) {
-                    var conf = queue[i];
-                    var version = conf.opt.version;
-                    var fn = conf.fn;
-                    if (modules && version) {
-                        var findVersion = false;
-                        for (var j = 0; j < modules.length; j++) {
-                            var module = modules[i];
-                            if (module && dependencies[module.moduleId] && module.version === version) {
-                                var minVersion = dependencies[module.moduleId].minVersion,
-                                    maxVersion = dependencies[module.moduleId].maxVersion;
-                                if (minVersion && (moduleInjection[module.moduleId].version || version) < minVersion) {
-                                    findVersion = true;
-                                    break;
-                                }
-                                if (maxVersion && (moduleInjection[module.moduleId].version || version) > maxVersion) {
-                                    findVersion = true;
-                                    break;
-                                }
-                            }
-                        }
-                        if (findVersion === true) {
-                            _global.console && console.error("moduleId: [" + module.moduleId + "] 接口: [" + type + "] 接口版本: [" + version + "] 已过期，版本要求为：", dependencies[module.moduleId], "=>", moduleInjection[module.moduleId]);
-                            continue;
-                        }
-                    }
-                    if (constantInjection[type]) {
-                        constantInjection[type] = fn(constantInjection[type]);
-                        continue;
-                    }
-                    if (providerInjection[type]) {
-                        if (!providers[type]) {
-                            providers[type] = new providerInjection[type]();
-                        }
-                        if (providerInstance[type]) {
-                            delete providerInstance[type];
-                        }
-                        fn(providers[type]);
-                        continue;
-                    }
-                    BI.Plugin.configWidget(type, fn);
-                }
-                configFunctions[type] = null;
-            });
         }
         configFunctions[type].push({
             fn: configFn,
             opt: opt
         });
+
+        // // 初始化过或者系统配置需要立刻执行
+        // if (BI.initialized || "bi.provider.system" === type) {
+        //     if (constantInjection[type]) {
+        //         return (constantInjection[type] = configFn(constantInjection[type]));
+        //     }
+        //     if (providerInjection[type]) {
+        //         if (!providers[type]) {
+        //             providers[type] = new providerInjection[type]();
+        //         }
+        //         // 如果config被重新配置的话，需要删除掉之前的实例
+        //         if (providerInstance[type]) {
+        //             delete providerInstance[type];
+        //         }
+        //         return configFn(providers[type]);
+        //     }
+        //     return BI.Plugin.configWidget(type, configFn, opt);
+        // }
+        // if (!configFunctions[type]) {
+        //     configFunctions[type] = [];
+        //     BI.prepares.push(function () {
+        //         var queue = configFunctions[type];
+        //         var dependencies = BI.Providers.getProvider("bi.provider.system").getDependencies();
+        //         var modules = moduleInjectionMap.components[type]
+        //             || moduleInjectionMap.constants[type]
+        //             || moduleInjectionMap.services[type]
+        //             || moduleInjectionMap.stores[type]
+        //             || moduleInjectionMap.models[type]
+        //             || moduleInjectionMap.providers[type];
+        //         for (var i = 0; i < queue.length; i++) {
+        //             var conf = queue[i];
+        //             var version = conf.opt.version;
+        //             var fn = conf.fn;
+        //             if (modules && version) {
+        //                 var findVersion = false;
+        //                 for (var j = 0; j < modules.length; j++) {
+        //                     var module = modules[i];
+        //                     if (module && dependencies[module.moduleId] && module.version === version) {
+        //                         var minVersion = dependencies[module.moduleId].minVersion,
+        //                             maxVersion = dependencies[module.moduleId].maxVersion;
+        //                         if (minVersion && (moduleInjection[module.moduleId].version || version) < minVersion) {
+        //                             findVersion = true;
+        //                             break;
+        //                         }
+        //                         if (maxVersion && (moduleInjection[module.moduleId].version || version) > maxVersion) {
+        //                             findVersion = true;
+        //                             break;
+        //                         }
+        //                     }
+        //                 }
+        //                 if (findVersion === true) {
+        //                     _global.console && console.error("moduleId: [" + module.moduleId + "] 接口: [" + type + "] 接口版本: [" + version + "] 已过期，版本要求为：", dependencies[module.moduleId], "=>", moduleInjection[module.moduleId]);
+        //                     continue;
+        //                 }
+        //             }
+        //             if (constantInjection[type]) {
+        //                 constantInjection[type] = fn(constantInjection[type]);
+        //                 continue;
+        //             }
+        //             if (providerInjection[type]) {
+        //                 if (!providers[type]) {
+        //                     providers[type] = new providerInjection[type]();
+        //                 }
+        //                 if (providerInstance[type]) {
+        //                     delete providerInstance[type];
+        //                 }
+        //                 fn(providers[type]);
+        //                 continue;
+        //             }
+        //             BI.Plugin.configWidget(type, fn);
+        //         }
+        //         configFunctions[type] = null;
+        //     });
+        // }
+        // configFunctions[type].push({
+        //     fn: configFn,
+        //     opt: opt
+        // });
     };
 
     BI.getReference = BI.getReference || function (type, fn) {
@@ -4830,6 +4908,7 @@ if (!_global.BI) {
             if (BI.isNull(constantInjection[type])) {
                 _global.console && console.error("constant: [" + type + "] 未定义");
             }
+            runConfigFunction(type);
             return constantInjection[type];
         }
     };
@@ -4877,6 +4956,7 @@ if (!_global.BI) {
             if (!modelInjection[type]) {
                 _global.console && console.error("model: [" + type + "] 未定义");
             }
+            runConfigFunction(type);
             var inst = new modelInjection[type](config);
             inst._constructor && inst._constructor(config);
             inst.mixins && callPoint(inst, inst.mixins);
@@ -4928,6 +5008,7 @@ if (!_global.BI) {
             if (!providerInjection[type]) {
                 _global.console && console.error("provider: [" + type + "] 未定义");
             }
+            runConfigFunction(type);
             if (!providers[type]) {
                 providers[type] = new providerInjection[type]();
             }
@@ -9301,6 +9382,7 @@ module.exports = !__webpack_require__(927)(function () {
                     return;
                 }
                 initCallbackCalled = true;
+
                 function render () {
                     // 加个保险
                     if (renderCallbackCalled === true) {
@@ -9310,6 +9392,7 @@ module.exports = !__webpack_require__(927)(function () {
                     renderCallbackCalled = true;
                     self._render();
                 }
+
                 if (self.options.beforeRender || self.beforeRender) {
                     self.__async = true;
                     (self.options.beforeRender || self.beforeRender).call(self, render);
@@ -9422,27 +9505,14 @@ module.exports = !__webpack_require__(927)(function () {
             var self = this;
             var isMounted = this._isMounted;
             this.__async === true && isMounted && callLifeHook(this, "beforeMount");
-            var render = BI.isFunction(this.options.render) ? this.options.render : this.render;
-            var els = render && render.call(this);
-            if (BI.isPlainObject(els)) {
-                els = [els];
-            }
-            if (BI.isArray(els)) {
-                if (this.options.vdom) {
-                    var div = document.createElement("div");
-                    var element = this.element;
-                    element.append(div);
-                    this.vnode = this._renderVNode();
-                    BI.patchVNode(div, this.vnode);
-                    // 去除这个临时的div
-                    BI.DOM.hang([div]);
-                    element.attr("style", self.vnode.elm.getAttribute("style"));
-                    element.addClass(self.vnode.elm.getAttribute("class"));
-                    element.empty();
-                    BI.each(BI.jQuery(self.vnode.elm).children(), function (i, node) {
-                        element.append(node);
-                    });
-                } else {
+            if (!this._initVNode()) {
+                var render = BI.isFunction(this.options.render) ? this.options.render : this.render;
+                var els = render && render.call(this);
+                els = BI.Plugin.getRender(this.options.type, els);
+                if (BI.isPlainObject(els)) {
+                    els = [els];
+                }
+                if (BI.isArray(els)) {
                     BI.each(els, function (i, el) {
                         if (el) {
                             BI._lazyCreateWidget(el, {
@@ -9459,10 +9529,31 @@ module.exports = !__webpack_require__(927)(function () {
             }
         },
 
+        _initVNode: function () {
+            if (this.options.vdom) {
+                var div = document.createElement("div");
+                var element = this.element;
+                element.append(div);
+                this.vnode = this._renderVNode();
+                BI.patchVNode(div, this.vnode);
+                // 去除这个临时的div
+                BI.DOM.hang([div]);
+                element.attr("style", self.vnode.elm.getAttribute("style"));
+                element.addClass(self.vnode.elm.getAttribute("class"));
+                element.empty();
+                BI.each(BI.jQuery(self.vnode.elm).children(), function (i, node) {
+                    element.append(node);
+                });
+                return true;
+            }
+            return false;
+        },
+
         _renderVNode: function () {
             var self = this;
             var render = BI.isFunction(this.options.render) ? this.options.render : this.render;
             var els = render && render.call(this);
+            els = BI.Plugin.getRender(this.options.type, els);
             if (BI.isPlainObject(els)) {
                 els = [els];
             }
@@ -10052,9 +10143,6 @@ module.exports = !__webpack_require__(927)(function () {
     };
 
     BI.createWidget = BI.createWidget || function (item, options, context, lazy) {
-        // 先把准备环境准备好
-        BI.init();
-        var el, w;
         item || (item = {});
         if (BI.isWidget(options)) {
             context = options;
@@ -10062,6 +10150,21 @@ module.exports = !__webpack_require__(927)(function () {
         } else {
             options || (options = {});
         }
+
+        var el, w;
+        if (item.type || options.type) {
+            el = BI.extend({}, options, item);
+        } else if (item.el && (item.el.type || options.type)) {
+            el = BI.extend({}, options, item.el);
+        }
+
+        if (el) {
+            BI.runConfigFunction(el.type);
+        }
+
+        // 先把准备环境准备好
+        BI.init();
+
         if (BI.isEmpty(item) && BI.isEmpty(options)) {
             return BI.createWidget({
                 type: "bi.layout"
@@ -10070,24 +10173,7 @@ module.exports = !__webpack_require__(927)(function () {
         if (BI.isWidget(item)) {
             return item;
         }
-        if (item.type || options.type) {
-            el = BI.extend({}, options, item);
-            w = BI.Plugin.getWidget(el.type, el);
-            if (w.type === el.type) {
-                if (BI.Plugin.hasObject(el.type)) {
-                    w.listeners = (w.listeners || []).concat([{
-                        eventName: BI.Events.MOUNT,
-                        action: function () {
-                            BI.Plugin.getObject(el.type, this);
-                        }
-                    }]);
-                }
-                return createWidget(w, context, lazy);
-            }
-            return BI.createWidget(w, options, context, lazy);
-        }
-        if (item.el && (item.el.type || options.type)) {
-            el = BI.extend({}, options, item.el);
+        if (el) {
             w = BI.Plugin.getWidget(el.type, el);
             if (w.type === el.type) {
                 if (BI.Plugin.hasObject(el.type)) {
@@ -10129,6 +10215,7 @@ BI.Plugin = BI.Plugin || {};
     var _WidgetsPlugin = {};
     var _ObjectPlugin = {};
     var _ConfigPlugin = {};
+    var _ConfigRenderPlugin = {};
     var _GlobalWidgetConfigFns = [];
     var __GlobalObjectConfigFns = [];
     BI.defaults(BI.Plugin, {
@@ -10173,6 +10260,25 @@ BI.Plugin = BI.Plugin || {};
             _ConfigPlugin[type].push(fn);
         },
 
+        getRender: function (type, rendered) {
+            var res;
+            if (_ConfigRenderPlugin[type]) {
+                for (var i = _ConfigRenderPlugin[type].length - 1; i >= 0; i--) {
+                    if (res = _ConfigRenderPlugin[type][i](rendered)) {
+                        rendered = res;
+                    }
+                }
+            }
+            return rendered;
+        },
+
+        configRender: function (type, fn) {
+            if (!_ConfigRenderPlugin[type]) {
+                _ConfigRenderPlugin[type] = [];
+            }
+            _ConfigRenderPlugin[type].push(fn);
+        },
+
         // Deprecated
         registerWidget: function (type, fn) {
             if (!_WidgetsPlugin[type]) {
@@ -10184,6 +10290,7 @@ BI.Plugin = BI.Plugin || {};
             _WidgetsPlugin[type].push(fn);
         },
 
+        // Deprecated
         relieveWidget: function (type) {
             delete _WidgetsPlugin[type];
         },
