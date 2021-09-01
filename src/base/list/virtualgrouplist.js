@@ -1,17 +1,18 @@
 /**
- * 虚拟列表
+ * 同时用于virtualGroup和virtualList特性的虚拟列表
  *
  * Created by GUY on 2017/5/22.
  * @class BI.VirtualList
  * @extends BI.Widget
  */
-BI.VirtualList = BI.inherit(BI.Widget, {
+BI.VirtualGroupList = BI.inherit(BI.Widget, {
     props: function () {
         return {
-            baseCls: "bi-virtual-list",
+            baseCls: "bi-virtual-group-list",
             overscanHeight: 100,
             blockSize: 10,
             scrollTop: 0,
+            rowHeight: "auto",
             items: []
         };
     },
@@ -19,7 +20,6 @@ BI.VirtualList = BI.inherit(BI.Widget, {
     init: function () {
         var self = this;
         this.renderedIndex = -1;
-        this.cache = {};
     },
 
     render: function () {
@@ -32,11 +32,15 @@ BI.VirtualList = BI.inherit(BI.Widget, {
                     self.topBlank = this;
                 }
             }, {
-                type: "bi.vertical",
-                scrolly: false,
+                type: "bi.virtual_group",
+                height: o.rowHeight * o.items.length,
                 ref: function () {
                     self.container = this;
-                }
+                },
+                layouts: [{
+                    type: "bi.vertical",
+                    scrolly: false
+                }]
             }, {
                 type: "bi.layout",
                 ref: function () {
@@ -60,6 +64,10 @@ BI.VirtualList = BI.inherit(BI.Widget, {
         });
     },
 
+    _isAutoHeight: function () {
+        return this.options.rowHeight === "auto";
+    },
+
     _renderMoreIf: function () {
         var self = this, o = this.options;
         var height = this.element.height();
@@ -73,11 +81,6 @@ BI.VirtualList = BI.inherit(BI.Widget, {
             var items = o.items.slice(index, index + o.blockSize);
             this.container.addItems(items, this);
             var addedHeight = getElementHeight() - lastHeight;
-            this.cache[cnt] = {
-                index: index,
-                scrollTop: lastHeight,
-                height: addedHeight
-            };
             this.tree.set(cnt, addedHeight);
             this.renderedIndex = cnt;
             cnt++;
@@ -87,60 +90,36 @@ BI.VirtualList = BI.inherit(BI.Widget, {
 
     _calculateBlocksToRender: function () {
         var o = this.options;
-        this._renderMoreIf();
+        this._isAutoHeight() && this._renderMoreIf();
         var height = this.element.height();
         var minContentHeightFrom = o.scrollTop - o.overscanHeight;
         var minContentHeightTo = o.scrollTop + height + o.overscanHeight;
         var start = this.tree.greatestLowerBound(minContentHeightFrom);
         var end = this.tree.leastUpperBound(minContentHeightTo);
-        var needDestroyed = [], needMount = [];
-        for (var i = 0; i < start; i++) {
-            var index = this.cache[i].index;
-            if (!this.cache[i].destroyed) {
+        var items = [];
+        var topHeight = this.tree.sumTo(Math.max(-1, start - 1));
+        this.topBlank.setHeight(topHeight);
+        if (this._isAutoHeight()) {
+            for (var i = (start < 0 ? 0 : start); i <= end && i <= this.renderedIndex; i++) {
+                var index = i * o.blockSize;
                 for (var j = index; j < index + o.blockSize && j < o.items.length; j++) {
-                    needDestroyed.push(this.container._children[j]);
-                    this.container._children[j] = null;
+                    items.push(o.items[j]);
                 }
-                this.cache[i].destroyed = true;
             }
-        }
-        for (var i = end + 1; i <= this.renderedIndex; i++) {
-            var index = this.cache[i].index;
-            if (!this.cache[i].destroyed) {
+            this.bottomBlank.setHeight(this.tree.sumTo(this.renderedIndex) - this.tree.sumTo(Math.min(end, this.renderedIndex)));
+            this.container.element.height(this.container.element.height());
+            this.container.populate(items);
+            this.container.element.height("auto");
+        } else {
+            for (var i = (start < 0 ? 0 : start); i <= end; i++) {
+                var index = i * o.blockSize;
                 for (var j = index; j < index + o.blockSize && j < o.items.length; j++) {
-                    needDestroyed.push(this.container._children[j]);
-                    this.container._children[j] = null;
+                    items.push(o.items[j]);
                 }
-                this.cache[i].destroyed = true;
             }
+            this.container.element.height(o.rowHeight * o.items.length - topHeight);
+            this.container.populate(items);
         }
-        var firstFragment = BI.Widget._renderEngine.createFragment(),
-            lastFragment = BI.Widget._renderEngine.createFragment();
-        var currentFragment = firstFragment;
-        for (var i = (start < 0 ? 0 : start); i <= end && i <= this.renderedIndex; i++) {
-            var index = this.cache[i].index;
-            if (!this.cache[i].destroyed) {
-                currentFragment = lastFragment;
-            }
-            if (this.cache[i].destroyed === true) {
-                for (var j = index; j < index + o.blockSize && j < o.items.length; j++) {
-                    var w = this.container._addElement(j, o.items[j], this);
-                    needMount.push(w);
-                    currentFragment.appendChild(w.element[0]);
-                }
-                this.cache[i].destroyed = false;
-            }
-        }
-        this.container.element.prepend(firstFragment);
-        this.container.element.append(lastFragment);
-        this.topBlank.setHeight(this.tree.sumTo(Math.max(-1, start - 1)));
-        this.bottomBlank.setHeight(this.tree.sumTo(this.renderedIndex) - this.tree.sumTo(Math.min(end, this.renderedIndex)));
-        BI.each(needMount, function (i, child) {
-            child && child._mount();
-        });
-        BI.each(needDestroyed, function (i, child) {
-            child && child._destroy();
-        });
     },
 
     _populate: function (items) {
@@ -148,7 +127,8 @@ BI.VirtualList = BI.inherit(BI.Widget, {
         if (items && this.options.items !== items) {
             this.options.items = items;
         }
-        this.tree = BI.PrefixIntervalTree.empty(Math.ceil(o.items.length / o.blockSize));
+        this.tree = BI.PrefixIntervalTree.uniform(Math.ceil(o.items.length / o.blockSize), this._isAutoHeight() ? 0 : o.rowHeight * o.blockSize);
+
         this._calculateBlocksToRender();
         try {
             this.element.scrollTop(o.scrollTop);
@@ -156,18 +136,8 @@ BI.VirtualList = BI.inherit(BI.Widget, {
         }
     },
 
-    _clearChildren: function () {
-        BI.each(this.container._children, function (i, cell) {
-            cell && cell._destroy();
-        });
-        this.container._children = {};
-        this.container.attr("items", []);
-    },
-
     restore: function () {
         this.renderedIndex = -1;
-        this._clearChildren();
-        this.cache = {};
         this.options.scrollTop = 0;
         // 依赖于cache的占位元素也要初始化
         this.topBlank.setHeight(0);
@@ -179,12 +149,7 @@ BI.VirtualList = BI.inherit(BI.Widget, {
             this.restore();
         }
         this._populate(items);
-    },
-
-    destroyed: function () {
-        this.cache = {};
-        this.renderedIndex = -1;
     }
 });
-BI.shortcut("bi.virtual_list", BI.VirtualList);
+BI.shortcut("bi.virtual_group_list", BI.VirtualGroupList);
 

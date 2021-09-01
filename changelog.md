@@ -1,5 +1,6 @@
 # 更新日志
 2.0(2021-07)
+- 新增bi.virtual_group_list组件
 - layout支持forceUpdate刷新方式
 - width属性支持calc()
 - 修改了颜色选择器交互
