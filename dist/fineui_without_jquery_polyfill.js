@@ -1,4 +1,4 @@
-/*! time: 2021-9-1 11:40:44 */
+/*! time: 2021-9-1 23:40:34 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -82,7 +82,7 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 1459);
+/******/ 	return __webpack_require__(__webpack_require__.s = 1460);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -26691,7 +26691,168 @@ BI.shortcut("bi.list_view", BI.ListView);
 /***/ (function(module, exports) {
 
 /**
- * 表示当前对象
+ * 同时用于virtualGroup和virtualList特性的虚拟列表
+ *
+ * Created by GUY on 2017/5/22.
+ * @class BI.VirtualList
+ * @extends BI.Widget
+ */
+BI.VirtualGroupList = BI.inherit(BI.Widget, {
+    props: function () {
+        return {
+            baseCls: "bi-virtual-group-list",
+            overscanHeight: 100,
+            blockSize: 10,
+            scrollTop: 0,
+            rowHeight: "auto",
+            items: []
+        };
+    },
+
+    init: function () {
+        var self = this;
+        this.renderedIndex = -1;
+    },
+
+    render: function () {
+        var self = this, o = this.options;
+        return {
+            type: "bi.vertical",
+            items: [{
+                type: "bi.layout",
+                ref: function () {
+                    self.topBlank = this;
+                }
+            }, {
+                type: "bi.virtual_group",
+                height: o.rowHeight * o.items.length,
+                ref: function () {
+                    self.container = this;
+                },
+                layouts: [{
+                    type: "bi.vertical",
+                    scrolly: false
+                }]
+            }, {
+                type: "bi.layout",
+                ref: function () {
+                    self.bottomBlank = this;
+                }
+            }],
+            element: this
+        };
+    },
+
+    // mounted之后绑定事件
+    mounted: function () {
+        var self = this, o = this.options;
+        this._populate();
+        this.element.scroll(function (e) {
+            o.scrollTop = self.element.scrollTop();
+            self._calculateBlocksToRender();
+        });
+        BI.ResizeDetector.addResizeListener(this, function () {
+            self._calculateBlocksToRender();
+        });
+    },
+
+    _isAutoHeight: function () {
+        return this.options.rowHeight === "auto";
+    },
+
+    _renderMoreIf: function () {
+        var self = this, o = this.options;
+        var height = this.element.height();
+        var minContentHeight = o.scrollTop + height + o.overscanHeight;
+        var index = (this.renderedIndex + 1) * o.blockSize, cnt = this.renderedIndex + 1;
+        var lastHeight;
+        var getElementHeight = function () {
+            return self.container.element.height() + self.topBlank.element.height() + self.bottomBlank.element.height();
+        };
+        while ((lastHeight = getElementHeight()) < minContentHeight && index < o.items.length) {
+            var items = o.items.slice(index, index + o.blockSize);
+            this.container.addItems(items, this);
+            var addedHeight = getElementHeight() - lastHeight;
+            this.tree.set(cnt, addedHeight);
+            this.renderedIndex = cnt;
+            cnt++;
+            index += o.blockSize;
+        }
+    },
+
+    _calculateBlocksToRender: function () {
+        var o = this.options;
+        this._isAutoHeight() && this._renderMoreIf();
+        var height = this.element.height();
+        var minContentHeightFrom = o.scrollTop - o.overscanHeight;
+        var minContentHeightTo = o.scrollTop + height + o.overscanHeight;
+        var start = this.tree.greatestLowerBound(minContentHeightFrom);
+        var end = this.tree.leastUpperBound(minContentHeightTo);
+        var items = [];
+        var topHeight = this.tree.sumTo(Math.max(-1, start - 1));
+        this.topBlank.setHeight(topHeight);
+        if (this._isAutoHeight()) {
+            for (var i = (start < 0 ? 0 : start); i <= end && i <= this.renderedIndex; i++) {
+                var index = i * o.blockSize;
+                for (var j = index; j < index + o.blockSize && j < o.items.length; j++) {
+                    items.push(o.items[j]);
+                }
+            }
+            this.bottomBlank.setHeight(this.tree.sumTo(this.renderedIndex) - this.tree.sumTo(Math.min(end, this.renderedIndex)));
+            this.container.element.height(this.container.element.height());
+            this.container.populate(items);
+            this.container.element.height("auto");
+        } else {
+            for (var i = (start < 0 ? 0 : start); i <= end; i++) {
+                var index = i * o.blockSize;
+                for (var j = index; j < index + o.blockSize && j < o.items.length; j++) {
+                    items.push(o.items[j]);
+                }
+            }
+            this.container.element.height(o.rowHeight * o.items.length - topHeight);
+            this.container.populate(items);
+        }
+    },
+
+    _populate: function (items) {
+        var o = this.options;
+        if (items && this.options.items !== items) {
+            this.options.items = items;
+        }
+        this.tree = BI.PrefixIntervalTree.uniform(Math.ceil(o.items.length / o.blockSize), this._isAutoHeight() ? 0 : o.rowHeight * o.blockSize);
+
+        this._calculateBlocksToRender();
+        try {
+            this.element.scrollTop(o.scrollTop);
+        } catch (e) {
+        }
+    },
+
+    restore: function () {
+        this.renderedIndex = -1;
+        this.options.scrollTop = 0;
+        // 依赖于cache的占位元素也要初始化
+        this.topBlank.setHeight(0);
+        this.bottomBlank.setHeight(0);
+    },
+
+    populate: function (items) {
+        if (items && this.options.items !== items) {
+            this.restore();
+        }
+        this._populate(items);
+    }
+});
+BI.shortcut("bi.virtual_group_list", BI.VirtualGroupList);
+
+
+
+/***/ }),
+/* 401 */
+/***/ (function(module, exports) {
+
+/**
+ * 虚拟列表
  *
  * Created by GUY on 2017/5/22.
  * @class BI.VirtualList
@@ -26756,8 +26917,7 @@ BI.VirtualList = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
         var height = this.element.height();
         var minContentHeight = o.scrollTop + height + o.overscanHeight;
-        var index = (this.cache[this.renderedIndex] && (this.cache[this.renderedIndex].index + o.blockSize)) || 0,
-            cnt = this.renderedIndex + 1;
+        var index = (this.renderedIndex + 1) * o.blockSize, cnt = this.renderedIndex + 1;
         var lastHeight;
         var getElementHeight = function () {
             return self.container.element.height() + self.topBlank.element.height() + self.bottomBlank.element.height();
@@ -26786,7 +26946,7 @@ BI.VirtualList = BI.inherit(BI.Widget, {
         var minContentHeightTo = o.scrollTop + height + o.overscanHeight;
         var start = this.tree.greatestLowerBound(minContentHeightFrom);
         var end = this.tree.leastUpperBound(minContentHeightTo);
-        var needDestroyed = [];
+        var needDestroyed = [], needMount = [];
         for (var i = 0; i < start; i++) {
             var index = this.cache[i].index;
             if (!this.cache[i].destroyed) {
@@ -26817,7 +26977,8 @@ BI.VirtualList = BI.inherit(BI.Widget, {
             }
             if (this.cache[i].destroyed === true) {
                 for (var j = index; j < index + o.blockSize && j < o.items.length; j++) {
-                    var w = this.container._addElement(j, BI.extend({root: true}, BI.stripEL(o.items[j])), this);
+                    var w = this.container._addElement(j, o.items[j], this);
+                    needMount.push(w);
                     currentFragment.appendChild(w.element[0]);
                 }
                 this.cache[i].destroyed = false;
@@ -26827,6 +26988,9 @@ BI.VirtualList = BI.inherit(BI.Widget, {
         this.container.element.append(lastFragment);
         this.topBlank.setHeight(this.tree.sumTo(Math.max(-1, start - 1)));
         this.bottomBlank.setHeight(this.tree.sumTo(this.renderedIndex) - this.tree.sumTo(Math.min(end, this.renderedIndex)));
+        BI.each(needMount, function (i, child) {
+            child && child._mount();
+        });
         BI.each(needDestroyed, function (i, child) {
             child && child._destroy();
         });
@@ -26871,7 +27035,8 @@ BI.VirtualList = BI.inherit(BI.Widget, {
     },
 
     destroyed: function () {
-        this.restore();
+        this.cache = {};
+        this.renderedIndex = -1;
     }
 });
 BI.shortcut("bi.virtual_list", BI.VirtualList);
@@ -26879,7 +27044,7 @@ BI.shortcut("bi.virtual_list", BI.VirtualList);
 
 
 /***/ }),
-/* 401 */
+/* 402 */
 /***/ (function(module, exports) {
 
 /**
@@ -27173,7 +27338,7 @@ BI.Pager.EVENT_AFTER_POPULATE = "EVENT_AFTER_POPULATE";
 BI.shortcut("bi.pager", BI.Pager);
 
 /***/ }),
-/* 402 */
+/* 403 */
 /***/ (function(module, exports) {
 
 /**
@@ -27387,7 +27552,7 @@ BI.shortcut("bi.single", BI.Single);
 
 
 /***/ }),
-/* 403 */
+/* 404 */
 /***/ (function(module, exports) {
 
 /**
@@ -27563,7 +27728,7 @@ BI.shortcut("bi.single", BI.Single);
 
 
 /***/ }),
-/* 404 */
+/* 405 */
 /***/ (function(module, exports) {
 
 /**
@@ -27600,7 +27765,7 @@ BI.A = BI.inherit(BI.Text, {
 BI.shortcut("bi.a", BI.A);
 
 /***/ }),
-/* 405 */
+/* 406 */
 /***/ (function(module, exports) {
 
 /**
@@ -27685,7 +27850,7 @@ BI.LoadingBar = BI.inherit(BI.Single, {
 BI.shortcut("bi.loading_bar", BI.LoadingBar);
 
 /***/ }),
-/* 406 */
+/* 407 */
 /***/ (function(module, exports) {
 
 /**
@@ -28103,7 +28268,7 @@ BI.shortcut("bi.basic_button", BI.BasicButton);
 
 
 /***/ }),
-/* 407 */
+/* 408 */
 /***/ (function(module, exports) {
 
 /**
@@ -28166,7 +28331,7 @@ BI.shortcut("bi.node_button", BI.NodeButton);
 
 
 /***/ }),
-/* 408 */
+/* 409 */
 /***/ (function(module, exports) {
 
 /**
@@ -28224,7 +28389,7 @@ BI.shortcut("bi.icon_button", BI.IconButton);
 
 
 /***/ }),
-/* 409 */
+/* 410 */
 /***/ (function(module, exports) {
 
 /**
@@ -28316,7 +28481,7 @@ BI.ImageButton.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.image_button", BI.ImageButton);
 
 /***/ }),
-/* 410 */
+/* 411 */
 /***/ (function(module, exports) {
 
 /**
@@ -28474,7 +28639,7 @@ BI.Button.EVENT_CHANGE = "EVENT_CHANGE";
 
 
 /***/ }),
-/* 411 */
+/* 412 */
 /***/ (function(module, exports) {
 
 /**
@@ -28569,7 +28734,7 @@ BI.TextButton.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.text_button", BI.TextButton);
 
 /***/ }),
-/* 412 */
+/* 413 */
 /***/ (function(module, exports) {
 
 /**
@@ -28694,7 +28859,7 @@ BI.shortcut("bi.blank_icon_icon_text_item", BI.BlankIconIconTextItem);
 
 
 /***/ }),
-/* 413 */
+/* 414 */
 /***/ (function(module, exports) {
 
 /**
@@ -28826,7 +28991,7 @@ BI.shortcut("bi.blank_icon_text_icon_item", BI.BlankIconTextIconItem);
 
 
 /***/ }),
-/* 414 */
+/* 415 */
 /***/ (function(module, exports) {
 
 /**
@@ -28937,7 +29102,7 @@ BI.shortcut("bi.blank_icon_text_item", BI.BlankIconTextItem);
 
 
 /***/ }),
-/* 415 */
+/* 416 */
 /***/ (function(module, exports) {
 
 /**
@@ -29066,7 +29231,7 @@ BI.shortcut("bi.icon_text_icon_item", BI.IconTextIconItem);
 
 
 /***/ }),
-/* 416 */
+/* 417 */
 /***/ (function(module, exports) {
 
 /**
@@ -29174,7 +29339,7 @@ BI.shortcut("bi.icon_text_item", BI.IconTextItem);
 
 
 /***/ }),
-/* 417 */
+/* 418 */
 /***/ (function(module, exports) {
 
 /**
@@ -29281,7 +29446,7 @@ BI.shortcut("bi.text_icon_item", BI.TextIconItem);
 
 
 /***/ }),
-/* 418 */
+/* 419 */
 /***/ (function(module, exports) {
 
 /**
@@ -29372,7 +29537,7 @@ BI.TextItem.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.text_item", BI.TextItem);
 
 /***/ }),
-/* 419 */
+/* 420 */
 /***/ (function(module, exports) {
 
 /**
@@ -29490,7 +29655,7 @@ BI.IconTextIconNode.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.icon_text_icon_node", BI.IconTextIconNode);
 
 /***/ }),
-/* 420 */
+/* 421 */
 /***/ (function(module, exports) {
 
 /**
@@ -29585,7 +29750,7 @@ BI.IconTextNode.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.icon_text_node", BI.IconTextNode);
 
 /***/ }),
-/* 421 */
+/* 422 */
 /***/ (function(module, exports) {
 
 /**
@@ -29679,7 +29844,7 @@ BI.TextIconNode.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.text_icon_node", BI.TextIconNode);
 
 /***/ }),
-/* 422 */
+/* 423 */
 /***/ (function(module, exports) {
 
 /**
@@ -29761,7 +29926,7 @@ BI.TextNode.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.text_node", BI.TextNode);
 
 /***/ }),
-/* 423 */
+/* 424 */
 /***/ (function(module, exports) {
 
 /**
@@ -30138,7 +30303,7 @@ BI.shortcut("bi.editor", BI.Editor);
 
 
 /***/ }),
-/* 424 */
+/* 425 */
 /***/ (function(module, exports) {
 
 /**
@@ -30244,7 +30409,7 @@ BI.shortcut("bi.multifile_editor", BI.MultifileEditor);
 
 
 /***/ }),
-/* 425 */
+/* 426 */
 /***/ (function(module, exports) {
 
 /**
@@ -30502,7 +30667,7 @@ BI.shortcut("bi.textarea_editor", BI.TextAreaEditor);
 
 
 /***/ }),
-/* 426 */
+/* 427 */
 /***/ (function(module, exports) {
 
 /**
@@ -30622,7 +30787,7 @@ BI.shortcut("bi.html", BI.Html);
 
 
 /***/ }),
-/* 427 */
+/* 428 */
 /***/ (function(module, exports) {
 
 /**
@@ -30648,7 +30813,7 @@ BI.Icon = BI.inherit(BI.Single, {
 BI.shortcut("bi.icon", BI.Icon);
 
 /***/ }),
-/* 428 */
+/* 429 */
 /***/ (function(module, exports) {
 
 /**
@@ -30712,7 +30877,7 @@ BI.shortcut("bi.iframe", BI.Iframe);
 
 
 /***/ }),
-/* 429 */
+/* 430 */
 /***/ (function(module, exports) {
 
 /**
@@ -30758,7 +30923,7 @@ BI.shortcut("bi.img", BI.Img);
 
 
 /***/ }),
-/* 430 */
+/* 431 */
 /***/ (function(module, exports) {
 
 /**
@@ -30785,7 +30950,7 @@ BI.ImageCheckbox.EVENT_CHANGE = BI.IconButton.EVENT_CHANGE;
 BI.shortcut("bi.image_checkbox", BI.ImageCheckbox);
 
 /***/ }),
-/* 431 */
+/* 432 */
 /***/ (function(module, exports) {
 
 /**
@@ -30851,7 +31016,7 @@ BI.Checkbox.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.checkbox", BI.Checkbox);
 
 /***/ }),
-/* 432 */
+/* 433 */
 /***/ (function(module, exports) {
 
 /**
@@ -31173,7 +31338,7 @@ BI.shortcut("bi.input", BI.Input);
 
 
 /***/ }),
-/* 433 */
+/* 434 */
 /***/ (function(module, exports) {
 
 /**
@@ -31211,7 +31376,7 @@ BI.ImageRadio.EVENT_CHANGE = BI.IconButton.EVENT_CHANGE;
 BI.shortcut("bi.image_radio", BI.ImageRadio);
 
 /***/ }),
-/* 434 */
+/* 435 */
 /***/ (function(module, exports) {
 
 /**
@@ -31278,7 +31443,7 @@ BI.Radio.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.radio", BI.Radio);
 
 /***/ }),
-/* 435 */
+/* 436 */
 /***/ (function(module, exports) {
 
 /**
@@ -31670,7 +31835,7 @@ BI.shortcut("bi.radio", BI.Radio);
 
 
 /***/ }),
-/* 436 */
+/* 437 */
 /***/ (function(module, exports) {
 
 /**
@@ -31700,7 +31865,7 @@ BI.HtmlLabel = BI.inherit(BI.AbstractLabel, {
 BI.shortcut("bi.html_label", BI.HtmlLabel);
 
 /***/ }),
-/* 437 */
+/* 438 */
 /***/ (function(module, exports) {
 
 /**
@@ -31748,7 +31913,7 @@ BI.shortcut("bi.icon_label", BI.IconLabel);
 
 
 /***/ }),
-/* 438 */
+/* 439 */
 /***/ (function(module, exports) {
 
 /**
@@ -31776,7 +31941,7 @@ BI.shortcut("bi.label", BI.Label);
 
 
 /***/ }),
-/* 439 */
+/* 440 */
 /***/ (function(module, exports) {
 
 /**
@@ -31816,7 +31981,7 @@ BI.shortcut("bi.link", BI.Link);
 
 
 /***/ }),
-/* 440 */
+/* 441 */
 /***/ (function(module, exports) {
 
 /**
@@ -31865,7 +32030,7 @@ BI.shortcut("bi.link", BI.Link);
 
 
 /***/ }),
-/* 441 */
+/* 442 */
 /***/ (function(module, exports) {
 
 /**
@@ -31892,7 +32057,7 @@ BI.Tip = BI.inherit(BI.Single, {
 });
 
 /***/ }),
-/* 442 */
+/* 443 */
 /***/ (function(module, exports) {
 
 /**
@@ -32005,7 +32170,7 @@ BI.shortcut("bi.toast", BI.Toast);
 
 
 /***/ }),
-/* 443 */
+/* 444 */
 /***/ (function(module, exports) {
 
 /**
@@ -32094,7 +32259,7 @@ BI.Tooltip = BI.inherit(BI.Tip, {
 BI.shortcut("bi.tooltip", BI.Tooltip);
 
 /***/ }),
-/* 444 */
+/* 445 */
 /***/ (function(module, exports) {
 
 /**
@@ -32126,7 +32291,7 @@ BI.Trigger = BI.inherit(BI.Single, {
 });
 
 /***/ }),
-/* 445 */
+/* 446 */
 /***/ (function(module, exports) {
 
 /**
@@ -32279,7 +32444,7 @@ BI.CustomTree.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.custom_tree", BI.CustomTree);
 
 /***/ }),
-/* 446 */
+/* 447 */
 /***/ (function(module, exports) {
 
 /**
@@ -32367,7 +32532,7 @@ BI.IconChangeButton.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.icon_change_button", BI.IconChangeButton);
 
 /***/ }),
-/* 447 */
+/* 448 */
 /***/ (function(module, exports) {
 
 /**
@@ -32392,7 +32557,7 @@ BI.shortcut("bi.trigger_icon_button", BI.TriggerIconButton);
 
 
 /***/ }),
-/* 448 */
+/* 449 */
 /***/ (function(module, exports) {
 
 /**
@@ -32418,7 +32583,7 @@ BI.HalfIconButton.EVENT_CHANGE = BI.IconButton.EVENT_CHANGE;
 BI.shortcut("bi.half_icon_button", BI.HalfIconButton);
 
 /***/ }),
-/* 449 */
+/* 450 */
 /***/ (function(module, exports) {
 
 /**
@@ -32463,7 +32628,7 @@ BI.HalfButton.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.half_button", BI.HalfButton);
 
 /***/ }),
-/* 450 */
+/* 451 */
 /***/ (function(module, exports) {
 
 /**
@@ -32549,7 +32714,7 @@ BI.shortcut("bi.multi_select_item", BI.MultiSelectItem);
 
 
 /***/ }),
-/* 451 */
+/* 452 */
 /***/ (function(module, exports) {
 
 /**
@@ -32613,7 +32778,7 @@ BI.SingleSelectIconTextItem = BI.inherit(BI.Single, {
 BI.shortcut("bi.single_select_icon_text_item", BI.SingleSelectIconTextItem);
 
 /***/ }),
-/* 452 */
+/* 453 */
 /***/ (function(module, exports) {
 
 BI.SingleSelectItem = BI.inherit(BI.BasicButton, {
@@ -32669,7 +32834,7 @@ BI.SingleSelectItem.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.single_select_item", BI.SingleSelectItem);
 
 /***/ }),
-/* 453 */
+/* 454 */
 /***/ (function(module, exports) {
 
 /**
@@ -32753,7 +32918,7 @@ BI.shortcut("bi.single_select_radio_item", BI.SingleSelectRadioItem);
 
 
 /***/ }),
-/* 454 */
+/* 455 */
 /***/ (function(module, exports) {
 
 /**
@@ -32841,7 +33006,7 @@ BI.shortcut("bi.arrow_group_node", BI.ArrowNode);
 
 
 /***/ }),
-/* 455 */
+/* 456 */
 /***/ (function(module, exports) {
 
 /**
@@ -32929,7 +33094,7 @@ BI.shortcut("bi.first_plus_group_node", BI.FirstPlusGroupNode);
 
 
 /***/ }),
-/* 456 */
+/* 457 */
 /***/ (function(module, exports) {
 
 /**
@@ -33037,7 +33202,7 @@ BI.shortcut("bi.icon_arrow_node", BI.IconArrowNode);
 
 
 /***/ }),
-/* 457 */
+/* 458 */
 /***/ (function(module, exports) {
 
 /**
@@ -33124,7 +33289,7 @@ BI.LastPlusGroupNode = BI.inherit(BI.NodeButton, {
 BI.shortcut("bi.last_plus_group_node", BI.LastPlusGroupNode);
 
 /***/ }),
-/* 458 */
+/* 459 */
 /***/ (function(module, exports) {
 
 /**
@@ -33211,7 +33376,7 @@ BI.MidPlusGroupNode = BI.inherit(BI.NodeButton, {
 BI.shortcut("bi.mid_plus_group_node", BI.MidPlusGroupNode);
 
 /***/ }),
-/* 459 */
+/* 460 */
 /***/ (function(module, exports) {
 
 BI.MultiLayerIconArrowNode = BI.inherit(BI.NodeButton, {
@@ -33306,7 +33471,7 @@ BI.shortcut("bi.multilayer_icon_arrow_node", BI.MultiLayerIconArrowNode);
 
 
 /***/ }),
-/* 460 */
+/* 461 */
 /***/ (function(module, exports) {
 
 /**
@@ -33389,7 +33554,7 @@ BI.PlusGroupNode = BI.inherit(BI.NodeButton, {
 BI.shortcut("bi.plus_group_node", BI.PlusGroupNode);
 
 /***/ }),
-/* 461 */
+/* 462 */
 /***/ (function(module, exports) {
 
 /**
@@ -33441,7 +33606,7 @@ BI.Switch.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.switch", BI.Switch);
 
 /***/ }),
-/* 462 */
+/* 463 */
 /***/ (function(module, exports) {
 
 BI.FirstTreeLeafItem = BI.inherit(BI.BasicButton, {
@@ -33527,7 +33692,7 @@ BI.FirstTreeLeafItem = BI.inherit(BI.BasicButton, {
 BI.shortcut("bi.first_tree_leaf_item", BI.FirstTreeLeafItem);
 
 /***/ }),
-/* 463 */
+/* 464 */
 /***/ (function(module, exports) {
 
 BI.IconTreeLeafItem = BI.inherit(BI.BasicButton, {
@@ -33614,7 +33779,7 @@ BI.IconTreeLeafItem = BI.inherit(BI.BasicButton, {
 BI.shortcut("bi.icon_tree_leaf_item", BI.IconTreeLeafItem);
 
 /***/ }),
-/* 464 */
+/* 465 */
 /***/ (function(module, exports) {
 
 BI.LastTreeLeafItem = BI.inherit(BI.BasicButton, {
@@ -33700,7 +33865,7 @@ BI.LastTreeLeafItem = BI.inherit(BI.BasicButton, {
 BI.shortcut("bi.last_tree_leaf_item", BI.LastTreeLeafItem);
 
 /***/ }),
-/* 465 */
+/* 466 */
 /***/ (function(module, exports) {
 
 BI.MidTreeLeafItem = BI.inherit(BI.BasicButton, {
@@ -33786,7 +33951,7 @@ BI.MidTreeLeafItem = BI.inherit(BI.BasicButton, {
 BI.shortcut("bi.mid_tree_leaf_item", BI.MidTreeLeafItem);
 
 /***/ }),
-/* 466 */
+/* 467 */
 /***/ (function(module, exports) {
 
 /**
@@ -33890,7 +34055,7 @@ BI.shortcut("bi.multilayer_icon_tree_leaf_item", BI.MultiLayerIconTreeLeafItem);
 
 
 /***/ }),
-/* 467 */
+/* 468 */
 /***/ (function(module, exports) {
 
 BI.RootTreeLeafItem = BI.inherit(BI.BasicButton, {
@@ -33970,7 +34135,7 @@ BI.shortcut("bi.root_tree_leaf_item", BI.RootTreeLeafItem);
 
 
 /***/ }),
-/* 468 */
+/* 469 */
 /***/ (function(module, exports) {
 
 /**
@@ -34046,7 +34211,7 @@ BI.shortcut("bi.tree_text_leaf_item", BI.TreeTextLeafItem);
 
 
 /***/ }),
-/* 469 */
+/* 470 */
 /***/ (function(module, exports) {
 
 /**
@@ -34104,7 +34269,7 @@ BI.CalendarDateItem = BI.inherit(BI.BasicButton, {
 BI.shortcut("bi.calendar_date_item", BI.CalendarDateItem);
 
 /***/ }),
-/* 470 */
+/* 471 */
 /***/ (function(module, exports) {
 
 /**
@@ -34343,7 +34508,7 @@ BI.extend(BI.Calendar, {
 BI.shortcut("bi.calendar", BI.Calendar);
 
 /***/ }),
-/* 471 */
+/* 472 */
 /***/ (function(module, exports) {
 
 /**
@@ -34519,7 +34684,7 @@ BI.extend(BI.YearCalendar, {
 BI.shortcut("bi.year_calendar", BI.YearCalendar);
 
 /***/ }),
-/* 472 */
+/* 473 */
 /***/ (function(module, exports) {
 
 /**
@@ -34545,7 +34710,7 @@ BI.ArrowTreeGroupNodeCheckbox = BI.inherit(BI.IconButton, {
 BI.shortcut("bi.arrow_group_node_checkbox", BI.ArrowTreeGroupNodeCheckbox);
 
 /***/ }),
-/* 473 */
+/* 474 */
 /***/ (function(module, exports) {
 
 /**
@@ -34576,7 +34741,7 @@ BI.CheckingMarkNode = BI.inherit(BI.IconButton, {
 BI.shortcut("bi.checking_mark_node", BI.CheckingMarkNode);
 
 /***/ }),
-/* 474 */
+/* 475 */
 /***/ (function(module, exports) {
 
 /**
@@ -34605,7 +34770,7 @@ BI.FirstTreeNodeCheckbox = BI.inherit(BI.IconButton, {
 BI.shortcut("bi.first_tree_node_checkbox", BI.FirstTreeNodeCheckbox);
 
 /***/ }),
-/* 475 */
+/* 476 */
 /***/ (function(module, exports) {
 
 /**
@@ -34634,7 +34799,7 @@ BI.LastTreeNodeCheckbox = BI.inherit(BI.IconButton, {
 BI.shortcut("bi.last_tree_node_checkbox", BI.LastTreeNodeCheckbox);
 
 /***/ }),
-/* 476 */
+/* 477 */
 /***/ (function(module, exports) {
 
 /**
@@ -34663,7 +34828,7 @@ BI.MidTreeNodeCheckbox = BI.inherit(BI.IconButton, {
 BI.shortcut("bi.mid_tree_node_checkbox", BI.MidTreeNodeCheckbox);
 
 /***/ }),
-/* 477 */
+/* 478 */
 /***/ (function(module, exports) {
 
 /**
@@ -34692,7 +34857,7 @@ BI.TreeNodeCheckbox = BI.inherit(BI.IconButton, {
 BI.shortcut("bi.tree_node_checkbox", BI.TreeNodeCheckbox);
 
 /***/ }),
-/* 478 */
+/* 479 */
 /***/ (function(module, exports) {
 
 /**
@@ -34766,7 +34931,7 @@ BI.CustomColorChooser.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.custom_color_chooser", BI.CustomColorChooser);
 
 /***/ }),
-/* 479 */
+/* 480 */
 /***/ (function(module, exports) {
 
 /**
@@ -34875,7 +35040,7 @@ BI.shortcut("bi.color_chooser", BI.ColorChooser);
 
 
 /***/ }),
-/* 480 */
+/* 481 */
 /***/ (function(module, exports) {
 
 /**
@@ -35168,7 +35333,7 @@ BI.shortcut("bi.hex_color_chooser_popup", BI.HexColorChooserPopup);
 
 
 /***/ }),
-/* 481 */
+/* 482 */
 /***/ (function(module, exports) {
 
 /**
@@ -35223,7 +35388,7 @@ BI.SimpleHexColorChooserPopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.simple_hex_color_chooser_popup", BI.SimpleHexColorChooserPopup);
 
 /***/ }),
-/* 482 */
+/* 483 */
 /***/ (function(module, exports) {
 
 /**
@@ -35466,7 +35631,7 @@ BI.shortcut("bi.color_chooser_popup", BI.ColorChooserPopup);
 
 
 /***/ }),
-/* 483 */
+/* 484 */
 /***/ (function(module, exports) {
 
 /**
@@ -35518,7 +35683,7 @@ BI.SimpleColorChooserPopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.simple_color_chooser_popup", BI.SimpleColorChooserPopup);
 
 /***/ }),
-/* 484 */
+/* 485 */
 /***/ (function(module, exports) {
 
 /**
@@ -35583,7 +35748,7 @@ BI.SimpleColorChooser.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.simple_color_chooser", BI.SimpleColorChooser);
 
 /***/ }),
-/* 485 */
+/* 486 */
 /***/ (function(module, exports) {
 
 /**
@@ -35654,7 +35819,7 @@ BI.shortcut("bi.color_chooser_trigger", BI.ColorChooserTrigger);
 
 
 /***/ }),
-/* 486 */
+/* 487 */
 /***/ (function(module, exports) {
 
 /**
@@ -35758,7 +35923,7 @@ BI.shortcut("bi.long_color_chooser_trigger", BI.LongColorChooserTrigger);
 
 
 /***/ }),
-/* 487 */
+/* 488 */
 /***/ (function(module, exports) {
 
 /**
@@ -35829,7 +35994,7 @@ BI.ColorPickerButton.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.color_picker_button", BI.ColorPickerButton);
 
 /***/ }),
-/* 488 */
+/* 489 */
 /***/ (function(module, exports) {
 
 /**
@@ -35877,7 +36042,7 @@ BI.ColorChooserShowButton.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.color_picker_show_button", BI.ColorChooserShowButton);
 
 /***/ }),
-/* 489 */
+/* 490 */
 /***/ (function(module, exports) {
 
 /**
@@ -36052,7 +36217,7 @@ BI.HexColorPicker.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.hex_color_picker", BI.HexColorPicker);
 
 /***/ }),
-/* 490 */
+/* 491 */
 /***/ (function(module, exports) {
 
 /**
@@ -36247,7 +36412,7 @@ BI.ColorPicker.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.color_picker", BI.ColorPicker);
 
 /***/ }),
-/* 491 */
+/* 492 */
 /***/ (function(module, exports) {
 
 /**
@@ -36559,7 +36724,7 @@ BI.HexColorPickerEditor.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.hex_color_picker_editor", BI.HexColorPickerEditor);
 
 /***/ }),
-/* 492 */
+/* 493 */
 /***/ (function(module, exports) {
 
 /**
@@ -36741,7 +36906,7 @@ BI.SimpleHexColorPickerEditor.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.simple_hex_color_picker_editor", BI.SimpleHexColorPickerEditor);
 
 /***/ }),
-/* 493 */
+/* 494 */
 /***/ (function(module, exports) {
 
 /**
@@ -36990,7 +37155,7 @@ BI.ColorPickerEditor.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.color_picker_editor", BI.ColorPickerEditor);
 
 /***/ }),
-/* 494 */
+/* 495 */
 /***/ (function(module, exports) {
 
 /**
@@ -37118,7 +37283,7 @@ BI.SimpleColorPickerEditor.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.simple_color_picker_editor", BI.SimpleColorPickerEditor);
 
 /***/ }),
-/* 495 */
+/* 496 */
 /***/ (function(module, exports) {
 
 BI.Farbtastic = BI.inherit(BI.BasicButton, {
@@ -37403,7 +37568,7 @@ BI.shortcut("bi.farbtastic", BI.Farbtastic);
 
 
 /***/ }),
-/* 496 */
+/* 497 */
 /***/ (function(module, exports) {
 
 /**
@@ -37629,7 +37794,7 @@ BI.shortcut("bi.bubble_combo", BI.BubbleCombo);
 
 
 /***/ }),
-/* 497 */
+/* 498 */
 /***/ (function(module, exports) {
 
 /**
@@ -37799,7 +37964,7 @@ BI.shortcut("bi.text_bubble_bar_popup_view", BI.TextBubblePopupBarView);
 
 
 /***/ }),
-/* 498 */
+/* 499 */
 /***/ (function(module, exports) {
 
 /**
@@ -37900,7 +38065,7 @@ BI.shortcut("bi.editor_icon_check_combo", BI.EditorIconCheckCombo);
 
 
 /***/ }),
-/* 499 */
+/* 500 */
 /***/ (function(module, exports) {
 
 /**
@@ -38004,7 +38169,7 @@ BI.IconCombo.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.icon_combo", BI.IconCombo);
 
 /***/ }),
-/* 500 */
+/* 501 */
 /***/ (function(module, exports) {
 
 /**
@@ -38074,7 +38239,7 @@ BI.IconComboPopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.icon_combo_popup", BI.IconComboPopup);
 
 /***/ }),
-/* 501 */
+/* 502 */
 /***/ (function(module, exports) {
 
 /**
@@ -38181,7 +38346,7 @@ BI.IconComboTrigger.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.icon_combo_trigger", BI.IconComboTrigger);
 
 /***/ }),
-/* 502 */
+/* 503 */
 /***/ (function(module, exports) {
 
 /**
@@ -38291,7 +38456,7 @@ BI.shortcut("bi.icon_text_value_combo", BI.IconTextValueCombo);
 
 
 /***/ }),
-/* 503 */
+/* 504 */
 /***/ (function(module, exports) {
 
 /**
@@ -38373,7 +38538,7 @@ BI.shortcut("bi.icon_text_value_combo_popup", BI.IconTextValueComboPopup);
 
 
 /***/ }),
-/* 504 */
+/* 505 */
 /***/ (function(module, exports) {
 
 /**
@@ -38542,7 +38707,7 @@ BI.shortcut("bi.search_text_value_combo", BI.SearchTextValueCombo);
 
 
 /***/ }),
-/* 505 */
+/* 506 */
 /***/ (function(module, exports) {
 
 /**
@@ -38621,7 +38786,7 @@ BI.shortcut("bi.search_text_value_combo_popup", BI.SearchTextValueComboPopup);
 
 
 /***/ }),
-/* 506 */
+/* 507 */
 /***/ (function(module, exports) {
 
 /**
@@ -38741,7 +38906,7 @@ BI.shortcut("bi.search_text_value_trigger", BI.SearchTextValueTrigger);
 
 
 /***/ }),
-/* 507 */
+/* 508 */
 /***/ (function(module, exports) {
 
 /**
@@ -38831,7 +38996,7 @@ BI.TextValueCheckCombo.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.text_value_check_combo", BI.TextValueCheckCombo);
 
 /***/ }),
-/* 508 */
+/* 509 */
 /***/ (function(module, exports) {
 
 BI.TextValueCheckComboPopup = BI.inherit(BI.Pane, {
@@ -38899,7 +39064,7 @@ BI.shortcut("bi.text_value_check_combo_popup", BI.TextValueCheckComboPopup);
 
 
 /***/ }),
-/* 509 */
+/* 510 */
 /***/ (function(module, exports) {
 
 /**
@@ -39004,7 +39169,7 @@ BI.shortcut("bi.text_value_combo", BI.TextValueCombo);
 
 
 /***/ }),
-/* 510 */
+/* 511 */
 /***/ (function(module, exports) {
 
 /**
@@ -39078,7 +39243,7 @@ BI.SmallTextValueCombo.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.small_text_value_combo", BI.SmallTextValueCombo);
 
 /***/ }),
-/* 511 */
+/* 512 */
 /***/ (function(module, exports) {
 
 BI.TextValueComboPopup = BI.inherit(BI.Pane, {
@@ -39144,7 +39309,7 @@ BI.TextValueComboPopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.text_value_combo_popup", BI.TextValueComboPopup);
 
 /***/ }),
-/* 512 */
+/* 513 */
 /***/ (function(module, exports) {
 
 /**
@@ -39331,7 +39496,7 @@ BI.ClearEditor.EVENT_EMPTY = "EVENT_EMPTY";
 BI.shortcut("bi.clear_editor", BI.ClearEditor);
 
 /***/ }),
-/* 513 */
+/* 514 */
 /***/ (function(module, exports) {
 
 /**
@@ -39613,7 +39778,7 @@ BI.shortcut("bi.shelter_editor", BI.ShelterEditor);
 
 
 /***/ }),
-/* 514 */
+/* 515 */
 /***/ (function(module, exports) {
 
 /**
@@ -39894,7 +40059,7 @@ BI.SignEditor.EVENT_EMPTY = "EVENT_EMPTY";
 BI.shortcut("bi.sign_editor", BI.SignEditor);
 
 /***/ }),
-/* 515 */
+/* 516 */
 /***/ (function(module, exports) {
 
 /**
@@ -40211,7 +40376,7 @@ BI.shortcut("bi.state_editor", BI.StateEditor);
 
 
 /***/ }),
-/* 516 */
+/* 517 */
 /***/ (function(module, exports) {
 
 /**
@@ -40498,7 +40663,7 @@ BI.SimpleStateEditor.EVENT_EMPTY = "EVENT_EMPTY";
 BI.shortcut("bi.simple_state_editor", BI.SimpleStateEditor);
 
 /***/ }),
-/* 517 */
+/* 518 */
 /***/ (function(module, exports) {
 
 /**
@@ -40564,7 +40729,7 @@ BI.shortcut("bi.multi_popup_view", BI.MultiPopupView);
 
 
 /***/ }),
-/* 518 */
+/* 519 */
 /***/ (function(module, exports) {
 
 /**
@@ -40623,7 +40788,7 @@ BI.shortcut("bi.popup_panel", BI.PopupPanel);
 
 
 /***/ }),
-/* 519 */
+/* 520 */
 /***/ (function(module, exports) {
 
 /**
@@ -40813,7 +40978,7 @@ BI.ListPane.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.list_pane", BI.ListPane);
 
 /***/ }),
-/* 520 */
+/* 521 */
 /***/ (function(module, exports) {
 
 /**
@@ -40898,7 +41063,7 @@ BI.shortcut("bi.panel", BI.Panel);
 
 
 /***/ }),
-/* 521 */
+/* 522 */
 /***/ (function(module, exports) {
 
 BI.LinearSegmentButton = BI.inherit(BI.BasicButton, {
@@ -40957,7 +41122,7 @@ BI.LinearSegmentButton = BI.inherit(BI.BasicButton, {
 BI.shortcut("bi.linear_segment_button", BI.LinearSegmentButton);
 
 /***/ }),
-/* 522 */
+/* 523 */
 /***/ (function(module, exports) {
 
 BI.LinearSegment = BI.inherit(BI.Widget, {
@@ -41013,7 +41178,7 @@ BI.LinearSegment = BI.inherit(BI.Widget, {
 BI.shortcut("bi.linear_segment", BI.LinearSegment);
 
 /***/ }),
-/* 523 */
+/* 524 */
 /***/ (function(module, exports) {
 
 /**
@@ -41238,7 +41403,7 @@ BI.shortcut("bi.select_list", BI.SelectList);
 
 
 /***/ }),
-/* 524 */
+/* 525 */
 /***/ (function(module, exports) {
 
 /**
@@ -41346,7 +41511,7 @@ BI.LazyLoader.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.lazy_loader", BI.LazyLoader);
 
 /***/ }),
-/* 525 */
+/* 526 */
 /***/ (function(module, exports) {
 
 /**
@@ -41547,7 +41712,7 @@ BI.ListLoader.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.list_loader", BI.ListLoader);
 
 /***/ }),
-/* 526 */
+/* 527 */
 /***/ (function(module, exports) {
 
 /**
@@ -41729,7 +41894,7 @@ BI.shortcut("bi.sort_list", BI.SortList);
 
 
 /***/ }),
-/* 527 */
+/* 528 */
 /***/ (function(module, exports) {
 
 /**
@@ -41765,7 +41930,7 @@ BI.LoadingPane = BI.inherit(BI.Pane, {
 });
 
 /***/ }),
-/* 528 */
+/* 529 */
 /***/ (function(module, exports) {
 
 /**
@@ -42003,7 +42168,7 @@ BI.AllCountPager.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.all_count_pager", BI.AllCountPager);
 
 /***/ }),
-/* 529 */
+/* 530 */
 /***/ (function(module, exports) {
 
 /**
@@ -42284,7 +42449,7 @@ BI.DirectionPager.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.direction_pager", BI.DirectionPager);
 
 /***/ }),
-/* 530 */
+/* 531 */
 /***/ (function(module, exports) {
 
 /**
@@ -42577,7 +42742,7 @@ BI.DetailPager.EVENT_AFTER_POPULATE = "EVENT_AFTER_POPULATE";
 BI.shortcut("bi.detail_pager", BI.DetailPager);
 
 /***/ }),
-/* 531 */
+/* 532 */
 /***/ (function(module, exports) {
 
 /**
@@ -42629,7 +42794,7 @@ BI.shortcut("bi.segment_button", BI.SegmentButton);
 
 
 /***/ }),
-/* 532 */
+/* 533 */
 /***/ (function(module, exports) {
 
 /**
@@ -42698,7 +42863,7 @@ BI.Segment.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.segment", BI.Segment);
 
 /***/ }),
-/* 533 */
+/* 534 */
 /***/ (function(module, exports) {
 
 /**
@@ -42849,7 +43014,7 @@ BI.shortcut("bi.multi_select_bar", BI.MultiSelectBar);
 
 
 /***/ }),
-/* 534 */
+/* 535 */
 /***/ (function(module, exports) {
 
 /**
@@ -42991,7 +43156,7 @@ BI.shortcut("bi.level_tree", BI.LevelTree);
 
 
 /***/ }),
-/* 535 */
+/* 536 */
 /***/ (function(module, exports) {
 
 !(function () {
@@ -43074,7 +43239,7 @@ BI.shortcut("bi.level_tree", BI.LevelTree);
 
 
 /***/ }),
-/* 536 */
+/* 537 */
 /***/ (function(module, exports) {
 
 !(function () {
@@ -43133,7 +43298,7 @@ BI.shortcut("bi.level_tree", BI.LevelTree);
 
 
 /***/ }),
-/* 537 */
+/* 538 */
 /***/ (function(module, exports) {
 
 /**
@@ -43235,7 +43400,7 @@ BI.shortcut("bi.editor_trigger", BI.EditorTrigger);
 
 
 /***/ }),
-/* 538 */
+/* 539 */
 /***/ (function(module, exports) {
 
 /**
@@ -43270,7 +43435,7 @@ BI.IconTrigger = BI.inherit(BI.Trigger, {
 BI.shortcut("bi.icon_trigger", BI.IconTrigger);
 
 /***/ }),
-/* 539 */
+/* 540 */
 /***/ (function(module, exports) {
 
 /**
@@ -43380,7 +43545,7 @@ BI.IconTextTrigger = BI.inherit(BI.Trigger, {
 BI.shortcut("bi.icon_text_trigger", BI.IconTextTrigger);
 
 /***/ }),
-/* 540 */
+/* 541 */
 /***/ (function(module, exports) {
 
 /**
@@ -43459,7 +43624,7 @@ BI.SelectIconTextTrigger = BI.inherit(BI.Trigger, {
 BI.shortcut("bi.select_icon_text_trigger", BI.SelectIconTextTrigger);
 
 /***/ }),
-/* 541 */
+/* 542 */
 /***/ (function(module, exports) {
 
 /**
@@ -43542,7 +43707,7 @@ BI.shortcut("bi.text_trigger", BI.TextTrigger);
 
 
 /***/ }),
-/* 542 */
+/* 543 */
 /***/ (function(module, exports) {
 
 /**
@@ -43623,7 +43788,7 @@ BI.shortcut("bi.select_text_trigger", BI.SelectTextTrigger);
 
 
 /***/ }),
-/* 543 */
+/* 544 */
 /***/ (function(module, exports) {
 
 /**
@@ -43692,7 +43857,7 @@ BI.SmallSelectTextTrigger = BI.inherit(BI.Trigger, {
 BI.shortcut("bi.small_select_text_trigger", BI.SmallSelectTextTrigger);
 
 /***/ }),
-/* 544 */
+/* 545 */
 /***/ (function(module, exports) {
 
 /**
@@ -43754,7 +43919,7 @@ BI.SmallTextTrigger = BI.inherit(BI.Trigger, {
 BI.shortcut("bi.small_text_trigger", BI.SmallTextTrigger);
 
 /***/ }),
-/* 545 */
+/* 546 */
 /***/ (function(module, exports) {
 
 /**
@@ -43832,7 +43997,7 @@ BI.MonthDateCombo.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.month_date_combo", BI.MonthDateCombo);
 
 /***/ }),
-/* 546 */
+/* 547 */
 /***/ (function(module, exports) {
 
 /**
@@ -43922,7 +44087,7 @@ BI.shortcut("bi.year_date_combo", BI.YearDateCombo);
 
 
 /***/ }),
-/* 547 */
+/* 548 */
 /***/ (function(module, exports) {
 
 /**
@@ -44156,7 +44321,7 @@ BI.shortcut("bi.date_picker", BI.DatePicker);
 
 
 /***/ }),
-/* 548 */
+/* 549 */
 /***/ (function(module, exports) {
 
 /**
@@ -44293,7 +44458,7 @@ BI.shortcut("bi.year_picker", BI.YearPicker);
 
 
 /***/ }),
-/* 549 */
+/* 550 */
 /***/ (function(module, exports) {
 
 /**
@@ -44449,7 +44614,7 @@ BI.DateCalendarPopup.EVENT_BEFORE_YEAR_MONTH_POPUPVIEW = "EVENT_BEFORE_YEAR_MONT
 BI.shortcut("bi.date_calendar_popup", BI.DateCalendarPopup);
 
 /***/ }),
-/* 550 */
+/* 551 */
 /***/ (function(module, exports) {
 
 /**
@@ -44552,7 +44717,7 @@ BI.MonthPopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.month_popup", BI.MonthPopup);
 
 /***/ }),
-/* 551 */
+/* 552 */
 /***/ (function(module, exports) {
 
 /**
@@ -44693,7 +44858,7 @@ BI.YearPopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.year_popup", BI.YearPopup);
 
 /***/ }),
-/* 552 */
+/* 553 */
 /***/ (function(module, exports) {
 
 /**
@@ -44764,7 +44929,7 @@ BI.DateTriangleTrigger = BI.inherit(BI.Trigger, {
 BI.shortcut("bi.date_triangle_trigger", BI.DateTriangleTrigger);
 
 /***/ }),
-/* 553 */
+/* 554 */
 /***/ (function(module, exports) {
 
 /**
@@ -44954,7 +45119,7 @@ BI.StaticDatePaneCard.EVENT_BEFORE_YEAR_MONTH_POPUPVIEW = "EVENT_BEFORE_YEAR_MON
 BI.shortcut("bi.static_date_pane_card", BI.StaticDatePaneCard);
 
 /***/ }),
-/* 554 */
+/* 555 */
 /***/ (function(module, exports) {
 
 BI.DynamicDatePane = BI.inherit(BI.Widget, {
@@ -45177,7 +45342,7 @@ BI.extend(BI.DynamicDatePane, {
 
 
 /***/ }),
-/* 555 */
+/* 556 */
 /***/ (function(module, exports) {
 
 /**
@@ -45318,7 +45483,7 @@ BI.shortcut("bi.date_time_combo", BI.DateTimeCombo);
 
 
 /***/ }),
-/* 556 */
+/* 557 */
 /***/ (function(module, exports) {
 
 /**
@@ -45437,7 +45602,7 @@ BI.shortcut("bi.date_time_popup", BI.DateTimePopup);
 
 
 /***/ }),
-/* 557 */
+/* 558 */
 /***/ (function(module, exports) {
 
 /**
@@ -45505,7 +45670,7 @@ BI.shortcut("bi.date_time_trigger", BI.DateTimeTrigger);
 
 
 /***/ }),
-/* 558 */
+/* 559 */
 /***/ (function(module, exports) {
 
 BI.StaticDateTimePaneCard = BI.inherit(BI.Widget, {
@@ -45715,7 +45880,7 @@ BI.StaticDateTimePaneCard.EVENT_BEFORE_YEAR_MONTH_POPUPVIEW = "EVENT_BEFORE_YEAR
 BI.shortcut("bi.static_date_time_pane_card", BI.StaticDateTimePaneCard);
 
 /***/ }),
-/* 559 */
+/* 560 */
 /***/ (function(module, exports) {
 
 BI.DynamicDateTimePane = BI.inherit(BI.Widget, {
@@ -45935,7 +46100,7 @@ BI.extend(BI.DynamicDateTimePane, {
 
 
 /***/ }),
-/* 560 */
+/* 561 */
 /***/ (function(module, exports) {
 
 /**
@@ -46034,7 +46199,7 @@ BI.DownListCombo.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
 BI.shortcut("bi.down_list_combo", BI.DownListCombo);
 
 /***/ }),
-/* 561 */
+/* 562 */
 /***/ (function(module, exports) {
 
 /**
@@ -46090,7 +46255,7 @@ BI.DownListGroup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.down_list_group", BI.DownListGroup);
 
 /***/ }),
-/* 562 */
+/* 563 */
 /***/ (function(module, exports) {
 
 BI.DownListItem = BI.inherit(BI.BasicButton, {
@@ -46193,7 +46358,7 @@ BI.DownListItem.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.down_list_item", BI.DownListItem);
 
 /***/ }),
-/* 563 */
+/* 564 */
 /***/ (function(module, exports) {
 
 BI.DownListGroupItem = BI.inherit(BI.BasicButton, {
@@ -46319,7 +46484,7 @@ BI.DownListGroupItem.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.down_list_group_item", BI.DownListGroupItem);
 
 /***/ }),
-/* 564 */
+/* 565 */
 /***/ (function(module, exports) {
 
 /**
@@ -46611,7 +46776,7 @@ BI.DownListPopup.EVENT_SON_VALUE_CHANGE = "EVENT_SON_VALUE_CHANGE";
 BI.shortcut("bi.down_list_popup", BI.DownListPopup);
 
 /***/ }),
-/* 565 */
+/* 566 */
 /***/ (function(module, exports) {
 
 !(function () {
@@ -46734,7 +46899,7 @@ BI.shortcut("bi.down_list_popup", BI.DownListPopup);
 
 
 /***/ }),
-/* 566 */
+/* 567 */
 /***/ (function(module, exports) {
 
 BI.DynamicDateCard = BI.inherit(BI.Widget, {
@@ -47163,7 +47328,7 @@ BI.extend(BI.DynamicDateCard, {
 });
 
 /***/ }),
-/* 567 */
+/* 568 */
 /***/ (function(module, exports) {
 
 BI.DynamicDateCombo = BI.inherit(BI.Single, {
@@ -47504,7 +47669,7 @@ BI.extend(BI.DynamicDateCombo, {
 
 
 /***/ }),
-/* 568 */
+/* 569 */
 /***/ (function(module, exports) {
 
 BI.DynamicDateParamItem = BI.inherit(BI.Widget, {
@@ -47640,7 +47805,7 @@ BI.shortcut("bi.dynamic_date_param_item", BI.DynamicDateParamItem);
 
 
 /***/ }),
-/* 569 */
+/* 570 */
 /***/ (function(module, exports) {
 
 BI.DynamicDatePopup = BI.inherit(BI.Widget, {
@@ -47902,7 +48067,7 @@ BI.DynamicDatePopup.EVENT_BEFORE_YEAR_MONTH_POPUPVIEW = "EVENT_BEFORE_YEAR_MONTH
 BI.shortcut("bi.dynamic_date_popup", BI.DynamicDatePopup);
 
 /***/ }),
-/* 570 */
+/* 571 */
 /***/ (function(module, exports) {
 
 BI.DynamicDateTrigger = BI.inherit(BI.Trigger, {
@@ -48227,7 +48392,7 @@ BI.shortcut("bi.dynamic_date_trigger", BI.DynamicDateTrigger);
 
 
 /***/ }),
-/* 571 */
+/* 572 */
 /***/ (function(module, exports) {
 
 BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
@@ -48576,7 +48741,7 @@ BI.extend(BI.DynamicDateTimeCombo, {
 
 
 /***/ }),
-/* 572 */
+/* 573 */
 /***/ (function(module, exports) {
 
 BI.DynamicDateTimePopup = BI.inherit(BI.Widget, {
@@ -48847,7 +49012,7 @@ BI.DynamicDateTimePopup.EVENT_BEFORE_YEAR_MONTH_POPUPVIEW = "EVENT_BEFORE_YEAR_M
 BI.shortcut("bi.dynamic_date_time_popup", BI.DynamicDateTimePopup);
 
 /***/ }),
-/* 573 */
+/* 574 */
 /***/ (function(module, exports) {
 
 BI.DynamicDateTimeSelect = BI.inherit(BI.Widget, {
@@ -49064,7 +49229,7 @@ BI.extend(BI.DynamicDateTimeSelect, {
 });
 
 /***/ }),
-/* 574 */
+/* 575 */
 /***/ (function(module, exports) {
 
 BI.DynamicDateTimeTrigger = BI.inherit(BI.Trigger, {
@@ -49460,7 +49625,7 @@ BI.DynamicDateTimeTrigger.EVENT_KEY_DOWN = "EVENT_KEY_DOWN";
 BI.shortcut("bi.dynamic_date_time_trigger", BI.DynamicDateTimeTrigger);
 
 /***/ }),
-/* 575 */
+/* 576 */
 /***/ (function(module, exports) {
 
 /**
@@ -49681,7 +49846,7 @@ BI.SearchEditor.EVENT_EMPTY = "EVENT_EMPTY";
 BI.shortcut("bi.search_editor", BI.SearchEditor);
 
 /***/ }),
-/* 576 */
+/* 577 */
 /***/ (function(module, exports) {
 
 /**
@@ -49706,7 +49871,7 @@ BI.SmallSearchEditor = BI.inherit(BI.SearchEditor, {
 BI.shortcut("bi.small_search_editor", BI.SmallSearchEditor);
 
 /***/ }),
-/* 577 */
+/* 578 */
 /***/ (function(module, exports) {
 
 /**
@@ -49885,7 +50050,7 @@ BI.TextEditor.EVENT_EMPTY = "EVENT_EMPTY";
 BI.shortcut("bi.text_editor", BI.TextEditor);
 
 /***/ }),
-/* 578 */
+/* 579 */
 /***/ (function(module, exports) {
 
 /**
@@ -49910,7 +50075,7 @@ BI.SmallTextEditor = BI.inherit(BI.TextEditor, {
 BI.shortcut("bi.small_text_editor", BI.SmallTextEditor);
 
 /***/ }),
-/* 579 */
+/* 580 */
 /***/ (function(module, exports) {
 
 /**
@@ -50455,7 +50620,7 @@ BI.IntervalSlider.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.interval_slider", BI.IntervalSlider);
 
 /***/ }),
-/* 580 */
+/* 581 */
 /***/ (function(module, exports) {
 
 /**
@@ -50682,7 +50847,7 @@ BI.AccurateCalculationModel = BI.inherit(BI.Widget, {
 });
 
 /***/ }),
-/* 581 */
+/* 582 */
 /***/ (function(module, exports) {
 
 /**
@@ -50777,7 +50942,7 @@ BI.MultiLayerDownListCombo.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
 BI.shortcut("bi.multi_layer_down_list_combo", BI.MultiLayerDownListCombo);
 
 /***/ }),
-/* 582 */
+/* 583 */
 /***/ (function(module, exports) {
 
 /**
@@ -51104,7 +51269,7 @@ BI.MultiLayerDownListPopup.EVENT_SON_VALUE_CHANGE = "EVENT_SON_VALUE_CHANGE";
 BI.shortcut("bi.multi_layer_down_list_popup", BI.MultiLayerDownListPopup);
 
 /***/ }),
-/* 583 */
+/* 584 */
 /***/ (function(module, exports) {
 
 /**
@@ -51355,7 +51520,7 @@ BI.MultiLayerSelectTreeCombo.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
 BI.shortcut("bi.multilayer_select_tree_combo", BI.MultiLayerSelectTreeCombo);
 
 /***/ }),
-/* 584 */
+/* 585 */
 /***/ (function(module, exports) {
 
 /**
@@ -51452,7 +51617,7 @@ BI.MultiLayerSelectTreeInsertSearchPane.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multilayer_select_tree_insert_search_pane", BI.MultiLayerSelectTreeInsertSearchPane);
 
 /***/ }),
-/* 585 */
+/* 586 */
 /***/ (function(module, exports) {
 
 /**
@@ -51647,7 +51812,7 @@ BI.shortcut("bi.multilayer_select_level_tree", BI.MultiLayerSelectLevelTree);
 
 
 /***/ }),
-/* 586 */
+/* 587 */
 /***/ (function(module, exports) {
 
 /**
@@ -51729,7 +51894,7 @@ BI.MultiLayerSelectTreePopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multilayer_select_tree_popup", BI.MultiLayerSelectTreePopup);
 
 /***/ }),
-/* 587 */
+/* 588 */
 /***/ (function(module, exports) {
 
 /**
@@ -51984,7 +52149,7 @@ BI.MultiLayerSelectTreeTrigger.EVENT_ADD_ITEM = "EVENT_ADD_ITEM";
 BI.shortcut("bi.multilayer_select_tree_trigger", BI.MultiLayerSelectTreeTrigger);
 
 /***/ }),
-/* 588 */
+/* 589 */
 /***/ (function(module, exports) {
 
 /**
@@ -52089,7 +52254,7 @@ BI.shortcut("bi.multilayer_select_tree_first_plus_group_node", BI.MultiLayerSele
 
 
 /***/ }),
-/* 589 */
+/* 590 */
 /***/ (function(module, exports) {
 
 /**
@@ -52183,7 +52348,7 @@ BI.shortcut("bi.multilayer_select_tree_last_plus_group_node", BI.MultiLayerSelec
 
 
 /***/ }),
-/* 590 */
+/* 591 */
 /***/ (function(module, exports) {
 
 /**
@@ -52277,7 +52442,7 @@ BI.shortcut("bi.multilayer_select_tree_mid_plus_group_node", BI.MultiLayerSelect
 
 
 /***/ }),
-/* 591 */
+/* 592 */
 /***/ (function(module, exports) {
 
 /**
@@ -52375,7 +52540,7 @@ BI.shortcut("bi.multilayer_select_tree_plus_group_node", BI.MultiLayerSelectTree
 
 
 /***/ }),
-/* 592 */
+/* 593 */
 /***/ (function(module, exports) {
 
 /**
@@ -52629,7 +52794,7 @@ BI.MultiLayerSingleTreeCombo.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
 BI.shortcut("bi.multilayer_single_tree_combo", BI.MultiLayerSingleTreeCombo);
 
 /***/ }),
-/* 593 */
+/* 594 */
 /***/ (function(module, exports) {
 
 /**
@@ -52726,7 +52891,7 @@ BI.MultiLayerSingleTreeInsertSearchPane.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multilayer_single_tree_insert_search_pane", BI.MultiLayerSingleTreeInsertSearchPane);
 
 /***/ }),
-/* 594 */
+/* 595 */
 /***/ (function(module, exports) {
 
 /**
@@ -52920,7 +53085,7 @@ BI.shortcut("bi.multilayer_single_level_tree", BI.MultiLayerSingleLevelTree);
 
 
 /***/ }),
-/* 595 */
+/* 596 */
 /***/ (function(module, exports) {
 
 /**
@@ -53001,7 +53166,7 @@ BI.MultiLayerSingleTreePopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multilayer_single_tree_popup", BI.MultiLayerSingleTreePopup);
 
 /***/ }),
-/* 596 */
+/* 597 */
 /***/ (function(module, exports) {
 
 /**
@@ -53257,7 +53422,7 @@ BI.MultiLayerSingleTreeTrigger.EVENT_ADD_ITEM = "EVENT_ADD_ITEM";
 BI.shortcut("bi.multilayer_single_tree_trigger", BI.MultiLayerSingleTreeTrigger);
 
 /***/ }),
-/* 597 */
+/* 598 */
 /***/ (function(module, exports) {
 
 /**
@@ -53354,7 +53519,7 @@ BI.shortcut("bi.multilayer_single_tree_first_plus_group_node", BI.MultiLayerSing
 
 
 /***/ }),
-/* 598 */
+/* 599 */
 /***/ (function(module, exports) {
 
 /**
@@ -53450,7 +53615,7 @@ BI.shortcut("bi.multilayer_single_tree_last_plus_group_node", BI.MultiLayerSingl
 
 
 /***/ }),
-/* 599 */
+/* 600 */
 /***/ (function(module, exports) {
 
 /**
@@ -53546,7 +53711,7 @@ BI.shortcut("bi.multilayer_single_tree_mid_plus_group_node", BI.MultiLayerSingle
 
 
 /***/ }),
-/* 600 */
+/* 601 */
 /***/ (function(module, exports) {
 
 /**
@@ -53653,7 +53818,7 @@ BI.MultiLayerSingleTreePlusGroupNode = BI.inherit(BI.NodeButton, {
 BI.shortcut("bi.multilayer_single_tree_plus_group_node", BI.MultiLayerSingleTreePlusGroupNode);
 
 /***/ }),
-/* 601 */
+/* 602 */
 /***/ (function(module, exports) {
 
 /**
@@ -53745,7 +53910,7 @@ BI.shortcut("bi.multilayer_single_tree_first_tree_leaf_item", BI.MultiLayerSingl
 
 
 /***/ }),
-/* 602 */
+/* 603 */
 /***/ (function(module, exports) {
 
 /**
@@ -53837,7 +54002,7 @@ BI.shortcut("bi.multilayer_single_tree_last_tree_leaf_item", BI.MultiLayerSingle
 
 
 /***/ }),
-/* 603 */
+/* 604 */
 /***/ (function(module, exports) {
 
 /**
@@ -53929,7 +54094,7 @@ BI.shortcut("bi.multilayer_single_tree_mid_tree_leaf_item", BI.MultiLayerSingleT
 
 
 /***/ }),
-/* 604 */
+/* 605 */
 /***/ (function(module, exports) {
 
 /**
@@ -54042,7 +54207,7 @@ BI.MultiSelectCheckPane = BI.inherit(BI.Widget, {
 BI.shortcut("bi.multi_select_check_pane", BI.MultiSelectCheckPane);
 
 /***/ }),
-/* 605 */
+/* 606 */
 /***/ (function(module, exports) {
 
 /**
@@ -54134,7 +54299,7 @@ BI.DisplaySelectedList = BI.inherit(BI.Pane, {
 BI.shortcut("bi.display_selected_list", BI.DisplaySelectedList);
 
 /***/ }),
-/* 606 */
+/* 607 */
 /***/ (function(module, exports) {
 
 /**
@@ -54616,7 +54781,7 @@ BI.shortcut("bi.multi_select_combo", BI.MultiSelectCombo);
 
 
 /***/ }),
-/* 607 */
+/* 608 */
 /***/ (function(module, exports) {
 
 /**
@@ -55125,7 +55290,7 @@ BI.shortcut("bi.multi_select_no_bar_combo", BI.MultiSelectNoBarCombo);
 
 
 /***/ }),
-/* 608 */
+/* 609 */
 /***/ (function(module, exports) {
 
 /**
@@ -55621,7 +55786,7 @@ BI.shortcut("bi.multi_select_insert_combo", BI.MultiSelectInsertCombo);
 
 
 /***/ }),
-/* 609 */
+/* 610 */
 /***/ (function(module, exports) {
 
 /**
@@ -56110,7 +56275,7 @@ BI.shortcut("bi.multi_select_insert_no_bar_combo", BI.MultiSelectInsertNoBarComb
 
 
 /***/ }),
-/* 610 */
+/* 611 */
 /***/ (function(module, exports) {
 
 /**
@@ -56268,7 +56433,7 @@ BI.MultiSelectInsertTrigger.EVENT_BLUR = "EVENT_BLUR";
 BI.shortcut("bi.multi_select_insert_trigger", BI.MultiSelectInsertTrigger);
 
 /***/ }),
-/* 611 */
+/* 612 */
 /***/ (function(module, exports) {
 
 /**
@@ -56466,7 +56631,7 @@ BI.MultiSelectLoader.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multi_select_loader", BI.MultiSelectLoader);
 
 /***/ }),
-/* 612 */
+/* 613 */
 /***/ (function(module, exports) {
 
 /**
@@ -56652,7 +56817,7 @@ BI.shortcut("bi.multi_select_no_bar_loader", BI.MultiSelectNoBarLoader);
 
 
 /***/ }),
-/* 613 */
+/* 614 */
 /***/ (function(module, exports) {
 
 /**
@@ -56752,7 +56917,7 @@ BI.MultiSelectPopupView.EVENT_CLICK_CLEAR = "EVENT_CLICK_CLEAR";
 BI.shortcut("bi.multi_select_popup_view", BI.MultiSelectPopupView);
 
 /***/ }),
-/* 614 */
+/* 615 */
 /***/ (function(module, exports) {
 
 /**
@@ -56848,7 +57013,7 @@ BI.MultiSelectNoBarPopupView.EVENT_CLICK_CLEAR = "EVENT_CLICK_CLEAR";
 BI.shortcut("bi.multi_select_no_bar_popup_view", BI.MultiSelectNoBarPopupView);
 
 /***/ }),
-/* 615 */
+/* 616 */
 /***/ (function(module, exports) {
 
 /**
@@ -57006,7 +57171,7 @@ BI.MultiSelectTrigger.EVENT_FOCUS = "EVENT_FOCUS";
 BI.shortcut("bi.multi_select_trigger", BI.MultiSelectTrigger);
 
 /***/ }),
-/* 616 */
+/* 617 */
 /***/ (function(module, exports) {
 
 /**
@@ -57109,7 +57274,7 @@ BI.MultiSelectSearchInsertPane.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multi_select_search_insert_pane", BI.MultiSelectSearchInsertPane);
 
 /***/ }),
-/* 617 */
+/* 618 */
 /***/ (function(module, exports) {
 
 /**
@@ -57279,7 +57444,7 @@ BI.MultiSelectSearchLoader.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multi_select_search_loader", BI.MultiSelectSearchLoader);
 
 /***/ }),
-/* 618 */
+/* 619 */
 /***/ (function(module, exports) {
 
 /**
@@ -57369,7 +57534,7 @@ BI.MultiSelectSearchPane.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multi_select_search_pane", BI.MultiSelectSearchPane);
 
 /***/ }),
-/* 619 */
+/* 620 */
 /***/ (function(module, exports) {
 
 /**
@@ -57474,7 +57639,7 @@ BI.shortcut("bi.multi_select_check_selected_button", BI.MultiSelectCheckSelected
 
 
 /***/ }),
-/* 620 */
+/* 621 */
 /***/ (function(module, exports) {
 
 /**
@@ -57582,7 +57747,7 @@ BI.shortcut("bi.multi_select_editor", BI.MultiSelectEditor);
 
 
 /***/ }),
-/* 621 */
+/* 622 */
 /***/ (function(module, exports) {
 
 /**
@@ -57801,7 +57966,7 @@ BI.SelectPatchEditor.EVENT_BLUR = "EVENT_BLUR";
 BI.shortcut("bi.select_patch_editor", BI.SelectPatchEditor);
 
 /***/ }),
-/* 622 */
+/* 623 */
 /***/ (function(module, exports) {
 
 /**
@@ -58003,7 +58168,7 @@ BI.shortcut("bi.multi_select_insert_searcher", BI.MultiSelectInsertSearcher);
 
 
 /***/ }),
-/* 623 */
+/* 624 */
 /***/ (function(module, exports) {
 
 /**
@@ -58203,7 +58368,7 @@ BI.shortcut("bi.multi_select_searcher", BI.MultiSelectSearcher);
 
 
 /***/ }),
-/* 624 */
+/* 625 */
 /***/ (function(module, exports) {
 
 /**
@@ -58320,7 +58485,7 @@ BI.MultiSelectCheckSelectedSwitcher.EVENT_AFTER_HIDEVIEW = "EVENT_AFTER_HIDEVIEW
 BI.shortcut("bi.multi_select_check_selected_switcher", BI.MultiSelectCheckSelectedSwitcher);
 
 /***/ }),
-/* 625 */
+/* 626 */
 /***/ (function(module, exports) {
 
 /**
@@ -58674,7 +58839,7 @@ BI.shortcut("bi.multi_select_insert_list", BI.MultiSelectInsertList);
 
 
 /***/ }),
-/* 626 */
+/* 627 */
 /***/ (function(module, exports) {
 
 /**
@@ -59033,7 +59198,7 @@ BI.MultiSelectInsertNoBarList.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multi_select_insert_no_bar_list", BI.MultiSelectInsertNoBarList);
 
 /***/ }),
-/* 627 */
+/* 628 */
 /***/ (function(module, exports) {
 
 /**
@@ -59406,7 +59571,7 @@ BI.MultiSelectList.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multi_select_list", BI.MultiSelectList);
 
 /***/ }),
-/* 628 */
+/* 629 */
 /***/ (function(module, exports) {
 
 /**
@@ -59583,7 +59748,7 @@ BI.shortcut("bi.multi_select_tree", BI.MultiSelectTree);
 
 
 /***/ }),
-/* 629 */
+/* 630 */
 /***/ (function(module, exports) {
 
 /**
@@ -59646,7 +59811,7 @@ BI.MultiSelectTreePopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multi_select_tree_popup", BI.MultiSelectTreePopup);
 
 /***/ }),
-/* 630 */
+/* 631 */
 /***/ (function(module, exports) {
 
 /**
@@ -59770,7 +59935,7 @@ BI.MultiTreeCheckPane.EVENT_CONTINUE_CLICK = "EVENT_CONTINUE_CLICK";
 BI.shortcut("bi.multi_tree_check_pane", BI.MultiTreeCheckPane);
 
 /***/ }),
-/* 631 */
+/* 632 */
 /***/ (function(module, exports) {
 
 /**
@@ -60134,7 +60299,7 @@ BI.shortcut("bi.multi_tree_combo", BI.MultiTreeCombo);
 
 
 /***/ }),
-/* 632 */
+/* 633 */
 /***/ (function(module, exports) {
 
 /**
@@ -60513,7 +60678,7 @@ BI.shortcut("bi.multi_tree_insert_combo", BI.MultiTreeInsertCombo);
 
 
 /***/ }),
-/* 633 */
+/* 634 */
 /***/ (function(module, exports) {
 
 /**
@@ -60916,7 +61081,7 @@ BI.shortcut("bi.multi_tree_list_combo", BI.MultiTreeListCombo);
 
 
 /***/ }),
-/* 634 */
+/* 635 */
 /***/ (function(module, exports) {
 
 /**
@@ -61023,7 +61188,7 @@ BI.MultiTreePopup.EVENT_AFTERINIT = "EVENT_AFTERINIT";
 BI.shortcut("bi.multi_tree_popup_view", BI.MultiTreePopup);
 
 /***/ }),
-/* 635 */
+/* 636 */
 /***/ (function(module, exports) {
 
 /**
@@ -61096,7 +61261,7 @@ BI.MultiTreeCheckSelectedButton.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multi_tree_check_selected_button", BI.MultiTreeCheckSelectedButton);
 
 /***/ }),
-/* 636 */
+/* 637 */
 /***/ (function(module, exports) {
 
 /**
@@ -61220,7 +61385,7 @@ BI.MultiTreeSearchInsertPane.EVENT_ADD_ITEM = "EVENT_ADD_ITEM";
 BI.shortcut("bi.multi_tree_search_insert_pane", BI.MultiTreeSearchInsertPane);
 
 /***/ }),
-/* 637 */
+/* 638 */
 /***/ (function(module, exports) {
 
 /**
@@ -61301,7 +61466,7 @@ BI.MultiTreeSearchPane.EVENT_CLICK_CLEAR = "EVENT_CLICK_CLEAR";
 BI.shortcut("bi.multi_tree_search_pane", BI.MultiTreeSearchPane);
 
 /***/ }),
-/* 638 */
+/* 639 */
 /***/ (function(module, exports) {
 
 /**
@@ -61471,7 +61636,7 @@ BI.shortcut("bi.multi_list_tree_searcher", BI.MultiListTreeSearcher);
 
 
 /***/ }),
-/* 639 */
+/* 640 */
 /***/ (function(module, exports) {
 
 /**
@@ -61673,7 +61838,7 @@ BI.shortcut("bi.multi_tree_searcher", BI.MultiTreeSearcher);
 
 
 /***/ }),
-/* 640 */
+/* 641 */
 /***/ (function(module, exports) {
 
 /**
@@ -61832,7 +61997,7 @@ BI.NumberEditor.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.number_editor", BI.NumberEditor);
 
 /***/ }),
-/* 641 */
+/* 642 */
 /***/ (function(module, exports) {
 
 // 小于号的值为：0，小于等于号的值为:1
@@ -62380,7 +62545,7 @@ BI.NumberInterval.EVENT_ERROR = "EVENT_ERROR";
 BI.shortcut("bi.number_interval", BI.NumberInterval);
 
 /***/ }),
-/* 642 */
+/* 643 */
 /***/ (function(module, exports) {
 
 BI.NumberIntervalSingleEidtor = BI.inherit(BI.Single, {
@@ -62469,7 +62634,7 @@ BI.NumberIntervalSingleEidtor.EVENT_CONFIRM = "EVENT_CONFIRM";
 BI.shortcut("bi.number_interval_single_editor", BI.NumberIntervalSingleEidtor);
 
 /***/ }),
-/* 643 */
+/* 644 */
 /***/ (function(module, exports) {
 
 /**
@@ -62956,7 +63121,7 @@ BI.shortcut("bi.search_multi_text_value_combo", BI.SearchMultiTextValueCombo);
 
 
 /***/ }),
-/* 644 */
+/* 645 */
 /***/ (function(module, exports) {
 
 BI.SearchMultiSelectTrigger = BI.inherit(BI.Trigger, {
@@ -63116,7 +63281,7 @@ BI.shortcut("bi.search_multi_select_trigger", BI.SearchMultiSelectTrigger);
 
 
 /***/ }),
-/* 645 */
+/* 646 */
 /***/ (function(module, exports) {
 
 /**
@@ -63298,7 +63463,7 @@ BI.SearchMultiSelectLoader.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.search_multi_select_loader", BI.SearchMultiSelectLoader);
 
 /***/ }),
-/* 646 */
+/* 647 */
 /***/ (function(module, exports) {
 
 BI.SearchMultiSelectPopupView = BI.inherit(BI.Widget, {
@@ -63391,7 +63556,7 @@ BI.SearchMultiSelectPopupView.EVENT_CLICK_CLEAR = "EVENT_CLICK_CLEAR";
 BI.shortcut("bi.search_multi_select_popup_view", BI.SearchMultiSelectPopupView);
 
 /***/ }),
-/* 647 */
+/* 648 */
 /***/ (function(module, exports) {
 
 BI.SearchMultiSelectSearcher = BI.inherit(BI.Widget, {
@@ -63572,7 +63737,7 @@ BI.shortcut("bi.search_multi_select_searcher", BI.SearchMultiSelectSearcher);
 
 
 /***/ }),
-/* 648 */
+/* 649 */
 /***/ (function(module, exports) {
 
 /**
@@ -63663,7 +63828,7 @@ BI.SelectTreeFirstPlusGroupNode = BI.inherit(BI.NodeButton, {
 BI.shortcut("bi.select_tree_first_plus_group_node", BI.SelectTreeFirstPlusGroupNode);
 
 /***/ }),
-/* 649 */
+/* 650 */
 /***/ (function(module, exports) {
 
 /**
@@ -63754,7 +63919,7 @@ BI.SelectTreeLastPlusGroupNode = BI.inherit(BI.NodeButton, {
 BI.shortcut("bi.select_tree_last_plus_group_node", BI.SelectTreeLastPlusGroupNode);
 
 /***/ }),
-/* 650 */
+/* 651 */
 /***/ (function(module, exports) {
 
 /**
@@ -63845,7 +64010,7 @@ BI.SelectTreeMidPlusGroupNode = BI.inherit(BI.NodeButton, {
 BI.shortcut("bi.select_tree_mid_plus_group_node", BI.SelectTreeMidPlusGroupNode);
 
 /***/ }),
-/* 651 */
+/* 652 */
 /***/ (function(module, exports) {
 
 /**
@@ -63936,7 +64101,7 @@ BI.SelectTreePlusGroupNode = BI.inherit(BI.NodeButton, {
 BI.shortcut("bi.select_tree_plus_group_node", BI.SelectTreePlusGroupNode);
 
 /***/ }),
-/* 652 */
+/* 653 */
 /***/ (function(module, exports) {
 
 /**
@@ -64015,7 +64180,7 @@ BI.SelectTreeCombo = BI.inherit(BI.Widget, {
 BI.shortcut("bi.select_tree_combo", BI.SelectTreeCombo);
 
 /***/ }),
-/* 653 */
+/* 654 */
 /***/ (function(module, exports) {
 
 /**
@@ -64097,7 +64262,7 @@ BI.SelectTreeExpander = BI.inherit(BI.Widget, {
 BI.shortcut("bi.select_tree_expander", BI.SelectTreeExpander);
 
 /***/ }),
-/* 654 */
+/* 655 */
 /***/ (function(module, exports) {
 
 /**
@@ -64203,7 +64368,7 @@ BI.SelectTreePopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.select_level_tree", BI.SelectTreePopup);
 
 /***/ }),
-/* 655 */
+/* 656 */
 /***/ (function(module, exports) {
 
 /**
@@ -64367,7 +64532,7 @@ BI.shortcut("bi.single_select_search_loader", BI.SingleSelectSearchLoader);
 
 
 /***/ }),
-/* 656 */
+/* 657 */
 /***/ (function(module, exports) {
 
 /**
@@ -64467,7 +64632,7 @@ BI.SingleSelectSearchInsertPane.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.single_select_search_insert_pane", BI.SingleSelectSearchInsertPane);
 
 /***/ }),
-/* 657 */
+/* 658 */
 /***/ (function(module, exports) {
 
 /**
@@ -64573,7 +64738,7 @@ BI.SingleSelectSearchPane.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.single_select_search_pane", BI.SingleSelectSearchPane);
 
 /***/ }),
-/* 658 */
+/* 659 */
 /***/ (function(module, exports) {
 
 /**
@@ -64842,7 +65007,7 @@ BI.shortcut("bi.single_select_combo", BI.SingleSelectCombo);
 
 
 /***/ }),
-/* 659 */
+/* 660 */
 /***/ (function(module, exports) {
 
 /**
@@ -65087,7 +65252,7 @@ BI.SingleSelectInsertCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
 BI.shortcut("bi.single_select_insert_combo", BI.SingleSelectInsertCombo);
 
 /***/ }),
-/* 660 */
+/* 661 */
 /***/ (function(module, exports) {
 
 /**
@@ -65256,7 +65421,7 @@ BI.shortcut("bi.single_select_list", BI.SingleSelectList);
 
 
 /***/ }),
-/* 661 */
+/* 662 */
 /***/ (function(module, exports) {
 
 /**
@@ -65429,7 +65594,7 @@ BI.shortcut("bi.single_select_loader", BI.SingleSelectLoader);
 
 
 /***/ }),
-/* 662 */
+/* 663 */
 /***/ (function(module, exports) {
 
 /**
@@ -65512,7 +65677,7 @@ BI.SingleSelectPopupView.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.single_select_popup_view", BI.SingleSelectPopupView);
 
 /***/ }),
-/* 663 */
+/* 664 */
 /***/ (function(module, exports) {
 
 /**
@@ -65655,7 +65820,7 @@ BI.SingleSelectTrigger.EVENT_BLUR = "EVENT_BLUR";
 BI.shortcut("bi.single_select_trigger", BI.SingleSelectTrigger);
 
 /***/ }),
-/* 664 */
+/* 665 */
 /***/ (function(module, exports) {
 
 /**
@@ -65866,7 +66031,7 @@ BI.shortcut("bi.single_select_insert_list", BI.SingleSelectInsertList);
 
 
 /***/ }),
-/* 665 */
+/* 666 */
 /***/ (function(module, exports) {
 
 /**
@@ -65963,7 +66128,7 @@ BI.SingleSelectEditor.EVENT_BLUR = "EVENT_BLUR";
 BI.shortcut("bi.single_select_editor", BI.SingleSelectEditor);
 
 /***/ }),
-/* 666 */
+/* 667 */
 /***/ (function(module, exports) {
 
 /**
@@ -66130,7 +66295,7 @@ BI.shortcut("bi.single_select_searcher", BI.SingleSelectSearcher);
 
 
 /***/ }),
-/* 667 */
+/* 668 */
 /***/ (function(module, exports) {
 
 BI.SignTextEditor = BI.inherit(BI.Widget, {
@@ -66330,7 +66495,7 @@ BI.SignTextEditor.EVENT_CLICK_LABEL = "EVENT_CLICK_LABEL";
 BI.shortcut("bi.sign_text_editor", BI.SignTextEditor);
 
 /***/ }),
-/* 668 */
+/* 669 */
 /***/ (function(module, exports) {
 
 /**
@@ -66371,7 +66536,7 @@ BI.SliderIconButton = BI.inherit(BI.Widget, {
 BI.shortcut("bi.single_slider_button", BI.SliderIconButton);
 
 /***/ }),
-/* 669 */
+/* 670 */
 /***/ (function(module, exports) {
 
 /**
@@ -66718,7 +66883,7 @@ BI.SingleSlider.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.single_slider", BI.SingleSlider);
 
 /***/ }),
-/* 670 */
+/* 671 */
 /***/ (function(module, exports) {
 
 /**
@@ -67034,7 +67199,7 @@ BI.SingleSliderLabel.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.single_slider_label", BI.SingleSliderLabel);
 
 /***/ }),
-/* 671 */
+/* 672 */
 /***/ (function(module, exports) {
 
 /**
@@ -67324,7 +67489,7 @@ BI.SingleSliderNormal.EVENT_DRAG = "EVENT_DRAG";
 BI.shortcut("bi.single_slider_normal", BI.SingleSliderNormal);
 
 /***/ }),
-/* 672 */
+/* 673 */
 /***/ (function(module, exports) {
 
 /**
@@ -67409,7 +67574,7 @@ BI.SingleTreeCombo.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
 BI.shortcut("bi.single_tree_combo", BI.SingleTreeCombo);
 
 /***/ }),
-/* 673 */
+/* 674 */
 /***/ (function(module, exports) {
 
 /**
@@ -67480,7 +67645,7 @@ BI.SingleTreePopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.single_level_tree", BI.SingleTreePopup);
 
 /***/ }),
-/* 674 */
+/* 675 */
 /***/ (function(module, exports) {
 
 /**
@@ -67550,7 +67715,7 @@ BI.shortcut("bi.single_tree_trigger", BI.SingleTreeTrigger);
 
 
 /***/ }),
-/* 675 */
+/* 676 */
 /***/ (function(module, exports) {
 
 /**
@@ -67653,7 +67818,7 @@ BI.TextValueDownListCombo.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.text_value_down_list_combo", BI.TextValueDownListCombo);
 
 /***/ }),
-/* 676 */
+/* 677 */
 /***/ (function(module, exports) {
 
 /**
@@ -67713,7 +67878,7 @@ BI.DownListSelectTextTrigger = BI.inherit(BI.Trigger, {
 BI.shortcut("bi.down_list_select_text_trigger", BI.DownListSelectTextTrigger);
 
 /***/ }),
-/* 677 */
+/* 678 */
 /***/ (function(module, exports) {
 
 !(function () {
@@ -67812,7 +67977,7 @@ BI.shortcut("bi.down_list_select_text_trigger", BI.DownListSelectTextTrigger);
 })();
 
 /***/ }),
-/* 678 */
+/* 679 */
 /***/ (function(module, exports) {
 
 /**
@@ -68050,7 +68215,7 @@ BI.shortcut("bi.down_list_select_text_trigger", BI.DownListSelectTextTrigger);
 })();
 
 /***/ }),
-/* 679 */
+/* 680 */
 /***/ (function(module, exports) {
 
 !(function () {
@@ -68242,7 +68407,7 @@ BI.shortcut("bi.down_list_select_text_trigger", BI.DownListSelectTextTrigger);
 })();
 
 /***/ }),
-/* 680 */
+/* 681 */
 /***/ (function(module, exports) {
 
 /**
@@ -68457,7 +68622,7 @@ BI.shortcut("bi.date_interval", BI.DateInterval);
 
 
 /***/ }),
-/* 681 */
+/* 682 */
 /***/ (function(module, exports) {
 
 /**
@@ -68665,7 +68830,7 @@ BI.TimeInterval.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.time_interval", BI.TimeInterval);
 
 /***/ }),
-/* 682 */
+/* 683 */
 /***/ (function(module, exports) {
 
 /**
@@ -68790,7 +68955,7 @@ BI.shortcut("bi.time_interval", BI.TimeInterval);
 })();
 
 /***/ }),
-/* 683 */
+/* 684 */
 /***/ (function(module, exports) {
 
 /**
@@ -68914,7 +69079,7 @@ BI.DynamicYearCard.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.dynamic_year_card", BI.DynamicYearCard);
 
 /***/ }),
-/* 684 */
+/* 685 */
 /***/ (function(module, exports) {
 
 /**
@@ -69113,7 +69278,7 @@ BI.StaticYearCard.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.static_year_card", BI.StaticYearCard);
 
 /***/ }),
-/* 685 */
+/* 686 */
 /***/ (function(module, exports) {
 
 BI.DynamicYearCombo = BI.inherit(BI.Widget, {
@@ -69330,7 +69495,7 @@ BI.extend(BI.DynamicYearCombo, {
 
 
 /***/ }),
-/* 686 */
+/* 687 */
 /***/ (function(module, exports) {
 
 /**
@@ -69581,7 +69746,7 @@ BI.DynamicYearPopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.dynamic_year_popup", BI.DynamicYearPopup);
 
 /***/ }),
-/* 687 */
+/* 688 */
 /***/ (function(module, exports) {
 
 BI.DynamicYearTrigger = BI.inherit(BI.Trigger, {
@@ -69785,7 +69950,7 @@ BI.DynamicYearTrigger.EVENT_VALID = "EVENT_VALID";
 BI.shortcut("bi.dynamic_year_trigger", BI.DynamicYearTrigger);
 
 /***/ }),
-/* 688 */
+/* 689 */
 /***/ (function(module, exports) {
 
 /**
@@ -69998,7 +70163,7 @@ BI.YearInterval.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
 BI.shortcut("bi.year_interval", BI.YearInterval);
 
 /***/ }),
-/* 689 */
+/* 690 */
 /***/ (function(module, exports) {
 
 /**
@@ -70169,7 +70334,7 @@ BI.DynamicYearMonthCard.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.dynamic_year_month_card", BI.DynamicYearMonthCard);
 
 /***/ }),
-/* 690 */
+/* 691 */
 /***/ (function(module, exports) {
 
 BI.StaticYearMonthCard = BI.inherit(BI.Widget, {
@@ -70338,7 +70503,7 @@ BI.shortcut("bi.static_year_month_card", BI.StaticYearMonthCard);
 
 
 /***/ }),
-/* 691 */
+/* 692 */
 /***/ (function(module, exports) {
 
 BI.DynamicYearMonthCombo = BI.inherit(BI.Single, {
@@ -70569,7 +70734,7 @@ BI.extend(BI.DynamicYearMonthCombo, {
 
 
 /***/ }),
-/* 692 */
+/* 693 */
 /***/ (function(module, exports) {
 
 /**
@@ -70815,7 +70980,7 @@ BI.DynamicYearMonthPopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.dynamic_year_month_popup", BI.DynamicYearMonthPopup);
 
 /***/ }),
-/* 693 */
+/* 694 */
 /***/ (function(module, exports) {
 
 BI.DynamicYearMonthTrigger = BI.inherit(BI.Trigger, {
@@ -71111,7 +71276,7 @@ BI.DynamicYearMonthTrigger.EVENT_KEY_DOWN = "EVENT_KEY_DOWN";
 BI.shortcut("bi.dynamic_year_month_trigger", BI.DynamicYearMonthTrigger);
 
 /***/ }),
-/* 694 */
+/* 695 */
 /***/ (function(module, exports) {
 
 BI.YearMonthInterval = BI.inherit(BI.Single, {
@@ -71324,7 +71489,7 @@ BI.shortcut("bi.year_month_interval", BI.YearMonthInterval);
 
 
 /***/ }),
-/* 695 */
+/* 696 */
 /***/ (function(module, exports) {
 
 /**
@@ -71495,7 +71660,7 @@ BI.DynamicYearQuarterCard.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.dynamic_year_quarter_card", BI.DynamicYearQuarterCard);
 
 /***/ }),
-/* 696 */
+/* 697 */
 /***/ (function(module, exports) {
 
 BI.StaticYearQuarterCard = BI.inherit(BI.Widget, {
@@ -71652,7 +71817,7 @@ BI.shortcut("bi.static_year_quarter_card", BI.StaticYearQuarterCard);
 
 
 /***/ }),
-/* 697 */
+/* 698 */
 /***/ (function(module, exports) {
 
 BI.DynamicYearQuarterCombo = BI.inherit(BI.Widget, {
@@ -71883,7 +72048,7 @@ BI.extend(BI.DynamicYearQuarterCombo, {
 
 
 /***/ }),
-/* 698 */
+/* 699 */
 /***/ (function(module, exports) {
 
 BI.DynamicYearQuarterPopup = BI.inherit(BI.Widget, {
@@ -72123,7 +72288,7 @@ BI.DynamicYearQuarterPopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.dynamic_year_quarter_popup", BI.DynamicYearQuarterPopup);
 
 /***/ }),
-/* 699 */
+/* 700 */
 /***/ (function(module, exports) {
 
 BI.DynamicYearQuarterTrigger = BI.inherit(BI.Trigger, {
@@ -72404,7 +72569,7 @@ BI.DynamicYearQuarterTrigger.EVENT_VALID = "EVENT_VALID";
 BI.shortcut("bi.dynamic_year_quarter_trigger", BI.DynamicYearQuarterTrigger);
 
 /***/ }),
-/* 700 */
+/* 701 */
 /***/ (function(module, exports) {
 
 /**
@@ -72615,7 +72780,7 @@ BI.YearQuarterInterval.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
 BI.shortcut("bi.year_quarter_interval", BI.YearQuarterInterval);
 
 /***/ }),
-/* 701 */
+/* 702 */
 /***/ (function(module, exports) {
 
 /**
@@ -72721,7 +72886,7 @@ BI.AbstractAllValueChooser = BI.inherit(BI.Widget, {
 });
 
 /***/ }),
-/* 702 */
+/* 703 */
 /***/ (function(module, exports) {
 
 /**
@@ -72803,7 +72968,7 @@ BI.shortcut("bi.all_value_chooser_combo", BI.AllValueChooserCombo);
 
 
 /***/ }),
-/* 703 */
+/* 704 */
 /***/ (function(module, exports) {
 
 /**
@@ -72877,7 +73042,7 @@ BI.shortcut("bi.all_value_chooser_pane", BI.AllValueChooserPane);
 
 
 /***/ }),
-/* 704 */
+/* 705 */
 /***/ (function(module, exports) {
 
 BI.AllValueMultiTextValueCombo = BI.inherit(BI.Widget, {
@@ -72948,7 +73113,7 @@ BI.shortcut("bi.all_value_multi_text_value_combo", BI.AllValueMultiTextValueComb
 
 
 /***/ }),
-/* 705 */
+/* 706 */
 /***/ (function(module, exports) {
 
 BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
@@ -73808,7 +73973,7 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
 
 
 /***/ }),
-/* 706 */
+/* 707 */
 /***/ (function(module, exports) {
 
 BI.AbstractListTreeValueChooser = BI.inherit(BI.AbstractTreeValueChooser, {
@@ -74100,7 +74265,7 @@ BI.AbstractListTreeValueChooser = BI.inherit(BI.AbstractTreeValueChooser, {
 });
 
 /***/ }),
-/* 707 */
+/* 708 */
 /***/ (function(module, exports) {
 
 /**
@@ -74220,7 +74385,7 @@ BI.shortcut("bi.list_tree_value_chooser_insert_combo", BI.ListTreeValueChooserIn
 
 
 /***/ }),
-/* 708 */
+/* 709 */
 /***/ (function(module, exports) {
 
 /**
@@ -74339,7 +74504,7 @@ BI.shortcut("bi.tree_value_chooser_insert_combo", BI.TreeValueChooserInsertCombo
 
 
 /***/ }),
-/* 709 */
+/* 710 */
 /***/ (function(module, exports) {
 
 /**
@@ -74462,7 +74627,7 @@ BI.shortcut("bi.tree_value_chooser_combo", BI.TreeValueChooserCombo);
 
 
 /***/ }),
-/* 710 */
+/* 711 */
 /***/ (function(module, exports) {
 
 /**
@@ -74530,7 +74695,7 @@ BI.shortcut("bi.tree_value_chooser_pane", BI.TreeValueChooserPane);
 
 
 /***/ }),
-/* 711 */
+/* 712 */
 /***/ (function(module, exports) {
 
 /**
@@ -74642,7 +74807,7 @@ BI.AbstractValueChooser = BI.inherit(BI.Widget, {
 });
 
 /***/ }),
-/* 712 */
+/* 713 */
 /***/ (function(module, exports) {
 
 /**
@@ -74752,7 +74917,7 @@ BI.shortcut("bi.value_chooser_insert_combo", BI.ValueChooserInsertCombo);
 
 
 /***/ }),
-/* 713 */
+/* 714 */
 /***/ (function(module, exports) {
 
 /**
@@ -74866,7 +75031,7 @@ BI.shortcut("bi.value_chooser_combo", BI.ValueChooserCombo);
 
 
 /***/ }),
-/* 714 */
+/* 715 */
 /***/ (function(module, exports) {
 
 /**
@@ -74968,7 +75133,7 @@ BI.shortcut("bi.value_chooser_no_bar_combo", BI.ValueChooserNoBarCombo);
 
 
 /***/ }),
-/* 715 */
+/* 716 */
 /***/ (function(module, exports) {
 
 /**
@@ -75044,20 +75209,20 @@ BI.shortcut("bi.value_chooser_pane", BI.ValueChooserPane);
 
 
 /***/ }),
-/* 716 */
+/* 717 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var _index = _interopRequireDefault(__webpack_require__(717));
+var _index = _interopRequireDefault(__webpack_require__(718));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 BI.extend(BI, _index["default"]);
 
 /***/ }),
-/* 717 */
+/* 718 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -76138,11 +76303,11 @@ Object.defineProperty(exports, "SelectTreeExpander", {
 });
 exports["default"] = void 0;
 
-var _combo = __webpack_require__(718);
+var _combo = __webpack_require__(719);
 
 var _group = __webpack_require__(68);
 
-var _tab = __webpack_require__(719);
+var _tab = __webpack_require__(720);
 
 var _pane = __webpack_require__(14);
 
@@ -76150,23 +76315,23 @@ var _button = __webpack_require__(4);
 
 var _button2 = __webpack_require__(46);
 
-var _button3 = __webpack_require__(720);
+var _button3 = __webpack_require__(721);
 
-var _button4 = __webpack_require__(721);
+var _button4 = __webpack_require__(722);
 
-var _icontextitem = __webpack_require__(722);
+var _icontextitem = __webpack_require__(723);
 
-var _editor = __webpack_require__(723);
+var _editor = __webpack_require__(724);
 
-var _iframe = __webpack_require__(724);
+var _iframe = __webpack_require__(725);
 
-var _checkbox = __webpack_require__(725);
+var _checkbox = __webpack_require__(726);
 
-var _input = __webpack_require__(726);
+var _input = __webpack_require__(727);
 
 var _abstract = __webpack_require__(47);
 
-var _label = __webpack_require__(727);
+var _label = __webpack_require__(728);
 
 var _single = __webpack_require__(2);
 
@@ -76174,25 +76339,25 @@ var _text = __webpack_require__(69);
 
 var _trigger = __webpack_require__(48);
 
-var _icon = __webpack_require__(728);
+var _icon = __webpack_require__(729);
 
-var _item = __webpack_require__(729);
+var _item = __webpack_require__(730);
 
-var _combo2 = __webpack_require__(730);
+var _combo2 = __webpack_require__(731);
 
-var _combo3 = __webpack_require__(731);
+var _combo3 = __webpack_require__(732);
 
-var _combo4 = __webpack_require__(732);
+var _combo4 = __webpack_require__(733);
 
-var _combo5 = __webpack_require__(733);
+var _combo5 = __webpack_require__(734);
 
-var _editor2 = __webpack_require__(734);
+var _editor2 = __webpack_require__(735);
 
-var _editor3 = __webpack_require__(735);
+var _editor3 = __webpack_require__(736);
 
-var _loading_pane = __webpack_require__(736);
+var _loading_pane = __webpack_require__(737);
 
-var _allvalueMultitextvalue = __webpack_require__(737);
+var _allvalueMultitextvalue = __webpack_require__(738);
 
 var _abstract2 = __webpack_require__(30);
 
@@ -76200,15 +76365,15 @@ var _abstractTreevaluechooser = __webpack_require__(70);
 
 var _action = __webpack_require__(71);
 
-var _action2 = __webpack_require__(738);
+var _action2 = __webpack_require__(739);
 
 var _behavior = __webpack_require__(49);
 
-var _behavior2 = __webpack_require__(739);
+var _behavior2 = __webpack_require__(740);
 
-var _behavior3 = __webpack_require__(740);
+var _behavior3 = __webpack_require__(741);
 
-var decorator = _interopRequireWildcard(__webpack_require__(741));
+var decorator = _interopRequireWildcard(__webpack_require__(742));
 
 var _ob = __webpack_require__(29);
 
@@ -76216,265 +76381,265 @@ var _widget = __webpack_require__(0);
 
 var _layout = __webpack_require__(3);
 
-var _layout2 = __webpack_require__(742);
+var _layout2 = __webpack_require__(743);
 
-var _layout3 = __webpack_require__(743);
+var _layout3 = __webpack_require__(744);
 
-var _layout4 = __webpack_require__(744);
+var _layout4 = __webpack_require__(745);
 
-var _layout5 = __webpack_require__(745);
+var _layout5 = __webpack_require__(746);
 
-var _combo6 = __webpack_require__(746);
+var _combo6 = __webpack_require__(747);
 
-var _icon2 = __webpack_require__(747);
+var _icon2 = __webpack_require__(748);
 
-var _adapt = __webpack_require__(748);
+var _adapt = __webpack_require__(749);
 
-var _adapt2 = __webpack_require__(749);
+var _adapt2 = __webpack_require__(750);
 
-var _icontexticonitem = __webpack_require__(750);
+var _icontexticonitem = __webpack_require__(751);
 
-var _auto = __webpack_require__(751);
+var _auto = __webpack_require__(752);
 
-var _inline = __webpack_require__(752);
+var _inline = __webpack_require__(753);
 
-var _adapt3 = __webpack_require__(753);
+var _adapt3 = __webpack_require__(754);
 
 var _button5 = __webpack_require__(50);
 
 var _editor4 = __webpack_require__(72);
 
-var _icon3 = __webpack_require__(754);
+var _icon3 = __webpack_require__(755);
 
-var _layer = __webpack_require__(755);
+var _layer = __webpack_require__(756);
 
-var _combo7 = __webpack_require__(756);
+var _combo7 = __webpack_require__(757);
 
-var _dynamicdate = __webpack_require__(757);
+var _dynamicdate = __webpack_require__(758);
 
-var _customtree = __webpack_require__(758);
+var _customtree = __webpack_require__(759);
 
-var _tree = __webpack_require__(759);
+var _tree = __webpack_require__(760);
 
-var _nodeIcon = __webpack_require__(760);
+var _nodeIcon = __webpack_require__(761);
 
-var _itemMid = __webpack_require__(761);
+var _itemMid = __webpack_require__(762);
 
-var _itemFirst = __webpack_require__(762);
+var _itemFirst = __webpack_require__(763);
 
-var _itemLast = __webpack_require__(763);
+var _itemLast = __webpack_require__(764);
 
-var _editorText = __webpack_require__(764);
+var _editorText = __webpack_require__(765);
 
-var _editor5 = __webpack_require__(765);
+var _editor5 = __webpack_require__(766);
 
-var _absolute = __webpack_require__(766);
+var _absolute = __webpack_require__(767);
 
-var _adapt4 = __webpack_require__(767);
+var _adapt4 = __webpack_require__(768);
 
-var _layout6 = __webpack_require__(768);
+var _layout6 = __webpack_require__(769);
 
-var _adapt5 = __webpack_require__(769);
+var _adapt5 = __webpack_require__(770);
 
-var _adapt6 = __webpack_require__(770);
+var _adapt6 = __webpack_require__(771);
 
-var _multiselectInsert = __webpack_require__(771);
+var _multiselectInsert = __webpack_require__(772);
 
-var _multiselect = __webpack_require__(772);
+var _multiselect = __webpack_require__(773);
 
-var _editor6 = __webpack_require__(773);
+var _editor6 = __webpack_require__(774);
 
-var _multilayersingletree = __webpack_require__(774);
+var _multilayersingletree = __webpack_require__(775);
 
-var _colorchooser = __webpack_require__(775);
+var _colorchooser = __webpack_require__(776);
 
-var _a = __webpack_require__(776);
+var _a = __webpack_require__(777);
 
-var _html = __webpack_require__(777);
+var _html = __webpack_require__(778);
 
-var _switcher = __webpack_require__(778);
+var _switcher = __webpack_require__(779);
 
-var _expander = __webpack_require__(779);
+var _expander = __webpack_require__(780);
 
-var _loader = __webpack_require__(780);
+var _loader = __webpack_require__(781);
 
-var _pane2 = __webpack_require__(781);
+var _pane2 = __webpack_require__(782);
 
-var _layer2 = __webpack_require__(782);
+var _layer2 = __webpack_require__(783);
 
-var _toolbar = __webpack_require__(783);
+var _toolbar = __webpack_require__(784);
 
-var _list = __webpack_require__(784);
+var _list = __webpack_require__(785);
 
 var _abstract3 = __webpack_require__(73);
 
-var _combo8 = __webpack_require__(785);
+var _combo8 = __webpack_require__(786);
 
-var _editor7 = __webpack_require__(786);
+var _editor7 = __webpack_require__(787);
 
-var _item2 = __webpack_require__(787);
+var _item2 = __webpack_require__(788);
 
-var _dynamicdatetime = __webpack_require__(788);
+var _dynamicdatetime = __webpack_require__(789);
 
-var _multiTree = __webpack_require__(789);
+var _multiTree = __webpack_require__(790);
 
-var _middle = __webpack_require__(790);
+var _middle = __webpack_require__(791);
 
-var _group2 = __webpack_require__(791);
+var _group2 = __webpack_require__(792);
 
-var _layout7 = __webpack_require__(792);
+var _layout7 = __webpack_require__(793);
 
-var _icon4 = __webpack_require__(793);
+var _icon4 = __webpack_require__(794);
 
-var _searcher = __webpack_require__(794);
+var _searcher = __webpack_require__(795);
 
-var _combo9 = __webpack_require__(795);
+var _combo9 = __webpack_require__(796);
 
-var _combo10 = __webpack_require__(796);
+var _combo10 = __webpack_require__(797);
 
-var _comboTreevaluechooser = __webpack_require__(797);
+var _comboTreevaluechooser = __webpack_require__(798);
 
-var _radio = __webpack_require__(798);
+var _radio = __webpack_require__(799);
 
-var _multilayerselecttree = __webpack_require__(799);
+var _multilayerselecttree = __webpack_require__(800);
 
-var _multilayersingletree2 = __webpack_require__(800);
+var _multilayersingletree2 = __webpack_require__(801);
 
-var _multilayerdownlist = __webpack_require__(801);
+var _multilayerdownlist = __webpack_require__(802);
 
 var _treeview = __webpack_require__(52);
 
-var _multiTree2 = __webpack_require__(802);
+var _multiTree2 = __webpack_require__(803);
 
-var _itemSingleselect = __webpack_require__(803);
+var _itemSingleselect = __webpack_require__(804);
 
-var _singleselectInsert = __webpack_require__(804);
+var _singleselectInsert = __webpack_require__(805);
 
-var _singleselect = __webpack_require__(805);
+var _singleselect = __webpack_require__(806);
 
-var _layout8 = __webpack_require__(806);
+var _layout8 = __webpack_require__(807);
 
-var _combo11 = __webpack_require__(807);
+var _combo11 = __webpack_require__(808);
 
-var _time = __webpack_require__(808);
+var _time = __webpack_require__(809);
 
 var _listtreeview = __webpack_require__(74);
 
-var _listasynctree = __webpack_require__(809);
+var _listasynctree = __webpack_require__(810);
 
-var _asynctree = __webpack_require__(810);
+var _asynctree = __webpack_require__(811);
 
-var _multilayersingletree3 = __webpack_require__(811);
+var _multilayersingletree3 = __webpack_require__(812);
 
-var _multilayerselecttree2 = __webpack_require__(812);
+var _multilayerselecttree2 = __webpack_require__(813);
 
-var _multilayerdownlist2 = __webpack_require__(813);
+var _multilayerdownlist2 = __webpack_require__(814);
 
-var _multiTreeList = __webpack_require__(814);
+var _multiTreeList = __webpack_require__(815);
 
-var _multiTreeInsert = __webpack_require__(815);
+var _multiTreeInsert = __webpack_require__(816);
 
-var _combo12 = __webpack_require__(816);
+var _combo12 = __webpack_require__(817);
 
-var _switch = __webpack_require__(817);
+var _switch = __webpack_require__(818);
 
-var _layout9 = __webpack_require__(818);
+var _layout9 = __webpack_require__(819);
 
-var _editor8 = __webpack_require__(819);
+var _editor8 = __webpack_require__(820);
 
-var _trigger2 = __webpack_require__(820);
+var _trigger2 = __webpack_require__(821);
 
-var _triggerText = __webpack_require__(821);
+var _triggerText = __webpack_require__(822);
 
-var _dateinterval = __webpack_require__(822);
+var _dateinterval = __webpack_require__(823);
 
-var _datepane = __webpack_require__(823);
+var _datepane = __webpack_require__(824);
 
-var _pagerAll = __webpack_require__(824);
+var _pagerAll = __webpack_require__(825);
 
 var _layer3 = __webpack_require__(51);
 
-var _popup = __webpack_require__(825);
+var _popup = __webpack_require__(826);
 
-var _check = __webpack_require__(826);
+var _check = __webpack_require__(827);
 
-var _numberinterval = __webpack_require__(827);
+var _numberinterval = __webpack_require__(828);
 
-var _combo13 = __webpack_require__(828);
+var _combo13 = __webpack_require__(829);
 
-var _combo14 = __webpack_require__(829);
+var _combo14 = __webpack_require__(830);
 
-var _intervalslider = __webpack_require__(830);
+var _intervalslider = __webpack_require__(831);
 
-var _multiselectlist = __webpack_require__(831);
+var _multiselectlist = __webpack_require__(832);
 
-var _yearmonthinterval = __webpack_require__(832);
+var _yearmonthinterval = __webpack_require__(833);
 
-var _numbereditor = __webpack_require__(833);
+var _numbereditor = __webpack_require__(834);
 
-var _combo15 = __webpack_require__(834);
+var _combo15 = __webpack_require__(835);
 
-var _linear = __webpack_require__(835);
+var _linear = __webpack_require__(836);
 
-var _img = __webpack_require__(836);
+var _img = __webpack_require__(837);
 
-var _combo16 = __webpack_require__(837);
+var _combo16 = __webpack_require__(838);
 
-var _combo17 = __webpack_require__(838);
+var _combo17 = __webpack_require__(839);
 
-var _listview = __webpack_require__(839);
+var _listview = __webpack_require__(840);
 
-var _middleFloat = __webpack_require__(840);
+var _middleFloat = __webpack_require__(841);
 
-var _popup2 = __webpack_require__(841);
+var _popup2 = __webpack_require__(842);
 
 var _controller = __webpack_require__(53);
 
-var _controller2 = __webpack_require__(842);
+var _controller2 = __webpack_require__(843);
 
-var _popupCalendar = __webpack_require__(843);
+var _popupCalendar = __webpack_require__(844);
 
-var _tree2 = __webpack_require__(844);
+var _tree2 = __webpack_require__(845);
 
-var _textnode = __webpack_require__(845);
+var _textnode = __webpack_require__(846);
 
-var _popup3 = __webpack_require__(846);
+var _popup3 = __webpack_require__(847);
 
-var _button6 = __webpack_require__(847);
+var _button6 = __webpack_require__(848);
 
-var _router = __webpack_require__(848);
+var _router = __webpack_require__(849);
 
-var _datetime = __webpack_require__(849);
+var _datetime = __webpack_require__(850);
 
-var _float = __webpack_require__(850);
+var _float = __webpack_require__(851);
 
-var _layout10 = __webpack_require__(851);
+var _layout10 = __webpack_require__(852);
 
-var _colorchooserPopup = __webpack_require__(852);
+var _colorchooserPopup = __webpack_require__(853);
 
-var _blankicontextitem = __webpack_require__(853);
+var _blankicontextitem = __webpack_require__(854);
 
-var _controller3 = __webpack_require__(854);
+var _controller3 = __webpack_require__(855);
 
-var _pager = __webpack_require__(855);
+var _pager = __webpack_require__(856);
 
-var _timeinterval = __webpack_require__(856);
+var _timeinterval = __webpack_require__(857);
 
-var _datetimepane = __webpack_require__(857);
+var _datetimepane = __webpack_require__(858);
 
-var _singleselectlist = __webpack_require__(858);
+var _singleselectlist = __webpack_require__(859);
 
-var _multiselecttree = __webpack_require__(859);
+var _multiselecttree = __webpack_require__(860);
 
-var _html2 = __webpack_require__(860);
+var _html2 = __webpack_require__(861);
 
-var _pane3 = __webpack_require__(861);
+var _pane3 = __webpack_require__(862);
 
-var _layout11 = __webpack_require__(862);
+var _layout11 = __webpack_require__(863);
 
-var _multilayerselecttree3 = __webpack_require__(863);
+var _multilayerselecttree3 = __webpack_require__(864);
 
-var _selecttree = __webpack_require__(864);
+var _selecttree = __webpack_require__(865);
 
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
@@ -76484,15 +76649,6 @@ var _default = {
   Decorators: decorator
 };
 exports["default"] = _default;
-
-/***/ }),
-/* 718 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _widget = __webpack_require__(0);
 
 /***/ }),
 /* 719 */
@@ -76510,7 +76666,7 @@ var _widget = __webpack_require__(0);
 "use strict";
 
 
-var _button = __webpack_require__(4);
+var _widget = __webpack_require__(0);
 
 /***/ }),
 /* 721 */
@@ -76537,7 +76693,7 @@ var _button = __webpack_require__(4);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _button = __webpack_require__(4);
 
 /***/ }),
 /* 724 */
@@ -76555,7 +76711,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _button = __webpack_require__(4);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 726 */
@@ -76564,7 +76720,7 @@ var _button = __webpack_require__(4);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _button = __webpack_require__(4);
 
 /***/ }),
 /* 727 */
@@ -76573,7 +76729,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _abstract = __webpack_require__(47);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 728 */
@@ -76582,7 +76738,7 @@ var _abstract = __webpack_require__(47);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _abstract = __webpack_require__(47);
 
 /***/ }),
 /* 729 */
@@ -76591,7 +76747,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _button = __webpack_require__(4);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 730 */
@@ -76600,7 +76756,7 @@ var _button = __webpack_require__(4);
 "use strict";
 
 
-var _widget = __webpack_require__(0);
+var _button = __webpack_require__(4);
 
 /***/ }),
 /* 731 */
@@ -76654,7 +76810,7 @@ var _widget = __webpack_require__(0);
 "use strict";
 
 
-var _pane = __webpack_require__(14);
+var _widget = __webpack_require__(0);
 
 /***/ }),
 /* 737 */
@@ -76663,7 +76819,7 @@ var _pane = __webpack_require__(14);
 "use strict";
 
 
-var _widget = __webpack_require__(0);
+var _pane = __webpack_require__(14);
 
 /***/ }),
 /* 738 */
@@ -76672,7 +76828,7 @@ var _widget = __webpack_require__(0);
 "use strict";
 
 
-var _action = __webpack_require__(71);
+var _widget = __webpack_require__(0);
 
 /***/ }),
 /* 739 */
@@ -76681,7 +76837,7 @@ var _action = __webpack_require__(71);
 "use strict";
 
 
-var _behavior = __webpack_require__(49);
+var _action = __webpack_require__(71);
 
 /***/ }),
 /* 740 */
@@ -76694,6 +76850,15 @@ var _behavior = __webpack_require__(49);
 
 /***/ }),
 /* 741 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _behavior = __webpack_require__(49);
+
+/***/ }),
+/* 742 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -76904,15 +77069,6 @@ type UnionToTuple<U> = UnionToTupleRecursively<U, []>;
 exports.Model = Model;
 
 /***/ }),
-/* 742 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _layout = __webpack_require__(3);
-
-/***/ }),
 /* 743 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -76946,7 +77102,7 @@ var _layout = __webpack_require__(3);
 "use strict";
 
 
-var _widget = __webpack_require__(0);
+var _layout = __webpack_require__(3);
 
 /***/ }),
 /* 747 */
@@ -76955,7 +77111,7 @@ var _widget = __webpack_require__(0);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _widget = __webpack_require__(0);
 
 /***/ }),
 /* 748 */
@@ -76964,7 +77120,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _layout = __webpack_require__(3);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 749 */
@@ -76982,7 +77138,7 @@ var _layout = __webpack_require__(3);
 "use strict";
 
 
-var _button = __webpack_require__(4);
+var _layout = __webpack_require__(3);
 
 /***/ }),
 /* 751 */
@@ -76991,7 +77147,7 @@ var _button = __webpack_require__(4);
 "use strict";
 
 
-var _layout = __webpack_require__(3);
+var _button = __webpack_require__(4);
 
 /***/ }),
 /* 752 */
@@ -77018,7 +77174,7 @@ var _layout = __webpack_require__(3);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _layout = __webpack_require__(3);
 
 /***/ }),
 /* 755 */
@@ -77027,7 +77183,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _widget = __webpack_require__(0);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 756 */
@@ -77045,7 +77201,7 @@ var _widget = __webpack_require__(0);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _widget = __webpack_require__(0);
 
 /***/ }),
 /* 758 */
@@ -77054,7 +77210,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _widget = __webpack_require__(0);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 759 */
@@ -77063,7 +77219,7 @@ var _widget = __webpack_require__(0);
 "use strict";
 
 
-var _group = __webpack_require__(68);
+var _widget = __webpack_require__(0);
 
 /***/ }),
 /* 760 */
@@ -77072,7 +77228,7 @@ var _group = __webpack_require__(68);
 "use strict";
 
 
-var _button = __webpack_require__(46);
+var _group = __webpack_require__(68);
 
 /***/ }),
 /* 761 */
@@ -77081,7 +77237,7 @@ var _button = __webpack_require__(46);
 "use strict";
 
 
-var _button = __webpack_require__(4);
+var _button = __webpack_require__(46);
 
 /***/ }),
 /* 762 */
@@ -77108,7 +77264,7 @@ var _button = __webpack_require__(4);
 "use strict";
 
 
-var _editor = __webpack_require__(72);
+var _button = __webpack_require__(4);
 
 /***/ }),
 /* 765 */
@@ -77117,7 +77273,7 @@ var _editor = __webpack_require__(72);
 "use strict";
 
 
-var _widget = __webpack_require__(0);
+var _editor = __webpack_require__(72);
 
 /***/ }),
 /* 766 */
@@ -77126,7 +77282,7 @@ var _widget = __webpack_require__(0);
 "use strict";
 
 
-var _layout = __webpack_require__(3);
+var _widget = __webpack_require__(0);
 
 /***/ }),
 /* 767 */
@@ -77171,7 +77327,7 @@ var _layout = __webpack_require__(3);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _layout = __webpack_require__(3);
 
 /***/ }),
 /* 772 */
@@ -77189,7 +77345,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _widget = __webpack_require__(0);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 774 */
@@ -77198,7 +77354,7 @@ var _widget = __webpack_require__(0);
 "use strict";
 
 
-var _pane = __webpack_require__(14);
+var _widget = __webpack_require__(0);
 
 /***/ }),
 /* 775 */
@@ -77207,7 +77363,7 @@ var _pane = __webpack_require__(14);
 "use strict";
 
 
-var _widget = __webpack_require__(0);
+var _pane = __webpack_require__(14);
 
 /***/ }),
 /* 776 */
@@ -77216,7 +77372,7 @@ var _widget = __webpack_require__(0);
 "use strict";
 
 
-var _text = __webpack_require__(69);
+var _widget = __webpack_require__(0);
 
 /***/ }),
 /* 777 */
@@ -77225,7 +77381,7 @@ var _text = __webpack_require__(69);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _text = __webpack_require__(69);
 
 /***/ }),
 /* 778 */
@@ -77234,7 +77390,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _widget = __webpack_require__(0);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 779 */
@@ -77261,7 +77417,7 @@ var _widget = __webpack_require__(0);
 "use strict";
 
 
-var _pane = __webpack_require__(14);
+var _widget = __webpack_require__(0);
 
 /***/ }),
 /* 782 */
@@ -77270,7 +77426,7 @@ var _pane = __webpack_require__(14);
 "use strict";
 
 
-var _layer = __webpack_require__(51);
+var _pane = __webpack_require__(14);
 
 /***/ }),
 /* 783 */
@@ -77279,7 +77435,7 @@ var _layer = __webpack_require__(51);
 "use strict";
 
 
-var _button = __webpack_require__(4);
+var _layer = __webpack_require__(51);
 
 /***/ }),
 /* 784 */
@@ -77288,7 +77444,7 @@ var _button = __webpack_require__(4);
 "use strict";
 
 
-var _widget = __webpack_require__(0);
+var _button = __webpack_require__(4);
 
 /***/ }),
 /* 785 */
@@ -77297,7 +77453,7 @@ var _widget = __webpack_require__(0);
 "use strict";
 
 
-var _abstract = __webpack_require__(73);
+var _widget = __webpack_require__(0);
 
 /***/ }),
 /* 786 */
@@ -77306,7 +77462,7 @@ var _abstract = __webpack_require__(73);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _abstract = __webpack_require__(73);
 
 /***/ }),
 /* 787 */
@@ -77315,7 +77471,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _button = __webpack_require__(4);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 788 */
@@ -77324,7 +77480,7 @@ var _button = __webpack_require__(4);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _button = __webpack_require__(4);
 
 /***/ }),
 /* 789 */
@@ -77342,7 +77498,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _layout = __webpack_require__(3);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 791 */
@@ -77351,7 +77507,7 @@ var _layout = __webpack_require__(3);
 "use strict";
 
 
-var _widget = __webpack_require__(0);
+var _layout = __webpack_require__(3);
 
 /***/ }),
 /* 792 */
@@ -77360,7 +77516,7 @@ var _widget = __webpack_require__(0);
 "use strict";
 
 
-var _layout = __webpack_require__(3);
+var _widget = __webpack_require__(0);
 
 /***/ }),
 /* 793 */
@@ -77369,7 +77525,7 @@ var _layout = __webpack_require__(3);
 "use strict";
 
 
-var _button = __webpack_require__(50);
+var _layout = __webpack_require__(3);
 
 /***/ }),
 /* 794 */
@@ -77378,7 +77534,7 @@ var _button = __webpack_require__(50);
 "use strict";
 
 
-var _widget = __webpack_require__(0);
+var _button = __webpack_require__(50);
 
 /***/ }),
 /* 795 */
@@ -77387,7 +77543,7 @@ var _widget = __webpack_require__(0);
 "use strict";
 
 
-var _abstractTreevaluechooser = __webpack_require__(70);
+var _widget = __webpack_require__(0);
 
 /***/ }),
 /* 796 */
@@ -77396,7 +77552,7 @@ var _abstractTreevaluechooser = __webpack_require__(70);
 "use strict";
 
 
-var _abstract = __webpack_require__(30);
+var _abstractTreevaluechooser = __webpack_require__(70);
 
 /***/ }),
 /* 797 */
@@ -77414,7 +77570,7 @@ var _abstract = __webpack_require__(30);
 "use strict";
 
 
-var _button = __webpack_require__(4);
+var _abstract = __webpack_require__(30);
 
 /***/ }),
 /* 799 */
@@ -77423,7 +77579,7 @@ var _button = __webpack_require__(4);
 "use strict";
 
 
-var _widget = __webpack_require__(0);
+var _button = __webpack_require__(4);
 
 /***/ }),
 /* 800 */
@@ -77450,7 +77606,7 @@ var _widget = __webpack_require__(0);
 "use strict";
 
 
-var _pane = __webpack_require__(14);
+var _widget = __webpack_require__(0);
 
 /***/ }),
 /* 803 */
@@ -77459,7 +77615,7 @@ var _pane = __webpack_require__(14);
 "use strict";
 
 
-var _button = __webpack_require__(4);
+var _pane = __webpack_require__(14);
 
 /***/ }),
 /* 804 */
@@ -77468,7 +77624,7 @@ var _button = __webpack_require__(4);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _button = __webpack_require__(4);
 
 /***/ }),
 /* 805 */
@@ -77486,7 +77642,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _layout = __webpack_require__(3);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 807 */
@@ -77495,7 +77651,7 @@ var _layout = __webpack_require__(3);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _layout = __webpack_require__(3);
 
 /***/ }),
 /* 808 */
@@ -77513,7 +77669,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _listtreeview = __webpack_require__(74);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 810 */
@@ -77522,7 +77678,7 @@ var _listtreeview = __webpack_require__(74);
 "use strict";
 
 
-var _treeview = __webpack_require__(52);
+var _listtreeview = __webpack_require__(74);
 
 /***/ }),
 /* 811 */
@@ -77531,7 +77687,7 @@ var _treeview = __webpack_require__(52);
 "use strict";
 
 
-var _widget = __webpack_require__(0);
+var _treeview = __webpack_require__(52);
 
 /***/ }),
 /* 812 */
@@ -77558,7 +77714,7 @@ var _widget = __webpack_require__(0);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _widget = __webpack_require__(0);
 
 /***/ }),
 /* 815 */
@@ -77576,7 +77732,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _widget = __webpack_require__(0);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 817 */
@@ -77585,7 +77741,7 @@ var _widget = __webpack_require__(0);
 "use strict";
 
 
-var _button = __webpack_require__(4);
+var _widget = __webpack_require__(0);
 
 /***/ }),
 /* 818 */
@@ -77594,7 +77750,7 @@ var _button = __webpack_require__(4);
 "use strict";
 
 
-var _layout = __webpack_require__(3);
+var _button = __webpack_require__(4);
 
 /***/ }),
 /* 819 */
@@ -77603,7 +77759,7 @@ var _layout = __webpack_require__(3);
 "use strict";
 
 
-var _widget = __webpack_require__(0);
+var _layout = __webpack_require__(3);
 
 /***/ }),
 /* 820 */
@@ -77612,7 +77768,7 @@ var _widget = __webpack_require__(0);
 "use strict";
 
 
-var _trigger = __webpack_require__(48);
+var _widget = __webpack_require__(0);
 
 /***/ }),
 /* 821 */
@@ -77630,7 +77786,7 @@ var _trigger = __webpack_require__(48);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _trigger = __webpack_require__(48);
 
 /***/ }),
 /* 823 */
@@ -77639,7 +77795,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _widget = __webpack_require__(0);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 824 */
@@ -77657,8 +77813,6 @@ var _widget = __webpack_require__(0);
 "use strict";
 
 
-var _layer = __webpack_require__(51);
-
 var _widget = __webpack_require__(0);
 
 /***/ }),
@@ -77668,7 +77822,9 @@ var _widget = __webpack_require__(0);
 "use strict";
 
 
-var _button = __webpack_require__(50);
+var _layer = __webpack_require__(51);
+
+var _widget = __webpack_require__(0);
 
 /***/ }),
 /* 827 */
@@ -77677,7 +77833,7 @@ var _button = __webpack_require__(50);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _button = __webpack_require__(50);
 
 /***/ }),
 /* 828 */
@@ -77686,7 +77842,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _widget = __webpack_require__(0);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 829 */
@@ -77704,7 +77860,7 @@ var _widget = __webpack_require__(0);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _widget = __webpack_require__(0);
 
 /***/ }),
 /* 831 */
@@ -77731,7 +77887,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _widget = __webpack_require__(0);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 834 */
@@ -77758,7 +77914,7 @@ var _widget = __webpack_require__(0);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _widget = __webpack_require__(0);
 
 /***/ }),
 /* 837 */
@@ -77767,7 +77923,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _widget = __webpack_require__(0);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 838 */
@@ -77794,7 +77950,7 @@ var _widget = __webpack_require__(0);
 "use strict";
 
 
-var _layout = __webpack_require__(3);
+var _widget = __webpack_require__(0);
 
 /***/ }),
 /* 841 */
@@ -77803,7 +77959,7 @@ var _layout = __webpack_require__(3);
 "use strict";
 
 
-var _widget = __webpack_require__(0);
+var _layout = __webpack_require__(3);
 
 /***/ }),
 /* 842 */
@@ -77812,7 +77968,7 @@ var _widget = __webpack_require__(0);
 "use strict";
 
 
-var _controller = __webpack_require__(53);
+var _widget = __webpack_require__(0);
 
 /***/ }),
 /* 843 */
@@ -77821,7 +77977,7 @@ var _controller = __webpack_require__(53);
 "use strict";
 
 
-var _widget = __webpack_require__(0);
+var _controller = __webpack_require__(53);
 
 /***/ }),
 /* 844 */
@@ -77830,14 +77986,14 @@ var _widget = __webpack_require__(0);
 "use strict";
 
 
+var _widget = __webpack_require__(0);
+
 /***/ }),
 /* 845 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
-
-var _button = __webpack_require__(46);
 
 /***/ }),
 /* 846 */
@@ -77846,7 +78002,7 @@ var _button = __webpack_require__(46);
 "use strict";
 
 
-var _pane = __webpack_require__(14);
+var _button = __webpack_require__(46);
 
 /***/ }),
 /* 847 */
@@ -77855,7 +78011,7 @@ var _pane = __webpack_require__(14);
 "use strict";
 
 
-var _button = __webpack_require__(4);
+var _pane = __webpack_require__(14);
 
 /***/ }),
 /* 848 */
@@ -77864,14 +78020,14 @@ var _button = __webpack_require__(4);
 "use strict";
 
 
+var _button = __webpack_require__(4);
+
 /***/ }),
 /* 849 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
-
-var _single = __webpack_require__(2);
 
 /***/ }),
 /* 850 */
@@ -77880,7 +78036,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _layout = __webpack_require__(3);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 851 */
@@ -77898,7 +78054,7 @@ var _layout = __webpack_require__(3);
 "use strict";
 
 
-var _widget = __webpack_require__(0);
+var _layout = __webpack_require__(3);
 
 /***/ }),
 /* 853 */
@@ -77907,7 +78063,7 @@ var _widget = __webpack_require__(0);
 "use strict";
 
 
-var _button = __webpack_require__(4);
+var _widget = __webpack_require__(0);
 
 /***/ }),
 /* 854 */
@@ -77916,7 +78072,7 @@ var _button = __webpack_require__(4);
 "use strict";
 
 
-var _controller = __webpack_require__(53);
+var _button = __webpack_require__(4);
 
 /***/ }),
 /* 855 */
@@ -77925,7 +78081,7 @@ var _controller = __webpack_require__(53);
 "use strict";
 
 
-var _widget = __webpack_require__(0);
+var _controller = __webpack_require__(53);
 
 /***/ }),
 /* 856 */
@@ -77934,7 +78090,7 @@ var _widget = __webpack_require__(0);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _widget = __webpack_require__(0);
 
 /***/ }),
 /* 857 */
@@ -77943,7 +78099,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _widget = __webpack_require__(0);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 858 */
@@ -77952,7 +78108,7 @@ var _widget = __webpack_require__(0);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _widget = __webpack_require__(0);
 
 /***/ }),
 /* 859 */
@@ -77970,7 +78126,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _abstract = __webpack_require__(47);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 861 */
@@ -77979,7 +78135,7 @@ var _abstract = __webpack_require__(47);
 "use strict";
 
 
-var _abstract = __webpack_require__(30);
+var _abstract = __webpack_require__(47);
 
 /***/ }),
 /* 862 */
@@ -77988,7 +78144,7 @@ var _abstract = __webpack_require__(30);
 "use strict";
 
 
-var _layout = __webpack_require__(3);
+var _abstract = __webpack_require__(30);
 
 /***/ }),
 /* 863 */
@@ -77997,7 +78153,7 @@ var _layout = __webpack_require__(3);
 "use strict";
 
 
-var _pane = __webpack_require__(14);
+var _layout = __webpack_require__(3);
 
 /***/ }),
 /* 864 */
@@ -78006,10 +78162,18 @@ var _pane = __webpack_require__(14);
 "use strict";
 
 
+var _pane = __webpack_require__(14);
+
+/***/ }),
+/* 865 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
 var _widget = __webpack_require__(0);
 
 /***/ }),
-/* 865 */,
 /* 866 */,
 /* 867 */,
 /* 868 */,
@@ -78037,7 +78201,8 @@ var _widget = __webpack_require__(0);
 /* 890 */,
 /* 891 */,
 /* 892 */,
-/* 893 */
+/* 893 */,
+/* 894 */
 /***/ (function(module, exports) {
 
 ;(function () {
@@ -78200,7 +78365,6 @@ var _widget = __webpack_require__(0);
 
 
 /***/ }),
-/* 894 */,
 /* 895 */,
 /* 896 */,
 /* 897 */,
@@ -78234,7 +78398,8 @@ var _widget = __webpack_require__(0);
 /* 925 */,
 /* 926 */,
 /* 927 */,
-/* 928 */
+/* 928 */,
+/* 929 */
 /***/ (function(module, exports) {
 
 ;(function () {
@@ -78510,7 +78675,6 @@ var _widget = __webpack_require__(0);
 
 
 /***/ }),
-/* 929 */,
 /* 930 */,
 /* 931 */,
 /* 932 */,
@@ -78519,14 +78683,15 @@ var _widget = __webpack_require__(0);
 /* 935 */,
 /* 936 */,
 /* 937 */,
-/* 938 */
+/* 938 */,
+/* 939 */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(global) {module.exports = global["Fix"] = __webpack_require__(939);
+/* WEBPACK VAR INJECTION */(function(global) {module.exports = global["Fix"] = __webpack_require__(940);
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(15)))
 
 /***/ }),
-/* 939 */
+/* 940 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(setImmediate) {function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -80059,7 +80224,6 @@ var _widget = __webpack_require__(0);
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(61).setImmediate))
 
 /***/ }),
-/* 940 */,
 /* 941 */,
 /* 942 */,
 /* 943 */,
@@ -80264,13 +80428,13 @@ var _widget = __webpack_require__(0);
 /* 1142 */,
 /* 1143 */,
 /* 1144 */,
-/* 1145 */
+/* 1145 */,
+/* 1146 */
 /***/ (function(module, exports) {
 
 
 
 /***/ }),
-/* 1146 */,
 /* 1147 */,
 /* 1148 */,
 /* 1149 */,
@@ -80583,7 +80747,8 @@ var _widget = __webpack_require__(0);
 /* 1456 */,
 /* 1457 */,
 /* 1458 */,
-/* 1459 */
+/* 1459 */,
+/* 1460 */
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(170);
@@ -80702,7 +80867,7 @@ __webpack_require__(378);
 __webpack_require__(188);
 __webpack_require__(189);
 __webpack_require__(190);
-__webpack_require__(938);
+__webpack_require__(939);
 __webpack_require__(379);
 __webpack_require__(380);
 __webpack_require__(381);
@@ -80869,6 +81034,7 @@ __webpack_require__(541);
 __webpack_require__(542);
 __webpack_require__(543);
 __webpack_require__(544);
+__webpack_require__(545);
 __webpack_require__(89);
 __webpack_require__(90);
 __webpack_require__(91);
@@ -80929,7 +81095,6 @@ __webpack_require__(145);
 __webpack_require__(146);
 __webpack_require__(147);
 __webpack_require__(148);
-__webpack_require__(545);
 __webpack_require__(546);
 __webpack_require__(547);
 __webpack_require__(548);
@@ -81100,10 +81265,11 @@ __webpack_require__(712);
 __webpack_require__(713);
 __webpack_require__(714);
 __webpack_require__(715);
-__webpack_require__(928);
-__webpack_require__(893);
-__webpack_require__(1145);
-module.exports = __webpack_require__(716);
+__webpack_require__(716);
+__webpack_require__(929);
+__webpack_require__(894);
+__webpack_require__(1146);
+module.exports = __webpack_require__(717);
 
 
 /***/ })
