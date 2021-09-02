@@ -1,4 +1,4 @@
-/*! time: 2021-9-2 11:00:15 */
+/*! time: 2021-9-2 21:32:16 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -82,12 +82,12 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 1282);
+/******/ 	return __webpack_require__(__webpack_require__.s = 1280);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 1140:
+/***/ 1138:
 /***/ (function(module, exports) {
 
 BI.i18n = {
@@ -293,7 +293,7 @@ BI.i18n = {
 
 /***/ }),
 
-/***/ 1282:
+/***/ 1280:
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(151);
@@ -312,8 +312,8 @@ __webpack_require__(175);
 __webpack_require__(176);
 __webpack_require__(186);
 __webpack_require__(187);
-__webpack_require__(1140);
-__webpack_require__(1283);
+__webpack_require__(1138);
+__webpack_require__(1281);
 __webpack_require__(188);
 __webpack_require__(189);
 module.exports = __webpack_require__(190);
@@ -321,7 +321,7 @@ module.exports = __webpack_require__(190);
 
 /***/ }),
 
-/***/ 1283:
+/***/ 1281:
 /***/ (function(module, exports) {
 
 /**

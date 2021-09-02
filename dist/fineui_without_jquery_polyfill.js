@@ -1,4 +1,4 @@
-/*! time: 2021-9-2 11:00:15 */
+/*! time: 2021-9-2 21:32:16 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -82,7 +82,7 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 1460);
+/******/ 	return __webpack_require__(__webpack_require__.s = 1458);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -6614,10 +6614,10 @@ BI.Req = {
                 BI.patchVNode(div, this.vnode);
                 // 去除这个临时的div
                 BI.DOM.hang([div]);
-                element.attr("style", self.vnode.elm.getAttribute("style"));
-                element.addClass(self.vnode.elm.getAttribute("class"));
+                element.attr("style", this.vnode.elm.getAttribute("style"));
+                element.addClass(this.vnode.elm.getAttribute("class"));
                 element.empty();
-                BI.each(BI.jQuery(self.vnode.elm).children(), function (i, node) {
+                BI.each(BI.jQuery(this.vnode.elm).children(), function (i, node) {
                     element.append(node);
                 });
                 return true;
@@ -7413,1064 +7413,6 @@ BI.Plugin = BI.Plugin || {};
 
 /***/ }),
 /* 286 */
-/***/ (function(module, exports) {
-
-(function (global, factory) {
-    factory(BI.Snabbdom = BI.Snabbdom || {});
-})(this, function (exports) {
-    'use strict';
-
-    function createElement(tagName) {
-        return document.createElement(tagName);
-    }
-    function createElementNS(namespaceURI, qualifiedName) {
-        return document.createElementNS(namespaceURI, qualifiedName);
-    }
-    function createTextNode(text) {
-        return document.createTextNode(text);
-    }
-    function createComment(text) {
-        return document.createComment(text);
-    }
-    function insertBefore(parentNode, newNode, referenceNode) {
-        parentNode.insertBefore(newNode, referenceNode);
-    }
-    function removeChild(node, child) {
-        node.removeChild(child);
-    }
-    function appendChild(node, child) {
-        node.appendChild(child);
-    }
-    function parentNode(node) {
-        return node.parentNode;
-    }
-    function nextSibling(node) {
-        return node.nextSibling;
-    }
-    function tagName(elm) {
-        return elm.tagName;
-    }
-    function setTextContent(node, text) {
-        node.textContent = text;
-    }
-    function getTextContent(node) {
-        return node.textContent;
-    }
-    function isElement(node) {
-        return node.nodeType === 1;
-    }
-    function isText(node) {
-        return node.nodeType === 3;
-    }
-    function isComment(node) {
-        return node.nodeType === 8;
-    }
-    var htmlDomApi = {
-        createElement: createElement,
-        createElementNS: createElementNS,
-        createTextNode: createTextNode,
-        createComment: createComment,
-        insertBefore: insertBefore,
-        removeChild: removeChild,
-        appendChild: appendChild,
-        parentNode: parentNode,
-        nextSibling: nextSibling,
-        tagName: tagName,
-        setTextContent: setTextContent,
-        getTextContent: getTextContent,
-        isElement: isElement,
-        isText: isText,
-        isComment: isComment
-    };
-
-    function vnode(sel, data, children, text, elm) {
-        var key = data === undefined ? undefined : data.key;
-        return { sel: sel, data: data, children: children, text: text, elm: elm, key: key };
-    }
-
-    var array = Array.isArray;
-    function primitive(s) {
-        return typeof s === "string" || typeof s === "number";
-    }
-
-    function isUndef(s) {
-        return s === undefined;
-    }
-    function isDef(s) {
-        return s !== undefined;
-    }
-    var emptyNode = vnode("", {}, [], undefined, undefined);
-    function sameVnode(vnode1, vnode2) {
-        return vnode1.key === vnode2.key && vnode1.sel === vnode2.sel;
-    }
-    function isVnode(vnode) {
-        return vnode.sel !== undefined;
-    }
-    function createKeyToOldIdx(children, beginIdx, endIdx) {
-        var _a;
-        var map = {};
-        for (var i = beginIdx; i <= endIdx; ++i) {
-            var key = (_a = children[i]) === null || _a === void 0 ? void 0 : _a.key;
-            if (key !== undefined) {
-                map[key] = i;
-            }
-        }
-        return map;
-    }
-    var hooks = ["create", "update", "remove", "destroy", "pre", "post"];
-    function init(modules, domApi) {
-        var i = void 0;
-        var j = void 0;
-        var cbs = {
-            create: [],
-            update: [],
-            remove: [],
-            destroy: [],
-            pre: [],
-            post: []
-        };
-        var api = domApi !== undefined ? domApi : htmlDomApi;
-        for (i = 0; i < hooks.length; ++i) {
-            cbs[hooks[i]] = [];
-            for (j = 0; j < modules.length; ++j) {
-                var hook = modules[j][hooks[i]];
-                if (hook !== undefined) {
-                    cbs[hooks[i]].push(hook);
-                }
-            }
-        }
-        function emptyNodeAt(elm) {
-            var id = elm.id ? "#" + elm.id : "";
-            var c = elm.className ? "." + elm.className.split(" ").join(".") : "";
-            return vnode(api.tagName(elm).toLowerCase() + id + c, {}, [], undefined, elm);
-        }
-        function createRmCb(childElm, listeners) {
-            return function rmCb() {
-                if (--listeners === 0) {
-                    var parent = api.parentNode(childElm);
-                    api.removeChild(parent, childElm);
-                }
-            };
-        }
-        function createElm(vnode, insertedVnodeQueue) {
-            var _a, _b;
-            var i = void 0;
-            var data = vnode.data;
-            if (data !== undefined) {
-                var _init = (_a = data.hook) === null || _a === void 0 ? void 0 : _a.init;
-                if (isDef(_init)) {
-                    _init(vnode);
-                    data = vnode.data;
-                }
-            }
-            var children = vnode.children;
-            var sel = vnode.sel;
-            if (sel === "!") {
-                if (isUndef(vnode.text)) {
-                    vnode.text = "";
-                }
-                vnode.elm = api.createComment(vnode.text);
-            } else if (sel !== undefined) {
-                // Parse selector
-                var hashIdx = sel.indexOf("#");
-                var dotIdx = sel.indexOf(".", hashIdx);
-                var hash = hashIdx > 0 ? hashIdx : sel.length;
-                var dot = dotIdx > 0 ? dotIdx : sel.length;
-                var tag = hashIdx !== -1 || dotIdx !== -1 ? sel.slice(0, Math.min(hash, dot)) : sel;
-                var elm = vnode.elm = isDef(data) && isDef(i = data.ns) ? api.createElementNS(i, tag) : api.createElement(tag);
-                if (hash < dot) elm.setAttribute("id", sel.slice(hash + 1, dot));
-                if (dotIdx > 0) elm.setAttribute("class", sel.slice(dot + 1).replace(/\./g, " "));
-                for (i = 0; i < cbs.create.length; ++i) {
-                    cbs.create[i](emptyNode, vnode);
-                }if (array(children)) {
-                    for (i = 0; i < children.length; ++i) {
-                        var ch = children[i];
-                        if (ch != null) {
-                            api.appendChild(elm, createElm(ch, insertedVnodeQueue));
-                        }
-                    }
-                } else if (primitive(vnode.text)) {
-                    api.appendChild(elm, api.createTextNode(vnode.text));
-                }
-                var _hook = vnode.data.hook;
-                if (isDef(_hook)) {
-                    (_b = _hook.create) === null || _b === void 0 ? void 0 : _b.call(_hook, emptyNode, vnode);
-                    if (_hook.insert) {
-                        insertedVnodeQueue.push(vnode);
-                    }
-                }
-            } else {
-                vnode.elm = api.createTextNode(vnode.text);
-            }
-            return vnode.elm;
-        }
-        function addVnodes(parentElm, before, vnodes, startIdx, endIdx, insertedVnodeQueue) {
-            for (; startIdx <= endIdx; ++startIdx) {
-                var ch = vnodes[startIdx];
-                if (ch != null) {
-                    api.insertBefore(parentElm, createElm(ch, insertedVnodeQueue), before);
-                }
-            }
-        }
-        function invokeDestroyHook(vnode) {
-            var _a, _b;
-            var data = vnode.data;
-            if (data !== undefined) {
-                (_b = (_a = data === null || data === void 0 ? void 0 : data.hook) === null || _a === void 0 ? void 0 : _a.destroy) === null || _b === void 0 ? void 0 : _b.call(_a, vnode);
-                for (var _i = 0; _i < cbs.destroy.length; ++_i) {
-                    cbs.destroy[_i](vnode);
-                }if (vnode.children !== undefined) {
-                    for (var _j = 0; _j < vnode.children.length; ++_j) {
-                        var child = vnode.children[_j];
-                        if (child != null && typeof child !== "string") {
-                            invokeDestroyHook(child);
-                        }
-                    }
-                }
-            }
-        }
-        function removeVnodes(parentElm, vnodes, startIdx, endIdx) {
-            var _a, _b;
-            for (; startIdx <= endIdx; ++startIdx) {
-                var listeners = void 0;
-                var rm = void 0;
-                var ch = vnodes[startIdx];
-                if (ch != null) {
-                    if (isDef(ch.sel)) {
-                        invokeDestroyHook(ch);
-                        listeners = cbs.remove.length + 1;
-                        rm = createRmCb(ch.elm, listeners);
-                        for (var _i2 = 0; _i2 < cbs.remove.length; ++_i2) {
-                            cbs.remove[_i2](ch, rm);
-                        }var removeHook = (_b = (_a = ch === null || ch === void 0 ? void 0 : ch.data) === null || _a === void 0 ? void 0 : _a.hook) === null || _b === void 0 ? void 0 : _b.remove;
-                        if (isDef(removeHook)) {
-                            removeHook(ch, rm);
-                        } else {
-                            rm();
-                        }
-                    } else {
-                        // Text node
-                        api.removeChild(parentElm, ch.elm);
-                    }
-                }
-            }
-        }
-        function updateChildren(parentElm, oldCh, newCh, insertedVnodeQueue) {
-            var oldStartIdx = 0;
-            var newStartIdx = 0;
-            var oldEndIdx = oldCh.length - 1;
-            var oldStartVnode = oldCh[0];
-            var oldEndVnode = oldCh[oldEndIdx];
-            var newEndIdx = newCh.length - 1;
-            var newStartVnode = newCh[0];
-            var newEndVnode = newCh[newEndIdx];
-            var oldKeyToIdx = void 0;
-            var idxInOld = void 0;
-            var elmToMove = void 0;
-            var before = void 0;
-            while (oldStartIdx <= oldEndIdx && newStartIdx <= newEndIdx) {
-                if (oldStartVnode == null) {
-                    oldStartVnode = oldCh[++oldStartIdx]; // Vnode might have been moved left
-                } else if (oldEndVnode == null) {
-                    oldEndVnode = oldCh[--oldEndIdx];
-                } else if (newStartVnode == null) {
-                    newStartVnode = newCh[++newStartIdx];
-                } else if (newEndVnode == null) {
-                    newEndVnode = newCh[--newEndIdx];
-                } else if (sameVnode(oldStartVnode, newStartVnode)) {
-                    patchVnode(oldStartVnode, newStartVnode, insertedVnodeQueue);
-                    oldStartVnode = oldCh[++oldStartIdx];
-                    newStartVnode = newCh[++newStartIdx];
-                } else if (sameVnode(oldEndVnode, newEndVnode)) {
-                    patchVnode(oldEndVnode, newEndVnode, insertedVnodeQueue);
-                    oldEndVnode = oldCh[--oldEndIdx];
-                    newEndVnode = newCh[--newEndIdx];
-                } else if (sameVnode(oldStartVnode, newEndVnode)) {
-                    // Vnode moved right
-                    patchVnode(oldStartVnode, newEndVnode, insertedVnodeQueue);
-                    api.insertBefore(parentElm, oldStartVnode.elm, api.nextSibling(oldEndVnode.elm));
-                    oldStartVnode = oldCh[++oldStartIdx];
-                    newEndVnode = newCh[--newEndIdx];
-                } else if (sameVnode(oldEndVnode, newStartVnode)) {
-                    // Vnode moved left
-                    patchVnode(oldEndVnode, newStartVnode, insertedVnodeQueue);
-                    api.insertBefore(parentElm, oldEndVnode.elm, oldStartVnode.elm);
-                    oldEndVnode = oldCh[--oldEndIdx];
-                    newStartVnode = newCh[++newStartIdx];
-                } else {
-                    if (oldKeyToIdx === undefined) {
-                        oldKeyToIdx = createKeyToOldIdx(oldCh, oldStartIdx, oldEndIdx);
-                    }
-                    idxInOld = oldKeyToIdx[newStartVnode.key];
-                    if (isUndef(idxInOld)) {
-                        // New element
-                        api.insertBefore(parentElm, createElm(newStartVnode, insertedVnodeQueue), oldStartVnode.elm);
-                    } else {
-                        elmToMove = oldCh[idxInOld];
-                        if (elmToMove.sel !== newStartVnode.sel) {
-                            api.insertBefore(parentElm, createElm(newStartVnode, insertedVnodeQueue), oldStartVnode.elm);
-                        } else {
-                            patchVnode(elmToMove, newStartVnode, insertedVnodeQueue);
-                            oldCh[idxInOld] = undefined;
-                            api.insertBefore(parentElm, elmToMove.elm, oldStartVnode.elm);
-                        }
-                    }
-                    newStartVnode = newCh[++newStartIdx];
-                }
-            }
-            if (oldStartIdx <= oldEndIdx || newStartIdx <= newEndIdx) {
-                if (oldStartIdx > oldEndIdx) {
-                    before = newCh[newEndIdx + 1] == null ? null : newCh[newEndIdx + 1].elm;
-                    addVnodes(parentElm, before, newCh, newStartIdx, newEndIdx, insertedVnodeQueue);
-                } else {
-                    removeVnodes(parentElm, oldCh, oldStartIdx, oldEndIdx);
-                }
-            }
-        }
-        function patchVnode(oldVnode, vnode, insertedVnodeQueue) {
-            var _a, _b, _c, _d, _e;
-            var hook = (_a = vnode.data) === null || _a === void 0 ? void 0 : _a.hook;
-            (_b = hook === null || hook === void 0 ? void 0 : hook.prepatch) === null || _b === void 0 ? void 0 : _b.call(hook, oldVnode, vnode);
-            var elm = vnode.elm = oldVnode.elm;
-            var oldCh = oldVnode.children;
-            var ch = vnode.children;
-            if (oldVnode === vnode) return;
-            if (vnode.data !== undefined) {
-                for (var _i3 = 0; _i3 < cbs.update.length; ++_i3) {
-                    cbs.update[_i3](oldVnode, vnode);
-                }(_d = (_c = vnode.data.hook) === null || _c === void 0 ? void 0 : _c.update) === null || _d === void 0 ? void 0 : _d.call(_c, oldVnode, vnode);
-            }
-            if (isUndef(vnode.text)) {
-                if (isDef(oldCh) && isDef(ch)) {
-                    if (oldCh !== ch) updateChildren(elm, oldCh, ch, insertedVnodeQueue);
-                } else if (isDef(ch)) {
-                    if (isDef(oldVnode.text)) api.setTextContent(elm, "");
-                    addVnodes(elm, null, ch, 0, ch.length - 1, insertedVnodeQueue);
-                } else if (isDef(oldCh)) {
-                    removeVnodes(elm, oldCh, 0, oldCh.length - 1);
-                } else if (isDef(oldVnode.text)) {
-                    api.setTextContent(elm, "");
-                }
-            } else if (oldVnode.text !== vnode.text) {
-                if (isDef(oldCh)) {
-                    removeVnodes(elm, oldCh, 0, oldCh.length - 1);
-                }
-                api.setTextContent(elm, vnode.text);
-            }
-            (_e = hook === null || hook === void 0 ? void 0 : hook.postpatch) === null || _e === void 0 ? void 0 : _e.call(hook, oldVnode, vnode);
-        }
-        return function patch(oldVnode, vnode) {
-            var i = void 0,
-                elm = void 0,
-                parent = void 0;
-            var insertedVnodeQueue = [];
-            for (i = 0; i < cbs.pre.length; ++i) {
-                cbs.pre[i]();
-            }if (!isVnode(oldVnode)) {
-                oldVnode = emptyNodeAt(oldVnode);
-            }
-            if (sameVnode(oldVnode, vnode)) {
-                patchVnode(oldVnode, vnode, insertedVnodeQueue);
-            } else {
-                elm = oldVnode.elm;
-                parent = api.parentNode(elm);
-                createElm(vnode, insertedVnodeQueue);
-                if (parent !== null) {
-                    api.insertBefore(parent, vnode.elm, api.nextSibling(elm));
-                    removeVnodes(parent, [oldVnode], 0, 0);
-                }
-            }
-            for (i = 0; i < insertedVnodeQueue.length; ++i) {
-                insertedVnodeQueue[i].data.hook.insert(insertedVnodeQueue[i]);
-            }
-            for (i = 0; i < cbs.post.length; ++i) {
-                cbs.post[i]();
-            }return vnode;
-        };
-    }
-
-    function addNS(data, children, sel) {
-        data.ns = "http://www.w3.org/2000/svg";
-        if (sel !== "foreignObject" && children !== undefined) {
-            for (var i = 0; i < children.length; ++i) {
-                var childData = children[i].data;
-                if (childData !== undefined) {
-                    addNS(childData, children[i].children, children[i].sel);
-                }
-            }
-        }
-    }
-    function h(sel, b, c) {
-        var data = {};
-        var children = void 0;
-        var text = void 0;
-        var i = void 0;
-        if (c !== undefined) {
-            if (b !== null) {
-                data = b;
-            }
-            if (array(c)) {
-                children = c;
-            } else if (primitive(c)) {
-                text = c;
-            } else if (c && c.sel) {
-                children = [c];
-            }
-        } else if (b !== undefined && b !== null) {
-            if (array(b)) {
-                children = b;
-            } else if (primitive(b)) {
-                text = b;
-            } else if (b && b.sel) {
-                children = [b];
-            } else {
-                data = b;
-            }
-        }
-        if (children !== undefined) {
-            for (i = 0; i < children.length; ++i) {
-                if (primitive(children[i])) children[i] = vnode(undefined, undefined, undefined, children[i], undefined);
-            }
-        }
-        if (sel[0] === "s" && sel[1] === "v" && sel[2] === "g" && (sel.length === 3 || sel[3] === "." || sel[3] === "#")) {
-            addNS(data, children, sel);
-        }
-        return vnode(sel, data, children, text, undefined);
-    }
-
-    function copyToThunk(vnode, thunk) {
-        vnode.data.fn = thunk.data.fn;
-        vnode.data.args = thunk.data.args;
-        thunk.data = vnode.data;
-        thunk.children = vnode.children;
-        thunk.text = vnode.text;
-        thunk.elm = vnode.elm;
-    }
-    function init$1(thunk) {
-        var cur = thunk.data;
-        var vnode = cur.fn.apply(undefined, cur.args);
-        copyToThunk(vnode, thunk);
-    }
-    function prepatch(oldVnode, thunk) {
-        var i = void 0;
-        var old = oldVnode.data;
-        var cur = thunk.data;
-        var oldArgs = old.args;
-        var args = cur.args;
-        if (old.fn !== cur.fn || oldArgs.length !== args.length) {
-            copyToThunk(cur.fn.apply(undefined, args), thunk);
-            return;
-        }
-        for (i = 0; i < args.length; ++i) {
-            if (oldArgs[i] !== args[i]) {
-                copyToThunk(cur.fn.apply(undefined, args), thunk);
-                return;
-            }
-        }
-        copyToThunk(oldVnode, thunk);
-    }
-    var thunk = function thunk(sel, key, fn, args) {
-        if (args === undefined) {
-            args = fn;
-            fn = key;
-            key = undefined;
-        }
-        return h(sel, {
-            key: key,
-            hook: { init: init$1, prepatch: prepatch },
-            fn: fn,
-            args: args
-        });
-    };
-
-    function pre(vnode, newVnode) {
-        var attachData = vnode.data.attachData;
-        // Copy created placeholder and real element from old vnode
-        newVnode.data.attachData.placeholder = attachData.placeholder;
-        newVnode.data.attachData.real = attachData.real;
-        // Mount real element in vnode so the patch process operates on it
-        vnode.elm = vnode.data.attachData.real;
-    }
-    function post(_, vnode) {
-        // Mount dummy placeholder in vnode so potential reorders use it
-        vnode.elm = vnode.data.attachData.placeholder;
-    }
-    function destroy(vnode) {
-        // Remove placeholder
-        if (vnode.elm !== undefined) {
-            vnode.elm.parentNode.removeChild(vnode.elm);
-        }
-        // Remove real element from where it was inserted
-        vnode.elm = vnode.data.attachData.real;
-    }
-    function create(_, vnode) {
-        var real = vnode.elm;
-        var attachData = vnode.data.attachData;
-        var placeholder = document.createElement("span");
-        // Replace actual element with dummy placeholder
-        // Snabbdom will then insert placeholder instead
-        vnode.elm = placeholder;
-        attachData.target.appendChild(real);
-        attachData.real = real;
-        attachData.placeholder = placeholder;
-    }
-    function attachTo(target, vnode) {
-        if (vnode.data === undefined) vnode.data = {};
-        if (vnode.data.hook === undefined) vnode.data.hook = {};
-        var data = vnode.data;
-        var hook = vnode.data.hook;
-        data.attachData = { target: target, placeholder: undefined, real: undefined };
-        hook.create = create;
-        hook.prepatch = pre;
-        hook.postpatch = post;
-        hook.destroy = destroy;
-        return vnode;
-    }
-
-    function toVNode(node, domApi) {
-        var api = domApi !== undefined ? domApi : htmlDomApi;
-        var text = void 0;
-        if (api.isElement(node)) {
-            var id = node.id ? "#" + node.id : "";
-            var cn = node.getAttribute("class");
-            var c = cn ? "." + cn.split(" ").join(".") : "";
-            var sel = api.tagName(node).toLowerCase() + id + c;
-            var attrs = {};
-            var children = [];
-            var name = void 0;
-            var i = void 0,
-                n = void 0;
-            var elmAttrs = node.attributes;
-            var elmChildren = node.childNodes;
-            for (i = 0, n = elmAttrs.length; i < n; i++) {
-                name = elmAttrs[i].nodeName;
-                if (name !== "id" && name !== "class") {
-                    attrs[name] = elmAttrs[i].nodeValue;
-                }
-            }
-            for (i = 0, n = elmChildren.length; i < n; i++) {
-                children.push(toVNode(elmChildren[i], domApi));
-            }
-            return vnode(sel, { attrs: attrs }, children, undefined, node);
-        } else if (api.isText(node)) {
-            text = api.getTextContent(node);
-            return vnode(undefined, undefined, undefined, text, node);
-        } else if (api.isComment(node)) {
-            text = api.getTextContent(node);
-            return vnode("!", {}, [], text, node);
-        } else {
-            return vnode("", {}, [], undefined, node);
-        }
-    }
-
-    var xlinkNS = "http://www.w3.org/1999/xlink";
-    var xmlNS = "http://www.w3.org/XML/1998/namespace";
-    var colonChar = 58;
-    var xChar = 120;
-    function updateAttrs(oldVnode, vnode) {
-        var key = void 0;
-        var elm = vnode.elm;
-        var oldAttrs = oldVnode.data.attrs;
-        var attrs = vnode.data.attrs;
-        if (!oldAttrs && !attrs) return;
-        if (oldAttrs === attrs) return;
-        oldAttrs = oldAttrs || {};
-        attrs = attrs || {};
-        // update modified attributes, add new attributes
-        for (key in attrs) {
-            var cur = attrs[key];
-            var old = oldAttrs[key];
-            if (old !== cur) {
-                if (cur === true) {
-                    elm.setAttribute(key, "");
-                } else if (cur === false) {
-                    elm.removeAttribute(key);
-                } else {
-                    if (key.charCodeAt(0) !== xChar) {
-                        elm.setAttribute(key, cur);
-                    } else if (key.charCodeAt(3) === colonChar) {
-                        // Assume xml namespace
-                        elm.setAttributeNS(xmlNS, key, cur);
-                    } else if (key.charCodeAt(5) === colonChar) {
-                        // Assume xlink namespace
-                        elm.setAttributeNS(xlinkNS, key, cur);
-                    } else {
-                        elm.setAttribute(key, cur);
-                    }
-                }
-            }
-        }
-        // remove removed attributes
-        // use `in` operator since the previous `for` iteration uses it (.i.e. add even attributes with undefined value)
-        // the other option is to remove all attributes with value == undefined
-        for (key in oldAttrs) {
-            if (!(key in attrs)) {
-                elm.removeAttribute(key);
-            }
-        }
-    }
-    var attributesModule = { create: updateAttrs, update: updateAttrs };
-
-    function updateClass(oldVnode, vnode) {
-        var cur = void 0;
-        var name = void 0;
-        var elm = vnode.elm;
-        var oldClass = oldVnode.data["class"];
-        var klass = vnode.data["class"];
-        if (!oldClass && !klass) return;
-        if (oldClass === klass) return;
-        oldClass = oldClass || {};
-        klass = klass || {};
-        for (name in oldClass) {
-            if (oldClass[name] && !Object.prototype.hasOwnProperty.call(klass, name)) {
-                // was `true` and now not provided
-                elm.classList.remove(name);
-            }
-        }
-        for (name in klass) {
-            cur = klass[name];
-            if (cur !== oldClass[name]) {
-                elm.classList[cur ? "add" : "remove"](name);
-            }
-        }
-    }
-    var classModule = { create: updateClass, update: updateClass };
-
-    var CAPS_REGEX = /[A-Z]/g;
-    function updateDataset(oldVnode, vnode) {
-        var elm = vnode.elm;
-        var oldDataset = oldVnode.data.dataset;
-        var dataset = vnode.data.dataset;
-        var key = void 0;
-        if (!oldDataset && !dataset) return;
-        if (oldDataset === dataset) return;
-        oldDataset = oldDataset || {};
-        dataset = dataset || {};
-        var d = elm.dataset;
-        for (key in oldDataset) {
-            if (!dataset[key]) {
-                if (d) {
-                    if (key in d) {
-                        delete d[key];
-                    }
-                } else {
-                    elm.removeAttribute("data-" + key.replace(CAPS_REGEX, "-$&").toLowerCase());
-                }
-            }
-        }
-        for (key in dataset) {
-            if (oldDataset[key] !== dataset[key]) {
-                if (d) {
-                    d[key] = dataset[key];
-                } else {
-                    elm.setAttribute("data-" + key.replace(CAPS_REGEX, "-$&").toLowerCase(), dataset[key]);
-                }
-            }
-        }
-    }
-    var datasetModule = { create: updateDataset, update: updateDataset };
-
-    function invokeHandler(handler, vnode, event) {
-        if (typeof handler === "function") {
-            // call function handler
-            handler.call(vnode, event, vnode);
-        } else if (typeof handler === "object") {
-            // call multiple handlers
-            for (var i = 0; i < handler.length; i++) {
-                invokeHandler(handler[i], vnode, event);
-            }
-        }
-    }
-    function handleEvent(event, vnode) {
-        var name = event.type;
-        var on = vnode.data.on;
-        // call event handler(s) if exists
-        if (on && on[name]) {
-            invokeHandler(on[name], vnode, event);
-        }
-    }
-    function createListener() {
-        return function handler(event) {
-            handleEvent(event, handler.vnode);
-        };
-    }
-    function updateEventListeners(oldVnode, vnode) {
-        var oldOn = oldVnode.data.on;
-        var oldListener = oldVnode.listener;
-        var oldElm = oldVnode.elm;
-        var on = vnode && vnode.data.on;
-        var elm = vnode && vnode.elm;
-        var name = void 0;
-        // optimization for reused immutable handlers
-        if (oldOn === on) {
-            return;
-        }
-        // remove existing listeners which no longer used
-        if (oldOn && oldListener) {
-            // if element changed or deleted we remove all existing listeners unconditionally
-            if (!on) {
-                for (name in oldOn) {
-                    // remove listener if element was changed or existing listeners removed
-                    oldElm.removeEventListener(name, oldListener, false);
-                }
-            } else {
-                for (name in oldOn) {
-                    // remove listener if existing listener removed
-                    if (!on[name]) {
-                        oldElm.removeEventListener(name, oldListener, false);
-                    }
-                }
-            }
-        }
-        // add new listeners which has not already attached
-        if (on) {
-            // reuse existing listener or create new
-            var listener = vnode.listener = oldVnode.listener || createListener();
-            // update vnode for listener
-            listener.vnode = vnode;
-            // if element changed or added we add all needed listeners unconditionally
-            if (!oldOn) {
-                for (name in on) {
-                    // add listener if element was changed or new listeners added
-                    elm.addEventListener(name, listener, false);
-                }
-            } else {
-                for (name in on) {
-                    // add listener if new listener added
-                    if (!oldOn[name]) {
-                        elm.addEventListener(name, listener, false);
-                    }
-                }
-            }
-        }
-    }
-    var eventListenersModule = {
-        create: updateEventListeners,
-        update: updateEventListeners,
-        destroy: updateEventListeners
-    };
-
-    var raf = typeof window !== "undefined" && window.requestAnimationFrame || setTimeout;
-    var nextFrame = function nextFrame(fn) {
-        raf(function () {
-            raf(fn);
-        });
-    };
-    function setNextFrame(obj, prop, val) {
-        nextFrame(function () {
-            obj[prop] = val;
-        });
-    }
-    function getTextNodeRect(textNode) {
-        var rect = void 0;
-        if (document.createRange) {
-            var range = document.createRange();
-            range.selectNodeContents(textNode);
-            if (range.getBoundingClientRect) {
-                rect = range.getBoundingClientRect();
-            }
-        }
-        return rect;
-    }
-    function calcTransformOrigin(isTextNode, textRect, boundingRect) {
-        if (isTextNode) {
-            if (textRect) {
-                // calculate pixels to center of text from left edge of bounding box
-                var relativeCenterX = textRect.left + textRect.width / 2 - boundingRect.left;
-                var relativeCenterY = textRect.top + textRect.height / 2 - boundingRect.top;
-                return relativeCenterX + "px " + relativeCenterY + "px";
-            }
-        }
-        return "0 0"; // top left
-    }
-    function getTextDx(oldTextRect, newTextRect) {
-        if (oldTextRect && newTextRect) {
-            return oldTextRect.left + oldTextRect.width / 2 - (newTextRect.left + newTextRect.width / 2);
-        }
-        return 0;
-    }
-    function getTextDy(oldTextRect, newTextRect) {
-        if (oldTextRect && newTextRect) {
-            return oldTextRect.top + oldTextRect.height / 2 - (newTextRect.top + newTextRect.height / 2);
-        }
-        return 0;
-    }
-    function isTextElement(elm) {
-        return elm.childNodes.length === 1 && elm.childNodes[0].nodeType === 3;
-    }
-    var removed = void 0;
-    var created = void 0;
-    function pre$1() {
-        removed = {};
-        created = [];
-    }
-    function create$1(oldVnode, vnode) {
-        var hero = vnode.data.hero;
-        if (hero && hero.id) {
-            created.push(hero.id);
-            created.push(vnode);
-        }
-    }
-    function destroy$1(vnode) {
-        var hero = vnode.data.hero;
-        if (hero && hero.id) {
-            var elm = vnode.elm;
-            vnode.isTextNode = isTextElement(elm); // is this a text node?
-            vnode.boundingRect = elm.getBoundingClientRect(); // save the bounding rectangle to a new property on the vnode
-            vnode.textRect = vnode.isTextNode ? getTextNodeRect(elm.childNodes[0]) : null; // save bounding rect of inner text node
-            var computedStyle = window.getComputedStyle(elm, undefined); // get current styles (includes inherited properties)
-            vnode.savedStyle = JSON.parse(JSON.stringify(computedStyle)); // save a copy of computed style values
-            removed[hero.id] = vnode;
-        }
-    }
-    function post$1() {
-        var i = void 0,
-            id = void 0,
-            newElm = void 0,
-            oldVnode = void 0,
-            oldElm = void 0,
-            hRatio = void 0,
-            wRatio = void 0,
-            oldRect = void 0,
-            newRect = void 0,
-            dx = void 0,
-            dy = void 0,
-            origTransform = void 0,
-            origTransition = void 0,
-            newStyle = void 0,
-            oldStyle = void 0,
-            newComputedStyle = void 0,
-            isTextNode = void 0,
-            newTextRect = void 0,
-            oldTextRect = void 0;
-        for (i = 0; i < created.length; i += 2) {
-            id = created[i];
-            newElm = created[i + 1].elm;
-            oldVnode = removed[id];
-            if (oldVnode) {
-                isTextNode = oldVnode.isTextNode && isTextElement(newElm); // Are old & new both text?
-                newStyle = newElm.style;
-                newComputedStyle = window.getComputedStyle(newElm, undefined); // get full computed style for new element
-                oldElm = oldVnode.elm;
-                oldStyle = oldElm.style;
-                // Overall element bounding boxes
-                newRect = newElm.getBoundingClientRect();
-                oldRect = oldVnode.boundingRect; // previously saved bounding rect
-                // Text node bounding boxes & distances
-                if (isTextNode) {
-                    newTextRect = getTextNodeRect(newElm.childNodes[0]);
-                    oldTextRect = oldVnode.textRect;
-                    dx = getTextDx(oldTextRect, newTextRect);
-                    dy = getTextDy(oldTextRect, newTextRect);
-                } else {
-                    // Calculate distances between old & new positions
-                    dx = oldRect.left - newRect.left;
-                    dy = oldRect.top - newRect.top;
-                }
-                hRatio = newRect.height / Math.max(oldRect.height, 1);
-                wRatio = isTextNode ? hRatio : newRect.width / Math.max(oldRect.width, 1); // text scales based on hRatio
-                // Animate new element
-                origTransform = newStyle.transform;
-                origTransition = newStyle.transition;
-                if (newComputedStyle.display === "inline") {
-                    // inline elements cannot be transformed
-                    newStyle.display = "inline-block"; // this does not appear to have any negative side effects
-                }
-                newStyle.transition = origTransition + "transform 0s";
-                newStyle.transformOrigin = calcTransformOrigin(isTextNode, newTextRect, newRect);
-                newStyle.opacity = "0";
-                newStyle.transform = origTransform + "translate(" + dx + "px, " + dy + "px) " + "scale(" + 1 / wRatio + ", " + 1 / hRatio + ")";
-                setNextFrame(newStyle, "transition", origTransition);
-                setNextFrame(newStyle, "transform", origTransform);
-                setNextFrame(newStyle, "opacity", "1");
-                // Animate old element
-                for (var key in oldVnode.savedStyle) {
-                    // re-apply saved inherited properties
-                    if (String(parseInt(key)) !== key) {
-                        var ms = key.substring(0, 2) === "ms";
-                        var moz = key.substring(0, 3) === "moz";
-                        var webkit = key.substring(0, 6) === "webkit";
-                        if (!ms && !moz && !webkit) {
-                            // ignore prefixed style properties
-                            oldStyle[key] = oldVnode.savedStyle[key];
-                        }
-                    }
-                }
-                oldStyle.position = "absolute";
-                oldStyle.top = oldRect.top + "px"; // start at existing position
-                oldStyle.left = oldRect.left + "px";
-                oldStyle.width = oldRect.width + "px"; // Needed for elements who were sized relative to their parents
-                oldStyle.height = oldRect.height + "px"; // Needed for elements who were sized relative to their parents
-                oldStyle.margin = "0"; // Margin on hero element leads to incorrect positioning
-                oldStyle.transformOrigin = calcTransformOrigin(isTextNode, oldTextRect, oldRect);
-                oldStyle.transform = "";
-                oldStyle.opacity = "1";
-                document.body.appendChild(oldElm);
-                setNextFrame(oldStyle, "transform", "translate(" + -dx + "px, " + -dy + "px) scale(" + wRatio + ", " + hRatio + ")"); // scale must be on far right for translate to be correct
-                setNextFrame(oldStyle, "opacity", "0");
-                oldElm.addEventListener("transitionend", function (ev) {
-                    if (ev.propertyName === "transform") {
-                        document.body.removeChild(ev.target);
-                    }
-                });
-            }
-        }
-        removed = created = undefined;
-    }
-    var heroModule = {
-        pre: pre$1,
-        create: create$1,
-        destroy: destroy$1,
-        post: post$1
-    };
-
-    function updateProps(oldVnode, vnode) {
-        var key = void 0;
-        var cur = void 0;
-        var old = void 0;
-        var elm = vnode.elm;
-        var oldProps = oldVnode.data.props;
-        var props = vnode.data.props;
-        if (!oldProps && !props) return;
-        if (oldProps === props) return;
-        oldProps = oldProps || {};
-        props = props || {};
-        for (key in props) {
-            cur = props[key];
-            old = oldProps[key];
-            if (old !== cur && (key !== "value" || elm[key] !== cur)) {
-                elm[key] = cur;
-            }
-        }
-    }
-    var propsModule = { create: updateProps, update: updateProps };
-
-    // Bindig `requestAnimationFrame` like this fixes a bug in IE/Edge. See #360 and #409.
-    var raf$1 = typeof window !== "undefined" && (window.requestAnimationFrame && window.requestAnimationFrame.bind(window)) || setTimeout;
-    var nextFrame$1 = function nextFrame$1(fn) {
-        raf$1(function () {
-            raf$1(fn);
-        });
-    };
-    var reflowForced = false;
-    function setNextFrame$1(obj, prop, val) {
-        nextFrame$1(function () {
-            obj[prop] = val;
-        });
-    }
-    function updateStyle(oldVnode, vnode) {
-        var cur = void 0;
-        var name = void 0;
-        var elm = vnode.elm;
-        var oldStyle = oldVnode.data.style;
-        var style = vnode.data.style;
-        if (!oldStyle && !style) return;
-        if (oldStyle === style) return;
-        oldStyle = oldStyle || {};
-        style = style || {};
-        var oldHasDel = "delayed" in oldStyle;
-        for (name in oldStyle) {
-            if (!style[name]) {
-                if (name[0] === "-" && name[1] === "-") {
-                    elm.style.removeProperty(name);
-                } else {
-                    elm.style[name] = "";
-                }
-            }
-        }
-        for (name in style) {
-            cur = style[name];
-            if (name === "delayed" && style.delayed) {
-                for (var name2 in style.delayed) {
-                    cur = style.delayed[name2];
-                    if (!oldHasDel || cur !== oldStyle.delayed[name2]) {
-                        setNextFrame$1(elm.style, name2, cur);
-                    }
-                }
-            } else if (name !== "remove" && cur !== oldStyle[name]) {
-                if (name[0] === "-" && name[1] === "-") {
-                    elm.style.setProperty(name, cur);
-                } else {
-                    elm.style[name] = cur;
-                }
-            }
-        }
-    }
-    function applyDestroyStyle(vnode) {
-        var style = void 0;
-        var name = void 0;
-        var elm = vnode.elm;
-        var s = vnode.data.style;
-        if (!s || !(style = s.destroy)) return;
-        for (name in style) {
-            elm.style[name] = style[name];
-        }
-    }
-    function applyRemoveStyle(vnode, rm) {
-        var s = vnode.data.style;
-        if (!s || !s.remove) {
-            rm();
-            return;
-        }
-        if (!reflowForced) {
-            // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-            vnode.elm.offsetLeft;
-            reflowForced = true;
-        }
-        var name = void 0;
-        var elm = vnode.elm;
-        var i = 0;
-        var style = s.remove;
-        var amount = 0;
-        var applied = [];
-        for (name in style) {
-            applied.push(name);
-            elm.style[name] = style[name];
-        }
-        var compStyle = getComputedStyle(elm);
-        var props = compStyle["transition-property"].split(", ");
-        for (; i < props.length; ++i) {
-            if (applied.indexOf(props[i]) !== -1) amount++;
-        }
-        elm.addEventListener("transitionend", function (ev) {
-            if (ev.target === elm) --amount;
-            if (amount === 0) rm();
-        });
-    }
-    function forceReflow() {
-        reflowForced = false;
-    }
-    var styleModule = {
-        pre: forceReflow,
-        create: updateStyle,
-        update: updateStyle,
-        destroy: applyDestroyStyle,
-        remove: applyRemoveStyle
-    };
-
-    exports.array = array;
-    exports.attachTo = attachTo;
-    exports.attributesModule = attributesModule;
-    exports.classModule = classModule;
-    exports.datasetModule = datasetModule;
-    exports.eventListenersModule = eventListenersModule;
-    exports.h = h;
-    exports.heroModule = heroModule;
-    exports.htmlDomApi = htmlDomApi;
-    exports.init = init;
-    exports.primitive = primitive;
-    exports.propsModule = propsModule;
-    exports.styleModule = styleModule;
-    exports.thunk = thunk;
-    exports.toVNode = toVNode;
-    exports.vnode = vnode;
-
-    exports.__esModule = true;
-});
-
-
-/***/ }),
-/* 287 */
 /***/ (function(module, exports) {
 
 /**
@@ -10384,7 +9326,7 @@ BI.Plugin = BI.Plugin || {};
 
 
 /***/ }),
-/* 288 */
+/* 287 */
 /***/ (function(module, exports) {
 
 /**
@@ -10425,7 +9367,7 @@ BI.ActionFactory = {
 
 
 /***/ }),
-/* 289 */
+/* 288 */
 /***/ (function(module, exports) {
 
 /**
@@ -10450,7 +9392,7 @@ BI.ShowAction = BI.inherit(BI.Action, {
 
 
 /***/ }),
-/* 290 */
+/* 289 */
 /***/ (function(module, exports) {
 
 BI.BehaviorFactory = {
@@ -10488,7 +9430,7 @@ BI.Behavior = BI.inherit(BI.OB, {
 
 
 /***/ }),
-/* 291 */
+/* 290 */
 /***/ (function(module, exports) {
 
 /**
@@ -10527,7 +9469,7 @@ BI.HighlightBehavior = BI.inherit(BI.Behavior, {
 
 
 /***/ }),
-/* 292 */
+/* 291 */
 /***/ (function(module, exports) {
 
 /**
@@ -10556,7 +9498,7 @@ BI.RedMarkBehavior = BI.inherit(BI.Behavior, {
 
 
 /***/ }),
-/* 293 */
+/* 292 */
 /***/ (function(module, exports) {
 
 /**
@@ -10573,7 +9515,7 @@ BI.Controller.EVENT_CHANGE = "__EVENT_CHANGE__";
 
 
 /***/ }),
-/* 294 */
+/* 293 */
 /***/ (function(module, exports) {
 
 /**
@@ -10624,7 +9566,7 @@ BI.BroadcastController = BI.inherit(BI.Controller, {
 
 
 /***/ }),
-/* 295 */
+/* 294 */
 /***/ (function(module, exports) {
 
 /**
@@ -10734,7 +9676,7 @@ BI.BubblesController = BI.inherit(BI.Controller, {
 
 
 /***/ }),
-/* 296 */
+/* 295 */
 /***/ (function(module, exports) {
 
 /**
@@ -10909,7 +9851,7 @@ BI.LayerController = BI.inherit(BI.Controller, {
 
 
 /***/ }),
-/* 297 */
+/* 296 */
 /***/ (function(module, exports) {
 
 /**
@@ -10927,7 +9869,7 @@ BI.MaskersController = BI.inherit(BI.LayerController, {
 
 
 /***/ }),
-/* 298 */
+/* 297 */
 /***/ (function(module, exports) {
 
 /**
@@ -11100,7 +10042,7 @@ BI.PopoverController = BI.inherit(BI.Controller, {
 
 
 /***/ }),
-/* 299 */
+/* 298 */
 /***/ (function(module, exports) {
 
 /**
@@ -11174,7 +10116,7 @@ BI.ResizeController = BI.inherit(BI.Controller, {
 
 
 /***/ }),
-/* 300 */
+/* 299 */
 /***/ (function(module, exports) {
 
 /**
@@ -11320,62 +10262,7 @@ BI.TooltipsController = BI.inherit(BI.Controller, {
 
 
 /***/ }),
-/* 301 */
-/***/ (function(module, exports) {
-
-!function () {
-    var patch = BI.Snabbdom.init([BI.Snabbdom.attributesModule, BI.Snabbdom.classModule, BI.Snabbdom.datasetModule, BI.Snabbdom.propsModule, BI.Snabbdom.styleModule, BI.Snabbdom.eventListenersModule]);
-    BI.Element2Vnode = function (parentNode) {
-        if (parentNode.nodeType === 3) {
-            return BI.Snabbdom.vnode(undefined, undefined, undefined, parentNode.textContent, parentNode);
-        }
-        var data = BI.jQuery._data(parentNode);
-        var on = {};
-        BI.each(data && data.events, function (eventName, events) {
-            on[eventName] = function () {
-                var ob = this, args = arguments;
-                BI.each(events, function (i, ev) {
-                    ev.handler.apply(ob, args);
-                });
-            };
-        });
-        var attrs = {};
-        var elmAttrs = parentNode.attributes;
-        var elmChildren = parentNode.childNodes;
-        var key = parentNode.getAttribute("key");
-        for (i = 0, n = elmAttrs.length; i < n; i++) {
-            var name = elmAttrs[i].nodeName;
-            if (name !== "id" && name !== "class") {
-                attrs[name] = elmAttrs[i].nodeValue;
-            }
-        }
-        var vnode = BI.Snabbdom.vnode(parentNode.nodeName, {
-            class: BI.makeObject(parentNode.classList),
-            attrs: attrs,
-            key: key,
-            on: on,
-            hook: {
-                create: function () {
-                    BI.each(BI.Widget._renderEngine.createElement(parentNode).data("__widgets"), function (i, w) {
-                        w.element = BI.Widget._renderEngine.createElement(vnode.elm);
-                    });
-                }
-            }
-        }, BI.map(elmChildren, function (i, childNode) {
-            return BI.Element2Vnode(childNode);
-        }), undefined, parentNode);
-        return vnode;
-    };
-
-    BI.patchVNode = function (element, node) {
-        patch(element, node);
-    };
-}();
-
-
-
-/***/ }),
-/* 302 */
+/* 300 */
 /***/ (function(module, exports) {
 
 BI.Fragment = function () {
@@ -11426,7 +10313,7 @@ BI.h = function (type, props, children) {
 
 
 /***/ }),
-/* 303 */
+/* 301 */
 /***/ (function(module, exports) {
 
 /**
@@ -11480,7 +10367,7 @@ BI.ShowListener.EVENT_CHANGE = "EVENT_CHANGE";
 
 
 /***/ }),
-/* 304 */
+/* 302 */
 /***/ (function(module, exports) {
 
 /**
@@ -11535,7 +10422,7 @@ BI.StyleLoaderManager = BI.inherit(BI.OB, {
 });
 
 /***/ }),
-/* 305 */
+/* 303 */
 /***/ (function(module, exports) {
 
 /**
@@ -11621,7 +10508,7 @@ BI.LogicFactory = {
 };
 
 /***/ }),
-/* 306 */
+/* 304 */
 /***/ (function(module, exports) {
 
 /**
@@ -11823,7 +10710,7 @@ BI.HorizontalFillLayoutLogic = BI.inherit(BI.Logic, {
 
 
 /***/ }),
-/* 307 */
+/* 305 */
 /***/ (function(module, exports) {
 
 if (!Number.prototype.toFixed || (0.00008).toFixed(3) !== "0.000" ||
@@ -11970,7 +10857,7 @@ if (!Number.prototype.toFixed || (0.00008).toFixed(3) !== "0.000" ||
 }
 
 /***/ }),
-/* 308 */
+/* 306 */
 /***/ (function(module, exports) {
 
 !(function () {
@@ -14321,7 +13208,7 @@ if (!Number.prototype.toFixed || (0.00008).toFixed(3) !== "0.000" ||
 }());
 
 /***/ }),
-/* 309 */
+/* 307 */
 /***/ (function(module, exports) {
 
 !(function () {
@@ -14389,7 +13276,7 @@ if (!Number.prototype.toFixed || (0.00008).toFixed(3) !== "0.000" ||
 })();
 
 /***/ }),
-/* 310 */
+/* 308 */
 /***/ (function(module, exports) {
 
 
@@ -14524,7 +13411,7 @@ if (!Number.prototype.toFixed || (0.00008).toFixed(3) !== "0.000" ||
 })();
 
 /***/ }),
-/* 311 */
+/* 309 */
 /***/ (function(module, exports) {
 
 
@@ -14606,7 +13493,7 @@ BI.Cache = {
 };
 
 /***/ }),
-/* 312 */
+/* 310 */
 /***/ (function(module, exports) {
 
 BI.CellSizeAndPositionManager = function (cellCount, cellSizeGetter, estimatedCellSize) {
@@ -14882,7 +13769,7 @@ BI.ScalingCellSizeAndPositionManager.prototype = {
 };
 
 /***/ }),
-/* 313 */
+/* 311 */
 /***/ (function(module, exports) {
 
 
@@ -15003,7 +13890,7 @@ BI.ScalingCellSizeAndPositionManager.prototype = {
 
 
 /***/ }),
-/* 314 */
+/* 312 */
 /***/ (function(module, exports) {
 
 
@@ -15080,7 +13967,7 @@ BI.ScalingCellSizeAndPositionManager.prototype = {
 })();
 
 /***/ }),
-/* 315 */
+/* 313 */
 /***/ (function(module, exports) {
 
 
@@ -15171,7 +14058,7 @@ BI.ScalingCellSizeAndPositionManager.prototype = {
 })();
 
 /***/ }),
-/* 316 */
+/* 314 */
 /***/ (function(module, exports) {
 
 // 线段树
@@ -15357,7 +14244,7 @@ BI.ScalingCellSizeAndPositionManager.prototype = {
 
 
 /***/ }),
-/* 317 */
+/* 315 */
 /***/ (function(module, exports) {
 
 
@@ -15451,7 +14338,7 @@ BI.ScalingCellSizeAndPositionManager.prototype = {
 })();
 
 /***/ }),
-/* 318 */
+/* 316 */
 /***/ (function(module, exports) {
 
 !(function () {
@@ -15544,7 +14431,7 @@ BI.ScalingCellSizeAndPositionManager.prototype = {
 })();
 
 /***/ }),
-/* 319 */
+/* 317 */
 /***/ (function(module, exports) {
 
 (function () {
@@ -16067,7 +14954,7 @@ BI.ScalingCellSizeAndPositionManager.prototype = {
 
 
 /***/ }),
-/* 320 */
+/* 318 */
 /***/ (function(module, exports) {
 
 // 向量操作
@@ -16135,7 +15022,7 @@ BI.Region.prototype = {
 };
 
 /***/ }),
-/* 321 */
+/* 319 */
 /***/ (function(module, exports) {
 
 /**
@@ -16197,7 +15084,7 @@ BI.prepares.push(function () {
 
 
 /***/ }),
-/* 322 */
+/* 320 */
 /***/ (function(module, exports) {
 
 BI.EventListener = {
@@ -16239,7 +15126,7 @@ BI.EventListener = {
 };
 
 /***/ }),
-/* 323 */
+/* 321 */
 /***/ (function(module, exports) {
 
 !(function () {
@@ -16351,7 +15238,7 @@ BI.EventListener = {
 })();
 
 /***/ }),
-/* 324 */
+/* 322 */
 /***/ (function(module, exports) {
 
 !(function () {
@@ -16505,13 +15392,13 @@ BI.EventListener = {
 })();
 
 /***/ }),
-/* 325 */
+/* 323 */
 /***/ (function(module, exports) {
 
 BI.version = "2.0";
 
 /***/ }),
-/* 326 */
+/* 324 */
 /***/ (function(module, exports) {
 
 /**
@@ -17135,7 +16022,7 @@ BI.shortcut("bi.layout", BI.Layout);
 
 
 /***/ }),
-/* 327 */
+/* 325 */
 /***/ (function(module, exports) {
 
 /**
@@ -17184,7 +16071,7 @@ BI.shortcut("bi.absolute_center_adapt", BI.AbsoluteCenterLayout);
 
 
 /***/ }),
-/* 328 */
+/* 326 */
 /***/ (function(module, exports) {
 
 /**
@@ -17242,7 +16129,7 @@ BI.shortcut("bi.absolute_horizontal_adapt", BI.AbsoluteHorizontalLayout);
 
 
 /***/ }),
-/* 329 */
+/* 327 */
 /***/ (function(module, exports) {
 
 BI.AbsoluteLeftRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
@@ -17405,7 +16292,7 @@ BI.shortcut("bi.absolute_right_vertical_adapt", BI.AbsoluteRightVerticalAdaptLay
 
 
 /***/ }),
-/* 330 */
+/* 328 */
 /***/ (function(module, exports) {
 
 /**
@@ -17463,7 +16350,7 @@ BI.shortcut("bi.absolute_vertical_adapt", BI.AbsoluteVerticalLayout);
 
 
 /***/ }),
-/* 331 */
+/* 329 */
 /***/ (function(module, exports) {
 
 /**
@@ -17522,7 +16409,7 @@ BI.shortcut("bi.center_adapt", BI.CenterAdaptLayout);
 
 
 /***/ }),
-/* 332 */
+/* 330 */
 /***/ (function(module, exports) {
 
 /**
@@ -17536,7 +16423,7 @@ BI.shortcut("bi.horizontal_adapt", BI.HorizontalAdaptLayout);
 
 
 /***/ }),
-/* 333 */
+/* 331 */
 /***/ (function(module, exports) {
 
 /**
@@ -17618,7 +16505,6 @@ BI.LeftRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
     },
 
     _getLeftRight: function (items) {
-        var o = this.options;
         var left, right;
         if (BI.isArray(items)) {
             BI.each(items, function (i, item) {
@@ -17761,7 +16647,7 @@ BI.shortcut("bi.right_vertical_adapt", BI.RightVerticalAdaptLayout);
 
 
 /***/ }),
-/* 334 */
+/* 332 */
 /***/ (function(module, exports) {
 
 /**
@@ -17877,7 +16763,7 @@ BI.shortcut("bi.table_adapt", BI.TableAdaptLayout);
 
 
 /***/ }),
-/* 335 */
+/* 333 */
 /***/ (function(module, exports) {
 
 /**
@@ -17936,7 +16822,7 @@ BI.shortcut("bi.vertical_adapt", BI.VerticalAdaptLayout);
 
 
 /***/ }),
-/* 336 */
+/* 334 */
 /***/ (function(module, exports) {
 
 /**
@@ -17982,7 +16868,7 @@ BI.shortcut("bi.horizontal_auto", BI.HorizontalAutoLayout);
 
 
 /***/ }),
-/* 337 */
+/* 335 */
 /***/ (function(module, exports) {
 
 /**
@@ -18043,7 +16929,7 @@ BI.shortcut("bi.inline_center_adapt", BI.InlineCenterAdaptLayout);
 
 
 /***/ }),
-/* 338 */
+/* 336 */
 /***/ (function(module, exports) {
 
 /**
@@ -18104,7 +16990,7 @@ BI.shortcut("bi.inline_horizontal_adapt", BI.InlineHorizontalAdaptLayout);
 
 
 /***/ }),
-/* 339 */
+/* 337 */
 /***/ (function(module, exports) {
 
 /**
@@ -18165,7 +17051,7 @@ BI.shortcut("bi.inline_vertical_adapt", BI.InlineVerticalAdaptLayout);
 
 
 /***/ }),
-/* 340 */
+/* 338 */
 /***/ (function(module, exports) {
 
 /**
@@ -18177,7 +17063,7 @@ BI.shortcut("bi.horizontal_fill", BI.HorizontalFillLayout);
 
 
 /***/ }),
-/* 341 */
+/* 339 */
 /***/ (function(module, exports) {
 
 /**
@@ -18189,7 +17075,7 @@ BI.shortcut("bi.vertical_fill", BI.VerticalFillLayout);
 
 
 /***/ }),
-/* 342 */
+/* 340 */
 /***/ (function(module, exports) {
 
 BI.FloatHorizontalFillLayout = BI.inherit(BI.Layout, {
@@ -18335,7 +17221,7 @@ BI.shortcut("bi.horizontal_float_fill", BI.FloatHorizontalFillLayout);
 
 
 /***/ }),
-/* 343 */
+/* 341 */
 /***/ (function(module, exports) {
 
 /**
@@ -18393,7 +17279,7 @@ BI.shortcut("bi.flex_center_adapt", BI.FlexCenterLayout);
 
 
 /***/ }),
-/* 344 */
+/* 342 */
 /***/ (function(module, exports) {
 
 /**
@@ -18453,7 +17339,7 @@ BI.shortcut("bi.flex_horizontal_center_adapt", BI.FlexHorizontalCenter);
 
 
 /***/ }),
-/* 345 */
+/* 343 */
 /***/ (function(module, exports) {
 
 /**
@@ -18557,7 +17443,7 @@ BI.shortcut("bi.flex_horizontal", BI.FlexHorizontalLayout);
 
 
 /***/ }),
-/* 346 */
+/* 344 */
 /***/ (function(module, exports) {
 
 BI.FlexLeftRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
@@ -18661,7 +17547,7 @@ BI.shortcut("bi.flex_left_right_vertical_adapt", BI.FlexLeftRightVerticalAdaptLa
 
 
 /***/ }),
-/* 347 */
+/* 345 */
 /***/ (function(module, exports) {
 
 /**
@@ -18722,7 +17608,7 @@ BI.shortcut("bi.flex_vertical_center_adapt", BI.FlexVerticalCenter);
 
 
 /***/ }),
-/* 348 */
+/* 346 */
 /***/ (function(module, exports) {
 
 /**
@@ -18825,7 +17711,7 @@ BI.shortcut("bi.flex_vertical", BI.FlexVerticalLayout);
 
 
 /***/ }),
-/* 349 */
+/* 347 */
 /***/ (function(module, exports) {
 
 /**
@@ -18886,7 +17772,7 @@ BI.shortcut("bi.flex_scrollable_center_adapt", BI.FlexWrapperCenterLayout);
 
 
 /***/ }),
-/* 350 */
+/* 348 */
 /***/ (function(module, exports) {
 
 /**
@@ -18948,7 +17834,7 @@ BI.shortcut("bi.flex_scrollable_horizontal_center_adapt", BI.FlexWrapperHorizont
 
 
 /***/ }),
-/* 351 */
+/* 349 */
 /***/ (function(module, exports) {
 
 /**
@@ -19058,7 +17944,7 @@ BI.shortcut("bi.flex_scrollable_horizontal", BI.FlexWrapperHorizontalLayout);
 
 
 /***/ }),
-/* 352 */
+/* 350 */
 /***/ (function(module, exports) {
 
 /**
@@ -19120,7 +18006,7 @@ BI.shortcut("bi.flex_scrollable_vertical_center_adapt", BI.FlexWrapperVerticalCe
 
 
 /***/ }),
-/* 353 */
+/* 351 */
 /***/ (function(module, exports) {
 
 /**
@@ -19230,7 +18116,7 @@ BI.shortcut("bi.flex_scrollable_vertical", BI.FlexWrapperVerticalLayout);
 
 
 /***/ }),
-/* 354 */
+/* 352 */
 /***/ (function(module, exports) {
 
 /**
@@ -19268,7 +18154,7 @@ BI.shortcut("bi.absolute_center_float", BI.FloatAbsoluteCenterLayout);
 
 
 /***/ }),
-/* 355 */
+/* 353 */
 /***/ (function(module, exports) {
 
 /**
@@ -19344,7 +18230,7 @@ BI.shortcut("bi.absolute_horizontal_float", BI.FloatAbsoluteHorizontalLayout);
 
 
 /***/ }),
-/* 356 */
+/* 354 */
 /***/ (function(module, exports) {
 
 BI.FloatAbsoluteLeftRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
@@ -19537,7 +18423,7 @@ BI.shortcut("bi.absolute_right_vertical_float", BI.FloatAbsoluteRightVerticalAda
 
 
 /***/ }),
-/* 357 */
+/* 355 */
 /***/ (function(module, exports) {
 
 /**
@@ -19613,7 +18499,7 @@ BI.shortcut("bi.absolute_vertical_float", BI.FloatAbsoluteVerticalLayout);
 
 
 /***/ }),
-/* 358 */
+/* 356 */
 /***/ (function(module, exports) {
 
 /**
@@ -19703,7 +18589,7 @@ BI.shortcut("bi.horizontal_float", BI.FloatHorizontalLayout);
 
 
 /***/ }),
-/* 359 */
+/* 357 */
 /***/ (function(module, exports) {
 
 /**
@@ -19798,7 +18684,7 @@ BI.shortcut("bi.absolute", BI.AbsoluteLayout);
 
 
 /***/ }),
-/* 360 */
+/* 358 */
 /***/ (function(module, exports) {
 
 BI.AdaptiveLayout = BI.inherit(BI.Layout, {
@@ -19863,7 +18749,7 @@ BI.shortcut("bi.adaptive", BI.AdaptiveLayout);
 
 
 /***/ }),
-/* 361 */
+/* 359 */
 /***/ (function(module, exports) {
 
 /**
@@ -20007,7 +18893,7 @@ BI.shortcut("bi.border", BI.BorderLayout);
 
 
 /***/ }),
-/* 362 */
+/* 360 */
 /***/ (function(module, exports) {
 
 /**
@@ -20224,7 +19110,7 @@ BI.shortcut("bi.card", BI.CardLayout);
 
 
 /***/ }),
-/* 363 */
+/* 361 */
 /***/ (function(module, exports) {
 
 /**
@@ -20265,7 +19151,7 @@ BI.shortcut("bi.default", BI.DefaultLayout);
 
 
 /***/ }),
-/* 364 */
+/* 362 */
 /***/ (function(module, exports) {
 
 /**
@@ -20407,7 +19293,7 @@ BI.shortcut("bi.division", BI.DivisionLayout);
 
 
 /***/ }),
-/* 365 */
+/* 363 */
 /***/ (function(module, exports) {
 
 /**
@@ -20558,7 +19444,7 @@ BI.shortcut("bi.right", BI.FloatRightLayout);
 
 
 /***/ }),
-/* 366 */
+/* 364 */
 /***/ (function(module, exports) {
 
 /**
@@ -20678,7 +19564,7 @@ BI.shortcut("bi.grid", BI.GridLayout);
 
 
 /***/ }),
-/* 367 */
+/* 365 */
 /***/ (function(module, exports) {
 
 /**
@@ -20692,7 +19578,7 @@ BI.shortcut("bi.horizontal", BI.HorizontalLayout);
 
 
 /***/ }),
-/* 368 */
+/* 366 */
 /***/ (function(module, exports) {
 
 /**
@@ -20791,7 +19677,7 @@ BI.shortcut("bi.inline", BI.InlineLayout);
 
 
 /***/ }),
-/* 369 */
+/* 367 */
 /***/ (function(module, exports) {
 
 /**
@@ -20836,7 +19722,7 @@ BI.shortcut("bi.lattice", BI.LatticeLayout);
 
 
 /***/ }),
-/* 370 */
+/* 368 */
 /***/ (function(module, exports) {
 
 /**
@@ -20975,7 +19861,7 @@ BI.shortcut("bi.table", BI.TableLayout);
 
 
 /***/ }),
-/* 371 */
+/* 369 */
 /***/ (function(module, exports) {
 
 /**
@@ -21244,7 +20130,7 @@ BI.shortcut("bi.vtape", BI.VTapeLayout);
 
 
 /***/ }),
-/* 372 */
+/* 370 */
 /***/ (function(module, exports) {
 
 /**
@@ -21438,7 +20324,7 @@ BI.shortcut("bi.td", BI.TdLayout);
 
 
 /***/ }),
-/* 373 */
+/* 371 */
 /***/ (function(module, exports) {
 
 /**
@@ -21494,7 +20380,7 @@ BI.shortcut("bi.vertical", BI.VerticalLayout);
 
 
 /***/ }),
-/* 374 */
+/* 372 */
 /***/ (function(module, exports) {
 
 /**
@@ -21683,7 +20569,7 @@ BI.shortcut("bi.window", BI.WindowLayout);
 
 
 /***/ }),
-/* 375 */
+/* 373 */
 /***/ (function(module, exports) {
 
 /**
@@ -21761,7 +20647,7 @@ BI.shortcut("bi.center", BI.CenterLayout);
 
 
 /***/ }),
-/* 376 */
+/* 374 */
 /***/ (function(module, exports) {
 
 /**
@@ -21838,7 +20724,7 @@ BI.shortcut("bi.float_center", BI.FloatCenterLayout);
 
 
 /***/ }),
-/* 377 */
+/* 375 */
 /***/ (function(module, exports) {
 
 /**
@@ -21914,7 +20800,7 @@ BI.shortcut("bi.horizontal_center", BI.HorizontalCenterLayout);
 
 
 /***/ }),
-/* 378 */
+/* 376 */
 /***/ (function(module, exports) {
 
 /**
@@ -21991,7 +20877,7 @@ BI.shortcut("bi.vertical_center", BI.VerticalCenterLayout);
 
 
 /***/ }),
-/* 379 */
+/* 377 */
 /***/ (function(module, exports) {
 
 BI.prepares.push(function () {
@@ -22007,7 +20893,7 @@ BI.prepares.push(function () {
 
 
 /***/ }),
-/* 380 */
+/* 378 */
 /***/ (function(module, exports) {
 
 /**
@@ -22165,7 +21051,7 @@ BI.Pane.EVENT_LOADING = "EVENT_LOADING";
 
 
 /***/ }),
-/* 381 */
+/* 379 */
 /***/ (function(module, exports) {
 
 /**
@@ -22552,7 +21438,7 @@ BI.shortcut("bi.collection_view", BI.CollectionView);
 
 
 /***/ }),
-/* 382 */
+/* 380 */
 /***/ (function(module, exports) {
 
 !(function () {
@@ -23120,7 +22006,7 @@ BI.shortcut("bi.collection_view", BI.CollectionView);
 
 
 /***/ }),
-/* 383 */
+/* 381 */
 /***/ (function(module, exports) {
 
 /**
@@ -23407,7 +22293,7 @@ BI.Expander.EVENT_AFTER_HIDEVIEW = "EVENT_AFTER_HIDEVIEW";
 BI.shortcut("bi.expander", BI.Expander);
 
 /***/ }),
-/* 384 */
+/* 382 */
 /***/ (function(module, exports) {
 
 /**
@@ -23742,7 +22628,7 @@ BI.ButtonGroup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.button_group", BI.ButtonGroup);
 
 /***/ }),
-/* 385 */
+/* 383 */
 /***/ (function(module, exports) {
 
 /**
@@ -23844,7 +22730,7 @@ BI.ComboGroup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.combo_group", BI.ComboGroup);
 
 /***/ }),
-/* 386 */
+/* 384 */
 /***/ (function(module, exports) {
 
 BI.VirtualGroup = BI.inherit(BI.Widget, {
@@ -23965,7 +22851,7 @@ BI.VirtualGroup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.virtual_group", BI.VirtualGroup);
 
 /***/ }),
-/* 387 */
+/* 385 */
 /***/ (function(module, exports) {
 
 /**
@@ -24231,7 +23117,7 @@ BI.shortcut("bi.loader", BI.Loader);
 
 
 /***/ }),
-/* 388 */
+/* 386 */
 /***/ (function(module, exports) {
 
 /**
@@ -24399,7 +23285,7 @@ BI.shortcut("bi.navigation", BI.Navigation);
 
 
 /***/ }),
-/* 389 */
+/* 387 */
 /***/ (function(module, exports) {
 
 /**
@@ -24724,7 +23610,7 @@ BI.Searcher.EVENT_AFTER_INIT = "EVENT_AFTER_INIT";
 BI.shortcut("bi.searcher", BI.Searcher);
 
 /***/ }),
-/* 390 */
+/* 388 */
 /***/ (function(module, exports) {
 
 /**
@@ -25021,7 +23907,7 @@ BI.Switcher.EVENT_AFTER_HIDEVIEW = "EVENT_AFTER_HIDEVIEW";
 BI.shortcut("bi.switcher", BI.Switcher);
 
 /***/ }),
-/* 391 */
+/* 389 */
 /***/ (function(module, exports) {
 
 /**
@@ -25184,7 +24070,7 @@ BI.shortcut("bi.tab", BI.Tab);
 
 
 /***/ }),
-/* 392 */
+/* 390 */
 /***/ (function(module, exports) {
 
 /**
@@ -25371,7 +24257,7 @@ BI.ButtonTree.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.button_tree", BI.ButtonTree);
 
 /***/ }),
-/* 393 */
+/* 391 */
 /***/ (function(module, exports) {
 
 /**
@@ -25418,7 +24304,7 @@ BI.EL = BI.inherit(BI.Widget, {
 BI.shortcut("bi.el", BI.EL);
 
 /***/ }),
-/* 394 */
+/* 392 */
 /***/ (function(module, exports) {
 
 /**
@@ -25627,7 +24513,7 @@ BI.Msg = function () {
 
 
 /***/ }),
-/* 395 */
+/* 393 */
 /***/ (function(module, exports) {
 
 /**
@@ -26015,7 +24901,7 @@ BI.shortcut("bi.grid_view", BI.GridView);
 
 
 /***/ }),
-/* 396 */
+/* 394 */
 /***/ (function(module, exports) {
 
 /**
@@ -26293,7 +25179,7 @@ BI.Popover.EVENT_CONFIRM = "EVENT_CONFIRM";
 
 
 /***/ }),
-/* 397 */
+/* 395 */
 /***/ (function(module, exports) {
 
 /**
@@ -26480,7 +25366,7 @@ BI.shortcut("bi.popup_view", BI.PopupView);
 
 
 /***/ }),
-/* 398 */
+/* 396 */
 /***/ (function(module, exports) {
 
 /**
@@ -26626,7 +25512,7 @@ BI.SearcherView.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.searcher_view", BI.SearcherView);
 
 /***/ }),
-/* 399 */
+/* 397 */
 /***/ (function(module, exports) {
 
 /**
@@ -26751,7 +25637,7 @@ BI.shortcut("bi.list_view", BI.ListView);
 
 
 /***/ }),
-/* 400 */
+/* 398 */
 /***/ (function(module, exports) {
 
 /**
@@ -26907,7 +25793,7 @@ BI.shortcut("bi.virtual_group_list", BI.VirtualGroupList);
 
 
 /***/ }),
-/* 401 */
+/* 399 */
 /***/ (function(module, exports) {
 
 /**
@@ -27108,7 +25994,7 @@ BI.shortcut("bi.virtual_list", BI.VirtualList);
 
 
 /***/ }),
-/* 402 */
+/* 400 */
 /***/ (function(module, exports) {
 
 /**
@@ -27402,7 +26288,7 @@ BI.Pager.EVENT_AFTER_POPULATE = "EVENT_AFTER_POPULATE";
 BI.shortcut("bi.pager", BI.Pager);
 
 /***/ }),
-/* 403 */
+/* 401 */
 /***/ (function(module, exports) {
 
 /**
@@ -27616,7 +26502,7 @@ BI.shortcut("bi.single", BI.Single);
 
 
 /***/ }),
-/* 404 */
+/* 402 */
 /***/ (function(module, exports) {
 
 /**
@@ -27792,7 +26678,7 @@ BI.shortcut("bi.single", BI.Single);
 
 
 /***/ }),
-/* 405 */
+/* 403 */
 /***/ (function(module, exports) {
 
 /**
@@ -27829,7 +26715,7 @@ BI.A = BI.inherit(BI.Text, {
 BI.shortcut("bi.a", BI.A);
 
 /***/ }),
-/* 406 */
+/* 404 */
 /***/ (function(module, exports) {
 
 /**
@@ -27914,7 +26800,7 @@ BI.LoadingBar = BI.inherit(BI.Single, {
 BI.shortcut("bi.loading_bar", BI.LoadingBar);
 
 /***/ }),
-/* 407 */
+/* 405 */
 /***/ (function(module, exports) {
 
 /**
@@ -28332,7 +27218,7 @@ BI.shortcut("bi.basic_button", BI.BasicButton);
 
 
 /***/ }),
-/* 408 */
+/* 406 */
 /***/ (function(module, exports) {
 
 /**
@@ -28395,7 +27281,7 @@ BI.shortcut("bi.node_button", BI.NodeButton);
 
 
 /***/ }),
-/* 409 */
+/* 407 */
 /***/ (function(module, exports) {
 
 /**
@@ -28453,7 +27339,7 @@ BI.shortcut("bi.icon_button", BI.IconButton);
 
 
 /***/ }),
-/* 410 */
+/* 408 */
 /***/ (function(module, exports) {
 
 /**
@@ -28545,7 +27431,7 @@ BI.ImageButton.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.image_button", BI.ImageButton);
 
 /***/ }),
-/* 411 */
+/* 409 */
 /***/ (function(module, exports) {
 
 /**
@@ -28703,7 +27589,7 @@ BI.Button.EVENT_CHANGE = "EVENT_CHANGE";
 
 
 /***/ }),
-/* 412 */
+/* 410 */
 /***/ (function(module, exports) {
 
 /**
@@ -28798,7 +27684,7 @@ BI.TextButton.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.text_button", BI.TextButton);
 
 /***/ }),
-/* 413 */
+/* 411 */
 /***/ (function(module, exports) {
 
 /**
@@ -28923,7 +27809,7 @@ BI.shortcut("bi.blank_icon_icon_text_item", BI.BlankIconIconTextItem);
 
 
 /***/ }),
-/* 414 */
+/* 412 */
 /***/ (function(module, exports) {
 
 /**
@@ -29055,7 +27941,7 @@ BI.shortcut("bi.blank_icon_text_icon_item", BI.BlankIconTextIconItem);
 
 
 /***/ }),
-/* 415 */
+/* 413 */
 /***/ (function(module, exports) {
 
 /**
@@ -29166,7 +28052,7 @@ BI.shortcut("bi.blank_icon_text_item", BI.BlankIconTextItem);
 
 
 /***/ }),
-/* 416 */
+/* 414 */
 /***/ (function(module, exports) {
 
 /**
@@ -29295,7 +28181,7 @@ BI.shortcut("bi.icon_text_icon_item", BI.IconTextIconItem);
 
 
 /***/ }),
-/* 417 */
+/* 415 */
 /***/ (function(module, exports) {
 
 /**
@@ -29403,7 +28289,7 @@ BI.shortcut("bi.icon_text_item", BI.IconTextItem);
 
 
 /***/ }),
-/* 418 */
+/* 416 */
 /***/ (function(module, exports) {
 
 /**
@@ -29510,7 +28396,7 @@ BI.shortcut("bi.text_icon_item", BI.TextIconItem);
 
 
 /***/ }),
-/* 419 */
+/* 417 */
 /***/ (function(module, exports) {
 
 /**
@@ -29601,7 +28487,7 @@ BI.TextItem.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.text_item", BI.TextItem);
 
 /***/ }),
-/* 420 */
+/* 418 */
 /***/ (function(module, exports) {
 
 /**
@@ -29719,7 +28605,7 @@ BI.IconTextIconNode.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.icon_text_icon_node", BI.IconTextIconNode);
 
 /***/ }),
-/* 421 */
+/* 419 */
 /***/ (function(module, exports) {
 
 /**
@@ -29814,7 +28700,7 @@ BI.IconTextNode.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.icon_text_node", BI.IconTextNode);
 
 /***/ }),
-/* 422 */
+/* 420 */
 /***/ (function(module, exports) {
 
 /**
@@ -29908,7 +28794,7 @@ BI.TextIconNode.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.text_icon_node", BI.TextIconNode);
 
 /***/ }),
-/* 423 */
+/* 421 */
 /***/ (function(module, exports) {
 
 /**
@@ -29990,7 +28876,7 @@ BI.TextNode.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.text_node", BI.TextNode);
 
 /***/ }),
-/* 424 */
+/* 422 */
 /***/ (function(module, exports) {
 
 /**
@@ -30367,7 +29253,7 @@ BI.shortcut("bi.editor", BI.Editor);
 
 
 /***/ }),
-/* 425 */
+/* 423 */
 /***/ (function(module, exports) {
 
 /**
@@ -30473,7 +29359,7 @@ BI.shortcut("bi.multifile_editor", BI.MultifileEditor);
 
 
 /***/ }),
-/* 426 */
+/* 424 */
 /***/ (function(module, exports) {
 
 /**
@@ -30731,7 +29617,7 @@ BI.shortcut("bi.textarea_editor", BI.TextAreaEditor);
 
 
 /***/ }),
-/* 427 */
+/* 425 */
 /***/ (function(module, exports) {
 
 /**
@@ -30851,7 +29737,7 @@ BI.shortcut("bi.html", BI.Html);
 
 
 /***/ }),
-/* 428 */
+/* 426 */
 /***/ (function(module, exports) {
 
 /**
@@ -30877,7 +29763,7 @@ BI.Icon = BI.inherit(BI.Single, {
 BI.shortcut("bi.icon", BI.Icon);
 
 /***/ }),
-/* 429 */
+/* 427 */
 /***/ (function(module, exports) {
 
 /**
@@ -30941,7 +29827,7 @@ BI.shortcut("bi.iframe", BI.Iframe);
 
 
 /***/ }),
-/* 430 */
+/* 428 */
 /***/ (function(module, exports) {
 
 /**
@@ -30987,7 +29873,7 @@ BI.shortcut("bi.img", BI.Img);
 
 
 /***/ }),
-/* 431 */
+/* 429 */
 /***/ (function(module, exports) {
 
 /**
@@ -31014,7 +29900,7 @@ BI.ImageCheckbox.EVENT_CHANGE = BI.IconButton.EVENT_CHANGE;
 BI.shortcut("bi.image_checkbox", BI.ImageCheckbox);
 
 /***/ }),
-/* 432 */
+/* 430 */
 /***/ (function(module, exports) {
 
 /**
@@ -31080,7 +29966,7 @@ BI.Checkbox.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.checkbox", BI.Checkbox);
 
 /***/ }),
-/* 433 */
+/* 431 */
 /***/ (function(module, exports) {
 
 /**
@@ -31402,7 +30288,7 @@ BI.shortcut("bi.input", BI.Input);
 
 
 /***/ }),
-/* 434 */
+/* 432 */
 /***/ (function(module, exports) {
 
 /**
@@ -31440,7 +30326,7 @@ BI.ImageRadio.EVENT_CHANGE = BI.IconButton.EVENT_CHANGE;
 BI.shortcut("bi.image_radio", BI.ImageRadio);
 
 /***/ }),
-/* 435 */
+/* 433 */
 /***/ (function(module, exports) {
 
 /**
@@ -31507,7 +30393,7 @@ BI.Radio.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.radio", BI.Radio);
 
 /***/ }),
-/* 436 */
+/* 434 */
 /***/ (function(module, exports) {
 
 /**
@@ -31899,7 +30785,7 @@ BI.shortcut("bi.radio", BI.Radio);
 
 
 /***/ }),
-/* 437 */
+/* 435 */
 /***/ (function(module, exports) {
 
 /**
@@ -31929,7 +30815,7 @@ BI.HtmlLabel = BI.inherit(BI.AbstractLabel, {
 BI.shortcut("bi.html_label", BI.HtmlLabel);
 
 /***/ }),
-/* 438 */
+/* 436 */
 /***/ (function(module, exports) {
 
 /**
@@ -31977,7 +30863,7 @@ BI.shortcut("bi.icon_label", BI.IconLabel);
 
 
 /***/ }),
-/* 439 */
+/* 437 */
 /***/ (function(module, exports) {
 
 /**
@@ -32005,7 +30891,7 @@ BI.shortcut("bi.label", BI.Label);
 
 
 /***/ }),
-/* 440 */
+/* 438 */
 /***/ (function(module, exports) {
 
 /**
@@ -32045,7 +30931,7 @@ BI.shortcut("bi.link", BI.Link);
 
 
 /***/ }),
-/* 441 */
+/* 439 */
 /***/ (function(module, exports) {
 
 /**
@@ -32094,7 +30980,7 @@ BI.shortcut("bi.link", BI.Link);
 
 
 /***/ }),
-/* 442 */
+/* 440 */
 /***/ (function(module, exports) {
 
 /**
@@ -32121,7 +31007,7 @@ BI.Tip = BI.inherit(BI.Single, {
 });
 
 /***/ }),
-/* 443 */
+/* 441 */
 /***/ (function(module, exports) {
 
 /**
@@ -32234,7 +31120,7 @@ BI.shortcut("bi.toast", BI.Toast);
 
 
 /***/ }),
-/* 444 */
+/* 442 */
 /***/ (function(module, exports) {
 
 /**
@@ -32323,7 +31209,7 @@ BI.Tooltip = BI.inherit(BI.Tip, {
 BI.shortcut("bi.tooltip", BI.Tooltip);
 
 /***/ }),
-/* 445 */
+/* 443 */
 /***/ (function(module, exports) {
 
 /**
@@ -32355,7 +31241,7 @@ BI.Trigger = BI.inherit(BI.Single, {
 });
 
 /***/ }),
-/* 446 */
+/* 444 */
 /***/ (function(module, exports) {
 
 /**
@@ -32508,7 +31394,7 @@ BI.CustomTree.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.custom_tree", BI.CustomTree);
 
 /***/ }),
-/* 447 */
+/* 445 */
 /***/ (function(module, exports) {
 
 /**
@@ -32596,7 +31482,7 @@ BI.IconChangeButton.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.icon_change_button", BI.IconChangeButton);
 
 /***/ }),
-/* 448 */
+/* 446 */
 /***/ (function(module, exports) {
 
 /**
@@ -32621,7 +31507,7 @@ BI.shortcut("bi.trigger_icon_button", BI.TriggerIconButton);
 
 
 /***/ }),
-/* 449 */
+/* 447 */
 /***/ (function(module, exports) {
 
 /**
@@ -32647,7 +31533,7 @@ BI.HalfIconButton.EVENT_CHANGE = BI.IconButton.EVENT_CHANGE;
 BI.shortcut("bi.half_icon_button", BI.HalfIconButton);
 
 /***/ }),
-/* 450 */
+/* 448 */
 /***/ (function(module, exports) {
 
 /**
@@ -32692,7 +31578,7 @@ BI.HalfButton.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.half_button", BI.HalfButton);
 
 /***/ }),
-/* 451 */
+/* 449 */
 /***/ (function(module, exports) {
 
 /**
@@ -32778,7 +31664,7 @@ BI.shortcut("bi.multi_select_item", BI.MultiSelectItem);
 
 
 /***/ }),
-/* 452 */
+/* 450 */
 /***/ (function(module, exports) {
 
 /**
@@ -32842,7 +31728,7 @@ BI.SingleSelectIconTextItem = BI.inherit(BI.Single, {
 BI.shortcut("bi.single_select_icon_text_item", BI.SingleSelectIconTextItem);
 
 /***/ }),
-/* 453 */
+/* 451 */
 /***/ (function(module, exports) {
 
 BI.SingleSelectItem = BI.inherit(BI.BasicButton, {
@@ -32898,7 +31784,7 @@ BI.SingleSelectItem.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.single_select_item", BI.SingleSelectItem);
 
 /***/ }),
-/* 454 */
+/* 452 */
 /***/ (function(module, exports) {
 
 /**
@@ -32982,7 +31868,7 @@ BI.shortcut("bi.single_select_radio_item", BI.SingleSelectRadioItem);
 
 
 /***/ }),
-/* 455 */
+/* 453 */
 /***/ (function(module, exports) {
 
 /**
@@ -33070,7 +31956,7 @@ BI.shortcut("bi.arrow_group_node", BI.ArrowNode);
 
 
 /***/ }),
-/* 456 */
+/* 454 */
 /***/ (function(module, exports) {
 
 /**
@@ -33158,7 +32044,7 @@ BI.shortcut("bi.first_plus_group_node", BI.FirstPlusGroupNode);
 
 
 /***/ }),
-/* 457 */
+/* 455 */
 /***/ (function(module, exports) {
 
 /**
@@ -33266,7 +32152,7 @@ BI.shortcut("bi.icon_arrow_node", BI.IconArrowNode);
 
 
 /***/ }),
-/* 458 */
+/* 456 */
 /***/ (function(module, exports) {
 
 /**
@@ -33353,7 +32239,7 @@ BI.LastPlusGroupNode = BI.inherit(BI.NodeButton, {
 BI.shortcut("bi.last_plus_group_node", BI.LastPlusGroupNode);
 
 /***/ }),
-/* 459 */
+/* 457 */
 /***/ (function(module, exports) {
 
 /**
@@ -33440,7 +32326,7 @@ BI.MidPlusGroupNode = BI.inherit(BI.NodeButton, {
 BI.shortcut("bi.mid_plus_group_node", BI.MidPlusGroupNode);
 
 /***/ }),
-/* 460 */
+/* 458 */
 /***/ (function(module, exports) {
 
 BI.MultiLayerIconArrowNode = BI.inherit(BI.NodeButton, {
@@ -33535,7 +32421,7 @@ BI.shortcut("bi.multilayer_icon_arrow_node", BI.MultiLayerIconArrowNode);
 
 
 /***/ }),
-/* 461 */
+/* 459 */
 /***/ (function(module, exports) {
 
 /**
@@ -33618,7 +32504,7 @@ BI.PlusGroupNode = BI.inherit(BI.NodeButton, {
 BI.shortcut("bi.plus_group_node", BI.PlusGroupNode);
 
 /***/ }),
-/* 462 */
+/* 460 */
 /***/ (function(module, exports) {
 
 /**
@@ -33670,7 +32556,7 @@ BI.Switch.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.switch", BI.Switch);
 
 /***/ }),
-/* 463 */
+/* 461 */
 /***/ (function(module, exports) {
 
 BI.FirstTreeLeafItem = BI.inherit(BI.BasicButton, {
@@ -33756,7 +32642,7 @@ BI.FirstTreeLeafItem = BI.inherit(BI.BasicButton, {
 BI.shortcut("bi.first_tree_leaf_item", BI.FirstTreeLeafItem);
 
 /***/ }),
-/* 464 */
+/* 462 */
 /***/ (function(module, exports) {
 
 BI.IconTreeLeafItem = BI.inherit(BI.BasicButton, {
@@ -33843,7 +32729,7 @@ BI.IconTreeLeafItem = BI.inherit(BI.BasicButton, {
 BI.shortcut("bi.icon_tree_leaf_item", BI.IconTreeLeafItem);
 
 /***/ }),
-/* 465 */
+/* 463 */
 /***/ (function(module, exports) {
 
 BI.LastTreeLeafItem = BI.inherit(BI.BasicButton, {
@@ -33929,7 +32815,7 @@ BI.LastTreeLeafItem = BI.inherit(BI.BasicButton, {
 BI.shortcut("bi.last_tree_leaf_item", BI.LastTreeLeafItem);
 
 /***/ }),
-/* 466 */
+/* 464 */
 /***/ (function(module, exports) {
 
 BI.MidTreeLeafItem = BI.inherit(BI.BasicButton, {
@@ -34015,7 +32901,7 @@ BI.MidTreeLeafItem = BI.inherit(BI.BasicButton, {
 BI.shortcut("bi.mid_tree_leaf_item", BI.MidTreeLeafItem);
 
 /***/ }),
-/* 467 */
+/* 465 */
 /***/ (function(module, exports) {
 
 /**
@@ -34119,7 +33005,7 @@ BI.shortcut("bi.multilayer_icon_tree_leaf_item", BI.MultiLayerIconTreeLeafItem);
 
 
 /***/ }),
-/* 468 */
+/* 466 */
 /***/ (function(module, exports) {
 
 BI.RootTreeLeafItem = BI.inherit(BI.BasicButton, {
@@ -34199,7 +33085,7 @@ BI.shortcut("bi.root_tree_leaf_item", BI.RootTreeLeafItem);
 
 
 /***/ }),
-/* 469 */
+/* 467 */
 /***/ (function(module, exports) {
 
 /**
@@ -34275,7 +33161,7 @@ BI.shortcut("bi.tree_text_leaf_item", BI.TreeTextLeafItem);
 
 
 /***/ }),
-/* 470 */
+/* 468 */
 /***/ (function(module, exports) {
 
 /**
@@ -34333,7 +33219,7 @@ BI.CalendarDateItem = BI.inherit(BI.BasicButton, {
 BI.shortcut("bi.calendar_date_item", BI.CalendarDateItem);
 
 /***/ }),
-/* 471 */
+/* 469 */
 /***/ (function(module, exports) {
 
 /**
@@ -34572,7 +33458,7 @@ BI.extend(BI.Calendar, {
 BI.shortcut("bi.calendar", BI.Calendar);
 
 /***/ }),
-/* 472 */
+/* 470 */
 /***/ (function(module, exports) {
 
 /**
@@ -34748,7 +33634,7 @@ BI.extend(BI.YearCalendar, {
 BI.shortcut("bi.year_calendar", BI.YearCalendar);
 
 /***/ }),
-/* 473 */
+/* 471 */
 /***/ (function(module, exports) {
 
 /**
@@ -34774,7 +33660,7 @@ BI.ArrowTreeGroupNodeCheckbox = BI.inherit(BI.IconButton, {
 BI.shortcut("bi.arrow_group_node_checkbox", BI.ArrowTreeGroupNodeCheckbox);
 
 /***/ }),
-/* 474 */
+/* 472 */
 /***/ (function(module, exports) {
 
 /**
@@ -34805,7 +33691,7 @@ BI.CheckingMarkNode = BI.inherit(BI.IconButton, {
 BI.shortcut("bi.checking_mark_node", BI.CheckingMarkNode);
 
 /***/ }),
-/* 475 */
+/* 473 */
 /***/ (function(module, exports) {
 
 /**
@@ -34834,7 +33720,7 @@ BI.FirstTreeNodeCheckbox = BI.inherit(BI.IconButton, {
 BI.shortcut("bi.first_tree_node_checkbox", BI.FirstTreeNodeCheckbox);
 
 /***/ }),
-/* 476 */
+/* 474 */
 /***/ (function(module, exports) {
 
 /**
@@ -34863,7 +33749,7 @@ BI.LastTreeNodeCheckbox = BI.inherit(BI.IconButton, {
 BI.shortcut("bi.last_tree_node_checkbox", BI.LastTreeNodeCheckbox);
 
 /***/ }),
-/* 477 */
+/* 475 */
 /***/ (function(module, exports) {
 
 /**
@@ -34892,7 +33778,7 @@ BI.MidTreeNodeCheckbox = BI.inherit(BI.IconButton, {
 BI.shortcut("bi.mid_tree_node_checkbox", BI.MidTreeNodeCheckbox);
 
 /***/ }),
-/* 478 */
+/* 476 */
 /***/ (function(module, exports) {
 
 /**
@@ -34921,7 +33807,7 @@ BI.TreeNodeCheckbox = BI.inherit(BI.IconButton, {
 BI.shortcut("bi.tree_node_checkbox", BI.TreeNodeCheckbox);
 
 /***/ }),
-/* 479 */
+/* 477 */
 /***/ (function(module, exports) {
 
 /**
@@ -34995,7 +33881,7 @@ BI.CustomColorChooser.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.custom_color_chooser", BI.CustomColorChooser);
 
 /***/ }),
-/* 480 */
+/* 478 */
 /***/ (function(module, exports) {
 
 /**
@@ -35104,7 +33990,7 @@ BI.shortcut("bi.color_chooser", BI.ColorChooser);
 
 
 /***/ }),
-/* 481 */
+/* 479 */
 /***/ (function(module, exports) {
 
 /**
@@ -35397,7 +34283,7 @@ BI.shortcut("bi.hex_color_chooser_popup", BI.HexColorChooserPopup);
 
 
 /***/ }),
-/* 482 */
+/* 480 */
 /***/ (function(module, exports) {
 
 /**
@@ -35452,7 +34338,7 @@ BI.SimpleHexColorChooserPopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.simple_hex_color_chooser_popup", BI.SimpleHexColorChooserPopup);
 
 /***/ }),
-/* 483 */
+/* 481 */
 /***/ (function(module, exports) {
 
 /**
@@ -35695,7 +34581,7 @@ BI.shortcut("bi.color_chooser_popup", BI.ColorChooserPopup);
 
 
 /***/ }),
-/* 484 */
+/* 482 */
 /***/ (function(module, exports) {
 
 /**
@@ -35747,7 +34633,7 @@ BI.SimpleColorChooserPopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.simple_color_chooser_popup", BI.SimpleColorChooserPopup);
 
 /***/ }),
-/* 485 */
+/* 483 */
 /***/ (function(module, exports) {
 
 /**
@@ -35812,7 +34698,7 @@ BI.SimpleColorChooser.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.simple_color_chooser", BI.SimpleColorChooser);
 
 /***/ }),
-/* 486 */
+/* 484 */
 /***/ (function(module, exports) {
 
 /**
@@ -35883,7 +34769,7 @@ BI.shortcut("bi.color_chooser_trigger", BI.ColorChooserTrigger);
 
 
 /***/ }),
-/* 487 */
+/* 485 */
 /***/ (function(module, exports) {
 
 /**
@@ -35987,7 +34873,7 @@ BI.shortcut("bi.long_color_chooser_trigger", BI.LongColorChooserTrigger);
 
 
 /***/ }),
-/* 488 */
+/* 486 */
 /***/ (function(module, exports) {
 
 /**
@@ -36058,7 +34944,7 @@ BI.ColorPickerButton.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.color_picker_button", BI.ColorPickerButton);
 
 /***/ }),
-/* 489 */
+/* 487 */
 /***/ (function(module, exports) {
 
 /**
@@ -36106,7 +34992,7 @@ BI.ColorChooserShowButton.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.color_picker_show_button", BI.ColorChooserShowButton);
 
 /***/ }),
-/* 490 */
+/* 488 */
 /***/ (function(module, exports) {
 
 /**
@@ -36281,7 +35167,7 @@ BI.HexColorPicker.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.hex_color_picker", BI.HexColorPicker);
 
 /***/ }),
-/* 491 */
+/* 489 */
 /***/ (function(module, exports) {
 
 /**
@@ -36476,7 +35362,7 @@ BI.ColorPicker.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.color_picker", BI.ColorPicker);
 
 /***/ }),
-/* 492 */
+/* 490 */
 /***/ (function(module, exports) {
 
 /**
@@ -36788,7 +35674,7 @@ BI.HexColorPickerEditor.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.hex_color_picker_editor", BI.HexColorPickerEditor);
 
 /***/ }),
-/* 493 */
+/* 491 */
 /***/ (function(module, exports) {
 
 /**
@@ -36970,7 +35856,7 @@ BI.SimpleHexColorPickerEditor.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.simple_hex_color_picker_editor", BI.SimpleHexColorPickerEditor);
 
 /***/ }),
-/* 494 */
+/* 492 */
 /***/ (function(module, exports) {
 
 /**
@@ -37219,7 +36105,7 @@ BI.ColorPickerEditor.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.color_picker_editor", BI.ColorPickerEditor);
 
 /***/ }),
-/* 495 */
+/* 493 */
 /***/ (function(module, exports) {
 
 /**
@@ -37347,7 +36233,7 @@ BI.SimpleColorPickerEditor.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.simple_color_picker_editor", BI.SimpleColorPickerEditor);
 
 /***/ }),
-/* 496 */
+/* 494 */
 /***/ (function(module, exports) {
 
 BI.Farbtastic = BI.inherit(BI.BasicButton, {
@@ -37632,7 +36518,7 @@ BI.shortcut("bi.farbtastic", BI.Farbtastic);
 
 
 /***/ }),
-/* 497 */
+/* 495 */
 /***/ (function(module, exports) {
 
 /**
@@ -37858,7 +36744,7 @@ BI.shortcut("bi.bubble_combo", BI.BubbleCombo);
 
 
 /***/ }),
-/* 498 */
+/* 496 */
 /***/ (function(module, exports) {
 
 /**
@@ -38028,7 +36914,7 @@ BI.shortcut("bi.text_bubble_bar_popup_view", BI.TextBubblePopupBarView);
 
 
 /***/ }),
-/* 499 */
+/* 497 */
 /***/ (function(module, exports) {
 
 /**
@@ -38129,7 +37015,7 @@ BI.shortcut("bi.editor_icon_check_combo", BI.EditorIconCheckCombo);
 
 
 /***/ }),
-/* 500 */
+/* 498 */
 /***/ (function(module, exports) {
 
 /**
@@ -38233,7 +37119,7 @@ BI.IconCombo.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.icon_combo", BI.IconCombo);
 
 /***/ }),
-/* 501 */
+/* 499 */
 /***/ (function(module, exports) {
 
 /**
@@ -38303,7 +37189,7 @@ BI.IconComboPopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.icon_combo_popup", BI.IconComboPopup);
 
 /***/ }),
-/* 502 */
+/* 500 */
 /***/ (function(module, exports) {
 
 /**
@@ -38410,7 +37296,7 @@ BI.IconComboTrigger.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.icon_combo_trigger", BI.IconComboTrigger);
 
 /***/ }),
-/* 503 */
+/* 501 */
 /***/ (function(module, exports) {
 
 /**
@@ -38520,7 +37406,7 @@ BI.shortcut("bi.icon_text_value_combo", BI.IconTextValueCombo);
 
 
 /***/ }),
-/* 504 */
+/* 502 */
 /***/ (function(module, exports) {
 
 /**
@@ -38602,7 +37488,7 @@ BI.shortcut("bi.icon_text_value_combo_popup", BI.IconTextValueComboPopup);
 
 
 /***/ }),
-/* 505 */
+/* 503 */
 /***/ (function(module, exports) {
 
 /**
@@ -38771,7 +37657,7 @@ BI.shortcut("bi.search_text_value_combo", BI.SearchTextValueCombo);
 
 
 /***/ }),
-/* 506 */
+/* 504 */
 /***/ (function(module, exports) {
 
 /**
@@ -38850,7 +37736,7 @@ BI.shortcut("bi.search_text_value_combo_popup", BI.SearchTextValueComboPopup);
 
 
 /***/ }),
-/* 507 */
+/* 505 */
 /***/ (function(module, exports) {
 
 /**
@@ -38970,7 +37856,7 @@ BI.shortcut("bi.search_text_value_trigger", BI.SearchTextValueTrigger);
 
 
 /***/ }),
-/* 508 */
+/* 506 */
 /***/ (function(module, exports) {
 
 /**
@@ -39060,7 +37946,7 @@ BI.TextValueCheckCombo.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.text_value_check_combo", BI.TextValueCheckCombo);
 
 /***/ }),
-/* 509 */
+/* 507 */
 /***/ (function(module, exports) {
 
 BI.TextValueCheckComboPopup = BI.inherit(BI.Pane, {
@@ -39128,7 +38014,7 @@ BI.shortcut("bi.text_value_check_combo_popup", BI.TextValueCheckComboPopup);
 
 
 /***/ }),
-/* 510 */
+/* 508 */
 /***/ (function(module, exports) {
 
 /**
@@ -39233,7 +38119,7 @@ BI.shortcut("bi.text_value_combo", BI.TextValueCombo);
 
 
 /***/ }),
-/* 511 */
+/* 509 */
 /***/ (function(module, exports) {
 
 /**
@@ -39307,7 +38193,7 @@ BI.SmallTextValueCombo.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.small_text_value_combo", BI.SmallTextValueCombo);
 
 /***/ }),
-/* 512 */
+/* 510 */
 /***/ (function(module, exports) {
 
 BI.TextValueComboPopup = BI.inherit(BI.Pane, {
@@ -39373,7 +38259,7 @@ BI.TextValueComboPopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.text_value_combo_popup", BI.TextValueComboPopup);
 
 /***/ }),
-/* 513 */
+/* 511 */
 /***/ (function(module, exports) {
 
 /**
@@ -39560,7 +38446,7 @@ BI.ClearEditor.EVENT_EMPTY = "EVENT_EMPTY";
 BI.shortcut("bi.clear_editor", BI.ClearEditor);
 
 /***/ }),
-/* 514 */
+/* 512 */
 /***/ (function(module, exports) {
 
 /**
@@ -39842,7 +38728,7 @@ BI.shortcut("bi.shelter_editor", BI.ShelterEditor);
 
 
 /***/ }),
-/* 515 */
+/* 513 */
 /***/ (function(module, exports) {
 
 /**
@@ -40123,7 +39009,7 @@ BI.SignEditor.EVENT_EMPTY = "EVENT_EMPTY";
 BI.shortcut("bi.sign_editor", BI.SignEditor);
 
 /***/ }),
-/* 516 */
+/* 514 */
 /***/ (function(module, exports) {
 
 /**
@@ -40440,7 +39326,7 @@ BI.shortcut("bi.state_editor", BI.StateEditor);
 
 
 /***/ }),
-/* 517 */
+/* 515 */
 /***/ (function(module, exports) {
 
 /**
@@ -40727,7 +39613,7 @@ BI.SimpleStateEditor.EVENT_EMPTY = "EVENT_EMPTY";
 BI.shortcut("bi.simple_state_editor", BI.SimpleStateEditor);
 
 /***/ }),
-/* 518 */
+/* 516 */
 /***/ (function(module, exports) {
 
 /**
@@ -40793,7 +39679,7 @@ BI.shortcut("bi.multi_popup_view", BI.MultiPopupView);
 
 
 /***/ }),
-/* 519 */
+/* 517 */
 /***/ (function(module, exports) {
 
 /**
@@ -40852,7 +39738,7 @@ BI.shortcut("bi.popup_panel", BI.PopupPanel);
 
 
 /***/ }),
-/* 520 */
+/* 518 */
 /***/ (function(module, exports) {
 
 /**
@@ -41042,7 +39928,7 @@ BI.ListPane.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.list_pane", BI.ListPane);
 
 /***/ }),
-/* 521 */
+/* 519 */
 /***/ (function(module, exports) {
 
 /**
@@ -41127,7 +40013,7 @@ BI.shortcut("bi.panel", BI.Panel);
 
 
 /***/ }),
-/* 522 */
+/* 520 */
 /***/ (function(module, exports) {
 
 BI.LinearSegmentButton = BI.inherit(BI.BasicButton, {
@@ -41186,7 +40072,7 @@ BI.LinearSegmentButton = BI.inherit(BI.BasicButton, {
 BI.shortcut("bi.linear_segment_button", BI.LinearSegmentButton);
 
 /***/ }),
-/* 523 */
+/* 521 */
 /***/ (function(module, exports) {
 
 BI.LinearSegment = BI.inherit(BI.Widget, {
@@ -41242,7 +40128,7 @@ BI.LinearSegment = BI.inherit(BI.Widget, {
 BI.shortcut("bi.linear_segment", BI.LinearSegment);
 
 /***/ }),
-/* 524 */
+/* 522 */
 /***/ (function(module, exports) {
 
 /**
@@ -41467,7 +40353,7 @@ BI.shortcut("bi.select_list", BI.SelectList);
 
 
 /***/ }),
-/* 525 */
+/* 523 */
 /***/ (function(module, exports) {
 
 /**
@@ -41575,7 +40461,7 @@ BI.LazyLoader.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.lazy_loader", BI.LazyLoader);
 
 /***/ }),
-/* 526 */
+/* 524 */
 /***/ (function(module, exports) {
 
 /**
@@ -41776,7 +40662,7 @@ BI.ListLoader.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.list_loader", BI.ListLoader);
 
 /***/ }),
-/* 527 */
+/* 525 */
 /***/ (function(module, exports) {
 
 /**
@@ -41958,7 +40844,7 @@ BI.shortcut("bi.sort_list", BI.SortList);
 
 
 /***/ }),
-/* 528 */
+/* 526 */
 /***/ (function(module, exports) {
 
 /**
@@ -41994,7 +40880,7 @@ BI.LoadingPane = BI.inherit(BI.Pane, {
 });
 
 /***/ }),
-/* 529 */
+/* 527 */
 /***/ (function(module, exports) {
 
 /**
@@ -42232,7 +41118,7 @@ BI.AllCountPager.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.all_count_pager", BI.AllCountPager);
 
 /***/ }),
-/* 530 */
+/* 528 */
 /***/ (function(module, exports) {
 
 /**
@@ -42513,7 +41399,7 @@ BI.DirectionPager.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.direction_pager", BI.DirectionPager);
 
 /***/ }),
-/* 531 */
+/* 529 */
 /***/ (function(module, exports) {
 
 /**
@@ -42806,7 +41692,7 @@ BI.DetailPager.EVENT_AFTER_POPULATE = "EVENT_AFTER_POPULATE";
 BI.shortcut("bi.detail_pager", BI.DetailPager);
 
 /***/ }),
-/* 532 */
+/* 530 */
 /***/ (function(module, exports) {
 
 /**
@@ -42858,7 +41744,7 @@ BI.shortcut("bi.segment_button", BI.SegmentButton);
 
 
 /***/ }),
-/* 533 */
+/* 531 */
 /***/ (function(module, exports) {
 
 /**
@@ -42927,7 +41813,7 @@ BI.Segment.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.segment", BI.Segment);
 
 /***/ }),
-/* 534 */
+/* 532 */
 /***/ (function(module, exports) {
 
 /**
@@ -43078,7 +41964,7 @@ BI.shortcut("bi.multi_select_bar", BI.MultiSelectBar);
 
 
 /***/ }),
-/* 535 */
+/* 533 */
 /***/ (function(module, exports) {
 
 /**
@@ -43220,7 +42106,7 @@ BI.shortcut("bi.level_tree", BI.LevelTree);
 
 
 /***/ }),
-/* 536 */
+/* 534 */
 /***/ (function(module, exports) {
 
 !(function () {
@@ -43303,7 +42189,7 @@ BI.shortcut("bi.level_tree", BI.LevelTree);
 
 
 /***/ }),
-/* 537 */
+/* 535 */
 /***/ (function(module, exports) {
 
 !(function () {
@@ -43362,7 +42248,7 @@ BI.shortcut("bi.level_tree", BI.LevelTree);
 
 
 /***/ }),
-/* 538 */
+/* 536 */
 /***/ (function(module, exports) {
 
 /**
@@ -43464,7 +42350,7 @@ BI.shortcut("bi.editor_trigger", BI.EditorTrigger);
 
 
 /***/ }),
-/* 539 */
+/* 537 */
 /***/ (function(module, exports) {
 
 /**
@@ -43499,7 +42385,7 @@ BI.IconTrigger = BI.inherit(BI.Trigger, {
 BI.shortcut("bi.icon_trigger", BI.IconTrigger);
 
 /***/ }),
-/* 540 */
+/* 538 */
 /***/ (function(module, exports) {
 
 /**
@@ -43609,7 +42495,7 @@ BI.IconTextTrigger = BI.inherit(BI.Trigger, {
 BI.shortcut("bi.icon_text_trigger", BI.IconTextTrigger);
 
 /***/ }),
-/* 541 */
+/* 539 */
 /***/ (function(module, exports) {
 
 /**
@@ -43688,7 +42574,7 @@ BI.SelectIconTextTrigger = BI.inherit(BI.Trigger, {
 BI.shortcut("bi.select_icon_text_trigger", BI.SelectIconTextTrigger);
 
 /***/ }),
-/* 542 */
+/* 540 */
 /***/ (function(module, exports) {
 
 /**
@@ -43771,7 +42657,7 @@ BI.shortcut("bi.text_trigger", BI.TextTrigger);
 
 
 /***/ }),
-/* 543 */
+/* 541 */
 /***/ (function(module, exports) {
 
 /**
@@ -43852,7 +42738,7 @@ BI.shortcut("bi.select_text_trigger", BI.SelectTextTrigger);
 
 
 /***/ }),
-/* 544 */
+/* 542 */
 /***/ (function(module, exports) {
 
 /**
@@ -43921,7 +42807,7 @@ BI.SmallSelectTextTrigger = BI.inherit(BI.Trigger, {
 BI.shortcut("bi.small_select_text_trigger", BI.SmallSelectTextTrigger);
 
 /***/ }),
-/* 545 */
+/* 543 */
 /***/ (function(module, exports) {
 
 /**
@@ -43983,7 +42869,7 @@ BI.SmallTextTrigger = BI.inherit(BI.Trigger, {
 BI.shortcut("bi.small_text_trigger", BI.SmallTextTrigger);
 
 /***/ }),
-/* 546 */
+/* 544 */
 /***/ (function(module, exports) {
 
 /**
@@ -44061,7 +42947,7 @@ BI.MonthDateCombo.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.month_date_combo", BI.MonthDateCombo);
 
 /***/ }),
-/* 547 */
+/* 545 */
 /***/ (function(module, exports) {
 
 /**
@@ -44151,7 +43037,7 @@ BI.shortcut("bi.year_date_combo", BI.YearDateCombo);
 
 
 /***/ }),
-/* 548 */
+/* 546 */
 /***/ (function(module, exports) {
 
 /**
@@ -44385,7 +43271,7 @@ BI.shortcut("bi.date_picker", BI.DatePicker);
 
 
 /***/ }),
-/* 549 */
+/* 547 */
 /***/ (function(module, exports) {
 
 /**
@@ -44522,7 +43408,7 @@ BI.shortcut("bi.year_picker", BI.YearPicker);
 
 
 /***/ }),
-/* 550 */
+/* 548 */
 /***/ (function(module, exports) {
 
 /**
@@ -44678,7 +43564,7 @@ BI.DateCalendarPopup.EVENT_BEFORE_YEAR_MONTH_POPUPVIEW = "EVENT_BEFORE_YEAR_MONT
 BI.shortcut("bi.date_calendar_popup", BI.DateCalendarPopup);
 
 /***/ }),
-/* 551 */
+/* 549 */
 /***/ (function(module, exports) {
 
 /**
@@ -44781,7 +43667,7 @@ BI.MonthPopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.month_popup", BI.MonthPopup);
 
 /***/ }),
-/* 552 */
+/* 550 */
 /***/ (function(module, exports) {
 
 /**
@@ -44922,7 +43808,7 @@ BI.YearPopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.year_popup", BI.YearPopup);
 
 /***/ }),
-/* 553 */
+/* 551 */
 /***/ (function(module, exports) {
 
 /**
@@ -44993,7 +43879,7 @@ BI.DateTriangleTrigger = BI.inherit(BI.Trigger, {
 BI.shortcut("bi.date_triangle_trigger", BI.DateTriangleTrigger);
 
 /***/ }),
-/* 554 */
+/* 552 */
 /***/ (function(module, exports) {
 
 /**
@@ -45183,7 +44069,7 @@ BI.StaticDatePaneCard.EVENT_BEFORE_YEAR_MONTH_POPUPVIEW = "EVENT_BEFORE_YEAR_MON
 BI.shortcut("bi.static_date_pane_card", BI.StaticDatePaneCard);
 
 /***/ }),
-/* 555 */
+/* 553 */
 /***/ (function(module, exports) {
 
 BI.DynamicDatePane = BI.inherit(BI.Widget, {
@@ -45406,7 +44292,7 @@ BI.extend(BI.DynamicDatePane, {
 
 
 /***/ }),
-/* 556 */
+/* 554 */
 /***/ (function(module, exports) {
 
 /**
@@ -45547,7 +44433,7 @@ BI.shortcut("bi.date_time_combo", BI.DateTimeCombo);
 
 
 /***/ }),
-/* 557 */
+/* 555 */
 /***/ (function(module, exports) {
 
 /**
@@ -45666,7 +44552,7 @@ BI.shortcut("bi.date_time_popup", BI.DateTimePopup);
 
 
 /***/ }),
-/* 558 */
+/* 556 */
 /***/ (function(module, exports) {
 
 /**
@@ -45734,7 +44620,7 @@ BI.shortcut("bi.date_time_trigger", BI.DateTimeTrigger);
 
 
 /***/ }),
-/* 559 */
+/* 557 */
 /***/ (function(module, exports) {
 
 BI.StaticDateTimePaneCard = BI.inherit(BI.Widget, {
@@ -45944,7 +44830,7 @@ BI.StaticDateTimePaneCard.EVENT_BEFORE_YEAR_MONTH_POPUPVIEW = "EVENT_BEFORE_YEAR
 BI.shortcut("bi.static_date_time_pane_card", BI.StaticDateTimePaneCard);
 
 /***/ }),
-/* 560 */
+/* 558 */
 /***/ (function(module, exports) {
 
 BI.DynamicDateTimePane = BI.inherit(BI.Widget, {
@@ -46164,7 +45050,7 @@ BI.extend(BI.DynamicDateTimePane, {
 
 
 /***/ }),
-/* 561 */
+/* 559 */
 /***/ (function(module, exports) {
 
 /**
@@ -46263,7 +45149,7 @@ BI.DownListCombo.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
 BI.shortcut("bi.down_list_combo", BI.DownListCombo);
 
 /***/ }),
-/* 562 */
+/* 560 */
 /***/ (function(module, exports) {
 
 /**
@@ -46319,7 +45205,7 @@ BI.DownListGroup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.down_list_group", BI.DownListGroup);
 
 /***/ }),
-/* 563 */
+/* 561 */
 /***/ (function(module, exports) {
 
 BI.DownListItem = BI.inherit(BI.BasicButton, {
@@ -46422,7 +45308,7 @@ BI.DownListItem.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.down_list_item", BI.DownListItem);
 
 /***/ }),
-/* 564 */
+/* 562 */
 /***/ (function(module, exports) {
 
 BI.DownListGroupItem = BI.inherit(BI.BasicButton, {
@@ -46548,7 +45434,7 @@ BI.DownListGroupItem.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.down_list_group_item", BI.DownListGroupItem);
 
 /***/ }),
-/* 565 */
+/* 563 */
 /***/ (function(module, exports) {
 
 /**
@@ -46840,7 +45726,7 @@ BI.DownListPopup.EVENT_SON_VALUE_CHANGE = "EVENT_SON_VALUE_CHANGE";
 BI.shortcut("bi.down_list_popup", BI.DownListPopup);
 
 /***/ }),
-/* 566 */
+/* 564 */
 /***/ (function(module, exports) {
 
 !(function () {
@@ -46963,7 +45849,7 @@ BI.shortcut("bi.down_list_popup", BI.DownListPopup);
 
 
 /***/ }),
-/* 567 */
+/* 565 */
 /***/ (function(module, exports) {
 
 BI.DynamicDateCard = BI.inherit(BI.Widget, {
@@ -47392,7 +46278,7 @@ BI.extend(BI.DynamicDateCard, {
 });
 
 /***/ }),
-/* 568 */
+/* 566 */
 /***/ (function(module, exports) {
 
 BI.DynamicDateCombo = BI.inherit(BI.Single, {
@@ -47733,7 +46619,7 @@ BI.extend(BI.DynamicDateCombo, {
 
 
 /***/ }),
-/* 569 */
+/* 567 */
 /***/ (function(module, exports) {
 
 BI.DynamicDateParamItem = BI.inherit(BI.Widget, {
@@ -47869,7 +46755,7 @@ BI.shortcut("bi.dynamic_date_param_item", BI.DynamicDateParamItem);
 
 
 /***/ }),
-/* 570 */
+/* 568 */
 /***/ (function(module, exports) {
 
 BI.DynamicDatePopup = BI.inherit(BI.Widget, {
@@ -48131,7 +47017,7 @@ BI.DynamicDatePopup.EVENT_BEFORE_YEAR_MONTH_POPUPVIEW = "EVENT_BEFORE_YEAR_MONTH
 BI.shortcut("bi.dynamic_date_popup", BI.DynamicDatePopup);
 
 /***/ }),
-/* 571 */
+/* 569 */
 /***/ (function(module, exports) {
 
 BI.DynamicDateTrigger = BI.inherit(BI.Trigger, {
@@ -48456,7 +47342,7 @@ BI.shortcut("bi.dynamic_date_trigger", BI.DynamicDateTrigger);
 
 
 /***/ }),
-/* 572 */
+/* 570 */
 /***/ (function(module, exports) {
 
 BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
@@ -48805,7 +47691,7 @@ BI.extend(BI.DynamicDateTimeCombo, {
 
 
 /***/ }),
-/* 573 */
+/* 571 */
 /***/ (function(module, exports) {
 
 BI.DynamicDateTimePopup = BI.inherit(BI.Widget, {
@@ -49076,7 +47962,7 @@ BI.DynamicDateTimePopup.EVENT_BEFORE_YEAR_MONTH_POPUPVIEW = "EVENT_BEFORE_YEAR_M
 BI.shortcut("bi.dynamic_date_time_popup", BI.DynamicDateTimePopup);
 
 /***/ }),
-/* 574 */
+/* 572 */
 /***/ (function(module, exports) {
 
 BI.DynamicDateTimeSelect = BI.inherit(BI.Widget, {
@@ -49293,7 +48179,7 @@ BI.extend(BI.DynamicDateTimeSelect, {
 });
 
 /***/ }),
-/* 575 */
+/* 573 */
 /***/ (function(module, exports) {
 
 BI.DynamicDateTimeTrigger = BI.inherit(BI.Trigger, {
@@ -49689,7 +48575,7 @@ BI.DynamicDateTimeTrigger.EVENT_KEY_DOWN = "EVENT_KEY_DOWN";
 BI.shortcut("bi.dynamic_date_time_trigger", BI.DynamicDateTimeTrigger);
 
 /***/ }),
-/* 576 */
+/* 574 */
 /***/ (function(module, exports) {
 
 /**
@@ -49910,7 +48796,7 @@ BI.SearchEditor.EVENT_EMPTY = "EVENT_EMPTY";
 BI.shortcut("bi.search_editor", BI.SearchEditor);
 
 /***/ }),
-/* 577 */
+/* 575 */
 /***/ (function(module, exports) {
 
 /**
@@ -49935,7 +48821,7 @@ BI.SmallSearchEditor = BI.inherit(BI.SearchEditor, {
 BI.shortcut("bi.small_search_editor", BI.SmallSearchEditor);
 
 /***/ }),
-/* 578 */
+/* 576 */
 /***/ (function(module, exports) {
 
 /**
@@ -50114,7 +49000,7 @@ BI.TextEditor.EVENT_EMPTY = "EVENT_EMPTY";
 BI.shortcut("bi.text_editor", BI.TextEditor);
 
 /***/ }),
-/* 579 */
+/* 577 */
 /***/ (function(module, exports) {
 
 /**
@@ -50139,7 +49025,7 @@ BI.SmallTextEditor = BI.inherit(BI.TextEditor, {
 BI.shortcut("bi.small_text_editor", BI.SmallTextEditor);
 
 /***/ }),
-/* 580 */
+/* 578 */
 /***/ (function(module, exports) {
 
 /**
@@ -50684,7 +49570,7 @@ BI.IntervalSlider.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.interval_slider", BI.IntervalSlider);
 
 /***/ }),
-/* 581 */
+/* 579 */
 /***/ (function(module, exports) {
 
 /**
@@ -50911,7 +49797,7 @@ BI.AccurateCalculationModel = BI.inherit(BI.Widget, {
 });
 
 /***/ }),
-/* 582 */
+/* 580 */
 /***/ (function(module, exports) {
 
 /**
@@ -51006,7 +49892,7 @@ BI.MultiLayerDownListCombo.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
 BI.shortcut("bi.multi_layer_down_list_combo", BI.MultiLayerDownListCombo);
 
 /***/ }),
-/* 583 */
+/* 581 */
 /***/ (function(module, exports) {
 
 /**
@@ -51333,7 +50219,7 @@ BI.MultiLayerDownListPopup.EVENT_SON_VALUE_CHANGE = "EVENT_SON_VALUE_CHANGE";
 BI.shortcut("bi.multi_layer_down_list_popup", BI.MultiLayerDownListPopup);
 
 /***/ }),
-/* 584 */
+/* 582 */
 /***/ (function(module, exports) {
 
 /**
@@ -51584,7 +50470,7 @@ BI.MultiLayerSelectTreeCombo.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
 BI.shortcut("bi.multilayer_select_tree_combo", BI.MultiLayerSelectTreeCombo);
 
 /***/ }),
-/* 585 */
+/* 583 */
 /***/ (function(module, exports) {
 
 /**
@@ -51681,7 +50567,7 @@ BI.MultiLayerSelectTreeInsertSearchPane.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multilayer_select_tree_insert_search_pane", BI.MultiLayerSelectTreeInsertSearchPane);
 
 /***/ }),
-/* 586 */
+/* 584 */
 /***/ (function(module, exports) {
 
 /**
@@ -51876,7 +50762,7 @@ BI.shortcut("bi.multilayer_select_level_tree", BI.MultiLayerSelectLevelTree);
 
 
 /***/ }),
-/* 587 */
+/* 585 */
 /***/ (function(module, exports) {
 
 /**
@@ -51958,7 +50844,7 @@ BI.MultiLayerSelectTreePopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multilayer_select_tree_popup", BI.MultiLayerSelectTreePopup);
 
 /***/ }),
-/* 588 */
+/* 586 */
 /***/ (function(module, exports) {
 
 /**
@@ -52213,7 +51099,7 @@ BI.MultiLayerSelectTreeTrigger.EVENT_ADD_ITEM = "EVENT_ADD_ITEM";
 BI.shortcut("bi.multilayer_select_tree_trigger", BI.MultiLayerSelectTreeTrigger);
 
 /***/ }),
-/* 589 */
+/* 587 */
 /***/ (function(module, exports) {
 
 /**
@@ -52318,7 +51204,7 @@ BI.shortcut("bi.multilayer_select_tree_first_plus_group_node", BI.MultiLayerSele
 
 
 /***/ }),
-/* 590 */
+/* 588 */
 /***/ (function(module, exports) {
 
 /**
@@ -52412,7 +51298,7 @@ BI.shortcut("bi.multilayer_select_tree_last_plus_group_node", BI.MultiLayerSelec
 
 
 /***/ }),
-/* 591 */
+/* 589 */
 /***/ (function(module, exports) {
 
 /**
@@ -52506,7 +51392,7 @@ BI.shortcut("bi.multilayer_select_tree_mid_plus_group_node", BI.MultiLayerSelect
 
 
 /***/ }),
-/* 592 */
+/* 590 */
 /***/ (function(module, exports) {
 
 /**
@@ -52604,7 +51490,7 @@ BI.shortcut("bi.multilayer_select_tree_plus_group_node", BI.MultiLayerSelectTree
 
 
 /***/ }),
-/* 593 */
+/* 591 */
 /***/ (function(module, exports) {
 
 /**
@@ -52858,7 +51744,7 @@ BI.MultiLayerSingleTreeCombo.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
 BI.shortcut("bi.multilayer_single_tree_combo", BI.MultiLayerSingleTreeCombo);
 
 /***/ }),
-/* 594 */
+/* 592 */
 /***/ (function(module, exports) {
 
 /**
@@ -52955,7 +51841,7 @@ BI.MultiLayerSingleTreeInsertSearchPane.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multilayer_single_tree_insert_search_pane", BI.MultiLayerSingleTreeInsertSearchPane);
 
 /***/ }),
-/* 595 */
+/* 593 */
 /***/ (function(module, exports) {
 
 /**
@@ -53149,7 +52035,7 @@ BI.shortcut("bi.multilayer_single_level_tree", BI.MultiLayerSingleLevelTree);
 
 
 /***/ }),
-/* 596 */
+/* 594 */
 /***/ (function(module, exports) {
 
 /**
@@ -53230,7 +52116,7 @@ BI.MultiLayerSingleTreePopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multilayer_single_tree_popup", BI.MultiLayerSingleTreePopup);
 
 /***/ }),
-/* 597 */
+/* 595 */
 /***/ (function(module, exports) {
 
 /**
@@ -53486,7 +52372,7 @@ BI.MultiLayerSingleTreeTrigger.EVENT_ADD_ITEM = "EVENT_ADD_ITEM";
 BI.shortcut("bi.multilayer_single_tree_trigger", BI.MultiLayerSingleTreeTrigger);
 
 /***/ }),
-/* 598 */
+/* 596 */
 /***/ (function(module, exports) {
 
 /**
@@ -53583,7 +52469,7 @@ BI.shortcut("bi.multilayer_single_tree_first_plus_group_node", BI.MultiLayerSing
 
 
 /***/ }),
-/* 599 */
+/* 597 */
 /***/ (function(module, exports) {
 
 /**
@@ -53679,7 +52565,7 @@ BI.shortcut("bi.multilayer_single_tree_last_plus_group_node", BI.MultiLayerSingl
 
 
 /***/ }),
-/* 600 */
+/* 598 */
 /***/ (function(module, exports) {
 
 /**
@@ -53775,7 +52661,7 @@ BI.shortcut("bi.multilayer_single_tree_mid_plus_group_node", BI.MultiLayerSingle
 
 
 /***/ }),
-/* 601 */
+/* 599 */
 /***/ (function(module, exports) {
 
 /**
@@ -53882,7 +52768,7 @@ BI.MultiLayerSingleTreePlusGroupNode = BI.inherit(BI.NodeButton, {
 BI.shortcut("bi.multilayer_single_tree_plus_group_node", BI.MultiLayerSingleTreePlusGroupNode);
 
 /***/ }),
-/* 602 */
+/* 600 */
 /***/ (function(module, exports) {
 
 /**
@@ -53974,7 +52860,7 @@ BI.shortcut("bi.multilayer_single_tree_first_tree_leaf_item", BI.MultiLayerSingl
 
 
 /***/ }),
-/* 603 */
+/* 601 */
 /***/ (function(module, exports) {
 
 /**
@@ -54066,7 +52952,7 @@ BI.shortcut("bi.multilayer_single_tree_last_tree_leaf_item", BI.MultiLayerSingle
 
 
 /***/ }),
-/* 604 */
+/* 602 */
 /***/ (function(module, exports) {
 
 /**
@@ -54158,7 +53044,7 @@ BI.shortcut("bi.multilayer_single_tree_mid_tree_leaf_item", BI.MultiLayerSingleT
 
 
 /***/ }),
-/* 605 */
+/* 603 */
 /***/ (function(module, exports) {
 
 /**
@@ -54271,7 +53157,7 @@ BI.MultiSelectCheckPane = BI.inherit(BI.Widget, {
 BI.shortcut("bi.multi_select_check_pane", BI.MultiSelectCheckPane);
 
 /***/ }),
-/* 606 */
+/* 604 */
 /***/ (function(module, exports) {
 
 /**
@@ -54363,7 +53249,7 @@ BI.DisplaySelectedList = BI.inherit(BI.Pane, {
 BI.shortcut("bi.display_selected_list", BI.DisplaySelectedList);
 
 /***/ }),
-/* 607 */
+/* 605 */
 /***/ (function(module, exports) {
 
 /**
@@ -54845,7 +53731,7 @@ BI.shortcut("bi.multi_select_combo", BI.MultiSelectCombo);
 
 
 /***/ }),
-/* 608 */
+/* 606 */
 /***/ (function(module, exports) {
 
 /**
@@ -55354,7 +54240,7 @@ BI.shortcut("bi.multi_select_no_bar_combo", BI.MultiSelectNoBarCombo);
 
 
 /***/ }),
-/* 609 */
+/* 607 */
 /***/ (function(module, exports) {
 
 /**
@@ -55850,7 +54736,7 @@ BI.shortcut("bi.multi_select_insert_combo", BI.MultiSelectInsertCombo);
 
 
 /***/ }),
-/* 610 */
+/* 608 */
 /***/ (function(module, exports) {
 
 /**
@@ -56339,7 +55225,7 @@ BI.shortcut("bi.multi_select_insert_no_bar_combo", BI.MultiSelectInsertNoBarComb
 
 
 /***/ }),
-/* 611 */
+/* 609 */
 /***/ (function(module, exports) {
 
 /**
@@ -56497,7 +55383,7 @@ BI.MultiSelectInsertTrigger.EVENT_BLUR = "EVENT_BLUR";
 BI.shortcut("bi.multi_select_insert_trigger", BI.MultiSelectInsertTrigger);
 
 /***/ }),
-/* 612 */
+/* 610 */
 /***/ (function(module, exports) {
 
 /**
@@ -56695,7 +55581,7 @@ BI.MultiSelectLoader.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multi_select_loader", BI.MultiSelectLoader);
 
 /***/ }),
-/* 613 */
+/* 611 */
 /***/ (function(module, exports) {
 
 /**
@@ -56881,7 +55767,7 @@ BI.shortcut("bi.multi_select_no_bar_loader", BI.MultiSelectNoBarLoader);
 
 
 /***/ }),
-/* 614 */
+/* 612 */
 /***/ (function(module, exports) {
 
 /**
@@ -56981,7 +55867,7 @@ BI.MultiSelectPopupView.EVENT_CLICK_CLEAR = "EVENT_CLICK_CLEAR";
 BI.shortcut("bi.multi_select_popup_view", BI.MultiSelectPopupView);
 
 /***/ }),
-/* 615 */
+/* 613 */
 /***/ (function(module, exports) {
 
 /**
@@ -57077,7 +55963,7 @@ BI.MultiSelectNoBarPopupView.EVENT_CLICK_CLEAR = "EVENT_CLICK_CLEAR";
 BI.shortcut("bi.multi_select_no_bar_popup_view", BI.MultiSelectNoBarPopupView);
 
 /***/ }),
-/* 616 */
+/* 614 */
 /***/ (function(module, exports) {
 
 /**
@@ -57235,7 +56121,7 @@ BI.MultiSelectTrigger.EVENT_FOCUS = "EVENT_FOCUS";
 BI.shortcut("bi.multi_select_trigger", BI.MultiSelectTrigger);
 
 /***/ }),
-/* 617 */
+/* 615 */
 /***/ (function(module, exports) {
 
 /**
@@ -57338,7 +56224,7 @@ BI.MultiSelectSearchInsertPane.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multi_select_search_insert_pane", BI.MultiSelectSearchInsertPane);
 
 /***/ }),
-/* 618 */
+/* 616 */
 /***/ (function(module, exports) {
 
 /**
@@ -57508,7 +56394,7 @@ BI.MultiSelectSearchLoader.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multi_select_search_loader", BI.MultiSelectSearchLoader);
 
 /***/ }),
-/* 619 */
+/* 617 */
 /***/ (function(module, exports) {
 
 /**
@@ -57598,7 +56484,7 @@ BI.MultiSelectSearchPane.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multi_select_search_pane", BI.MultiSelectSearchPane);
 
 /***/ }),
-/* 620 */
+/* 618 */
 /***/ (function(module, exports) {
 
 /**
@@ -57703,7 +56589,7 @@ BI.shortcut("bi.multi_select_check_selected_button", BI.MultiSelectCheckSelected
 
 
 /***/ }),
-/* 621 */
+/* 619 */
 /***/ (function(module, exports) {
 
 /**
@@ -57811,7 +56697,7 @@ BI.shortcut("bi.multi_select_editor", BI.MultiSelectEditor);
 
 
 /***/ }),
-/* 622 */
+/* 620 */
 /***/ (function(module, exports) {
 
 /**
@@ -58030,7 +56916,7 @@ BI.SelectPatchEditor.EVENT_BLUR = "EVENT_BLUR";
 BI.shortcut("bi.select_patch_editor", BI.SelectPatchEditor);
 
 /***/ }),
-/* 623 */
+/* 621 */
 /***/ (function(module, exports) {
 
 /**
@@ -58232,7 +57118,7 @@ BI.shortcut("bi.multi_select_insert_searcher", BI.MultiSelectInsertSearcher);
 
 
 /***/ }),
-/* 624 */
+/* 622 */
 /***/ (function(module, exports) {
 
 /**
@@ -58432,7 +57318,7 @@ BI.shortcut("bi.multi_select_searcher", BI.MultiSelectSearcher);
 
 
 /***/ }),
-/* 625 */
+/* 623 */
 /***/ (function(module, exports) {
 
 /**
@@ -58549,7 +57435,7 @@ BI.MultiSelectCheckSelectedSwitcher.EVENT_AFTER_HIDEVIEW = "EVENT_AFTER_HIDEVIEW
 BI.shortcut("bi.multi_select_check_selected_switcher", BI.MultiSelectCheckSelectedSwitcher);
 
 /***/ }),
-/* 626 */
+/* 624 */
 /***/ (function(module, exports) {
 
 /**
@@ -58903,7 +57789,7 @@ BI.shortcut("bi.multi_select_insert_list", BI.MultiSelectInsertList);
 
 
 /***/ }),
-/* 627 */
+/* 625 */
 /***/ (function(module, exports) {
 
 /**
@@ -59262,7 +58148,7 @@ BI.MultiSelectInsertNoBarList.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multi_select_insert_no_bar_list", BI.MultiSelectInsertNoBarList);
 
 /***/ }),
-/* 628 */
+/* 626 */
 /***/ (function(module, exports) {
 
 /**
@@ -59635,7 +58521,7 @@ BI.MultiSelectList.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multi_select_list", BI.MultiSelectList);
 
 /***/ }),
-/* 629 */
+/* 627 */
 /***/ (function(module, exports) {
 
 /**
@@ -59812,7 +58698,7 @@ BI.shortcut("bi.multi_select_tree", BI.MultiSelectTree);
 
 
 /***/ }),
-/* 630 */
+/* 628 */
 /***/ (function(module, exports) {
 
 /**
@@ -59875,7 +58761,7 @@ BI.MultiSelectTreePopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multi_select_tree_popup", BI.MultiSelectTreePopup);
 
 /***/ }),
-/* 631 */
+/* 629 */
 /***/ (function(module, exports) {
 
 /**
@@ -59999,7 +58885,7 @@ BI.MultiTreeCheckPane.EVENT_CONTINUE_CLICK = "EVENT_CONTINUE_CLICK";
 BI.shortcut("bi.multi_tree_check_pane", BI.MultiTreeCheckPane);
 
 /***/ }),
-/* 632 */
+/* 630 */
 /***/ (function(module, exports) {
 
 /**
@@ -60363,7 +59249,7 @@ BI.shortcut("bi.multi_tree_combo", BI.MultiTreeCombo);
 
 
 /***/ }),
-/* 633 */
+/* 631 */
 /***/ (function(module, exports) {
 
 /**
@@ -60742,7 +59628,7 @@ BI.shortcut("bi.multi_tree_insert_combo", BI.MultiTreeInsertCombo);
 
 
 /***/ }),
-/* 634 */
+/* 632 */
 /***/ (function(module, exports) {
 
 /**
@@ -61145,7 +60031,7 @@ BI.shortcut("bi.multi_tree_list_combo", BI.MultiTreeListCombo);
 
 
 /***/ }),
-/* 635 */
+/* 633 */
 /***/ (function(module, exports) {
 
 /**
@@ -61252,7 +60138,7 @@ BI.MultiTreePopup.EVENT_AFTERINIT = "EVENT_AFTERINIT";
 BI.shortcut("bi.multi_tree_popup_view", BI.MultiTreePopup);
 
 /***/ }),
-/* 636 */
+/* 634 */
 /***/ (function(module, exports) {
 
 /**
@@ -61325,7 +60211,7 @@ BI.MultiTreeCheckSelectedButton.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multi_tree_check_selected_button", BI.MultiTreeCheckSelectedButton);
 
 /***/ }),
-/* 637 */
+/* 635 */
 /***/ (function(module, exports) {
 
 /**
@@ -61449,7 +60335,7 @@ BI.MultiTreeSearchInsertPane.EVENT_ADD_ITEM = "EVENT_ADD_ITEM";
 BI.shortcut("bi.multi_tree_search_insert_pane", BI.MultiTreeSearchInsertPane);
 
 /***/ }),
-/* 638 */
+/* 636 */
 /***/ (function(module, exports) {
 
 /**
@@ -61530,7 +60416,7 @@ BI.MultiTreeSearchPane.EVENT_CLICK_CLEAR = "EVENT_CLICK_CLEAR";
 BI.shortcut("bi.multi_tree_search_pane", BI.MultiTreeSearchPane);
 
 /***/ }),
-/* 639 */
+/* 637 */
 /***/ (function(module, exports) {
 
 /**
@@ -61700,7 +60586,7 @@ BI.shortcut("bi.multi_list_tree_searcher", BI.MultiListTreeSearcher);
 
 
 /***/ }),
-/* 640 */
+/* 638 */
 /***/ (function(module, exports) {
 
 /**
@@ -61902,7 +60788,7 @@ BI.shortcut("bi.multi_tree_searcher", BI.MultiTreeSearcher);
 
 
 /***/ }),
-/* 641 */
+/* 639 */
 /***/ (function(module, exports) {
 
 /**
@@ -62061,7 +60947,7 @@ BI.NumberEditor.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.number_editor", BI.NumberEditor);
 
 /***/ }),
-/* 642 */
+/* 640 */
 /***/ (function(module, exports) {
 
 // 小于号的值为：0，小于等于号的值为:1
@@ -62609,7 +61495,7 @@ BI.NumberInterval.EVENT_ERROR = "EVENT_ERROR";
 BI.shortcut("bi.number_interval", BI.NumberInterval);
 
 /***/ }),
-/* 643 */
+/* 641 */
 /***/ (function(module, exports) {
 
 BI.NumberIntervalSingleEidtor = BI.inherit(BI.Single, {
@@ -62698,7 +61584,7 @@ BI.NumberIntervalSingleEidtor.EVENT_CONFIRM = "EVENT_CONFIRM";
 BI.shortcut("bi.number_interval_single_editor", BI.NumberIntervalSingleEidtor);
 
 /***/ }),
-/* 644 */
+/* 642 */
 /***/ (function(module, exports) {
 
 /**
@@ -63185,7 +62071,7 @@ BI.shortcut("bi.search_multi_text_value_combo", BI.SearchMultiTextValueCombo);
 
 
 /***/ }),
-/* 645 */
+/* 643 */
 /***/ (function(module, exports) {
 
 BI.SearchMultiSelectTrigger = BI.inherit(BI.Trigger, {
@@ -63345,7 +62231,7 @@ BI.shortcut("bi.search_multi_select_trigger", BI.SearchMultiSelectTrigger);
 
 
 /***/ }),
-/* 646 */
+/* 644 */
 /***/ (function(module, exports) {
 
 /**
@@ -63527,7 +62413,7 @@ BI.SearchMultiSelectLoader.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.search_multi_select_loader", BI.SearchMultiSelectLoader);
 
 /***/ }),
-/* 647 */
+/* 645 */
 /***/ (function(module, exports) {
 
 BI.SearchMultiSelectPopupView = BI.inherit(BI.Widget, {
@@ -63620,7 +62506,7 @@ BI.SearchMultiSelectPopupView.EVENT_CLICK_CLEAR = "EVENT_CLICK_CLEAR";
 BI.shortcut("bi.search_multi_select_popup_view", BI.SearchMultiSelectPopupView);
 
 /***/ }),
-/* 648 */
+/* 646 */
 /***/ (function(module, exports) {
 
 BI.SearchMultiSelectSearcher = BI.inherit(BI.Widget, {
@@ -63801,7 +62687,7 @@ BI.shortcut("bi.search_multi_select_searcher", BI.SearchMultiSelectSearcher);
 
 
 /***/ }),
-/* 649 */
+/* 647 */
 /***/ (function(module, exports) {
 
 /**
@@ -63892,7 +62778,7 @@ BI.SelectTreeFirstPlusGroupNode = BI.inherit(BI.NodeButton, {
 BI.shortcut("bi.select_tree_first_plus_group_node", BI.SelectTreeFirstPlusGroupNode);
 
 /***/ }),
-/* 650 */
+/* 648 */
 /***/ (function(module, exports) {
 
 /**
@@ -63983,7 +62869,7 @@ BI.SelectTreeLastPlusGroupNode = BI.inherit(BI.NodeButton, {
 BI.shortcut("bi.select_tree_last_plus_group_node", BI.SelectTreeLastPlusGroupNode);
 
 /***/ }),
-/* 651 */
+/* 649 */
 /***/ (function(module, exports) {
 
 /**
@@ -64074,7 +62960,7 @@ BI.SelectTreeMidPlusGroupNode = BI.inherit(BI.NodeButton, {
 BI.shortcut("bi.select_tree_mid_plus_group_node", BI.SelectTreeMidPlusGroupNode);
 
 /***/ }),
-/* 652 */
+/* 650 */
 /***/ (function(module, exports) {
 
 /**
@@ -64165,7 +63051,7 @@ BI.SelectTreePlusGroupNode = BI.inherit(BI.NodeButton, {
 BI.shortcut("bi.select_tree_plus_group_node", BI.SelectTreePlusGroupNode);
 
 /***/ }),
-/* 653 */
+/* 651 */
 /***/ (function(module, exports) {
 
 /**
@@ -64244,7 +63130,7 @@ BI.SelectTreeCombo = BI.inherit(BI.Widget, {
 BI.shortcut("bi.select_tree_combo", BI.SelectTreeCombo);
 
 /***/ }),
-/* 654 */
+/* 652 */
 /***/ (function(module, exports) {
 
 /**
@@ -64326,7 +63212,7 @@ BI.SelectTreeExpander = BI.inherit(BI.Widget, {
 BI.shortcut("bi.select_tree_expander", BI.SelectTreeExpander);
 
 /***/ }),
-/* 655 */
+/* 653 */
 /***/ (function(module, exports) {
 
 /**
@@ -64432,7 +63318,7 @@ BI.SelectTreePopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.select_level_tree", BI.SelectTreePopup);
 
 /***/ }),
-/* 656 */
+/* 654 */
 /***/ (function(module, exports) {
 
 /**
@@ -64596,7 +63482,7 @@ BI.shortcut("bi.single_select_search_loader", BI.SingleSelectSearchLoader);
 
 
 /***/ }),
-/* 657 */
+/* 655 */
 /***/ (function(module, exports) {
 
 /**
@@ -64696,7 +63582,7 @@ BI.SingleSelectSearchInsertPane.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.single_select_search_insert_pane", BI.SingleSelectSearchInsertPane);
 
 /***/ }),
-/* 658 */
+/* 656 */
 /***/ (function(module, exports) {
 
 /**
@@ -64802,7 +63688,7 @@ BI.SingleSelectSearchPane.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.single_select_search_pane", BI.SingleSelectSearchPane);
 
 /***/ }),
-/* 659 */
+/* 657 */
 /***/ (function(module, exports) {
 
 /**
@@ -65071,7 +63957,7 @@ BI.shortcut("bi.single_select_combo", BI.SingleSelectCombo);
 
 
 /***/ }),
-/* 660 */
+/* 658 */
 /***/ (function(module, exports) {
 
 /**
@@ -65316,7 +64202,7 @@ BI.SingleSelectInsertCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
 BI.shortcut("bi.single_select_insert_combo", BI.SingleSelectInsertCombo);
 
 /***/ }),
-/* 661 */
+/* 659 */
 /***/ (function(module, exports) {
 
 /**
@@ -65485,7 +64371,7 @@ BI.shortcut("bi.single_select_list", BI.SingleSelectList);
 
 
 /***/ }),
-/* 662 */
+/* 660 */
 /***/ (function(module, exports) {
 
 /**
@@ -65658,7 +64544,7 @@ BI.shortcut("bi.single_select_loader", BI.SingleSelectLoader);
 
 
 /***/ }),
-/* 663 */
+/* 661 */
 /***/ (function(module, exports) {
 
 /**
@@ -65741,7 +64627,7 @@ BI.SingleSelectPopupView.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.single_select_popup_view", BI.SingleSelectPopupView);
 
 /***/ }),
-/* 664 */
+/* 662 */
 /***/ (function(module, exports) {
 
 /**
@@ -65884,7 +64770,7 @@ BI.SingleSelectTrigger.EVENT_BLUR = "EVENT_BLUR";
 BI.shortcut("bi.single_select_trigger", BI.SingleSelectTrigger);
 
 /***/ }),
-/* 665 */
+/* 663 */
 /***/ (function(module, exports) {
 
 /**
@@ -66095,7 +64981,7 @@ BI.shortcut("bi.single_select_insert_list", BI.SingleSelectInsertList);
 
 
 /***/ }),
-/* 666 */
+/* 664 */
 /***/ (function(module, exports) {
 
 /**
@@ -66192,7 +65078,7 @@ BI.SingleSelectEditor.EVENT_BLUR = "EVENT_BLUR";
 BI.shortcut("bi.single_select_editor", BI.SingleSelectEditor);
 
 /***/ }),
-/* 667 */
+/* 665 */
 /***/ (function(module, exports) {
 
 /**
@@ -66359,7 +65245,7 @@ BI.shortcut("bi.single_select_searcher", BI.SingleSelectSearcher);
 
 
 /***/ }),
-/* 668 */
+/* 666 */
 /***/ (function(module, exports) {
 
 BI.SignTextEditor = BI.inherit(BI.Widget, {
@@ -66559,7 +65445,7 @@ BI.SignTextEditor.EVENT_CLICK_LABEL = "EVENT_CLICK_LABEL";
 BI.shortcut("bi.sign_text_editor", BI.SignTextEditor);
 
 /***/ }),
-/* 669 */
+/* 667 */
 /***/ (function(module, exports) {
 
 /**
@@ -66600,7 +65486,7 @@ BI.SliderIconButton = BI.inherit(BI.Widget, {
 BI.shortcut("bi.single_slider_button", BI.SliderIconButton);
 
 /***/ }),
-/* 670 */
+/* 668 */
 /***/ (function(module, exports) {
 
 /**
@@ -66947,7 +65833,7 @@ BI.SingleSlider.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.single_slider", BI.SingleSlider);
 
 /***/ }),
-/* 671 */
+/* 669 */
 /***/ (function(module, exports) {
 
 /**
@@ -67263,7 +66149,7 @@ BI.SingleSliderLabel.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.single_slider_label", BI.SingleSliderLabel);
 
 /***/ }),
-/* 672 */
+/* 670 */
 /***/ (function(module, exports) {
 
 /**
@@ -67553,7 +66439,7 @@ BI.SingleSliderNormal.EVENT_DRAG = "EVENT_DRAG";
 BI.shortcut("bi.single_slider_normal", BI.SingleSliderNormal);
 
 /***/ }),
-/* 673 */
+/* 671 */
 /***/ (function(module, exports) {
 
 /**
@@ -67638,7 +66524,7 @@ BI.SingleTreeCombo.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
 BI.shortcut("bi.single_tree_combo", BI.SingleTreeCombo);
 
 /***/ }),
-/* 674 */
+/* 672 */
 /***/ (function(module, exports) {
 
 /**
@@ -67709,7 +66595,7 @@ BI.SingleTreePopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.single_level_tree", BI.SingleTreePopup);
 
 /***/ }),
-/* 675 */
+/* 673 */
 /***/ (function(module, exports) {
 
 /**
@@ -67779,7 +66665,7 @@ BI.shortcut("bi.single_tree_trigger", BI.SingleTreeTrigger);
 
 
 /***/ }),
-/* 676 */
+/* 674 */
 /***/ (function(module, exports) {
 
 /**
@@ -67882,7 +66768,7 @@ BI.TextValueDownListCombo.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.text_value_down_list_combo", BI.TextValueDownListCombo);
 
 /***/ }),
-/* 677 */
+/* 675 */
 /***/ (function(module, exports) {
 
 /**
@@ -67942,7 +66828,7 @@ BI.DownListSelectTextTrigger = BI.inherit(BI.Trigger, {
 BI.shortcut("bi.down_list_select_text_trigger", BI.DownListSelectTextTrigger);
 
 /***/ }),
-/* 678 */
+/* 676 */
 /***/ (function(module, exports) {
 
 !(function () {
@@ -68041,7 +66927,7 @@ BI.shortcut("bi.down_list_select_text_trigger", BI.DownListSelectTextTrigger);
 })();
 
 /***/ }),
-/* 679 */
+/* 677 */
 /***/ (function(module, exports) {
 
 /**
@@ -68279,7 +67165,7 @@ BI.shortcut("bi.down_list_select_text_trigger", BI.DownListSelectTextTrigger);
 })();
 
 /***/ }),
-/* 680 */
+/* 678 */
 /***/ (function(module, exports) {
 
 !(function () {
@@ -68471,7 +67357,7 @@ BI.shortcut("bi.down_list_select_text_trigger", BI.DownListSelectTextTrigger);
 })();
 
 /***/ }),
-/* 681 */
+/* 679 */
 /***/ (function(module, exports) {
 
 /**
@@ -68686,7 +67572,7 @@ BI.shortcut("bi.date_interval", BI.DateInterval);
 
 
 /***/ }),
-/* 682 */
+/* 680 */
 /***/ (function(module, exports) {
 
 /**
@@ -68894,7 +67780,7 @@ BI.TimeInterval.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.time_interval", BI.TimeInterval);
 
 /***/ }),
-/* 683 */
+/* 681 */
 /***/ (function(module, exports) {
 
 /**
@@ -69019,7 +67905,7 @@ BI.shortcut("bi.time_interval", BI.TimeInterval);
 })();
 
 /***/ }),
-/* 684 */
+/* 682 */
 /***/ (function(module, exports) {
 
 /**
@@ -69143,7 +68029,7 @@ BI.DynamicYearCard.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.dynamic_year_card", BI.DynamicYearCard);
 
 /***/ }),
-/* 685 */
+/* 683 */
 /***/ (function(module, exports) {
 
 /**
@@ -69342,7 +68228,7 @@ BI.StaticYearCard.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.static_year_card", BI.StaticYearCard);
 
 /***/ }),
-/* 686 */
+/* 684 */
 /***/ (function(module, exports) {
 
 BI.DynamicYearCombo = BI.inherit(BI.Widget, {
@@ -69559,7 +68445,7 @@ BI.extend(BI.DynamicYearCombo, {
 
 
 /***/ }),
-/* 687 */
+/* 685 */
 /***/ (function(module, exports) {
 
 /**
@@ -69810,7 +68696,7 @@ BI.DynamicYearPopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.dynamic_year_popup", BI.DynamicYearPopup);
 
 /***/ }),
-/* 688 */
+/* 686 */
 /***/ (function(module, exports) {
 
 BI.DynamicYearTrigger = BI.inherit(BI.Trigger, {
@@ -70014,7 +68900,7 @@ BI.DynamicYearTrigger.EVENT_VALID = "EVENT_VALID";
 BI.shortcut("bi.dynamic_year_trigger", BI.DynamicYearTrigger);
 
 /***/ }),
-/* 689 */
+/* 687 */
 /***/ (function(module, exports) {
 
 /**
@@ -70227,7 +69113,7 @@ BI.YearInterval.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
 BI.shortcut("bi.year_interval", BI.YearInterval);
 
 /***/ }),
-/* 690 */
+/* 688 */
 /***/ (function(module, exports) {
 
 /**
@@ -70398,7 +69284,7 @@ BI.DynamicYearMonthCard.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.dynamic_year_month_card", BI.DynamicYearMonthCard);
 
 /***/ }),
-/* 691 */
+/* 689 */
 /***/ (function(module, exports) {
 
 BI.StaticYearMonthCard = BI.inherit(BI.Widget, {
@@ -70567,7 +69453,7 @@ BI.shortcut("bi.static_year_month_card", BI.StaticYearMonthCard);
 
 
 /***/ }),
-/* 692 */
+/* 690 */
 /***/ (function(module, exports) {
 
 BI.DynamicYearMonthCombo = BI.inherit(BI.Single, {
@@ -70798,7 +69684,7 @@ BI.extend(BI.DynamicYearMonthCombo, {
 
 
 /***/ }),
-/* 693 */
+/* 691 */
 /***/ (function(module, exports) {
 
 /**
@@ -71044,7 +69930,7 @@ BI.DynamicYearMonthPopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.dynamic_year_month_popup", BI.DynamicYearMonthPopup);
 
 /***/ }),
-/* 694 */
+/* 692 */
 /***/ (function(module, exports) {
 
 BI.DynamicYearMonthTrigger = BI.inherit(BI.Trigger, {
@@ -71340,7 +70226,7 @@ BI.DynamicYearMonthTrigger.EVENT_KEY_DOWN = "EVENT_KEY_DOWN";
 BI.shortcut("bi.dynamic_year_month_trigger", BI.DynamicYearMonthTrigger);
 
 /***/ }),
-/* 695 */
+/* 693 */
 /***/ (function(module, exports) {
 
 BI.YearMonthInterval = BI.inherit(BI.Single, {
@@ -71553,7 +70439,7 @@ BI.shortcut("bi.year_month_interval", BI.YearMonthInterval);
 
 
 /***/ }),
-/* 696 */
+/* 694 */
 /***/ (function(module, exports) {
 
 /**
@@ -71724,7 +70610,7 @@ BI.DynamicYearQuarterCard.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.dynamic_year_quarter_card", BI.DynamicYearQuarterCard);
 
 /***/ }),
-/* 697 */
+/* 695 */
 /***/ (function(module, exports) {
 
 BI.StaticYearQuarterCard = BI.inherit(BI.Widget, {
@@ -71881,7 +70767,7 @@ BI.shortcut("bi.static_year_quarter_card", BI.StaticYearQuarterCard);
 
 
 /***/ }),
-/* 698 */
+/* 696 */
 /***/ (function(module, exports) {
 
 BI.DynamicYearQuarterCombo = BI.inherit(BI.Widget, {
@@ -72112,7 +70998,7 @@ BI.extend(BI.DynamicYearQuarterCombo, {
 
 
 /***/ }),
-/* 699 */
+/* 697 */
 /***/ (function(module, exports) {
 
 BI.DynamicYearQuarterPopup = BI.inherit(BI.Widget, {
@@ -72352,7 +71238,7 @@ BI.DynamicYearQuarterPopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.dynamic_year_quarter_popup", BI.DynamicYearQuarterPopup);
 
 /***/ }),
-/* 700 */
+/* 698 */
 /***/ (function(module, exports) {
 
 BI.DynamicYearQuarterTrigger = BI.inherit(BI.Trigger, {
@@ -72633,7 +71519,7 @@ BI.DynamicYearQuarterTrigger.EVENT_VALID = "EVENT_VALID";
 BI.shortcut("bi.dynamic_year_quarter_trigger", BI.DynamicYearQuarterTrigger);
 
 /***/ }),
-/* 701 */
+/* 699 */
 /***/ (function(module, exports) {
 
 /**
@@ -72844,7 +71730,7 @@ BI.YearQuarterInterval.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
 BI.shortcut("bi.year_quarter_interval", BI.YearQuarterInterval);
 
 /***/ }),
-/* 702 */
+/* 700 */
 /***/ (function(module, exports) {
 
 /**
@@ -72950,7 +71836,7 @@ BI.AbstractAllValueChooser = BI.inherit(BI.Widget, {
 });
 
 /***/ }),
-/* 703 */
+/* 701 */
 /***/ (function(module, exports) {
 
 /**
@@ -73032,7 +71918,7 @@ BI.shortcut("bi.all_value_chooser_combo", BI.AllValueChooserCombo);
 
 
 /***/ }),
-/* 704 */
+/* 702 */
 /***/ (function(module, exports) {
 
 /**
@@ -73106,7 +71992,7 @@ BI.shortcut("bi.all_value_chooser_pane", BI.AllValueChooserPane);
 
 
 /***/ }),
-/* 705 */
+/* 703 */
 /***/ (function(module, exports) {
 
 BI.AllValueMultiTextValueCombo = BI.inherit(BI.Widget, {
@@ -73177,7 +72063,7 @@ BI.shortcut("bi.all_value_multi_text_value_combo", BI.AllValueMultiTextValueComb
 
 
 /***/ }),
-/* 706 */
+/* 704 */
 /***/ (function(module, exports) {
 
 BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
@@ -74037,7 +72923,7 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
 
 
 /***/ }),
-/* 707 */
+/* 705 */
 /***/ (function(module, exports) {
 
 BI.AbstractListTreeValueChooser = BI.inherit(BI.AbstractTreeValueChooser, {
@@ -74329,7 +73215,7 @@ BI.AbstractListTreeValueChooser = BI.inherit(BI.AbstractTreeValueChooser, {
 });
 
 /***/ }),
-/* 708 */
+/* 706 */
 /***/ (function(module, exports) {
 
 /**
@@ -74449,7 +73335,7 @@ BI.shortcut("bi.list_tree_value_chooser_insert_combo", BI.ListTreeValueChooserIn
 
 
 /***/ }),
-/* 709 */
+/* 707 */
 /***/ (function(module, exports) {
 
 /**
@@ -74568,7 +73454,7 @@ BI.shortcut("bi.tree_value_chooser_insert_combo", BI.TreeValueChooserInsertCombo
 
 
 /***/ }),
-/* 710 */
+/* 708 */
 /***/ (function(module, exports) {
 
 /**
@@ -74691,7 +73577,7 @@ BI.shortcut("bi.tree_value_chooser_combo", BI.TreeValueChooserCombo);
 
 
 /***/ }),
-/* 711 */
+/* 709 */
 /***/ (function(module, exports) {
 
 /**
@@ -74759,7 +73645,7 @@ BI.shortcut("bi.tree_value_chooser_pane", BI.TreeValueChooserPane);
 
 
 /***/ }),
-/* 712 */
+/* 710 */
 /***/ (function(module, exports) {
 
 /**
@@ -74871,7 +73757,7 @@ BI.AbstractValueChooser = BI.inherit(BI.Widget, {
 });
 
 /***/ }),
-/* 713 */
+/* 711 */
 /***/ (function(module, exports) {
 
 /**
@@ -74981,7 +73867,7 @@ BI.shortcut("bi.value_chooser_insert_combo", BI.ValueChooserInsertCombo);
 
 
 /***/ }),
-/* 714 */
+/* 712 */
 /***/ (function(module, exports) {
 
 /**
@@ -75095,7 +73981,7 @@ BI.shortcut("bi.value_chooser_combo", BI.ValueChooserCombo);
 
 
 /***/ }),
-/* 715 */
+/* 713 */
 /***/ (function(module, exports) {
 
 /**
@@ -75197,7 +74083,7 @@ BI.shortcut("bi.value_chooser_no_bar_combo", BI.ValueChooserNoBarCombo);
 
 
 /***/ }),
-/* 716 */
+/* 714 */
 /***/ (function(module, exports) {
 
 /**
@@ -75273,20 +74159,20 @@ BI.shortcut("bi.value_chooser_pane", BI.ValueChooserPane);
 
 
 /***/ }),
-/* 717 */
+/* 715 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var _index = _interopRequireDefault(__webpack_require__(718));
+var _index = _interopRequireDefault(__webpack_require__(716));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 BI.extend(BI, _index["default"]);
 
 /***/ }),
-/* 718 */
+/* 716 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -76367,11 +75253,11 @@ Object.defineProperty(exports, "SelectTreeExpander", {
 });
 exports["default"] = void 0;
 
-var _combo = __webpack_require__(719);
+var _combo = __webpack_require__(717);
 
 var _group = __webpack_require__(68);
 
-var _tab = __webpack_require__(720);
+var _tab = __webpack_require__(718);
 
 var _pane = __webpack_require__(14);
 
@@ -76379,23 +75265,23 @@ var _button = __webpack_require__(4);
 
 var _button2 = __webpack_require__(46);
 
-var _button3 = __webpack_require__(721);
+var _button3 = __webpack_require__(719);
 
-var _button4 = __webpack_require__(722);
+var _button4 = __webpack_require__(720);
 
-var _icontextitem = __webpack_require__(723);
+var _icontextitem = __webpack_require__(721);
 
-var _editor = __webpack_require__(724);
+var _editor = __webpack_require__(722);
 
-var _iframe = __webpack_require__(725);
+var _iframe = __webpack_require__(723);
 
-var _checkbox = __webpack_require__(726);
+var _checkbox = __webpack_require__(724);
 
-var _input = __webpack_require__(727);
+var _input = __webpack_require__(725);
 
 var _abstract = __webpack_require__(47);
 
-var _label = __webpack_require__(728);
+var _label = __webpack_require__(726);
 
 var _single = __webpack_require__(2);
 
@@ -76403,25 +75289,25 @@ var _text = __webpack_require__(69);
 
 var _trigger = __webpack_require__(48);
 
-var _icon = __webpack_require__(729);
+var _icon = __webpack_require__(727);
 
-var _item = __webpack_require__(730);
+var _item = __webpack_require__(728);
 
-var _combo2 = __webpack_require__(731);
+var _combo2 = __webpack_require__(729);
 
-var _combo3 = __webpack_require__(732);
+var _combo3 = __webpack_require__(730);
 
-var _combo4 = __webpack_require__(733);
+var _combo4 = __webpack_require__(731);
 
-var _combo5 = __webpack_require__(734);
+var _combo5 = __webpack_require__(732);
 
-var _editor2 = __webpack_require__(735);
+var _editor2 = __webpack_require__(733);
 
-var _editor3 = __webpack_require__(736);
+var _editor3 = __webpack_require__(734);
 
-var _loading_pane = __webpack_require__(737);
+var _loading_pane = __webpack_require__(735);
 
-var _allvalueMultitextvalue = __webpack_require__(738);
+var _allvalueMultitextvalue = __webpack_require__(736);
 
 var _abstract2 = __webpack_require__(30);
 
@@ -76429,15 +75315,15 @@ var _abstractTreevaluechooser = __webpack_require__(70);
 
 var _action = __webpack_require__(71);
 
-var _action2 = __webpack_require__(739);
+var _action2 = __webpack_require__(737);
 
 var _behavior = __webpack_require__(49);
 
-var _behavior2 = __webpack_require__(740);
+var _behavior2 = __webpack_require__(738);
 
-var _behavior3 = __webpack_require__(741);
+var _behavior3 = __webpack_require__(739);
 
-var decorator = _interopRequireWildcard(__webpack_require__(742));
+var decorator = _interopRequireWildcard(__webpack_require__(740));
 
 var _ob = __webpack_require__(29);
 
@@ -76445,265 +75331,265 @@ var _widget = __webpack_require__(0);
 
 var _layout = __webpack_require__(3);
 
-var _layout2 = __webpack_require__(743);
+var _layout2 = __webpack_require__(741);
 
-var _layout3 = __webpack_require__(744);
+var _layout3 = __webpack_require__(742);
 
-var _layout4 = __webpack_require__(745);
+var _layout4 = __webpack_require__(743);
 
-var _layout5 = __webpack_require__(746);
+var _layout5 = __webpack_require__(744);
 
-var _combo6 = __webpack_require__(747);
+var _combo6 = __webpack_require__(745);
 
-var _icon2 = __webpack_require__(748);
+var _icon2 = __webpack_require__(746);
 
-var _adapt = __webpack_require__(749);
+var _adapt = __webpack_require__(747);
 
-var _adapt2 = __webpack_require__(750);
+var _adapt2 = __webpack_require__(748);
 
-var _icontexticonitem = __webpack_require__(751);
+var _icontexticonitem = __webpack_require__(749);
 
-var _auto = __webpack_require__(752);
+var _auto = __webpack_require__(750);
 
-var _inline = __webpack_require__(753);
+var _inline = __webpack_require__(751);
 
-var _adapt3 = __webpack_require__(754);
+var _adapt3 = __webpack_require__(752);
 
 var _button5 = __webpack_require__(50);
 
 var _editor4 = __webpack_require__(72);
 
-var _icon3 = __webpack_require__(755);
+var _icon3 = __webpack_require__(753);
 
-var _layer = __webpack_require__(756);
+var _layer = __webpack_require__(754);
 
-var _combo7 = __webpack_require__(757);
+var _combo7 = __webpack_require__(755);
 
-var _dynamicdate = __webpack_require__(758);
+var _dynamicdate = __webpack_require__(756);
 
-var _customtree = __webpack_require__(759);
+var _customtree = __webpack_require__(757);
 
-var _tree = __webpack_require__(760);
+var _tree = __webpack_require__(758);
 
-var _nodeIcon = __webpack_require__(761);
+var _nodeIcon = __webpack_require__(759);
 
-var _itemMid = __webpack_require__(762);
+var _itemMid = __webpack_require__(760);
 
-var _itemFirst = __webpack_require__(763);
+var _itemFirst = __webpack_require__(761);
 
-var _itemLast = __webpack_require__(764);
+var _itemLast = __webpack_require__(762);
 
-var _editorText = __webpack_require__(765);
+var _editorText = __webpack_require__(763);
 
-var _editor5 = __webpack_require__(766);
+var _editor5 = __webpack_require__(764);
 
-var _absolute = __webpack_require__(767);
+var _absolute = __webpack_require__(765);
 
-var _adapt4 = __webpack_require__(768);
+var _adapt4 = __webpack_require__(766);
 
-var _layout6 = __webpack_require__(769);
+var _layout6 = __webpack_require__(767);
 
-var _adapt5 = __webpack_require__(770);
+var _adapt5 = __webpack_require__(768);
 
-var _adapt6 = __webpack_require__(771);
+var _adapt6 = __webpack_require__(769);
 
-var _multiselectInsert = __webpack_require__(772);
+var _multiselectInsert = __webpack_require__(770);
 
-var _multiselect = __webpack_require__(773);
+var _multiselect = __webpack_require__(771);
 
-var _editor6 = __webpack_require__(774);
+var _editor6 = __webpack_require__(772);
 
-var _multilayersingletree = __webpack_require__(775);
+var _multilayersingletree = __webpack_require__(773);
 
-var _colorchooser = __webpack_require__(776);
+var _colorchooser = __webpack_require__(774);
 
-var _a = __webpack_require__(777);
+var _a = __webpack_require__(775);
 
-var _html = __webpack_require__(778);
+var _html = __webpack_require__(776);
 
-var _switcher = __webpack_require__(779);
+var _switcher = __webpack_require__(777);
 
-var _expander = __webpack_require__(780);
+var _expander = __webpack_require__(778);
 
-var _loader = __webpack_require__(781);
+var _loader = __webpack_require__(779);
 
-var _pane2 = __webpack_require__(782);
+var _pane2 = __webpack_require__(780);
 
-var _layer2 = __webpack_require__(783);
+var _layer2 = __webpack_require__(781);
 
-var _toolbar = __webpack_require__(784);
+var _toolbar = __webpack_require__(782);
 
-var _list = __webpack_require__(785);
+var _list = __webpack_require__(783);
 
 var _abstract3 = __webpack_require__(73);
 
-var _combo8 = __webpack_require__(786);
+var _combo8 = __webpack_require__(784);
 
-var _editor7 = __webpack_require__(787);
+var _editor7 = __webpack_require__(785);
 
-var _item2 = __webpack_require__(788);
+var _item2 = __webpack_require__(786);
 
-var _dynamicdatetime = __webpack_require__(789);
+var _dynamicdatetime = __webpack_require__(787);
 
-var _multiTree = __webpack_require__(790);
+var _multiTree = __webpack_require__(788);
 
-var _middle = __webpack_require__(791);
+var _middle = __webpack_require__(789);
 
-var _group2 = __webpack_require__(792);
+var _group2 = __webpack_require__(790);
 
-var _layout7 = __webpack_require__(793);
+var _layout7 = __webpack_require__(791);
 
-var _icon4 = __webpack_require__(794);
+var _icon4 = __webpack_require__(792);
 
-var _searcher = __webpack_require__(795);
+var _searcher = __webpack_require__(793);
 
-var _combo9 = __webpack_require__(796);
+var _combo9 = __webpack_require__(794);
 
-var _combo10 = __webpack_require__(797);
+var _combo10 = __webpack_require__(795);
 
-var _comboTreevaluechooser = __webpack_require__(798);
+var _comboTreevaluechooser = __webpack_require__(796);
 
-var _radio = __webpack_require__(799);
+var _radio = __webpack_require__(797);
 
-var _multilayerselecttree = __webpack_require__(800);
+var _multilayerselecttree = __webpack_require__(798);
 
-var _multilayersingletree2 = __webpack_require__(801);
+var _multilayersingletree2 = __webpack_require__(799);
 
-var _multilayerdownlist = __webpack_require__(802);
+var _multilayerdownlist = __webpack_require__(800);
 
 var _treeview = __webpack_require__(52);
 
-var _multiTree2 = __webpack_require__(803);
+var _multiTree2 = __webpack_require__(801);
 
-var _itemSingleselect = __webpack_require__(804);
+var _itemSingleselect = __webpack_require__(802);
 
-var _singleselectInsert = __webpack_require__(805);
+var _singleselectInsert = __webpack_require__(803);
 
-var _singleselect = __webpack_require__(806);
+var _singleselect = __webpack_require__(804);
 
-var _layout8 = __webpack_require__(807);
+var _layout8 = __webpack_require__(805);
 
-var _combo11 = __webpack_require__(808);
+var _combo11 = __webpack_require__(806);
 
-var _time = __webpack_require__(809);
+var _time = __webpack_require__(807);
 
 var _listtreeview = __webpack_require__(74);
 
-var _listasynctree = __webpack_require__(810);
+var _listasynctree = __webpack_require__(808);
 
-var _asynctree = __webpack_require__(811);
+var _asynctree = __webpack_require__(809);
 
-var _multilayersingletree3 = __webpack_require__(812);
+var _multilayersingletree3 = __webpack_require__(810);
 
-var _multilayerselecttree2 = __webpack_require__(813);
+var _multilayerselecttree2 = __webpack_require__(811);
 
-var _multilayerdownlist2 = __webpack_require__(814);
+var _multilayerdownlist2 = __webpack_require__(812);
 
-var _multiTreeList = __webpack_require__(815);
+var _multiTreeList = __webpack_require__(813);
 
-var _multiTreeInsert = __webpack_require__(816);
+var _multiTreeInsert = __webpack_require__(814);
 
-var _combo12 = __webpack_require__(817);
+var _combo12 = __webpack_require__(815);
 
-var _switch = __webpack_require__(818);
+var _switch = __webpack_require__(816);
 
-var _layout9 = __webpack_require__(819);
+var _layout9 = __webpack_require__(817);
 
-var _editor8 = __webpack_require__(820);
+var _editor8 = __webpack_require__(818);
 
-var _trigger2 = __webpack_require__(821);
+var _trigger2 = __webpack_require__(819);
 
-var _triggerText = __webpack_require__(822);
+var _triggerText = __webpack_require__(820);
 
-var _dateinterval = __webpack_require__(823);
+var _dateinterval = __webpack_require__(821);
 
-var _datepane = __webpack_require__(824);
+var _datepane = __webpack_require__(822);
 
-var _pagerAll = __webpack_require__(825);
+var _pagerAll = __webpack_require__(823);
 
 var _layer3 = __webpack_require__(51);
 
-var _popup = __webpack_require__(826);
+var _popup = __webpack_require__(824);
 
-var _check = __webpack_require__(827);
+var _check = __webpack_require__(825);
 
-var _numberinterval = __webpack_require__(828);
+var _numberinterval = __webpack_require__(826);
 
-var _combo13 = __webpack_require__(829);
+var _combo13 = __webpack_require__(827);
 
-var _combo14 = __webpack_require__(830);
+var _combo14 = __webpack_require__(828);
 
-var _intervalslider = __webpack_require__(831);
+var _intervalslider = __webpack_require__(829);
 
-var _multiselectlist = __webpack_require__(832);
+var _multiselectlist = __webpack_require__(830);
 
-var _yearmonthinterval = __webpack_require__(833);
+var _yearmonthinterval = __webpack_require__(831);
 
-var _numbereditor = __webpack_require__(834);
+var _numbereditor = __webpack_require__(832);
 
-var _combo15 = __webpack_require__(835);
+var _combo15 = __webpack_require__(833);
 
-var _linear = __webpack_require__(836);
+var _linear = __webpack_require__(834);
 
-var _img = __webpack_require__(837);
+var _img = __webpack_require__(835);
 
-var _combo16 = __webpack_require__(838);
+var _combo16 = __webpack_require__(836);
 
-var _combo17 = __webpack_require__(839);
+var _combo17 = __webpack_require__(837);
 
-var _listview = __webpack_require__(840);
+var _listview = __webpack_require__(838);
 
-var _middleFloat = __webpack_require__(841);
+var _middleFloat = __webpack_require__(839);
 
-var _popup2 = __webpack_require__(842);
+var _popup2 = __webpack_require__(840);
 
 var _controller = __webpack_require__(53);
 
-var _controller2 = __webpack_require__(843);
+var _controller2 = __webpack_require__(841);
 
-var _popupCalendar = __webpack_require__(844);
+var _popupCalendar = __webpack_require__(842);
 
-var _tree2 = __webpack_require__(845);
+var _tree2 = __webpack_require__(843);
 
-var _textnode = __webpack_require__(846);
+var _textnode = __webpack_require__(844);
 
-var _popup3 = __webpack_require__(847);
+var _popup3 = __webpack_require__(845);
 
-var _button6 = __webpack_require__(848);
+var _button6 = __webpack_require__(846);
 
-var _router = __webpack_require__(849);
+var _router = __webpack_require__(847);
 
-var _datetime = __webpack_require__(850);
+var _datetime = __webpack_require__(848);
 
-var _float = __webpack_require__(851);
+var _float = __webpack_require__(849);
 
-var _layout10 = __webpack_require__(852);
+var _layout10 = __webpack_require__(850);
 
-var _colorchooserPopup = __webpack_require__(853);
+var _colorchooserPopup = __webpack_require__(851);
 
-var _blankicontextitem = __webpack_require__(854);
+var _blankicontextitem = __webpack_require__(852);
 
-var _controller3 = __webpack_require__(855);
+var _controller3 = __webpack_require__(853);
 
-var _pager = __webpack_require__(856);
+var _pager = __webpack_require__(854);
 
-var _timeinterval = __webpack_require__(857);
+var _timeinterval = __webpack_require__(855);
 
-var _datetimepane = __webpack_require__(858);
+var _datetimepane = __webpack_require__(856);
 
-var _singleselectlist = __webpack_require__(859);
+var _singleselectlist = __webpack_require__(857);
 
-var _multiselecttree = __webpack_require__(860);
+var _multiselecttree = __webpack_require__(858);
 
-var _html2 = __webpack_require__(861);
+var _html2 = __webpack_require__(859);
 
-var _pane3 = __webpack_require__(862);
+var _pane3 = __webpack_require__(860);
 
-var _layout11 = __webpack_require__(863);
+var _layout11 = __webpack_require__(861);
 
-var _multilayerselecttree3 = __webpack_require__(864);
+var _multilayerselecttree3 = __webpack_require__(862);
 
-var _selecttree = __webpack_require__(865);
+var _selecttree = __webpack_require__(863);
 
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
@@ -76715,7 +75601,7 @@ var _default = {
 exports["default"] = _default;
 
 /***/ }),
-/* 719 */
+/* 717 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -76724,13 +75610,31 @@ exports["default"] = _default;
 var _widget = __webpack_require__(0);
 
 /***/ }),
-/* 720 */
+/* 718 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
 var _widget = __webpack_require__(0);
+
+/***/ }),
+/* 719 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _button = __webpack_require__(4);
+
+/***/ }),
+/* 720 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _button = __webpack_require__(4);
 
 /***/ }),
 /* 721 */
@@ -76748,7 +75652,7 @@ var _button = __webpack_require__(4);
 "use strict";
 
 
-var _button = __webpack_require__(4);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 723 */
@@ -76757,7 +75661,7 @@ var _button = __webpack_require__(4);
 "use strict";
 
 
-var _button = __webpack_require__(4);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 724 */
@@ -76766,7 +75670,7 @@ var _button = __webpack_require__(4);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _button = __webpack_require__(4);
 
 /***/ }),
 /* 725 */
@@ -76784,7 +75688,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _button = __webpack_require__(4);
+var _abstract = __webpack_require__(47);
 
 /***/ }),
 /* 727 */
@@ -76802,7 +75706,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _abstract = __webpack_require__(47);
+var _button = __webpack_require__(4);
 
 /***/ }),
 /* 729 */
@@ -76811,7 +75715,7 @@ var _abstract = __webpack_require__(47);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _widget = __webpack_require__(0);
 
 /***/ }),
 /* 730 */
@@ -76820,7 +75724,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _button = __webpack_require__(4);
+var _widget = __webpack_require__(0);
 
 /***/ }),
 /* 731 */
@@ -76865,7 +75769,7 @@ var _widget = __webpack_require__(0);
 "use strict";
 
 
-var _widget = __webpack_require__(0);
+var _pane = __webpack_require__(14);
 
 /***/ }),
 /* 736 */
@@ -76883,7 +75787,7 @@ var _widget = __webpack_require__(0);
 "use strict";
 
 
-var _pane = __webpack_require__(14);
+var _action = __webpack_require__(71);
 
 /***/ }),
 /* 738 */
@@ -76892,7 +75796,7 @@ var _pane = __webpack_require__(14);
 "use strict";
 
 
-var _widget = __webpack_require__(0);
+var _behavior = __webpack_require__(49);
 
 /***/ }),
 /* 739 */
@@ -76901,28 +75805,10 @@ var _widget = __webpack_require__(0);
 "use strict";
 
 
-var _action = __webpack_require__(71);
+var _behavior = __webpack_require__(49);
 
 /***/ }),
 /* 740 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _behavior = __webpack_require__(49);
-
-/***/ }),
-/* 741 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _behavior = __webpack_require__(49);
-
-/***/ }),
-/* 742 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -77133,6 +76019,24 @@ type UnionToTuple<U> = UnionToTupleRecursively<U, []>;
 exports.Model = Model;
 
 /***/ }),
+/* 741 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _layout = __webpack_require__(3);
+
+/***/ }),
+/* 742 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _layout = __webpack_require__(3);
+
+/***/ }),
 /* 743 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -77157,7 +76061,7 @@ var _layout = __webpack_require__(3);
 "use strict";
 
 
-var _layout = __webpack_require__(3);
+var _widget = __webpack_require__(0);
 
 /***/ }),
 /* 746 */
@@ -77166,7 +76070,7 @@ var _layout = __webpack_require__(3);
 "use strict";
 
 
-var _layout = __webpack_require__(3);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 747 */
@@ -77175,7 +76079,7 @@ var _layout = __webpack_require__(3);
 "use strict";
 
 
-var _widget = __webpack_require__(0);
+var _layout = __webpack_require__(3);
 
 /***/ }),
 /* 748 */
@@ -77184,7 +76088,7 @@ var _widget = __webpack_require__(0);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _layout = __webpack_require__(3);
 
 /***/ }),
 /* 749 */
@@ -77193,7 +76097,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _layout = __webpack_require__(3);
+var _button = __webpack_require__(4);
 
 /***/ }),
 /* 750 */
@@ -77211,7 +76115,7 @@ var _layout = __webpack_require__(3);
 "use strict";
 
 
-var _button = __webpack_require__(4);
+var _layout = __webpack_require__(3);
 
 /***/ }),
 /* 752 */
@@ -77229,7 +76133,7 @@ var _layout = __webpack_require__(3);
 "use strict";
 
 
-var _layout = __webpack_require__(3);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 754 */
@@ -77238,7 +76142,7 @@ var _layout = __webpack_require__(3);
 "use strict";
 
 
-var _layout = __webpack_require__(3);
+var _widget = __webpack_require__(0);
 
 /***/ }),
 /* 755 */
@@ -77247,7 +76151,7 @@ var _layout = __webpack_require__(3);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _widget = __webpack_require__(0);
 
 /***/ }),
 /* 756 */
@@ -77256,7 +76160,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _widget = __webpack_require__(0);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 757 */
@@ -77274,7 +76178,7 @@ var _widget = __webpack_require__(0);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _group = __webpack_require__(68);
 
 /***/ }),
 /* 759 */
@@ -77283,7 +76187,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _widget = __webpack_require__(0);
+var _button = __webpack_require__(46);
 
 /***/ }),
 /* 760 */
@@ -77292,7 +76196,7 @@ var _widget = __webpack_require__(0);
 "use strict";
 
 
-var _group = __webpack_require__(68);
+var _button = __webpack_require__(4);
 
 /***/ }),
 /* 761 */
@@ -77301,7 +76205,7 @@ var _group = __webpack_require__(68);
 "use strict";
 
 
-var _button = __webpack_require__(46);
+var _button = __webpack_require__(4);
 
 /***/ }),
 /* 762 */
@@ -77319,7 +76223,7 @@ var _button = __webpack_require__(4);
 "use strict";
 
 
-var _button = __webpack_require__(4);
+var _editor = __webpack_require__(72);
 
 /***/ }),
 /* 764 */
@@ -77328,7 +76232,7 @@ var _button = __webpack_require__(4);
 "use strict";
 
 
-var _button = __webpack_require__(4);
+var _widget = __webpack_require__(0);
 
 /***/ }),
 /* 765 */
@@ -77337,7 +76241,7 @@ var _button = __webpack_require__(4);
 "use strict";
 
 
-var _editor = __webpack_require__(72);
+var _layout = __webpack_require__(3);
 
 /***/ }),
 /* 766 */
@@ -77346,7 +76250,7 @@ var _editor = __webpack_require__(72);
 "use strict";
 
 
-var _widget = __webpack_require__(0);
+var _layout = __webpack_require__(3);
 
 /***/ }),
 /* 767 */
@@ -77382,7 +76286,7 @@ var _layout = __webpack_require__(3);
 "use strict";
 
 
-var _layout = __webpack_require__(3);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 771 */
@@ -77391,7 +76295,7 @@ var _layout = __webpack_require__(3);
 "use strict";
 
 
-var _layout = __webpack_require__(3);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 772 */
@@ -77400,7 +76304,7 @@ var _layout = __webpack_require__(3);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _widget = __webpack_require__(0);
 
 /***/ }),
 /* 773 */
@@ -77409,7 +76313,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _pane = __webpack_require__(14);
 
 /***/ }),
 /* 774 */
@@ -77427,7 +76331,7 @@ var _widget = __webpack_require__(0);
 "use strict";
 
 
-var _pane = __webpack_require__(14);
+var _text = __webpack_require__(69);
 
 /***/ }),
 /* 776 */
@@ -77436,7 +76340,7 @@ var _pane = __webpack_require__(14);
 "use strict";
 
 
-var _widget = __webpack_require__(0);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 777 */
@@ -77445,7 +76349,7 @@ var _widget = __webpack_require__(0);
 "use strict";
 
 
-var _text = __webpack_require__(69);
+var _widget = __webpack_require__(0);
 
 /***/ }),
 /* 778 */
@@ -77454,7 +76358,7 @@ var _text = __webpack_require__(69);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _widget = __webpack_require__(0);
 
 /***/ }),
 /* 779 */
@@ -77472,7 +76376,7 @@ var _widget = __webpack_require__(0);
 "use strict";
 
 
-var _widget = __webpack_require__(0);
+var _pane = __webpack_require__(14);
 
 /***/ }),
 /* 781 */
@@ -77481,7 +76385,7 @@ var _widget = __webpack_require__(0);
 "use strict";
 
 
-var _widget = __webpack_require__(0);
+var _layer = __webpack_require__(51);
 
 /***/ }),
 /* 782 */
@@ -77490,7 +76394,7 @@ var _widget = __webpack_require__(0);
 "use strict";
 
 
-var _pane = __webpack_require__(14);
+var _button = __webpack_require__(4);
 
 /***/ }),
 /* 783 */
@@ -77499,7 +76403,7 @@ var _pane = __webpack_require__(14);
 "use strict";
 
 
-var _layer = __webpack_require__(51);
+var _widget = __webpack_require__(0);
 
 /***/ }),
 /* 784 */
@@ -77508,7 +76412,7 @@ var _layer = __webpack_require__(51);
 "use strict";
 
 
-var _button = __webpack_require__(4);
+var _abstract = __webpack_require__(73);
 
 /***/ }),
 /* 785 */
@@ -77517,7 +76421,7 @@ var _button = __webpack_require__(4);
 "use strict";
 
 
-var _widget = __webpack_require__(0);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 786 */
@@ -77526,7 +76430,7 @@ var _widget = __webpack_require__(0);
 "use strict";
 
 
-var _abstract = __webpack_require__(73);
+var _button = __webpack_require__(4);
 
 /***/ }),
 /* 787 */
@@ -77544,7 +76448,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _button = __webpack_require__(4);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 789 */
@@ -77553,7 +76457,7 @@ var _button = __webpack_require__(4);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _layout = __webpack_require__(3);
 
 /***/ }),
 /* 790 */
@@ -77562,7 +76466,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _widget = __webpack_require__(0);
 
 /***/ }),
 /* 791 */
@@ -77580,7 +76484,7 @@ var _layout = __webpack_require__(3);
 "use strict";
 
 
-var _widget = __webpack_require__(0);
+var _button = __webpack_require__(50);
 
 /***/ }),
 /* 793 */
@@ -77589,7 +76493,7 @@ var _widget = __webpack_require__(0);
 "use strict";
 
 
-var _layout = __webpack_require__(3);
+var _widget = __webpack_require__(0);
 
 /***/ }),
 /* 794 */
@@ -77598,7 +76502,7 @@ var _layout = __webpack_require__(3);
 "use strict";
 
 
-var _button = __webpack_require__(50);
+var _abstractTreevaluechooser = __webpack_require__(70);
 
 /***/ }),
 /* 795 */
@@ -77607,7 +76511,7 @@ var _button = __webpack_require__(50);
 "use strict";
 
 
-var _widget = __webpack_require__(0);
+var _abstract = __webpack_require__(30);
 
 /***/ }),
 /* 796 */
@@ -77616,7 +76520,7 @@ var _widget = __webpack_require__(0);
 "use strict";
 
 
-var _abstractTreevaluechooser = __webpack_require__(70);
+var _abstract = __webpack_require__(30);
 
 /***/ }),
 /* 797 */
@@ -77625,7 +76529,7 @@ var _abstractTreevaluechooser = __webpack_require__(70);
 "use strict";
 
 
-var _abstract = __webpack_require__(30);
+var _button = __webpack_require__(4);
 
 /***/ }),
 /* 798 */
@@ -77634,7 +76538,7 @@ var _abstract = __webpack_require__(30);
 "use strict";
 
 
-var _abstract = __webpack_require__(30);
+var _widget = __webpack_require__(0);
 
 /***/ }),
 /* 799 */
@@ -77643,7 +76547,7 @@ var _abstract = __webpack_require__(30);
 "use strict";
 
 
-var _button = __webpack_require__(4);
+var _widget = __webpack_require__(0);
 
 /***/ }),
 /* 800 */
@@ -77661,7 +76565,7 @@ var _widget = __webpack_require__(0);
 "use strict";
 
 
-var _widget = __webpack_require__(0);
+var _pane = __webpack_require__(14);
 
 /***/ }),
 /* 802 */
@@ -77670,7 +76574,7 @@ var _widget = __webpack_require__(0);
 "use strict";
 
 
-var _widget = __webpack_require__(0);
+var _button = __webpack_require__(4);
 
 /***/ }),
 /* 803 */
@@ -77679,7 +76583,7 @@ var _widget = __webpack_require__(0);
 "use strict";
 
 
-var _pane = __webpack_require__(14);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 804 */
@@ -77688,7 +76592,7 @@ var _pane = __webpack_require__(14);
 "use strict";
 
 
-var _button = __webpack_require__(4);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 805 */
@@ -77697,7 +76601,7 @@ var _button = __webpack_require__(4);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _layout = __webpack_require__(3);
 
 /***/ }),
 /* 806 */
@@ -77715,7 +76619,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _layout = __webpack_require__(3);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 808 */
@@ -77724,7 +76628,7 @@ var _layout = __webpack_require__(3);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _listtreeview = __webpack_require__(74);
 
 /***/ }),
 /* 809 */
@@ -77733,7 +76637,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _treeview = __webpack_require__(52);
 
 /***/ }),
 /* 810 */
@@ -77742,7 +76646,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _listtreeview = __webpack_require__(74);
+var _widget = __webpack_require__(0);
 
 /***/ }),
 /* 811 */
@@ -77751,7 +76655,7 @@ var _listtreeview = __webpack_require__(74);
 "use strict";
 
 
-var _treeview = __webpack_require__(52);
+var _widget = __webpack_require__(0);
 
 /***/ }),
 /* 812 */
@@ -77769,7 +76673,7 @@ var _widget = __webpack_require__(0);
 "use strict";
 
 
-var _widget = __webpack_require__(0);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 814 */
@@ -77778,7 +76682,7 @@ var _widget = __webpack_require__(0);
 "use strict";
 
 
-var _widget = __webpack_require__(0);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 815 */
@@ -77787,7 +76691,7 @@ var _widget = __webpack_require__(0);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _widget = __webpack_require__(0);
 
 /***/ }),
 /* 816 */
@@ -77796,7 +76700,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _button = __webpack_require__(4);
 
 /***/ }),
 /* 817 */
@@ -77805,7 +76709,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _widget = __webpack_require__(0);
+var _layout = __webpack_require__(3);
 
 /***/ }),
 /* 818 */
@@ -77814,7 +76718,7 @@ var _widget = __webpack_require__(0);
 "use strict";
 
 
-var _button = __webpack_require__(4);
+var _widget = __webpack_require__(0);
 
 /***/ }),
 /* 819 */
@@ -77823,7 +76727,7 @@ var _button = __webpack_require__(4);
 "use strict";
 
 
-var _layout = __webpack_require__(3);
+var _trigger = __webpack_require__(48);
 
 /***/ }),
 /* 820 */
@@ -77832,7 +76736,7 @@ var _layout = __webpack_require__(3);
 "use strict";
 
 
-var _widget = __webpack_require__(0);
+var _trigger = __webpack_require__(48);
 
 /***/ }),
 /* 821 */
@@ -77841,7 +76745,7 @@ var _widget = __webpack_require__(0);
 "use strict";
 
 
-var _trigger = __webpack_require__(48);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 822 */
@@ -77850,7 +76754,7 @@ var _trigger = __webpack_require__(48);
 "use strict";
 
 
-var _trigger = __webpack_require__(48);
+var _widget = __webpack_require__(0);
 
 /***/ }),
 /* 823 */
@@ -77859,28 +76763,10 @@ var _trigger = __webpack_require__(48);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _widget = __webpack_require__(0);
 
 /***/ }),
 /* 824 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _widget = __webpack_require__(0);
-
-/***/ }),
-/* 825 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _widget = __webpack_require__(0);
-
-/***/ }),
-/* 826 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -77891,7 +76777,7 @@ var _layer = __webpack_require__(51);
 var _widget = __webpack_require__(0);
 
 /***/ }),
-/* 827 */
+/* 825 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -77900,7 +76786,7 @@ var _widget = __webpack_require__(0);
 var _button = __webpack_require__(50);
 
 /***/ }),
-/* 828 */
+/* 826 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -77909,7 +76795,7 @@ var _button = __webpack_require__(50);
 var _single = __webpack_require__(2);
 
 /***/ }),
-/* 829 */
+/* 827 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -77918,13 +76804,31 @@ var _single = __webpack_require__(2);
 var _widget = __webpack_require__(0);
 
 /***/ }),
-/* 830 */
+/* 828 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
 var _widget = __webpack_require__(0);
+
+/***/ }),
+/* 829 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _single = __webpack_require__(2);
+
+/***/ }),
+/* 830 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 831 */
@@ -77942,7 +76846,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _widget = __webpack_require__(0);
 
 /***/ }),
 /* 833 */
@@ -77951,7 +76855,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _widget = __webpack_require__(0);
 
 /***/ }),
 /* 834 */
@@ -77969,7 +76873,7 @@ var _widget = __webpack_require__(0);
 "use strict";
 
 
-var _widget = __webpack_require__(0);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 836 */
@@ -77987,7 +76891,7 @@ var _widget = __webpack_require__(0);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _widget = __webpack_require__(0);
 
 /***/ }),
 /* 838 */
@@ -78005,7 +76909,7 @@ var _widget = __webpack_require__(0);
 "use strict";
 
 
-var _widget = __webpack_require__(0);
+var _layout = __webpack_require__(3);
 
 /***/ }),
 /* 840 */
@@ -78023,7 +76927,7 @@ var _widget = __webpack_require__(0);
 "use strict";
 
 
-var _layout = __webpack_require__(3);
+var _controller = __webpack_require__(53);
 
 /***/ }),
 /* 842 */
@@ -78041,26 +76945,8 @@ var _widget = __webpack_require__(0);
 "use strict";
 
 
-var _controller = __webpack_require__(53);
-
 /***/ }),
 /* 844 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _widget = __webpack_require__(0);
-
-/***/ }),
-/* 845 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-/***/ }),
-/* 846 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -78069,7 +76955,7 @@ var _widget = __webpack_require__(0);
 var _button = __webpack_require__(46);
 
 /***/ }),
-/* 847 */
+/* 845 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -78078,7 +76964,7 @@ var _button = __webpack_require__(46);
 var _pane = __webpack_require__(14);
 
 /***/ }),
-/* 848 */
+/* 846 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -78087,14 +76973,14 @@ var _pane = __webpack_require__(14);
 var _button = __webpack_require__(4);
 
 /***/ }),
-/* 849 */
+/* 847 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
 /***/ }),
-/* 850 */
+/* 848 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -78103,25 +76989,25 @@ var _button = __webpack_require__(4);
 var _single = __webpack_require__(2);
 
 /***/ }),
+/* 849 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _layout = __webpack_require__(3);
+
+/***/ }),
+/* 850 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _layout = __webpack_require__(3);
+
+/***/ }),
 /* 851 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _layout = __webpack_require__(3);
-
-/***/ }),
-/* 852 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _layout = __webpack_require__(3);
-
-/***/ }),
-/* 853 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -78130,7 +77016,7 @@ var _layout = __webpack_require__(3);
 var _widget = __webpack_require__(0);
 
 /***/ }),
-/* 854 */
+/* 852 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -78139,13 +77025,31 @@ var _widget = __webpack_require__(0);
 var _button = __webpack_require__(4);
 
 /***/ }),
-/* 855 */
+/* 853 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
 var _controller = __webpack_require__(53);
+
+/***/ }),
+/* 854 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _widget = __webpack_require__(0);
+
+/***/ }),
+/* 855 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 856 */
@@ -78172,7 +77076,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _widget = __webpack_require__(0);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 859 */
@@ -78181,7 +77085,7 @@ var _widget = __webpack_require__(0);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _abstract = __webpack_require__(47);
 
 /***/ }),
 /* 860 */
@@ -78190,7 +77094,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _abstract = __webpack_require__(30);
 
 /***/ }),
 /* 861 */
@@ -78199,7 +77103,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _abstract = __webpack_require__(47);
+var _layout = __webpack_require__(3);
 
 /***/ }),
 /* 862 */
@@ -78208,7 +77112,7 @@ var _abstract = __webpack_require__(47);
 "use strict";
 
 
-var _abstract = __webpack_require__(30);
+var _pane = __webpack_require__(14);
 
 /***/ }),
 /* 863 */
@@ -78217,27 +77121,11 @@ var _abstract = __webpack_require__(30);
 "use strict";
 
 
-var _layout = __webpack_require__(3);
-
-/***/ }),
-/* 864 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _pane = __webpack_require__(14);
-
-/***/ }),
-/* 865 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
 var _widget = __webpack_require__(0);
 
 /***/ }),
+/* 864 */,
+/* 865 */,
 /* 866 */,
 /* 867 */,
 /* 868 */,
@@ -78264,9 +77152,7 @@ var _widget = __webpack_require__(0);
 /* 889 */,
 /* 890 */,
 /* 891 */,
-/* 892 */,
-/* 893 */,
-/* 894 */
+/* 892 */
 /***/ (function(module, exports) {
 
 ;(function () {
@@ -78429,6 +77315,8 @@ var _widget = __webpack_require__(0);
 
 
 /***/ }),
+/* 893 */,
+/* 894 */,
 /* 895 */,
 /* 896 */,
 /* 897 */,
@@ -78461,9 +77349,7 @@ var _widget = __webpack_require__(0);
 /* 924 */,
 /* 925 */,
 /* 926 */,
-/* 927 */,
-/* 928 */,
-/* 929 */
+/* 927 */
 /***/ (function(module, exports) {
 
 ;(function () {
@@ -78739,6 +77625,8 @@ var _widget = __webpack_require__(0);
 
 
 /***/ }),
+/* 928 */,
+/* 929 */,
 /* 930 */,
 /* 931 */,
 /* 932 */,
@@ -78746,16 +77634,14 @@ var _widget = __webpack_require__(0);
 /* 934 */,
 /* 935 */,
 /* 936 */,
-/* 937 */,
-/* 938 */,
-/* 939 */
+/* 937 */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(global) {module.exports = global["Fix"] = __webpack_require__(940);
+/* WEBPACK VAR INJECTION */(function(global) {module.exports = global["Fix"] = __webpack_require__(938);
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(15)))
 
 /***/ }),
-/* 940 */
+/* 938 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(setImmediate) {function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -80288,6 +79174,8 @@ var _widget = __webpack_require__(0);
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(61).setImmediate))
 
 /***/ }),
+/* 939 */,
+/* 940 */,
 /* 941 */,
 /* 942 */,
 /* 943 */,
@@ -80491,14 +79379,14 @@ var _widget = __webpack_require__(0);
 /* 1141 */,
 /* 1142 */,
 /* 1143 */,
-/* 1144 */,
-/* 1145 */,
-/* 1146 */
+/* 1144 */
 /***/ (function(module, exports) {
 
 
 
 /***/ }),
+/* 1145 */,
+/* 1146 */,
 /* 1147 */,
 /* 1148 */,
 /* 1149 */,
@@ -80810,9 +79698,7 @@ var _widget = __webpack_require__(0);
 /* 1455 */,
 /* 1456 */,
 /* 1457 */,
-/* 1458 */,
-/* 1459 */,
-/* 1460 */
+/* 1458 */
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(170);
@@ -80830,10 +79716,10 @@ __webpack_require__(288);
 __webpack_require__(289);
 __webpack_require__(290);
 __webpack_require__(291);
-__webpack_require__(292);
 __webpack_require__(177);
 __webpack_require__(178);
 __webpack_require__(179);
+__webpack_require__(292);
 __webpack_require__(293);
 __webpack_require__(294);
 __webpack_require__(295);
@@ -80841,14 +79727,14 @@ __webpack_require__(296);
 __webpack_require__(297);
 __webpack_require__(298);
 __webpack_require__(299);
-__webpack_require__(300);
-__webpack_require__(301);
 __webpack_require__(180);
 __webpack_require__(181);
 __webpack_require__(182);
 __webpack_require__(183);
 __webpack_require__(184);
 __webpack_require__(185);
+__webpack_require__(300);
+__webpack_require__(301);
 __webpack_require__(302);
 __webpack_require__(303);
 __webpack_require__(304);
@@ -80867,13 +79753,13 @@ __webpack_require__(316);
 __webpack_require__(317);
 __webpack_require__(318);
 __webpack_require__(319);
+__webpack_require__(186);
 __webpack_require__(320);
 __webpack_require__(321);
-__webpack_require__(186);
 __webpack_require__(322);
+__webpack_require__(187);
 __webpack_require__(323);
 __webpack_require__(324);
-__webpack_require__(187);
 __webpack_require__(325);
 __webpack_require__(326);
 __webpack_require__(327);
@@ -80926,12 +79812,12 @@ __webpack_require__(373);
 __webpack_require__(374);
 __webpack_require__(375);
 __webpack_require__(376);
-__webpack_require__(377);
-__webpack_require__(378);
 __webpack_require__(188);
 __webpack_require__(189);
 __webpack_require__(190);
-__webpack_require__(939);
+__webpack_require__(937);
+__webpack_require__(377);
+__webpack_require__(378);
 __webpack_require__(379);
 __webpack_require__(380);
 __webpack_require__(381);
@@ -81097,8 +79983,6 @@ __webpack_require__(540);
 __webpack_require__(541);
 __webpack_require__(542);
 __webpack_require__(543);
-__webpack_require__(544);
-__webpack_require__(545);
 __webpack_require__(89);
 __webpack_require__(90);
 __webpack_require__(91);
@@ -81159,6 +80043,8 @@ __webpack_require__(145);
 __webpack_require__(146);
 __webpack_require__(147);
 __webpack_require__(148);
+__webpack_require__(544);
+__webpack_require__(545);
 __webpack_require__(546);
 __webpack_require__(547);
 __webpack_require__(548);
@@ -81328,12 +80214,10 @@ __webpack_require__(711);
 __webpack_require__(712);
 __webpack_require__(713);
 __webpack_require__(714);
-__webpack_require__(715);
-__webpack_require__(716);
-__webpack_require__(929);
-__webpack_require__(894);
-__webpack_require__(1146);
-module.exports = __webpack_require__(717);
+__webpack_require__(927);
+__webpack_require__(892);
+__webpack_require__(1144);
+module.exports = __webpack_require__(715);
 
 
 /***/ })
