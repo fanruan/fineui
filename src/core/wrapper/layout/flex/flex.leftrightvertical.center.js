@@ -34,8 +34,19 @@ BI.FlexLeftRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
 
     _formatItems: function (items) {
         var o = this.options;
-        var leftItems = items.left || [];
-        var rightItems = items.right || [];
+        var left, right;
+        if (BI.isArray(items)) {
+            BI.each(items, function (i, item) {
+                if (item.left) {
+                    left = item.left;
+                }
+                if (item.right) {
+                    right = item.right;
+                }
+            });
+        }
+        var leftItems = left || items.left || [];
+        var rightItems = right || items.right || [];
         leftItems = BI.map(leftItems, function (i, item) {
             var json = {
                 el: BI.stripEL(item)

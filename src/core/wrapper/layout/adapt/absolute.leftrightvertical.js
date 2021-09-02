@@ -27,17 +27,28 @@ BI.AbsoluteLeftRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
                 self.layout = _ref;
             },
             verticalAlign: o.verticalAlign,
-            items: this._formatItems(),
+            items: this._formatItems(o.items),
             scrollx: o.scrollx,
             scrolly: o.scrolly,
             scrollable: o.scrollable
         };
     },
 
-    _formatItems: function () {
+    _formatItems: function (items) {
         var o = this.options;
-        var leftItems = o.items.left || [];
-        var rightItems = o.items.right || [];
+        var left, right;
+        if (BI.isArray(items)) {
+            BI.each(items, function (i, item) {
+                if (item.left) {
+                    left = item.left;
+                }
+                if (item.right) {
+                    right = item.right;
+                }
+            });
+        }
+        var leftItems = left || items.left || [];
+        var rightItems = right || items.right || [];
         leftItems = BI.map(leftItems, function (i, item) {
             var json = {
                 el: BI.stripEL(item),
@@ -80,7 +91,7 @@ BI.AbsoluteLeftRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
     },
 
     resize: function () {
-        this.layout.stroke(this._formatItems())
+        this.layout.stroke(this._formatItems(this.options.items));
     },
 
     addItem: function () {
@@ -89,8 +100,7 @@ BI.AbsoluteLeftRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
     },
 
     populate: function (items) {
-        this.options.items = items;
-        this.layout.populate(this._formatItems());
+        this.layout.populate(this._formatItems(items));
     }
 });
 BI.shortcut("bi.absolute_left_right_vertical_adapt", BI.AbsoluteLeftRightVerticalAdaptLayout);
@@ -132,7 +142,7 @@ BI.AbsoluteRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
     },
 
     resize: function () {
-        this.layout.stroke([{}].concat(this.options.items))
+        this.layout.stroke([{}].concat(this.options.items));
     },
 
     addItem: function () {
