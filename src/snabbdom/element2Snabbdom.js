@@ -18,7 +18,7 @@
         var elmAttrs = parentNode.attributes;
         var elmChildren = parentNode.childNodes;
         var key = parentNode.getAttribute("key");
-        for (i = 0, n = elmAttrs.length; i < n; i++) {
+        for (var i = 0, n = elmAttrs.length; i < n; i++) {
             var name = elmAttrs[i].nodeName;
             if (name !== "id" && name !== "class") {
                 attrs[name] = elmAttrs[i].nodeValue;
