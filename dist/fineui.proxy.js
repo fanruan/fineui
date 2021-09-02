@@ -1,4 +1,4 @@
-/*! time: 2021-9-1 23:40:34 */
+/*! time: 2021-9-2 9:00:18 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -27222,9 +27222,6 @@ BI.VirtualGroupList = BI.inherit(BI.Widget, {
     },
 
     populate: function (items) {
-        if (items && this.options.items !== items) {
-            this.restore();
-        }
         this._populate(items);
     }
 });
