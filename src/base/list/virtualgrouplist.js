@@ -107,9 +107,7 @@ BI.VirtualGroupList = BI.inherit(BI.Widget, {
                 }
             }
             this.bottomBlank.setHeight(this.tree.sumTo(this.renderedIndex) - this.tree.sumTo(Math.min(end, this.renderedIndex)));
-            this.container.element.height(this.container.element.height());
             this.container.populate(items);
-            this.container.element.height("auto");
         } else {
             for (var i = (start < 0 ? 0 : start); i <= end; i++) {
                 var index = i * o.blockSize;
