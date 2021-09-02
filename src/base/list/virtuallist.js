@@ -73,11 +73,6 @@ BI.VirtualList = BI.inherit(BI.Widget, {
             var items = o.items.slice(index, index + o.blockSize);
             this.container.addItems(items, this);
             var addedHeight = getElementHeight() - lastHeight;
-            this.cache[cnt] = {
-                index: index,
-                scrollTop: lastHeight,
-                height: addedHeight
-            };
             this.tree.set(cnt, addedHeight);
             this.renderedIndex = cnt;
             cnt++;
@@ -95,7 +90,10 @@ BI.VirtualList = BI.inherit(BI.Widget, {
         var end = this.tree.leastUpperBound(minContentHeightTo);
         var needDestroyed = [], needMount = [];
         for (var i = 0; i < start; i++) {
-            var index = this.cache[i].index;
+            var index = i * o.blockSize;
+            if (!this.cache[i]) {
+                this.cache[i] = {};
+            }
             if (!this.cache[i].destroyed) {
                 for (var j = index; j < index + o.blockSize && j < o.items.length; j++) {
                     needDestroyed.push(this.container._children[j]);
@@ -105,7 +103,10 @@ BI.VirtualList = BI.inherit(BI.Widget, {
             }
         }
         for (var i = end + 1; i <= this.renderedIndex; i++) {
-            var index = this.cache[i].index;
+            var index = i * o.blockSize;
+            if (!this.cache[i]) {
+                this.cache[i] = {};
+            }
             if (!this.cache[i].destroyed) {
                 for (var j = index; j < index + o.blockSize && j < o.items.length; j++) {
                     needDestroyed.push(this.container._children[j]);
@@ -118,7 +119,10 @@ BI.VirtualList = BI.inherit(BI.Widget, {
             lastFragment = BI.Widget._renderEngine.createFragment();
         var currentFragment = firstFragment;
         for (var i = (start < 0 ? 0 : start); i <= end && i <= this.renderedIndex; i++) {
-            var index = this.cache[i].index;
+            var index = i * o.blockSize;
+            if (!this.cache[i]) {
+                this.cache[i] = {};
+            }
             if (!this.cache[i].destroyed) {
                 currentFragment = lastFragment;
             }
@@ -149,6 +153,7 @@ BI.VirtualList = BI.inherit(BI.Widget, {
             this.options.items = items;
         }
         this.tree = BI.PrefixIntervalTree.empty(Math.ceil(o.items.length / o.blockSize));
+
         this._calculateBlocksToRender();
         try {
             this.element.scrollTop(o.scrollTop);
