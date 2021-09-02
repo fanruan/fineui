@@ -270,10 +270,10 @@
                 BI.patchVNode(div, this.vnode);
                 // 去除这个临时的div
                 BI.DOM.hang([div]);
-                element.attr("style", self.vnode.elm.getAttribute("style"));
-                element.addClass(self.vnode.elm.getAttribute("class"));
+                element.attr("style", this.vnode.elm.getAttribute("style"));
+                element.addClass(this.vnode.elm.getAttribute("class"));
                 element.empty();
-                BI.each(BI.jQuery(self.vnode.elm).children(), function (i, node) {
+                BI.each(BI.jQuery(this.vnode.elm).children(), function (i, node) {
                     element.append(node);
                 });
                 return true;

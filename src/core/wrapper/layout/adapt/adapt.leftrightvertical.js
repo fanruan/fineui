@@ -77,7 +77,6 @@ BI.LeftRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
     },
 
     _getLeftRight: function (items) {
-        var o = this.options;
         var left, right;
         if (BI.isArray(items)) {
             BI.each(items, function (i, item) {
