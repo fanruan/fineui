@@ -1,6 +1,9 @@
 # 更新日志
-2.0(2021-07)
+2.0(2021-09)
+- 支持h函数传递left、right，优化left_right_vertical_adapt布局的jsx写法
 - 新增bi.virtual_group_list组件
+
+2.0(2021-07)
 - layout支持forceUpdate刷新方式
 - width属性支持calc()
 - 修改了颜色选择器交互
