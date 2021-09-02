@@ -1,4 +1,4 @@
-/*! time: 2021-9-2 9:00:18 */
+/*! time: 2021-9-2 9:30:13 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -27184,9 +27184,7 @@ BI.VirtualGroupList = BI.inherit(BI.Widget, {
                 }
             }
             this.bottomBlank.setHeight(this.tree.sumTo(this.renderedIndex) - this.tree.sumTo(Math.min(end, this.renderedIndex)));
-            this.container.element.height(this.container.element.height());
             this.container.populate(items);
-            this.container.element.height("auto");
         } else {
             for (var i = (start < 0 ? 0 : start); i <= end; i++) {
                 var index = i * o.blockSize;
