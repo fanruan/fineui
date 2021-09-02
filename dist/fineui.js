@@ -1,4 +1,4 @@
-/*! time: 2021-9-2 10:40:16 */
+/*! time: 2021-9-2 11:00:15 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -14333,8 +14333,18 @@ BI.h = function (type, props, children) {
             el: children[0]
         }, props);
     }
+    if (type === "left") {
+        return BI.extend({
+            left: children
+        }, props);
+    }
+    if (type === "right") {
+        return BI.extend({
+            right: children
+        }, props);
+    }
     return BI.extend({
-        type: type,
+        type: type
     }, children.length > 0 ? {items: children} : {}, props);
 };
 
@@ -20188,17 +20198,28 @@ BI.AbsoluteLeftRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
                 self.layout = _ref;
             },
             verticalAlign: o.verticalAlign,
-            items: this._formatItems(),
+            items: this._formatItems(o.items),
             scrollx: o.scrollx,
             scrolly: o.scrolly,
             scrollable: o.scrollable
         };
     },
 
-    _formatItems: function () {
+    _formatItems: function (items) {
         var o = this.options;
-        var leftItems = o.items.left || [];
-        var rightItems = o.items.right || [];
+        var left, right;
+        if (BI.isArray(items)) {
+            BI.each(items, function (i, item) {
+                if (item.left) {
+                    left = item.left;
+                }
+                if (item.right) {
+                    right = item.right;
+                }
+            });
+        }
+        var leftItems = left || items.left || [];
+        var rightItems = right || items.right || [];
         leftItems = BI.map(leftItems, function (i, item) {
             var json = {
                 el: BI.stripEL(item),
@@ -20241,7 +20262,7 @@ BI.AbsoluteLeftRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
     },
 
     resize: function () {
-        this.layout.stroke(this._formatItems())
+        this.layout.stroke(this._formatItems(this.options.items));
     },
 
     addItem: function () {
@@ -20250,8 +20271,7 @@ BI.AbsoluteLeftRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
     },
 
     populate: function (items) {
-        this.options.items = items;
-        this.layout.populate(this._formatItems());
+        this.layout.populate(this._formatItems(items));
     }
 });
 BI.shortcut("bi.absolute_left_right_vertical_adapt", BI.AbsoluteLeftRightVerticalAdaptLayout);
@@ -20293,7 +20313,7 @@ BI.AbsoluteRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
     },
 
     resize: function () {
-        this.layout.stroke([{}].concat(this.options.items))
+        this.layout.stroke([{}].concat(this.options.items));
     },
 
     addItem: function () {
@@ -20474,8 +20494,9 @@ BI.LeftRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
     render: function () {
         var o = this.options, self = this;
         BI.LeftRightVerticalAdaptLayout.superclass.render.apply(this, arguments);
+        var leftRight = this._getLeftRight(o.items);
         var layoutArray = [];
-        if ("left" in o.items) {
+        if (leftRight.left || "left" in o.items) {
             layoutArray.push({
                 type: "bi.left",
                 items: [{
@@ -20485,7 +20506,7 @@ BI.LeftRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
                             self.left = _ref;
                         },
                         height: "100%",
-                        items: o.items.left,
+                        items: leftRight.left || o.items.left,
                         hgap: o.lhgap,
                         lgap: o.llgap,
                         rgap: o.lrgap,
@@ -20496,7 +20517,7 @@ BI.LeftRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
                 }]
             });
         }
-        if ("right" in o.items) {
+        if (leftRight.right || "right" in o.items) {
             layoutArray.push({
                 type: "bi.right",
                 items: [{
@@ -20506,7 +20527,7 @@ BI.LeftRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
                             self.right = _ref;
                         },
                         height: "100%",
-                        items: o.items.right,
+                        items: leftRight.right || o.items.right,
                         hgap: o.rhgap,
                         lgap: o.rlgap,
                         rgap: o.rrgap,
@@ -20520,9 +20541,29 @@ BI.LeftRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
         return layoutArray;
     },
 
+    _getLeftRight: function (items) {
+        var o = this.options;
+        var left, right;
+        if (BI.isArray(items)) {
+            BI.each(items, function (i, item) {
+                if (item.left) {
+                    left = item.left;
+                }
+                if (item.right) {
+                    right = item.right;
+                }
+            });
+        }
+        return {
+            left: left,
+            right: right
+        };
+    },
+
     resize: function () {
-        this.left.stroke(this.options.items.left);
-        this.right.stroke(this.options.items.right);
+        var leftRight = this._getLeftRight(this.options.items);
+        this.left.stroke(leftRight.left || this.options.items.left);
+        this.right.stroke(leftRight.right || this.options.items.right);
     },
 
     addItem: function () {
@@ -20531,8 +20572,9 @@ BI.LeftRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
     },
 
     populate: function (items) {
-        this.left.populate(items.left);
-        this.right.populate(items.right);
+        var leftRight = this._getLeftRight(items);
+        this.left.populate(leftRight.left || items.left);
+        this.right.populate(leftRight.right || items.right);
     }
 });
 BI.shortcut("bi.left_right_vertical_adapt", BI.LeftRightVerticalAdaptLayout);
@@ -21478,8 +21520,19 @@ BI.FlexLeftRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
 
     _formatItems: function (items) {
         var o = this.options;
-        var leftItems = items.left || [];
-        var rightItems = items.right || [];
+        var left, right;
+        if (BI.isArray(items)) {
+            BI.each(items, function (i, item) {
+                if (item.left) {
+                    left = item.left;
+                }
+                if (item.right) {
+                    right = item.right;
+                }
+            });
+        }
+        var leftItems = left || items.left || [];
+        var rightItems = right || items.right || [];
         leftItems = BI.map(leftItems, function (i, item) {
             var json = {
                 el: BI.stripEL(item)
@@ -22257,8 +22310,19 @@ BI.FloatAbsoluteLeftRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
 
     _formatItems: function (items) {
         var o = this.options;
-        var leftItems = items.left || [];
-        var rightItems = items.right || [];
+        var left, right;
+        if (BI.isArray(items)) {
+            BI.each(items, function (i, item) {
+                if (item.left) {
+                    left = item.left;
+                }
+                if (item.right) {
+                    right = item.right;
+                }
+            });
+        }
+        var leftItems = left || items.left || [];
+        var rightItems = right || items.right || [];
         leftItems = BI.map(leftItems, function (i, item) {
             var el = BI.stripEL(item);
             if (o.verticalAlign === BI.VerticalAlign.Middle) {
