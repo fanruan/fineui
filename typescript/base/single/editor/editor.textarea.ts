@@ -5,6 +5,9 @@ export declare class TextAreaEditor extends Single {
     static EVENT_CHANGE: string;
     static EVENT_FOCUS: string;
     static EVENT_BLUR: string;
+    static EVENT_CONFIRM: string;
+    static EVENT_EMPTY: string;
+    static EVENT_KEY_DOWN: string;
 
     focus(): void;
 
