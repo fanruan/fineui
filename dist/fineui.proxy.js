@@ -1,4 +1,4 @@
-/*! time: 2021-9-3 14:40:18 */
+/*! time: 2021-9-3 15:40:14 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -15875,14 +15875,17 @@ BI.Layout = BI.inherit(BI.Widget, {
         return "" + index;
     },
 
-    _addElement: function (i, item, context) {
+    _addElement: function (i, item, context, widget) {
         var self = this, w;
+        if (widget) {
+            return widget;
+        }
         if (!this.hasWidget(this._getChildName(i))) {
             w = BI._lazyCreateWidget(item, context);
             w.on(BI.Events.DESTROY, function () {
                 BI.each(self._children, function (name, child) {
                     if (child === w) {
-                        BI.remove(self._children, child);
+                        delete self._children[name];
                         self.removeItemAt(name | 0);
                     }
                 });
@@ -15892,6 +15895,20 @@ BI.Layout = BI.inherit(BI.Widget, {
             w = this.getWidgetByName(this._getChildName(i));
         }
         return w;
+    },
+
+    _newElement: function (i, item, context) {
+        var self = this;
+        var w = BI._lazyCreateWidget(item, context);
+        w.on(BI.Events.DESTROY, function () {
+            BI.each(self._children, function (name, child) {
+                if (child === w) {
+                    delete self._children[name];
+                    self.removeItemAt(name | 0);
+                }
+            });
+        });
+        return this._addElement(i, item, context, w);
     },
 
     _getOptions: function (item) {
@@ -16229,16 +16246,12 @@ BI.Layout = BI.inherit(BI.Widget, {
             } else {
                 var sameOldVnode = findOldVnode(oldCh, newStartVnode, oldStartIdx, oldEndIdx);
                 if (BI.isNull(sameOldVnode[0])) {  //  不存在就把新的放到左边
-                    delete self._children[self._getChildName(newStartIdx)];
                     var node = addNode(newStartVnode, newStartIdx);
                     insertBefore(node, oldStartVnode);
                 } else {   //  如果新节点在旧节点区间中存在就复用一下
                     var sameOldIndex = sameOldVnode[1];
                     updated = self.patchItem(sameOldVnode[0], newStartVnode, sameOldIndex, newStartIdx) || updated;
                     children[sameOldVnode[0].key == null ? newStartIdx : sameOldVnode[0].key] = self._children[self._getChildName(sameOldIndex)];
-                    if (newStartIdx !== sameOldIndex) {
-                        delete self._children[self._getChildName(sameOldIndex)];
-                    }
                     oldCh[sameOldIndex] = undefined;
                     insertBefore(sameOldVnode[0], oldStartVnode);
                 }
@@ -16256,6 +16269,7 @@ BI.Layout = BI.inherit(BI.Widget, {
         BI.each(newCh, function (i, child) {
             var node = self._getOptions(child);
             var key = node.key == null ? i : node.key;
+            children[key]._setParent && children[key]._setParent(self);
             children[key]._mount();
             self._children[self._getChildName(i)] = children[key];
         });
@@ -16274,8 +16288,7 @@ BI.Layout = BI.inherit(BI.Widget, {
         function addNode (vnode, index) {
             var opt = self._getOptions(vnode);
             var key = opt.key == null ? index : opt.key;
-            delete self._children[self._getChildName(index)];
-            return children[key] = self._addElement(index, vnode);
+            return children[key] = self._newElement(index, vnode);
         }
 
         function addVnodes (before, vnodes, startIdx, endIdx) {
@@ -16291,7 +16304,6 @@ BI.Layout = BI.inherit(BI.Widget, {
                 if (BI.isNotNull(ch)) {
                     var node = self._getOptions(ch);
                     var key = node.key == null ? startIdx : node.key;
-                    delete self._children[self._getChildName(startIdx)];
                     children[key]._destroy();
                 }
             }
