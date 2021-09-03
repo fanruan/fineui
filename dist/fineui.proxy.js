@@ -1,4 +1,4 @@
-/*! time: 2021-9-3 14:10:18 */
+/*! time: 2021-9-3 14:40:18 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -51919,7 +51919,7 @@ BI.MultiLayerSingleTreeCombo = BI.inherit(BI.Widget, {
 
         return this._shouldWrapper() ? combo : {
             type: "bi.absolute",
-            height: o.height - 2,
+            height: o.height,
             items: [{
                 el: combo,
                 left: 0,
