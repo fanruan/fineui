@@ -1,4 +1,4 @@
-/*! time: 2021-9-3 15:40:14 */
+/*! time: 2021-9-3 17:40:17 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -46311,7 +46311,9 @@ BI.DynamicDateCombo = BI.inherit(BI.Single, {
         supportDynamic: true,
         attributes: {
             tabIndex: -1
-        }
+        },
+        isNeedAdjustHeight: false,
+        isNeedAdjustWidth: false
     },
 
     _init: function () {
@@ -46348,8 +46350,8 @@ BI.DynamicDateCombo = BI.inherit(BI.Single, {
                             self.combo = this;
                         },
                         toggle: false,
-                        isNeedAdjustHeight: false,
-                        isNeedAdjustWidth: false,
+                        isNeedAdjustHeight: opts.isNeedAdjustHeight,
+                        isNeedAdjustWidth: opts.isNeedAdjustWidth,
                         destroyWhenHide: true,
                         el: {
                             type: "bi.dynamic_date_trigger",
@@ -46438,6 +46440,7 @@ BI.DynamicDateCombo = BI.inherit(BI.Single, {
                         popup: {
                             el: {
                                 type: "bi.dynamic_date_popup",
+                                width: opts.isNeedAdjustWidth ? opts.width : undefined,
                                 supportDynamic: opts.supportDynamic,
                                 behaviors: opts.behaviors,
                                 min: opts.minDate,
@@ -47375,7 +47378,9 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
         supportDynamic: true,
         attributes: {
             tabIndex: -1
-        }
+        },
+        isNeedAdjustHeight: false,
+        isNeedAdjustWidth: false
     },
 
     _init: function () {
@@ -47413,8 +47418,8 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
                             self.combo = this;
                         },
                         toggle: false,
-                        isNeedAdjustHeight: false,
-                        isNeedAdjustWidth: false,
+                        isNeedAdjustHeight: opts.isNeedAdjustHeight,
+                        isNeedAdjustWidth: opts.isNeedAdjustWidth,
                         el: {
                             type: "bi.dynamic_date_time_trigger",
                             min: opts.minDate,
@@ -47507,6 +47512,7 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
                         popup: {
                             el: {
                                 type: "bi.dynamic_date_time_popup",
+                                width: opts.isNeedAdjustWidth ? opts.width : undefined,
                                 supportDynamic: opts.supportDynamic,
                                 behaviors: opts.behaviors,
                                 min: opts.minDate,
@@ -66961,6 +66967,8 @@ BI.shortcut("bi.down_list_select_text_trigger", BI.DownListSelectTextTrigger);
             height: 24,
             format: "",
             allowEdit: false,
+            isNeedAdjustHeight: false,
+            isNeedAdjustWidth: false
         },
 
         _init: function () {
@@ -67010,8 +67018,8 @@ BI.shortcut("bi.down_list_select_text_trigger", BI.DownListSelectTextTrigger);
                             cls: "bi-border bi-border-radius bi-focus-shadow",
                             container: opts.container,
                             toggle: false,
-                            isNeedAdjustHeight: false,
-                            isNeedAdjustWidth: false,
+                            isNeedAdjustHeight: opts.isNeedAdjustHeight,
+                            isNeedAdjustWidth: opts.isNeedAdjustWidth,
                             el: {
                                 type: "bi.time_trigger",
                                 height: opts.height,
@@ -67094,7 +67102,7 @@ BI.shortcut("bi.down_list_select_text_trigger", BI.DownListSelectTextTrigger);
                             adjustLength: this.constants.comboAdjustHeight,
                             popup: {
                                 el: popup,
-                                width: this.constants.popupWidth,
+                                width: opts.isNeedAdjustWidth ? opts.width : this.constants.popupWidth,
                                 stopPropagation: false
                             },
                             hideChecker: function (e) {
@@ -69476,7 +69484,9 @@ BI.DynamicYearMonthCombo = BI.inherit(BI.Single, {
         minDate: "1900-01-01", // 最小日期
         maxDate: "2099-12-31", // 最大日期
         height: 24,
-        supportDynamic: true
+        supportDynamic: true,
+        isNeedAdjustHeight: false,
+        isNeedAdjustWidth: false
     },
 
     _init: function () {
@@ -69530,8 +69540,8 @@ BI.DynamicYearMonthCombo = BI.inherit(BI.Single, {
         this.combo = BI.createWidget({
             type: "bi.combo",
             container: o.container,
-            isNeedAdjustHeight: false,
-            isNeedAdjustWidth: false,
+            isNeedAdjustHeight: o.isNeedAdjustHeight,
+            isNeedAdjustWidth: o.isNeedAdjustWidth,
             el: this.trigger,
             destroyWhenHide: true,
             adjustLength: 1,
@@ -69540,6 +69550,7 @@ BI.DynamicYearMonthCombo = BI.inherit(BI.Single, {
                 stopPropagation: false,
                 el: {
                     type: "bi.dynamic_year_month_popup",
+                    width: o.isNeedAdjustWidth ? o.width : undefined,
                     supportDynamic: o.supportDynamic,
                     ref: function () {
                         self.popup = this;
@@ -70791,6 +70802,8 @@ BI.DynamicYearQuarterCombo = BI.inherit(BI.Widget, {
         maxDate: "2099-12-31", // 最大日期
         height: 24,
         supportDynamic: true,
+        isNeedAdjustHeight: false,
+        isNeedAdjustWidth: false
     },
 
     _init: function () {
@@ -70844,8 +70857,8 @@ BI.DynamicYearQuarterCombo = BI.inherit(BI.Widget, {
         this.combo = BI.createWidget({
             type: "bi.combo",
             container: o.container,
-            isNeedAdjustHeight: false,
-            isNeedAdjustWidth: false,
+            isNeedAdjustHeight: o.isNeedAdjustHeight,
+            isNeedAdjustWidth: o.isNeedAdjustWidth,
             el: this.trigger,
             destroyWhenHide: true,
             adjustLength: 1,
@@ -70854,6 +70867,7 @@ BI.DynamicYearQuarterCombo = BI.inherit(BI.Widget, {
                 stopPropagation: false,
                 el: {
                     type: "bi.dynamic_year_quarter_popup",
+                    width: o.isNeedAdjustWidth ? o.width : undefined,
                     supportDynamic: o.supportDynamic,
                     ref: function () {
                         self.popup = this;
