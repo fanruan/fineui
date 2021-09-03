@@ -29,7 +29,17 @@ BI.h = function (type, props, children) {
             el: children[0]
         }, props);
     }
+    if (type === "left") {
+        return BI.extend({
+            left: children
+        }, props);
+    }
+    if (type === "right") {
+        return BI.extend({
+            right: children
+        }, props);
+    }
     return BI.extend({
-        type: type,
+        type: type
     }, children.length > 0 ? {items: children} : {}, props);
 };

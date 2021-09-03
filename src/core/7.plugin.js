@@ -3,6 +3,7 @@ BI.Plugin = BI.Plugin || {};
     var _WidgetsPlugin = {};
     var _ObjectPlugin = {};
     var _ConfigPlugin = {};
+    var _ConfigRenderPlugin = {};
     var _GlobalWidgetConfigFns = [];
     var __GlobalObjectConfigFns = [];
     BI.defaults(BI.Plugin, {
@@ -47,6 +48,25 @@ BI.Plugin = BI.Plugin || {};
             _ConfigPlugin[type].push(fn);
         },
 
+        getRender: function (type, rendered) {
+            var res;
+            if (_ConfigRenderPlugin[type]) {
+                for (var i = _ConfigRenderPlugin[type].length - 1; i >= 0; i--) {
+                    if (res = _ConfigRenderPlugin[type][i](rendered)) {
+                        rendered = res;
+                    }
+                }
+            }
+            return rendered;
+        },
+
+        configRender: function (type, fn) {
+            if (!_ConfigRenderPlugin[type]) {
+                _ConfigRenderPlugin[type] = [];
+            }
+            _ConfigRenderPlugin[type].push(fn);
+        },
+
         // Deprecated
         registerWidget: function (type, fn) {
             if (!_WidgetsPlugin[type]) {
@@ -58,6 +78,7 @@ BI.Plugin = BI.Plugin || {};
             _WidgetsPlugin[type].push(fn);
         },
 
+        // Deprecated
         relieveWidget: function (type) {
             delete _WidgetsPlugin[type];
         },

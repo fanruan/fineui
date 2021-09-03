@@ -29,8 +29,9 @@ BI.LeftRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
     render: function () {
         var o = this.options, self = this;
         BI.LeftRightVerticalAdaptLayout.superclass.render.apply(this, arguments);
+        var leftRight = this._getLeftRight(o.items);
         var layoutArray = [];
-        if ("left" in o.items) {
+        if (leftRight.left || "left" in o.items) {
             layoutArray.push({
                 type: "bi.left",
                 items: [{
@@ -40,7 +41,7 @@ BI.LeftRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
                             self.left = _ref;
                         },
                         height: "100%",
-                        items: o.items.left,
+                        items: leftRight.left || o.items.left,
                         hgap: o.lhgap,
                         lgap: o.llgap,
                         rgap: o.lrgap,
@@ -51,7 +52,7 @@ BI.LeftRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
                 }]
             });
         }
-        if ("right" in o.items) {
+        if (leftRight.right || "right" in o.items) {
             layoutArray.push({
                 type: "bi.right",
                 items: [{
@@ -61,7 +62,7 @@ BI.LeftRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
                             self.right = _ref;
                         },
                         height: "100%",
-                        items: o.items.right,
+                        items: leftRight.right || o.items.right,
                         hgap: o.rhgap,
                         lgap: o.rlgap,
                         rgap: o.rrgap,
@@ -75,9 +76,28 @@ BI.LeftRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
         return layoutArray;
     },
 
+    _getLeftRight: function (items) {
+        var left, right;
+        if (BI.isArray(items)) {
+            BI.each(items, function (i, item) {
+                if (item.left) {
+                    left = item.left;
+                }
+                if (item.right) {
+                    right = item.right;
+                }
+            });
+        }
+        return {
+            left: left,
+            right: right
+        };
+    },
+
     resize: function () {
-        this.left.stroke(this.options.items.left);
-        this.right.stroke(this.options.items.right);
+        var leftRight = this._getLeftRight(this.options.items);
+        this.left.stroke(leftRight.left || this.options.items.left);
+        this.right.stroke(leftRight.right || this.options.items.right);
     },
 
     addItem: function () {
@@ -86,8 +106,9 @@ BI.LeftRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
     },
 
     populate: function (items) {
-        this.left.populate(items.left);
-        this.right.populate(items.right);
+        var leftRight = this._getLeftRight(items);
+        this.left.populate(leftRight.left || items.left);
+        this.right.populate(leftRight.right || items.right);
     }
 });
 BI.shortcut("bi.left_right_vertical_adapt", BI.LeftRightVerticalAdaptLayout);

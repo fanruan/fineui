@@ -42,7 +42,7 @@ export declare class Tree {
   nrPreOrderTraverse(callback: Function): void;
   postOrderTraverse(callback: Function): void;
   nrPostOrderTraverse(callback: Function): void;
-  static transformToArrayFormat(nodes: Node | Node[], pId: any): Node[];
+  static transformToArrayFormat<T>(nodes: T | T[], pId: any, childKey?: string): T[];
   static arrayFormat(nodes: Node | Node[], pId: any): Node[];
   static transformToTreeFormat<T>(sNodes: T[]): Node[];
   static treeFormat(sNodes: Node | Node[]): Node[];

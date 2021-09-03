@@ -1,5 +1,5 @@
 /**
- * 表示当前对象
+ * 虚拟列表
  *
  * Created by GUY on 2017/5/22.
  * @class BI.VirtualList
@@ -64,8 +64,7 @@ BI.VirtualList = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
         var height = this.element.height();
         var minContentHeight = o.scrollTop + height + o.overscanHeight;
-        var index = (this.cache[this.renderedIndex] && (this.cache[this.renderedIndex].index + o.blockSize)) || 0,
-            cnt = this.renderedIndex + 1;
+        var index = (this.renderedIndex + 1) * o.blockSize, cnt = this.renderedIndex + 1;
         var lastHeight;
         var getElementHeight = function () {
             return self.container.element.height() + self.topBlank.element.height() + self.bottomBlank.element.height();
@@ -74,11 +73,6 @@ BI.VirtualList = BI.inherit(BI.Widget, {
             var items = o.items.slice(index, index + o.blockSize);
             this.container.addItems(items, this);
             var addedHeight = getElementHeight() - lastHeight;
-            this.cache[cnt] = {
-                index: index,
-                scrollTop: lastHeight,
-                height: addedHeight
-            };
             this.tree.set(cnt, addedHeight);
             this.renderedIndex = cnt;
             cnt++;
@@ -94,9 +88,12 @@ BI.VirtualList = BI.inherit(BI.Widget, {
         var minContentHeightTo = o.scrollTop + height + o.overscanHeight;
         var start = this.tree.greatestLowerBound(minContentHeightFrom);
         var end = this.tree.leastUpperBound(minContentHeightTo);
-        var needDestroyed = [];
+        var needDestroyed = [], needMount = [];
         for (var i = 0; i < start; i++) {
-            var index = this.cache[i].index;
+            var index = i * o.blockSize;
+            if (!this.cache[i]) {
+                this.cache[i] = {};
+            }
             if (!this.cache[i].destroyed) {
                 for (var j = index; j < index + o.blockSize && j < o.items.length; j++) {
                     needDestroyed.push(this.container._children[j]);
@@ -106,7 +103,10 @@ BI.VirtualList = BI.inherit(BI.Widget, {
             }
         }
         for (var i = end + 1; i <= this.renderedIndex; i++) {
-            var index = this.cache[i].index;
+            var index = i * o.blockSize;
+            if (!this.cache[i]) {
+                this.cache[i] = {};
+            }
             if (!this.cache[i].destroyed) {
                 for (var j = index; j < index + o.blockSize && j < o.items.length; j++) {
                     needDestroyed.push(this.container._children[j]);
@@ -119,13 +119,17 @@ BI.VirtualList = BI.inherit(BI.Widget, {
             lastFragment = BI.Widget._renderEngine.createFragment();
         var currentFragment = firstFragment;
         for (var i = (start < 0 ? 0 : start); i <= end && i <= this.renderedIndex; i++) {
-            var index = this.cache[i].index;
+            var index = i * o.blockSize;
+            if (!this.cache[i]) {
+                this.cache[i] = {};
+            }
             if (!this.cache[i].destroyed) {
                 currentFragment = lastFragment;
             }
             if (this.cache[i].destroyed === true) {
                 for (var j = index; j < index + o.blockSize && j < o.items.length; j++) {
-                    var w = this.container._addElement(j, BI.extend({root: true}, BI.stripEL(o.items[j])), this);
+                    var w = this.container._addElement(j, o.items[j], this);
+                    needMount.push(w);
                     currentFragment.appendChild(w.element[0]);
                 }
                 this.cache[i].destroyed = false;
@@ -135,6 +139,9 @@ BI.VirtualList = BI.inherit(BI.Widget, {
         this.container.element.append(lastFragment);
         this.topBlank.setHeight(this.tree.sumTo(Math.max(-1, start - 1)));
         this.bottomBlank.setHeight(this.tree.sumTo(this.renderedIndex) - this.tree.sumTo(Math.min(end, this.renderedIndex)));
+        BI.each(needMount, function (i, child) {
+            child && child._mount();
+        });
         BI.each(needDestroyed, function (i, child) {
             child && child._destroy();
         });
@@ -146,6 +153,7 @@ BI.VirtualList = BI.inherit(BI.Widget, {
             this.options.items = items;
         }
         this.tree = BI.PrefixIntervalTree.empty(Math.ceil(o.items.length / o.blockSize));
+
         this._calculateBlocksToRender();
         try {
             this.element.scrollTop(o.scrollTop);
@@ -179,7 +187,8 @@ BI.VirtualList = BI.inherit(BI.Widget, {
     },
 
     destroyed: function () {
-        this.restore();
+        this.cache = {};
+        this.renderedIndex = -1;
     }
 });
 BI.shortcut("bi.virtual_list", BI.VirtualList);
