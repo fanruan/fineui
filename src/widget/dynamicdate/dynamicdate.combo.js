@@ -16,7 +16,9 @@ BI.DynamicDateCombo = BI.inherit(BI.Single, {
         supportDynamic: true,
         attributes: {
             tabIndex: -1
-        }
+        },
+        isNeedAdjustHeight: false,
+        isNeedAdjustWidth: false
     },
 
     _init: function () {
@@ -53,8 +55,8 @@ BI.DynamicDateCombo = BI.inherit(BI.Single, {
                             self.combo = this;
                         },
                         toggle: false,
-                        isNeedAdjustHeight: false,
-                        isNeedAdjustWidth: false,
+                        isNeedAdjustHeight: opts.isNeedAdjustHeight,
+                        isNeedAdjustWidth: opts.isNeedAdjustWidth,
                         destroyWhenHide: true,
                         el: {
                             type: "bi.dynamic_date_trigger",
@@ -143,6 +145,7 @@ BI.DynamicDateCombo = BI.inherit(BI.Single, {
                         popup: {
                             el: {
                                 type: "bi.dynamic_date_popup",
+                                width: opts.isNeedAdjustWidth ? opts.width : undefined,
                                 supportDynamic: opts.supportDynamic,
                                 behaviors: opts.behaviors,
                                 min: opts.minDate,

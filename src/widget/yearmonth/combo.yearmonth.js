@@ -6,7 +6,9 @@ BI.DynamicYearMonthCombo = BI.inherit(BI.Single, {
         minDate: "1900-01-01", // 最小日期
         maxDate: "2099-12-31", // 最大日期
         height: 24,
-        supportDynamic: true
+        supportDynamic: true,
+        isNeedAdjustHeight: false,
+        isNeedAdjustWidth: false
     },
 
     _init: function () {
@@ -60,8 +62,8 @@ BI.DynamicYearMonthCombo = BI.inherit(BI.Single, {
         this.combo = BI.createWidget({
             type: "bi.combo",
             container: o.container,
-            isNeedAdjustHeight: false,
-            isNeedAdjustWidth: false,
+            isNeedAdjustHeight: o.isNeedAdjustHeight,
+            isNeedAdjustWidth: o.isNeedAdjustWidth,
             el: this.trigger,
             destroyWhenHide: true,
             adjustLength: 1,
@@ -70,6 +72,7 @@ BI.DynamicYearMonthCombo = BI.inherit(BI.Single, {
                 stopPropagation: false,
                 el: {
                     type: "bi.dynamic_year_month_popup",
+                    width: o.isNeedAdjustWidth ? o.width : undefined,
                     supportDynamic: o.supportDynamic,
                     ref: function () {
                         self.popup = this;
