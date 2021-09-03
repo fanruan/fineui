@@ -17,6 +17,8 @@
             height: 24,
             format: "",
             allowEdit: false,
+            isNeedAdjustHeight: false,
+            isNeedAdjustWidth: false
         },
 
         _init: function () {
@@ -66,8 +68,8 @@
                             cls: "bi-border bi-border-radius bi-focus-shadow",
                             container: opts.container,
                             toggle: false,
-                            isNeedAdjustHeight: false,
-                            isNeedAdjustWidth: false,
+                            isNeedAdjustHeight: opts.isNeedAdjustHeight,
+                            isNeedAdjustWidth: opts.isNeedAdjustWidth,
                             el: {
                                 type: "bi.time_trigger",
                                 height: opts.height,
@@ -150,7 +152,7 @@
                             adjustLength: this.constants.comboAdjustHeight,
                             popup: {
                                 el: popup,
-                                width: this.constants.popupWidth,
+                                width: opts.isNeedAdjustWidth ? opts.width : this.constants.popupWidth,
                                 stopPropagation: false
                             },
                             hideChecker: function (e) {
