@@ -1,4 +1,4 @@
-/*! time: 2021-9-2 21:32:16 */
+/*! time: 2021-9-3 14:10:18 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -20004,7 +20004,7 @@ BI.shortcut("bi.htape", BI.HTapeLayout);
 BI.VTapeLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.VTapeLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-v-tape-layout",
+            baseCls: "bi-v-tape",
             horizontalAlign: BI.HorizontalAlign.Left,
             hgap: 0,
             vgap: 0,
