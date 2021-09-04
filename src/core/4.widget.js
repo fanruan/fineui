@@ -701,6 +701,7 @@
             return current.$storeDelegate;
         }
         if (current) {
+            var currentStore = current._store;
             var delegate = {}, origin;
             if (_global.Proxy) {
                 var proxy = new Proxy(delegate, {
@@ -712,13 +713,14 @@
                     }
                 });
                 current._store = function () {
-                    origin = _store.apply(this, arguments);
+                    origin = (_store || currentStore).apply(this, arguments);
+                    delegate.$delegate = origin;
                     return origin;
                 };
                 return current.$storeDelegate = proxy;
             }
             current._store = function () {
-                var st = _store.apply(this, arguments);
+                var st = (_store || currentStore).apply(this, arguments);
                 BI.extend(delegate, st);
                 return st;
             };
