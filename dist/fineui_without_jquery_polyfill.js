@@ -1,4 +1,4 @@
-/*! time: 2021-9-3 17:40:17 */
+/*! time: 2021-9-4 17:40:47 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -7045,6 +7045,7 @@ BI.Req = {
             return current.$storeDelegate;
         }
         if (current) {
+            var currentStore = current._store;
             var delegate = {}, origin;
             if (_global.Proxy) {
                 var proxy = new Proxy(delegate, {
@@ -7056,13 +7057,14 @@ BI.Req = {
                     }
                 });
                 current._store = function () {
-                    origin = _store.apply(this, arguments);
+                    origin = (_store || currentStore).apply(this, arguments);
+                    delegate.$delegate = origin;
                     return origin;
                 };
                 return current.$storeDelegate = proxy;
             }
             current._store = function () {
-                var st = _store.apply(this, arguments);
+                var st = (_store || currentStore).apply(this, arguments);
                 BI.extend(delegate, st);
                 return st;
             };
@@ -7209,8 +7211,8 @@ BI.Req = {
             BI.Widget.pushContext(context);
         }
         widget._initProps(config);
-        widget._constructed();
         widget._initRoot();
+        widget._constructed();
         // if (!lazy || config.element || config.root) {
         widget._lazyConstructor();
         // }
