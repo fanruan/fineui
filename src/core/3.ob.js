@@ -73,10 +73,10 @@
         // 获得一个当前对象的引用
         _initRef: function () {
             if (this.options.__ref) {
-                this.options.__ref.call(this, this.$delegate || this);
+                this.options.__ref.call(this, this);
             }
             if (this.options.ref) {
-                this.options.ref.call(this, this.$delegate || this);
+                this.options.ref.call(this, this);
             }
         },
 
