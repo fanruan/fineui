@@ -1,4 +1,4 @@
-/*! time: 2021-9-4 17:40:47 */
+/*! time: 2021-9-5 15:01:44 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -2102,10 +2102,10 @@ if (!_global.BI) {
         // 获得一个当前对象的引用
         _initRef: function () {
             if (this.options.__ref) {
-                this.options.__ref.call(this, this);
+                this.options.__ref.call(this, this.$delegate || this);
             }
             if (this.options.ref) {
-                this.options.ref.call(this, this);
+                this.options.ref.call(this);
             }
         },
 
