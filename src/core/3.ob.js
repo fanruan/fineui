@@ -76,7 +76,7 @@
                 this.options.__ref.call(this, this.$delegate || this);
             }
             if (this.options.ref) {
-                this.options.ref.call(this);
+                this.options.ref.call(this, this.$delegate || this);
             }
         },
 
