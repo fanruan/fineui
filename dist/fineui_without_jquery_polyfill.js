@@ -1,4 +1,4 @@
-/*! time: 2021-9-5 15:01:44 */
+/*! time: 2021-9-5 15:20:38 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -2709,10 +2709,10 @@ if (!_global.BI) {
         // 获得一个当前对象的引用
         _initRef: function () {
             if (this.options.__ref) {
-                this.options.__ref.call(this, this.$delegate || this);
+                this.options.__ref.call(this, this);
             }
             if (this.options.ref) {
-                this.options.ref.call(this);
+                this.options.ref.call(this, this);
             }
         },
 
@@ -6394,13 +6394,13 @@ BI.Req = {
 
         // 覆盖父类的_constructor方法，widget不走ob的生命周期
         _constructed: function () {
+            var self = this;
             if (this.setup) {
                 pushTarget(this);
                 var delegate = this.setup(this.options);
                 if (BI.isPlainObject(delegate)) {
-                    this.render = delegate.render;
-                    // setup返回一个json，即对外暴露的方法
-                    this.$delegate = delegate;
+                    // 如果setup返回一个json，即对外暴露的方法
+                    BI.extend(this, delegate);
                 } else {
                     this.render = delegate;
                 }
