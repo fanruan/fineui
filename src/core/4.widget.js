@@ -52,8 +52,14 @@
         _constructed: function () {
             if (this.setup) {
                 pushTarget(this);
-                this.service = this.setup(this.options);
-                this.render = BI.isPlainObject(this.service) ? this.service.render : this.service;
+                var delegate = this.setup(this.options);
+                if (BI.isPlainObject(delegate)) {
+                    this.render = delegate.render;
+                    // setup返回一个json，即对外暴露的方法
+                    this.$delegate = delegate;
+                } else {
+                    this.render = delegate;
+                }
                 popTarget();
             }
         },
