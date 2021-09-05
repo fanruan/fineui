@@ -37,7 +37,7 @@ BI.$(function () {
                 }, {
                     type: "bi.router_view",
                     deps: 1,
-                    height: 100,
+                    height: 100
                 }, {
                     type: "bi.router_view",
                     name: 'home',
@@ -52,13 +52,13 @@ BI.$(function () {
                     return Promise.resolve({
                         type: "bi.label",
                         text: 'default'
-                    })
+                    });
                 },
                 home: function () {
                     return Promise.resolve({
                         type: "bi.label",
                         text: 'home'
-                    })
+                    });
                 },
             }
         }, {
@@ -68,7 +68,7 @@ BI.$(function () {
                 return Promise.resolve({
                     type: "bi.label",
                     text: 'dashboard'
-                })
+                });
             }
         }, {
             name: 'tables',
@@ -77,7 +77,7 @@ BI.$(function () {
                 return Promise.resolve({
                     type: "bi.label",
                     text: 'tables'
-                })
+                });
             }
         }]
     }];

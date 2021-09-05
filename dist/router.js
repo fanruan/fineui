@@ -3148,7 +3148,7 @@
   BI.RouterView = BI.inherit(BI.Widget, {
     props: {
       deps: 0,
-      name: 'default',
+      name: 'default'
     },
     created: function () {
       var self = this, o = this.options;
