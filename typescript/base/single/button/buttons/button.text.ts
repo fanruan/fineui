@@ -1,4 +1,4 @@
-import { Label } from "typescript";
+import { Label } from "../../../..";
 import { BasicButton } from "../button.basic";
 
 export declare class TextButton extends BasicButton {
