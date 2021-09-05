@@ -50,13 +50,13 @@
 
         // 覆盖父类的_constructor方法，widget不走ob的生命周期
         _constructed: function () {
+            var self = this;
             if (this.setup) {
                 pushTarget(this);
                 var delegate = this.setup(this.options);
                 if (BI.isPlainObject(delegate)) {
-                    this.render = delegate.render;
-                    // setup返回一个json，即对外暴露的方法
-                    this.$delegate = delegate;
+                    // 如果setup返回一个json，即对外暴露的方法
+                    BI.extend(this, delegate);
                 } else {
                     this.render = delegate;
                 }
