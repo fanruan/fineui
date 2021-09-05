@@ -3147,7 +3147,8 @@
 
   BI.RouterView = BI.inherit(BI.Widget, {
     props: {
-      deps: 0
+      deps: 0,
+      name: 'default',
     },
     created: function () {
       var self = this, o = this.options;
@@ -3155,13 +3156,17 @@
         var current = $router.history.current;
         // 匹配的路径名(/component/:id)
         var matchedPath = current.matched[o.deps] && current.matched[o.deps].path;
-        if (matchedPath) {
-          BI.each(current.params, function (key, value) {
-            // 把  :id  替换成具体的值(/component/demo.td)
-            matchedPath = matchedPath.replace(`:${key}`, value);
-          });
+        var component = current.matched[o.deps] && current.matched[o.deps].components[o.name];
+
+        if (BI.isNotNull(component)) {
+          if (matchedPath) {
+            BI.each(current.params, function (key, value) {
+              // 把  :id  替换成具体的值(/component/demo.td)
+              matchedPath = matchedPath.replace(`:${key}`, value);
+            });
+          }
+          self.tab.setSelect(matchedPath || "/");
         }
-        self.tab.setSelect(matchedPath || "/");
       });
     },
     render: function () {
@@ -3177,7 +3182,7 @@
         },
         showIndex: false,
         cardCreator: function (v) {
-          return $router.history.current.matched[o.deps].components.default;
+          return $router.history.current.matched[o.deps].components[o.name];
         }
       };
     },

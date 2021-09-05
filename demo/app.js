@@ -36,17 +36,30 @@ BI.$(function () {
                     height: 50
                 }, {
                     type: "bi.router_view",
+                    deps: 1,
+                    height: 100,
+                }, {
+                    type: "bi.router_view",
+                    name: 'home',
                     deps: 1
                 }]
             });
         },
         children: [{
             path: '',
-            component: function () {
-                return Promise.resolve({
-                    type: "bi.label",
-                    text: 'home'
-                })
+            components: {
+                default: function () {
+                    return Promise.resolve({
+                        type: "bi.label",
+                        text: 'default'
+                    })
+                },
+                home: function () {
+                    return Promise.resolve({
+                        type: "bi.label",
+                        text: 'home'
+                    })
+                },
             }
         }, {
             name: 'dashboard',
