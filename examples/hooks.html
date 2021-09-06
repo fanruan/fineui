@@ -51,9 +51,9 @@
 
     BI.model("demo.model", Model);
 
-    function expandFunction (storeCreator) {
+    function useExpand () {
         var button;
-        var store = BI.useStore(storeCreator);
+        var store = BI.useStore();
         BI.onBeforeMount(function () {
 
         });
@@ -83,9 +83,9 @@
         };
     }
 
-    function clearAllFunction (storeCreator) {
+    function useClearAll () {
         var button;
-        var store = BI.useStore(storeCreator);
+        var store = BI.useStore();
         BI.onBeforeMount(function () {
 
         });
@@ -115,9 +115,9 @@
         };
     }
 
-    function undoFunction (storeCreator) {
+    function useUndo () {
         var button;
-        var store = BI.useStore(storeCreator);
+        var store = BI.useStore();
         BI.onBeforeMount(function () {
 
         });
@@ -147,9 +147,9 @@
         };
     }
 
-    function redoFunction (storeCreator) {
+    function useRedo () {
         var button;
-        var store = BI.useStore(storeCreator);
+        var store = BI.useStore();
         BI.onBeforeMount(function () {
 
         });
@@ -180,14 +180,14 @@
     }
 
     var Widget = BI.inherit(BI.Widget, {
+        _store: function () {
+            return BI.Models.getModel("demo.model");
+        },
         setup: function () {
-            var storeCreator = function () {
-                return BI.Models.getModel("demo.model");
-            };
-            var expandComponent = expandFunction(storeCreator);
-            var clearAllComponent = clearAllFunction(storeCreator);
-            var undoComponent = undoFunction(storeCreator);
-            var redoComponent = redoFunction(storeCreator);
+            var expandComponent = useExpand();
+            var clearAllComponent = useClearAll();
+            var undoComponent = useUndo();
+            var redoComponent = useRedo();
             return function () {
                 return {
                     type: "bi.vertical",

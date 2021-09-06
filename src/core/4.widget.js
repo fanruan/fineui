@@ -50,10 +50,16 @@
 
         // 覆盖父类的_constructor方法，widget不走ob的生命周期
         _constructed: function () {
+            var self = this;
             if (this.setup) {
                 pushTarget(this);
-                this.service = this.setup(this.options);
-                this.render = BI.isPlainObject(this.service) ? this.service.render : this.service;
+                var delegate = this.setup(this.options);
+                if (BI.isPlainObject(delegate)) {
+                    // 如果setup返回一个json，即对外暴露的方法
+                    BI.extend(this, delegate);
+                } else {
+                    this.render = delegate;
+                }
                 popTarget();
             }
         },
@@ -701,6 +707,7 @@
             return current.$storeDelegate;
         }
         if (current) {
+            var currentStore = current._store;
             var delegate = {}, origin;
             if (_global.Proxy) {
                 var proxy = new Proxy(delegate, {
@@ -712,13 +719,14 @@
                     }
                 });
                 current._store = function () {
-                    origin = _store.apply(this, arguments);
+                    origin = (_store || currentStore).apply(this, arguments);
+                    delegate.$delegate = origin;
                     return origin;
                 };
                 return current.$storeDelegate = proxy;
             }
             current._store = function () {
-                var st = _store.apply(this, arguments);
+                var st = (_store || currentStore).apply(this, arguments);
                 BI.extend(delegate, st);
                 return st;
             };

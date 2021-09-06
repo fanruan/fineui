@@ -9,112 +9,200 @@
 <body>
 <div id="wrapper"></div>
 <script>
-    !(function () {
-
-        var element2InstanceMap = new WeakMap();
-
-        BI.getInstanceByElement = function (element) {
-            return element2InstanceMap.get(element);
-        };
-
-        BI.Plugin.config(function (options) {
-
-        }, function (shortcut, instance) {
-            instance.element.attr("shortcut", shortcut);
-            if (instance.options.$testId) {
-                setIDAttribute(instance.element[0], instance.options.$testId);
-            }
-            element2InstanceMap.set(instance.element[0], instance);
-        });
-
-        function setIDAttribute (element, id) {
-            if (element.id !== "") {
-                throw new Error("不能修改有默认id的元素");
-            }
-            element.setAttribute("id", id);
-        }
-
-        function registerWidgetIdGenerator () {
-
-            const idSet = new Set();
-
-            return function (shortcut, id) {
-                if (idSet.has(id)) {
-                    throw new Error("id重复了");
-                }
-                idSet.add(id);
-                BI.Plugin.registerObject(shortcut, function (widget) {
-                    setIDAttribute(widget.element[0], id);
-                });
+    var Model = BI.inherit(Fix.Model, {
+        state: function () {
+            return {
+                expand: false,
+                showClearAll: false,
+                hasUndo: false,
+                hasRedo: false
             };
-        }
+        },
 
-        BI.registerWidgetId = registerWidgetIdGenerator();
-    }());
-</script>
-<script>
-
-    function setTestId (parentShortcut, childShortcut, testId) {
-        BI.Plugin.configRender(parentShortcut, function (rendered) {
-            var queue = BI.isArray(rendered) ? rendered : [rendered];// 广度遍历
-            while (queue.length > 0) {
-                var element = queue.shift();
-                BI.each(element, function (key, value) {
-                    if (BI.isArray(value)) {
-                        queue = queue.concat(value);
-                    } else if (BI.isPlainObject(value)) {
-                        queue.push(value);
-                    } else if ("type" === key && value === childShortcut) {
-                        element.$testId = testId;
-                    }
-                });
+        computed: {
+            expandText: function () {
+                return this.model.expand ? "expand" : "not-expand";
+            },
+            clearAllText: function () {
+                return this.model.showClearAll ? "showClearAll" : "not-showClearAll";
+            },
+            undoText: function () {
+                return this.model.hasUndo ? "hasUndo" : "not-hasUndo";
+            },
+            redoText: function () {
+                return this.model.hasRedo ? "hasRedo" : "not-hasRedo";
             }
-            return rendered;
+        },
+
+        actions: {
+            setExpand: function () {
+                this.model.expand = !this.model.expand;
+            },
+            setClearAll: function () {
+                this.model.showClearAll = !this.model.showClearAll;
+            },
+            setUndo: function () {
+                this.model.hasUndo = !this.model.hasUndo;
+            },
+            setRedo: function () {
+                this.model.hasRedo = !this.model.hasRedo;
+            }
+        }
+    });
+
+    BI.model("demo.model", Model);
+
+    function useExpand () {
+        var button;
+        var store = BI.useStore();
+        BI.onBeforeMount(function () {
+
         });
+        BI.onMounted(function () {
+
+        });
+        BI.onBeforeUnmount(function () {
+
+        });
+        BI.onUnmounted(function () {
+
+        });
+        BI.watch("expandText", function (val) {
+            button.setText(val);
+        });
+        return function () {
+            return {
+                type: "bi.button",
+                ref: function (_ref) {
+                    button = _ref;
+                },
+                text: store.model.expandText,
+                handler: function () {
+                    store.setExpand();
+                }
+            };
+        };
     }
 
-    setTestId("demo.parent", "bi.button_group", "测试testId");
+    function useClearAll () {
+        var button;
+        var store = BI.useStore();
+        BI.onBeforeMount(function () {
+
+        });
+        BI.onMounted(function () {
+
+        });
+        BI.onBeforeUnmount(function () {
+
+        });
+        BI.onUnmounted(function () {
+
+        });
+        BI.watch("clearAllText", function (val) {
+            button.setText(val);
+        });
+        return function () {
+            return {
+                type: "bi.button",
+                ref: function (_ref) {
+                    button = _ref;
+                },
+                text: store.model.clearAllText,
+                handler: function () {
+                    store.setClearAll();
+                }
+            };
+        };
+    }
+
+    function useUndo () {
+        var button;
+        var store = BI.useStore();
+        BI.onBeforeMount(function () {
+
+        });
+        BI.onMounted(function () {
+
+        });
+        BI.onBeforeUnmount(function () {
+
+        });
+        BI.onUnmounted(function () {
+
+        });
+        BI.watch("undoText", function (val) {
+            button.setText(val);
+        });
+        return function () {
+            return {
+                type: "bi.button",
+                ref: function (_ref) {
+                    button = _ref;
+                },
+                text: store.model.undoText,
+                handler: function () {
+                    store.setUndo();
+                }
+            };
+        };
+    }
+
+    function useRedo () {
+        var button;
+        var store = BI.useStore();
+        BI.onBeforeMount(function () {
+
+        });
+        BI.onMounted(function () {
+
+        });
+        BI.onBeforeUnmount(function () {
+
+        });
+        BI.onUnmounted(function () {
+
+        });
+        BI.watch("redoText", function (val) {
+            button.setText(val);
+        });
+        return function () {
+            return {
+                type: "bi.button",
+                ref: function (_ref) {
+                    button = _ref;
+                },
+                text: store.model.redoText,
+                handler: function () {
+                    store.setRedo();
+                }
+            };
+        };
+    }
 
     var Widget = BI.inherit(BI.Widget, {
+        _store: function () {
+            return BI.Models.getModel("demo.model");
+        },
         setup: function () {
-            var list;
+            var expandComponent = useExpand();
+            var clearAllComponent = useClearAll();
+            var undoComponent = useUndo();
+            var redoComponent = useRedo();
             return function () {
                 return {
                     type: "bi.vertical",
-                    items: [{
-                        type: "bi.button_group",
-                        height: 100,
-                        ref: function (_ref) {
-                            list = _ref;
-                        },
-                        items: BI.range(10).map(function (i) {
-                            return {
-                                type: "bi.label",
-                                text: i,
-                                cls: "bi-border"
-                            };
-                        }),
-                        layouts: [{
-                            type: "bi.inline",
-                            tgap: 10,
-                            lgap: 10
-                        }]
-                    }, {
-                        type: "bi.button",
-                        text: "点击",
-                        handler: function () {
-                        }
-                    }]
+                    items: [expandComponent(), clearAllComponent(), undoComponent(), redoComponent()]
                 };
             };
         }
     });
-    BI.shortcut("demo.parent", Widget);
+    BI.shortcut("demo.hooks", Widget);
     BI.createWidget({
         type: "bi.absolute",
         items: [{
             el: {
-                type: "demo.parent"
+                type: "demo.hooks"
             },
             top: 100,
             left: 100

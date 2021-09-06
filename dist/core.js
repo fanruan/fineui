@@ -1,4 +1,4 @@
-/*! time: 2021-9-2 21:32:16 */
+/*! time: 2021-9-6 10:20:28 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -9318,10 +9318,16 @@ module.exports = !__webpack_require__(926)(function () {
 
         // 覆盖父类的_constructor方法，widget不走ob的生命周期
         _constructed: function () {
+            var self = this;
             if (this.setup) {
                 pushTarget(this);
-                this.service = this.setup(this.options);
-                this.render = BI.isPlainObject(this.service) ? this.service.render : this.service;
+                var delegate = this.setup(this.options);
+                if (BI.isPlainObject(delegate)) {
+                    // 如果setup返回一个json，即对外暴露的方法
+                    BI.extend(this, delegate);
+                } else {
+                    this.render = delegate;
+                }
                 popTarget();
             }
         },
@@ -9969,6 +9975,7 @@ module.exports = !__webpack_require__(926)(function () {
             return current.$storeDelegate;
         }
         if (current) {
+            var currentStore = current._store;
             var delegate = {}, origin;
             if (_global.Proxy) {
                 var proxy = new Proxy(delegate, {
@@ -9980,13 +9987,14 @@ module.exports = !__webpack_require__(926)(function () {
                     }
                 });
                 current._store = function () {
-                    origin = _store.apply(this, arguments);
+                    origin = (_store || currentStore).apply(this, arguments);
+                    delegate.$delegate = origin;
                     return origin;
                 };
                 return current.$storeDelegate = proxy;
             }
             current._store = function () {
-                var st = _store.apply(this, arguments);
+                var st = (_store || currentStore).apply(this, arguments);
                 BI.extend(delegate, st);
                 return st;
             };
@@ -10133,8 +10141,8 @@ module.exports = !__webpack_require__(926)(function () {
             BI.Widget.pushContext(context);
         }
         widget._initProps(config);
-        widget._constructed();
         widget._initRoot();
+        widget._constructed();
         // if (!lazy || config.element || config.root) {
         widget._lazyConstructor();
         // }
@@ -18414,14 +18422,17 @@ BI.Layout = BI.inherit(BI.Widget, {
         return "" + index;
     },
 
-    _addElement: function (i, item, context) {
+    _addElement: function (i, item, context, widget) {
         var self = this, w;
+        if (widget) {
+            return widget;
+        }
         if (!this.hasWidget(this._getChildName(i))) {
             w = BI._lazyCreateWidget(item, context);
             w.on(BI.Events.DESTROY, function () {
                 BI.each(self._children, function (name, child) {
                     if (child === w) {
-                        BI.remove(self._children, child);
+                        delete self._children[name];
                         self.removeItemAt(name | 0);
                     }
                 });
@@ -18431,6 +18442,20 @@ BI.Layout = BI.inherit(BI.Widget, {
             w = this.getWidgetByName(this._getChildName(i));
         }
         return w;
+    },
+
+    _newElement: function (i, item, context) {
+        var self = this;
+        var w = BI._lazyCreateWidget(item, context);
+        w.on(BI.Events.DESTROY, function () {
+            BI.each(self._children, function (name, child) {
+                if (child === w) {
+                    delete self._children[name];
+                    self.removeItemAt(name | 0);
+                }
+            });
+        });
+        return this._addElement(i, item, context, w);
     },
 
     _getOptions: function (item) {
@@ -18768,16 +18793,12 @@ BI.Layout = BI.inherit(BI.Widget, {
             } else {
                 var sameOldVnode = findOldVnode(oldCh, newStartVnode, oldStartIdx, oldEndIdx);
                 if (BI.isNull(sameOldVnode[0])) {  //  不存在就把新的放到左边
-                    delete self._children[self._getChildName(newStartIdx)];
                     var node = addNode(newStartVnode, newStartIdx);
                     insertBefore(node, oldStartVnode);
                 } else {   //  如果新节点在旧节点区间中存在就复用一下
                     var sameOldIndex = sameOldVnode[1];
                     updated = self.patchItem(sameOldVnode[0], newStartVnode, sameOldIndex, newStartIdx) || updated;
                     children[sameOldVnode[0].key == null ? newStartIdx : sameOldVnode[0].key] = self._children[self._getChildName(sameOldIndex)];
-                    if (newStartIdx !== sameOldIndex) {
-                        delete self._children[self._getChildName(sameOldIndex)];
-                    }
                     oldCh[sameOldIndex] = undefined;
                     insertBefore(sameOldVnode[0], oldStartVnode);
                 }
@@ -18795,6 +18816,7 @@ BI.Layout = BI.inherit(BI.Widget, {
         BI.each(newCh, function (i, child) {
             var node = self._getOptions(child);
             var key = node.key == null ? i : node.key;
+            children[key]._setParent && children[key]._setParent(self);
             children[key]._mount();
             self._children[self._getChildName(i)] = children[key];
         });
@@ -18813,8 +18835,7 @@ BI.Layout = BI.inherit(BI.Widget, {
         function addNode (vnode, index) {
             var opt = self._getOptions(vnode);
             var key = opt.key == null ? index : opt.key;
-            delete self._children[self._getChildName(index)];
-            return children[key] = self._addElement(index, vnode);
+            return children[key] = self._newElement(index, vnode);
         }
 
         function addVnodes (before, vnodes, startIdx, endIdx) {
@@ -18830,7 +18851,6 @@ BI.Layout = BI.inherit(BI.Widget, {
                 if (BI.isNotNull(ch)) {
                     var node = self._getOptions(ch);
                     var key = node.key == null ? startIdx : node.key;
-                    delete self._children[self._getChildName(startIdx)];
                     children[key]._destroy();
                 }
             }
@@ -22928,7 +22948,7 @@ BI.shortcut("bi.htape", BI.HTapeLayout);
 BI.VTapeLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.VTapeLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-v-tape-layout",
+            baseCls: "bi-v-tape",
             horizontalAlign: BI.HorizontalAlign.Left,
             hgap: 0,
             vgap: 0,
@@ -49223,7 +49243,9 @@ BI.DynamicDateCombo = BI.inherit(BI.Single, {
         supportDynamic: true,
         attributes: {
             tabIndex: -1
-        }
+        },
+        isNeedAdjustHeight: false,
+        isNeedAdjustWidth: false
     },
 
     _init: function () {
@@ -49260,8 +49282,8 @@ BI.DynamicDateCombo = BI.inherit(BI.Single, {
                             self.combo = this;
                         },
                         toggle: false,
-                        isNeedAdjustHeight: false,
-                        isNeedAdjustWidth: false,
+                        isNeedAdjustHeight: opts.isNeedAdjustHeight,
+                        isNeedAdjustWidth: opts.isNeedAdjustWidth,
                         destroyWhenHide: true,
                         el: {
                             type: "bi.dynamic_date_trigger",
@@ -49350,6 +49372,7 @@ BI.DynamicDateCombo = BI.inherit(BI.Single, {
                         popup: {
                             el: {
                                 type: "bi.dynamic_date_popup",
+                                width: opts.isNeedAdjustWidth ? opts.width : undefined,
                                 supportDynamic: opts.supportDynamic,
                                 behaviors: opts.behaviors,
                                 min: opts.minDate,
@@ -50287,7 +50310,9 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
         supportDynamic: true,
         attributes: {
             tabIndex: -1
-        }
+        },
+        isNeedAdjustHeight: false,
+        isNeedAdjustWidth: false
     },
 
     _init: function () {
@@ -50325,8 +50350,8 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
                             self.combo = this;
                         },
                         toggle: false,
-                        isNeedAdjustHeight: false,
-                        isNeedAdjustWidth: false,
+                        isNeedAdjustHeight: opts.isNeedAdjustHeight,
+                        isNeedAdjustWidth: opts.isNeedAdjustWidth,
                         el: {
                             type: "bi.dynamic_date_time_trigger",
                             min: opts.minDate,
@@ -50419,6 +50444,7 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
                         popup: {
                             el: {
                                 type: "bi.dynamic_date_time_popup",
+                                width: opts.isNeedAdjustWidth ? opts.width : undefined,
                                 supportDynamic: opts.supportDynamic,
                                 behaviors: opts.behaviors,
                                 min: opts.minDate,
@@ -54458,7 +54484,7 @@ BI.MultiLayerSingleTreeCombo = BI.inherit(BI.Widget, {
 
         return this._shouldWrapper() ? combo : {
             type: "bi.absolute",
-            height: o.height - 2,
+            height: o.height,
             items: [{
                 el: combo,
                 left: 0,
@@ -69873,6 +69899,8 @@ BI.shortcut("bi.down_list_select_text_trigger", BI.DownListSelectTextTrigger);
             height: 24,
             format: "",
             allowEdit: false,
+            isNeedAdjustHeight: false,
+            isNeedAdjustWidth: false
         },
 
         _init: function () {
@@ -69922,8 +69950,8 @@ BI.shortcut("bi.down_list_select_text_trigger", BI.DownListSelectTextTrigger);
                             cls: "bi-border bi-border-radius bi-focus-shadow",
                             container: opts.container,
                             toggle: false,
-                            isNeedAdjustHeight: false,
-                            isNeedAdjustWidth: false,
+                            isNeedAdjustHeight: opts.isNeedAdjustHeight,
+                            isNeedAdjustWidth: opts.isNeedAdjustWidth,
                             el: {
                                 type: "bi.time_trigger",
                                 height: opts.height,
@@ -70006,7 +70034,7 @@ BI.shortcut("bi.down_list_select_text_trigger", BI.DownListSelectTextTrigger);
                             adjustLength: this.constants.comboAdjustHeight,
                             popup: {
                                 el: popup,
-                                width: this.constants.popupWidth,
+                                width: opts.isNeedAdjustWidth ? opts.width : this.constants.popupWidth,
                                 stopPropagation: false
                             },
                             hideChecker: function (e) {
@@ -72388,7 +72416,9 @@ BI.DynamicYearMonthCombo = BI.inherit(BI.Single, {
         minDate: "1900-01-01", // 最小日期
         maxDate: "2099-12-31", // 最大日期
         height: 24,
-        supportDynamic: true
+        supportDynamic: true,
+        isNeedAdjustHeight: false,
+        isNeedAdjustWidth: false
     },
 
     _init: function () {
@@ -72442,8 +72472,8 @@ BI.DynamicYearMonthCombo = BI.inherit(BI.Single, {
         this.combo = BI.createWidget({
             type: "bi.combo",
             container: o.container,
-            isNeedAdjustHeight: false,
-            isNeedAdjustWidth: false,
+            isNeedAdjustHeight: o.isNeedAdjustHeight,
+            isNeedAdjustWidth: o.isNeedAdjustWidth,
             el: this.trigger,
             destroyWhenHide: true,
             adjustLength: 1,
@@ -72452,6 +72482,7 @@ BI.DynamicYearMonthCombo = BI.inherit(BI.Single, {
                 stopPropagation: false,
                 el: {
                     type: "bi.dynamic_year_month_popup",
+                    width: o.isNeedAdjustWidth ? o.width : undefined,
                     supportDynamic: o.supportDynamic,
                     ref: function () {
                         self.popup = this;
@@ -73703,6 +73734,8 @@ BI.DynamicYearQuarterCombo = BI.inherit(BI.Widget, {
         maxDate: "2099-12-31", // 最大日期
         height: 24,
         supportDynamic: true,
+        isNeedAdjustHeight: false,
+        isNeedAdjustWidth: false
     },
 
     _init: function () {
@@ -73756,8 +73789,8 @@ BI.DynamicYearQuarterCombo = BI.inherit(BI.Widget, {
         this.combo = BI.createWidget({
             type: "bi.combo",
             container: o.container,
-            isNeedAdjustHeight: false,
-            isNeedAdjustWidth: false,
+            isNeedAdjustHeight: o.isNeedAdjustHeight,
+            isNeedAdjustWidth: o.isNeedAdjustWidth,
             el: this.trigger,
             destroyWhenHide: true,
             adjustLength: 1,
@@ -73766,6 +73799,7 @@ BI.DynamicYearQuarterCombo = BI.inherit(BI.Widget, {
                 stopPropagation: false,
                 el: {
                     type: "bi.dynamic_year_quarter_popup",
+                    width: o.isNeedAdjustWidth ? o.width : undefined,
                     supportDynamic: o.supportDynamic,
                     ref: function () {
                         self.popup = this;
