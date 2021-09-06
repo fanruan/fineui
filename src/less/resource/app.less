@@ -27,6 +27,8 @@ body {
 }
 
 div, textarea {
+  scrollbar-color: fade(@scroll-color, 10%) fade(@scroll-color, 5%);
+  scrollbar-width: thin;
   &::-webkit-scrollbar {
     -webkit-appearance: none;
     width: 10px;
@@ -60,6 +62,7 @@ div, textarea {
 
 .bi-theme-dark {
   div, textarea {
+    scrollbar-color: fade(@scroll-color-theme-dark, 10%) fade(@scroll-color-theme-dark, 5%);
     &::-webkit-scrollbar {
       -webkit-appearance: none;
     }
