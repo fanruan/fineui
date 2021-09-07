@@ -101,6 +101,19 @@ const bundle = [].concat(
     basicAttachmentMap.ts,
 );
 
+const bundleModern = [].concat(
+    basicAttachmentMap.core,
+    basicAttachmentMap.fixProxy,
+    basicAttachmentMap.base,
+    basicAttachmentMap.case,
+    basicAttachmentMap.widget,
+    sync(["public/modern/app.less", "public/modern/**/*.less"]),
+    [fixCompact, workerCompact],
+    basicAttachmentMap.router,
+    sync(["public/js/**/*.js", "public/js/index.js", "i18n/i18n.cn.js"]),
+    basicAttachmentMap.ts,
+);
+
 const coreJs = [].concat(
     basicAttachmentMap.polyfill,
     basicAttachmentMap.core,
@@ -212,11 +225,13 @@ const fineuiWithoutJqueryAndPolyfillJs = [].concat(
         lodashJs,
         "src/core/**/*.js",
         "src/data/**/*.js",
-        "dist/fix/fix.js",
+        "!src/core/platform/web/**/*.js",
+    ]),
+    basicAttachmentMap.fix,
+    sync([
         "src/base/**/*.js",
         "src/case/**/*.js",
 
-        "!src/core/platform/web/**/*.js",
         "!src/base/single/input/file.js",
         "!src/case/ztree/**/*.js",
     ]),
@@ -247,6 +262,7 @@ module.exports = {
     lodash: lodashJs,
     font: basicAttachmentMap.font,
     bundle: uniq(bundle),
+    bundleModern: uniq(bundleModern),
     bundleIE: uniq(bundleIE),
     fineuiWithoutNormalize: uniq(fineuiWithoutNormalize),
     bundleWithoutNormalize: uniq(bundleWithoutNormalize),
