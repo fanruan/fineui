@@ -165,6 +165,22 @@ const fineui = [].concat(
     basicAttachmentMap.ts,
 );
 
+const fineuiModern = [].concat(
+    basicAttachmentMap.core,
+    basicAttachmentMap.fixProxy,
+    basicAttachmentMap.base,
+    basicAttachmentMap.case,
+    basicAttachmentMap.widget,
+    basicAttachmentMap.router,
+    [fixCompact, workerCompact],
+    sync([
+        'ui/modern/app.less',
+        'ui/modern/**/*.less',
+        'ui/js/**/*.js',
+    ]),
+    basicAttachmentMap.ts,
+);
+
 const fineuiProxy = [].concat(
     basicAttachmentMap.core,
     basicAttachmentMap.fixProxy,
@@ -235,6 +251,7 @@ module.exports = {
     fineuiWithoutNormalize: uniq(fineuiWithoutNormalize),
     bundleWithoutNormalize: uniq(bundleWithoutNormalize),
     fineui: uniq(fineui),
+    fineuiModern: uniq(fineuiModern),
     fineuiProxy: uniq(fineuiProxy),
     fineuiIE: uniq(fineuiIE),
     fineuiWithoutJqueryAndPolyfillJs: uniq(fineuiWithoutJqueryAndPolyfillJs),
