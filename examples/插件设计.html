@@ -2,7 +2,7 @@
 <head>
     <meta charset="utf-8">
     <title></title>
-    <link rel="stylesheet" type="text/css" href="../dist/2.0/fineui.css"/>
+    <link rel="stylesheet" type="text/css" href="../dist/2.0/fineui.modern.min.css"/>
     <script src="../dist/2.0/fineui.js"></script>
 <!--    <link rel="stylesheet" type="text/css" href="http://fanruan.design/fineui/2.0/fineui.min.css" />-->
 <!--    <script src="http://fanruan.design/fineui/2.0/fineui.min.js"></script>-->
@@ -81,6 +81,12 @@
                             text: store.model.text,
                             handler: function () {
                                 console.log("click");
+                                BI.Msg.toast("123", {
+                                    autoClose: false,
+                          callback: function(){
+                              BI.Msg.alert("提示", "点击了关闭")
+                          }
+                                })
                             }
                         }, {
                             type: "bi.label",
@@ -95,7 +101,7 @@
 
     var Widget = BI.inherit(BI.Widget, {
         props: {
-            vdom: true
+            // vdom: true
         },
         watch: {
             text: function () {
