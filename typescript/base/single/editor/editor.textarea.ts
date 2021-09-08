@@ -9,6 +9,18 @@ export declare class TextAreaEditor extends Single {
     static EVENT_EMPTY: string;
     static EVENT_KEY_DOWN: string;
 
+    props: {
+        value?: string;
+        errorText?: string | ((v: string) => string)
+        adjustYOffset?: number;
+        adjustXOffset?: number;
+        offsetStyle?: string;
+        validationChecker?: Function;
+        scrolly?: boolean;
+        style?: any;
+        watermark?: string;
+    } & Single['props'];
+
     focus(): void;
 
     blur(): void;
