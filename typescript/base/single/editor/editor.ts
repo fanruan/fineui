@@ -3,6 +3,16 @@ import { Single } from "../single";
 export declare class Editor extends Single {
     static xtype: string;
 
+    props: {
+        inputType?: string;
+        validationChecker?: Function;
+        quitChecker?: Function
+        allowBlank?: boolean;
+        watermark?: string;
+        errorText?: string | ((v: string) => string);
+        autocomplete?: string;
+    } & Single['props']
+
     static EVENT_CHANGE: string;
     static EVENT_FOCUS: string;
     static EVENT_BLUR: string;
