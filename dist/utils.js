@@ -1,4 +1,4 @@
-/*! time: 2021-9-8 16:00:25 */
+/*! time: 2021-9-8 19:10:44 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -2364,7 +2364,7 @@ if (!_global.BI) {
                 fn(providers[type]);
                 continue;
             }
-            BI.Plugin.configWidget(type, fn);
+            BI.Plugin.configWidget(type, fn, conf.opt);
         }
     };
     BI.config = BI.config || function (type, configFn, opt) {
