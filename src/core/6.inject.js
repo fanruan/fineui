@@ -128,7 +128,7 @@
                 fn(providers[type]);
                 continue;
             }
-            BI.Plugin.configWidget(type, fn);
+            BI.Plugin.configWidget(type, fn, conf.opt);
         }
     };
     BI.config = BI.config || function (type, configFn, opt) {
