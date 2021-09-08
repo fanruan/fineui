@@ -102,16 +102,8 @@ const bundle = [].concat(
 );
 
 const bundleModern = [].concat(
-    basicAttachmentMap.core,
-    basicAttachmentMap.fixProxy,
-    basicAttachmentMap.base,
-    basicAttachmentMap.case,
-    basicAttachmentMap.widget,
+    sync(["src/less/modern.less"]),
     sync(["public/modern/app.less", "public/modern/**/*.less"]),
-    [fixCompact, workerCompact],
-    basicAttachmentMap.router,
-    sync(["public/js/**/*.js", "public/js/index.js", "i18n/i18n.cn.js"]),
-    basicAttachmentMap.ts,
 );
 
 const coreJs = [].concat(
@@ -179,19 +171,11 @@ const fineui = [].concat(
 );
 
 const fineuiModern = [].concat(
-    basicAttachmentMap.core,
-    basicAttachmentMap.fixProxy,
-    basicAttachmentMap.base,
-    basicAttachmentMap.case,
-    basicAttachmentMap.widget,
-    basicAttachmentMap.router,
-    [fixCompact, workerCompact],
+    sync(["src/less/modern.less"]),
     sync([
         'ui/modern/app.less',
         'ui/modern/**/*.less',
-        'ui/js/**/*.js',
     ]),
-    basicAttachmentMap.ts,
 );
 
 const fineuiProxy = [].concat(
