@@ -3,19 +3,19 @@ export declare class IconTextItem extends BasicButton {
     static xtype: string;
     static EVENT_CHANGE: string;
     props: {
-        direction: string;
-        logic: {
+        direction?: string;
+        logic?: {
             dynamic: boolean;
         };
         iconWrapperWidth?: number;
         iconHeight?: number;
         iconWidth?: number;
-        textHgap: number;
-        textVgap: number;
-        textLgap: number;
-        textRgap: number;
-        text: string;
-        keyword: string;
+        textHgap?: number;
+        textVgap?: number;
+        textLgap?: number;
+        textRgap?: number;
+        text?: string;
+        keyword?: string;
     } & BasicButton['props'];
     doRedMark(...args: any[]): void;
     unRedMark(...args: any[]): void;
