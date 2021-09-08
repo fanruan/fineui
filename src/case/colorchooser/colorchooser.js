@@ -73,6 +73,9 @@ BI.ColorChooser = BI.inherit(BI.Widget, {
         this.combo.on(BI.Combo.EVENT_BEFORE_HIDEVIEW, function () {
             self.fireEvent(BI.ColorChooser.EVENT_CHANGE, arguments);
         });
+        this.combo.on(BI.Combo.EVENT_AFTER_POPUPVIEW, function () {
+            self.fireEvent(BI.ColorChooser.EVENT_AFTER_POPUPVIEW, arguments);
+        });
     },
 
     _isRGBColor: function (color) {
@@ -100,4 +103,5 @@ BI.ColorChooser = BI.inherit(BI.Widget, {
     }
 });
 BI.ColorChooser.EVENT_CHANGE = "EVENT_CHANGE";
+BI.ColorChooser.EVENT_AFTER_POPUPVIEW = "EVENT_AFTER_POPUPVIEW";
 BI.shortcut("bi.color_chooser", BI.ColorChooser);
