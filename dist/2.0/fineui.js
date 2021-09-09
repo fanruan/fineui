@@ -1,4 +1,4 @@
-/*! time: 2021-9-8 19:10:44 */
+/*! time: 2021-9-9 12:00:19 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -36801,6 +36801,9 @@ BI.ColorChooser = BI.inherit(BI.Widget, {
         this.combo.on(BI.Combo.EVENT_BEFORE_HIDEVIEW, function () {
             self.fireEvent(BI.ColorChooser.EVENT_CHANGE, arguments);
         });
+        this.combo.on(BI.Combo.EVENT_AFTER_POPUPVIEW, function () {
+            self.fireEvent(BI.ColorChooser.EVENT_AFTER_POPUPVIEW, arguments);
+        });
     },
 
     _isRGBColor: function (color) {
@@ -36828,6 +36831,7 @@ BI.ColorChooser = BI.inherit(BI.Widget, {
     }
 });
 BI.ColorChooser.EVENT_CHANGE = "EVENT_CHANGE";
+BI.ColorChooser.EVENT_AFTER_POPUPVIEW = "EVENT_AFTER_POPUPVIEW";
 BI.shortcut("bi.color_chooser", BI.ColorChooser);
 
 
@@ -37514,6 +37518,9 @@ BI.SimpleColorChooser = BI.inherit(BI.Widget, {
         this.combo.on(BI.ColorChooser.EVENT_CHANGE, function () {
             self.fireEvent(BI.SimpleColorChooser.EVENT_CHANGE, arguments);
         });
+        this.combo.on(BI.ColorChooser.EVENT_AFTER_POPUPVIEW, function () {
+            self.fireEvent(BI.SimpleColorChooser.EVENT_AFTER_POPUPVIEW, arguments);
+        });
     },
 
     isViewVisible: function () {
@@ -37537,6 +37544,7 @@ BI.SimpleColorChooser = BI.inherit(BI.Widget, {
     }
 });
 BI.SimpleColorChooser.EVENT_CHANGE = "EVENT_CHANGE";
+BI.SimpleColorChooser.EVENT_AFTER_POPUPVIEW = "EVENT_AFTER_POPUPVIEW";
 BI.shortcut("bi.simple_color_chooser", BI.SimpleColorChooser);
 
 /***/ }),
