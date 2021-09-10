@@ -439,7 +439,23 @@
 			}
 			var chkName = setting.check.chkStyle + "_" + (node[checkedKey] ? c.TRUE : c.FALSE) + "_" + fullStyle;
 			chkName = (node.check_Focus && node.chkDisabled !== true) ? chkName + "_" + c.FOCUS : chkName;
-			return consts.className.BUTTON + " " + c.DEFAULT + " " + chkName;
+			var chClass = consts.className.BUTTON + " " + c.DEFAULT + " " + chkName;
+			switch (chkName) {
+				case 'checkbox_true_part':
+				case 'checkbox_true_part_focus':
+					chClass += ' bi-half-button bi-high-light-border';
+					break;
+				case 'checkbox_true_full':
+				case 'checkbox_true_full_focus':
+					chClass += ' bi-checkbox checkbox-content bi-high-light-background active';
+					break;
+				case 'checkbox_false_full':
+				case 'checkbox_false_full_focus':
+				default:
+					chClass += ' bi-checkbox checkbox-content';
+					break;
+			}
+			return chClass;
 		},
 		repairAllChk: function(setting, checked) {
 			if (setting.check.enable && setting.check.chkStyle === consts.checkbox.STYLE) {

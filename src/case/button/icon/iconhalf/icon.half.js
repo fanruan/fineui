@@ -14,20 +14,6 @@ BI.HalfButton = BI.inherit(BI.BasicButton, {
         });
     },
 
-    _init: function () {
-        BI.HalfButton.superclass._init.apply(this, arguments);
-        BI.createWidget({
-            type: "bi.center_adapt",
-            element: this.element,
-            items: [{
-                type: "bi.layout",
-                cls: "bi-high-light-background",
-                width: 8,
-                height: 8
-            }]
-        });
-    },
-
     doClick: function () {
         BI.HalfButton.superclass.doClick.apply(this, arguments);
         if(this.isValid()) {
