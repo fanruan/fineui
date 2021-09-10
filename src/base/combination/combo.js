@@ -81,7 +81,7 @@
                 element: this
             }, BI.LogicFactory.createLogic("vertical", BI.extend(o.logic, {
                 items: [
-                    { el: this.combo }
+                    {el: this.combo}
                 ]
             }))));
             o.isDefaultInit && (this._assertPopupView());
@@ -118,7 +118,7 @@
 
             var enterPopup = false;
 
-            function hide(e) {
+            function hide (e) {
                 if (self.isEnabled() && self.isValid() && self.combo.isEnabled() && self.combo.isValid() && o.toggle === true) {
                     self._hideView(e);
                     self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.COLLAPSE, "", self.combo);
@@ -259,7 +259,7 @@
                     scrolly: false,
                     element: this.options.container || this,
                     items: [
-                        { el: this.popupView }
+                        {el: this.popupView}
                     ]
                 });
                 this._rendered = true;
@@ -312,7 +312,7 @@
             this._assertPopupViewRender();
             this.fireEvent(BI.Combo.EVENT_BEFORE_POPUPVIEW);
             // popupVisible是为了获取其宽高, 放到可视范围之外以防止在IE下闪一下
-            this.popupView.css({ left: -999999999, top: -99999999 });
+            this.popupView.css({left: -999999999, top: -99999999});
             this.popupView.visible();
             BI.each(needHideWhenAnotherComboOpen, function (i, combo) {
                 if (i !== self.getName()) {
@@ -340,11 +340,20 @@
                 this.resetListWidth("");
                 var width = this.popupView.element.outerWidth();
                 var maxW = this.element.outerWidth() || o.width;
-                if (width > maxW + 80) {
-                    maxW = maxW + 80;
-                } else if (width > maxW) {
-                    maxW = width;
+                // BI-93885 最大列宽算法调整
+                if (maxW < 500) {
+                    if (width > 500) {
+                        maxW = 500;
+                    } else if (width > maxW) {
+                        maxW = width;
+                    }
                 }
+
+                // if (width > maxW + 80) {
+                //     maxW = maxW + 80;
+                // } else if (width > maxW) {
+                //     maxW = width;
+                // }
                 this.resetListWidth(maxW < 100 ? 100 : maxW);
             }
         },
