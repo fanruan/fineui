@@ -1,4 +1,4 @@
-/*! time: 2021-9-9 15:00:18 */
+/*! time: 2021-9-10 15:20:53 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -31852,20 +31852,6 @@ BI.HalfButton = BI.inherit(BI.BasicButton, {
             height: 14,
             width: 14,
             selected: false
-        });
-    },
-
-    _init: function () {
-        BI.HalfButton.superclass._init.apply(this, arguments);
-        BI.createWidget({
-            type: "bi.center_adapt",
-            element: this.element,
-            items: [{
-                type: "bi.layout",
-                cls: "bi-high-light-background",
-                width: 8,
-                height: 8
-            }]
         });
     },
 
@@ -94687,7 +94673,23 @@ BI.shortcut("bi.async_tree", BI.AsyncTree);
 			}
 			var chkName = setting.check.chkStyle + "_" + (node[checkedKey] ? c.TRUE : c.FALSE) + "_" + fullStyle;
 			chkName = (node.check_Focus && node.chkDisabled !== true) ? chkName + "_" + c.FOCUS : chkName;
-			return consts.className.BUTTON + " " + c.DEFAULT + " " + chkName;
+			var chClass = consts.className.BUTTON + " " + c.DEFAULT + " " + chkName;
+			switch (chkName) {
+				case 'checkbox_true_part':
+				case 'checkbox_true_part_focus':
+					chClass += ' bi-half-button bi-high-light-border';
+					break;
+				case 'checkbox_true_full':
+				case 'checkbox_true_full_focus':
+					chClass += ' bi-checkbox checkbox-content bi-high-light-background active';
+					break;
+				case 'checkbox_false_full':
+				case 'checkbox_false_full_focus':
+				default:
+					chClass += ' bi-checkbox checkbox-content';
+					break;
+			}
+			return chClass;
 		},
 		repairAllChk: function(setting, checked) {
 			if (setting.check.enable && setting.check.chkStyle === consts.checkbox.STYLE) {

@@ -1,4 +1,4 @@
-/*! time: 2021-9-9 15:00:18 */
+/*! time: 2021-9-10 15:20:53 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -31477,20 +31477,6 @@ BI.HalfButton = BI.inherit(BI.BasicButton, {
             height: 14,
             width: 14,
             selected: false
-        });
-    },
-
-    _init: function () {
-        BI.HalfButton.superclass._init.apply(this, arguments);
-        BI.createWidget({
-            type: "bi.center_adapt",
-            element: this.element,
-            items: [{
-                type: "bi.layout",
-                cls: "bi-high-light-background",
-                width: 8,
-                height: 8
-            }]
         });
     },
 
