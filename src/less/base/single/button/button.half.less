@@ -2,4 +2,13 @@
 
 .bi-half-button {
   .border-radius(2px);
+  &:after {
+    position: absolute;
+    left: 3px;
+    top: 3px;
+    width: 8px;
+    height: 8px;
+    background-color: @color-bi-background-highlight;
+    content: '';
+  }
 }

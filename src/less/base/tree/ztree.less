@@ -106,8 +106,23 @@
 }
 
 .ztree li span.button.chk {
-  width: 16px;
-  height: 16px;
+  &.bi-checkbox {
+    border: 1px solid @color-bi-border-dark-line;
+    &.active {
+      background-color: @color-bi-background-highlight;
+      border-color: @color-bi-border-highlight;;
+    }
+  }
+  &.bi-half-button {
+    border: 1px solid @color-bi-border-highlight;
+  }
+}
+
+
+.ztree li span.button.chk {
+  position: relative;
+  width: 14px;
+  height: 14px;
   margin: 0 3px 0 0;
   cursor: auto
 }
