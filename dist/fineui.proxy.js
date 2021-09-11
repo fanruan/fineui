@@ -1,4 +1,4 @@
-/*! time: 2021-9-11 15:31:50 */
+/*! time: 2021-9-11 17:50:19 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -22091,7 +22091,8 @@ BI.shortcut("bi.collection_view", BI.CollectionView);
                     if (width > 500) {
                         maxW = 500;
                     } else if(width > maxW) {
-                        maxW = width;
+                        // 防止小数导致差那么一点
+                        maxW = width + 1;
                     }
                 }
 
