@@ -345,7 +345,8 @@
                     if (width > 500) {
                         maxW = 500;
                     } else if(width > maxW) {
-                        maxW = width;
+                        // 防止小数导致差那么一点
+                        maxW = width + 1;
                     }
                 }
 
