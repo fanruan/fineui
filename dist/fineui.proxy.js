@@ -1,4 +1,4 @@
-/*! time: 2021-9-11 17:50:19 */
+/*! time: 2021-9-11 18:00:39 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -22088,7 +22088,7 @@ BI.shortcut("bi.collection_view", BI.CollectionView);
                 var maxW = this.element.outerWidth() || o.width;
                 // BI-93885 最大列宽算法调整
                 if (maxW < 500) {
-                    if (width > 500) {
+                    if (width >= 500) {
                         maxW = 500;
                     } else if(width > maxW) {
                         // 防止小数导致差那么一点
