@@ -342,7 +342,7 @@
                 var maxW = this.element.outerWidth() || o.width;
                 // BI-93885 最大列宽算法调整
                 if (maxW < 500) {
-                    if (width > 500) {
+                    if (width >= 500) {
                         maxW = 500;
                     } else if(width > maxW) {
                         // 防止小数导致差那么一点
