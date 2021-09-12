@@ -40,7 +40,7 @@
                 cls: "",
                 css: null,
 
-                vdom: false
+                // vdom: false
             });
         },
 
@@ -195,9 +195,9 @@
                 this.element = BI.Widget._renderEngine.createElement(this);
             }
             this.element._isWidget = true;
-            var widgets = this.element.data("__widgets") || [];
-            widgets.push(this);
-            this.element.data("__widgets", widgets);
+            // var widgets = this.element.data("__widgets") || [];
+            // widgets.push(this);
+            // this.element.data("__widgets", widgets);
             this._initCurrent();
         },
 
@@ -243,52 +243,7 @@
             var self = this;
             var isMounted = this._isMounted;
             this.__async === true && isMounted && callLifeHook(this, "beforeMount");
-            if (!this._initVNode()) {
-                var render = BI.isFunction(this.options.render) ? this.options.render : this.render;
-                var els = render && render.call(this);
-                els = BI.Plugin.getRender(this.options.type, els);
-                if (BI.isPlainObject(els)) {
-                    els = [els];
-                }
-                if (BI.isArray(els)) {
-                    BI.each(els, function (i, el) {
-                        if (el) {
-                            BI._lazyCreateWidget(el, {
-                                element: self
-                            });
-                        }
-                    });
-                }
-            }
-            this._mount();
-            if (this.__async === true && isMounted) {
-                callLifeHook(this, "mounted");
-                this.fireEvent(BI.Events.MOUNT);
-            }
-        },
-
-        _initVNode: function () {
-            if (this.options.vdom) {
-                var div = document.createElement("div");
-                var element = this.element;
-                element.append(div);
-                this.vnode = this._renderVNode();
-                BI.patchVNode(div, this.vnode);
-                // 去除这个临时的div
-                BI.DOM.hang([div]);
-                element.attr("style", this.vnode.elm.getAttribute("style"));
-                element.addClass(this.vnode.elm.getAttribute("class"));
-                element.empty();
-                BI.each(BI.jQuery(this.vnode.elm).children(), function (i, node) {
-                    element.append(node);
-                });
-                return true;
-            }
-            return false;
-        },
-
-        _renderVNode: function () {
-            var self = this;
+            // if (!this._initVNode()) {
             var render = BI.isFunction(this.options.render) ? this.options.render : this.render;
             var els = render && render.call(this);
             els = BI.Plugin.getRender(this.options.type, els);
@@ -296,19 +251,64 @@
                 els = [els];
             }
             if (BI.isArray(els)) {
-                var container = document.createElement("div");
-                this._children = {};
                 BI.each(els, function (i, el) {
                     if (el) {
-                        var w = BI._lazyCreateWidget(el, {
-                            element: container
+                        BI._lazyCreateWidget(el, {
+                            element: self
                         });
-                        self.addWidget(w);
                     }
                 });
             }
-            return BI.Element2Vnode(container);
+            // }
+            this._mount();
+            if (this.__async === true && isMounted) {
+                callLifeHook(this, "mounted");
+                this.fireEvent(BI.Events.MOUNT);
+            }
         },
+
+        // _initVNode: function () {
+        //     if (this.options.vdom) {
+        //         var div = document.createElement("div");
+        //         var element = this.element;
+        //         element.append(div);
+        //         this.vnode = this._renderVNode();
+        //         BI.patchVNode(div, this.vnode);
+        //         // 去除这个临时的div
+        //         BI.DOM.hang([div]);
+        //         element.attr("style", this.vnode.elm.getAttribute("style"));
+        //         element.addClass(this.vnode.elm.getAttribute("class"));
+        //         element.empty();
+        //         BI.each(BI.jQuery(this.vnode.elm).children(), function (i, node) {
+        //             element.append(node);
+        //         });
+        //         return true;
+        //     }
+        //     return false;
+        // },
+
+        // _renderVNode: function () {
+        //     var self = this;
+        //     var render = BI.isFunction(this.options.render) ? this.options.render : this.render;
+        //     var els = render && render.call(this);
+        //     els = BI.Plugin.getRender(this.options.type, els);
+        //     if (BI.isPlainObject(els)) {
+        //         els = [els];
+        //     }
+        //     if (BI.isArray(els)) {
+        //         var container = document.createElement("div");
+        //         this._children = {};
+        //         BI.each(els, function (i, el) {
+        //             if (el) {
+        //                 var w = BI._lazyCreateWidget(el, {
+        //                     element: container
+        //                 });
+        //                 self.addWidget(w);
+        //             }
+        //         });
+        //     }
+        //     return BI.Element2Vnode(container);
+        // },
 
         _setParent: function (parent) {
             this._parent = parent;
@@ -647,12 +647,12 @@
             if (this.__async === true || this.__asking === true) {
                 return;
             }
-            if (this.options.vdom) {
-                var vnode = this._renderVNode();
-                BI.patchVNode(this.vnode, vnode);
-                this.vnode = vnode;
-                return;
-            }
+            // if (this.options.vdom) {
+            //     var vnode = this._renderVNode();
+            //     BI.patchVNode(this.vnode, vnode);
+            //     this.vnode = vnode;
+            //     return;
+            // }
             // this._isMounted = false;
             // this.purgeListeners();
             this._empty();
