@@ -1,4 +1,4 @@
-/*! time: 2021-9-13 18:20:55 */
+/*! time: 2021-9-13 20:32:11 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -21520,20 +21520,20 @@ BI.CollectionView = BI.inherit(BI.Widget, {
                 var index = this.renderedKeys[datum.index] && this.renderedKeys[datum.index][1];
                 var child;
                 if (index >= 0) {
-                    if (datum.width !== this.renderedCells[index]._width) {
-                        this.renderedCells[index]._width = datum.width;
-                        this.renderedCells[index].el.setWidth(datum.width);
-                    }
-                    if (datum.height !== this.renderedCells[index]._height) {
-                        this.renderedCells[index]._height = datum.height;
-                        this.renderedCells[index].el.setHeight(datum.height);
-                    }
-                    if (this.renderedCells[index]._left !== datum.x) {
-                        this.renderedCells[index].el.element.css("left", datum.x / BI.pixRatio + BI.pixUnit);
-                    }
-                    if (this.renderedCells[index]._top !== datum.y) {
-                        this.renderedCells[index].el.element.css("top", datum.y  / BI.pixRatio + BI.pixUnit);
-                    }
+                    // if (datum.width !== this.renderedCells[index]._width) {
+                    //     this.renderedCells[index]._width = datum.width;
+                    this.renderedCells[index].el.setWidth(datum.width);
+                    // }
+                    // if (datum.height !== this.renderedCells[index]._height) {
+                    //     this.renderedCells[index]._height = datum.height;
+                    this.renderedCells[index].el.setHeight(datum.height);
+                    // }
+                    // if (this.renderedCells[index]._left !== datum.x) {
+                    this.renderedCells[index].el.element.css("left", datum.x / BI.pixRatio + BI.pixUnit);
+                    // }
+                    // if (this.renderedCells[index]._top !== datum.y) {
+                    this.renderedCells[index].el.element.css("top", datum.y  / BI.pixRatio + BI.pixUnit);
+                    // }
                     renderedCells.push(child = this.renderedCells[index]);
                 } else {
                     child = BI._lazyCreateWidget(BI.extend({
@@ -21551,8 +21551,8 @@ BI.CollectionView = BI.inherit(BI.Widget, {
                         top: datum.y,
                         _left: datum.x,
                         _top: datum.y,
-                        _width: datum.width,
-                        _height: datum.height
+                        // _width: datum.width,
+                        // _height: datum.height
                     });
                 }
                 var startTopIndex = topMap[datum.y] | 0;
@@ -21640,6 +21640,7 @@ BI.CollectionView = BI.inherit(BI.Widget, {
             this.container.setWidth(this._width);
             this.container.setHeight(this._height);
 
+            this._debounceRelease();
             this._calculateChildrenToRender();
             // 元素未挂载时不能设置scrollTop
             try {
@@ -24968,20 +24969,20 @@ BI.GridView = BI.inherit(BI.Widget, {
                     var index = this.renderedKeys[key] && this.renderedKeys[key][2];
                     var child;
                     if (index >= 0) {
-                        if (columnDatum.size !== this.renderedCells[index]._width) {
-                            this.renderedCells[index]._width = columnDatum.size;
-                            this.renderedCells[index].el.setWidth(columnDatum.size);
-                        }
-                        if (rowDatum.size !== this.renderedCells[index]._height) {
-                            this.renderedCells[index]._height = rowDatum.size;
-                            this.renderedCells[index].el.setHeight(rowDatum.size);
-                        }
-                        if (this.renderedCells[index]._left !== columnDatum.offset + horizontalOffsetAdjustment) {
-                            this.renderedCells[index].el.element.css("left", (columnDatum.offset + horizontalOffsetAdjustment) / BI.pixRatio + BI.pixUnit);
-                        }
-                        if (this.renderedCells[index]._top !== rowDatum.offset + verticalOffsetAdjustment) {
-                            this.renderedCells[index].el.element.css("top", (rowDatum.offset + verticalOffsetAdjustment) / BI.pixRatio + BI.pixUnit);
-                        }
+                        // if (columnDatum.size !== this.renderedCells[index]._width) {
+                        // this.renderedCells[index]._width = columnDatum.size;
+                        this.renderedCells[index].el.setWidth(columnDatum.size);
+                        // }
+                        // if (rowDatum.size !== this.renderedCells[index]._height) {
+                        // this.renderedCells[index]._height = rowDatum.size;
+                        this.renderedCells[index].el.setHeight(rowDatum.size);
+                        // }
+                        // if (this.renderedCells[index]._left !== columnDatum.offset + horizontalOffsetAdjustment) {
+                        this.renderedCells[index].el.element.css("left", (columnDatum.offset + horizontalOffsetAdjustment) / BI.pixRatio + BI.pixUnit);
+                        // }
+                        // if (this.renderedCells[index]._top !== rowDatum.offset + verticalOffsetAdjustment) {
+                        this.renderedCells[index].el.element.css("top", (rowDatum.offset + verticalOffsetAdjustment) / BI.pixRatio + BI.pixUnit);
+                        // }
                         child = this.renderedCells[index].el;
                         renderedCells.push(this.renderedCells[index]);
                     } else {
@@ -25002,8 +25003,8 @@ BI.GridView = BI.inherit(BI.Widget, {
                             top: rowDatum.offset + verticalOffsetAdjustment,
                             _left: columnDatum.offset + horizontalOffsetAdjustment,
                             _top: rowDatum.offset + verticalOffsetAdjustment,
-                            _width: columnDatum.size,
-                            _height: rowDatum.size
+                            // _width: columnDatum.size,
+                            // _height: rowDatum.size
                         });
                     }
                     minX = Math.min(minX, columnDatum.offset + horizontalOffsetAdjustment);
@@ -25055,7 +25056,7 @@ BI.GridView = BI.inherit(BI.Widget, {
     /**
      * 获取真实的可滚动的最大宽度
      * 对于grid_view如果没有全部渲染过，this._columnSizeAndPositionManager.getTotalSize获取的宽度是不准确的
-     * 因此在调用setScrollLeft等函数时会造成没法移动到最右端(预估可移动具体太短)
+     * 因此在调用setScrollLeft等函数时会造成没法移动到最右端(预估可移动距离太短)
      */
     _getRealMaxScrollLeft: function () {
         var o = this.options;
@@ -25098,6 +25099,7 @@ BI.GridView = BI.inherit(BI.Widget, {
         this._columnSizeAndPositionManager = new BI.ScalingCellSizeAndPositionManager(this.columnCount, o.columnWidthGetter, o.estimatedColumnSize);
         this._rowSizeAndPositionManager = new BI.ScalingCellSizeAndPositionManager(this.rowCount, o.rowHeightGetter, o.estimatedRowSize);
 
+        this._debounceRelease();
         this._calculateChildrenToRender();
         // 元素未挂载时不能设置scrollTop
         try {
