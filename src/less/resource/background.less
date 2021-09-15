@@ -318,7 +318,11 @@
 }
 
 .auto-color-normal-disabled-background {
-  .image2xPath(@background-auto-color-normal-disabled);
+  .image2xPath(@background-auto-color-disabled);
+}
+
+.auto-color-square-normal-background {
+  .image2xPath(@background-auto-color-square-normal);
 }
 
 .trans-color-background {
@@ -343,7 +347,13 @@
 
 .auto-color-normal-disabled-background {
   &.hack{
-    .imagePath(@background-auto-color-normal-disabled);
+    .imagePath(@background-auto-color-disabled);
+  }
+}
+
+.auto-color-square-normal-background {
+  &.hack{
+    .imagePath(@background-auto-color-square-normal);
   }
 }
 

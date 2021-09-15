@@ -69,7 +69,7 @@ BI.DynamicYearQuarterTrigger = BI.inherit(BI.Trigger, {
                     if(BI.isEmptyString(month)) {
                         month = parseInt(v, 10) === BI.parseDateTime(o.min, "%Y-%X-%d").getFullYear() ? BI.parseDateTime(o.min, "%Y-%X-%d").getMonth() + 1 : 1;
                     } else {
-                        month = (v - 1) * 3 + 1;
+                        month = (parseInt(month, 10) - 1) * 3 + 1;
                     }
                     return v === "" || (BI.isPositiveInteger(v) && !BI.checkDateVoid(v, month, 1, o.min, o.max)[0]);
                 }
