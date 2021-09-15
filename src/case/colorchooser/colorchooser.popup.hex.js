@@ -7,7 +7,7 @@ BI.HexColorChooserPopup = BI.inherit(BI.Widget, {
 
     props: {
         baseCls: "bi-color-chooser-popup",
-        width: 292,
+        width: 300,
         recommendColorsGetter: BI.emptyFn, // 推荐色获取接口
         simple: false // 简单模式, popup中没有自动和透明
     },
@@ -21,11 +21,11 @@ BI.HexColorChooserPopup = BI.inherit(BI.Widget, {
                 items: [{
                     el: {
                         type: "bi.vertical",
-                        hgap: 10,
+                        hgap: 15,
                         items: [BI.extend({
                             type: o.simple ? "bi.simple_hex_color_picker_editor" : "bi.hex_color_picker_editor",
                             value: o.value,
-                            height: o.simple ? 30 : 64,
+                            height: o.simple ? 36 : 70,
                             listeners: [{
                                 eventName: BI.ColorPickerEditor.EVENT_CHANGE,
                                 action: function () {

@@ -13,7 +13,7 @@ BI.SimpleHexColorPickerEditor = BI.inherit(BI.Widget, {
 
     props: {
         baseCls: "bi-color-picker-editor",
-        height: 30
+        height: 36
     },
 
     render: function () {
@@ -37,7 +37,7 @@ BI.SimpleHexColorPickerEditor = BI.inherit(BI.Widget, {
                 allowBlank: true,
                 value: 255,
                 width: c.RGB_WIDTH,
-                height: 20,
+                height: 24,
                 listeners: [{
                     eventName: BI.TextEditor.EVENT_CHANGE,
                     action: function () {
@@ -58,18 +58,18 @@ BI.SimpleHexColorPickerEditor = BI.inherit(BI.Widget, {
                 el: {
                     type: "bi.vertical_adapt",
                     rgap: 5,
-                    columnSize: [16, 10, 'fill', 12, c.RGB_WIDTH, 12, c.RGB_WIDTH, 12, c.RGB_WIDTH],
+                    columnSize: [22, 10, 'fill', 12, c.RGB_WIDTH, 12, c.RGB_WIDTH, 12, c.RGB_WIDTH],
                     items: [{
                         el: {
                             type: "bi.layout",
                             cls: "color-picker-editor-display bi-card bi-border",
-                            height: 16,
-                            width: 16,
+                            height: 22,
+                            width: 22,
                             ref: function (_ref) {
                                 self.colorShow = _ref;
                             }
                         },
-                        width: 16,
+                        width: 18,
                     }, {
                         type: "bi.label",
                         text: "#",
@@ -84,7 +84,7 @@ BI.SimpleHexColorPickerEditor = BI.inherit(BI.Widget, {
                         allowBlank: true,
                         errorText: BI.i18nText("BI-Color_Picker_Error_Text_Hex"),
                         width: c.HEX_WIDTH,
-                        height: 20,
+                        height: 24,
                         listeners: [{
                             eventName: "EVENT_CHANGE",
                             action: function () {

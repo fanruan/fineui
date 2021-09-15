@@ -26,8 +26,10 @@
 .icon_hover(slider-icon, @icon-slider-normal, @icon-slider-active);
 
 //颜色自动、透明
-.icon_select(auto-color-icon, @icon-auto-normal, @icon-auto-select, @icon-auto-disable);
-.icon_select(trans-color-icon, @icon-trans-normal, @icon-trans-select, @icon-trans-disable);
+.icon_select(auto-color-icon, @icon-auto-normal, @icon-auto-select);
+.icon_select(trans-color-icon, @icon-trans-normal, @icon-trans-select);
+// 方形的自动
+.icon(auto-square-color-icon, @icon-auto-square-normal);
 
 .bi-theme-dark {
   .icon(tree-collapse-icon-type1, @icon-tree-collapse-type1-theme-dark);
@@ -43,4 +45,5 @@
   .icon(tree-vertical-line-type4, @icon-tree-vertical-line-4-theme-dark);
 
   .icon_select(trans-color-icon, @icon-trans-normal-dark, @icon-trans-select-dark, @icon-trans-disable-dark);
+  .icon(auto-square-color-icon, @icon-auto-square-normal-dark);
 }
