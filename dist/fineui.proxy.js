@@ -1,4 +1,4 @@
-/*! time: 2021-9-13 22:10:57 */
+/*! time: 2021-9-15 14:02:06 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -34254,7 +34254,7 @@ BI.ColorChooser = BI.inherit(BI.Widget, {
                     }]
                 }, o.popup),
                 value: o.value,
-                width: 292
+                width: 300
             },
             value: o.value
         });
@@ -34314,7 +34314,7 @@ BI.HexColorChooserPopup = BI.inherit(BI.Widget, {
 
     props: {
         baseCls: "bi-color-chooser-popup",
-        width: 292,
+        width: 300,
         recommendColorsGetter: BI.emptyFn, // 推荐色获取接口
         simple: false // 简单模式, popup中没有自动和透明
     },
@@ -34328,11 +34328,11 @@ BI.HexColorChooserPopup = BI.inherit(BI.Widget, {
                 items: [{
                     el: {
                         type: "bi.vertical",
-                        hgap: 10,
+                        hgap: 15,
                         items: [BI.extend({
                             type: o.simple ? "bi.simple_hex_color_picker_editor" : "bi.hex_color_picker_editor",
                             value: o.value,
-                            height: o.simple ? 30 : 64,
+                            height: o.simple ? 36 : 70,
                             listeners: [{
                                 eventName: BI.ColorPickerEditor.EVENT_CHANGE,
                                 action: function () {
@@ -35213,7 +35213,7 @@ BI.ColorPickerButton = BI.inherit(BI.BasicButton, {
         var self = this, o = this.options;
         if (BI.isNotNull(o.value)) {
             if (o.value === '') {
-                this.element.addClass("auto-color-normal-background");
+                this.element.addClass("auto-color-square-normal-background");
             } else if (o.value === "transparent") {
                 this.element.addClass("trans-color-background");
             } else {
@@ -35722,7 +35722,7 @@ BI.HexColorPickerEditor = BI.inherit(BI.Widget, {
                 allowBlank: true,
                 value: 255,
                 width: c.RGB_WIDTH,
-                height: 20,
+                height: 24,
                 listeners: [{
                     eventName: BI.TextEditor.EVENT_CHANGE,
                     action: function () {
@@ -35805,20 +35805,20 @@ BI.HexColorPickerEditor = BI.inherit(BI.Widget, {
                     }, {
                         el: {
                             type: "bi.vertical_adapt",
-                            columnSize: [16, 10, 'fill', 12, c.RGB_WIDTH, 12, c.RGB_WIDTH, 12, c.RGB_WIDTH],
+                            columnSize: [22, 10, 'fill', 12, c.RGB_WIDTH, 12, c.RGB_WIDTH, 12, c.RGB_WIDTH],
 
                             rgap: 5,
                             items: [{
                                 el: {
                                     type: "bi.layout",
                                     cls: "color-picker-editor-display bi-card bi-border",
-                                    height: 16,
-                                    width: 16,
+                                    height: 22,
+                                    width: 22,
                                     ref: function (_ref) {
                                         self.colorShow = _ref;
                                     }
                                 },
-                                width: 16
+                                width: 18
                             }, {
                                 type: "bi.label",
                                 text: "#",
@@ -35833,7 +35833,7 @@ BI.HexColorPickerEditor = BI.inherit(BI.Widget, {
                                 allowBlank: true,
                                 errorText: BI.i18nText("BI-Color_Picker_Error_Text_Hex"),
                                 width: c.HEX_WIDTH,
-                                height: 20,
+                                height: 24,
                                 listeners: [{
                                     eventName: "EVENT_CHANGE",
                                     action: function () {
@@ -35922,11 +35922,11 @@ BI.HexColorPickerEditor = BI.inherit(BI.Widget, {
 
     _showPreColor: function (color) {
         if (color === "") {
-            this.colorShow.element.css("background-color", "").removeClass("trans-color-background").addClass("auto-color-normal-background");
+            this.colorShow.element.css("background-color", "").removeClass("trans-color-background").addClass("auto-color-square-normal-background");
         } else if (color === "transparent") {
-            this.colorShow.element.css("background-color", "").removeClass("auto-color-normal-background").addClass("trans-color-background");
+            this.colorShow.element.css("background-color", "").removeClass("auto-color-square-normal-background").addClass("trans-color-background");
         } else {
-            this.colorShow.element.css({"background-color": color}).removeClass("auto-color-normal-background").removeClass("trans-color-background");
+            this.colorShow.element.css({"background-color": color}).removeClass("auto-color-square-normal-background").removeClass("trans-color-background");
         }
     },
 
@@ -36008,7 +36008,7 @@ BI.SimpleHexColorPickerEditor = BI.inherit(BI.Widget, {
 
     props: {
         baseCls: "bi-color-picker-editor",
-        height: 30
+        height: 36
     },
 
     render: function () {
@@ -36032,7 +36032,7 @@ BI.SimpleHexColorPickerEditor = BI.inherit(BI.Widget, {
                 allowBlank: true,
                 value: 255,
                 width: c.RGB_WIDTH,
-                height: 20,
+                height: 24,
                 listeners: [{
                     eventName: BI.TextEditor.EVENT_CHANGE,
                     action: function () {
@@ -36053,18 +36053,18 @@ BI.SimpleHexColorPickerEditor = BI.inherit(BI.Widget, {
                 el: {
                     type: "bi.vertical_adapt",
                     rgap: 5,
-                    columnSize: [16, 10, 'fill', 12, c.RGB_WIDTH, 12, c.RGB_WIDTH, 12, c.RGB_WIDTH],
+                    columnSize: [22, 10, 'fill', 12, c.RGB_WIDTH, 12, c.RGB_WIDTH, 12, c.RGB_WIDTH],
                     items: [{
                         el: {
                             type: "bi.layout",
                             cls: "color-picker-editor-display bi-card bi-border",
-                            height: 16,
-                            width: 16,
+                            height: 22,
+                            width: 22,
                             ref: function (_ref) {
                                 self.colorShow = _ref;
                             }
                         },
-                        width: 16,
+                        width: 18,
                     }, {
                         type: "bi.label",
                         text: "#",
@@ -36079,7 +36079,7 @@ BI.SimpleHexColorPickerEditor = BI.inherit(BI.Widget, {
                         allowBlank: true,
                         errorText: BI.i18nText("BI-Color_Picker_Error_Text_Hex"),
                         width: c.HEX_WIDTH,
-                        height: 20,
+                        height: 24,
                         listeners: [{
                             eventName: "EVENT_CHANGE",
                             action: function () {
@@ -71642,7 +71642,7 @@ BI.DynamicYearQuarterTrigger = BI.inherit(BI.Trigger, {
                     if(BI.isEmptyString(month)) {
                         month = parseInt(v, 10) === BI.parseDateTime(o.min, "%Y-%X-%d").getFullYear() ? BI.parseDateTime(o.min, "%Y-%X-%d").getMonth() + 1 : 1;
                     } else {
-                        month = (v - 1) * 3 + 1;
+                        month = (parseInt(month, 10) - 1) * 3 + 1;
                     }
                     return v === "" || (BI.isPositiveInteger(v) && !BI.checkDateVoid(v, month, 1, o.min, o.max)[0]);
                 }
