@@ -1,4 +1,4 @@
-/*! time: 2021-9-15 14:02:06 */
+/*! time: 2021-9-16 9:50:52 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -27124,18 +27124,14 @@ BI.EL = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.EL.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-el",
-            el: {},
-            layout: {}
+            el: {}
         });
     },
-    _init: function () {
-        BI.EL.superclass._init.apply(this, arguments);
+
+    render: function () {
         var self = this, o = this.options;
-        this.ele = BI.createWidget(o.el);
-        BI.createWidget(o.layout, {
-            type: "bi.adaptive",
-            element: this,
-            items: [this.ele]
+        this.ele = BI.createWidget(o.el, {
+            element: this
         });
         this.ele.on(BI.Controller.EVENT_CHANGE, function () {
             self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
@@ -27155,6 +27151,7 @@ BI.EL = BI.inherit(BI.Widget, {
     }
 });
 BI.shortcut("bi.el", BI.EL);
+
 
 /***/ }),
 /* 375 */
