@@ -9,18 +9,14 @@ BI.EL = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.EL.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-el",
-            el: {},
-            layout: {}
+            el: {}
         });
     },
-    _init: function () {
-        BI.EL.superclass._init.apply(this, arguments);
+
+    render: function () {
         var self = this, o = this.options;
-        this.ele = BI.createWidget(o.el);
-        BI.createWidget(o.layout, {
-            type: "bi.adaptive",
-            element: this,
-            items: [this.ele]
+        this.ele = BI.createWidget(o.el, {
+            element: this
         });
         this.ele.on(BI.Controller.EVENT_CHANGE, function () {
             self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
