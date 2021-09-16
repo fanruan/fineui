@@ -1,4 +1,4 @@
-/*! time: 2021-9-16 15:02:33 */
+/*! time: 2021-9-16 17:31:56 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -29164,7 +29164,6 @@ BI.Single = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         var conf = BI.Single.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
-            // el: {},
             readonly: false,
             title: null,
             warningTitle: null,
@@ -29172,10 +29171,6 @@ BI.Single = BI.inherit(BI.Widget, {
             value: null,
             belowMouse: false   // title是否跟随鼠标
         });
-    },
-
-    render: function () {
-        return this.options.el;
     },
 
     _showToolTip: function (e, opt) {
