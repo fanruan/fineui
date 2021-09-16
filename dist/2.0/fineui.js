@@ -1,4 +1,4 @@
-/*! time: 2021-9-16 14:05:09 */
+/*! time: 2021-9-16 15:02:33 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -29164,7 +29164,7 @@ BI.Single = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         var conf = BI.Single.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
-            el: {},
+            // el: {},
             readonly: false,
             title: null,
             warningTitle: null,
