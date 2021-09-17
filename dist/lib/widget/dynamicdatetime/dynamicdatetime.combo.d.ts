@@ -1,4 +1,4 @@
-import { Single } from "../../base/single/single";
+import { Single } from '../../base/single/single';
 export declare class DynamicDateTimeCombo extends Single {
     static xtype: string;
     static EVENT_KEY_DOWN: string;
