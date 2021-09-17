@@ -1,7 +1,7 @@
 @import "../../../index";
 
 .bi-radio {
-  & .radio-content {
+  & .radio-content, &.radio-content {
     .border-radius(8px);
     border: 1px solid @color-bi-border-dark-line;
     &:after {
@@ -12,7 +12,7 @@
     }
   }
   &:active, &.active {
-    & .radio-content {
+    & .radio-content, &.radio-content {
       border-color:  @color-bi-border-highlight;
       &:after {
         width: 6px;
@@ -28,15 +28,15 @@
     }
   }
   &.disabled {
-    & .radio-content {
+    & .radio-content, &.radio-content {
       background-color: @color-bi-background-disabled;
       border-color: @color-bi-border-disabled;
     }
-    & .radio-content:after {
+    & .radio-content:after, &.radio-content:after {
       background-color: transparent;
     }
     &.active {
-      & .radio-content {
+      & .radio-content, &.radio-content {
         background-color: @color-bi-background-dark-gray;
         &:after {
           background-color: @color-bi-background-default;
@@ -48,26 +48,26 @@
 
 .bi-theme-dark {
   .bi-radio {
-    & .radio-content {
+    & .radio-content, &.radio-content {
       border-color: @color-bi-border-dark-line-theme-dark;
       &.hover, &:hover {
         border-color: @color-bi-border-highlight;
       }
     }
     &.active, &:active {
-      & .radio-content {
+      & .radio-content, &.radio-content {
         border-color: @color-bi-border-highlight;
       }
     }
     &.disabled {
-      & .radio-content {
+      & .radio-content, &.radio-content {
         background-color: @color-bi-background-disabled-theme-dark;
         &.hover, &:hover {
           border-color: @color-bi-border-dark-line-theme-dark;
         }
       }
       &.active {
-        & .radio-content {
+        & .radio-content, &.radio-content {
           background-color: @color-bi-background-dark-gray-theme-dark;
           border-color: @color-bi-border-disabled-theme-dark;
         }

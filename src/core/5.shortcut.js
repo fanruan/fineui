@@ -25,8 +25,8 @@
             BI.Widget.pushContext(context);
         }
         widget._initProps(config);
-        widget._constructed();
         widget._initRoot();
+        widget._constructed();
         // if (!lazy || config.element || config.root) {
         widget._lazyConstructor();
         // }

@@ -161,20 +161,20 @@ BI.CollectionView = BI.inherit(BI.Widget, {
                 var index = this.renderedKeys[datum.index] && this.renderedKeys[datum.index][1];
                 var child;
                 if (index >= 0) {
-                    if (datum.width !== this.renderedCells[index]._width) {
-                        this.renderedCells[index]._width = datum.width;
-                        this.renderedCells[index].el.setWidth(datum.width);
-                    }
-                    if (datum.height !== this.renderedCells[index]._height) {
-                        this.renderedCells[index]._height = datum.height;
-                        this.renderedCells[index].el.setHeight(datum.height);
-                    }
-                    if (this.renderedCells[index]._left !== datum.x) {
-                        this.renderedCells[index].el.element.css("left", datum.x / BI.pixRatio + BI.pixUnit);
-                    }
-                    if (this.renderedCells[index]._top !== datum.y) {
-                        this.renderedCells[index].el.element.css("top", datum.y  / BI.pixRatio + BI.pixUnit);
-                    }
+                    // if (datum.width !== this.renderedCells[index]._width) {
+                    //     this.renderedCells[index]._width = datum.width;
+                    this.renderedCells[index].el.setWidth(datum.width);
+                    // }
+                    // if (datum.height !== this.renderedCells[index]._height) {
+                    //     this.renderedCells[index]._height = datum.height;
+                    this.renderedCells[index].el.setHeight(datum.height);
+                    // }
+                    // if (this.renderedCells[index]._left !== datum.x) {
+                    this.renderedCells[index].el.element.css("left", datum.x / BI.pixRatio + BI.pixUnit);
+                    // }
+                    // if (this.renderedCells[index]._top !== datum.y) {
+                    this.renderedCells[index].el.element.css("top", datum.y  / BI.pixRatio + BI.pixUnit);
+                    // }
                     renderedCells.push(child = this.renderedCells[index]);
                 } else {
                     child = BI._lazyCreateWidget(BI.extend({
@@ -192,8 +192,8 @@ BI.CollectionView = BI.inherit(BI.Widget, {
                         top: datum.y,
                         _left: datum.x,
                         _top: datum.y,
-                        _width: datum.width,
-                        _height: datum.height
+                        // _width: datum.width,
+                        // _height: datum.height
                     });
                 }
                 var startTopIndex = topMap[datum.y] | 0;
@@ -281,6 +281,7 @@ BI.CollectionView = BI.inherit(BI.Widget, {
             this.container.setWidth(this._width);
             this.container.setHeight(this._height);
 
+            this._debounceRelease();
             this._calculateChildrenToRender();
             // 元素未挂载时不能设置scrollTop
             try {

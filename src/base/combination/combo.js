@@ -340,11 +340,21 @@
                 this.resetListWidth("");
                 var width = this.popupView.element.outerWidth();
                 var maxW = this.element.outerWidth() || o.width;
-                if (width > maxW + 80) {
-                    maxW = maxW + 80;
-                } else if (width > maxW) {
-                    maxW = width;
+                // BI-93885 最大列宽算法调整
+                if (maxW < 500) {
+                    if (width >= 500) {
+                        maxW = 500;
+                    } else if(width > maxW) {
+                        // 防止小数导致差那么一点
+                        maxW = width + 1;
+                    }
                 }
+
+                // if (width > maxW + 80) {
+                //     maxW = maxW + 80;
+                // } else if (width > maxW) {
+                //     maxW = width;
+                // }
                 this.resetListWidth(maxW < 100 ? 100 : maxW);
             }
         },

@@ -34,6 +34,9 @@ BI.SimpleColorChooser = BI.inherit(BI.Widget, {
         this.combo.on(BI.ColorChooser.EVENT_CHANGE, function () {
             self.fireEvent(BI.SimpleColorChooser.EVENT_CHANGE, arguments);
         });
+        this.combo.on(BI.ColorChooser.EVENT_AFTER_POPUPVIEW, function () {
+            self.fireEvent(BI.SimpleColorChooser.EVENT_AFTER_POPUPVIEW, arguments);
+        });
     },
 
     isViewVisible: function () {
@@ -57,4 +60,5 @@ BI.SimpleColorChooser = BI.inherit(BI.Widget, {
     }
 });
 BI.SimpleColorChooser.EVENT_CHANGE = "EVENT_CHANGE";
+BI.SimpleColorChooser.EVENT_AFTER_POPUPVIEW = "EVENT_AFTER_POPUPVIEW";
 BI.shortcut("bi.simple_color_chooser", BI.SimpleColorChooser);
