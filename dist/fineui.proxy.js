@@ -1,4 +1,4 @@
-/*! time: 2021-9-17 21:32:30 */
+/*! time: 2021-9-18 9:50:56 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -46603,7 +46603,7 @@ BI.DynamicDateCombo = BI.inherit(BI.Single, {
     },
 
     props: {
-        baseCls: "bi-dynamic-date-combo bi-border bi-focus-shadow bi-border-radius",
+        baseCls: "bi-dynamic-date-combo",
         height: 24,
         minDate: "1900-01-01",
         maxDate: "2099-12-31",
@@ -46618,8 +46618,6 @@ BI.DynamicDateCombo = BI.inherit(BI.Single, {
     },
 
     _init: function () {
-        var o = this.options;
-        o.height -= 2;
         BI.DynamicDateCombo.superclass._init.apply(this, arguments);
     },
 
@@ -46646,6 +46644,7 @@ BI.DynamicDateCombo = BI.inherit(BI.Single, {
                 items: [{
                     el: {
                         type: "bi.combo",
+                        cls: "bi-border bi-border-radius bi-focus-shadow",
                         container: opts.container,
                         ref: function () {
                             self.combo = this;
@@ -46661,7 +46660,7 @@ BI.DynamicDateCombo = BI.inherit(BI.Single, {
                             format: opts.format,
                             allowEdit: opts.allowEdit,
                             watermark: opts.watermark,
-                            height: opts.height,
+                            height: opts.height - 2,
                             value: opts.value,
                             ref: function () {
                                 self.trigger = this;
@@ -47670,7 +47669,7 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
     },
 
     props: {
-        baseCls: "bi-dynamic-date-combo bi-border bi-focus-shadow bi-border-radius",
+        baseCls: "bi-dynamic-date-combo",
         height: 24,
         minDate: "1900-01-01",
         maxDate: "2099-12-31",
@@ -47685,8 +47684,6 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
     },
 
     _init: function () {
-        var o = this.options;
-        o.height -= 2;
         BI.DynamicDateTimeCombo.superclass._init.apply(this, arguments);
     },
 
@@ -47713,6 +47710,7 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
                 items: [{
                     el: {
                         type: "bi.combo",
+                        cls: "bi-border bi-border-radius bi-focus-shadow",
                         destroyWhenHide: true,
                         container: opts.container,
                         ref: function () {
@@ -47728,7 +47726,7 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
                             allowEdit: opts.allowEdit,
                             watermark: opts.watermark,
                             format: opts.format,
-                            height: opts.height,
+                            height: opts.height - 2,
                             value: opts.value,
                             ref: function () {
                                 self.trigger = this;
@@ -67323,7 +67321,7 @@ BI.shortcut("bi.down_list_select_text_trigger", BI.DownListSelectTextTrigger);
                             isNeedAdjustWidth: opts.isNeedAdjustWidth,
                             el: {
                                 type: "bi.time_trigger",
-                                height: opts.height,
+                                height: opts.height - 2,
                                 allowEdit: opts.allowEdit,
                                 watermark: opts.watermark,
                                 format: opts.format,
@@ -69780,7 +69778,7 @@ BI.shortcut("bi.static_year_month_card", BI.StaticYearMonthCard);
 BI.DynamicYearMonthCombo = BI.inherit(BI.Single, {
 
     props: {
-        baseCls: "bi-year-month-combo bi-border bi-border-radius bi-focus-shadow",
+        baseCls: "bi-year-month-combo",
         behaviors: {},
         minDate: "1900-01-01", // 最小日期
         maxDate: "2099-12-31", // 最大日期
@@ -69792,8 +69790,6 @@ BI.DynamicYearMonthCombo = BI.inherit(BI.Single, {
 
     _init: function () {
         var self = this, o = this.options;
-        o.height -= 2;
-        BI.isNumeric(o.width) && (o.width -= 2);
         BI.DynamicYearMonthCombo.superclass._init.apply(this, arguments);
         this.storeValue = o.value;
         this.storeTriggerValue = "";
@@ -69801,7 +69797,7 @@ BI.DynamicYearMonthCombo = BI.inherit(BI.Single, {
             type: "bi.dynamic_year_month_trigger",
             min: o.minDate,
             max: o.maxDate,
-            height: o.height,
+            height: o.height - 2,
             value: o.value || ""
         });
         this.trigger.on(BI.DynamicYearMonthTrigger.EVENT_KEY_DOWN, function () {
@@ -69840,6 +69836,7 @@ BI.DynamicYearMonthCombo = BI.inherit(BI.Single, {
 
         this.combo = BI.createWidget({
             type: "bi.combo",
+            cls: "bi-border bi-border-radius bi-focus-shadow",
             container: o.container,
             isNeedAdjustHeight: o.isNeedAdjustHeight,
             isNeedAdjustWidth: o.isNeedAdjustWidth,
@@ -71097,7 +71094,7 @@ BI.shortcut("bi.static_year_quarter_card", BI.StaticYearQuarterCard);
 BI.DynamicYearQuarterCombo = BI.inherit(BI.Widget, {
 
     props: {
-        baseCls: "bi-year-quarter-combo bi-border bi-border-radius bi-focus-shadow",
+        baseCls: "bi-year-quarter-combo",
         behaviors: {},
         minDate: "1900-01-01", // 最小日期
         maxDate: "2099-12-31", // 最大日期
@@ -71109,8 +71106,6 @@ BI.DynamicYearQuarterCombo = BI.inherit(BI.Widget, {
 
     _init: function () {
         var self = this, o = this.options;
-        o.height -= 2;
-        BI.isNumeric(o.width) && (o.width -= 2);
         BI.DynamicYearQuarterCombo.superclass._init.apply(this, arguments);
         this.storeValue = o.value;
         self.storeTriggerValue = "";
@@ -71118,7 +71113,7 @@ BI.DynamicYearQuarterCombo = BI.inherit(BI.Widget, {
             type: "bi.dynamic_year_quarter_trigger",
             min: o.minDate,
             max: o.maxDate,
-            height: o.height,
+            height: o.height - 2,
             value: o.value || ""
         });
         this.trigger.on(BI.DynamicYearQuarterTrigger.EVENT_KEY_DOWN, function () {
@@ -71157,6 +71152,7 @@ BI.DynamicYearQuarterCombo = BI.inherit(BI.Widget, {
 
         this.combo = BI.createWidget({
             type: "bi.combo",
+            cls: "bi-border bi-border-radius bi-focus-shadow",
             container: o.container,
             isNeedAdjustHeight: o.isNeedAdjustHeight,
             isNeedAdjustWidth: o.isNeedAdjustWidth,
