@@ -72,7 +72,7 @@
                             isNeedAdjustWidth: opts.isNeedAdjustWidth,
                             el: {
                                 type: "bi.time_trigger",
-                                height: opts.height,
+                                height: opts.height - 2,
                                 allowEdit: opts.allowEdit,
                                 watermark: opts.watermark,
                                 format: opts.format,

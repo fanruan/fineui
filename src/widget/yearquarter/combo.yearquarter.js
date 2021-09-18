@@ -1,7 +1,7 @@
 BI.DynamicYearQuarterCombo = BI.inherit(BI.Widget, {
 
     props: {
-        baseCls: "bi-year-quarter-combo bi-border bi-border-radius bi-focus-shadow",
+        baseCls: "bi-year-quarter-combo",
         behaviors: {},
         minDate: "1900-01-01", // 最小日期
         maxDate: "2099-12-31", // 最大日期
@@ -13,8 +13,6 @@ BI.DynamicYearQuarterCombo = BI.inherit(BI.Widget, {
 
     _init: function () {
         var self = this, o = this.options;
-        o.height -= 2;
-        BI.isNumeric(o.width) && (o.width -= 2);
         BI.DynamicYearQuarterCombo.superclass._init.apply(this, arguments);
         this.storeValue = o.value;
         self.storeTriggerValue = "";
@@ -22,7 +20,7 @@ BI.DynamicYearQuarterCombo = BI.inherit(BI.Widget, {
             type: "bi.dynamic_year_quarter_trigger",
             min: o.minDate,
             max: o.maxDate,
-            height: o.height,
+            height: o.height - 2,
             value: o.value || ""
         });
         this.trigger.on(BI.DynamicYearQuarterTrigger.EVENT_KEY_DOWN, function () {
@@ -61,6 +59,7 @@ BI.DynamicYearQuarterCombo = BI.inherit(BI.Widget, {
 
         this.combo = BI.createWidget({
             type: "bi.combo",
+            cls: "bi-border bi-border-radius bi-focus-shadow",
             container: o.container,
             isNeedAdjustHeight: o.isNeedAdjustHeight,
             isNeedAdjustWidth: o.isNeedAdjustWidth,

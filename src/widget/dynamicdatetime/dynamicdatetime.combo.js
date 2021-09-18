@@ -7,7 +7,7 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
     },
 
     props: {
-        baseCls: "bi-dynamic-date-combo bi-border bi-focus-shadow bi-border-radius",
+        baseCls: "bi-dynamic-date-combo",
         height: 24,
         minDate: "1900-01-01",
         maxDate: "2099-12-31",
@@ -22,8 +22,6 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
     },
 
     _init: function () {
-        var o = this.options;
-        o.height -= 2;
         BI.DynamicDateTimeCombo.superclass._init.apply(this, arguments);
     },
 
@@ -50,6 +48,7 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
                 items: [{
                     el: {
                         type: "bi.combo",
+                        cls: "bi-border bi-border-radius bi-focus-shadow",
                         destroyWhenHide: true,
                         container: opts.container,
                         ref: function () {
@@ -65,7 +64,7 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
                             allowEdit: opts.allowEdit,
                             watermark: opts.watermark,
                             format: opts.format,
-                            height: opts.height,
+                            height: opts.height - 2,
                             value: opts.value,
                             ref: function () {
                                 self.trigger = this;
