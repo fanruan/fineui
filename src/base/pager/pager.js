@@ -40,8 +40,8 @@ BI.Pager = BI.inherit(BI.Widget, {
             hasNext: BI.emptyFn  // pages不可用时有效
         });
     },
-    _init: function () {
-        BI.Pager.superclass._init.apply(this, arguments);
+
+    render: function () {
         var self = this;
         this.currPage = BI.result(this.options, "curr");
         // 翻页太灵敏

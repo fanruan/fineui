@@ -3,8 +3,7 @@
     <meta charset="utf-8">
     <title></title>
     <link rel="stylesheet" type="text/css" href="../dist/2.0/fineui.css"/>
-    <!--    <script src="../dist/2.0/fineui.js"></script>-->
-    <script src="http://localhost:9001/fineui.js"></script>
+    <script src="../dist/2.0/fineui.js"></script>
 </head>
 <body>
 <div id="wrapper"></div>
@@ -12,6 +11,8 @@
     var Model = BI.inherit(Fix.Model, {
         state: function () {
             return {
+                cls: "my-cls",
+                background: "red",
                 count: 0
             };
         }
@@ -30,11 +31,18 @@
                     type: "bi.vertical",
                     items: [{
                         type: "bi.button",
-                        effect: function () {
-                            this.setText(store.model.count)
+                        cls: function () {
+                            return store.model.cls;
                         },
+                        css: function () {
+                            return {
+                                background: store.model.background
+                            }
+                        },
+                        text: "按钮",
                         handler: function () {
-                            store.model.count++;
+                            store.model.cls = "my-cls" + store.model.count++;
+                            store.model.background = "blue";
                         }
                     }]
                 };

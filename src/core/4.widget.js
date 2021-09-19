@@ -38,7 +38,7 @@
                 baseCls: "",
                 extraCls: "",
                 cls: "",
-                css: null,
+                css: null
 
                 // vdom: false
             });
@@ -157,9 +157,21 @@
         },
 
         _initCurrent: function () {
-            var o = this.options;
-            if (o._baseCls || o.baseCls || o.extraCls || o.cls) {
-                this.element.addClass((o._baseCls || "") + " " + (o.baseCls || "") + " " + (o.extraCls || "") + " " + (o.cls || ""));
+            var self = this, o = this.options;
+            if (o._baseCls || o.baseCls || o.extraCls) {
+                this.element.addClass((o._baseCls || "") + " " + (o.baseCls || "") + " " + (o.extraCls || ""));
+            }
+            if (o.cls) {
+                if (BI.isFunction(o.cls)) {
+                    var cls = this.__watch(o.cls, function (newValue) {
+                        if (newValue !== cls) {
+                            self.element.removeClass(cls).addClass(cls = newValue);
+                        }
+                    });
+                    this.element.addClass(cls);
+                } else {
+                    this.element.addClass(o.cls);
+                }
             }
             if (o.key != null) {
                 this.element.attr("key", o.key);
@@ -171,7 +183,30 @@
                 this.element.data(o.data);
             }
             if (o.css) {
-                this.element.css(o.css);
+                if (BI.isFunction(o.css)) {
+                    var css = this.__watch(o.css, function (newValue) {
+                        for (var k in css) {
+                            if (!newValue[k]) {
+                                newValue[k] = "";
+                            }
+                        }
+                        self.element.css(css = newValue);
+                    });
+                    this.element.css(css);
+                } else {
+                    this.element.css(o.css);
+                }
+            }
+        },
+
+        __watch: function (getter, handler) {
+            if (Fix.Model.target) {
+                this._watchers = this._watchers || [];
+                var watcher = new Fix.Watcher(Fix.Model.target, BI.bind(getter, this), handler || BI.emptyFn);
+                this._watchers.push(watcher);
+                return watcher.value;
+            } else {
+                return getter();
             }
         },
 
@@ -232,6 +267,9 @@
                 if (this.options.invalid) {
                     this.setValid(false);
                 }
+            }
+            if (o.effect) {
+                this.__watch(o.effect);
             }
         },
 

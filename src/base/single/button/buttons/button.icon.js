@@ -13,8 +13,7 @@ BI.IconButton = BI.inherit(BI.BasicButton, {
         });
     },
 
-    _init: function () {
-        BI.IconButton.superclass._init.apply(this, arguments);
+    render: function () {
         var o = this.options;
         this.element.css({
             textAlign: "center"

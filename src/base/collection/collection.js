@@ -22,8 +22,7 @@ BI.CollectionView = BI.inherit(BI.Widget, {
         });
     },
 
-    _init: function () {
-        BI.CollectionView.superclass._init.apply(this, arguments);
+    render: function () {
         var self = this, o = this.options;
         this.renderedCells = [];
         this.renderedKeys = [];

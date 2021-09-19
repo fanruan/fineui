@@ -11,8 +11,7 @@ BI.IconLabel = BI.inherit(BI.Single, {
         iconHeight: null
     },
 
-    _init: function () {
-        BI.IconLabel.superclass._init.apply(this, arguments);
+    render: function () {
         var o = this.options;
         this.element.css({
             textAlign: "center"

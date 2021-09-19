@@ -22,8 +22,7 @@ BI.Switcher = BI.inherit(BI.Widget, {
         });
     },
 
-    _init: function () {
-        BI.Switcher.superclass._init.apply(this, arguments);
+    render: function () {
         var self = this, o = this.options;
         this._initSwitcher();
         this._initPullDownAction();

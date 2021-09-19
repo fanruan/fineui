@@ -16,8 +16,7 @@ BI.Input = BI.inherit(BI.Single, {
         });
     },
 
-    _init: function () {
-        BI.Input.superclass._init.apply(this, arguments);
+    render: function () {
         var self = this;
         var ctrlKey = false;
         var keyCode = null;
