@@ -53,8 +53,7 @@ BI.Loader = BI.inherit(BI.Widget, {
         }]);
     },
 
-    _init: function () {
-        BI.Loader.superclass._init.apply(this, arguments);
+    render: function () {
         var self = this, o = this.options;
         if (o.itemsCreator === false) {
             o.prev = false;

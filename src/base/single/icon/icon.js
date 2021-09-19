@@ -11,8 +11,8 @@ BI.Icon = BI.inherit(BI.Single, {
             baseCls: (conf.baseCls || "") + " x-icon b-font horizon-center display-block"
         });
     },
-    _init: function () {
-        BI.Icon.superclass._init.apply(this, arguments);
+
+    render: function () {
         if (BI.isIE9Below && BI.isIE9Below()) {
             this.element.addClass("hack");
         }

@@ -39,8 +39,7 @@ BI.Button = BI.inherit(BI.BasicButton, {
         });
     },
 
-    _init: function () {
-        BI.Button.superclass._init.apply(this, arguments);
+    render: function () {
         var o = this.options, self = this;
         if (BI.isKey(o.iconCls)) {
             this.icon = BI.createWidget({

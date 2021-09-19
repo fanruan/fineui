@@ -25,8 +25,8 @@ BI.BlankIconIconTextItem = BI.inherit(BI.BasicButton, {
             textRgap: 0
         });
     },
-    _init: function () {
-        BI.BlankIconIconTextItem.superclass._init.apply(this, arguments);
+
+    render: function () {
         var o = this.options, c = this._const;
         var blank = BI.createWidget({
             type: "bi.layout",

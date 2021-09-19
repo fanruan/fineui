@@ -18,8 +18,8 @@ BI.Toast = BI.inherit(BI.Tip, {
             level: "success" // success或warning
         });
     },
-    _init: function () {
-        BI.Toast.superclass._init.apply(this, arguments);
+
+    render: function () {
         var self = this, o = this.options;
         this.element.css({
             minWidth: this._const.minWidth / BI.pixRatio + BI.pixUnit

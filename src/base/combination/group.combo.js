@@ -30,8 +30,7 @@ BI.ComboGroup = BI.inherit(BI.Widget, {
         });
     },
 
-    _init: function () {
-        BI.ComboGroup.superclass._init.apply(this, arguments);
+    render: function () {
         this._populate(this.options.el);
     },
 

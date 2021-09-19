@@ -25,8 +25,8 @@ BI.IconTextIconItem = BI.inherit(BI.BasicButton, {
             textRgap: 0
         });
     },
-    _init: function () {
-        BI.IconTextIconItem.superclass._init.apply(this, arguments);
+
+    render: function () {
         var o = this.options, c = this._const;
         this.text = BI.createWidget({
             type: "bi.label",

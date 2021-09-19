@@ -20,8 +20,7 @@ BI.ButtonGroup = BI.inherit(BI.Widget, {
         });
     },
 
-    _init: function () {
-        BI.ButtonGroup.superclass._init.apply(this, arguments);
+    render: function () {
         var o = this.options;
         var behaviors = {};
         BI.each(o.behaviors, function (key, rule) {
