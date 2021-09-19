@@ -202,7 +202,7 @@
         __watch: function (getter, handler, options) {
             if (Fix.Model.target) {
                 this._watchers = this._watchers || [];
-                var watcher = new Fix.Watcher(Fix.Model.target, BI.bind(getter, this), handler || BI.emptyFn, options);
+                var watcher = new Fix.Watcher(Fix.Model.target, BI.bind(getter, this), (handler && BI.bind(handler, this)) || BI.emptyFn, options);
                 this._watchers.push(watcher);
                 return watcher.value;
             } else {
