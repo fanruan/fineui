@@ -164,9 +164,7 @@
             if (o.cls) {
                 if (BI.isFunction(o.cls)) {
                     var cls = this.__watch(o.cls, function (newValue) {
-                        if (newValue !== cls) {
-                            self.element.removeClass(cls).addClass(cls = newValue);
-                        }
+                        self.element.removeClass(cls).addClass(cls = newValue);
                     });
                     this.element.addClass(cls);
                 } else {
@@ -191,6 +189,8 @@
                             }
                         }
                         self.element.css(css = newValue);
+                    }, {
+                        deep: true
                     });
                     this.element.css(css);
                 } else {
@@ -199,10 +199,10 @@
             }
         },
 
-        __watch: function (getter, handler) {
+        __watch: function (getter, handler, options) {
             if (Fix.Model.target) {
                 this._watchers = this._watchers || [];
-                var watcher = new Fix.Watcher(Fix.Model.target, BI.bind(getter, this), handler || BI.emptyFn);
+                var watcher = new Fix.Watcher(Fix.Model.target, BI.bind(getter, this), (handler && BI.bind(handler, this)) || BI.emptyFn, options);
                 this._watchers.push(watcher);
                 return watcher.value;
             } else {
@@ -259,7 +259,7 @@
         },
 
         _initEffects: function () {
-            var o = this.options;
+            var self = this, o = this.options;
             if (o.disabled || o.invalid) {
                 if (this.options.disabled) {
                     this.setEnable(false);
@@ -269,7 +269,21 @@
                 }
             }
             if (o.effect) {
-                this.__watch(o.effect);
+                if (BI.isArray(o.effect)) {
+                    if (BI.isArray(o.effect[0])) {
+                        BI.each(o.effect, function (i, effect) {
+                            self.__watch(effect[0], effect[1], {
+                                deep: true
+                            });
+                        });
+                    } else {
+                        self.__watch(o.effect[0], o.effect[1], {
+                            deep: true
+                        });
+                    }
+                } else {
+                    this.__watch(o.effect);
+                }
             }
         },
 
