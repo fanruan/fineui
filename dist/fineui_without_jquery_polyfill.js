@@ -1,4 +1,4 @@
-/*! time: 2021-9-20 9:00:58 */
+/*! time: 2021-9-20 11:50:28 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -6452,9 +6452,9 @@ BI.Req = {
         },
 
         __watch: function (getter, handler, options) {
-            if (Fix.Model.target) {
+            if (_global.Fix) {
                 this._watchers = this._watchers || [];
-                var watcher = new Fix.Watcher(Fix.Model.target, BI.bind(getter, this), (handler && BI.bind(handler, this)) || BI.emptyFn, options);
+                var watcher = new Fix.Watcher(null, BI.bind(getter, this), (handler && BI.bind(handler, this)) || BI.emptyFn, options);
                 this._watchers.push(watcher);
                 return watcher.value;
             } else {
