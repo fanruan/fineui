@@ -171,9 +171,9 @@
                     this.element.addClass(o.cls);
                 }
             }
-            if (o.key != null) {
-                this.element.attr("key", o.key);
-            }
+            // if (o.key != null) {
+            //     this.element.attr("key", o.key);
+            // }
             if (o.attributes) {
                 this.element.attr(o.attributes);
             }
@@ -200,9 +200,12 @@
         },
 
         __watch: function (getter, handler, options) {
+            var self = this;
             if (_global.Fix) {
                 this._watchers = this._watchers || [];
-                var watcher = new Fix.Watcher(null, BI.bind(getter, this), (handler && BI.bind(handler, this)) || BI.emptyFn, options);
+                var watcher = new Fix.Watcher(null, BI.bind(getter, this), (handler && function () {
+                    handler.call(self, self);
+                }) || BI.emptyFn, options);
                 this._watchers.push(watcher);
                 return watcher.value;
             } else {
