@@ -171,9 +171,9 @@
                     this.element.addClass(o.cls);
                 }
             }
-            if (o.key != null) {
-                this.element.attr("key", o.key);
-            }
+            // if (o.key != null) {
+            //     this.element.attr("key", o.key);
+            // }
             if (o.attributes) {
                 this.element.attr(o.attributes);
             }
