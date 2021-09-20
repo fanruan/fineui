@@ -1,4 +1,4 @@
-/*! time: 2021-9-20 15:30:24 */
+/*! time: 2021-9-20 15:50:25 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -6830,7 +6830,9 @@ BI.Req = {
             var self = this;
             if (_global.Fix) {
                 this._watchers = this._watchers || [];
-                var watcher = new Fix.Watcher(null, BI.bind(getter, this), (handler && function () {
+                var watcher = new Fix.Watcher(null, function () {
+                    return getter.call(self, self);
+                }, (handler && function () {
                     handler.call(self, self);
                 }) || BI.emptyFn, options);
                 this._watchers.push(watcher);
