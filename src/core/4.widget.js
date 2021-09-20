@@ -203,7 +203,9 @@
             var self = this;
             if (_global.Fix) {
                 this._watchers = this._watchers || [];
-                var watcher = new Fix.Watcher(null, BI.bind(getter, this), (handler && function () {
+                var watcher = new Fix.Watcher(null, function () {
+                    return getter.call(self, self);
+                }, (handler && function () {
                     handler.call(self, self);
                 }) || BI.emptyFn, options);
                 this._watchers.push(watcher);
