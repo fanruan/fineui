@@ -163,7 +163,7 @@
             }
             if (o.cls) {
                 if (BI.isFunction(o.cls)) {
-                    var cls = this.__watch(o.cls, function (newValue) {
+                    var cls = this.__watch(o.cls, function (context, newValue) {
                         self.element.removeClass(cls).addClass(cls = newValue);
                     });
                     this.element.addClass(cls);
@@ -182,7 +182,7 @@
             }
             if (o.css) {
                 if (BI.isFunction(o.css)) {
-                    var css = this.__watch(o.css, function (newValue) {
+                    var css = this.__watch(o.css, function (context, newValue) {
                         for (var k in css) {
                             if (!newValue[k]) {
                                 newValue[k] = "";
@@ -205,8 +205,8 @@
                 this._watchers = this._watchers || [];
                 var watcher = new Fix.Watcher(null, function () {
                     return getter.call(self, self);
-                }, (handler && function () {
-                    handler.call(self, self);
+                }, (handler && function (v) {
+                    handler.call(self, self, v);
                 }) || BI.emptyFn, options);
                 this._watchers.push(watcher);
                 return watcher.value;

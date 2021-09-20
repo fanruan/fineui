@@ -19,8 +19,18 @@ BI.Layout = BI.inherit(BI.Widget, {
     },
 
     render: function () {
+        var self = this, o = this.options;
         this._init4Margin();
         this._init4Scroll();
+        if (BI.isFunction(o.columnSize)) {
+            var columnSizeFn = o.columnSize;
+            o.columnSize = this.__watch(columnSizeFn, function (context, newValue) {
+                o.columnSize = newValue;
+                self.resize();
+            }, {
+                deep: true
+            });
+        }
     },
 
     _init4Margin: function () {
