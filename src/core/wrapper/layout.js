@@ -31,6 +31,15 @@ BI.Layout = BI.inherit(BI.Widget, {
                 deep: true
             });
         }
+        if (BI.isFunction(o.rowSize)) {
+            var rowSizeFn = o.rowSize;
+            o.rowSize = this.__watch(rowSizeFn, function (context, newValue) {
+                o.rowSize = newValue;
+                self.resize();
+            }, {
+                deep: true
+            });
+        }
     },
 
     _init4Margin: function () {
