@@ -1,4 +1,4 @@
-/*! time: 2021-9-18 9:50:56 */
+/*! time: 2021-9-20 9:00:58 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -6290,7 +6290,7 @@ BI.Req = {
                 baseCls: "",
                 extraCls: "",
                 cls: "",
-                css: null,
+                css: null
 
                 // vdom: false
             });
@@ -6409,9 +6409,19 @@ BI.Req = {
         },
 
         _initCurrent: function () {
-            var o = this.options;
-            if (o._baseCls || o.baseCls || o.extraCls || o.cls) {
-                this.element.addClass((o._baseCls || "") + " " + (o.baseCls || "") + " " + (o.extraCls || "") + " " + (o.cls || ""));
+            var self = this, o = this.options;
+            if (o._baseCls || o.baseCls || o.extraCls) {
+                this.element.addClass((o._baseCls || "") + " " + (o.baseCls || "") + " " + (o.extraCls || ""));
+            }
+            if (o.cls) {
+                if (BI.isFunction(o.cls)) {
+                    var cls = this.__watch(o.cls, function (newValue) {
+                        self.element.removeClass(cls).addClass(cls = newValue);
+                    });
+                    this.element.addClass(cls);
+                } else {
+                    this.element.addClass(o.cls);
+                }
             }
             if (o.key != null) {
                 this.element.attr("key", o.key);
@@ -6423,7 +6433,32 @@ BI.Req = {
                 this.element.data(o.data);
             }
             if (o.css) {
-                this.element.css(o.css);
+                if (BI.isFunction(o.css)) {
+                    var css = this.__watch(o.css, function (newValue) {
+                        for (var k in css) {
+                            if (!newValue[k]) {
+                                newValue[k] = "";
+                            }
+                        }
+                        self.element.css(css = newValue);
+                    }, {
+                        deep: true
+                    });
+                    this.element.css(css);
+                } else {
+                    this.element.css(o.css);
+                }
+            }
+        },
+
+        __watch: function (getter, handler, options) {
+            if (Fix.Model.target) {
+                this._watchers = this._watchers || [];
+                var watcher = new Fix.Watcher(Fix.Model.target, BI.bind(getter, this), (handler && BI.bind(handler, this)) || BI.emptyFn, options);
+                this._watchers.push(watcher);
+                return watcher.value;
+            } else {
+                return getter();
             }
         },
 
@@ -6476,13 +6511,30 @@ BI.Req = {
         },
 
         _initEffects: function () {
-            var o = this.options;
+            var self = this, o = this.options;
             if (o.disabled || o.invalid) {
                 if (this.options.disabled) {
                     this.setEnable(false);
                 }
                 if (this.options.invalid) {
                     this.setValid(false);
+                }
+            }
+            if (o.effect) {
+                if (BI.isArray(o.effect)) {
+                    if (BI.isArray(o.effect[0])) {
+                        BI.each(o.effect, function (i, effect) {
+                            self.__watch(effect[0], effect[1], {
+                                deep: true
+                            });
+                        });
+                    } else {
+                        self.__watch(o.effect[0], o.effect[1], {
+                            deep: true
+                        });
+                    }
+                } else {
+                    this.__watch(o.effect);
                 }
             }
         },
@@ -21006,8 +21058,7 @@ BI.CollectionView = BI.inherit(BI.Widget, {
         });
     },
 
-    _init: function () {
-        BI.CollectionView.superclass._init.apply(this, arguments);
+    render: function () {
         var self = this, o = this.options;
         this.renderedCells = [];
         this.renderedKeys = [];
@@ -21411,8 +21462,7 @@ BI.shortcut("bi.collection_view", BI.CollectionView);
             });
         },
 
-        _init: function () {
-            BI.Combo.superclass._init.apply(this, arguments);
+        render: function () {
             var self = this, o = this.options;
             this._initCombo();
             this._initPullDownAction();
@@ -21971,8 +22021,7 @@ BI.Expander = BI.inherit(BI.Widget, {
         });
     },
 
-    _init: function () {
-        BI.Expander.superclass._init.apply(this, arguments);
+    render: function () {
         var self = this, o = this.options;
         this._expanded = !!o.el.open;
         this._initExpander();
@@ -22231,6 +22280,7 @@ BI.Expander.EVENT_AFTER_HIDEVIEW = "EVENT_AFTER_HIDEVIEW";
 
 BI.shortcut("bi.expander", BI.Expander);
 
+
 /***/ }),
 /* 365 */
 /***/ (function(module, exports) {
@@ -22257,8 +22307,7 @@ BI.ButtonGroup = BI.inherit(BI.Widget, {
         });
     },
 
-    _init: function () {
-        BI.ButtonGroup.superclass._init.apply(this, arguments);
+    render: function () {
         var o = this.options;
         var behaviors = {};
         BI.each(o.behaviors, function (key, rule) {
@@ -22566,6 +22615,7 @@ BI.ButtonGroup.EVENT_CHANGE = "EVENT_CHANGE";
 
 BI.shortcut("bi.button_group", BI.ButtonGroup);
 
+
 /***/ }),
 /* 366 */
 /***/ (function(module, exports) {
@@ -22602,8 +22652,7 @@ BI.ComboGroup = BI.inherit(BI.Widget, {
         });
     },
 
-    _init: function () {
-        BI.ComboGroup.superclass._init.apply(this, arguments);
+    render: function () {
         this._populate(this.options.el);
     },
 
@@ -22667,6 +22716,7 @@ BI.ComboGroup = BI.inherit(BI.Widget, {
 BI.ComboGroup.EVENT_CHANGE = "EVENT_CHANGE";
 
 BI.shortcut("bi.combo_group", BI.ComboGroup);
+
 
 /***/ }),
 /* 367 */
@@ -22848,8 +22898,7 @@ BI.Loader = BI.inherit(BI.Widget, {
         }]);
     },
 
-    _init: function () {
-        BI.Loader.superclass._init.apply(this, arguments);
+    render: function () {
         var self = this, o = this.options;
         if (o.itemsCreator === false) {
             o.prev = false;
@@ -23271,8 +23320,7 @@ BI.Searcher = BI.inherit(BI.Widget, {
         });
     },
 
-    _init: function () {
-        BI.Searcher.superclass._init.apply(this, arguments);
+    render: function () {
         var self = this, o = this.options;
 
         this.editor = BI.createWidget(o.el, {
@@ -23548,6 +23596,7 @@ BI.Searcher.EVENT_AFTER_INIT = "EVENT_AFTER_INIT";
 
 BI.shortcut("bi.searcher", BI.Searcher);
 
+
 /***/ }),
 /* 371 */
 /***/ (function(module, exports) {
@@ -23576,8 +23625,7 @@ BI.Switcher = BI.inherit(BI.Widget, {
         });
     },
 
-    _init: function () {
-        BI.Switcher.superclass._init.apply(this, arguments);
+    render: function () {
         var self = this, o = this.options;
         this._initSwitcher();
         this._initPullDownAction();
@@ -23845,6 +23893,7 @@ BI.Switcher.EVENT_AFTER_HIDEVIEW = "EVENT_AFTER_HIDEVIEW";
 
 BI.shortcut("bi.switcher", BI.Switcher);
 
+
 /***/ }),
 /* 372 */
 /***/ (function(module, exports) {
@@ -24025,10 +24074,6 @@ BI.ButtonTree = BI.inherit(BI.ButtonGroup, {
         });
     },
 
-    _init: function () {
-        BI.ButtonTree.superclass._init.apply(this, arguments);
-    },
-
     setNotSelectedValue: function (v) {
         v = BI.isArray(v) ? v : [v];
         BI.each(this.buttons, function (i, item) {
@@ -24194,6 +24239,7 @@ BI.ButtonTree = BI.inherit(BI.ButtonGroup, {
 BI.ButtonTree.EVENT_CHANGE = "EVENT_CHANGE";
 
 BI.shortcut("bi.button_tree", BI.ButtonTree);
+
 
 /***/ }),
 /* 374 */
@@ -24479,8 +24525,7 @@ BI.GridView = BI.inherit(BI.Widget, {
         });
     },
 
-    _init: function () {
-        BI.GridView.superclass._init.apply(this, arguments);
+    render: function () {
         var self = this, o = this.options;
         this.renderedCells = [];
         this.renderedKeys = [];
@@ -25170,8 +25215,7 @@ BI.PopupView = BI.inherit(BI.Widget, {
         });
     },
 
-    _init: function () {
-        BI.PopupView.superclass._init.apply(this, arguments);
+    render: function () {
         var self = this, o = this.options;
         var fn = function (e) {
             e.stopPropagation();
@@ -25356,8 +25400,7 @@ BI.SearcherView = BI.inherit(BI.Pane, {
         });
     },
 
-    _init: function () {
-        BI.SearcherView.superclass._init.apply(this, arguments);
+    render: function () {
         var self = this, o = this.options;
 
         this.matcher = BI.createWidget(o.matcher, {
@@ -25454,6 +25497,7 @@ BI.SearcherView = BI.inherit(BI.Pane, {
 BI.SearcherView.EVENT_CHANGE = "EVENT_CHANGE";
 
 BI.shortcut("bi.searcher_view", BI.SearcherView);
+
 
 /***/ }),
 /* 380 */
@@ -25983,8 +26027,8 @@ BI.Pager = BI.inherit(BI.Widget, {
             hasNext: BI.emptyFn  // pages不可用时有效
         });
     },
-    _init: function () {
-        BI.Pager.superclass._init.apply(this, arguments);
+
+    render: function () {
         var self = this;
         this.currPage = BI.result(this.options, "curr");
         // 翻页太灵敏
@@ -26230,6 +26274,7 @@ BI.Pager = BI.inherit(BI.Widget, {
 BI.Pager.EVENT_CHANGE = "EVENT_CHANGE";
 BI.Pager.EVENT_AFTER_POPULATE = "EVENT_AFTER_POPULATE";
 BI.shortcut("bi.pager", BI.Pager);
+
 
 /***/ }),
 /* 384 */
@@ -26644,9 +26689,9 @@ BI.A = BI.inherit(BI.Text, {
             tagName: "a"
         });
     },
-    _init: function () {
+
+    render: function () {
         var o = this.options;
-        BI.A.superclass._init.apply(this, arguments);
         this.element.attr({href: o.href, target: o.target});
         if (o.el) {
             BI.createWidget(o.el, {
@@ -26657,6 +26702,7 @@ BI.A = BI.inherit(BI.Text, {
 });
 
 BI.shortcut("bi.a", BI.A);
+
 
 /***/ }),
 /* 387 */
@@ -26676,8 +26722,8 @@ BI.LoadingBar = BI.inherit(BI.Single, {
             handler: BI.emptyFn
         });
     },
-    _init: function () {
-        BI.LoadingBar.superclass._init.apply(this, arguments);
+
+    render: function () {
         var self = this;
         this.loaded = BI.createWidget({
             type: "bi.text_button",
@@ -26742,6 +26788,7 @@ BI.LoadingBar = BI.inherit(BI.Single, {
 });
 
 BI.shortcut("bi.loading_bar", BI.LoadingBar);
+
 
 /***/ }),
 /* 388 */
@@ -27243,8 +27290,7 @@ BI.IconButton = BI.inherit(BI.BasicButton, {
         });
     },
 
-    _init: function () {
-        BI.IconButton.superclass._init.apply(this, arguments);
+    render: function () {
         var o = this.options;
         this.element.css({
             textAlign: "center"
@@ -27304,8 +27350,7 @@ BI.ImageButton = BI.inherit(BI.BasicButton, {
         });
     },
 
-    _init: function () {
-        BI.ImageButton.superclass._init.apply(this, arguments);
+    render: function () {
         var o = this.options;
         this.image = BI.createWidget({
             type: "bi.img",
@@ -27374,6 +27419,7 @@ BI.ImageButton = BI.inherit(BI.BasicButton, {
 BI.ImageButton.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.image_button", BI.ImageButton);
 
+
 /***/ }),
 /* 392 */
 /***/ (function(module, exports) {
@@ -27419,8 +27465,7 @@ BI.Button = BI.inherit(BI.BasicButton, {
         });
     },
 
-    _init: function () {
-        BI.Button.superclass._init.apply(this, arguments);
+    render: function () {
         var o = this.options, self = this;
         if (BI.isKey(o.iconCls)) {
             this.icon = BI.createWidget({
@@ -27560,8 +27605,7 @@ BI.TextButton = BI.inherit(BI.BasicButton, {
         });
     },
 
-    _init: function () {
-        BI.TextButton.superclass._init.apply(this, arguments);
+    render: function () {
         var o = this.options;
         this.text = BI.createWidget({
             type: "bi.label",
@@ -27627,6 +27671,7 @@ BI.TextButton = BI.inherit(BI.BasicButton, {
 BI.TextButton.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.text_button", BI.TextButton);
 
+
 /***/ }),
 /* 394 */
 /***/ (function(module, exports) {
@@ -27658,8 +27703,8 @@ BI.BlankIconIconTextItem = BI.inherit(BI.BasicButton, {
             textRgap: 0
         });
     },
-    _init: function () {
-        BI.BlankIconIconTextItem.superclass._init.apply(this, arguments);
+
+    render: function () {
         var o = this.options, c = this._const;
         var blank = BI.createWidget({
             type: "bi.layout",
@@ -27784,8 +27829,8 @@ BI.BlankIconTextIconItem = BI.inherit(BI.BasicButton, {
             textRgap: 0
         });
     },
-    _init: function () {
-        BI.BlankIconTextIconItem.superclass._init.apply(this, arguments);
+
+    render: function () {
         var o = this.options, c = this._const;
         this.text = BI.createWidget({
             type: "bi.label",
@@ -27914,8 +27959,8 @@ BI.BlankIconTextItem = BI.inherit(BI.BasicButton, {
             textRgap: 0
         });
     },
-    _init: function () {
-        BI.BlankIconTextItem.superclass._init.apply(this, arguments);
+
+    render: function () {
         var o = this.options, c = this._const;
         var blank = BI.createWidget({
             type: "bi.layout",
@@ -28026,8 +28071,8 @@ BI.IconTextIconItem = BI.inherit(BI.BasicButton, {
             textRgap: 0
         });
     },
-    _init: function () {
-        BI.IconTextIconItem.superclass._init.apply(this, arguments);
+
+    render: function () {
         var o = this.options, c = this._const;
         this.text = BI.createWidget({
             type: "bi.label",
@@ -28155,8 +28200,8 @@ BI.IconTextItem = BI.inherit(BI.BasicButton, {
             textRgap: 0
         });
     },
-    _init: function () {
-        BI.IconTextItem.superclass._init.apply(this, arguments);
+
+    render: function () {
         var o = this.options, c = this._const;
         this.text = BI.createWidget({
             type: "bi.label",
@@ -28262,8 +28307,8 @@ BI.TextIconItem = BI.inherit(BI.BasicButton, {
             textRgap: 0
         });
     },
-    _init: function () {
-        BI.TextIconItem.superclass._init.apply(this, arguments);
+
+    render: function () {
         var o = this.options, c = this._const;
         this.text = BI.createWidget({
             type: "bi.label",
@@ -28365,8 +28410,8 @@ BI.TextItem = BI.inherit(BI.BasicButton, {
             textRgap: 0
         });
     },
-    _init: function () {
-        BI.TextItem.superclass._init.apply(this, arguments);
+
+    render: function () {
         var o = this.options;
         this.text = BI.createWidget({
             type: "bi.label",
@@ -28430,6 +28475,7 @@ BI.TextItem = BI.inherit(BI.BasicButton, {
 BI.TextItem.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.text_item", BI.TextItem);
 
+
 /***/ }),
 /* 401 */
 /***/ (function(module, exports) {
@@ -28459,8 +28505,8 @@ BI.IconTextIconNode = BI.inherit(BI.NodeButton, {
             textRgap: 0
         });
     },
-    _init: function () {
-        BI.IconTextIconNode.superclass._init.apply(this, arguments);
+
+    render: function () {
         var o = this.options, c = this._const;
         this.text = BI.createWidget({
             type: "bi.label",
@@ -28548,6 +28594,7 @@ BI.IconTextIconNode = BI.inherit(BI.NodeButton, {
 BI.IconTextIconNode.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.icon_text_icon_node", BI.IconTextIconNode);
 
+
 /***/ }),
 /* 402 */
 /***/ (function(module, exports) {
@@ -28576,8 +28623,8 @@ BI.IconTextNode = BI.inherit(BI.NodeButton, {
             textRgap: 0
         });
     },
-    _init: function () {
-        BI.IconTextNode.superclass._init.apply(this, arguments);
+
+    render: function () {
         var o = this.options, c = this._const;
         this.text = BI.createWidget({
             type: "bi.label",
@@ -28643,6 +28690,7 @@ BI.IconTextNode = BI.inherit(BI.NodeButton, {
 BI.IconTextNode.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.icon_text_node", BI.IconTextNode);
 
+
 /***/ }),
 /* 403 */
 /***/ (function(module, exports) {
@@ -28670,8 +28718,8 @@ BI.TextIconNode = BI.inherit(BI.NodeButton, {
             textRgap: 0
         });
     },
-    _init: function () {
-        BI.TextIconNode.superclass._init.apply(this, arguments);
+
+    render: function () {
         var o = this.options, c = this._const;
         this.text = BI.createWidget({
             type: "bi.label",
@@ -28737,6 +28785,7 @@ BI.TextIconNode = BI.inherit(BI.NodeButton, {
 BI.TextIconNode.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.text_icon_node", BI.TextIconNode);
 
+
 /***/ }),
 /* 404 */
 /***/ (function(module, exports) {
@@ -28762,8 +28811,8 @@ BI.TextNode = BI.inherit(BI.NodeButton, {
             textRgap: 0
         });
     },
-    _init: function () {
-        BI.TextNode.superclass._init.apply(this, arguments);
+
+    render: function () {
         var o = this.options;
         this.text = BI.createWidget({
             type: "bi.label",
@@ -28819,6 +28868,7 @@ BI.TextNode = BI.inherit(BI.NodeButton, {
 BI.TextNode.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.text_node", BI.TextNode);
 
+
 /***/ }),
 /* 405 */
 /***/ (function(module, exports) {
@@ -28851,8 +28901,7 @@ BI.Editor = BI.inherit(BI.Single, {
         });
     },
 
-    _init: function () {
-        BI.Editor.superclass._init.apply(this, arguments);
+    render: function () {
         var self = this, o = this.options;
         // 密码输入框设置autocomplete="new-password"的情况下Firefox和chrome不会自动填充密码
         var autocomplete = o.autocomplete ? " autocomplete=" + o.autocomplete : "";
@@ -29220,8 +29269,7 @@ BI.MultifileEditor = BI.inherit(BI.Widget, {
         });
     },
 
-    _init: function () {
-        var self = this, o = this.options;
+    render: function () {
         BI.MultifileEditor.superclass._init.apply(this, arguments);
         this.file = BI.createWidget({
             type: "bi.file",
@@ -29697,14 +29745,15 @@ BI.Icon = BI.inherit(BI.Single, {
             baseCls: (conf.baseCls || "") + " x-icon b-font horizon-center display-block"
         });
     },
-    _init: function () {
-        BI.Icon.superclass._init.apply(this, arguments);
+
+    render: function () {
         if (BI.isIE9Below && BI.isIE9Below()) {
             this.element.addClass("hack");
         }
     }
 });
 BI.shortcut("bi.icon", BI.Icon);
+
 
 /***/ }),
 /* 410 */
@@ -29730,9 +29779,8 @@ BI.Iframe = BI.inherit(BI.Single, {
         });
     },
 
-    _init: function () {
+    render: function () {
         var self = this;
-        BI.Iframe.superclass._init.apply(this, arguments);
         this.element.on("load", function () {
             self.fireEvent("EVENT_LOADED");
         });
@@ -29931,8 +29979,7 @@ BI.Input = BI.inherit(BI.Single, {
         });
     },
 
-    _init: function () {
-        BI.Input.superclass._init.apply(this, arguments);
+    render: function () {
         var self = this;
         var ctrlKey = false;
         var keyCode = null;
@@ -30254,10 +30301,6 @@ BI.ImageRadio = BI.inherit(BI.IconButton, {
         });
     },
 
-    _init: function () {
-        BI.ImageRadio.superclass._init.apply(this, arguments);
-    },
-
     doClick: function () {
         BI.ImageRadio.superclass.doClick.apply(this, arguments);
         if(this.isValid()) {
@@ -30268,6 +30311,7 @@ BI.ImageRadio = BI.inherit(BI.IconButton, {
 BI.ImageRadio.EVENT_CHANGE = BI.IconButton.EVENT_CHANGE;
 
 BI.shortcut("bi.image_radio", BI.ImageRadio);
+
 
 /***/ }),
 /* 416 */
@@ -30380,9 +30424,7 @@ BI.shortcut("bi.radio", BI.Radio);
             };
         },
 
-        _init: function () {
-            BI.AbstractLabel.superclass._init.apply(this, arguments);
-
+        render: function () {
             if (this.options.textAlign === "center") {
                 this._createCenterEl();
             } else {
@@ -30775,8 +30817,7 @@ BI.IconLabel = BI.inherit(BI.Single, {
         iconHeight: null
     },
 
-    _init: function () {
-        BI.IconLabel.superclass._init.apply(this, arguments);
+    render: function () {
         var o = this.options;
         this.element.css({
             textAlign: "center"
@@ -30974,8 +31015,8 @@ BI.Toast = BI.inherit(BI.Tip, {
             level: "success" // success或warning
         });
     },
-    _init: function () {
-        BI.Toast.superclass._init.apply(this, arguments);
+
+    render: function () {
         var self = this, o = this.options;
         this.element.css({
             minWidth: this._const.minWidth / BI.pixRatio + BI.pixUnit
@@ -31089,8 +31130,8 @@ BI.Tooltip = BI.inherit(BI.Tip, {
             stopPropagation: false
         });
     },
-    _init: function () {
-        BI.Tooltip.superclass._init.apply(this, arguments);
+
+    render: function () {
         var self = this, o = this.options;
         this.element.addClass("tooltip-" + o.level);
         var fn = function (e) {
@@ -31152,6 +31193,7 @@ BI.Tooltip = BI.inherit(BI.Tip, {
 
 BI.shortcut("bi.tooltip", BI.Tooltip);
 
+
 /***/ }),
 /* 426 */
 /***/ (function(module, exports) {
@@ -31171,10 +31213,6 @@ BI.Trigger = BI.inherit(BI.Single, {
         });
     },
 
-    _init: function () {
-        BI.Trigger.superclass._init.apply(this, arguments);
-    },
-
     setKey: function () {
 
     },
@@ -31183,6 +31221,7 @@ BI.Trigger = BI.inherit(BI.Single, {
 
     },
 });
+
 
 /***/ }),
 /* 427 */
@@ -36700,9 +36739,6 @@ BI.BubblePopupView = BI.inherit(BI.PopupView, {
             maxWidth: 300,
             minHeight: 90
         });
-    },
-    _init: function () {
-        BI.BubblePopupView.superclass._init.apply(this, arguments);
     }
 });
 
