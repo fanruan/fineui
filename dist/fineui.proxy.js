@@ -1,4 +1,4 @@
-/*! time: 2021-9-20 15:50:25 */
+/*! time: 2021-9-21 9:00:58 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -6790,7 +6790,7 @@ BI.Req = {
             }
             if (o.cls) {
                 if (BI.isFunction(o.cls)) {
-                    var cls = this.__watch(o.cls, function (newValue) {
+                    var cls = this.__watch(o.cls, function (context, newValue) {
                         self.element.removeClass(cls).addClass(cls = newValue);
                     });
                     this.element.addClass(cls);
@@ -6809,7 +6809,7 @@ BI.Req = {
             }
             if (o.css) {
                 if (BI.isFunction(o.css)) {
-                    var css = this.__watch(o.css, function (newValue) {
+                    var css = this.__watch(o.css, function (context, newValue) {
                         for (var k in css) {
                             if (!newValue[k]) {
                                 newValue[k] = "";
@@ -6832,8 +6832,8 @@ BI.Req = {
                 this._watchers = this._watchers || [];
                 var watcher = new Fix.Watcher(null, function () {
                     return getter.call(self, self);
-                }, (handler && function () {
-                    handler.call(self, self);
+                }, (handler && function (v) {
+                    handler.call(self, self, v);
                 }) || BI.emptyFn, options);
                 this._watchers.push(watcher);
                 return watcher.value;
@@ -15770,8 +15770,27 @@ BI.Layout = BI.inherit(BI.Widget, {
     },
 
     render: function () {
+        var self = this, o = this.options;
         this._init4Margin();
         this._init4Scroll();
+        if (BI.isFunction(o.columnSize)) {
+            var columnSizeFn = o.columnSize;
+            o.columnSize = this.__watch(columnSizeFn, function (context, newValue) {
+                o.columnSize = newValue;
+                self.resize();
+            }, {
+                deep: true
+            });
+        }
+        if (BI.isFunction(o.rowSize)) {
+            var rowSizeFn = o.rowSize;
+            o.rowSize = this.__watch(rowSizeFn, function (context, newValue) {
+                o.rowSize = newValue;
+                self.resize();
+            }, {
+                deep: true
+            });
+        }
     },
 
     _init4Margin: function () {
