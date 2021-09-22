@@ -1,4 +1,4 @@
-/*! time: 2021-9-21 9:00:58 */
+/*! time: 2021-9-22 10:50:54 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -32208,7 +32208,7 @@ BI.MultifileEditor = BI.inherit(BI.Widget, {
     },
 
     render: function () {
-        BI.MultifileEditor.superclass._init.apply(this, arguments);
+        var self = this, o = this.options;
         this.file = BI.createWidget({
             type: "bi.file",
             cls: "multifile-editor",
