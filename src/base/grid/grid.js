@@ -293,7 +293,7 @@ BI.GridView = BI.inherit(BI.Widget, {
             return;
         }
         this._scrollLock = true;
-        this.options.scrollLeft = BI.clamp(scrollTop || 0, 0, this._getMaxScrollTop());
+        this.options.scrollTop = BI.clamp(scrollTop || 0, 0, this._getMaxScrollTop());
         this._debounceRelease();
         this._calculateChildrenToRender();
         this.element.scrollTop(this.options.scrollTop);
