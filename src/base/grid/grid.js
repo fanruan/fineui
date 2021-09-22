@@ -239,26 +239,20 @@ BI.GridView = BI.inherit(BI.Widget, {
         }
     },
 
-    /**
-     * 获取真实的可滚动的最大宽度
-     * 对于grid_view如果没有全部渲染过，this._columnSizeAndPositionManager.getTotalSize获取的宽度是不准确的
-     * 因此在调用setScrollLeft等函数时会造成没法移动到最右端(预估可移动距离太短)
-     */
-    // _getRealMaxScrollLeft: function () {
-    //     var o = this.options;
-    //     var totalWidth = 0;
-    //     BI.count(0, this.columnCount, function (index) {
-    //         totalWidth += o.columnWidthGetter(index);
-    //     });
-    //     return Math.max(0, totalWidth - this.options.width + (this.options.overflowX ? BI.DOM.getScrollWidth() : 0));
-    // },
-
     _getMaxScrollLeft: function () {
-        return Math.max(0, this._columnSizeAndPositionManager.getTotalSize() - this.options.width + (this.options.overflowX ? BI.DOM.getScrollWidth() : 0));
+        return Math.max(0, this._getContainerWidth() - this.options.width + (this.options.overflowX ? BI.DOM.getScrollWidth() : 0));
     },
 
     _getMaxScrollTop: function () {
-        return Math.max(0, this._rowSizeAndPositionManager.getTotalSize() - this.options.height + (this.options.overflowY ? BI.DOM.getScrollWidth() : 0));
+        return Math.max(0, this._getContainerHeight() - this.options.height + (this.options.overflowY ? BI.DOM.getScrollWidth() : 0));
+    },
+
+    _getContainerWidth: function () {
+        return this.columnCount * this.options.estimatedColumnSize;
+    },
+
+    _getContainerHeight: function () {
+        return this.rowCount * this.options.estimatedRowSize;
     },
 
     _populate: function (items) {
@@ -269,8 +263,8 @@ BI.GridView = BI.inherit(BI.Widget, {
             this._calculateSizeAndPositionData();
         }
         if (o.items.length > 0) {
-            this.container.setWidth(this.columnCount * o.estimatedColumnSize);
-            this.container.setHeight(this.rowCount * o.estimatedRowSize);
+            this.container.setWidth(this._getContainerWidth());
+            this.container.setHeight(this._getContainerHeight());
 
             this._debounceRelease();
             this._calculateChildrenToRender();
@@ -288,7 +282,7 @@ BI.GridView = BI.inherit(BI.Widget, {
             return;
         }
         this._scrollLock = true;
-        this.options.scrollLeft = scrollLeft || 0;
+        this.options.scrollLeft = BI.clamp(scrollLeft || 0, 0, this._getMaxScrollLeft());
         this._debounceRelease();
         this._calculateChildrenToRender();
         this.element.scrollLeft(this.options.scrollLeft);
@@ -299,7 +293,7 @@ BI.GridView = BI.inherit(BI.Widget, {
             return;
         }
         this._scrollLock = true;
-        this.options.scrollTop = scrollTop || 0;
+        this.options.scrollLeft = BI.clamp(scrollTop || 0, 0, this._getMaxScrollTop());
         this._debounceRelease();
         this._calculateChildrenToRender();
         this.element.scrollTop(this.options.scrollTop);
