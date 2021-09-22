@@ -262,14 +262,14 @@ BI.GridView = BI.inherit(BI.Widget, {
         if (o.items.length > 0) {
             this.container.setWidth(this._getContainerWidth());
             this.container.setHeight(this._getContainerHeight());
+
             // 元素未挂载时不能设置scrollTop
+            this._debounceRelease();
             try {
                 this.element.scrollTop(o.scrollTop);
                 this.element.scrollLeft(o.scrollLeft);
             } catch (e) {
             }
-
-            this._debounceRelease();
             this._calculateChildrenToRender();
         }
     },
@@ -281,8 +281,8 @@ BI.GridView = BI.inherit(BI.Widget, {
         this._scrollLock = true;
         this.options.scrollLeft = BI.clamp(scrollLeft || 0, 0, this._getMaxScrollLeft());
         this._debounceRelease();
-        this._calculateChildrenToRender();
         this.element.scrollLeft(this.options.scrollLeft);
+        this._calculateChildrenToRender();
     },
 
     setScrollTop: function (scrollTop) {
@@ -292,8 +292,8 @@ BI.GridView = BI.inherit(BI.Widget, {
         this._scrollLock = true;
         this.options.scrollTop = BI.clamp(scrollTop || 0, 0, this._getMaxScrollTop());
         this._debounceRelease();
-        this._calculateChildrenToRender();
         this.element.scrollTop(this.options.scrollTop);
+        this._calculateChildrenToRender();
     },
 
     setColumnCount: function (columnCount) {
