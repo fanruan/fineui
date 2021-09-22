@@ -90,6 +90,7 @@ BI.AllCountPager = BI.inherit(BI.Widget, {
         this.allPages = BI.createWidget({
             type: "bi.label",
             title: o.pages,
+            height: o.height,
             text: "/" + o.pages,
             lgap: 5,
             invisible: o.pages <= 1
