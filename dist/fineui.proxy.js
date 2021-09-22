@@ -1,4 +1,4 @@
-/*! time: 2021-9-22 16:10:23 */
+/*! time: 2021-9-22 16:40:29 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -25192,7 +25192,7 @@ BI.GridView = BI.inherit(BI.Widget, {
             return;
         }
         this._scrollLock = true;
-        this.options.scrollLeft = BI.clamp(scrollTop || 0, 0, this._getMaxScrollTop());
+        this.options.scrollTop = BI.clamp(scrollTop || 0, 0, this._getMaxScrollTop());
         this._debounceRelease();
         this._calculateChildrenToRender();
         this.element.scrollTop(this.options.scrollTop);
