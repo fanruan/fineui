@@ -19,7 +19,7 @@ BI.MultifileEditor = BI.inherit(BI.Widget, {
     },
 
     render: function () {
-        BI.MultifileEditor.superclass._init.apply(this, arguments);
+        var self = this, o = this.options;
         this.file = BI.createWidget({
             type: "bi.file",
             cls: "multifile-editor",

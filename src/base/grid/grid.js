@@ -74,20 +74,17 @@ BI.GridView = BI.inherit(BI.Widget, {
 
     _calculateSizeAndPositionData: function () {
         var o = this.options;
-        this.columnCount = 0;
         this.rowCount = 0;
         if (BI.isNumber(o.columnCount)) {
-            this.columnCount = o.columnCount;
         } else if (o.items.length > 0) {
-            this.columnCount = o.items[0].length;
+            this.options.columnCount = o.items[0].length;
         }
         if (BI.isNumber(o.rowCount)) {
-            this.rowCount = o.rowCount;
         } else {
-            this.rowCount = o.items.length;
+            this.options.rowCount = o.items.length;
         }
-        this._columnSizeAndPositionManager = new BI.ScalingCellSizeAndPositionManager(this.columnCount, o.columnWidthGetter, o.estimatedColumnSize);
-        this._rowSizeAndPositionManager = new BI.ScalingCellSizeAndPositionManager(this.rowCount, o.rowHeightGetter, o.estimatedRowSize);
+        this._columnSizeAndPositionManager = new BI.ScalingCellSizeAndPositionManager(o.columnCount, o.columnWidthGetter, o.estimatedColumnSize);
+        this._rowSizeAndPositionManager = new BI.ScalingCellSizeAndPositionManager(o.rowCount, o.rowHeightGetter, o.estimatedRowSize);
     },
 
     _getOverscanIndices: function (cellCount, overscanCellsCount, startIndex, stopIndex) {
@@ -119,9 +116,9 @@ BI.GridView = BI.inherit(BI.Widget, {
             this._renderedRowStartIndex = visibleRowIndices.start;
             this._renderedRowStopIndex = visibleRowIndices.stop;
 
-            var overscanColumnIndices = this._getOverscanIndices(this.columnCount, overscanColumnCount, this._renderedColumnStartIndex, this._renderedColumnStopIndex);
+            var overscanColumnIndices = this._getOverscanIndices(o.columnCount, overscanColumnCount, this._renderedColumnStartIndex, this._renderedColumnStopIndex);
 
-            var overscanRowIndices = this._getOverscanIndices(this.rowCount, overscanRowCount, this._renderedRowStartIndex, this._renderedRowStopIndex);
+            var overscanRowIndices = this._getOverscanIndices(o.rowCount, overscanRowCount, this._renderedRowStartIndex, this._renderedRowStopIndex);
 
             var columnStartIndex = overscanColumnIndices.overscanStartIndex;
             var columnStopIndex = overscanColumnIndices.overscanStopIndex;
@@ -239,26 +236,20 @@ BI.GridView = BI.inherit(BI.Widget, {
         }
     },
 
-    /**
-     * 获取真实的可滚动的最大宽度
-     * 对于grid_view如果没有全部渲染过，this._columnSizeAndPositionManager.getTotalSize获取的宽度是不准确的
-     * 因此在调用setScrollLeft等函数时会造成没法移动到最右端(预估可移动距离太短)
-     */
-    // _getRealMaxScrollLeft: function () {
-    //     var o = this.options;
-    //     var totalWidth = 0;
-    //     BI.count(0, this.columnCount, function (index) {
-    //         totalWidth += o.columnWidthGetter(index);
-    //     });
-    //     return Math.max(0, totalWidth - this.options.width + (this.options.overflowX ? BI.DOM.getScrollWidth() : 0));
-    // },
-
     _getMaxScrollLeft: function () {
-        return Math.max(0, this._columnSizeAndPositionManager.getTotalSize() - this.options.width + (this.options.overflowX ? BI.DOM.getScrollWidth() : 0));
+        return Math.max(0, this._getContainerWidth() - this.options.width + (this.options.overflowX ? BI.DOM.getScrollWidth() : 0));
     },
 
     _getMaxScrollTop: function () {
-        return Math.max(0, this._rowSizeAndPositionManager.getTotalSize() - this.options.height + (this.options.overflowY ? BI.DOM.getScrollWidth() : 0));
+        return Math.max(0, this._getContainerHeight() - this.options.height + (this.options.overflowY ? BI.DOM.getScrollWidth() : 0));
+    },
+
+    _getContainerWidth: function () {
+        return this.options.columnCount * this.options.estimatedColumnSize;
+    },
+
+    _getContainerHeight: function () {
+        return this.options.rowCount * this.options.estimatedRowSize;
     },
 
     _populate: function (items) {
@@ -269,17 +260,17 @@ BI.GridView = BI.inherit(BI.Widget, {
             this._calculateSizeAndPositionData();
         }
         if (o.items.length > 0) {
-            this.container.setWidth(this.columnCount * o.estimatedColumnSize);
-            this.container.setHeight(this.rowCount * o.estimatedRowSize);
-
-            this._debounceRelease();
-            this._calculateChildrenToRender();
+            this.container.setWidth(this._getContainerWidth());
+            this.container.setHeight(this._getContainerHeight());
             // 元素未挂载时不能设置scrollTop
             try {
                 this.element.scrollTop(o.scrollTop);
                 this.element.scrollLeft(o.scrollLeft);
             } catch (e) {
             }
+
+            this._debounceRelease();
+            this._calculateChildrenToRender();
         }
     },
 
@@ -288,7 +279,7 @@ BI.GridView = BI.inherit(BI.Widget, {
             return;
         }
         this._scrollLock = true;
-        this.options.scrollLeft = scrollLeft || 0;
+        this.options.scrollLeft = BI.clamp(scrollLeft || 0, 0, this._getMaxScrollLeft());
         this._debounceRelease();
         this._calculateChildrenToRender();
         this.element.scrollLeft(this.options.scrollLeft);
@@ -299,7 +290,7 @@ BI.GridView = BI.inherit(BI.Widget, {
             return;
         }
         this._scrollLock = true;
-        this.options.scrollTop = scrollTop || 0;
+        this.options.scrollTop = BI.clamp(scrollTop || 0, 0, this._getMaxScrollTop());
         this._debounceRelease();
         this._calculateChildrenToRender();
         this.element.scrollTop(this.options.scrollTop);

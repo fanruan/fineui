@@ -14,7 +14,6 @@ BI.DynamicDateCard = BI.inherit(BI.Widget, {
                     type: "bi.label",
                     text: BI.i18nText("BI-Multi_Date_Relative_Current_Time"),
                     textAlign: "left",
-                    height: 12,
                     lgap: 10
                 },
                 tgap: 10,
