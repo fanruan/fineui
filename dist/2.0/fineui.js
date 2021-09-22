@@ -1,4 +1,4 @@
-/*! time: 2021-9-22 10:50:54 */
+/*! time: 2021-9-22 13:40:25 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -48780,7 +48780,6 @@ BI.DynamicDateCard = BI.inherit(BI.Widget, {
                     type: "bi.label",
                     text: BI.i18nText("BI-Multi_Date_Relative_Current_Time"),
                     textAlign: "left",
-                    height: 12,
                     lgap: 10
                 },
                 tgap: 10,
