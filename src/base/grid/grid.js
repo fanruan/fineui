@@ -74,20 +74,17 @@ BI.GridView = BI.inherit(BI.Widget, {
 
     _calculateSizeAndPositionData: function () {
         var o = this.options;
-        this.columnCount = 0;
         this.rowCount = 0;
         if (BI.isNumber(o.columnCount)) {
-            this.columnCount = o.columnCount;
         } else if (o.items.length > 0) {
-            this.columnCount = o.items[0].length;
+            this.options.columnCount = o.items[0].length;
         }
         if (BI.isNumber(o.rowCount)) {
-            this.rowCount = o.rowCount;
         } else {
-            this.rowCount = o.items.length;
+            this.options.rowCount = o.items.length;
         }
-        this._columnSizeAndPositionManager = new BI.ScalingCellSizeAndPositionManager(this.columnCount, o.columnWidthGetter, o.estimatedColumnSize);
-        this._rowSizeAndPositionManager = new BI.ScalingCellSizeAndPositionManager(this.rowCount, o.rowHeightGetter, o.estimatedRowSize);
+        this._columnSizeAndPositionManager = new BI.ScalingCellSizeAndPositionManager(o.columnCount, o.columnWidthGetter, o.estimatedColumnSize);
+        this._rowSizeAndPositionManager = new BI.ScalingCellSizeAndPositionManager(o.rowCount, o.rowHeightGetter, o.estimatedRowSize);
     },
 
     _getOverscanIndices: function (cellCount, overscanCellsCount, startIndex, stopIndex) {
@@ -119,9 +116,9 @@ BI.GridView = BI.inherit(BI.Widget, {
             this._renderedRowStartIndex = visibleRowIndices.start;
             this._renderedRowStopIndex = visibleRowIndices.stop;
 
-            var overscanColumnIndices = this._getOverscanIndices(this.columnCount, overscanColumnCount, this._renderedColumnStartIndex, this._renderedColumnStopIndex);
+            var overscanColumnIndices = this._getOverscanIndices(o.columnCount, overscanColumnCount, this._renderedColumnStartIndex, this._renderedColumnStopIndex);
 
-            var overscanRowIndices = this._getOverscanIndices(this.rowCount, overscanRowCount, this._renderedRowStartIndex, this._renderedRowStopIndex);
+            var overscanRowIndices = this._getOverscanIndices(o.rowCount, overscanRowCount, this._renderedRowStartIndex, this._renderedRowStopIndex);
 
             var columnStartIndex = overscanColumnIndices.overscanStartIndex;
             var columnStopIndex = overscanColumnIndices.overscanStopIndex;
@@ -248,11 +245,11 @@ BI.GridView = BI.inherit(BI.Widget, {
     },
 
     _getContainerWidth: function () {
-        return this.columnCount * this.options.estimatedColumnSize;
+        return this.options.columnCount * this.options.estimatedColumnSize;
     },
 
     _getContainerHeight: function () {
-        return this.rowCount * this.options.estimatedRowSize;
+        return this.options.rowCount * this.options.estimatedRowSize;
     },
 
     _populate: function (items) {
@@ -265,15 +262,15 @@ BI.GridView = BI.inherit(BI.Widget, {
         if (o.items.length > 0) {
             this.container.setWidth(this._getContainerWidth());
             this.container.setHeight(this._getContainerHeight());
-
-            this._debounceRelease();
-            this._calculateChildrenToRender();
             // 元素未挂载时不能设置scrollTop
             try {
                 this.element.scrollTop(o.scrollTop);
                 this.element.scrollLeft(o.scrollLeft);
             } catch (e) {
             }
+
+            this._debounceRelease();
+            this._calculateChildrenToRender();
         }
     },
 
