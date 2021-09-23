@@ -1,4 +1,4 @@
-/*! time: 2021-9-22 19:32:02 */
+/*! time: 2021-9-23 14:50:27 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -40964,6 +40964,7 @@ BI.AllCountPager = BI.inherit(BI.Widget, {
         this.allPages = BI.createWidget({
             type: "bi.label",
             title: o.pages,
+            height: o.height,
             text: "/" + o.pages,
             lgap: 5,
             invisible: o.pages <= 1
@@ -63375,7 +63376,7 @@ BI.SingleSelectSearchLoader = BI.inherit(BI.Widget, {
                     var keyword = ob.keyword = opts.keywordGetter();
                     hasNext = ob.hasNext;
                     var firstItems = [];
-                    if (op.times === 1 && BI.isNotNull(self.storeValue)) {
+                    if (op.times === 1 && !BI.isUndefined(self.storeValue)) {
                         var json = self._filterValues(self.storeValue);
                         firstItems = self._createItems(json);
                     }
@@ -64428,13 +64429,13 @@ BI.SingleSelectLoader = BI.inherit(BI.Widget, {
             }, opts.el),
             itemsCreator: function (op, callback) {
                 var startValue = self._startValue;
-                BI.isNotNull(self.storeValue) && (op = BI.extend(op || {}, {
+                !BI.isUndefined(self.storeValue) && (op = BI.extend(op || {}, {
                     selectedValues: [self.storeValue]
                 }));
                 opts.itemsCreator(op, function (ob) {
                     hasNext = ob.hasNext;
                     var firstItems = [];
-                    if (op.times === 1 && BI.isNotNull(self.storeValue)) {
+                    if (op.times === 1 && !BI.isUndefined(self.storeValue)) {
                         var json = BI.map([self.storeValue], function (i, v) {
                             var txt = opts.valueFormatter(v) || v;
                             return {

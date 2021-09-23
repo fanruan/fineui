@@ -60,13 +60,13 @@ BI.SingleSelectLoader = BI.inherit(BI.Widget, {
             }, opts.el),
             itemsCreator: function (op, callback) {
                 var startValue = self._startValue;
-                BI.isNotNull(self.storeValue) && (op = BI.extend(op || {}, {
+                !BI.isUndefined(self.storeValue) && (op = BI.extend(op || {}, {
                     selectedValues: [self.storeValue]
                 }));
                 opts.itemsCreator(op, function (ob) {
                     hasNext = ob.hasNext;
                     var firstItems = [];
-                    if (op.times === 1 && BI.isNotNull(self.storeValue)) {
+                    if (op.times === 1 && !BI.isUndefined(self.storeValue)) {
                         var json = BI.map([self.storeValue], function (i, v) {
                             var txt = opts.valueFormatter(v) || v;
                             return {
