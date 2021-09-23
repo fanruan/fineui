@@ -1,4 +1,4 @@
-/*! time: 2021-9-23 14:50:27 */
+/*! time: 2021-9-23 15:30:22 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -24974,16 +24974,19 @@ BI.GridView = BI.inherit(BI.Widget, {
     _calculateSizeAndPositionData: function () {
         var o = this.options;
         this.rowCount = 0;
+        this.columnCount = 0;
         if (BI.isNumber(o.columnCount)) {
+            this.columnCount = o.columnCount;
         } else if (o.items.length > 0) {
-            this.options.columnCount = o.items[0].length;
+            this.columnCount = o.items[0].length;
         }
         if (BI.isNumber(o.rowCount)) {
+            this.rowCount = o.rowCount;
         } else {
-            this.options.rowCount = o.items.length;
+            this.rowCount = o.items.length;
         }
-        this._columnSizeAndPositionManager = new BI.ScalingCellSizeAndPositionManager(o.columnCount, o.columnWidthGetter, o.estimatedColumnSize);
-        this._rowSizeAndPositionManager = new BI.ScalingCellSizeAndPositionManager(o.rowCount, o.rowHeightGetter, o.estimatedRowSize);
+        this._columnSizeAndPositionManager = new BI.ScalingCellSizeAndPositionManager(this.columnCount, o.columnWidthGetter, o.estimatedColumnSize);
+        this._rowSizeAndPositionManager = new BI.ScalingCellSizeAndPositionManager(this.rowCount, o.rowHeightGetter, o.estimatedRowSize);
     },
 
     _getOverscanIndices: function (cellCount, overscanCellsCount, startIndex, stopIndex) {
@@ -25015,9 +25018,9 @@ BI.GridView = BI.inherit(BI.Widget, {
             this._renderedRowStartIndex = visibleRowIndices.start;
             this._renderedRowStopIndex = visibleRowIndices.stop;
 
-            var overscanColumnIndices = this._getOverscanIndices(o.columnCount, overscanColumnCount, this._renderedColumnStartIndex, this._renderedColumnStopIndex);
+            var overscanColumnIndices = this._getOverscanIndices(this.columnCount, overscanColumnCount, this._renderedColumnStartIndex, this._renderedColumnStopIndex);
 
-            var overscanRowIndices = this._getOverscanIndices(o.rowCount, overscanRowCount, this._renderedRowStartIndex, this._renderedRowStopIndex);
+            var overscanRowIndices = this._getOverscanIndices(this.rowCount, overscanRowCount, this._renderedRowStartIndex, this._renderedRowStopIndex);
 
             var columnStartIndex = overscanColumnIndices.overscanStartIndex;
             var columnStopIndex = overscanColumnIndices.overscanStopIndex;
@@ -25144,11 +25147,11 @@ BI.GridView = BI.inherit(BI.Widget, {
     },
 
     _getContainerWidth: function () {
-        return this.options.columnCount * this.options.estimatedColumnSize;
+        return this.columnCount * this.options.estimatedColumnSize;
     },
 
     _getContainerHeight: function () {
-        return this.options.rowCount * this.options.estimatedRowSize;
+        return this.rowCount * this.options.estimatedRowSize;
     },
 
     _populate: function (items) {
