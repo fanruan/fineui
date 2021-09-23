@@ -271,6 +271,9 @@ BI.GridView = BI.inherit(BI.Widget, {
             } catch (e) {
             }
             this._calculateChildrenToRender();
+        } else {
+            this.container.setWidth("auto");
+            this.container.setHeight("auto");
         }
     },
 
