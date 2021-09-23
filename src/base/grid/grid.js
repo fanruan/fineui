@@ -262,22 +262,17 @@ BI.GridView = BI.inherit(BI.Widget, {
             this.options.items = items;
             this._calculateSizeAndPositionData();
         }
-        if (o.items.length > 0) {
-            this.container.setWidth(this._getContainerWidth());
-            this.container.setHeight(this._getContainerHeight());
+        this.container.setWidth(this._getContainerWidth());
+        this.container.setHeight(this._getContainerHeight());
 
-            // 元素未挂载时不能设置scrollTop
-            this._debounceRelease();
-            try {
-                this.element.scrollTop(o.scrollTop);
-                this.element.scrollLeft(o.scrollLeft);
-            } catch (e) {
-            }
-            this._calculateChildrenToRender();
-        } else {
-            this.container.setWidth("auto");
-            this.container.setHeight("auto");
+        // 元素未挂载时不能设置scrollTop
+        this._debounceRelease();
+        try {
+            this.element.scrollTop(o.scrollTop);
+            this.element.scrollLeft(o.scrollLeft);
+        } catch (e) {
         }
+        this._calculateChildrenToRender();
     },
 
     setScrollLeft: function (scrollLeft) {

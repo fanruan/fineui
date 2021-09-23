@@ -276,19 +276,17 @@ BI.CollectionView = BI.inherit(BI.Widget, {
             this.options.items = items;
             this._calculateSizeAndPositionData();
         }
-        if (o.items.length > 0) {
-            this.container.setWidth(this._width);
-            this.container.setHeight(this._height);
+        this.container.setWidth(this._width);
+        this.container.setHeight(this._height);
 
-            this._debounceRelease();
-            // 元素未挂载时不能设置scrollTop
-            try {
-                this.element.scrollTop(o.scrollTop);
-                this.element.scrollLeft(o.scrollLeft);
-            } catch (e) {
-            }
-            this._calculateChildrenToRender();
+        this._debounceRelease();
+        // 元素未挂载时不能设置scrollTop
+        try {
+            this.element.scrollTop(o.scrollTop);
+            this.element.scrollLeft(o.scrollLeft);
+        } catch (e) {
         }
+        this._calculateChildrenToRender();
     },
 
     setScrollLeft: function (scrollLeft) {
