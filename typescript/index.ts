@@ -131,6 +131,7 @@ import { SelectTextTrigger } from "./case/trigger/trigger.text.select";
 import { DateInterval } from "./widget/timeinterval/dateinterval";
 import { DynamicDatePane } from "./widget/datepane/datepane";
 import { AllCountPager } from "./case/pager/pager.all.count";
+import { DirectionPager } from "./case/pager/pager.direction";
 import { PopupView } from "./base/layer/layer.popup";
 import { BubblePopupView, BubblePopupBarView, TextBubblePopupBarView } from "./case/combo/bubblecombo/popup.bubble";
 import { ArrowTreeGroupNodeCheckbox } from "./case/checkbox/check.arrownode";
@@ -319,6 +320,7 @@ export interface BI extends _func, _i18n, _base, _inject, _var, _web, _utils {
     DateInterval: typeof DateInterval;
     DynamicDatePane: typeof DynamicDatePane;
     AllCountPager: typeof AllCountPager;
+    DirectionPager: typeof DirectionPager;
     Pager: typeof Pager;
     PopupView: typeof PopupView;
     BubblePopupView: typeof BubblePopupView;
