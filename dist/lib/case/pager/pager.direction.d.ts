@@ -1,12 +1,11 @@
 import { Widget } from "../../core/widget";
-
 export declare class DirectionPager extends Widget {
     static xtype: string;
     static EVENT_CHANGE: string;
     getVPage(): number;
     getHPage(): number;
-    setVPage(v: number):void;
-    setHPage(v: number):void;
+    setVPage(v: number): void;
+    setHPage(v: number): void;
     hasVPrev(): boolean;
     hasVNext(): boolean;
     hasHPrev(): boolean;
