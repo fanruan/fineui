@@ -547,4 +547,5 @@ export {
     TdLayout,
     MultiLayerSelectLevelTree,
     SelectTreeExpander,
+    DirectionPager,
 };
