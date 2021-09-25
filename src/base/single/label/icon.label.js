@@ -8,7 +8,8 @@ BI.IconLabel = BI.inherit(BI.Single, {
     props: {
         baseCls: "bi-icon-label horizon-center",
         iconWidth: null,
-        iconHeight: null
+        iconHeight: null,
+        lineHeight: null,
     },
 
     render: function () {
@@ -22,7 +23,7 @@ BI.IconLabel = BI.inherit(BI.Single, {
             height: o.iconHeight
         });
         if (BI.isNumber(o.height) && o.height > 0 && BI.isNull(o.iconWidth) && BI.isNull(o.iconHeight)) {
-            this.element.css("lineHeight", o.height / BI.pixRatio + BI.pixUnit);
+            this.element.css("lineHeight", (o.lineHeight || o.height) / BI.pixRatio + BI.pixUnit);
             BI.createWidget({
                 type: "bi.default",
                 element: this,
