@@ -41,12 +41,28 @@ BI.Button = BI.inherit(BI.BasicButton, {
 
     render: function () {
         var o = this.options, self = this;
+
+        // 由于button默认情况下有个边框，所以要主动算行高
+        var lineHeight, textHeight = o.textHeight;
+        if (BI.isNumber(o.height)) {
+            if (o.clear || o.block) {
+                lineHeight = o.height;
+            } else {
+                lineHeight = o.height - 2;
+            }
+        }
+        if (!textHeight) {
+            if (o.whiteSpace === "nowrap") {
+                textHeight = lineHeight;
+            }
+        }
         if (BI.isKey(o.iconCls)) {
             this.icon = BI.createWidget({
                 type: "bi.icon_label",
                 cls: o.iconCls,
                 width: this._const.iconWidth,
-                height: o.height - 2,
+                height: o.height,
+                lineHeight: lineHeight,
                 iconWidth: o.iconWidth,
                 iconHeight: o.iconHeight
             });
@@ -54,9 +70,9 @@ BI.Button = BI.inherit(BI.BasicButton, {
                 type: "bi.label",
                 text: o.text,
                 textWidth: BI.isNotNull(o.textWidth) ? o.textWidth - this._const.iconWidth : null,
-                textHeight: o.textHeight,
-                value: o.value,
-                height: o.height - 2
+                textHeight: textHeight,
+                height: o.height,
+                value: o.value
             });
             BI.createWidget({
                 type: "bi.center_adapt",
@@ -76,7 +92,7 @@ BI.Button = BI.inherit(BI.BasicButton, {
                 textAlign: o.textAlign,
                 whiteSpace: o.whiteSpace,
                 textWidth: o.textWidth,
-                textHeight: o.textHeight,
+                textHeight: textHeight,
                 hgap: o.hgap,
                 vgap: o.vgap,
                 tgap: o.tgap,
@@ -87,16 +103,6 @@ BI.Button = BI.inherit(BI.BasicButton, {
                 text: o.text,
                 value: o.value
             });
-        }
-        if (BI.isNumber(o.height) && !o.clear && !o.block) {
-            this.element.css({
-                height: o.height / BI.pixRatio + BI.pixUnit,
-                lineHeight: (o.height - 2) / BI.pixRatio + BI.pixUnit
-            });
-        } else if (o.clear || o.block) {
-            this.element.css({lineHeight: o.height / BI.pixRatio + BI.pixUnit});
-        } else {
-            this.element.css({lineHeight: (o.height - 2) / BI.pixRatio + BI.pixUnit});
         }
         if (o.block === true) {
             this.element.addClass("block");
