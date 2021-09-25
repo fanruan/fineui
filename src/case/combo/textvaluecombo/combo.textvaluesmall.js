@@ -49,6 +49,10 @@ BI.SmallTextValueCombo = BI.inherit(BI.Widget, {
                 minHeight: 25
             }
         });
+
+        if(BI.isKey(o.value)){
+            this.setValue(o.value);
+        }
     },
 
     setValue: function (v) {

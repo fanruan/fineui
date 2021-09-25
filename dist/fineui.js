@@ -1,4 +1,4 @@
-/*! time: 2021-9-23 15:50:30 */
+/*! time: 2021-9-24 15:51:01 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -41079,6 +41079,10 @@ BI.SmallTextValueCombo = BI.inherit(BI.Widget, {
                 minHeight: 25
             }
         });
+
+        if(BI.isKey(o.value)){
+            this.setValue(o.value);
+        }
     },
 
     setValue: function (v) {
