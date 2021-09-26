@@ -48,7 +48,7 @@ BI.MultiLayerDownListPopup = BI.inherit(BI.Pane, {
             if (BI.isNotNull(self.childValueMap[value])) {
                 changedValue = self.childValueMap[value];
                 var fatherValue = self.fatherValueMap[value];
-                var fatherArrayValue = (fatherValue + "").split("_");
+                var fatherArrayValue = (fatherValue + "").split(BI.BlankSplitChar);
                 self.fireEvent(BI.MultiLayerDownListPopup.EVENT_SON_VALUE_CHANGE, changedValue, fatherArrayValue.length > 1 ? fatherArrayValue : fatherValue);
             } else {
                 self.fireEvent(BI.MultiLayerDownListPopup.EVENT_CHANGE, changedValue, object);
@@ -202,9 +202,9 @@ BI.MultiLayerDownListPopup = BI.inherit(BI.Pane, {
     _createChildValue: function (fatherValue, childValue) {
         var fValue = fatherValue;
         if(BI.isArray(fatherValue)) {
-            fValue = fatherValue.join("_");
+            fValue = fatherValue.join(BI.BlankSplitChar);
         }
-        return fValue + "_" + childValue;
+        return fValue + BI.BlankSplitChar + childValue;
     },
 
     _digest: function (valueItem) {
@@ -304,7 +304,7 @@ BI.MultiLayerDownListPopup = BI.inherit(BI.Pane, {
             if (BI.isNotNull(self.childValueMap[value])) {
                 var fartherValue = self.fatherValueMap[value];
                 valueItem.childValue = self.childValueMap[value];
-                var fatherArrayValue = (fartherValue + "").split("_");
+                var fatherArrayValue = (fartherValue + "").split(BI.BlankSplitChar);
                 valueItem.value = fatherArrayValue.length > 1 ? fatherArrayValue : fartherValue;
             } else {
                 valueItem.value = value;
