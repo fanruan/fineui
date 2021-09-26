@@ -26,8 +26,7 @@ BI.Editor = BI.inherit(BI.Single, {
         });
     },
 
-    _init: function () {
-        BI.Editor.superclass._init.apply(this, arguments);
+    render: function () {
         var self = this, o = this.options;
         // 密码输入框设置autocomplete="new-password"的情况下Firefox和chrome不会自动填充密码
         var autocomplete = o.autocomplete ? " autocomplete=" + o.autocomplete : "";

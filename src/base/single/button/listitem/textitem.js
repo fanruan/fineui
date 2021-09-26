@@ -20,8 +20,8 @@ BI.TextItem = BI.inherit(BI.BasicButton, {
             textRgap: 0
         });
     },
-    _init: function () {
-        BI.TextItem.superclass._init.apply(this, arguments);
+
+    render: function () {
         var o = this.options;
         this.text = BI.createWidget({
             type: "bi.label",

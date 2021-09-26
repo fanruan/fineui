@@ -451,9 +451,8 @@
             });
         },
 
-        _init: function () {
+        render: function () {
             var self = this, o = this.options;
-            BI.File.superclass._init.apply(this, arguments);
             if (o.multiple === true) {
                 this.element.attr("multiple", "multiple");
             }

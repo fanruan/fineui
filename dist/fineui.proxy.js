@@ -1,4 +1,4 @@
-/*! time: 2021-9-9 15:00:18 */
+/*! time: 2021-9-26 10:40:39 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -82,7 +82,7 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 1189);
+/******/ 	return __webpack_require__(__webpack_require__.s = 1190);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -6665,9 +6665,9 @@ BI.Req = {
                 baseCls: "",
                 extraCls: "",
                 cls: "",
-                css: null,
+                css: null
 
-                vdom: false
+                // vdom: false
             });
         },
 
@@ -6784,13 +6784,23 @@ BI.Req = {
         },
 
         _initCurrent: function () {
-            var o = this.options;
-            if (o._baseCls || o.baseCls || o.extraCls || o.cls) {
-                this.element.addClass((o._baseCls || "") + " " + (o.baseCls || "") + " " + (o.extraCls || "") + " " + (o.cls || ""));
+            var self = this, o = this.options;
+            if (o._baseCls || o.baseCls || o.extraCls) {
+                this.element.addClass((o._baseCls || "") + " " + (o.baseCls || "") + " " + (o.extraCls || ""));
             }
-            if (o.key != null) {
-                this.element.attr("key", o.key);
+            if (o.cls) {
+                if (BI.isFunction(o.cls)) {
+                    var cls = this.__watch(o.cls, function (context, newValue) {
+                        self.element.removeClass(cls).addClass(cls = newValue);
+                    });
+                    this.element.addClass(cls);
+                } else {
+                    this.element.addClass(o.cls);
+                }
             }
+            // if (o.key != null) {
+            //     this.element.attr("key", o.key);
+            // }
             if (o.attributes) {
                 this.element.attr(o.attributes);
             }
@@ -6798,7 +6808,37 @@ BI.Req = {
                 this.element.data(o.data);
             }
             if (o.css) {
-                this.element.css(o.css);
+                if (BI.isFunction(o.css)) {
+                    var css = this.__watch(o.css, function (context, newValue) {
+                        for (var k in css) {
+                            if (!newValue[k]) {
+                                newValue[k] = "";
+                            }
+                        }
+                        self.element.css(css = newValue);
+                    }, {
+                        deep: true
+                    });
+                    this.element.css(css);
+                } else {
+                    this.element.css(o.css);
+                }
+            }
+        },
+
+        __watch: function (getter, handler, options) {
+            var self = this;
+            if (_global.Fix) {
+                this._watchers = this._watchers || [];
+                var watcher = new Fix.Watcher(null, function () {
+                    return getter.call(self, self);
+                }, (handler && function (v) {
+                    handler.call(self, self, v);
+                }) || BI.emptyFn, options);
+                this._watchers.push(watcher);
+                return watcher.value;
+            } else {
+                return getter();
             }
         },
 
@@ -6822,9 +6862,9 @@ BI.Req = {
                 this.element = BI.Widget._renderEngine.createElement(this);
             }
             this.element._isWidget = true;
-            var widgets = this.element.data("__widgets") || [];
-            widgets.push(this);
-            this.element.data("__widgets", widgets);
+            // var widgets = this.element.data("__widgets") || [];
+            // widgets.push(this);
+            // this.element.data("__widgets", widgets);
             this._initCurrent();
         },
 
@@ -6851,13 +6891,30 @@ BI.Req = {
         },
 
         _initEffects: function () {
-            var o = this.options;
+            var self = this, o = this.options;
             if (o.disabled || o.invalid) {
                 if (this.options.disabled) {
                     this.setEnable(false);
                 }
                 if (this.options.invalid) {
                     this.setValid(false);
+                }
+            }
+            if (o.effect) {
+                if (BI.isArray(o.effect)) {
+                    if (BI.isArray(o.effect[0])) {
+                        BI.each(o.effect, function (i, effect) {
+                            self.__watch(effect[0], effect[1], {
+                                deep: true
+                            });
+                        });
+                    } else {
+                        self.__watch(o.effect[0], o.effect[1], {
+                            deep: true
+                        });
+                    }
+                } else {
+                    this.__watch(o.effect);
                 }
             }
         },
@@ -6870,52 +6927,7 @@ BI.Req = {
             var self = this;
             var isMounted = this._isMounted;
             this.__async === true && isMounted && callLifeHook(this, "beforeMount");
-            if (!this._initVNode()) {
-                var render = BI.isFunction(this.options.render) ? this.options.render : this.render;
-                var els = render && render.call(this);
-                els = BI.Plugin.getRender(this.options.type, els);
-                if (BI.isPlainObject(els)) {
-                    els = [els];
-                }
-                if (BI.isArray(els)) {
-                    BI.each(els, function (i, el) {
-                        if (el) {
-                            BI._lazyCreateWidget(el, {
-                                element: self
-                            });
-                        }
-                    });
-                }
-            }
-            this._mount();
-            if (this.__async === true && isMounted) {
-                callLifeHook(this, "mounted");
-                this.fireEvent(BI.Events.MOUNT);
-            }
-        },
-
-        _initVNode: function () {
-            if (this.options.vdom) {
-                var div = document.createElement("div");
-                var element = this.element;
-                element.append(div);
-                this.vnode = this._renderVNode();
-                BI.patchVNode(div, this.vnode);
-                // 去除这个临时的div
-                BI.DOM.hang([div]);
-                element.attr("style", this.vnode.elm.getAttribute("style"));
-                element.addClass(this.vnode.elm.getAttribute("class"));
-                element.empty();
-                BI.each(BI.jQuery(this.vnode.elm).children(), function (i, node) {
-                    element.append(node);
-                });
-                return true;
-            }
-            return false;
-        },
-
-        _renderVNode: function () {
-            var self = this;
+            // if (!this._initVNode()) {
             var render = BI.isFunction(this.options.render) ? this.options.render : this.render;
             var els = render && render.call(this);
             els = BI.Plugin.getRender(this.options.type, els);
@@ -6923,19 +6935,64 @@ BI.Req = {
                 els = [els];
             }
             if (BI.isArray(els)) {
-                var container = document.createElement("div");
-                this._children = {};
                 BI.each(els, function (i, el) {
                     if (el) {
-                        var w = BI._lazyCreateWidget(el, {
-                            element: container
+                        BI._lazyCreateWidget(el, {
+                            element: self
                         });
-                        self.addWidget(w);
                     }
                 });
             }
-            return BI.Element2Vnode(container);
+            // }
+            this._mount();
+            if (this.__async === true && isMounted) {
+                callLifeHook(this, "mounted");
+                this.fireEvent(BI.Events.MOUNT);
+            }
         },
+
+        // _initVNode: function () {
+        //     if (this.options.vdom) {
+        //         var div = document.createElement("div");
+        //         var element = this.element;
+        //         element.append(div);
+        //         this.vnode = this._renderVNode();
+        //         BI.patchVNode(div, this.vnode);
+        //         // 去除这个临时的div
+        //         BI.DOM.hang([div]);
+        //         element.attr("style", this.vnode.elm.getAttribute("style"));
+        //         element.addClass(this.vnode.elm.getAttribute("class"));
+        //         element.empty();
+        //         BI.each(BI.jQuery(this.vnode.elm).children(), function (i, node) {
+        //             element.append(node);
+        //         });
+        //         return true;
+        //     }
+        //     return false;
+        // },
+
+        // _renderVNode: function () {
+        //     var self = this;
+        //     var render = BI.isFunction(this.options.render) ? this.options.render : this.render;
+        //     var els = render && render.call(this);
+        //     els = BI.Plugin.getRender(this.options.type, els);
+        //     if (BI.isPlainObject(els)) {
+        //         els = [els];
+        //     }
+        //     if (BI.isArray(els)) {
+        //         var container = document.createElement("div");
+        //         this._children = {};
+        //         BI.each(els, function (i, el) {
+        //             if (el) {
+        //                 var w = BI._lazyCreateWidget(el, {
+        //                     element: container
+        //                 });
+        //                 self.addWidget(w);
+        //             }
+        //         });
+        //     }
+        //     return BI.Element2Vnode(container);
+        // },
 
         _setParent: function (parent) {
             this._parent = parent;
@@ -7274,12 +7331,12 @@ BI.Req = {
             if (this.__async === true || this.__asking === true) {
                 return;
             }
-            if (this.options.vdom) {
-                var vnode = this._renderVNode();
-                BI.patchVNode(this.vnode, vnode);
-                this.vnode = vnode;
-                return;
-            }
+            // if (this.options.vdom) {
+            //     var vnode = this._renderVNode();
+            //     BI.patchVNode(this.vnode, vnode);
+            //     this.vnode = vnode;
+            //     return;
+            // }
             // this._isMounted = false;
             // this.purgeListeners();
             this._empty();
@@ -15713,8 +15770,27 @@ BI.Layout = BI.inherit(BI.Widget, {
     },
 
     render: function () {
+        var self = this, o = this.options;
         this._init4Margin();
         this._init4Scroll();
+        if (BI.isFunction(o.columnSize)) {
+            var columnSizeFn = o.columnSize;
+            o.columnSize = this.__watch(columnSizeFn, function (context, newValue) {
+                o.columnSize = newValue;
+                self.resize();
+            }, {
+                deep: true
+            });
+        }
+        if (BI.isFunction(o.rowSize)) {
+            var rowSizeFn = o.rowSize;
+            o.rowSize = this.__watch(rowSizeFn, function (context, newValue) {
+                o.rowSize = newValue;
+                self.resize();
+            }, {
+                deep: true
+            });
+        }
     },
 
     _init4Margin: function () {
@@ -21381,8 +21457,7 @@ BI.CollectionView = BI.inherit(BI.Widget, {
         });
     },
 
-    _init: function () {
-        BI.CollectionView.superclass._init.apply(this, arguments);
+    render: function () {
         var self = this, o = this.options;
         this.renderedCells = [];
         this.renderedKeys = [];
@@ -21520,20 +21595,20 @@ BI.CollectionView = BI.inherit(BI.Widget, {
                 var index = this.renderedKeys[datum.index] && this.renderedKeys[datum.index][1];
                 var child;
                 if (index >= 0) {
-                    if (datum.width !== this.renderedCells[index]._width) {
-                        this.renderedCells[index]._width = datum.width;
-                        this.renderedCells[index].el.setWidth(datum.width);
-                    }
-                    if (datum.height !== this.renderedCells[index]._height) {
-                        this.renderedCells[index]._height = datum.height;
-                        this.renderedCells[index].el.setHeight(datum.height);
-                    }
-                    if (this.renderedCells[index]._left !== datum.x) {
-                        this.renderedCells[index].el.element.css("left", datum.x / BI.pixRatio + BI.pixUnit);
-                    }
-                    if (this.renderedCells[index]._top !== datum.y) {
-                        this.renderedCells[index].el.element.css("top", datum.y  / BI.pixRatio + BI.pixUnit);
-                    }
+                    // if (datum.width !== this.renderedCells[index]._width) {
+                    //     this.renderedCells[index]._width = datum.width;
+                    this.renderedCells[index].el.setWidth(datum.width);
+                    // }
+                    // if (datum.height !== this.renderedCells[index]._height) {
+                    //     this.renderedCells[index]._height = datum.height;
+                    this.renderedCells[index].el.setHeight(datum.height);
+                    // }
+                    // if (this.renderedCells[index]._left !== datum.x) {
+                    this.renderedCells[index].el.element.css("left", datum.x / BI.pixRatio + BI.pixUnit);
+                    // }
+                    // if (this.renderedCells[index]._top !== datum.y) {
+                    this.renderedCells[index].el.element.css("top", datum.y  / BI.pixRatio + BI.pixUnit);
+                    // }
                     renderedCells.push(child = this.renderedCells[index]);
                 } else {
                     child = BI._lazyCreateWidget(BI.extend({
@@ -21551,8 +21626,8 @@ BI.CollectionView = BI.inherit(BI.Widget, {
                         top: datum.y,
                         _left: datum.x,
                         _top: datum.y,
-                        _width: datum.width,
-                        _height: datum.height
+                        // _width: datum.width,
+                        // _height: datum.height
                     });
                 }
                 var startTopIndex = topMap[datum.y] | 0;
@@ -21636,18 +21711,17 @@ BI.CollectionView = BI.inherit(BI.Widget, {
             this.options.items = items;
             this._calculateSizeAndPositionData();
         }
-        if (o.items.length > 0) {
-            this.container.setWidth(this._width);
-            this.container.setHeight(this._height);
+        this.container.setWidth(this._width);
+        this.container.setHeight(this._height);
 
-            this._calculateChildrenToRender();
-            // 元素未挂载时不能设置scrollTop
-            try {
-                this.element.scrollTop(o.scrollTop);
-                this.element.scrollLeft(o.scrollLeft);
-            } catch (e) {
-            }
+        this._debounceRelease();
+        // 元素未挂载时不能设置scrollTop
+        try {
+            this.element.scrollTop(o.scrollTop);
+            this.element.scrollLeft(o.scrollLeft);
+        } catch (e) {
         }
+        this._calculateChildrenToRender();
     },
 
     setScrollLeft: function (scrollLeft) {
@@ -21657,8 +21731,8 @@ BI.CollectionView = BI.inherit(BI.Widget, {
         this._scrollLock = true;
         this.options.scrollLeft = BI.clamp(scrollLeft || 0, 0, this._getMaxScrollLeft());
         this._debounceRelease();
-        this._calculateChildrenToRender();
         this.element.scrollLeft(this.options.scrollLeft);
+        this._calculateChildrenToRender();
     },
 
     setScrollTop: function (scrollTop) {
@@ -21668,8 +21742,8 @@ BI.CollectionView = BI.inherit(BI.Widget, {
         this._scrollLock = true;
         this.options.scrollTop = BI.clamp(scrollTop || 0, 0, this._getMaxScrollTop());
         this._debounceRelease();
-        this._calculateChildrenToRender();
         this.element.scrollTop(this.options.scrollTop);
+        this._calculateChildrenToRender();
     },
 
     setOverflowX: function (b) {
@@ -21785,8 +21859,7 @@ BI.shortcut("bi.collection_view", BI.CollectionView);
             });
         },
 
-        _init: function () {
-            BI.Combo.superclass._init.apply(this, arguments);
+        render: function () {
             var self = this, o = this.options;
             this._initCombo();
             this._initPullDownAction();
@@ -22086,11 +22159,21 @@ BI.shortcut("bi.collection_view", BI.CollectionView);
                 this.resetListWidth("");
                 var width = this.popupView.element.outerWidth();
                 var maxW = this.element.outerWidth() || o.width;
-                if (width > maxW + 80) {
-                    maxW = maxW + 80;
-                } else if (width > maxW) {
-                    maxW = width;
+                // BI-93885 最大列宽算法调整
+                if (maxW < 500) {
+                    if (width >= 500) {
+                        maxW = 500;
+                    } else if(width > maxW) {
+                        // 防止小数导致差那么一点
+                        maxW = width + 1;
+                    }
                 }
+
+                // if (width > maxW + 80) {
+                //     maxW = maxW + 80;
+                // } else if (width > maxW) {
+                //     maxW = width;
+                // }
                 this.resetListWidth(maxW < 100 ? 100 : maxW);
             }
         },
@@ -22335,8 +22418,7 @@ BI.Expander = BI.inherit(BI.Widget, {
         });
     },
 
-    _init: function () {
-        BI.Expander.superclass._init.apply(this, arguments);
+    render: function () {
         var self = this, o = this.options;
         this._expanded = !!o.el.open;
         this._initExpander();
@@ -22595,6 +22677,7 @@ BI.Expander.EVENT_AFTER_HIDEVIEW = "EVENT_AFTER_HIDEVIEW";
 
 BI.shortcut("bi.expander", BI.Expander);
 
+
 /***/ }),
 /* 365 */
 /***/ (function(module, exports) {
@@ -22621,8 +22704,7 @@ BI.ButtonGroup = BI.inherit(BI.Widget, {
         });
     },
 
-    _init: function () {
-        BI.ButtonGroup.superclass._init.apply(this, arguments);
+    render: function () {
         var o = this.options;
         var behaviors = {};
         BI.each(o.behaviors, function (key, rule) {
@@ -22930,6 +23012,7 @@ BI.ButtonGroup.EVENT_CHANGE = "EVENT_CHANGE";
 
 BI.shortcut("bi.button_group", BI.ButtonGroup);
 
+
 /***/ }),
 /* 366 */
 /***/ (function(module, exports) {
@@ -22966,8 +23049,7 @@ BI.ComboGroup = BI.inherit(BI.Widget, {
         });
     },
 
-    _init: function () {
-        BI.ComboGroup.superclass._init.apply(this, arguments);
+    render: function () {
         this._populate(this.options.el);
     },
 
@@ -23031,6 +23113,7 @@ BI.ComboGroup = BI.inherit(BI.Widget, {
 BI.ComboGroup.EVENT_CHANGE = "EVENT_CHANGE";
 
 BI.shortcut("bi.combo_group", BI.ComboGroup);
+
 
 /***/ }),
 /* 367 */
@@ -23212,8 +23295,7 @@ BI.Loader = BI.inherit(BI.Widget, {
         }]);
     },
 
-    _init: function () {
-        BI.Loader.superclass._init.apply(this, arguments);
+    render: function () {
         var self = this, o = this.options;
         if (o.itemsCreator === false) {
             o.prev = false;
@@ -23635,8 +23717,7 @@ BI.Searcher = BI.inherit(BI.Widget, {
         });
     },
 
-    _init: function () {
-        BI.Searcher.superclass._init.apply(this, arguments);
+    render: function () {
         var self = this, o = this.options;
 
         this.editor = BI.createWidget(o.el, {
@@ -23912,6 +23993,7 @@ BI.Searcher.EVENT_AFTER_INIT = "EVENT_AFTER_INIT";
 
 BI.shortcut("bi.searcher", BI.Searcher);
 
+
 /***/ }),
 /* 371 */
 /***/ (function(module, exports) {
@@ -23940,8 +24022,7 @@ BI.Switcher = BI.inherit(BI.Widget, {
         });
     },
 
-    _init: function () {
-        BI.Switcher.superclass._init.apply(this, arguments);
+    render: function () {
         var self = this, o = this.options;
         this._initSwitcher();
         this._initPullDownAction();
@@ -24209,6 +24290,7 @@ BI.Switcher.EVENT_AFTER_HIDEVIEW = "EVENT_AFTER_HIDEVIEW";
 
 BI.shortcut("bi.switcher", BI.Switcher);
 
+
 /***/ }),
 /* 372 */
 /***/ (function(module, exports) {
@@ -24389,10 +24471,6 @@ BI.ButtonTree = BI.inherit(BI.ButtonGroup, {
         });
     },
 
-    _init: function () {
-        BI.ButtonTree.superclass._init.apply(this, arguments);
-    },
-
     setNotSelectedValue: function (v) {
         v = BI.isArray(v) ? v : [v];
         BI.each(this.buttons, function (i, item) {
@@ -24559,6 +24637,7 @@ BI.ButtonTree.EVENT_CHANGE = "EVENT_CHANGE";
 
 BI.shortcut("bi.button_tree", BI.ButtonTree);
 
+
 /***/ }),
 /* 374 */
 /***/ (function(module, exports) {
@@ -24574,18 +24653,14 @@ BI.EL = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.EL.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-el",
-            el: {},
-            layout: {}
+            el: {}
         });
     },
-    _init: function () {
-        BI.EL.superclass._init.apply(this, arguments);
+
+    render: function () {
         var self = this, o = this.options;
-        this.ele = BI.createWidget(o.el);
-        BI.createWidget(o.layout, {
-            type: "bi.adaptive",
-            element: this,
-            items: [this.ele]
+        this.ele = BI.createWidget(o.el, {
+            element: this
         });
         this.ele.on(BI.Controller.EVENT_CHANGE, function () {
             self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
@@ -24605,6 +24680,7 @@ BI.EL = BI.inherit(BI.Widget, {
     }
 });
 BI.shortcut("bi.el", BI.EL);
+
 
 /***/ }),
 /* 375 */
@@ -24846,8 +24922,7 @@ BI.GridView = BI.inherit(BI.Widget, {
         });
     },
 
-    _init: function () {
-        BI.GridView.superclass._init.apply(this, arguments);
+    render: function () {
         var self = this, o = this.options;
         this.renderedCells = [];
         this.renderedKeys = [];
@@ -24880,6 +24955,7 @@ BI.GridView = BI.inherit(BI.Widget, {
             items: [this.container]
         });
         if (o.items.length > 0) {
+            this._calculateSizeAndPositionData();
             this._populate();
         }
     },
@@ -24891,6 +24967,24 @@ BI.GridView = BI.inherit(BI.Widget, {
             this.element.scrollTop(o.scrollTop);
             this.element.scrollLeft(o.scrollLeft);
         }
+    },
+
+    _calculateSizeAndPositionData: function () {
+        var o = this.options;
+        this.rowCount = 0;
+        this.columnCount = 0;
+        if (BI.isNumber(o.columnCount)) {
+            this.columnCount = o.columnCount;
+        } else if (o.items.length > 0) {
+            this.columnCount = o.items[0].length;
+        }
+        if (BI.isNumber(o.rowCount)) {
+            this.rowCount = o.rowCount;
+        } else {
+            this.rowCount = o.items.length;
+        }
+        this._columnSizeAndPositionManager = new BI.ScalingCellSizeAndPositionManager(this.columnCount, o.columnWidthGetter, o.estimatedColumnSize);
+        this._rowSizeAndPositionManager = new BI.ScalingCellSizeAndPositionManager(this.rowCount, o.rowHeightGetter, o.estimatedRowSize);
     },
 
     _getOverscanIndices: function (cellCount, overscanCellsCount, startIndex, stopIndex) {
@@ -24958,20 +25052,20 @@ BI.GridView = BI.inherit(BI.Widget, {
                     var index = this.renderedKeys[key] && this.renderedKeys[key][2];
                     var child;
                     if (index >= 0) {
-                        if (columnDatum.size !== this.renderedCells[index]._width) {
-                            this.renderedCells[index]._width = columnDatum.size;
-                            this.renderedCells[index].el.setWidth(columnDatum.size);
-                        }
-                        if (rowDatum.size !== this.renderedCells[index]._height) {
-                            this.renderedCells[index]._height = rowDatum.size;
-                            this.renderedCells[index].el.setHeight(rowDatum.size);
-                        }
-                        if (this.renderedCells[index]._left !== columnDatum.offset + horizontalOffsetAdjustment) {
-                            this.renderedCells[index].el.element.css("left", (columnDatum.offset + horizontalOffsetAdjustment) / BI.pixRatio + BI.pixUnit);
-                        }
-                        if (this.renderedCells[index]._top !== rowDatum.offset + verticalOffsetAdjustment) {
-                            this.renderedCells[index].el.element.css("top", (rowDatum.offset + verticalOffsetAdjustment) / BI.pixRatio + BI.pixUnit);
-                        }
+                        // if (columnDatum.size !== this.renderedCells[index]._width) {
+                        // this.renderedCells[index]._width = columnDatum.size;
+                        this.renderedCells[index].el.setWidth(columnDatum.size);
+                        // }
+                        // if (rowDatum.size !== this.renderedCells[index]._height) {
+                        // this.renderedCells[index]._height = rowDatum.size;
+                        this.renderedCells[index].el.setHeight(rowDatum.size);
+                        // }
+                        // if (this.renderedCells[index]._left !== columnDatum.offset + horizontalOffsetAdjustment) {
+                        this.renderedCells[index].el.element.css("left", (columnDatum.offset + horizontalOffsetAdjustment) / BI.pixRatio + BI.pixUnit);
+                        // }
+                        // if (this.renderedCells[index]._top !== rowDatum.offset + verticalOffsetAdjustment) {
+                        this.renderedCells[index].el.element.css("top", (rowDatum.offset + verticalOffsetAdjustment) / BI.pixRatio + BI.pixUnit);
+                        // }
                         child = this.renderedCells[index].el;
                         renderedCells.push(this.renderedCells[index]);
                     } else {
@@ -24991,9 +25085,9 @@ BI.GridView = BI.inherit(BI.Widget, {
                             left: columnDatum.offset + horizontalOffsetAdjustment,
                             top: rowDatum.offset + verticalOffsetAdjustment,
                             _left: columnDatum.offset + horizontalOffsetAdjustment,
-                            _top: rowDatum.offset + verticalOffsetAdjustment,
-                            _width: columnDatum.size,
-                            _height: rowDatum.size
+                            _top: rowDatum.offset + verticalOffsetAdjustment
+                            // _width: columnDatum.size,
+                            // _height: rowDatum.size
                         });
                     }
                     minX = Math.min(minX, columnDatum.offset + horizontalOffsetAdjustment);
@@ -25042,59 +25136,40 @@ BI.GridView = BI.inherit(BI.Widget, {
         }
     },
 
-    /**
-     * 获取真实的可滚动的最大宽度
-     * 对于grid_view如果没有全部渲染过，this._columnSizeAndPositionManager.getTotalSize获取的宽度是不准确的
-     * 因此在调用setScrollLeft等函数时会造成没法移动到最右端(预估可移动具体太短)
-     */
-    _getRealMaxScrollLeft: function () {
-        var o = this.options;
-        var totalWidth = 0;
-        BI.count(0, this.columnCount, function (index) {
-            totalWidth += o.columnWidthGetter(index);
-        });
-        return Math.max(0, totalWidth - this.options.width + (this.options.overflowX ? BI.DOM.getScrollWidth() : 0));
-    },
-
     _getMaxScrollLeft: function () {
-        return Math.max(0, this._columnSizeAndPositionManager.getTotalSize() - this.options.width + (this.options.overflowX ? BI.DOM.getScrollWidth() : 0));
+        return Math.max(0, this._getContainerWidth() - this.options.width + (this.options.overflowX ? BI.DOM.getScrollWidth() : 0));
     },
 
     _getMaxScrollTop: function () {
-        return Math.max(0, this._rowSizeAndPositionManager.getTotalSize() - this.options.height + (this.options.overflowY ? BI.DOM.getScrollWidth() : 0));
+        return Math.max(0, this._getContainerHeight() - this.options.height + (this.options.overflowY ? BI.DOM.getScrollWidth() : 0));
+    },
+
+    _getContainerWidth: function () {
+        return this.columnCount * this.options.estimatedColumnSize;
+    },
+
+    _getContainerHeight: function () {
+        return this.rowCount * this.options.estimatedRowSize;
     },
 
     _populate: function (items) {
         var self = this, o = this.options;
         this._reRange();
-        this.columnCount = 0;
-        this.rowCount = 0;
         if (items && items !== this.options.items) {
             this.options.items = items;
+            this._calculateSizeAndPositionData();
         }
-        if (BI.isNumber(o.columnCount)) {
-            this.columnCount = o.columnCount;
-        } else if (o.items.length > 0) {
-            this.columnCount = o.items[0].length;
-        }
-        if (BI.isNumber(o.rowCount)) {
-            this.rowCount = o.rowCount;
-        } else {
-            this.rowCount = o.items.length;
-        }
-        this.container.setWidth(this.columnCount * o.estimatedColumnSize);
-        this.container.setHeight(this.rowCount * o.estimatedRowSize);
+        this.container.setWidth(this._getContainerWidth());
+        this.container.setHeight(this._getContainerHeight());
 
-        this._columnSizeAndPositionManager = new BI.ScalingCellSizeAndPositionManager(this.columnCount, o.columnWidthGetter, o.estimatedColumnSize);
-        this._rowSizeAndPositionManager = new BI.ScalingCellSizeAndPositionManager(this.rowCount, o.rowHeightGetter, o.estimatedRowSize);
-
-        this._calculateChildrenToRender();
         // 元素未挂载时不能设置scrollTop
+        this._debounceRelease();
         try {
             this.element.scrollTop(o.scrollTop);
             this.element.scrollLeft(o.scrollLeft);
         } catch (e) {
         }
+        this._calculateChildrenToRender();
     },
 
     setScrollLeft: function (scrollLeft) {
@@ -25102,10 +25177,10 @@ BI.GridView = BI.inherit(BI.Widget, {
             return;
         }
         this._scrollLock = true;
-        this.options.scrollLeft = BI.clamp(scrollLeft || 0, 0, this._getRealMaxScrollLeft());
+        this.options.scrollLeft = BI.clamp(scrollLeft || 0, 0, this._getMaxScrollLeft());
         this._debounceRelease();
-        this._calculateChildrenToRender();
         this.element.scrollLeft(this.options.scrollLeft);
+        this._calculateChildrenToRender();
     },
 
     setScrollTop: function (scrollTop) {
@@ -25115,8 +25190,8 @@ BI.GridView = BI.inherit(BI.Widget, {
         this._scrollLock = true;
         this.options.scrollTop = BI.clamp(scrollTop || 0, 0, this._getMaxScrollTop());
         this._debounceRelease();
-        this._calculateChildrenToRender();
         this.element.scrollTop(this.options.scrollTop);
+        this._calculateChildrenToRender();
     },
 
     setColumnCount: function (columnCount) {
@@ -25529,8 +25604,7 @@ BI.PopupView = BI.inherit(BI.Widget, {
         });
     },
 
-    _init: function () {
-        BI.PopupView.superclass._init.apply(this, arguments);
+    render: function () {
         var self = this, o = this.options;
         var fn = function (e) {
             e.stopPropagation();
@@ -25715,8 +25789,7 @@ BI.SearcherView = BI.inherit(BI.Pane, {
         });
     },
 
-    _init: function () {
-        BI.SearcherView.superclass._init.apply(this, arguments);
+    render: function () {
         var self = this, o = this.options;
 
         this.matcher = BI.createWidget(o.matcher, {
@@ -25813,6 +25886,7 @@ BI.SearcherView = BI.inherit(BI.Pane, {
 BI.SearcherView.EVENT_CHANGE = "EVENT_CHANGE";
 
 BI.shortcut("bi.searcher_view", BI.SearcherView);
+
 
 /***/ }),
 /* 380 */
@@ -26342,8 +26416,8 @@ BI.Pager = BI.inherit(BI.Widget, {
             hasNext: BI.emptyFn  // pages不可用时有效
         });
     },
-    _init: function () {
-        BI.Pager.superclass._init.apply(this, arguments);
+
+    render: function () {
         var self = this;
         this.currPage = BI.result(this.options, "curr");
         // 翻页太灵敏
@@ -26589,6 +26663,7 @@ BI.Pager = BI.inherit(BI.Widget, {
 BI.Pager.EVENT_CHANGE = "EVENT_CHANGE";
 BI.Pager.EVENT_AFTER_POPULATE = "EVENT_AFTER_POPULATE";
 BI.shortcut("bi.pager", BI.Pager);
+
 
 /***/ }),
 /* 384 */
@@ -27003,9 +27078,9 @@ BI.A = BI.inherit(BI.Text, {
             tagName: "a"
         });
     },
-    _init: function () {
+
+    render: function () {
         var o = this.options;
-        BI.A.superclass._init.apply(this, arguments);
         this.element.attr({href: o.href, target: o.target});
         if (o.el) {
             BI.createWidget(o.el, {
@@ -27016,6 +27091,7 @@ BI.A = BI.inherit(BI.Text, {
 });
 
 BI.shortcut("bi.a", BI.A);
+
 
 /***/ }),
 /* 387 */
@@ -27035,8 +27111,8 @@ BI.LoadingBar = BI.inherit(BI.Single, {
             handler: BI.emptyFn
         });
     },
-    _init: function () {
-        BI.LoadingBar.superclass._init.apply(this, arguments);
+
+    render: function () {
         var self = this;
         this.loaded = BI.createWidget({
             type: "bi.text_button",
@@ -27101,6 +27177,7 @@ BI.LoadingBar = BI.inherit(BI.Single, {
 });
 
 BI.shortcut("bi.loading_bar", BI.LoadingBar);
+
 
 /***/ }),
 /* 388 */
@@ -27602,8 +27679,7 @@ BI.IconButton = BI.inherit(BI.BasicButton, {
         });
     },
 
-    _init: function () {
-        BI.IconButton.superclass._init.apply(this, arguments);
+    render: function () {
         var o = this.options;
         this.element.css({
             textAlign: "center"
@@ -27663,8 +27739,7 @@ BI.ImageButton = BI.inherit(BI.BasicButton, {
         });
     },
 
-    _init: function () {
-        BI.ImageButton.superclass._init.apply(this, arguments);
+    render: function () {
         var o = this.options;
         this.image = BI.createWidget({
             type: "bi.img",
@@ -27733,6 +27808,7 @@ BI.ImageButton = BI.inherit(BI.BasicButton, {
 BI.ImageButton.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.image_button", BI.ImageButton);
 
+
 /***/ }),
 /* 392 */
 /***/ (function(module, exports) {
@@ -27778,15 +27854,30 @@ BI.Button = BI.inherit(BI.BasicButton, {
         });
     },
 
-    _init: function () {
-        BI.Button.superclass._init.apply(this, arguments);
+    render: function () {
         var o = this.options, self = this;
+
+        // 由于button默认情况下有个边框，所以要主动算行高
+        var lineHeight, textHeight = o.textHeight;
+        if (BI.isNumber(o.height)) {
+            if (o.clear || o.block) {
+                lineHeight = o.height;
+            } else {
+                lineHeight = o.height - 2;
+            }
+        }
+        if (!textHeight) {
+            if (o.whiteSpace === "nowrap") {
+                textHeight = lineHeight;
+            }
+        }
         if (BI.isKey(o.iconCls)) {
             this.icon = BI.createWidget({
                 type: "bi.icon_label",
                 cls: o.iconCls,
                 width: this._const.iconWidth,
-                height: o.height - 2,
+                height: o.height,
+                lineHeight: lineHeight,
                 iconWidth: o.iconWidth,
                 iconHeight: o.iconHeight
             });
@@ -27794,9 +27885,9 @@ BI.Button = BI.inherit(BI.BasicButton, {
                 type: "bi.label",
                 text: o.text,
                 textWidth: BI.isNotNull(o.textWidth) ? o.textWidth - this._const.iconWidth : null,
-                textHeight: o.textHeight,
-                value: o.value,
-                height: o.height - 2
+                textHeight: textHeight,
+                height: o.height,
+                value: o.value
             });
             BI.createWidget({
                 type: "bi.center_adapt",
@@ -27816,7 +27907,7 @@ BI.Button = BI.inherit(BI.BasicButton, {
                 textAlign: o.textAlign,
                 whiteSpace: o.whiteSpace,
                 textWidth: o.textWidth,
-                textHeight: o.textHeight,
+                textHeight: textHeight,
                 hgap: o.hgap,
                 vgap: o.vgap,
                 tgap: o.tgap,
@@ -27827,16 +27918,6 @@ BI.Button = BI.inherit(BI.BasicButton, {
                 text: o.text,
                 value: o.value
             });
-        }
-        if (BI.isNumber(o.height) && !o.clear && !o.block) {
-            this.element.css({
-                height: o.height / BI.pixRatio + BI.pixUnit,
-                lineHeight: (o.height - 2) / BI.pixRatio + BI.pixUnit
-            });
-        } else if (o.clear || o.block) {
-            this.element.css({lineHeight: o.height / BI.pixRatio + BI.pixUnit});
-        } else {
-            this.element.css({lineHeight: (o.height - 2) / BI.pixRatio + BI.pixUnit});
         }
         if (o.block === true) {
             this.element.addClass("block");
@@ -27919,8 +28000,7 @@ BI.TextButton = BI.inherit(BI.BasicButton, {
         });
     },
 
-    _init: function () {
-        BI.TextButton.superclass._init.apply(this, arguments);
+    render: function () {
         var o = this.options;
         this.text = BI.createWidget({
             type: "bi.label",
@@ -27986,6 +28066,7 @@ BI.TextButton = BI.inherit(BI.BasicButton, {
 BI.TextButton.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.text_button", BI.TextButton);
 
+
 /***/ }),
 /* 394 */
 /***/ (function(module, exports) {
@@ -28017,8 +28098,8 @@ BI.BlankIconIconTextItem = BI.inherit(BI.BasicButton, {
             textRgap: 0
         });
     },
-    _init: function () {
-        BI.BlankIconIconTextItem.superclass._init.apply(this, arguments);
+
+    render: function () {
         var o = this.options, c = this._const;
         var blank = BI.createWidget({
             type: "bi.layout",
@@ -28143,8 +28224,8 @@ BI.BlankIconTextIconItem = BI.inherit(BI.BasicButton, {
             textRgap: 0
         });
     },
-    _init: function () {
-        BI.BlankIconTextIconItem.superclass._init.apply(this, arguments);
+
+    render: function () {
         var o = this.options, c = this._const;
         this.text = BI.createWidget({
             type: "bi.label",
@@ -28273,8 +28354,8 @@ BI.BlankIconTextItem = BI.inherit(BI.BasicButton, {
             textRgap: 0
         });
     },
-    _init: function () {
-        BI.BlankIconTextItem.superclass._init.apply(this, arguments);
+
+    render: function () {
         var o = this.options, c = this._const;
         var blank = BI.createWidget({
             type: "bi.layout",
@@ -28385,8 +28466,8 @@ BI.IconTextIconItem = BI.inherit(BI.BasicButton, {
             textRgap: 0
         });
     },
-    _init: function () {
-        BI.IconTextIconItem.superclass._init.apply(this, arguments);
+
+    render: function () {
         var o = this.options, c = this._const;
         this.text = BI.createWidget({
             type: "bi.label",
@@ -28514,8 +28595,8 @@ BI.IconTextItem = BI.inherit(BI.BasicButton, {
             textRgap: 0
         });
     },
-    _init: function () {
-        BI.IconTextItem.superclass._init.apply(this, arguments);
+
+    render: function () {
         var o = this.options, c = this._const;
         this.text = BI.createWidget({
             type: "bi.label",
@@ -28621,8 +28702,8 @@ BI.TextIconItem = BI.inherit(BI.BasicButton, {
             textRgap: 0
         });
     },
-    _init: function () {
-        BI.TextIconItem.superclass._init.apply(this, arguments);
+
+    render: function () {
         var o = this.options, c = this._const;
         this.text = BI.createWidget({
             type: "bi.label",
@@ -28724,8 +28805,8 @@ BI.TextItem = BI.inherit(BI.BasicButton, {
             textRgap: 0
         });
     },
-    _init: function () {
-        BI.TextItem.superclass._init.apply(this, arguments);
+
+    render: function () {
         var o = this.options;
         this.text = BI.createWidget({
             type: "bi.label",
@@ -28789,6 +28870,7 @@ BI.TextItem = BI.inherit(BI.BasicButton, {
 BI.TextItem.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.text_item", BI.TextItem);
 
+
 /***/ }),
 /* 401 */
 /***/ (function(module, exports) {
@@ -28818,8 +28900,8 @@ BI.IconTextIconNode = BI.inherit(BI.NodeButton, {
             textRgap: 0
         });
     },
-    _init: function () {
-        BI.IconTextIconNode.superclass._init.apply(this, arguments);
+
+    render: function () {
         var o = this.options, c = this._const;
         this.text = BI.createWidget({
             type: "bi.label",
@@ -28907,6 +28989,7 @@ BI.IconTextIconNode = BI.inherit(BI.NodeButton, {
 BI.IconTextIconNode.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.icon_text_icon_node", BI.IconTextIconNode);
 
+
 /***/ }),
 /* 402 */
 /***/ (function(module, exports) {
@@ -28935,8 +29018,8 @@ BI.IconTextNode = BI.inherit(BI.NodeButton, {
             textRgap: 0
         });
     },
-    _init: function () {
-        BI.IconTextNode.superclass._init.apply(this, arguments);
+
+    render: function () {
         var o = this.options, c = this._const;
         this.text = BI.createWidget({
             type: "bi.label",
@@ -29002,6 +29085,7 @@ BI.IconTextNode = BI.inherit(BI.NodeButton, {
 BI.IconTextNode.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.icon_text_node", BI.IconTextNode);
 
+
 /***/ }),
 /* 403 */
 /***/ (function(module, exports) {
@@ -29029,8 +29113,8 @@ BI.TextIconNode = BI.inherit(BI.NodeButton, {
             textRgap: 0
         });
     },
-    _init: function () {
-        BI.TextIconNode.superclass._init.apply(this, arguments);
+
+    render: function () {
         var o = this.options, c = this._const;
         this.text = BI.createWidget({
             type: "bi.label",
@@ -29096,6 +29180,7 @@ BI.TextIconNode = BI.inherit(BI.NodeButton, {
 BI.TextIconNode.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.text_icon_node", BI.TextIconNode);
 
+
 /***/ }),
 /* 404 */
 /***/ (function(module, exports) {
@@ -29121,8 +29206,8 @@ BI.TextNode = BI.inherit(BI.NodeButton, {
             textRgap: 0
         });
     },
-    _init: function () {
-        BI.TextNode.superclass._init.apply(this, arguments);
+
+    render: function () {
         var o = this.options;
         this.text = BI.createWidget({
             type: "bi.label",
@@ -29178,6 +29263,7 @@ BI.TextNode = BI.inherit(BI.NodeButton, {
 BI.TextNode.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.text_node", BI.TextNode);
 
+
 /***/ }),
 /* 405 */
 /***/ (function(module, exports) {
@@ -29210,8 +29296,7 @@ BI.Editor = BI.inherit(BI.Single, {
         });
     },
 
-    _init: function () {
-        BI.Editor.superclass._init.apply(this, arguments);
+    render: function () {
         var self = this, o = this.options;
         // 密码输入框设置autocomplete="new-password"的情况下Firefox和chrome不会自动填充密码
         var autocomplete = o.autocomplete ? " autocomplete=" + o.autocomplete : "";
@@ -29579,9 +29664,8 @@ BI.MultifileEditor = BI.inherit(BI.Widget, {
         });
     },
 
-    _init: function () {
+    render: function () {
         var self = this, o = this.options;
-        BI.MultifileEditor.superclass._init.apply(this, arguments);
         this.file = BI.createWidget({
             type: "bi.file",
             cls: "multifile-editor",
@@ -30056,14 +30140,15 @@ BI.Icon = BI.inherit(BI.Single, {
             baseCls: (conf.baseCls || "") + " x-icon b-font horizon-center display-block"
         });
     },
-    _init: function () {
-        BI.Icon.superclass._init.apply(this, arguments);
+
+    render: function () {
         if (BI.isIE9Below && BI.isIE9Below()) {
             this.element.addClass("hack");
         }
     }
 });
 BI.shortcut("bi.icon", BI.Icon);
+
 
 /***/ }),
 /* 410 */
@@ -30089,9 +30174,8 @@ BI.Iframe = BI.inherit(BI.Single, {
         });
     },
 
-    _init: function () {
+    render: function () {
         var self = this;
-        BI.Iframe.superclass._init.apply(this, arguments);
         this.element.on("load", function () {
             self.fireEvent("EVENT_LOADED");
         });
@@ -30290,8 +30374,7 @@ BI.Input = BI.inherit(BI.Single, {
         });
     },
 
-    _init: function () {
-        BI.Input.superclass._init.apply(this, arguments);
+    render: function () {
         var self = this;
         var ctrlKey = false;
         var keyCode = null;
@@ -30613,10 +30696,6 @@ BI.ImageRadio = BI.inherit(BI.IconButton, {
         });
     },
 
-    _init: function () {
-        BI.ImageRadio.superclass._init.apply(this, arguments);
-    },
-
     doClick: function () {
         BI.ImageRadio.superclass.doClick.apply(this, arguments);
         if(this.isValid()) {
@@ -30627,6 +30706,7 @@ BI.ImageRadio = BI.inherit(BI.IconButton, {
 BI.ImageRadio.EVENT_CHANGE = BI.IconButton.EVENT_CHANGE;
 
 BI.shortcut("bi.image_radio", BI.ImageRadio);
+
 
 /***/ }),
 /* 416 */
@@ -30739,9 +30819,7 @@ BI.shortcut("bi.radio", BI.Radio);
             };
         },
 
-        _init: function () {
-            BI.AbstractLabel.superclass._init.apply(this, arguments);
-
+        render: function () {
             if (this.options.textAlign === "center") {
                 this._createCenterEl();
             } else {
@@ -31131,11 +31209,11 @@ BI.IconLabel = BI.inherit(BI.Single, {
     props: {
         baseCls: "bi-icon-label horizon-center",
         iconWidth: null,
-        iconHeight: null
+        iconHeight: null,
+        lineHeight: null,
     },
 
-    _init: function () {
-        BI.IconLabel.superclass._init.apply(this, arguments);
+    render: function () {
         var o = this.options;
         this.element.css({
             textAlign: "center"
@@ -31146,7 +31224,7 @@ BI.IconLabel = BI.inherit(BI.Single, {
             height: o.iconHeight
         });
         if (BI.isNumber(o.height) && o.height > 0 && BI.isNull(o.iconWidth) && BI.isNull(o.iconHeight)) {
-            this.element.css("lineHeight", o.height / BI.pixRatio + BI.pixUnit);
+            this.element.css("lineHeight", (o.lineHeight || o.height) / BI.pixRatio + BI.pixUnit);
             BI.createWidget({
                 type: "bi.default",
                 element: this,
@@ -31333,8 +31411,8 @@ BI.Toast = BI.inherit(BI.Tip, {
             level: "success" // success或warning
         });
     },
-    _init: function () {
-        BI.Toast.superclass._init.apply(this, arguments);
+
+    render: function () {
         var self = this, o = this.options;
         this.element.css({
             minWidth: this._const.minWidth / BI.pixRatio + BI.pixUnit
@@ -31448,8 +31526,8 @@ BI.Tooltip = BI.inherit(BI.Tip, {
             stopPropagation: false
         });
     },
-    _init: function () {
-        BI.Tooltip.superclass._init.apply(this, arguments);
+
+    render: function () {
         var self = this, o = this.options;
         this.element.addClass("tooltip-" + o.level);
         var fn = function (e) {
@@ -31511,6 +31589,7 @@ BI.Tooltip = BI.inherit(BI.Tip, {
 
 BI.shortcut("bi.tooltip", BI.Tooltip);
 
+
 /***/ }),
 /* 426 */
 /***/ (function(module, exports) {
@@ -31530,10 +31609,6 @@ BI.Trigger = BI.inherit(BI.Single, {
         });
     },
 
-    _init: function () {
-        BI.Trigger.superclass._init.apply(this, arguments);
-    },
-
     setKey: function () {
 
     },
@@ -31542,6 +31617,7 @@ BI.Trigger = BI.inherit(BI.Single, {
 
     },
 });
+
 
 /***/ }),
 /* 427 */
@@ -31852,20 +31928,6 @@ BI.HalfButton = BI.inherit(BI.BasicButton, {
             height: 14,
             width: 14,
             selected: false
-        });
-    },
-
-    _init: function () {
-        BI.HalfButton.superclass._init.apply(this, arguments);
-        BI.createWidget({
-            type: "bi.center_adapt",
-            element: this.element,
-            items: [{
-                type: "bi.layout",
-                cls: "bi-high-light-background",
-                width: 8,
-                height: 8
-            }]
         });
     },
 
@@ -34249,7 +34311,7 @@ BI.ColorChooser = BI.inherit(BI.Widget, {
                     }]
                 }, o.popup),
                 value: o.value,
-                width: 292
+                width: 300
             },
             value: o.value
         });
@@ -34309,7 +34371,7 @@ BI.HexColorChooserPopup = BI.inherit(BI.Widget, {
 
     props: {
         baseCls: "bi-color-chooser-popup",
-        width: 292,
+        width: 300,
         recommendColorsGetter: BI.emptyFn, // 推荐色获取接口
         simple: false // 简单模式, popup中没有自动和透明
     },
@@ -34323,11 +34385,11 @@ BI.HexColorChooserPopup = BI.inherit(BI.Widget, {
                 items: [{
                     el: {
                         type: "bi.vertical",
-                        hgap: 10,
+                        hgap: 15,
                         items: [BI.extend({
                             type: o.simple ? "bi.simple_hex_color_picker_editor" : "bi.hex_color_picker_editor",
                             value: o.value,
-                            height: o.simple ? 30 : 64,
+                            height: o.simple ? 36 : 70,
                             listeners: [{
                                 eventName: BI.ColorPickerEditor.EVENT_CHANGE,
                                 action: function () {
@@ -35208,7 +35270,7 @@ BI.ColorPickerButton = BI.inherit(BI.BasicButton, {
         var self = this, o = this.options;
         if (BI.isNotNull(o.value)) {
             if (o.value === '') {
-                this.element.addClass("auto-color-normal-background");
+                this.element.addClass("auto-color-square-normal-background");
             } else if (o.value === "transparent") {
                 this.element.addClass("trans-color-background");
             } else {
@@ -35717,7 +35779,7 @@ BI.HexColorPickerEditor = BI.inherit(BI.Widget, {
                 allowBlank: true,
                 value: 255,
                 width: c.RGB_WIDTH,
-                height: 20,
+                height: 24,
                 listeners: [{
                     eventName: BI.TextEditor.EVENT_CHANGE,
                     action: function () {
@@ -35800,20 +35862,20 @@ BI.HexColorPickerEditor = BI.inherit(BI.Widget, {
                     }, {
                         el: {
                             type: "bi.vertical_adapt",
-                            columnSize: [16, 10, 'fill', 12, c.RGB_WIDTH, 12, c.RGB_WIDTH, 12, c.RGB_WIDTH],
+                            columnSize: [22, 10, 'fill', 12, c.RGB_WIDTH, 12, c.RGB_WIDTH, 12, c.RGB_WIDTH],
 
                             rgap: 5,
                             items: [{
                                 el: {
                                     type: "bi.layout",
                                     cls: "color-picker-editor-display bi-card bi-border",
-                                    height: 16,
-                                    width: 16,
+                                    height: 22,
+                                    width: 22,
                                     ref: function (_ref) {
                                         self.colorShow = _ref;
                                     }
                                 },
-                                width: 16
+                                width: 18
                             }, {
                                 type: "bi.label",
                                 text: "#",
@@ -35828,7 +35890,7 @@ BI.HexColorPickerEditor = BI.inherit(BI.Widget, {
                                 allowBlank: true,
                                 errorText: BI.i18nText("BI-Color_Picker_Error_Text_Hex"),
                                 width: c.HEX_WIDTH,
-                                height: 20,
+                                height: 24,
                                 listeners: [{
                                     eventName: "EVENT_CHANGE",
                                     action: function () {
@@ -35917,11 +35979,11 @@ BI.HexColorPickerEditor = BI.inherit(BI.Widget, {
 
     _showPreColor: function (color) {
         if (color === "") {
-            this.colorShow.element.css("background-color", "").removeClass("trans-color-background").addClass("auto-color-normal-background");
+            this.colorShow.element.css("background-color", "").removeClass("trans-color-background").addClass("auto-color-square-normal-background");
         } else if (color === "transparent") {
-            this.colorShow.element.css("background-color", "").removeClass("auto-color-normal-background").addClass("trans-color-background");
+            this.colorShow.element.css("background-color", "").removeClass("auto-color-square-normal-background").addClass("trans-color-background");
         } else {
-            this.colorShow.element.css({"background-color": color}).removeClass("auto-color-normal-background").removeClass("trans-color-background");
+            this.colorShow.element.css({"background-color": color}).removeClass("auto-color-square-normal-background").removeClass("trans-color-background");
         }
     },
 
@@ -36003,7 +36065,7 @@ BI.SimpleHexColorPickerEditor = BI.inherit(BI.Widget, {
 
     props: {
         baseCls: "bi-color-picker-editor",
-        height: 30
+        height: 36
     },
 
     render: function () {
@@ -36027,7 +36089,7 @@ BI.SimpleHexColorPickerEditor = BI.inherit(BI.Widget, {
                 allowBlank: true,
                 value: 255,
                 width: c.RGB_WIDTH,
-                height: 20,
+                height: 24,
                 listeners: [{
                     eventName: BI.TextEditor.EVENT_CHANGE,
                     action: function () {
@@ -36048,18 +36110,18 @@ BI.SimpleHexColorPickerEditor = BI.inherit(BI.Widget, {
                 el: {
                     type: "bi.vertical_adapt",
                     rgap: 5,
-                    columnSize: [16, 10, 'fill', 12, c.RGB_WIDTH, 12, c.RGB_WIDTH, 12, c.RGB_WIDTH],
+                    columnSize: [22, 10, 'fill', 12, c.RGB_WIDTH, 12, c.RGB_WIDTH, 12, c.RGB_WIDTH],
                     items: [{
                         el: {
                             type: "bi.layout",
                             cls: "color-picker-editor-display bi-card bi-border",
-                            height: 16,
-                            width: 16,
+                            height: 22,
+                            width: 22,
                             ref: function (_ref) {
                                 self.colorShow = _ref;
                             }
                         },
-                        width: 16,
+                        width: 18,
                     }, {
                         type: "bi.label",
                         text: "#",
@@ -36074,7 +36136,7 @@ BI.SimpleHexColorPickerEditor = BI.inherit(BI.Widget, {
                         allowBlank: true,
                         errorText: BI.i18nText("BI-Color_Picker_Error_Text_Hex"),
                         width: c.HEX_WIDTH,
-                        height: 20,
+                        height: 24,
                         listeners: [{
                             eventName: "EVENT_CHANGE",
                             action: function () {
@@ -37073,9 +37135,6 @@ BI.BubblePopupView = BI.inherit(BI.PopupView, {
             maxWidth: 300,
             minHeight: 90
         });
-    },
-    _init: function () {
-        BI.BubblePopupView.superclass._init.apply(this, arguments);
     }
 });
 
@@ -38484,6 +38543,10 @@ BI.SmallTextValueCombo = BI.inherit(BI.Widget, {
                 minHeight: 25
             }
         });
+
+        if(BI.isKey(o.value)){
+            this.setValue(o.value);
+        }
     },
 
     setValue: function (v) {
@@ -41286,6 +41349,7 @@ BI.AllCountPager = BI.inherit(BI.Widget, {
         this.allPages = BI.createWidget({
             type: "bi.label",
             title: o.pages,
+            height: o.height,
             text: "/" + o.pages,
             lgap: 5,
             invisible: o.pages <= 1
@@ -46179,7 +46243,6 @@ BI.DynamicDateCard = BI.inherit(BI.Widget, {
                     type: "bi.label",
                     text: BI.i18nText("BI-Multi_Date_Relative_Current_Time"),
                     textAlign: "left",
-                    height: 12,
                     lgap: 10
                 },
                 tgap: 10,
@@ -46601,7 +46664,7 @@ BI.DynamicDateCombo = BI.inherit(BI.Single, {
     },
 
     props: {
-        baseCls: "bi-dynamic-date-combo bi-border bi-focus-shadow bi-border-radius",
+        baseCls: "bi-dynamic-date-combo",
         height: 24,
         minDate: "1900-01-01",
         maxDate: "2099-12-31",
@@ -46616,8 +46679,6 @@ BI.DynamicDateCombo = BI.inherit(BI.Single, {
     },
 
     _init: function () {
-        var o = this.options;
-        o.height -= 2;
         BI.DynamicDateCombo.superclass._init.apply(this, arguments);
     },
 
@@ -46644,6 +46705,7 @@ BI.DynamicDateCombo = BI.inherit(BI.Single, {
                 items: [{
                     el: {
                         type: "bi.combo",
+                        cls: "bi-border bi-border-radius bi-focus-shadow",
                         container: opts.container,
                         ref: function () {
                             self.combo = this;
@@ -46659,7 +46721,7 @@ BI.DynamicDateCombo = BI.inherit(BI.Single, {
                             format: opts.format,
                             allowEdit: opts.allowEdit,
                             watermark: opts.watermark,
-                            height: opts.height,
+                            height: opts.height - 2,
                             value: opts.value,
                             ref: function () {
                                 self.trigger = this;
@@ -47668,7 +47730,7 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
     },
 
     props: {
-        baseCls: "bi-dynamic-date-combo bi-border bi-focus-shadow bi-border-radius",
+        baseCls: "bi-dynamic-date-combo",
         height: 24,
         minDate: "1900-01-01",
         maxDate: "2099-12-31",
@@ -47683,8 +47745,6 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
     },
 
     _init: function () {
-        var o = this.options;
-        o.height -= 2;
         BI.DynamicDateTimeCombo.superclass._init.apply(this, arguments);
     },
 
@@ -47711,6 +47771,7 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
                 items: [{
                     el: {
                         type: "bi.combo",
+                        cls: "bi-border bi-border-radius bi-focus-shadow",
                         destroyWhenHide: true,
                         container: opts.container,
                         ref: function () {
@@ -47726,7 +47787,7 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
                             allowEdit: opts.allowEdit,
                             watermark: opts.watermark,
                             format: opts.format,
-                            height: opts.height,
+                            height: opts.height - 2,
                             value: opts.value,
                             ref: function () {
                                 self.trigger = this;
@@ -63700,7 +63761,7 @@ BI.SingleSelectSearchLoader = BI.inherit(BI.Widget, {
                     var keyword = ob.keyword = opts.keywordGetter();
                     hasNext = ob.hasNext;
                     var firstItems = [];
-                    if (op.times === 1 && BI.isNotNull(self.storeValue)) {
+                    if (op.times === 1 && !BI.isUndefined(self.storeValue)) {
                         var json = self._filterValues(self.storeValue);
                         firstItems = self._createItems(json);
                     }
@@ -64753,13 +64814,13 @@ BI.SingleSelectLoader = BI.inherit(BI.Widget, {
             }, opts.el),
             itemsCreator: function (op, callback) {
                 var startValue = self._startValue;
-                BI.isNotNull(self.storeValue) && (op = BI.extend(op || {}, {
+                !BI.isUndefined(self.storeValue) && (op = BI.extend(op || {}, {
                     selectedValues: [self.storeValue]
                 }));
                 opts.itemsCreator(op, function (ob) {
                     hasNext = ob.hasNext;
                     var firstItems = [];
-                    if (op.times === 1 && BI.isNotNull(self.storeValue)) {
+                    if (op.times === 1 && !BI.isUndefined(self.storeValue)) {
                         var json = BI.map([self.storeValue], function (i, v) {
                             var txt = opts.valueFormatter(v) || v;
                             return {
@@ -67321,7 +67382,7 @@ BI.shortcut("bi.down_list_select_text_trigger", BI.DownListSelectTextTrigger);
                             isNeedAdjustWidth: opts.isNeedAdjustWidth,
                             el: {
                                 type: "bi.time_trigger",
-                                height: opts.height,
+                                height: opts.height - 2,
                                 allowEdit: opts.allowEdit,
                                 watermark: opts.watermark,
                                 format: opts.format,
@@ -69778,7 +69839,7 @@ BI.shortcut("bi.static_year_month_card", BI.StaticYearMonthCard);
 BI.DynamicYearMonthCombo = BI.inherit(BI.Single, {
 
     props: {
-        baseCls: "bi-year-month-combo bi-border bi-border-radius bi-focus-shadow",
+        baseCls: "bi-year-month-combo",
         behaviors: {},
         minDate: "1900-01-01", // 最小日期
         maxDate: "2099-12-31", // 最大日期
@@ -69790,8 +69851,6 @@ BI.DynamicYearMonthCombo = BI.inherit(BI.Single, {
 
     _init: function () {
         var self = this, o = this.options;
-        o.height -= 2;
-        BI.isNumeric(o.width) && (o.width -= 2);
         BI.DynamicYearMonthCombo.superclass._init.apply(this, arguments);
         this.storeValue = o.value;
         this.storeTriggerValue = "";
@@ -69799,7 +69858,7 @@ BI.DynamicYearMonthCombo = BI.inherit(BI.Single, {
             type: "bi.dynamic_year_month_trigger",
             min: o.minDate,
             max: o.maxDate,
-            height: o.height,
+            height: o.height - 2,
             value: o.value || ""
         });
         this.trigger.on(BI.DynamicYearMonthTrigger.EVENT_KEY_DOWN, function () {
@@ -69838,6 +69897,7 @@ BI.DynamicYearMonthCombo = BI.inherit(BI.Single, {
 
         this.combo = BI.createWidget({
             type: "bi.combo",
+            cls: "bi-border bi-border-radius bi-focus-shadow",
             container: o.container,
             isNeedAdjustHeight: o.isNeedAdjustHeight,
             isNeedAdjustWidth: o.isNeedAdjustWidth,
@@ -71095,7 +71155,7 @@ BI.shortcut("bi.static_year_quarter_card", BI.StaticYearQuarterCard);
 BI.DynamicYearQuarterCombo = BI.inherit(BI.Widget, {
 
     props: {
-        baseCls: "bi-year-quarter-combo bi-border bi-border-radius bi-focus-shadow",
+        baseCls: "bi-year-quarter-combo",
         behaviors: {},
         minDate: "1900-01-01", // 最小日期
         maxDate: "2099-12-31", // 最大日期
@@ -71107,8 +71167,6 @@ BI.DynamicYearQuarterCombo = BI.inherit(BI.Widget, {
 
     _init: function () {
         var self = this, o = this.options;
-        o.height -= 2;
-        BI.isNumeric(o.width) && (o.width -= 2);
         BI.DynamicYearQuarterCombo.superclass._init.apply(this, arguments);
         this.storeValue = o.value;
         self.storeTriggerValue = "";
@@ -71116,7 +71174,7 @@ BI.DynamicYearQuarterCombo = BI.inherit(BI.Widget, {
             type: "bi.dynamic_year_quarter_trigger",
             min: o.minDate,
             max: o.maxDate,
-            height: o.height,
+            height: o.height - 2,
             value: o.value || ""
         });
         this.trigger.on(BI.DynamicYearQuarterTrigger.EVENT_KEY_DOWN, function () {
@@ -71155,6 +71213,7 @@ BI.DynamicYearQuarterCombo = BI.inherit(BI.Widget, {
 
         this.combo = BI.createWidget({
             type: "bi.combo",
+            cls: "bi-border bi-border-radius bi-focus-shadow",
             container: o.container,
             isNeedAdjustHeight: o.isNeedAdjustHeight,
             isNeedAdjustWidth: o.isNeedAdjustWidth,
@@ -71637,7 +71696,7 @@ BI.DynamicYearQuarterTrigger = BI.inherit(BI.Trigger, {
                     if(BI.isEmptyString(month)) {
                         month = parseInt(v, 10) === BI.parseDateTime(o.min, "%Y-%X-%d").getFullYear() ? BI.parseDateTime(o.min, "%Y-%X-%d").getMonth() + 1 : 1;
                     } else {
-                        month = (v - 1) * 3 + 1;
+                        month = (parseInt(month, 10) - 1) * 3 + 1;
                     }
                     return v === "" || (BI.isPositiveInteger(v) && !BI.checkDateVoid(v, month, 1, o.min, o.max)[0]);
                 }
@@ -75300,6 +75359,12 @@ Object.defineProperty(exports, "AllCountPager", {
     return _pagerAll.AllCountPager;
   }
 });
+Object.defineProperty(exports, "DirectionPager", {
+  enumerable: true,
+  get: function get() {
+    return _pager.DirectionPager;
+  }
+});
 Object.defineProperty(exports, "PopupView", {
   enumerable: true,
   get: function get() {
@@ -75519,7 +75584,7 @@ Object.defineProperty(exports, "BroadcastController", {
 Object.defineProperty(exports, "Pager", {
   enumerable: true,
   get: function get() {
-    return _pager.Pager;
+    return _pager2.Pager;
   }
 });
 Object.defineProperty(exports, "TimeInterval", {
@@ -75832,89 +75897,91 @@ var _datepane = __webpack_require__(805);
 
 var _pagerAll = __webpack_require__(806);
 
+var _pager = __webpack_require__(807);
+
 var _layer3 = __webpack_require__(51);
 
-var _popup = __webpack_require__(807);
+var _popup = __webpack_require__(808);
 
-var _check = __webpack_require__(808);
+var _check = __webpack_require__(809);
 
-var _numberinterval = __webpack_require__(809);
+var _numberinterval = __webpack_require__(810);
 
-var _combo13 = __webpack_require__(810);
+var _combo13 = __webpack_require__(811);
 
-var _combo14 = __webpack_require__(811);
+var _combo14 = __webpack_require__(812);
 
-var _intervalslider = __webpack_require__(812);
+var _intervalslider = __webpack_require__(813);
 
-var _multiselectlist = __webpack_require__(813);
+var _multiselectlist = __webpack_require__(814);
 
-var _yearmonthinterval = __webpack_require__(814);
+var _yearmonthinterval = __webpack_require__(815);
 
-var _numbereditor = __webpack_require__(815);
+var _numbereditor = __webpack_require__(816);
 
-var _combo15 = __webpack_require__(816);
+var _combo15 = __webpack_require__(817);
 
-var _linear = __webpack_require__(817);
+var _linear = __webpack_require__(818);
 
-var _img = __webpack_require__(818);
+var _img = __webpack_require__(819);
 
-var _combo16 = __webpack_require__(819);
+var _combo16 = __webpack_require__(820);
 
-var _combo17 = __webpack_require__(820);
+var _combo17 = __webpack_require__(821);
 
-var _listview = __webpack_require__(821);
+var _listview = __webpack_require__(822);
 
-var _middleFloat = __webpack_require__(822);
+var _middleFloat = __webpack_require__(823);
 
-var _popup2 = __webpack_require__(823);
+var _popup2 = __webpack_require__(824);
 
 var _controller = __webpack_require__(53);
 
-var _controller2 = __webpack_require__(824);
+var _controller2 = __webpack_require__(825);
 
-var _popupCalendar = __webpack_require__(825);
+var _popupCalendar = __webpack_require__(826);
 
-var _tree2 = __webpack_require__(826);
+var _tree2 = __webpack_require__(827);
 
-var _textnode = __webpack_require__(827);
+var _textnode = __webpack_require__(828);
 
-var _popup3 = __webpack_require__(828);
+var _popup3 = __webpack_require__(829);
 
-var _button6 = __webpack_require__(829);
+var _button6 = __webpack_require__(830);
 
-var _router = __webpack_require__(830);
+var _router = __webpack_require__(831);
 
-var _datetime = __webpack_require__(831);
+var _datetime = __webpack_require__(832);
 
-var _float = __webpack_require__(832);
+var _float = __webpack_require__(833);
 
-var _layout10 = __webpack_require__(833);
+var _layout10 = __webpack_require__(834);
 
-var _colorchooserPopup = __webpack_require__(834);
+var _colorchooserPopup = __webpack_require__(835);
 
-var _blankicontextitem = __webpack_require__(835);
+var _blankicontextitem = __webpack_require__(836);
 
-var _controller3 = __webpack_require__(836);
+var _controller3 = __webpack_require__(837);
 
-var _pager = __webpack_require__(837);
+var _pager2 = __webpack_require__(838);
 
-var _timeinterval = __webpack_require__(838);
+var _timeinterval = __webpack_require__(839);
 
-var _datetimepane = __webpack_require__(839);
+var _datetimepane = __webpack_require__(840);
 
-var _singleselectlist = __webpack_require__(840);
+var _singleselectlist = __webpack_require__(841);
 
-var _multiselecttree = __webpack_require__(841);
+var _multiselecttree = __webpack_require__(842);
 
-var _html2 = __webpack_require__(842);
+var _html2 = __webpack_require__(843);
 
-var _pane3 = __webpack_require__(843);
+var _pane3 = __webpack_require__(844);
 
-var _layout11 = __webpack_require__(844);
+var _layout11 = __webpack_require__(845);
 
-var _multilayerselecttree3 = __webpack_require__(845);
+var _multilayerselecttree3 = __webpack_require__(846);
 
-var _selecttree = __webpack_require__(846);
+var _selecttree = __webpack_require__(847);
 
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
@@ -77097,8 +77164,6 @@ var _widget = __webpack_require__(0);
 "use strict";
 
 
-var _layer = __webpack_require__(51);
-
 var _widget = __webpack_require__(0);
 
 /***/ }),
@@ -77108,7 +77173,9 @@ var _widget = __webpack_require__(0);
 "use strict";
 
 
-var _button = __webpack_require__(50);
+var _layer = __webpack_require__(51);
+
+var _widget = __webpack_require__(0);
 
 /***/ }),
 /* 809 */
@@ -77117,7 +77184,7 @@ var _button = __webpack_require__(50);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _button = __webpack_require__(50);
 
 /***/ }),
 /* 810 */
@@ -77126,7 +77193,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _widget = __webpack_require__(0);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 811 */
@@ -77144,7 +77211,7 @@ var _widget = __webpack_require__(0);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _widget = __webpack_require__(0);
 
 /***/ }),
 /* 813 */
@@ -77171,7 +77238,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _widget = __webpack_require__(0);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 816 */
@@ -77198,7 +77265,7 @@ var _widget = __webpack_require__(0);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _widget = __webpack_require__(0);
 
 /***/ }),
 /* 819 */
@@ -77207,7 +77274,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _widget = __webpack_require__(0);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 820 */
@@ -77234,7 +77301,7 @@ var _widget = __webpack_require__(0);
 "use strict";
 
 
-var _layout = __webpack_require__(3);
+var _widget = __webpack_require__(0);
 
 /***/ }),
 /* 823 */
@@ -77243,7 +77310,7 @@ var _layout = __webpack_require__(3);
 "use strict";
 
 
-var _widget = __webpack_require__(0);
+var _layout = __webpack_require__(3);
 
 /***/ }),
 /* 824 */
@@ -77252,7 +77319,7 @@ var _widget = __webpack_require__(0);
 "use strict";
 
 
-var _controller = __webpack_require__(53);
+var _widget = __webpack_require__(0);
 
 /***/ }),
 /* 825 */
@@ -77261,7 +77328,7 @@ var _controller = __webpack_require__(53);
 "use strict";
 
 
-var _widget = __webpack_require__(0);
+var _controller = __webpack_require__(53);
 
 /***/ }),
 /* 826 */
@@ -77270,14 +77337,14 @@ var _widget = __webpack_require__(0);
 "use strict";
 
 
+var _widget = __webpack_require__(0);
+
 /***/ }),
 /* 827 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
-
-var _button = __webpack_require__(46);
 
 /***/ }),
 /* 828 */
@@ -77286,7 +77353,7 @@ var _button = __webpack_require__(46);
 "use strict";
 
 
-var _pane = __webpack_require__(14);
+var _button = __webpack_require__(46);
 
 /***/ }),
 /* 829 */
@@ -77295,7 +77362,7 @@ var _pane = __webpack_require__(14);
 "use strict";
 
 
-var _button = __webpack_require__(4);
+var _pane = __webpack_require__(14);
 
 /***/ }),
 /* 830 */
@@ -77304,14 +77371,14 @@ var _button = __webpack_require__(4);
 "use strict";
 
 
+var _button = __webpack_require__(4);
+
 /***/ }),
 /* 831 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
-
-var _single = __webpack_require__(2);
 
 /***/ }),
 /* 832 */
@@ -77320,7 +77387,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _layout = __webpack_require__(3);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 833 */
@@ -77338,7 +77405,7 @@ var _layout = __webpack_require__(3);
 "use strict";
 
 
-var _widget = __webpack_require__(0);
+var _layout = __webpack_require__(3);
 
 /***/ }),
 /* 835 */
@@ -77347,7 +77414,7 @@ var _widget = __webpack_require__(0);
 "use strict";
 
 
-var _button = __webpack_require__(4);
+var _widget = __webpack_require__(0);
 
 /***/ }),
 /* 836 */
@@ -77356,7 +77423,7 @@ var _button = __webpack_require__(4);
 "use strict";
 
 
-var _controller = __webpack_require__(53);
+var _button = __webpack_require__(4);
 
 /***/ }),
 /* 837 */
@@ -77365,7 +77432,7 @@ var _controller = __webpack_require__(53);
 "use strict";
 
 
-var _widget = __webpack_require__(0);
+var _controller = __webpack_require__(53);
 
 /***/ }),
 /* 838 */
@@ -77374,7 +77441,7 @@ var _widget = __webpack_require__(0);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _widget = __webpack_require__(0);
 
 /***/ }),
 /* 839 */
@@ -77383,7 +77450,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _widget = __webpack_require__(0);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 840 */
@@ -77392,7 +77459,7 @@ var _widget = __webpack_require__(0);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _widget = __webpack_require__(0);
 
 /***/ }),
 /* 841 */
@@ -77410,7 +77477,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _abstract = __webpack_require__(47);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 843 */
@@ -77419,7 +77486,7 @@ var _abstract = __webpack_require__(47);
 "use strict";
 
 
-var _abstract = __webpack_require__(30);
+var _abstract = __webpack_require__(47);
 
 /***/ }),
 /* 844 */
@@ -77428,7 +77495,7 @@ var _abstract = __webpack_require__(30);
 "use strict";
 
 
-var _layout = __webpack_require__(3);
+var _abstract = __webpack_require__(30);
 
 /***/ }),
 /* 845 */
@@ -77437,7 +77504,7 @@ var _layout = __webpack_require__(3);
 "use strict";
 
 
-var _pane = __webpack_require__(14);
+var _layout = __webpack_require__(3);
 
 /***/ }),
 /* 846 */
@@ -77446,16 +77513,19 @@ var _pane = __webpack_require__(14);
 "use strict";
 
 
+var _pane = __webpack_require__(14);
+
+/***/ }),
+/* 847 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
 var _widget = __webpack_require__(0);
 
 /***/ }),
-/* 847 */,
-/* 848 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
-
-/***/ }),
+/* 848 */,
 /* 849 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -77463,6 +77533,12 @@ var _widget = __webpack_require__(0);
 
 /***/ }),
 /* 850 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
+/* 851 */
 /***/ (function(module, exports) {
 
 // 工程配置
@@ -77659,7 +77735,7 @@ BI.prepares.push(function () {
 
 
 /***/ }),
-/* 851 */
+/* 852 */
 /***/ (function(module, exports) {
 
 /**
@@ -77826,7 +77902,7 @@ BI.prepares.push(function () {
 
 
 /***/ }),
-/* 852 */
+/* 853 */
 /***/ (function(module, exports) {
 
 /**
@@ -78666,7 +78742,7 @@ BI.prepares.push(function () {
 
 
 /***/ }),
-/* 853 */
+/* 854 */
 /***/ (function(module, exports) {
 
 // 浏览器相关方法
@@ -78800,7 +78876,7 @@ _.extend(BI, {
 });
 
 /***/ }),
-/* 854 */
+/* 855 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -89829,7 +89905,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
 
 
 /***/ }),
-/* 855 */
+/* 856 */
 /***/ (function(module, exports) {
 
 /*
@@ -89844,7 +89920,7 @@ BI.$.extend(BI.$.Event.prototype, {
 });
 
 /***/ }),
-/* 856 */
+/* 857 */
 /***/ (function(module, exports) {
 
 if (BI.jQuery) {
@@ -90097,7 +90173,7 @@ if (BI.jQuery) {
 
 
 /***/ }),
-/* 857 */
+/* 858 */
 /***/ (function(module, exports) {
 
 /* !
@@ -90306,7 +90382,7 @@ if (BI.jQuery) {
 }));
 
 /***/ }),
-/* 858 */
+/* 859 */
 /***/ (function(module, exports) {
 
 _.extend(BI, {
@@ -90366,7 +90442,7 @@ _.extend(BI, {
 });
 
 /***/ }),
-/* 859 */
+/* 860 */
 /***/ (function(module, exports) {
 
 (function () {
@@ -90998,7 +91074,7 @@ _.extend(BI, {
 }());
 
 /***/ }),
-/* 860 */
+/* 861 */
 /***/ (function(module, exports) {
 
 !(function () {
@@ -91010,7 +91086,7 @@ _.extend(BI, {
 })();
 
 /***/ }),
-/* 861 */
+/* 862 */
 /***/ (function(module, exports) {
 
 /**
@@ -91466,9 +91542,8 @@ _.extend(BI, {
             });
         },
 
-        _init: function () {
+        render: function () {
             var self = this, o = this.options;
-            BI.File.superclass._init.apply(this, arguments);
             if (o.multiple === true) {
                 this.element.attr("multiple", "multiple");
             }
@@ -91714,7 +91789,7 @@ _.extend(BI, {
 
 
 /***/ }),
-/* 862 */
+/* 863 */
 /***/ (function(module, exports) {
 
 /**
@@ -92270,7 +92345,7 @@ BI.shortcut("bi.tree_view", BI.TreeView);
 
 
 /***/ }),
-/* 863 */
+/* 864 */
 /***/ (function(module, exports) {
 
 /**
@@ -92523,7 +92598,7 @@ BI.AsyncTree = BI.inherit(BI.TreeView, {
 BI.shortcut("bi.async_tree", BI.AsyncTree);
 
 /***/ }),
-/* 864 */
+/* 865 */
 /***/ (function(module, exports) {
 
 /*
@@ -94243,7 +94318,7 @@ BI.shortcut("bi.async_tree", BI.AsyncTree);
 })(BI.jQuery);
 
 /***/ }),
-/* 865 */
+/* 866 */
 /***/ (function(module, exports) {
 
 /*
@@ -94687,7 +94762,23 @@ BI.shortcut("bi.async_tree", BI.AsyncTree);
 			}
 			var chkName = setting.check.chkStyle + "_" + (node[checkedKey] ? c.TRUE : c.FALSE) + "_" + fullStyle;
 			chkName = (node.check_Focus && node.chkDisabled !== true) ? chkName + "_" + c.FOCUS : chkName;
-			return consts.className.BUTTON + " " + c.DEFAULT + " " + chkName;
+			var chClass = consts.className.BUTTON + " " + c.DEFAULT + " " + chkName;
+			switch (chkName) {
+				case 'checkbox_true_part':
+				case 'checkbox_true_part_focus':
+					chClass += ' bi-half-button bi-high-light-border';
+					break;
+				case 'checkbox_true_full':
+				case 'checkbox_true_full_focus':
+					chClass += ' bi-checkbox checkbox-content bi-high-light-background active';
+					break;
+				case 'checkbox_false_full':
+				case 'checkbox_false_full_focus':
+				default:
+					chClass += ' bi-checkbox checkbox-content';
+					break;
+			}
+			return chClass;
 		},
 		repairAllChk: function(setting, checked) {
 			if (setting.check.enable && setting.check.chkStyle === consts.checkbox.STYLE) {
@@ -94878,7 +94969,7 @@ BI.shortcut("bi.async_tree", BI.AsyncTree);
 })(BI.jQuery);
 
 /***/ }),
-/* 866 */
+/* 867 */
 /***/ (function(module, exports) {
 
 /**
@@ -95001,7 +95092,7 @@ BI.ListTreeView = BI.inherit(BI.TreeView, {
 BI.shortcut("bi.list_tree_view", BI.ListTreeView);
 
 /***/ }),
-/* 867 */
+/* 868 */
 /***/ (function(module, exports) {
 
 /**
@@ -95129,7 +95220,7 @@ BI.ListAsyncTree = BI.inherit(BI.ListTreeView, {
 BI.shortcut("bi.list_async_tree", BI.ListAsyncTree);
 
 /***/ }),
-/* 868 */
+/* 869 */
 /***/ (function(module, exports) {
 
 /**
@@ -95226,7 +95317,7 @@ BI.ListPartTree = BI.inherit(BI.ListAsyncTree, {
 BI.shortcut("bi.list_part_tree", BI.ListPartTree);
 
 /***/ }),
-/* 869 */
+/* 870 */
 /***/ (function(module, exports) {
 
 /**
@@ -95432,7 +95523,7 @@ BI.shortcut("bi.part_tree", BI.PartTree);
 
 
 /***/ }),
-/* 870 */
+/* 871 */
 /***/ (function(module, exports) {
 
 /**
@@ -95504,7 +95595,7 @@ BI.shortcut("bi.display_tree", BI.DisplayTree);
 
 
 /***/ }),
-/* 871 */
+/* 872 */
 /***/ (function(module, exports) {
 
 /**
@@ -95587,7 +95678,7 @@ BI.ListDisplayTree.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.list_display_tree", BI.ListDisplayTree);
 
 /***/ }),
-/* 872 */
+/* 873 */
 /***/ (function(module, exports) {
 
 /**
@@ -95720,7 +95811,7 @@ BI.shortcut("bi.simple_tree", BI.SimpleTreeView);
 
 
 /***/ }),
-/* 873 */
+/* 874 */
 /***/ (function(module, exports) {
 
 /**
@@ -95849,7 +95940,7 @@ BI.shortcut("bi.simple_tree", BI.SimpleTreeView);
 })();
 
 /***/ }),
-/* 874 */
+/* 875 */
 /***/ (function(module, exports) {
 
 /**
@@ -95930,7 +96021,7 @@ BI.shortcut("bi.simple_tree", BI.SimpleTreeView);
 })();
 
 /***/ }),
-/* 875 */
+/* 876 */
 /***/ (function(module, exports) {
 
 ;(function () {
@@ -96093,7 +96184,6 @@ BI.shortcut("bi.simple_tree", BI.SimpleTreeView);
 
 
 /***/ }),
-/* 876 */,
 /* 877 */,
 /* 878 */,
 /* 879 */,
@@ -96127,7 +96217,8 @@ BI.shortcut("bi.simple_tree", BI.SimpleTreeView);
 /* 907 */,
 /* 908 */,
 /* 909 */,
-/* 910 */
+/* 910 */,
+/* 911 */
 /***/ (function(module, exports) {
 
 ;(function () {
@@ -96403,7 +96494,6 @@ BI.shortcut("bi.simple_tree", BI.SimpleTreeView);
 
 
 /***/ }),
-/* 911 */,
 /* 912 */,
 /* 913 */,
 /* 914 */,
@@ -96614,12 +96704,7 @@ BI.shortcut("bi.simple_tree", BI.SimpleTreeView);
 /* 1119 */,
 /* 1120 */,
 /* 1121 */,
-/* 1122 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
-
-/***/ }),
+/* 1122 */,
 /* 1123 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -96645,12 +96730,17 @@ BI.shortcut("bi.simple_tree", BI.SimpleTreeView);
 
 /***/ }),
 /* 1127 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
+/* 1128 */
 /***/ (function(module, exports) {
 
 
 
 /***/ }),
-/* 1128 */,
 /* 1129 */,
 /* 1130 */,
 /* 1131 */,
@@ -96711,11 +96801,12 @@ BI.shortcut("bi.simple_tree", BI.SimpleTreeView);
 /* 1186 */,
 /* 1187 */,
 /* 1188 */,
-/* 1189 */
+/* 1189 */,
+/* 1190 */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(848);
 __webpack_require__(849);
+__webpack_require__(850);
 __webpack_require__(137);
 __webpack_require__(138);
 __webpack_require__(139);
@@ -96771,7 +96862,6 @@ __webpack_require__(284);
 __webpack_require__(285);
 __webpack_require__(286);
 __webpack_require__(287);
-__webpack_require__(850);
 __webpack_require__(851);
 __webpack_require__(852);
 __webpack_require__(853);
@@ -96780,6 +96870,7 @@ __webpack_require__(855);
 __webpack_require__(856);
 __webpack_require__(857);
 __webpack_require__(858);
+__webpack_require__(859);
 __webpack_require__(288);
 __webpack_require__(289);
 __webpack_require__(290);
@@ -96857,7 +96948,7 @@ __webpack_require__(359);
 __webpack_require__(173);
 __webpack_require__(174);
 __webpack_require__(175);
-__webpack_require__(1190);
+__webpack_require__(1191);
 __webpack_require__(176);
 __webpack_require__(177);
 __webpack_require__(178);
@@ -96915,7 +97006,7 @@ __webpack_require__(229);
 __webpack_require__(230);
 __webpack_require__(231);
 __webpack_require__(232);
-__webpack_require__(860);
+__webpack_require__(861);
 __webpack_require__(360);
 __webpack_require__(361);
 __webpack_require__(362);
@@ -96970,7 +97061,7 @@ __webpack_require__(410);
 __webpack_require__(411);
 __webpack_require__(412);
 __webpack_require__(413);
-__webpack_require__(861);
+__webpack_require__(862);
 __webpack_require__(414);
 __webpack_require__(415);
 __webpack_require__(416);
@@ -97084,7 +97175,6 @@ __webpack_require__(523);
 __webpack_require__(524);
 __webpack_require__(525);
 __webpack_require__(526);
-__webpack_require__(862);
 __webpack_require__(863);
 __webpack_require__(864);
 __webpack_require__(865);
@@ -97097,6 +97187,7 @@ __webpack_require__(871);
 __webpack_require__(872);
 __webpack_require__(873);
 __webpack_require__(874);
+__webpack_require__(875);
 __webpack_require__(89);
 __webpack_require__(90);
 __webpack_require__(91);
@@ -97313,27 +97404,27 @@ __webpack_require__(694);
 __webpack_require__(695);
 __webpack_require__(696);
 __webpack_require__(697);
-__webpack_require__(859);
-__webpack_require__(910);
-__webpack_require__(875);
-__webpack_require__(1122);
+__webpack_require__(860);
+__webpack_require__(911);
+__webpack_require__(876);
 __webpack_require__(1123);
 __webpack_require__(1124);
 __webpack_require__(1125);
 __webpack_require__(1126);
 __webpack_require__(1127);
+__webpack_require__(1128);
 module.exports = __webpack_require__(698);
 
 
 /***/ }),
-/* 1190 */
+/* 1191 */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(global) {module.exports = global["Fix"] = __webpack_require__(1191);
+/* WEBPACK VAR INJECTION */(function(global) {module.exports = global["Fix"] = __webpack_require__(1192);
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(15)))
 
 /***/ }),
-/* 1191 */
+/* 1192 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(setImmediate) {(function (global, factory) {

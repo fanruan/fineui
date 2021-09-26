@@ -42,8 +42,7 @@ BI.Searcher = BI.inherit(BI.Widget, {
         });
     },
 
-    _init: function () {
-        BI.Searcher.superclass._init.apply(this, arguments);
+    render: function () {
         var self = this, o = this.options;
 
         this.editor = BI.createWidget(o.el, {

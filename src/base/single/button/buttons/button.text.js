@@ -22,8 +22,7 @@ BI.TextButton = BI.inherit(BI.BasicButton, {
         });
     },
 
-    _init: function () {
-        BI.TextButton.superclass._init.apply(this, arguments);
+    render: function () {
         var o = this.options;
         this.text = BI.createWidget({
             type: "bi.label",

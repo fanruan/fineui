@@ -1,4 +1,4 @@
-import { Single } from "../../base/single/single";
+import { Single } from '../../base/single/single';
 
 export declare class DynamicDateTimeCombo extends Single {
     static xtype: string;
@@ -13,7 +13,16 @@ export declare class DynamicDateTimeCombo extends Single {
     static EVENT_BEFORE_YEAR_MONTH_POPUPVIEW: string;
     static Static: 1;
     static Dynamic: 2;
-
+    props: {
+        minDate?: string;
+        maxDate?: string;
+        format?: string;
+        allowEdit?: boolean;
+        supportDynamic?: boolean;
+        attributes?: {
+            tabIndex?: number;
+        };
+    } & Single['props'];
 
     setMinDate(minDate: string): void;
 

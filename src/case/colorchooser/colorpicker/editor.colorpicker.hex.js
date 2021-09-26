@@ -39,7 +39,7 @@ BI.HexColorPickerEditor = BI.inherit(BI.Widget, {
                 allowBlank: true,
                 value: 255,
                 width: c.RGB_WIDTH,
-                height: 20,
+                height: 24,
                 listeners: [{
                     eventName: BI.TextEditor.EVENT_CHANGE,
                     action: function () {
@@ -122,20 +122,20 @@ BI.HexColorPickerEditor = BI.inherit(BI.Widget, {
                     }, {
                         el: {
                             type: "bi.vertical_adapt",
-                            columnSize: [16, 10, 'fill', 12, c.RGB_WIDTH, 12, c.RGB_WIDTH, 12, c.RGB_WIDTH],
+                            columnSize: [22, 10, 'fill', 12, c.RGB_WIDTH, 12, c.RGB_WIDTH, 12, c.RGB_WIDTH],
 
                             rgap: 5,
                             items: [{
                                 el: {
                                     type: "bi.layout",
                                     cls: "color-picker-editor-display bi-card bi-border",
-                                    height: 16,
-                                    width: 16,
+                                    height: 22,
+                                    width: 22,
                                     ref: function (_ref) {
                                         self.colorShow = _ref;
                                     }
                                 },
-                                width: 16
+                                width: 18
                             }, {
                                 type: "bi.label",
                                 text: "#",
@@ -150,7 +150,7 @@ BI.HexColorPickerEditor = BI.inherit(BI.Widget, {
                                 allowBlank: true,
                                 errorText: BI.i18nText("BI-Color_Picker_Error_Text_Hex"),
                                 width: c.HEX_WIDTH,
-                                height: 20,
+                                height: 24,
                                 listeners: [{
                                     eventName: "EVENT_CHANGE",
                                     action: function () {
@@ -239,11 +239,11 @@ BI.HexColorPickerEditor = BI.inherit(BI.Widget, {
 
     _showPreColor: function (color) {
         if (color === "") {
-            this.colorShow.element.css("background-color", "").removeClass("trans-color-background").addClass("auto-color-normal-background");
+            this.colorShow.element.css("background-color", "").removeClass("trans-color-background").addClass("auto-color-square-normal-background");
         } else if (color === "transparent") {
-            this.colorShow.element.css("background-color", "").removeClass("auto-color-normal-background").addClass("trans-color-background");
+            this.colorShow.element.css("background-color", "").removeClass("auto-color-square-normal-background").addClass("trans-color-background");
         } else {
-            this.colorShow.element.css({"background-color": color}).removeClass("auto-color-normal-background").removeClass("trans-color-background");
+            this.colorShow.element.css({"background-color": color}).removeClass("auto-color-square-normal-background").removeClass("trans-color-background");
         }
     },
 

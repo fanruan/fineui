@@ -21,8 +21,7 @@ BI.Expander = BI.inherit(BI.Widget, {
         });
     },
 
-    _init: function () {
-        BI.Expander.superclass._init.apply(this, arguments);
+    render: function () {
         var self = this, o = this.options;
         this._expanded = !!o.el.open;
         this._initExpander();

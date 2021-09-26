@@ -13,9 +13,6 @@ BI.BubblePopupView = BI.inherit(BI.PopupView, {
             maxWidth: 300,
             minHeight: 90
         });
-    },
-    _init: function () {
-        BI.BubblePopupView.superclass._init.apply(this, arguments);
     }
 });
 
