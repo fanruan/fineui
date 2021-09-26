@@ -1,4 +1,4 @@
-/*! time: 2021-9-26 10:40:39 */
+/*! time: 2021-9-26 17:40:27 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -62256,6 +62256,7 @@ BI.SearchMultiSelectLoader = BI.inherit(BI.Widget, {
             },
             valueFormatter: BI.emptyFn,
             itemsCreator: BI.emptyFn,
+            itemHeight: BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT,
             onLoaded: BI.emptyFn
         });
     },
@@ -62273,6 +62274,12 @@ BI.SearchMultiSelectLoader = BI.inherit(BI.Widget, {
             type: "bi.select_list",
             element: this,
             logic: opts.logic,
+            toolbar: {
+                type: "bi.multi_select_bar",
+                cls: "bi-list-item-active",
+                height: this.options.itemHeight,
+                iconWrapperWidth: 36
+            },
             el: BI.extend({
                 onLoaded: opts.onLoaded,
                 el: {
@@ -62351,7 +62358,7 @@ BI.SearchMultiSelectLoader = BI.inherit(BI.Widget, {
             type: "bi.multi_select_item",
             logic: this.options.logic,
             cls: "bi-list-item-active",
-            height: 24,
+            height: this.options.itemHeight,
             selected: this.isAllSelected(),
             iconWrapperWidth: 36
         });
