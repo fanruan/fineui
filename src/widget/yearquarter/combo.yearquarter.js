@@ -59,7 +59,7 @@ BI.DynamicYearQuarterCombo = BI.inherit(BI.Widget, {
 
         this.combo = BI.createWidget({
             type: "bi.combo",
-            cls: "bi-border bi-border-radius bi-focus-shadow",
+            cls: "bi-border bi-border-radius",
             container: o.container,
             isNeedAdjustHeight: o.isNeedAdjustHeight,
             isNeedAdjustWidth: o.isNeedAdjustWidth,
