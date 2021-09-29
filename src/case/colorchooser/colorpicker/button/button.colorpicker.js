@@ -19,7 +19,7 @@ BI.ColorPickerButton = BI.inherit(BI.BasicButton, {
         var self = this, o = this.options;
         if (BI.isNotNull(o.value)) {
             if (o.value === '') {
-                this.element.addClass("auto-color-square-normal-background");
+                this.element.addClass("auto-color-no-square-normal-background");
             } else if (o.value === "transparent") {
                 this.element.addClass("trans-color-background");
             } else {
