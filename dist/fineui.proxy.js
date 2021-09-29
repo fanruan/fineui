@@ -1,4 +1,4 @@
-/*! time: 2021-9-28 11:11:00 */
+/*! time: 2021-9-29 14:40:58 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -21346,15 +21346,15 @@ BI.Pane = BI.inherit(BI.Widget, {
         // loading的异步情况下由loaded后对面板的populate的时机决定
         this.setTipVisible(false);
         if (o.overlap === true) {
-            if (!BI.Layers.has(this.getName())) {
+            if (!BI.Layers.has(this.getName() + "-loading")) {
                 BI.createWidget({
                     type: "bi.center_adapt",
                     cls: "loading-container",
                     items: this._getLoadingTipItems(loadingAnimation),
-                    element: BI.Layers.make(this.getName(), this)
+                    element: BI.Layers.make(this.getName() + "-loading", this)
                 });
             }
-            BI.Layers.show(self.getName());
+            BI.Layers.show(self.getName() + "-loading");
         } else if (BI.isNull(this._loading)) {
             loadingAnimation.element.css("zIndex", 1);
             BI.createWidget({
@@ -21395,7 +21395,7 @@ BI.Pane = BI.inherit(BI.Widget, {
 
     loaded: function () {
         var self = this, o = this.options;
-        BI.Layers.remove(self.getName());
+        BI.Layers.remove(self.getName() + "-loading");
         this._loading && this._loading.destroy();
         o.onLoaded();
         self.fireEvent(BI.Pane.EVENT_LOADED);
