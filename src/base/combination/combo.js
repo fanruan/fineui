@@ -287,11 +287,11 @@
             if (isHide === false) {
                 return;
             }
-            this._hideView();
+            this._hideView(e);
             return true;
         },
 
-        _hideView: function () {
+        _hideView: function (e) {
             this.fireEvent(BI.Combo.EVENT_BEFORE_HIDEVIEW);
             if (this.options.destroyWhenHide === true) {
                 this.popupView && this.popupView.destroy();
@@ -300,6 +300,11 @@
             } else {
                 this.popupView && this.popupView.invisible();
             }
+
+            if (!e || !this.combo.element.__isMouseInBounds__(e)) {
+                this.element.removeClass(this.options.hoverClass);
+            }
+
             this.element.removeClass(this.options.comboClass);
             delete needHideWhenAnotherComboOpen[this.getName()];
 
@@ -526,8 +531,8 @@
             }
         },
 
-        hideView: function () {
-            this._hideView();
+        hideView: function (e) {
+            this._hideView(e);
         },
 
         getView: function () {
