@@ -1,4 +1,4 @@
-/*! time: 2021-9-29 16:04:41 */
+/*! time: 2021-9-29 18:40:55 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -29232,7 +29232,6 @@ BI.Single = BI.inherit(BI.Widget, {
             title: null,
             warningTitle: null,
             tipType: null, // success或warning
-            value: null,
             belowMouse: false   // title是否跟随鼠标
         });
     },
