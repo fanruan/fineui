@@ -39,8 +39,7 @@
             });
         },
 
-        _init: function () {
-            BI.Combo.superclass._init.apply(this, arguments);
+        render: function () {
             var self = this, o = this.options;
             this._initCombo();
             this._initPullDownAction();

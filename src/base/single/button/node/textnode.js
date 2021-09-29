@@ -19,8 +19,8 @@ BI.TextNode = BI.inherit(BI.NodeButton, {
             textRgap: 0
         });
     },
-    _init: function () {
-        BI.TextNode.superclass._init.apply(this, arguments);
+
+    render: function () {
         var o = this.options;
         this.text = BI.createWidget({
             type: "bi.label",

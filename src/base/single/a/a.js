@@ -17,9 +17,9 @@ BI.A = BI.inherit(BI.Text, {
             tagName: "a"
         });
     },
-    _init: function () {
+
+    render: function () {
         var o = this.options;
-        BI.A.superclass._init.apply(this, arguments);
         this.element.attr({href: o.href, target: o.target});
         if (o.el) {
             BI.createWidget(o.el, {

@@ -20,8 +20,8 @@ BI.Tooltip = BI.inherit(BI.Tip, {
             stopPropagation: false
         });
     },
-    _init: function () {
-        BI.Tooltip.superclass._init.apply(this, arguments);
+
+    render: function () {
         var self = this, o = this.options;
         this.element.addClass("tooltip-" + o.level);
         var fn = function (e) {

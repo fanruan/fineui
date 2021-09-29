@@ -38,9 +38,7 @@
             };
         },
 
-        _init: function () {
-            BI.AbstractLabel.superclass._init.apply(this, arguments);
-
+        render: function () {
             if (this.options.textAlign === "center") {
                 this._createCenterEl();
             } else {

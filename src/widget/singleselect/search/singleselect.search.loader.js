@@ -60,7 +60,7 @@ BI.SingleSelectSearchLoader = BI.inherit(BI.Widget, {
                     var keyword = ob.keyword = opts.keywordGetter();
                     hasNext = ob.hasNext;
                     var firstItems = [];
-                    if (op.times === 1 && BI.isNotNull(self.storeValue)) {
+                    if (op.times === 1 && !BI.isUndefined(self.storeValue)) {
                         var json = self._filterValues(self.storeValue);
                         firstItems = self._createItems(json);
                     }
