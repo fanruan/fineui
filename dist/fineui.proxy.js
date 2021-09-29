@@ -1,4 +1,4 @@
-/*! time: 2021-9-29 14:40:58 */
+/*! time: 2021-9-29 16:04:41 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -22106,19 +22106,24 @@ BI.shortcut("bi.collection_view", BI.CollectionView);
             if (isHide === false) {
                 return;
             }
-            this._hideView();
+            this._hideView(e);
             return true;
         },
 
-        _hideView: function () {
+        _hideView: function (e) {
             this.fireEvent(BI.Combo.EVENT_BEFORE_HIDEVIEW);
             if (this.options.destroyWhenHide === true) {
                 this.popupView && this.popupView.destroy();
                 this.popupView = null;
                 this._rendered = false;
+
+                if (!e || !this.combo.element.__isMouseInBounds__(e)) {
+                    this.element.removeClass(this.options.hoverClass);
+                }
             } else {
                 this.popupView && this.popupView.invisible();
             }
+
             this.element.removeClass(this.options.comboClass);
             delete needHideWhenAnotherComboOpen[this.getName()];
 
@@ -22345,8 +22350,8 @@ BI.shortcut("bi.collection_view", BI.CollectionView);
             }
         },
 
-        hideView: function () {
-            this._hideView();
+        hideView: function (e) {
+            this._hideView(e);
         },
 
         getView: function () {
@@ -46705,7 +46710,7 @@ BI.DynamicDateCombo = BI.inherit(BI.Single, {
                 items: [{
                     el: {
                         type: "bi.combo",
-                        cls: "bi-border bi-border-radius bi-focus-shadow",
+                        cls: "bi-border bi-border-radius",
                         container: opts.container,
                         ref: function () {
                             self.combo = this;
@@ -47771,7 +47776,7 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
                 items: [{
                     el: {
                         type: "bi.combo",
-                        cls: "bi-border bi-border-radius bi-focus-shadow",
+                        cls: "bi-border bi-border-radius",
                         destroyWhenHide: true,
                         container: opts.container,
                         ref: function () {
@@ -50677,7 +50682,7 @@ BI.MultiLayerSelectTreeCombo = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
         return {
             type: "bi.combo",
-            cls: "bi-border bi-focus-shadow bi-border-radius",
+            cls: "bi-border bi-border-radius",
             container: o.container,
             destroyWhenHide: o.destroyWhenHide,
             adjustLength: 2,
@@ -51952,7 +51957,7 @@ BI.MultiLayerSingleTreeCombo = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
         return {
             type: "bi.combo",
-            cls: "bi-border bi-focus-shadow bi-border-radius",
+            cls: "bi-border bi-border-radius",
             container: o.container,
             destroyWhenHide: o.destroyWhenHide,
             adjustLength: 2,
@@ -53755,7 +53760,7 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
 
         this.combo = BI.createWidget({
             type: "bi.combo",
-            cls: "bi-border bi-focus-shadow bi-border-radius",
+            cls: "bi-border bi-border-radius",
             toggle: !o.allowEdit,
             container: o.container,
             el: this.trigger,
@@ -54236,7 +54241,7 @@ BI.MultiSelectNoBarCombo = BI.inherit(BI.Single, {
 
         this.combo = BI.createWidget({
             type: "bi.combo",
-            cls: "bi-border bi-focus-shadow bi-border-radius",
+            cls: "bi-border bi-border-radius",
             toggle: false,
             container: o.container,
             el: this.trigger,
@@ -54747,7 +54752,7 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
 
         this.combo = BI.createWidget({
             type: "bi.combo",
-            cls: "bi-border bi-focus-shadow bi-border-radius",
+            cls: "bi-border bi-border-radius",
             toggle: !o.allowEdit,
             el: this.trigger,
             adjustLength: 1,
@@ -55235,7 +55240,7 @@ BI.MultiSelectInsertNoBarCombo = BI.inherit(BI.Single, {
 
         this.combo = BI.createWidget({
             type: "bi.combo",
-            cls: "bi-border bi-focus-shadow bi-border-radius",
+            cls: "bi-border bi-border-radius",
             toggle: false,
             container: o.container,
             el: this.trigger,
@@ -59322,7 +59327,7 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
 
         this.combo = BI.createWidget({
             type: "bi.combo",
-            cls: "bi-border bi-focus-shadow bi-border-radius",
+            cls: "bi-border bi-border-radius",
             toggle: !o.allowEdit,
             container: o.container,
             el: this.trigger,
@@ -59701,7 +59706,7 @@ BI.MultiTreeInsertCombo = BI.inherit(BI.Single, {
 
         this.combo = BI.createWidget({
             type: "bi.combo",
-            cls: "bi-border bi-focus-shadow bi-border-radius",
+            cls: "bi-border bi-border-radius",
             toggle: !o.allowEdit,
             container: o.container,
             el: this.trigger,
@@ -60096,7 +60101,7 @@ BI.MultiTreeListCombo = BI.inherit(BI.Single, {
 
         this.combo = BI.createWidget({
             type: "bi.combo",
-            cls: "bi-border bi-focus-shadow bi-border-radius",
+            cls: "bi-border bi-border-radius",
             toggle: !o.allowEdit,
             container: o.container,
             el: this.trigger,
@@ -62078,7 +62083,7 @@ BI.SearchMultiTextValueCombo = BI.inherit(BI.Single, {
 
         this.combo = BI.createWidget({
             type: "bi.combo",
-            cls: "bi-border bi-focus-shadow bi-border-radius",
+            cls: "bi-border bi-border-radius",
             toggle: false,
             container: o.container,
             el: this.trigger,
@@ -67382,7 +67387,7 @@ BI.shortcut("bi.down_list_select_text_trigger", BI.DownListSelectTextTrigger);
                     items: [{
                         el: {
                             type: "bi.combo",
-                            cls: "bi-border bi-border-radius bi-focus-shadow",
+                            cls: "bi-border bi-border-radius",
                             container: opts.container,
                             toggle: false,
                             isNeedAdjustHeight: opts.isNeedAdjustHeight,
@@ -68621,7 +68626,7 @@ BI.shortcut("bi.static_year_card", BI.StaticYearCard);
 BI.DynamicYearCombo = BI.inherit(BI.Widget, {
 
     props: {
-        baseCls: "bi-year-combo bi-border bi-border-radius bi-focus-shadow",
+        baseCls: "bi-year-combo",
         behaviors: {},
         minDate: "1900-01-01", // 最小日期
         maxDate: "2099-12-31", // 最大日期
@@ -68631,15 +68636,13 @@ BI.DynamicYearCombo = BI.inherit(BI.Widget, {
 
     _init: function () {
         var self = this, o = this.options;
-        o.height -= 2;
-        BI.isNumeric(o.width) && (o.width -= 2);
         BI.DynamicYearCombo.superclass._init.apply(this, arguments);
         this.storeValue = o.value;
         this.trigger = BI.createWidget({
             type: "bi.dynamic_year_trigger",
             min: o.minDate,
             max: o.maxDate,
-            height: o.height,
+            height: o.height - 2,
             value: o.value || ""
         });
         this.trigger.on(BI.DynamicYearTrigger.EVENT_KEY_DOWN, function () {
@@ -68681,6 +68684,7 @@ BI.DynamicYearCombo = BI.inherit(BI.Widget, {
 
         this.combo = BI.createWidget({
             type: "bi.combo",
+            cls: "bi-border bi-border-radius",
             container: o.container,
             isNeedAdjustHeight: false,
             isNeedAdjustWidth: false,
@@ -69904,7 +69908,7 @@ BI.DynamicYearMonthCombo = BI.inherit(BI.Single, {
 
         this.combo = BI.createWidget({
             type: "bi.combo",
-            cls: "bi-border bi-border-radius bi-focus-shadow",
+            cls: "bi-border bi-border-radius",
             container: o.container,
             isNeedAdjustHeight: o.isNeedAdjustHeight,
             isNeedAdjustWidth: o.isNeedAdjustWidth,
@@ -71220,7 +71224,7 @@ BI.DynamicYearQuarterCombo = BI.inherit(BI.Widget, {
 
         this.combo = BI.createWidget({
             type: "bi.combo",
-            cls: "bi-border bi-border-radius bi-focus-shadow",
+            cls: "bi-border bi-border-radius",
             container: o.container,
             isNeedAdjustHeight: o.isNeedAdjustHeight,
             isNeedAdjustWidth: o.isNeedAdjustWidth,
