@@ -65,7 +65,7 @@
                     items: [{
                         el: {
                             type: "bi.combo",
-                            cls: "bi-border bi-border-radius bi-focus-shadow",
+                            cls: "bi-border bi-border-radius",
                             container: opts.container,
                             toggle: false,
                             isNeedAdjustHeight: opts.isNeedAdjustHeight,

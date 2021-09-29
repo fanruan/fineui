@@ -48,7 +48,7 @@ BI.DynamicDateCombo = BI.inherit(BI.Single, {
                 items: [{
                     el: {
                         type: "bi.combo",
-                        cls: "bi-border bi-border-radius bi-focus-shadow",
+                        cls: "bi-border bi-border-radius",
                         container: opts.container,
                         ref: function () {
                             self.combo = this;
