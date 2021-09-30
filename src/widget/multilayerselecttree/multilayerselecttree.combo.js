@@ -97,6 +97,7 @@ BI.MultiLayerSelectTreeCombo = BI.inherit(BI.Widget, {
                             self.setValue(this.getValue());
                             self.combo.hideView();
                             self.fireEvent(BI.MultiLayerSelectTreeCombo.EVENT_CHANGE);
+                            self.fireEvent(BI.MultiLayerSelectTreeCombo.EVENT_CLICK_ITEM, self.combo.getValue());
                         }
                     }],
                     onLoaded: function () {
@@ -150,6 +151,7 @@ BI.MultiLayerSelectTreeCombo = BI.inherit(BI.Widget, {
                         self.setValue(this.getValue());
                         self.combo.hideView();
                         self.fireEvent(BI.MultiLayerSelectTreeCombo.EVENT_CHANGE);
+                        self.fireEvent(BI.MultiLayerSelectTreeCombo.EVENT_CLICK_ITEM, self.combo.getValue());
                     }
                 }, {
                     eventName: BI.MultiLayerSelectTreeTrigger.EVENT_FOCUS,
@@ -243,4 +245,5 @@ BI.MultiLayerSelectTreeCombo.EVENT_BLUR = "EVENT_BLUR";
 BI.MultiLayerSelectTreeCombo.EVENT_FOCUS = "EVENT_FOCUS";
 BI.MultiLayerSelectTreeCombo.EVENT_CHANGE = "EVENT_CHANGE";
 BI.MultiLayerSelectTreeCombo.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
+BI.MultiLayerSelectTreeCombo.EVENT_CLICK_ITEM = "EVENT_CLICK_ITEM";
 BI.shortcut("bi.multilayer_select_tree_combo", BI.MultiLayerSelectTreeCombo);
