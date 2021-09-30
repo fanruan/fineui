@@ -8,3 +8,4 @@ unit.test.statistic.json
 package-lock.json
 yarn.lock
 *.tgz
+dist/
