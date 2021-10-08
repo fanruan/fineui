@@ -32,12 +32,13 @@ BI.DynamicDateCombo = BI.inherit(BI.Single, {
         this.storeValue = opts.value;
         return {
             type: "bi.htape",
+            cls: "bi-border bi-border-radius",
             items: [{
                 el: {
                     type: "bi.icon_button",
                     cls: "bi-trigger-icon-button date-change-h-font",
                     width: opts.height,
-                    height: opts.height,
+                    height: opts.height - 2,
                     ref: function () {
                         self.changeIcon = this;
                     }
@@ -48,7 +49,6 @@ BI.DynamicDateCombo = BI.inherit(BI.Single, {
                 items: [{
                     el: {
                         type: "bi.combo",
-                        cls: "bi-border bi-border-radius",
                         container: opts.container,
                         ref: function () {
                             self.combo = this;

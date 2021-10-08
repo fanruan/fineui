@@ -59,7 +59,6 @@ BI.DynamicYearCombo = BI.inherit(BI.Widget, {
 
         this.combo = BI.createWidget({
             type: "bi.combo",
-            cls: "bi-border bi-border-radius",
             container: o.container,
             isNeedAdjustHeight: false,
             isNeedAdjustWidth: false,
@@ -121,6 +120,7 @@ BI.DynamicYearCombo = BI.inherit(BI.Widget, {
 
         BI.createWidget({
             type: "bi.htape",
+            cls: "bi-border bi-border-radius",
             element: this,
             ref: function () {
                 self.comboWrapper = this;
@@ -130,7 +130,7 @@ BI.DynamicYearCombo = BI.inherit(BI.Widget, {
                     type: "bi.icon_button",
                     cls: "bi-trigger-icon-button date-change-h-font",
                     width: 24,
-                    height: 24,
+                    height: o.height - 2,
                     ref: function () {
                         self.changeIcon = this;
                     }
