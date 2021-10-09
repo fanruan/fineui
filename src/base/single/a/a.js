@@ -20,6 +20,7 @@ BI.A = BI.inherit(BI.Text, {
 
     render: function () {
         var o = this.options;
+        BI.A.superclass.render.apply(this, arguments);
         this.element.attr({href: o.href, target: o.target});
         if (o.el) {
             BI.createWidget(o.el, {
