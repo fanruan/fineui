@@ -296,12 +296,14 @@
                 this.popupView && this.popupView.destroy();
                 this.popupView = null;
                 this._rendered = false;
-
-                if (!e || !this.combo.element.__isMouseInBounds__(e)) {
-                    this.element.removeClass(this.options.hoverClass);
-                }
             } else {
                 this.popupView && this.popupView.invisible();
+            }
+
+            if (!e || !this.combo.element.__isMouseInBounds__(e)) {
+                this.element.removeClass(this.options.hoverClass);
+                // 应对bi-focus-shadow在收起时不失焦
+                this.element.blur();
             }
 
             this.element.removeClass(this.options.comboClass);
