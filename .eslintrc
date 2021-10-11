@@ -27,7 +27,10 @@
   "plugins": ["@typescript-eslint/eslint-plugin"],
   "overrides": [{
     "files": ["src/*.js","src/**/*.js", "demo/*.js", "demo/**/*.js", "i18n/**/*.js", "i18n/*.js", "test/**/*.js", "test/*.js"],
-    "extends": "plugin:@fui/es5"
+    "extends": "plugin:@fui/es5",
+    "rules": {
+      "comma-dangle": ["error", "never"] // 多行对象字面量中要求拖尾逗号
+    }
   }, {
     "files": ["webpack/*.js", "types/*.ts", "typescript/*.ts","typescript/**/*.ts", "./*.js", "lib/**/*.js", "lib/*.js"],
     "extends": "plugin:@fui/typescript"

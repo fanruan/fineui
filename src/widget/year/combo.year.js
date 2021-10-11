@@ -6,7 +6,7 @@ BI.DynamicYearCombo = BI.inherit(BI.Widget, {
         minDate: "1900-01-01", // 最小日期
         maxDate: "2099-12-31", // 最大日期
         height: 24,
-        supportDynamic: true,
+        supportDynamic: true
     },
 
     _init: function () {
@@ -92,7 +92,7 @@ BI.DynamicYearCombo = BI.inherit(BI.Widget, {
                         eventName: BI.DynamicYearPopup.BUTTON_lABEL_EVENT_CHANGE,
                         action: function () {
                             var date = BI.getDate();
-                            self.setValue({type: BI.DynamicYearCombo.Static, value: {year: date.getFullYear()}});
+                            self.setValue({ type: BI.DynamicYearCombo.Static, value: { year: date.getFullYear() } });
                             self.combo.hideView();
                             self.fireEvent(BI.DynamicDateCombo.EVENT_CONFIRM);
                         }
@@ -119,24 +119,33 @@ BI.DynamicYearCombo = BI.inherit(BI.Widget, {
         });
 
         BI.createWidget({
-            type: "bi.htape",
-            cls: "bi-border bi-border-radius",
+            type: "bi.absolute",
             element: this,
-            ref: function () {
-                self.comboWrapper = this;
-            },
             items: [{
                 el: {
-                    type: "bi.icon_button",
-                    cls: "bi-trigger-icon-button date-change-h-font",
-                    width: 24,
-                    height: o.height - 2,
+                    type: "bi.htape",
+                    cls: "bi-border bi-border-radius bi-focus-shadow",
                     ref: function () {
-                        self.changeIcon = this;
-                    }
+                        self.comboWrapper = this;
+                    },
+                    items: [{
+                        el: {
+                            type: "bi.icon_button",
+                            cls: "bi-trigger-icon-button date-change-h-font",
+                            width: o.height - 2,
+                            height: o.height - 2,
+                            ref: function () {
+                                self.changeIcon = this;
+                            }
+                        },
+                        width: o.height - 2
+                    }, this.combo]
                 },
-                width: 24
-            }, this.combo]
+                top: 1,
+                left: 1,
+                right: 1,
+                bottom: 1
+            }]
         });
         this._checkDynamicValue(o.value);
     },
@@ -149,7 +158,7 @@ BI.DynamicYearCombo = BI.inherit(BI.Widget, {
         switch (type) {
             case BI.DynamicYearCombo.Dynamic:
                 this.changeIcon.setVisible(true);
-                this.comboWrapper.attr("items")[0].width = 24;
+                this.comboWrapper.attr("items")[0].width = this.options.height - 2,
                 this.comboWrapper.resize();
                 break;
             default:
