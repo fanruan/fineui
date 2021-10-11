@@ -19,8 +19,8 @@ BI.MultiSelectBar = BI.inherit(BI.BasicButton, {
             },
             halfSelected: false,
             iconWrapperWidth: 26,
-            iconWidth: 16,
-            iconHeight: 16,
+            iconWidth: 14,
+            iconHeight: 14,
         });
     },
     _init: function () {
