@@ -4,6 +4,7 @@
   & .checkbox-content, &.checkbox-content {
     .border-radius(2px);
     border: 1px solid @color-bi-border-dark-line;
+    box-sizing: border-box;
     &:after {
       position: absolute;
       display: table;
@@ -12,8 +13,8 @@
       border: 2px solid transparent;
       border-top: 0;
       border-left: 0;
-      width: 4px;
-      height: 8px;
+      width: 6px;
+      height: 9px;
       .transform(rotate(45deg) scale(1) translate(-50%, -50%));
       content: '';
     }
