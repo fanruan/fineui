@@ -126,11 +126,12 @@ BI.ListPane = BI.inherit(BI.Pane, {
         var tipText = context.tipText || '';
         if (BI.isNotEmptyString(tipText)) {
             BI.ListPane.superclass.populate.apply(this, []);
+            this.setTipText(tipText);
         } else {
             BI.ListPane.superclass.populate.apply(this, arguments);
             this.button_group.populate.apply(this.button_group, arguments);
+            BI.isEmptyArray(BI.get(arguments, [0], [])) && this.setTipText(o.tipText);
         }
-        this.setTipText(tipText || o.tipText);
     },
 
     empty: function () {
