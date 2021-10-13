@@ -29,7 +29,7 @@ BI.SingleSelectSearchInsertPane = BI.inherit(BI.Widget, {
 
         this.addNotMatchTip = BI.createWidget({
             type: "bi.label",
-            text: BI.i18nText("BI-Basic_Click_To_Add_Text", ""),
+            text: BI.i18nText("BI-Basic_Press_Enter_To_Add_Text", ""),
             height: this.constants.height,
             cls: "bi-keyword-red-mark",
             hgap: 5,
@@ -66,7 +66,7 @@ BI.SingleSelectSearchInsertPane = BI.inherit(BI.Widget, {
     },
 
     setKeyword: function (keyword) {
-        this.addNotMatchTip.setText(BI.i18nText("BI-Basic_Click_To_Add_Text", keyword));
+        this.addNotMatchTip.setText(BI.i18nText("BI-Basic_Press_Enter_To_Add_Text", keyword));
     },
 
     hasMatched: function () {
