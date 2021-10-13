@@ -9,10 +9,10 @@ BI.Checkbox = BI.inherit(BI.BasicButton, {
         baseCls: "bi-checkbox",
         selected: false,
         handler: BI.emptyFn,
-        width: 16,
-        height: 16,
-        iconWidth: 16,
-        iconHeight: 16
+        width: 14,
+        height: 14,
+        iconWidth: 14,
+        iconHeight: 14
     },
 
     render: function () {
@@ -25,8 +25,8 @@ BI.Checkbox = BI.inherit(BI.BasicButton, {
                     self.checkbox = _ref;
                 },
                 cls: "checkbox-content",
-                width: o.iconWidth - 2,
-                height: o.iconHeight - 2
+                width: o.iconWidth,
+                height: o.iconHeight
             }]
         };
     },

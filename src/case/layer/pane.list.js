@@ -130,6 +130,7 @@ BI.ListPane = BI.inherit(BI.Pane, {
         } else {
             BI.ListPane.superclass.populate.apply(this, arguments);
             this.button_group.populate.apply(this.button_group, arguments);
+            BI.isEmptyArray(BI.get(arguments, [0], [])) && this.setTipText(o.tipText);
         }
     },
 
