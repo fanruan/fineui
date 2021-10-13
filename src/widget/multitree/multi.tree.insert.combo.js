@@ -11,7 +11,7 @@ BI.MultiTreeInsertCombo = BI.inherit(BI.Single, {
             top: 0,
             left: 0,
             right: 0,
-            bottom: 25
+            bottom: BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT + 1
         }
     },
 
