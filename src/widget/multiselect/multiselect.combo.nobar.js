@@ -49,8 +49,8 @@ BI.MultiSelectNoBarCombo = BI.inherit(BI.Single, {
                     left: 0,
                     top: 0,
                     right: 0,
-                    bottom: 25
-                }
+                    bottom: BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT + 1,
+                },
             },
             valueFormatter: o.valueFormatter,
             itemsCreator: BI.bind(this._itemsCreator4Trigger, this),
@@ -222,8 +222,8 @@ BI.MultiSelectNoBarCombo = BI.inherit(BI.Single, {
                     left: 0,
                     top: 0,
                     right: 0,
-                    bottom: 25
-                }
+                    bottom: BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT + 1,
+                },
             },
             valueFormatter: o.valueFormatter,
             itemsCreator: BI.bind(this._itemsCreator4Trigger, this),
