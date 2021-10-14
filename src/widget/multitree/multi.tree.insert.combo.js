@@ -6,15 +6,6 @@
 
 BI.MultiTreeInsertCombo = BI.inherit(BI.Single, {
 
-    constants: {
-        offset: {
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 25
-        }
-    },
-
     _defaultConfig: function () {
         return BI.extend(BI.MultiTreeInsertCombo.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-multi-tree-insert-combo",
@@ -41,7 +32,12 @@ BI.MultiTreeInsertCombo = BI.inherit(BI.Single, {
             valueFormatter: o.valueFormatter,
             // adapter: this.popup,
             masker: {
-                offset: this.constants.offset
+                offset: {
+                    left: 0,
+                    top: 0,
+                    right: 0,
+                    bottom: BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT + 1,
+                },
             },
             searcher: {
                 type: "bi.multi_tree_searcher",
@@ -252,7 +248,12 @@ BI.MultiTreeInsertCombo = BI.inherit(BI.Single, {
             },
             itemsCreator: o.itemsCreator,
             masker: {
-                offset: this.constants.offset
+                offset: {
+                    left: 0,
+                    top: 0,
+                    right: 0,
+                    bottom: BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT + 1,
+                },
             },
             valueFormatter: o.valueFormatter,
             value: o.value
