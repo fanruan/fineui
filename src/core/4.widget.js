@@ -50,7 +50,6 @@
 
         // 覆盖父类的_constructor方法，widget不走ob的生命周期
         _constructed: function () {
-            var self = this;
             if (this.setup) {
                 pushTarget(this);
                 var delegate = this.setup(this.options);
@@ -377,6 +376,7 @@
          * @param deep 子节点是否也是按照当前force处理
          * @param lifeHook 生命周期钩子触不触发，默认触发
          * @param predicate 递归每个widget的回调
+         * @param layer 组件层级
          * @returns {boolean}
          * @private
          */
@@ -421,7 +421,6 @@
         _mountChildren: null,
 
         _update: function (nextProps, shouldUpdate) {
-            var o = this.options;
             callLifeHook(this, "beforeUpdate");
             if (shouldUpdate) {
                 var res = this.update && this.update(nextProps, shouldUpdate);
@@ -570,7 +569,6 @@
         },
 
         removeWidget: function (nameOrWidget) {
-            var self = this;
             if (BI.isWidget(nameOrWidget)) {
                 BI.remove(this._children, nameOrWidget);
             } else {
