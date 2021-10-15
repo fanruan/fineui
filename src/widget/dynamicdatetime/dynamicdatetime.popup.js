@@ -59,7 +59,12 @@ BI.DynamicDateTimePopup = BI.inherit(BI.Widget, {
                         listeners: [{
                             eventName: BI.TextButton.EVENT_CHANGE,
                             action: function () {
-                                self.fireEvent(BI.DynamicDateTimePopup.BUTTON_OK_EVENT_CHANGE);
+                                var type = self.dateTab.getSelect();
+                                if (type === BI.DynamicDateCombo.Dynamic) {
+                                    self.dynamicPane.checkValidation(true) && self.fireEvent(BI.DynamicDateTimePopup.BUTTON_OK_EVENT_CHANGE);
+                                } else {
+                                    self.fireEvent(BI.DynamicDateTimePopup.BUTTON_OK_EVENT_CHANGE)
+                                }
                             }
                         }]
                     }]],
