@@ -240,10 +240,11 @@ BI.Layout = BI.inherit(BI.Widget, {
         var w = this._newElement(newIndex, item);
         // 需要有个地方临时存一下新建的组件，否则如果直接使用newIndex的话，newIndex位置的元素可能会被用到
         this._children[this._getChildName(newIndex) + "-temp"] = w;
-        if (oldIndex > 0) {
-            this._children[this._getChildName(oldIndex - 1)].element.after(w.element);
+        var nextSibling = del.element[0].nextSibling;
+        if (nextSibling) {
+            BI.Widget._renderEngine.createElement(nextSibling).before(w.element);
         } else {
-            w.element.prependTo(this._getWrapper());
+            w.element.appendTo(this._getWrapper());
         }
         del._destroy();
         w._mount();
@@ -308,6 +309,7 @@ BI.Layout = BI.inherit(BI.Widget, {
         }
         this._addItemAt(index, item);
         var w = this._addElement(index, item);
+        // addItemAt 还是用之前的找上个兄弟节点向后插入的方式
         if (index > 0) {
             this._children[this._getChildName(index - 1)].element.after(w.element);
         } else {
