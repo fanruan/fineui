@@ -157,11 +157,6 @@
         if (_global.Fix && this._store) {
             initWatch(this, this.watch);
         }
-        // try {
-        //     _render.apply(this, arguments);
-        // } catch (e) {
-        //     console.error(e);
-        // }
         needPop && popTarget();
     };
 
