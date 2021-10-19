@@ -309,11 +309,11 @@ BI.Layout = BI.inherit(BI.Widget, {
         }
         this._addItemAt(index, item);
         var w = this._addElement(index, item);
-        var nextSibling = this._children[this._getChildName(index)].element[0].nextSibling;
-        if (nextSibling) {
-            BI.Widget._renderEngine.createElement(nextSibling).before(w.element);
+        // addItemAt 还是用之前的找上个兄弟节点向后插入的方式
+        if (index > 0) {
+            this._children[this._getChildName(index - 1)].element.after(w.element);
         } else {
-            w.element.appendTo(this._getWrapper());
+            w.element.prependTo(this._getWrapper());
         }
         w._mount();
         return w;
