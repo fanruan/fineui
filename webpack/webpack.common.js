@@ -44,7 +44,7 @@ module.exports = {
                     {
                         loader: 'babel-loader',
                         options: {
-                            configFile: dirs.IE8_BABEL_CONFIG,
+                            configFile: dirs.BABEL_CONFIG,
                         },
                     },
                     {
@@ -94,15 +94,6 @@ module.exports = {
                 ],
             }, {
                 test: path.resolve(__dirname, '../', attachments.fixProxy),
-                use: [
-                    {
-                        loader: 'expose-loader',
-                        options: 'Fix',
-                    },
-                ],
-            },
-            {
-                test: path.resolve(__dirname, '../', attachments.fixIE),
                 use: [
                     {
                         loader: 'expose-loader',

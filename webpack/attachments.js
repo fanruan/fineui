@@ -10,28 +10,12 @@ function sync(patterns) {
 
 const fixJs = "./dist/fix/fix.js";
 const fixProxyJs = './dist/fix/fix.proxy.js';
-const fixIEJs = "./dist/fix/fix.ie.js";
 const fixCompact = "./dist/fix/fix.compact.js";
-const fixIECompact = './dist/fix/fix.compact.ie.js';
 const workerCompact = './dist/fix/worker.compact.js';
 const lodashJs = "src/core/1.lodash.js";
 
 const basicAttachmentMap = {
     polyfill: sync(["src/core/0.foundation.js", "src/polyfill/**/*.js"]).concat(["@babel/polyfill", "es6-promise/auto"]),
-    polyfillIE: sync(["src/core/0.foundation.js", "src/polyfill/**/*.js"]).concat([
-        "core-js/features/object/define-property",
-        "core-js/features/object/create",
-        "core-js/features/object/assign",
-        "core-js/features/object/get-own-property-symbols",
-        "core-js/features/object/get-prototype-of",
-        "core-js/features/array/for-each",
-        "core-js/features/array/index-of",
-        "core-js/features/function/bind",
-        "core-js/features/promise",
-        "core-js/features/string/replace",
-        "core-js/es/map",
-        // "core-js",
-    ]),
     core: sync([
         "src/less/core/**/*.less",
         "src/less/theme/**/*.less",
@@ -84,7 +68,6 @@ const basicAttachmentMap = {
     ]),
     fix: [fixJs],
     fixProxy: [fixProxyJs],
-    fixIE: [fixIEJs],
 };
 
 const bundle = [].concat(
@@ -121,20 +104,6 @@ const coreJs = [].concat(
 const resource = sync(["private/less/app.less", "private/less/**/*.less"]);
 
 const config = sync(["public/js/**/*.js", "public/js/index.js", "i18n/i18n.cn.js"]);
-
-const bundleIE = [].concat(
-    basicAttachmentMap.polyfillIE,
-    basicAttachmentMap.core,
-    basicAttachmentMap.fixIE,
-    basicAttachmentMap.base,
-    basicAttachmentMap.case,
-    basicAttachmentMap.widget,
-    sync(["public/less/app.less", "public/less/**/*.less"]),
-    [fixIECompact, workerCompact],
-    basicAttachmentMap.router,
-    sync(["public/js/**/*.js", "public/js/index.js", "i18n/i18n.cn.js"]),
-    basicAttachmentMap.ts,
-);
 
 const bundleWithoutNormalize = [].concat(
     basicAttachmentMap.core_without_normalize,
@@ -190,19 +159,6 @@ const fineuiProxy = [].concat(
     basicAttachmentMap.ts,
 );
 
-const fineuiIE = [].concat(
-    basicAttachmentMap.polyfillIE,
-    basicAttachmentMap.core,
-    basicAttachmentMap.fixIE,
-    basicAttachmentMap.base,
-    basicAttachmentMap.case,
-    basicAttachmentMap.widget,
-    basicAttachmentMap.router,
-    [fixIECompact, workerCompact],
-    basicAttachmentMap.ui,
-    basicAttachmentMap.ts,
-);
-
 const fineuiWithoutJqueryAndPolyfillJs = [].concat(
     sync([
         "src/core/foundation.js",
@@ -242,18 +198,15 @@ const demo = [].concat(
 module.exports = {
     fix: fixJs,
     fixProxy: fixProxyJs,
-    fixIE: fixIEJs,
     lodash: lodashJs,
     font: basicAttachmentMap.font,
     bundle: uniq(bundle),
     bundleModern: uniq(bundleModern),
-    bundleIE: uniq(bundleIE),
     fineuiWithoutNormalize: uniq(fineuiWithoutNormalize),
     bundleWithoutNormalize: uniq(bundleWithoutNormalize),
     fineui: uniq(fineui),
     fineuiModern: uniq(fineuiModern),
     fineuiProxy: uniq(fineuiProxy),
-    fineuiIE: uniq(fineuiIE),
     fineuiWithoutJqueryAndPolyfillJs: uniq(fineuiWithoutJqueryAndPolyfillJs),
     utils: uniq(basicAttachmentMap.utils),
     demo: uniq(demo),

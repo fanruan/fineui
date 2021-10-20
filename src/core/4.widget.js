@@ -128,6 +128,8 @@
                     }
                     renderCallbackCalled = true;
                     self._render();
+                    self._rendered();
+                    self.__async = false;
                 }
 
                 if (self.options.beforeRender || self.beforeRender) {
@@ -135,6 +137,7 @@
                     (self.options.beforeRender || self.beforeRender).call(self, render);
                 } else {
                     self._render();
+                    self._rendered();
                 }
             }
 
@@ -146,6 +149,17 @@
             }
         },
 
+        _rendered: function () {
+            pushTarget(this);
+            this.__async === true && this._isMounted && callLifeHook(this, "beforeMount");
+            this._mount();
+            if (this.__async === true && this._isMounted) {
+                callLifeHook(this, "mounted");
+                this.fireEvent(BI.Events.MOUNT);
+            }
+            popTarget();
+        },
+
         _render: function () {
             this.__asking = false;
             pushTarget(this);
@@ -154,7 +168,6 @@
             this._initEffects();
             callLifeHook(this, "created");
             popTarget();
-            this.__async = false;
         },
 
         _initCurrent: function () {
@@ -299,10 +312,7 @@
 
         _initElement: function () {
             var self = this;
-            var isMounted = this._isMounted;
-            this.__async === true && isMounted && callLifeHook(this, "beforeMount");
             this.__isMounting = true;
-            // if (!this._initVNode()) {
             var render = BI.isFunction(this.options.render) ? this.options.render : this.render;
             var els = render && render.call(this);
             els = BI.Plugin.getRender(this.options.type, els);
@@ -317,12 +327,6 @@
                         });
                     }
                 });
-            }
-            // }
-            this._mount();
-            if (this.__async === true && isMounted) {
-                callLifeHook(this, "mounted");
-                this.fireEvent(BI.Events.MOUNT);
             }
         },
 

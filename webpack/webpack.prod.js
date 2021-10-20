@@ -19,11 +19,9 @@ module.exports = merge.smart(common, {
         'fineui_without_normalize.min': attachments.fineuiWithoutNormalize,
         "fineui.modern.min": attachments.fineuiModern,
         "fineui.proxy.min": attachments.fineuiProxy,
-        "fineui.ie.min": attachments.fineuiIE,
         utils: attachments.utils,
         "utils.min": attachments.utils,
         "fineui_without_jquery_polyfill": attachments.fineuiWithoutJqueryAndPolyfillJs,
-        "2.0/fineui.ie.min": attachments.bundleIE,
         "2.0/fineui": attachments.bundle,
         "2.0/fineui.min": attachments.bundle,
         "2.0/fineui.modern.min": attachments.bundleModern,
@@ -39,7 +37,6 @@ module.exports = merge.smart(common, {
                 parallel: true,
                 sourceMap: true,
                 terserOptions: {
-                    ie8: true,
                     output: {
                         comments: false,
                     },

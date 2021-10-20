@@ -12,8 +12,6 @@
 !dist/fineui_without_normalize.min.css
 !dist/fineui.min.js
 !dist/fineui.min.js.map
-!dist/fineui.ie.min.js
-!dist/fineui.ie.min.js.map
 !dist/core.css
 !dist/core.js
 !dist/resource.css
@@ -23,8 +21,6 @@
 !dist/utils.min.js
 !dist/utils.min.js.map
 !dist/fineui_without_jquery_polyfill.js
-!dist/2.0/fineui.ie.min.js
-!dist/2.0/fineui.ie.min.js.map
 !dist/2.0/fineui.css
 !dist/2.0/fineui.js
 !dist/2.0/fineui.js.map
