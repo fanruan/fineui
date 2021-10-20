@@ -128,7 +128,7 @@
                     }
                     renderCallbackCalled = true;
                     self._render();
-                    self._rendered();
+                    self._afterRender();
                     self.__async = false;
                 }
 
@@ -137,7 +137,7 @@
                     (self.options.beforeRender || self.beforeRender).call(self, render);
                 } else {
                     self._render();
-                    self._rendered();
+                    self._afterRender();
                 }
             }
 
@@ -149,7 +149,7 @@
             }
         },
 
-        _rendered: function () {
+        _afterRender: function () {
             pushTarget(this);
             this.__async === true && this._isMounted && callLifeHook(this, "beforeMount");
             this._mount();
