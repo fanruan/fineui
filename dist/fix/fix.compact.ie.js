@@ -157,9 +157,11 @@
         if (_global.Fix && this._store) {
             needPop = true;
             pushTarget(this.store);
-            initWatch(this, this.watch);
         }
         _render.apply(this, arguments);
+        if (_global.Fix && this._store) {
+            initWatch(this, this.watch);
+        }
         needPop && popTarget();
     };
 

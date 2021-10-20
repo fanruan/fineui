@@ -148,10 +148,12 @@
 
         _render: function () {
             this.__asking = false;
+            pushTarget(this);
             callLifeHook(this, "beforeCreate");
             this._initElement();
             this._initEffects();
             callLifeHook(this, "created");
+            popTarget();
             this.__async = false;
         },
 
@@ -299,6 +301,7 @@
             var self = this;
             var isMounted = this._isMounted;
             this.__async === true && isMounted && callLifeHook(this, "beforeMount");
+            this.__isMounting = true;
             // if (!this._initVNode()) {
             var render = BI.isFunction(this.options.render) ? this.options.render : this.render;
             var els = render && render.call(this);
@@ -388,6 +391,7 @@
             layer = layer || 0;
             lifeHook !== false && !this.__async && callLifeHook(this, "beforeMount");
             this._isMounted = true;
+            this.__isMounting = false;
             for (var key in this._children) {
                 var child = this._children[key];
                 !self.isEnabled() && child._setEnable(false);
@@ -798,6 +802,10 @@
 
     BI.onBeforeMount = function (beforeMount) {
         if (current) {
+            if(current.__isMounting){
+                beforeMount();
+                return;
+            }
             if (!current.beforeMount) {
                 current.beforeMount = [];
             } else if (!BI.isArray(current.beforeMount)) {
@@ -808,6 +816,10 @@
     };
     BI.onMounted = function (mounted) {
         if (current) {
+            if(current._isMounted && !this.__async){
+                mounted();
+                return;
+            }
             if (!current.mounted) {
                 current.mounted = [];
             } else if (!BI.isArray(current.mounted)) {
