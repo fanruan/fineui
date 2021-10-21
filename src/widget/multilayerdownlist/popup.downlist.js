@@ -107,7 +107,8 @@ BI.MultiLayerDownListPopup = BI.inherit(BI.Pane, {
                             }]
 
                         },
-                        innerVGap: 5
+                        innerVGap: 5,
+                        maxHeight: 378,
                     };
                     self._createChildren(item);
                 } else {
