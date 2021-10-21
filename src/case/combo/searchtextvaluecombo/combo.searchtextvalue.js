@@ -22,6 +22,7 @@ BI.SearchTextValueCombo = BI.inherit(BI.Widget, {
                     type: "bi.combo",
                     cls: "bi-border bi-focus-shadow",
                     container: o.container,
+                    direction: o.direction,
                     adjustLength: 2,
                     toggle: false,
                     ref: function () {
