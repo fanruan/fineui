@@ -150,4 +150,3 @@ BI.Pane = BI.inherit(BI.Widget, {
 });
 BI.Pane.EVENT_LOADED = "EVENT_LOADED";
 BI.Pane.EVENT_LOADING = "EVENT_LOADING";
-BI.LoadingPane = BI.Pane;
