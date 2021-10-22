@@ -152,13 +152,13 @@
             pushTarget(this);
             var async = this.__async;
             this.__async = false;
-            if(async && this._isMounted){
-                callLifeHook(this, "beforeMount");
-            }
-            this._mount();
             if (async && this._isMounted) {
+                callLifeHook(this, "beforeMount");
+                this._mount();
                 callLifeHook(this, "mounted");
                 this.fireEvent(BI.Events.MOUNT);
+            } else {
+                this._mount();
             }
             popTarget();
         },
@@ -766,7 +766,7 @@
 
     BI.onBeforeMount = function (beforeMount) {
         if (current) {
-            if(current.__isMounting){
+            if (current.__isMounting) {
                 beforeMount();
                 return;
             }
@@ -780,7 +780,7 @@
     };
     BI.onMounted = function (mounted) {
         if (current) {
-            if(current._isMounted && !this.__async){
+            if (current._isMounted && !this.__async) {
                 mounted();
                 return;
             }
