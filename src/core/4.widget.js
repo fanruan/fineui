@@ -129,7 +129,6 @@
                     renderCallbackCalled = true;
                     self._render();
                     self.__afterRender();
-                    self.__async = false;
                 }
 
                 if (self.options.beforeRender || self.beforeRender) {
@@ -151,9 +150,13 @@
 
         __afterRender: function () {
             pushTarget(this);
-            this.__async === true && this._isMounted && callLifeHook(this, "beforeMount");
+            var async = this.__async;
+            this.__async = false;
+            if(async && this._isMounted){
+                callLifeHook(this, "beforeMount");
+            }
             this._mount();
-            if (this.__async === true && this._isMounted) {
+            if (async && this._isMounted) {
                 callLifeHook(this, "mounted");
                 this.fireEvent(BI.Events.MOUNT);
             }
@@ -329,49 +332,6 @@
                 });
             }
         },
-
-        // _initVNode: function () {
-        //     if (this.options.vdom) {
-        //         var div = document.createElement("div");
-        //         var element = this.element;
-        //         element.append(div);
-        //         this.vnode = this._renderVNode();
-        //         BI.patchVNode(div, this.vnode);
-        //         // 去除这个临时的div
-        //         BI.DOM.hang([div]);
-        //         element.attr("style", this.vnode.elm.getAttribute("style"));
-        //         element.addClass(this.vnode.elm.getAttribute("class"));
-        //         element.empty();
-        //         BI.each(BI.jQuery(this.vnode.elm).children(), function (i, node) {
-        //             element.append(node);
-        //         });
-        //         return true;
-        //     }
-        //     return false;
-        // },
-
-        // _renderVNode: function () {
-        //     var self = this;
-        //     var render = BI.isFunction(this.options.render) ? this.options.render : this.render;
-        //     var els = render && render.call(this);
-        //     els = BI.Plugin.getRender(this.options.type, els);
-        //     if (BI.isPlainObject(els)) {
-        //         els = [els];
-        //     }
-        //     if (BI.isArray(els)) {
-        //         var container = document.createElement("div");
-        //         this._children = {};
-        //         BI.each(els, function (i, el) {
-        //             if (el) {
-        //                 var w = BI._lazyCreateWidget(el, {
-        //                     element: container
-        //                 });
-        //                 self.addWidget(w);
-        //             }
-        //         });
-        //     }
-        //     return BI.Element2Vnode(container);
-        // },
 
         _setParent: function (parent) {
             this._parent = parent;
