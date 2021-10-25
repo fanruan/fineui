@@ -26,7 +26,7 @@
             var o = this.options;
             return {
                 type: "bi.text",
-                textAlign: "left",
+                textAlign: o.textAlign,
                 whiteSpace: o.whiteSpace,
                 lineHeight: o.textHeight,
                 maxWidth: "100%",
@@ -50,6 +50,7 @@
         _createCenterEl: function () {
             var o = this.options;
             var json = this._createJson();
+            json.textAlign = "left";
             if (BI.isNumber(o.width) && o.width > 0) {
                 if (BI.isNumber(o.textWidth) && o.textWidth > 0) {
                     json.maxWidth = o.textWidth;
@@ -250,7 +251,6 @@
                             "line-height": (o.height - (o.vgap * 2)) / BI.pixRatio + BI.pixUnit
                         });
                     }
-                    json.textAlign = o.textAlign;
                     this.text = BI.createWidget(BI.extend(json, {
                         element: this,
                         hgap: o.hgap,
@@ -309,7 +309,6 @@
                         "line-height": (o.height - (o.vgap * 2)) / BI.pixRatio + BI.pixUnit
                     });
                 }
-                json.textAlign = o.textAlign;
                 this.text = BI.createWidget(BI.extend(json, { // 2.6
                     element: this,
                     hgap: o.hgap,
