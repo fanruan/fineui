@@ -26,7 +26,7 @@
             var o = this.options;
             return {
                 type: "bi.text",
-                textAlign: o.textAlign,
+                textAlign: "left",
                 whiteSpace: o.whiteSpace,
                 lineHeight: o.textHeight,
                 maxWidth: "100%",
@@ -50,7 +50,6 @@
         _createCenterEl: function () {
             var o = this.options;
             var json = this._createJson();
-            json.textAlign = "left";
             if (BI.isNumber(o.width) && o.width > 0) {
                 if (BI.isNumber(o.textWidth) && o.textWidth > 0) {
                     json.maxWidth = o.textWidth;
@@ -246,6 +245,12 @@
                     return;
                 }
                 if (BI.isNumber(o.height) && o.height > 0) { // 2.3
+                    if (o.whiteSpace !== "normal") {
+                        this.element.css({
+                            "line-height": (o.height - (o.vgap * 2)) / BI.pixRatio + BI.pixUnit
+                        });
+                    }
+                    json.textAlign = o.textAlign;
                     this.text = BI.createWidget(BI.extend(json, {
                         element: this,
                         hgap: o.hgap,
@@ -255,11 +260,6 @@
                         tgap: o.tgap,
                         bgap: o.bgap
                     }));
-                    if (o.whiteSpace !== "normal") {
-                        this.element.css({
-                            "line-height": (o.height - (o.vgap * 2)) / BI.pixRatio + BI.pixUnit
-                        });
-                    }
                     return;
                 }
                 json.maxWidth = o.width - 2 * o.hgap - o.lgap - o.rgap;
@@ -309,6 +309,7 @@
                         "line-height": (o.height - (o.vgap * 2)) / BI.pixRatio + BI.pixUnit
                     });
                 }
+                json.textAlign = o.textAlign;
                 this.text = BI.createWidget(BI.extend(json, { // 2.6
                     element: this,
                     hgap: o.hgap,
