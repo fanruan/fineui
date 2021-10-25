@@ -211,7 +211,7 @@
             var json = this._createJson();
             if (BI.isNumber(o.width) && o.width > 0) {
                 if (BI.isNumber(o.textWidth) && o.textWidth > 0) {
-                    json.width = o.textWidth;
+                    json.maxWidth = o.textWidth;
                     if (BI.isNumber(o.height) && o.height > 0) { // 2.1
                         BI.createWidget({
                             type: adaptLayout,
@@ -265,7 +265,7 @@
                     }
                     return;
                 }
-                json.width = o.width - 2 * o.hgap - o.lgap - o.rgap;
+                json.maxWidth = o.width - 2 * o.hgap - o.lgap - o.rgap;
                 BI.createWidget({ // 2.4
                     type: adaptLayout,
                     horizontalAlign: o.textAlign,
@@ -285,7 +285,7 @@
                 return;
             }
             if (BI.isNumber(o.textWidth) && o.textWidth > 0) {
-                json.width = o.textWidth;
+                json.maxWidth = o.textWidth;
                 BI.createWidget({  // 2.5
                     type: adaptLayout,
                     horizontalAlign: o.textAlign,
