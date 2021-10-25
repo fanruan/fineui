@@ -29,6 +29,7 @@
                 textAlign: o.textAlign,
                 whiteSpace: o.whiteSpace,
                 lineHeight: o.textHeight,
+                maxWidth: "100%",
                 text: o.text,
                 value: o.value,
                 py: o.py,
@@ -185,17 +186,13 @@
                 }));
                 return;
             }
-            BI.extend(json, {
+            this.text = BI.createWidget(BI.extend(json, {
                 hgap: o.hgap,
                 vgap: o.vgap,
                 lgap: o.lgap,
                 rgap: o.rgap,
                 tgap: o.tgap,
                 bgap: o.bgap
-            });
-
-            this.text = BI.createWidget(BI.extend(json, {
-                maxWidth: "100%"
             }));
             BI.createWidget({
                 type: "bi.center_adapt",
@@ -323,17 +320,13 @@
                 }));
                 return;
             }
-            BI.extend(json, {
+            this.text = BI.createWidget(BI.extend(json, {
                 hgap: o.hgap,
                 vgap: o.vgap,
                 lgap: o.lgap,
                 rgap: o.rgap,
                 tgap: o.tgap,
                 bgap: o.bgap
-            });
-
-            this.text = BI.createWidget(BI.extend(json, {
-                maxWidth: "100%"
             }));
             BI.createWidget({
                 type: adaptLayout,
