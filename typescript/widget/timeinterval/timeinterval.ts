@@ -7,6 +7,12 @@ export declare class TimeInterval extends Single {
     static EVENT_VALID: string;
     static EVENT_ERROR: string;
 
+    props: {
+        minDate?: string;
+        maxDate?: string;
+        supportDynamic?: boolean;
+    } & Single['props']
+
     getValue(): {
         start: DynamicDataComboValue;
         end: DynamicDataComboValue;
