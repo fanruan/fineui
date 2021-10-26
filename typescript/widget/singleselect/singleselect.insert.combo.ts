@@ -8,4 +8,13 @@ export declare class SingleSelectInsertCombo extends Single {
     static EVENT_SEARCHING: string;
     static EVENT_CLICK_ITEM: string;
     static EVENT_CONFIRM: string;
+
+    props: {
+        text?: string,
+        allowNoSelect?: boolean,
+        itemsCreator?: Function,
+        valueFormatter?: Function,
+        allowEdit?: boolean,
+        watermark?: string,
+    } & Single['props']
 }

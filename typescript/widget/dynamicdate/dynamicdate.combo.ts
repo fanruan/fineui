@@ -15,6 +15,18 @@ export declare class DynamicDateCombo extends Single {
     static EVENT_BEFORE_POPUPVIEW: string;
     static EVENT_BEFORE_YEAR_MONTH_POPUPVIEW: string;
 
+    props: {
+        minDate?: string;
+        maxDate?: string;
+        format?: string;
+        allowEdit?: boolean;
+        supportDynamic?: boolean;
+        attributes?: {
+            tabIndex?: number;
+        };
+        watermark?: string;
+    } & Single['props']
+
     setMinDate(minDate: string): void;
 
     setMaxDate(maxDate: string): void;
