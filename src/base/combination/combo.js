@@ -21,6 +21,7 @@
                 container: null, // popupview放置的容器，默认为this.element
                 isDefaultInit: false,
                 destroyWhenHide: false,
+                hideWhenBlur: true,
                 hideWhenAnotherComboOpen: false,
                 isNeedAdjustHeight: true, // 是否需要高度调整
                 isNeedAdjustWidth: true,
@@ -291,6 +292,7 @@
         },
 
         _hideView: function (e) {
+            var o = this.options;
             this.fireEvent(BI.Combo.EVENT_BEFORE_HIDEVIEW);
             if (this.options.destroyWhenHide === true) {
                 this.popupView && this.popupView.destroy();
@@ -310,12 +312,12 @@
             delete needHideWhenAnotherComboOpen[this.getName()];
 
             BI.Widget._renderEngine.createElement(document).unbind("mousedown." + this.getName()).unbind("mousewheel." + this.getName());
-            BI.Widget._renderEngine.createElement(window).unbind("blur." + this.getName());
+            o.hideWhenBlur && BI.Widget._renderEngine.createElement(window).unbind("blur." + this.getName());
             this.fireEvent(BI.Combo.EVENT_AFTER_HIDEVIEW);
         },
 
         _popupView: function (e) {
-            var self = this;
+            var self = this, o = this.options;
             this._assertPopupViewRender();
             this.fireEvent(BI.Combo.EVENT_BEFORE_POPUPVIEW);
             // popupVisible是为了获取其宽高, 放到可视范围之外以防止在IE下闪一下
@@ -334,10 +336,10 @@
 
             this.element.addClass(this.options.comboClass);
             BI.Widget._renderEngine.createElement(document).unbind("mousedown." + this.getName()).unbind("mousewheel." + this.getName());
-            BI.Widget._renderEngine.createElement(window).unbind("blur." + this.getName());
+            o.hideWhenBlur && BI.Widget._renderEngine.createElement(window).unbind("blur." + this.getName());
 
             BI.Widget._renderEngine.createElement(document).bind("mousedown." + this.getName(), BI.bind(this._hideIf, this)).bind("mousewheel." + this.getName(), BI.bind(this._hideIf, this));
-            BI.Widget._renderEngine.createElement(window).bind("blur." + this.getName(), BI.bind(this._hideIf, this));
+            o.hideWhenBlur && BI.Widget._renderEngine.createElement(window).bind("blur." + this.getName(), BI.bind(this._hideIf, this));
             this.fireEvent(BI.Combo.EVENT_AFTER_POPUPVIEW);
         },
 
