@@ -126,10 +126,10 @@
                         _global.console && console.error("组件： 请检查beforeRender内部的写法，callback只能执行一次");
                         return;
                     }
-                    self.__async = false;
                     renderCallbackCalled = true;
                     self._render();
                     self.__afterRender();
+                    self.__async = false;
                 }
 
                 if (self.options.beforeRender || self.beforeRender) {
