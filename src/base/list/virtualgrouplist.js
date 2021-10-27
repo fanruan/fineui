@@ -62,7 +62,7 @@ BI.VirtualGroupList = BI.inherit(BI.Widget, {
             if (self._scrollLock === true) {
                 return;
             }
-            this._scrollLock = true;
+            self._scrollLock = true;
             o.scrollTop = self.element.scrollTop();
             self._debounceRelease();
             self._calculateBlocksToRender();
