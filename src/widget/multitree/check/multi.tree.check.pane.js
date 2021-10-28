@@ -43,7 +43,7 @@ BI.MultiTreeCheckPane = BI.inherit(BI.Pane, {
 
         var backToPopup = BI.createWidget({
             type: "bi.vertical_adapt",
-            columnSize: ['auto', 'auto'],
+            columnSize: ["auto", "auto"],
             cls: "multi-tree-continue-select",
             items: [
                 {

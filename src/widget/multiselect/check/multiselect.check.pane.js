@@ -72,7 +72,7 @@ BI.MultiSelectCheckPane = BI.inherit(BI.Widget, {
                 height: this.constants.height,
                 el: {
                     type: "bi.vertical_adapt",
-                    columnSize: ['auto', 'auto'],
+                    columnSize: ["auto", "auto"],
                     cls: "multi-select-continue-select",
                     items: [
                         {
