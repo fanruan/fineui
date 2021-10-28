@@ -55,8 +55,16 @@ BI.VirtualGroupList = BI.inherit(BI.Widget, {
     mounted: function () {
         var self = this, o = this.options;
         this._populate();
+        this._debounceRelease = BI.debounce(function () {
+            self._scrollLock = false;
+        }, 30);
         this.element.scroll(function (e) {
+            if (self._scrollLock === true) {
+                return;
+            }
+            self._scrollLock = true;
             o.scrollTop = self.element.scrollTop();
+            self._debounceRelease();
             self._calculateBlocksToRender();
         });
         BI.ResizeDetector.addResizeListener(this, function () {
