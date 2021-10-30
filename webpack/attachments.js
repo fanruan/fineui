@@ -161,7 +161,7 @@ const fineuiProxy = [].concat(
 
 const fineuiWithoutJqueryAndPolyfillJs = [].concat(
     sync([
-        "src/core/foundation.js",
+        "src/core/0.foundation.js",
         lodashJs,
         "src/core/**/*.js",
         "src/data/**/*.js",
