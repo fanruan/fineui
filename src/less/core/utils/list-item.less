@@ -337,6 +337,52 @@
   }
 }
 
+// hover的时候背景变化 -- 变灰
+// active的时候文字高亮背景变化 -- 变灰
+.bi-list-item-active3, .bi-list-item-select3 {
+  &:hover, &.hover {
+    background-color: @color-bi-background-normal;
+  }
+  &:active, &.active {
+    color: @color-bi-text-highlight;
+    & .bi-input {
+      color: @color-bi-text-highlight;
+    }
+    & .bi-textarea {
+      color: @color-bi-text-highlight;
+    }
+    background-color: @color-bi-background-normal;
+  }
+  &.disabled {
+    &:hover, &.hover, &:active, &.active {
+      background-color: @color-bi-background-default !important;
+    }
+  }
+}
+
+.bi-theme-dark {
+  .bi-list-item-active3, .bi-list-item-select3 {
+    &:hover, &.hover {
+      background-color: @color-bi-background-normal-theme-dark;
+    }
+    &:active, &.active {
+      color: @color-bi-text-highlight;
+      & .bi-input {
+        color: @color-bi-text-highlight;
+      }
+      & .bi-textarea {
+        color: @color-bi-text-highlight;
+      }
+      background-color: @color-bi-background-normal-theme-dark;
+    }
+    &.disabled {
+      &:hover, &.hover, &:active, &.active {
+        background-color: @color-bi-background-default-theme-dark !important;
+      }
+    }
+  }
+}
+
 // hover的时候背景变化
 // active的时候背景高亮
 .bi-list-item-select {
@@ -615,52 +661,6 @@
       }
       &.active {
         background-color: @background-color-black-theme-dark !important;
-      }
-    }
-  }
-}
-
-// hover的时候背景变化 -- 变灰
-// active的时候文字高亮背景变化 -- 变灰
-.bi-list-item-select3 {
-  &:hover, &.hover {
-    background-color: @color-bi-background-normal;
-  }
-  &:active, &.active {
-    color: @color-bi-text-highlight;
-    & .bi-input {
-      color: @color-bi-text-highlight;
-    }
-    & .bi-textarea {
-      color: @color-bi-text-highlight;
-    }
-    background-color: @color-bi-background-normal;
-  }
-  &.disabled {
-    &:hover, &.hover, &:active, &.active {
-      background-color: @color-bi-background-default !important;
-    }
-  }
-}
-
-.bi-theme-dark {
-  .bi-list-item-select3 {
-    &:hover, &.hover {
-      background-color: @color-bi-background-normal-theme-dark;
-    }
-    &:active, &.active {
-      color: @color-bi-text-highlight;
-      & .bi-input {
-        color: @color-bi-text-highlight;
-      }
-      & .bi-textarea {
-        color: @color-bi-text-highlight;
-      }
-      background-color: @color-bi-background-normal-theme-dark;
-    }
-    &.disabled {
-      &:hover, &.hover, &:active, &.active {
-        background-color: @color-bi-background-default-theme-dark !important;
       }
     }
   }
