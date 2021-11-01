@@ -312,7 +312,7 @@
             delete needHideWhenAnotherComboOpen[this.getName()];
 
             BI.Widget._renderEngine.createElement(document).unbind("mousedown." + this.getName()).unbind("mousewheel." + this.getName());
-            o.hideWhenBlur && BI.Widget._renderEngine.createElement(window).unbind("blur." + this.getName());
+            BI.EVENT_BLUR && o.hideWhenBlur && BI.Widget._renderEngine.createElement(window).unbind("blur." + this.getName());
             this.fireEvent(BI.Combo.EVENT_AFTER_HIDEVIEW);
         },
 
@@ -336,10 +336,10 @@
 
             this.element.addClass(this.options.comboClass);
             BI.Widget._renderEngine.createElement(document).unbind("mousedown." + this.getName()).unbind("mousewheel." + this.getName());
-            o.hideWhenBlur && BI.Widget._renderEngine.createElement(window).unbind("blur." + this.getName());
+            BI.EVENT_BLUR && o.hideWhenBlur && BI.Widget._renderEngine.createElement(window).unbind("blur." + this.getName());
 
             BI.Widget._renderEngine.createElement(document).bind("mousedown." + this.getName(), BI.bind(this._hideIf, this)).bind("mousewheel." + this.getName(), BI.bind(this._hideIf, this));
-            o.hideWhenBlur && BI.Widget._renderEngine.createElement(window).bind("blur." + this.getName(), BI.bind(this._hideIf, this));
+            BI.EVENT_BLUR && o.hideWhenBlur && BI.Widget._renderEngine.createElement(window).bind("blur." + this.getName(), BI.bind(this._hideIf, this));
             this.fireEvent(BI.Combo.EVENT_AFTER_POPUPVIEW);
         },
 
