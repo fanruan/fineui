@@ -343,7 +343,17 @@
   &:hover, &.hover {
     .background-color(@color-bi-background-highlight, 10%);
   }
-  &:active, &.active {
+  &:active {
+    color: @color-bi-text-highlight;
+    & .bi-input {
+      color: @color-bi-text-highlight;
+    }
+    & .bi-textarea {
+      color: @color-bi-text-highlight;
+    }
+    .background-color(@color-bi-background-highlight, 15%);
+  }
+  &.active {
     color: @color-bi-text;
     & .bi-input {
       color: @color-bi-text;
@@ -471,7 +481,17 @@
       }
       .background-color(@color-bi-background-default, 5%);
     }
-    &:active, &.active {
+    &:active {
+      color: @color-bi-text;
+      & .bi-input {
+        color: @color-bi-text;
+      }
+      & .bi-textarea {
+        color: @color-bi-text;
+      }
+      .background-color(@color-bi-background-default, 5%);
+    }
+    &.active {
       color: @color-bi-text;
       & .bi-input {
         color: @color-bi-text;
