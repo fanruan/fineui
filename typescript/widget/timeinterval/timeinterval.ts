@@ -11,6 +11,7 @@ export declare class TimeInterval extends Single {
         minDate?: string;
         maxDate?: string;
         supportDynamic?: boolean;
+        watermark?: string;
     } & Single['props']
 
     getValue(): {

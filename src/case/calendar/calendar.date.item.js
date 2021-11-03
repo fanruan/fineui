@@ -21,8 +21,8 @@ BI.CalendarDateItem = BI.inherit(BI.BasicButton, {
                 },
                 left: o.lgap,
                 right: o.rgap,
-                top: 0,
-                bottom: 0
+                top: o.tgap,
+                bottom: o.rgap
             }]
         };
     },
