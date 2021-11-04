@@ -24,7 +24,7 @@ BI.Input = BI.inherit(BI.Single, {
         var _keydown = BI.debounce(function (keyCode) {
             self.onKeyDown(keyCode, ctrlKey);
             self._keydown_ = false;
-        }, 300);
+        }, BI.EVENT_RESPONSE_TIME);
         var _clk = BI.debounce(BI.bind(this._click, this), BI.EVENT_RESPONSE_TIME, {
             "leading": true,
             "trailing": false
@@ -95,11 +95,7 @@ BI.Input = BI.inherit(BI.Single, {
 
     _blur: function () {
         var self = this;
-        if (self._keydown_ === true) {
-            BI.delay(blur, 300);
-        } else {
-            blur();
-        }
+        blur();
 
         function blur () {
             if (!self.isValid() && self.options.quitChecker.apply(self, [BI.trim(self.getValue())]) !== false) {
