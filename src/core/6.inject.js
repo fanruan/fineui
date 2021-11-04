@@ -397,7 +397,7 @@
             if (!providers[type]) {
                 providers[type] = new providerInjection[type]();
             }
-            if (!providerInstance[type]) {
+            if (!providerInstance[type] && providers[type].$get) {
                 providerInstance[type] = new (providers[type].$get())(config);
             }
             return providerInstance[type];
