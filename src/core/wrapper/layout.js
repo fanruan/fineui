@@ -420,6 +420,7 @@ BI.Layout = BI.inherit(BI.Widget, {
         var shouldUpdate = this.shouldUpdateItem(oldIndex, vnode);
         var child = this._children[this._getChildName(oldIndex)];
         if (shouldUpdate) {
+            this._children[this._getChildName(newIndex) + "-temp"] = child;
             return child._update(this._getOptions(vnode), shouldUpdate);
         }
         if (shouldUpdate === null && !this._compare(oldVnode, vnode)) {
