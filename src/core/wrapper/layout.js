@@ -240,7 +240,7 @@ BI.Layout = BI.inherit(BI.Widget, {
         var w = this._newElement(newIndex, item);
         // 需要有个地方临时存一下新建的组件，否则如果直接使用newIndex的话，newIndex位置的元素可能会被用到
         this._children[this._getChildName(newIndex) + "-temp"] = w;
-        var nextSibling = del.element[0].nextSibling;
+        var nextSibling = del.element.next();
         if (nextSibling) {
             BI.Widget._renderEngine.createElement(nextSibling).before(w.element);
         } else {
