@@ -88,7 +88,7 @@ BI.DateCalendarPopup = BI.inherit(BI.Widget, {
             items: [{
                 el: this.calendar,
                 hgap: 5,
-                bgap: 12
+                bgap: 7
             }]
         }, {
             type: "bi.absolute",

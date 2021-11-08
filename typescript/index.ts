@@ -24,7 +24,6 @@ import { SmallTextValueCombo } from './case/combo/combo.textvaluesmall';
 import { SearchTextValueCombo } from "./case/combo/searchtextvaluecombo/combo.searchtextvalue";
 import { SignEditor } from "./case/editor/editor.sign";
 import { StateEditor } from './case/editor/editor.state';
-import { LoadingPane } from "./case/loading/loading_pane";
 import { AllValueMultiTextValueCombo } from "./component/allvaluemultitextvaluecombo/allvalue.multitextvalue.combo";
 import { AbstractTreeValueChooser } from "./component/treevaluechooser/abstract.treevaluechooser";
 import { AbstractListTreeValueChooser } from "./component/treevaluechooser/abstract.treevaluechooser.list";
@@ -205,7 +204,6 @@ export interface BI extends _func, _i18n, _base, _inject, _var, _web, _utils {
     HighlightBehavior: typeof HighlightBehavior;
     RedMarkBehavior: typeof RedMarkBehavior;
     Pane: typeof Pane;
-    LoadingPane: typeof LoadingPane;
     Tab: typeof Tab;
     ButtonGroup: typeof ButtonGroup;
     Combo: typeof Combo;
@@ -411,7 +409,6 @@ export {
     BehaviorFactory,
     RedMarkBehavior,
     HighlightBehavior,
-    LoadingPane,
     Searcher,
     AbstractLabel,
     Label,

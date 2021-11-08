@@ -52,6 +52,7 @@ BI.IconTextValueCombo = BI.inherit(BI.Widget, {
             type: "bi.combo",
             element: this,
             container: o.container,
+            direction: o.direction,
             adjustLength: 2,
             el: this.trigger,
             popup: {

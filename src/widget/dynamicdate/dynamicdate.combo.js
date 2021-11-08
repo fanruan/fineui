@@ -30,7 +30,7 @@ BI.DynamicDateCombo = BI.inherit(BI.Single, {
         this.storeTriggerValue = "";
         var date = BI.getDate();
         this.storeValue = opts.value;
-        
+
         return {
             type: "bi.absolute",
             items: [{
@@ -250,10 +250,10 @@ BI.DynamicDateCombo = BI.inherit(BI.Single, {
                         self.comboWrapper = _ref;
                     }
                 },
-                top: 1,
-                left: 1,
-                right: 1,
-                bottom: 1
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0
             }]
         };
     },
@@ -289,7 +289,7 @@ BI.DynamicDateCombo = BI.inherit(BI.Single, {
                 return BI.isNotEmptyObject(v.value);
             case BI.DynamicDateCombo.Static:
                 var value = v.value || {};
-                
+
                 return !BI.checkDateVoid(value.year, value.month, value.day, o.minDate, o.maxDate)[0];
             default:
                 return true;

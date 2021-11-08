@@ -29,6 +29,8 @@
     "files": ["src/*.js","src/**/*.js", "demo/*.js", "demo/**/*.js", "i18n/**/*.js", "i18n/*.js", "test/**/*.js", "test/*.js"],
     "extends": "plugin:@fui/es5",
     "rules": {
+      "no-param-reassign": "off",
+      "quotes": [2, "double"],
       "comma-dangle": ["error", "never"] // 多行对象字面量中要求拖尾逗号
     }
   }, {

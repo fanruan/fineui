@@ -8,6 +8,13 @@ export declare class DateInterval extends Single {
     static EVENT_ERROR: string;
     static EVENT_BEFORE_YEAR_MONTH_POPUPVIEW: string;
 
+    props: {
+        minDate?: string;
+        maxDate?: string;
+        supportDynamic?: boolean;
+        watermark?: string;
+    } & Single['props']
+
     getValue(): {
         start: DynamicDataComboValue;
         end: DynamicDataComboValue;

@@ -401,7 +401,7 @@ BI.MultiSelectInsertNoBarCombo = BI.inherit(BI.Single, {
         callback();
         function adjust () {
             if (self.wants2Quit === true) {
-                self.fireEvent(BI.MultiSelectInsertNoBarCombo.EVENT_CONFIRM);
+                self._dataChange && self.fireEvent(BI.MultiSelectInsertNoBarCombo.EVENT_CONFIRM);
                 self.wants2Quit = false;
             }
             self.requesting = false;
