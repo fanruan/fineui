@@ -15,8 +15,14 @@ BI.Pane = BI.inherit(BI.Widget, {
             loadingText: "",
             loadingSize: "small",
             overlap: true,
-            onLoaded: BI.emptyFn
+            onLoaded: BI.emptyFn,
+            loading: false
         });
+    },
+
+    _init: function () {
+        BI.Pane.superclass._init.apply(this, arguments);
+        this.options.loading && this.loading();
     },
 
     _assertTip: function () {
@@ -40,6 +46,7 @@ BI.Pane = BI.inherit(BI.Widget, {
 
     loading: function () {
         var self = this, o = this.options;
+        o.loading = true;
         var isIE = BI.isIE();
         var loadingAnimation = BI.createWidget({
             type: "bi.horizontal",
@@ -118,6 +125,7 @@ BI.Pane = BI.inherit(BI.Widget, {
 
     loaded: function () {
         var self = this, o = this.options;
+        o.loading = false;
         BI.Layers.remove(self.getName() + "-loading");
         this._loading && this._loading.destroy();
         o.onLoaded();
@@ -150,3 +158,5 @@ BI.Pane = BI.inherit(BI.Widget, {
 });
 BI.Pane.EVENT_LOADED = "EVENT_LOADED";
 BI.Pane.EVENT_LOADING = "EVENT_LOADING";
+
+BI.shortcut("bi.pane", BI.Pane);
