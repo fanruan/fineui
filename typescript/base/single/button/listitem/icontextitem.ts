@@ -10,6 +10,7 @@ export declare class IconTextItem extends BasicButton {
             dynamic: boolean;
         };
         iconWrapperWidth?: number;
+        iconCls?: string;
         iconHeight?: number;
         iconWidth?: number;
         textHgap?: number;
