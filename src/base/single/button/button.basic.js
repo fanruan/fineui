@@ -10,6 +10,7 @@ BI.BasicButton = BI.inherit(BI.Single, {
         var conf = BI.BasicButton.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
             _baseCls: (conf._baseCls || "") + " bi-basic-button" + (conf.invalid ? "" : " cursor-pointer") + ((BI.isIE() && BI.getIEVersion() < 10) ? " hack" : ""),
+            // el: {} // 可以通过el来创建button元素
             value: "",
             stopEvent: false,
             stopPropagation: false,
@@ -26,6 +27,7 @@ BI.BasicButton = BI.inherit(BI.Single, {
             bubble: null
         });
     },
+
     _init: function () {
         BI.BasicButton.superclass._init.apply(this, arguments);
         var opts = this.options;
@@ -42,6 +44,11 @@ BI.BasicButton = BI.inherit(BI.Single, {
         if (opts.level) {
             this.element.addClass("button-" + opts.level);
         }
+    },
+
+    // 默认render方法
+    render: function () {
+        return this.options.el;
     },
 
     _createShadow: function () {
