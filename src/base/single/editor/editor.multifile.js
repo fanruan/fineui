@@ -78,6 +78,10 @@ BI.MultifileEditor = BI.inherit(BI.Widget, {
         this.file.select();
     },
 
+    getQueue: function () {
+        return this.file.getQueue();
+    },
+
     getValue: function () {
         return this.file.getValue();
     },

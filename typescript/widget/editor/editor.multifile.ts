@@ -19,6 +19,15 @@ export declare class MultifileEditor extends Widget {
     }[];
 
     upload(): void;
-    
+
     reset(): void;
+
+    getQueue(): {
+        fileName: string;
+        lastModified: number;
+        lastModifiedDate: Date;
+        name: string;
+        size: number;
+        type: string;
+    }[];
 }
