@@ -10,6 +10,7 @@ export declare class Text extends Single {
         lineHeight?: null | number;
         py?: string;
         highLight?: boolean;
+        maxWidth?: null | number;
     } & Single['props'];
 
     doRedMark(keyword: string): void;
