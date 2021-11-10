@@ -30,7 +30,7 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
         this.storeTriggerValue = "";
         var date = BI.getDate();
         this.storeValue = opts.value;
-        
+
         return {
             type: "bi.absolute",
             items: [{
@@ -259,10 +259,10 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
                         self.comboWrapper = _ref;
                     }
                 },
-                top: 1,
-                left: 1,
-                right: 1,
-                bottom: 1
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0
             }]
         };
     },

@@ -44,6 +44,7 @@ BI.TextValueCheckCombo = BI.inherit(BI.Widget, {
         this.textIconCheckCombo = BI.createWidget({
             type: "bi.combo",
             container: o.container,
+            direction: o.direction,
             element: this,
             adjustLength: 2,
             el: this.trigger,

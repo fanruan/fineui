@@ -100,8 +100,7 @@ BI.Calendar = BI.inherit(BI.Widget, {
                 columns: 7,
                 rows: 6,
                 columnSize: [1 / 7, 1 / 7, 1 / 7, 1 / 7, 1 / 7, 1 / 7, 1 / 7],
-                rowSize: BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT,
-                vgap: 10
+                rowSize: BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT + 10
             }))]
         });
         this.days.on(BI.Controller.EVENT_CHANGE, function () {
@@ -111,7 +110,10 @@ BI.Calendar = BI.inherit(BI.Widget, {
             element: this
 
         }, BI.LogicFactory.createLogic("vertical", BI.extend({}, o.logic, {
-            items: BI.LogicFactory.createLogicItemsByDirection("top", title, this.days)
+            items: BI.LogicFactory.createLogicItemsByDirection("top", title, {
+                el: this.days,
+                tgap: -5
+            })
         }))));
     },
 
@@ -159,11 +161,13 @@ BI.Calendar = BI.inherit(BI.Widget, {
                     whiteSpace: "normal",
                     once: false,
                     forceSelected: true,
-                    height: BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT,
+                    height: BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT + 10,
                     value: o.year + "-" + month + "-" + td.text,
                     disabled: td.lastMonth || td.nextMonth || td.disabled,
                     lgap: 5,
-                    rgap: 5
+                    rgap: 5,
+                    tgap: 5,
+                    bgap: 5
                     // selected: td.currentDay
                 });
             });

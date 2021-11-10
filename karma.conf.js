@@ -35,7 +35,6 @@ module.exports = function (config) {
 
         exclude: [
             "src/base/single/input/file.js",
-            "src/case/loading/loading_pane.js",
             "src/case/ztree/**/*.js",
             "src/widget/multitree/**/*.js",
             "src/widget/multiselecttree/**/*.js",

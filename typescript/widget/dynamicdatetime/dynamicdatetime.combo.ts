@@ -22,6 +22,7 @@ export declare class DynamicDateTimeCombo extends Single {
         attributes?: {
             tabIndex?: number;
         };
+        watermark?: string;
     } & Single['props'];
 
     setMinDate(minDate: string): void;

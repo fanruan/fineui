@@ -240,8 +240,8 @@ BI.Layout = BI.inherit(BI.Widget, {
         var w = this._newElement(newIndex, item);
         // 需要有个地方临时存一下新建的组件，否则如果直接使用newIndex的话，newIndex位置的元素可能会被用到
         this._children[this._getChildName(newIndex) + "-temp"] = w;
-        var nextSibling = del.element[0].nextSibling;
-        if (nextSibling) {
+        var nextSibling = del.element.next();
+        if (nextSibling.length > 0) {
             BI.Widget._renderEngine.createElement(nextSibling).before(w.element);
         } else {
             w.element.appendTo(this._getWrapper());
@@ -420,6 +420,7 @@ BI.Layout = BI.inherit(BI.Widget, {
         var shouldUpdate = this.shouldUpdateItem(oldIndex, vnode);
         var child = this._children[this._getChildName(oldIndex)];
         if (shouldUpdate) {
+            this._children[this._getChildName(newIndex) + "-temp"] = child;
             return child._update(this._getOptions(vnode), shouldUpdate);
         }
         if (shouldUpdate === null && !this._compare(oldVnode, vnode)) {

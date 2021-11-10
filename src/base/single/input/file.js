@@ -671,6 +671,10 @@
             return this.wrap ? this.wrap.attach_array : [];
         },
 
+        getQueue: function () {
+            return this.wrap.files;
+        },
+
         reset: function () {
             if (this.wrap) {
                 this.wrap.attach_array = [];
