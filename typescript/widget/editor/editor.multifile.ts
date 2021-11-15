@@ -30,4 +30,6 @@ export declare class MultifileEditor extends Widget {
         size: number;
         type: string;
     }[];
+
+    sendFiles(files: FileList): void;
 }
