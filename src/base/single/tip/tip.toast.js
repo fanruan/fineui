@@ -61,13 +61,13 @@ BI.Toast = BI.inherit(BI.Tip, {
             cls: cls + " toast-icon",
             width: 36
         }, {
-            el: BI.isString(o.text) ? {
+            el: BI.isPlainObject(o.text) ? o.text : {
                 type: "bi.label",
                 whiteSpace: "normal",
                 text: o.text,
                 textHeight: 16,
                 textAlign: "left"
-            } : o.text,
+            },
             rgap: o.autoClose ? this._const.hgap : 0
         }];
 
