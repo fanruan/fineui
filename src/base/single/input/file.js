@@ -668,7 +668,11 @@
         },
 
         getValue: function () {
-            return this.wrap ? this.wrap.attach_array : [];
+            return this.wrap
+                ? BI.filter(this.wrap.attach_array, function (index, attach) {
+                    return attach.attach_id;
+                })
+                : [];
         },
 
         getQueue: function () {
