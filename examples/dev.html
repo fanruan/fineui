@@ -2,7 +2,7 @@
 <head>
     <meta charset="utf-8">
     <title></title>
-    <link rel="stylesheet" type="text/css" href="../dist/2.0/fineui.css"/>
+    <link rel="stylesheet" type="text/css" href="http://localhost:9001/fineui.css"/>
     <!--    <script src="../dist/2.0/fineui.js"></script>-->
     <script src="http://localhost:9001/fineui.js"></script>
 </head>
@@ -23,6 +23,13 @@
         props: {
             height: 200,
             width: 600
+        },
+        beforeInit: function () {
+            return new Promise(function (resolve) {
+                setTimeout(function () {
+                    resolve();
+                }, 1000);
+            });
         },
         _store: function () {
             return BI.Models.getModel("demo.model");
@@ -49,7 +56,7 @@
                             type: "bi.button",
                             text: "点击",
                             handler: function () {
-                                store.model.columnSize = [300, "fill"]
+                                store.model.columnSize = [300, "fill"];
                             }
                         }]
                     }]
