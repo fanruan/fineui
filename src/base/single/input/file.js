@@ -683,6 +683,16 @@
             }
         },
 
+        sendFiles: function (files) {
+            if (!this.wrap) return;
+
+            this.wrap.dom.input.files = files;
+
+            var event = new CustomEvent("change");
+
+            this.wrap.dom.input.dispatchEvent(event);
+        },
+
         _setEnable: function (enable) {
             BI.File.superclass._setEnable.apply(this, arguments);
             if (enable === true) {

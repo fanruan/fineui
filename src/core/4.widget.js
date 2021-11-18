@@ -133,7 +133,10 @@
 
                 if (self.options.beforeRender || self.beforeRender) {
                     self.__async = true;
-                    (self.options.beforeRender || self.beforeRender).call(self, render);
+                    var beforeRenderResult = (self.options.beforeRender || self.beforeRender).call(self, render);
+                    if (beforeRenderResult instanceof Promise) {
+                        beforeRenderResult.then(render);
+                    }
                 } else {
                     self._render();
                     self.__afterRender();
@@ -142,7 +145,10 @@
 
             if (this.options.beforeInit || this.beforeInit) {
                 this.__asking = true;
-                (this.options.beforeInit || this.beforeInit).call(this, init);
+                var beforeInitResult = (this.options.beforeInit || this.beforeInit).call(this, init);
+                if (beforeInitResult instanceof Promise) {
+                    beforeInitResult.then(init);
+                }
             } else {
                 init();
             }

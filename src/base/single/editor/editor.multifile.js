@@ -91,6 +91,12 @@ BI.MultifileEditor = BI.inherit(BI.Widget, {
         this.file.upload();
     },
 
+    sendFiles: function (files) {
+        this._reset();
+
+        this.file.sendFiles(files);
+    },
+
     reset: function () {
         this._reset();
     }
