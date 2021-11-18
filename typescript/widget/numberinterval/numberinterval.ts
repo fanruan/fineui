@@ -35,4 +35,8 @@ export declare class NumberInterval extends Single {
     setNumTip(v: string): void;
 
     getNumTip(): void;
+
+    focusMinEditor(): void;
+
+    focusMaxEditor(): void;
 }
