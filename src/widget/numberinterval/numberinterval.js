@@ -529,6 +529,14 @@ BI.NumberInterval = BI.inherit(BI.Single, {
         return value;
     },
 
+    focusMinEditor: function () {
+        this.smallEditor.focus();
+    },
+
+    focusMaxEditor: function () {
+        this.bigEditor.focus();
+    },
+
     destroyed: function () {
         var c = this.constants;
         BI.Bubbles.remove(c.typeError);
