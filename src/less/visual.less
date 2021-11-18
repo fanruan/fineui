@@ -53,6 +53,13 @@
   transition: @transition;
 }
 
+.transitions(@transition1, @transition2) {
+  -webkit-transition: @transition1, @transition2;
+  -moz-transition: @transition1, @transition2;
+  -o-transition: @transition1, @transition2;
+  transition: @transition1, @transition2;
+}
+
 .rotate(@rotate) {
   -webkit-transform: rotate(@rotate);
   -moz-transform: rotate(@rotate);
