@@ -44,6 +44,8 @@ import { _inject } from "./core/inject";
 import { Layout } from "./core/wrapper/layout";
 import { AbsoluteLayout } from "./core/wrapper/layout/layout.absolute";
 import { HTapeLayout, VTapeLayout } from "./core/wrapper/layout/layout.tape";
+import {HorizontalFillLayout} from "./core/wrapper/layout/fill/fill.horizontal";
+import {VerticalFillLayout} from "./core/wrapper/layout/fill/fill.vertical";
 import { VerticalLayout } from "./core/wrapper/layout/layout.vertical";
 import { DefaultLayout } from "./core/wrapper/layout/layout.default";
 import { DownListCombo } from "./widget/downlist/combo.downlist";
@@ -243,6 +245,8 @@ export interface BI extends _func, _i18n, _base, _inject, _var, _web, _utils {
     DownListCombo: typeof DownListCombo;
     Iframe: typeof Iframe;
     AbsoluteLayout: typeof AbsoluteLayout;
+    HorizontalFillLayout: typeof HorizontalFillLayout;
+    VerticalFillLayout: typeof VerticalFillLayout;
     VerticalLayout: typeof VerticalLayout;
     DefaultLayout: typeof DefaultLayout;
     Input: typeof Input;
@@ -389,6 +393,8 @@ export {
     HorizontalAdaptLayout,
     FloatLeftLayout,
     FloatRightLayout,
+    HorizontalFillLayout,
+    VerticalFillLayout,
     VerticalLayout,
     AbsoluteLayout,
     DefaultLayout,
