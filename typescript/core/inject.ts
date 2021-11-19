@@ -1,9 +1,9 @@
-type _module = (xtype: string, cls: any) => void;
-type _constant = (xtype: string, cls: any) => void;
-type _model = (xtype: string, cls: any) => void;
-type _store = (xtype: string, cls: any) => void;
-type _service = (xtype: string, cls: any) => void;
-type _provider = (xtype: string, cls: any) => void;
+type _module = (xtype: string, cls: any) => void | Function;
+type _constant = (xtype: string, cls: any) => void | Function;
+type _model = (xtype: string, cls: any) => void | Function;
+type _store = (xtype: string, cls: any) => void | Function;
+type _service = (xtype: string, cls: any) => void | Function;
+type _provider = (xtype: string, cls: any) => void | Function;
 
 interface _modules {
     getModule: (type: string) => any;
