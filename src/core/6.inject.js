@@ -39,6 +39,9 @@
             _global.console && console.error("constant: [" + xtype + "]已经注册过了");
         }
         constantInjection[xtype] = cls;
+        return function () {
+            return BI.Constants.getConstant(xtype);
+        }
     };
 
     var modelInjection = {};
@@ -294,7 +297,7 @@
                 _global.console && console.error("constant: [" + type + "] 未定义");
             }
             runConfigFunction(type);
-            return constantInjection[type];
+            return BI.isFunction(constantInjection[type]) ? constantInjection[type]() : constantInjection[type];
         }
     };
 
