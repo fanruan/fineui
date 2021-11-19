@@ -18,7 +18,6 @@ BI.DrawerController = BI.inherit(BI.Controller, {
         this.floatLayer = {};
         this.floatContainer = {};
         this.floatOpened = {};
-        this.zindex = BI.zIndex_popover;
         this.zindexMap = {};
     },
 
@@ -41,17 +40,18 @@ BI.DrawerController = BI.inherit(BI.Controller, {
         if (!this.floatOpened[name]) {
             this.floatOpened[name] = true;
             var container = this.floatContainer[name];
-            container.element.css("zIndex", this.zindex++);
+            var zIndex = BI.Popovers._getZIndex();
+            container.element.css("zIndex", zIndex);
             this.modal && container.element.__hasZIndexMask__(this.zindexMap[name]) && container.element.__releaseZIndexMask__(this.zindexMap[name]);
-            this.zindexMap[name] = this.zindex;
+            this.zindexMap[name] = zIndex;
             if (this.modal) {
-                var mask = container.element.__buildZIndexMask__(this.zindex++);
+                var mask = container.element.__buildZIndexMask__(BI.Popovers._getZIndex());
                 mask.click(function () {
                     mask.destroy();
                     self.get(name).close();
                 });
             }
-            this.get(name).setZindex(this.zindex++);
+            this.get(name).setZindex(BI.Popovers._getZIndex());
             this.floatContainer[name].visible();
             var popover = this.get(name);
             popover.show && popover.show();

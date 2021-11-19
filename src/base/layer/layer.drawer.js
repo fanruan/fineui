@@ -4,8 +4,14 @@
  * @extends BI.Widget
  */
 BI.Drawer = BI.inherit(BI.Widget, {
+    SIZE: {
+        SMALL: "small",
+        NORMAL: "normal",
+        BIG: "big"
+    },
     props: {
         baseCls: "bi-drawer bi-card",
+        size: "normal",
         placement: "right", //  top/bottom/left/right
         header: null,
         headerHeight: 40,
@@ -74,10 +80,37 @@ BI.Drawer = BI.inherit(BI.Widget, {
             bgap: o.bodyBgap
         }];
 
-        return {
+        return BI.extend({
             type: "bi.vtape",
             items: items
-        };
+        }, this._getSuitableSize());
+    },
+
+    _getSuitableSize: function () {
+        var o = this.options;
+        var size = 0;
+        switch (o.size) {
+            case "big":
+                size = 736;
+                break;
+            case "small":
+                size = 200;
+                break;
+            case "normal":
+            default:
+                size = 378;
+                break;
+        }
+        if (o.placement === "top" || o.placement === "bottom") {
+            return {
+                height: o.height || size
+            };
+        }
+        if (o.placement === "left" || o.placement === "right") {
+            return {
+                width: o.width || size
+            };
+        }
     },
 
     mounted: function () {
@@ -117,25 +150,26 @@ BI.Drawer = BI.inherit(BI.Widget, {
     show: function (callback) {
         var self = this, o = this.options;
         requestAnimationFrame(function () {
+            var size = self._getSuitableSize();
             switch (o.placement) {
                 case "right":
                     self.element.css({
-                        transform: "translateX(-" + self.getWidth() + "px)"
+                        transform: "translateX(-" + size.width + "px)"
                     });
                     break;
                 case "left":
                     self.element.css({
-                        transform: "translateX(" + self.getWidth() + "px)"
+                        transform: "translateX(" + size.width + "px)"
                     });
                     break;
                 case "top":
                     self.element.css({
-                        transform: "translateY(" + self.getHeight() + "px)"
+                        transform: "translateY(" + size.height + "px)"
                     });
                     break;
                 case "bottom":
                     self.element.css({
-                        transform: "translateY(-" + self.getHeight() + "px)"
+                        transform: "translateY(-" + size.height + "px)"
                     });
                     break;
             }
@@ -160,7 +194,7 @@ BI.Drawer = BI.inherit(BI.Widget, {
                     });
                     break;
             }
-            setTimeout(callback, 300)
+            setTimeout(callback, 300);
         });
     },
 
