@@ -141,7 +141,11 @@ BI.prepares.push(function () {
                 scrolly: false
             }, ob, {type: "bi.flex_vertical"});
         }
-        return BI.extend({}, ob, {type: "bi.vtape"});
+        return BI.extend({}, ob, {
+            type: "bi.td",
+            items: BI.map(ob.items, function (i, item) {
+                return [item];
+            })});
     });
 
     BI.Plugin.configWidget("bi.left_right_vertical_adapt", function (ob) {
