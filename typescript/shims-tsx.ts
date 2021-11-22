@@ -24,7 +24,7 @@ interface AdditionalProps {
 }
 
 interface ElementClassProps<T> extends UIProps {
-    cls: string;
+    cls: string | (() => string);
     extraCls: string;
     ref: (ref: T) => void;
     listeners: {
@@ -40,7 +40,7 @@ interface ElementClassProps<T> extends UIProps {
     };
     css: {
         [key: string]: any;
-    };
+    } | (() => any);
     tagName: string;
     element: any;
     $testId: string;

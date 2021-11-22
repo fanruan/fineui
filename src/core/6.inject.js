@@ -31,6 +31,9 @@
             }
         }
         moduleInjection[xtype] = cls;
+        return function () {
+            return BI.Modules.getModule(xtype);
+        };
     };
 
     var constantInjection = {};
@@ -41,7 +44,7 @@
         constantInjection[xtype] = cls;
         return function () {
             return BI.Constants.getConstant(xtype);
-        }
+        };
     };
 
     var modelInjection = {};
@@ -50,7 +53,7 @@
             _global.console && console.error("model: [" + xtype + "] 已经注册过了");
         }
         modelInjection[xtype] = cls;
-        return function (xtype, config) {
+        return function (config) {
             return BI.Models.getModel(xtype, config);
         };
     };
@@ -61,9 +64,9 @@
             _global.console && console.error("store: [" + xtype + "] 已经注册过了");
         }
         storeInjection[xtype] = cls;
-        return function (xtype, config) {
+        return function (config) {
             return BI.Stores.getStore(xtype, config);
-        }
+        };
     };
 
     var serviceInjection = {};
@@ -72,9 +75,9 @@
             _global.console && console.error("service: [" + xtype + "] 已经注册过了");
         }
         serviceInjection[xtype] = cls;
-        return function (xtype, config) {
+        return function (config) {
             return BI.Services.getService(xtype, config);
-        }
+        };
     };
 
     var providerInjection = {};
@@ -83,9 +86,9 @@
             _global.console && console.error("provider: [" + xtype + "] 已经注册过了");
         }
         providerInjection[xtype] = cls;
-        return function (xtype, config) {
+        return function (config) {
             return BI.Providers.getProvider(xtype, config);
-        }
+        };
     };
 
     var configFunctions = {};
