@@ -33,10 +33,7 @@ BI.Input = BI.inherit(BI.Single, {
             "leading": true,
             "trailing": false
         });
-        this._blurDebounce = BI.debounce(BI.bind(this._blur, this), BI.EVENT_RESPONSE_TIME, {
-            "leading": true,
-            "trailing": false
-        });
+        this._blurDebounce = BI.debounce(BI.bind(this._blur, this), BI.EVENT_RESPONSE_TIME);
         this.element
             .keydown(function (e) {
                 inputEventValid = false;
