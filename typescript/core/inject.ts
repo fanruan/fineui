@@ -1,5 +1,5 @@
 type _module = (xtype: string, cls: any) => void;
-type _constant = (xtype: string, cls: any) => Function;
+type _constant = <T>(xtype: string, cls: T) => (() => T);
 type _model = (xtype: string, cls: any) => Function;
 type _store = (xtype: string, cls: any) => Function;
 type _service = (xtype: string, cls: any) => Function;
