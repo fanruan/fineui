@@ -40,7 +40,7 @@ BI.$(function () {
                     height: 100
                 }, {
                     type: "bi.router_view",
-                    name: 'home',
+                    name: 'tool-buttons',
                     deps: 1
                 }]
             });
@@ -49,12 +49,6 @@ BI.$(function () {
             path: '',
             components: {
                 default: function () {
-                    return Promise.resolve({
-                        type: "bi.label",
-                        text: 'default'
-                    });
-                },
-                home: function () {
                     return Promise.resolve({
                         type: "bi.label",
                         text: 'home'
@@ -73,11 +67,19 @@ BI.$(function () {
         }, {
             name: 'tables',
             path: 'tables/:id',
-            component: function () {
-                return Promise.resolve({
-                    type: "bi.label",
-                    text: 'tables'
-                });
+            components: {
+                default: function () {
+                    return Promise.resolve({
+                        type: "bi.label",
+                        text: 'table-view'
+                    });
+                },
+                "tool-buttons": function () {
+                    return Promise.resolve({
+                        type: "bi.label",
+                        text: '预览按钮',
+                    });
+                },
             }
         }]
     }];

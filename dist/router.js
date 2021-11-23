@@ -3147,6 +3147,7 @@
   
     BI.RouterView = BI.inherit(BI.Widget, {
       props: {
+        baseCls: 'bi-router-view',
         deps: 0,
         name: 'default'
       },
@@ -3168,6 +3169,8 @@
             self.tab.setSelect(matchedPath || "/");
           }
         });
+        // "bi.router_view"是由"bi.tab"实现的，cardCreator是一个异步过程，在"bi.router_view"创建之前，cbs里不会有创建子组件的方法，在初始化路由时，没法直接渲染到子组件，所以这里手动加了一次调用
+        this._callbackListener();
       },
       render: function () {
         var self = this, o = this.options;
