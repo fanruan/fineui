@@ -39,6 +39,7 @@ export declare class BasicButton extends Single {
         handler?: Function;
         bubble?: Function | null | string;
         text?: string;
+        el: Obj;
     } & Single['props'];
 
     _createShadow(): void;
