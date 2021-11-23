@@ -32,7 +32,7 @@ class IgnoreNotFoundExportPlugin {
 }
 
 module.exports = merge(common, {
-    devtool: "source-map",
+    devtool: "inline-source-map",
     output: {
         path: dirs.DEST,
         filename: "[name].js",
