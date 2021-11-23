@@ -9,8 +9,30 @@ const dirs = require("./dirs");
 
 const common = require("./webpack.common.js");
 
+const ModuleDependencyWarning = require("webpack/lib/ModuleDependencyWarning");
+
+class IgnoreNotFoundExportPlugin {
+    apply(compiler) {
+        const messageRegExp = /export '.*'( \(reexported as '.*'\))? was not found in/;
+        function doneHook(stats) {
+            stats.compilation.warnings = stats.compilation.warnings.filter(warn => {
+                if (warn instanceof ModuleDependencyWarning && messageRegExp.test(warn.message)) {
+                    return false;
+                }
+
+                return true;
+            });
+        }
+        if (compiler.hooks) {
+            compiler.hooks.done.tap("IgnoreNotFoundExportPlugin", doneHook);
+        } else {
+            compiler.plugin("done", doneHook);
+        }
+    }
+}
+
 module.exports = merge(common, {
-    devtool: "source-map",
+    devtool: "inline-source-map",
     output: {
         path: dirs.DEST,
         filename: "[name].js",
@@ -46,5 +68,6 @@ module.exports = merge(common, {
             },
             canPrint: true,
         }),
+        new IgnoreNotFoundExportPlugin(),
     ],
 });
