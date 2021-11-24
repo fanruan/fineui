@@ -7,12 +7,13 @@
 !(function () {
     var system = {
         dependencies: {},
+        responsiveMode: false,
         size: { // 尺寸
             TOOL_BAR_HEIGHT: 24,
             LIST_ITEM_HEIGHT: 24,
             TRIGGER_HEIGHT: 24,
             TOAST_TOP: 10
-        },
+        }
     };
 
     var provider = function () {
@@ -20,7 +21,11 @@
         this.SYSTEM = system;
 
         this.setSize = function (opt) {
-            BI.deepExtend(system, { size: opt });
+            BI.deepExtend(system, {size: opt});
+        };
+
+        this.setResponsiveMode = function (mode) {
+            system.responsiveMode = !!mode;
         };
 
         this.addDependency = function (moduleId, minVersion, maxVersion) {
@@ -41,6 +46,10 @@
                     return system.size;
                 },
 
+                getResponsiveMode: function () {
+                    return system.responsiveMode;
+                },
+
                 getDependencies: function () {
                     return system.dependencies;
                 }
@@ -52,5 +61,5 @@
 })();
 
 BI.prepares.push(function () {
-    BI.SIZE_CONSANTS = BI.Providers.getProvider('bi.provider.system').getSize();
+    BI.SIZE_CONSANTS = BI.Providers.getProvider("bi.provider.system").getSize();
 });
