@@ -6,6 +6,12 @@
  * @extends BI.FlexWrapperHorizontalLayout
  */
 BI.ResponsiveFlexWrapperHorizontalLayout = BI.inherit(BI.FlexWrapperHorizontalLayout, {
+    props: function () {
+        return BI.extend(BI.ResponsiveFlexWrapperHorizontalLayout.superclass.props.apply(this, arguments), {
+            extraCls: "bi-responsive-f-h"
+        });
+    },
+
     _addElement: function (i, item) {
         var w = BI.ResponsiveFlexHorizontalLayout.superclass._addElement.apply(this, arguments);
         var o = this.options;
