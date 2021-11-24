@@ -39,7 +39,13 @@ BI.h = function (type, props, children) {
             right: children
         }, props);
     }
+    if (children.length === 1 && BI.isKey(children[0])) {
+        return BI.extend({
+            type: type
+        }, { text: children[0] }, props);
+    }
+
     return BI.extend({
         type: type
-    }, children.length > 0 ? {items: children} : {}, props);
+    }, children.length > 0 ? { items: children } : {}, props);
 };
