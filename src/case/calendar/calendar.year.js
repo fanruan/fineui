@@ -62,8 +62,8 @@ BI.YearCalendar = BI.inherit(BI.Widget, {
         });
         BI.createWidget(BI.extend({
             element: this
-
         }, BI.LogicFactory.createLogic("vertical", BI.extend({}, o.logic, {
+            scrolly: true,
             vgap: 5,
             items: BI.LogicFactory.createLogicItemsByDirection("top", this.years)
         }))));
