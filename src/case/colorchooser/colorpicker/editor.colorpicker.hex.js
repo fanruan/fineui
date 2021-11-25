@@ -72,9 +72,8 @@ BI.HexColorPickerEditor = BI.inherit(BI.Widget, {
                             listeners: [{
                                 eventName: BI.ColorChooserShowButton.EVENT_CHANGE,
                                 action: function () {
-                                    var value = self.getValue();
                                     self.setValue("transparent");
-                                    (value !== "transparent") && self.fireEvent(BI.ColorPickerEditor.EVENT_CHANGE);
+                                    self.fireEvent(BI.ColorPickerEditor.EVENT_CHANGE);
                                 }
                             }],
                             ref: function (_ref) {
@@ -90,9 +89,8 @@ BI.HexColorPickerEditor = BI.inherit(BI.Widget, {
                                 listeners: [{
                                     eventName: BI.ColorChooserShowButton.EVENT_CHANGE,
                                     action: function () {
-                                        var value = self.getValue();
                                         self.setValue("");
-                                        (value !== "") && self.fireEvent(BI.ColorPickerEditor.EVENT_CHANGE);
+                                        self.fireEvent(BI.ColorPickerEditor.EVENT_CHANGE);
                                     }
                                 }],
                                 ref: function (_ref) {
