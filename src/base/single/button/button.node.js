@@ -15,12 +15,9 @@ BI.NodeButton = BI.inherit(BI.BasicButton, {
         });
     },
 
-    _init: function () {
-        BI.NodeButton.superclass._init.apply(this, arguments);
-        var self = this;
-        BI.nextTick(function () {
-            self.setOpened(self.isOpened());
-        });
+    _initRef: function () {
+        this.setOpened(this.isOpened());
+        BI.NodeButton.superclass._initRef.apply(this, arguments);
     },
 
     doClick: function () {
