@@ -319,6 +319,10 @@
             this._isMounted = false;
         },
 
+        __initWatch: function () {
+            // initWatch拦截的方法
+        },
+
         _initElement: function () {
             var self = this;
             this.__isMounting = true;
@@ -328,6 +332,7 @@
             if (BI.isPlainObject(els)) {
                 els = [els];
             }
+            this.__initWatch();
             if (BI.isArray(els)) {
                 BI.each(els, function (i, el) {
                     if (el) {

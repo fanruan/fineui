@@ -146,18 +146,12 @@
         needPop && popTarget();
     };
 
-    var _render = BI.Widget.prototype._render;
-    BI.Widget.prototype._render = function () {
-        var needPop = false;
-        if (_global.Fix && this._store) {
-            needPop = true;
-            pushTarget(this.store);
-        }
-        _render.apply(this, arguments);
+    var __initWatch = BI.Widget.prototype.__initWatch;
+    BI.Widget.prototype.__initWatch = function () {
+        __initWatch.apply(this, arguments);
         if (_global.Fix && this._store) {
             initWatch(this, this.watch);
         }
-        needPop && popTarget();
     };
 
     var unMount = BI.Widget.prototype.__d;
@@ -183,7 +177,7 @@
         delete this.__cacheStore;
     };
 
-    _.each(["__afterRender", "_mount", "__afterMount"], function (name) {
+    _.each(["_render", "__afterRender", "_mount", "__afterMount"], function (name) {
         var old = BI.Widget.prototype[name];
         old && (BI.Widget.prototype[name] = function () {
             this.store && pushTarget(this.store);
