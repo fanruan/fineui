@@ -16,8 +16,8 @@ BI.NodeButton = BI.inherit(BI.BasicButton, {
     },
 
     _initRef: function () {
-        self.setOpened(self.isOpened());
-        BI.BasicButton.superclass._initRef.apply(this, arguments);
+        this.setOpened(this.isOpened());
+        BI.NodeButton.superclass._initRef.apply(this, arguments);
     },
 
     doClick: function () {
