@@ -31,19 +31,21 @@ BI.BasicButton = BI.inherit(BI.Single, {
     _init: function () {
         BI.BasicButton.superclass._init.apply(this, arguments);
         var opts = this.options;
-        if (opts.selected === true) {
-            BI.nextTick(BI.bind(function () {
-                this.setSelected(opts.selected);
-            }, this));
-        }
-        BI.nextTick(BI.bind(this.bindEvent, this));
-
+        
         if (opts.shadow) {
             this._createShadow();
         }
         if (opts.level) {
             this.element.addClass("button-" + opts.level);
         }
+    },
+
+    _initRef: function () {
+        if (this.options.selected === true) {
+            this.setSelected(true);
+        }
+        this.bindEvent();
+        BI.BasicButton.superclass._initRef.apply(this, arguments);
     },
 
     // 默认render方法
