@@ -19,7 +19,6 @@ BI.Radio = BI.inherit(BI.BasicButton, {
         var self = this, o = this.options;
         return {
             type: "bi.center_adapt",
-            element: this.element,
             items: [{
                 type: "bi.layout",
                 cls: "radio-content",
