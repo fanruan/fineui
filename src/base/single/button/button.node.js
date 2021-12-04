@@ -9,14 +9,16 @@
 BI.NodeButton = BI.inherit(BI.BasicButton, {
     _defaultConfig: function () {
         var conf = BI.NodeButton.superclass._defaultConfig.apply(this, arguments);
-        return BI.extend( conf, {
+        return BI.extend(conf, {
             _baseCls: (conf._baseCls || "") + " bi-node",
             open: false
         });
     },
 
     _initRef: function () {
-        this.setOpened(this.isOpened());
+        if (this.isOpened()) {
+            this.setOpened(this.isOpened());
+        }
         BI.NodeButton.superclass._initRef.apply(this, arguments);
     },
 
@@ -38,14 +40,14 @@ BI.NodeButton = BI.inherit(BI.BasicButton, {
     },
 
     triggerCollapse: function () {
-        if(this.isOpened()) {
+        if (this.isOpened()) {
             this.setOpened(false);
             this.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.COLLAPSE, this.getValue(), this);
         }
     },
 
     triggerExpand: function () {
-        if(!this.isOpened()) {
+        if (!this.isOpened()) {
             this.setOpened(true);
             this.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.EXPAND, this.getValue(), this);
         }
