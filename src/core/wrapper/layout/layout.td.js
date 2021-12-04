@@ -96,26 +96,7 @@ BI.TdLayout = BI.inherit(BI.Layout, {
             }
             w.element.css({position: "relative", top: "0", left: "0", margin: "0px auto"});
             var item = arr[i];
-            if (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
-                w.element.css({
-                    "margin-top": (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0)) / BI.pixRatio + BI.pixUnit
-                });
-            }
-            if (o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0) !== 0) {
-                w.element.css({
-                    "margin-left": ((i === 0 ? o.hgap : 0) + o.lgap + (item.lgap || 0) + (item.hgap || 0)) / BI.pixRatio + BI.pixUnit
-                });
-            }
-            if (o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0) !== 0) {
-                w.element.css({
-                    "margin-right": (o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0)) / BI.pixRatio + BI.pixUnit
-                });
-            }
-            if (o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0) !== 0) {
-                w.element.css({
-                    "margin-bottom": (o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0)) / BI.pixRatio + BI.pixUnit
-                });
-            }
+            this._handleGap(w, item, i);
             first(w, this.rows++, i);
             var width = "";
             var columnSize = o.columnSize.length > 0 ? o.columnSize[i] : item.width;
