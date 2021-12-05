@@ -276,30 +276,34 @@ BI.Layout = BI.inherit(BI.Widget, {
         })
     },
 
+    _optimiseGap: function (gap) {
+        return gap > 0 && gap < 1 ? (gap * 100).toFixed(1) + "%" : gap / BI.pixRatio + BI.pixUnit;
+    },
+
     _handleGap: function (w, item, hIndex, vIndex) {
         var o = this.options;
         if (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
             var top = ((BI.isNull(vIndex) || vIndex === 0) ? o.vgap : 0) + o.tgap + (item.tgap || 0) + (item.vgap || 0);
             w.element.css({
-                "margin-top": top > 0 && top < 1 ? (top * 100).toFixed(1) + "%" : top / BI.pixRatio + BI.pixUnit
+                "margin-top": this._optimiseGap(top)
             });
         }
         if (o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0) !== 0) {
             var left = ((BI.isNull(hIndex) || hIndex === 0) ? o.hgap : 0) + o.lgap + (item.lgap || 0) + (item.hgap || 0);
             w.element.css({
-                "margin-left": left > 0 && left < 1 ? (left * 100).toFixed(1) + "%" : left / BI.pixRatio + BI.pixUnit
+                "margin-left": this._optimiseGap(left)
             });
         }
         if (o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0) !== 0) {
             var right = o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0);
             w.element.css({
-                "margin-right": right > 0 && right < 1 ? (right * 100).toFixed(1) + "%" : right / BI.pixRatio + BI.pixUnit
+                "margin-right": this._optimiseGap(right)
             });
         }
         if (o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0) !== 0) {
             var bottom = o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0);
             w.element.css({
-                "margin-bottom": bottom > 0 && bottom < 1 ? (bottom * 100).toFixed(1) + "%" : bottom / BI.pixRatio + BI.pixUnit
+                "margin-bottom": this._optimiseGap(bottom)
             });
         }
     },
@@ -308,28 +312,28 @@ BI.Layout = BI.inherit(BI.Widget, {
     _handleReverseGap: function (w, item, index) {
         var o = this.options;
         if (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
-            var top = (index === 0 ? o.vgap : 0) + o.tgap + (item.tgap || 0) + (item.vgap || 0);
+            var top = (index === 0 ? o.vgap : 0) + (index === 0 ? o.tgap : 0) + (item.tgap || 0) + (item.vgap || 0);
             w.element.css({
-                "margin-top": top > 0 && top < 1 ? (top * 100).toFixed(1) + "%" : top / BI.pixRatio + BI.pixUnit
+                "margin-top": this._optimiseGap(top)
             });
         }
         if (o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0) !== 0) {
             var left = o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0);
             w.element.css({
-                "margin-left": left > 0 && left < 1 ? (left * 100).toFixed(1) + "%" : left / BI.pixRatio + BI.pixUnit
+                "margin-left": this._optimiseGap(left)
             });
         }
         if (o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0) !== 0) {
             var right = o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0);
             w.element.css({
-                "margin-right": right > 0 && right < 1 ? (right * 100).toFixed(1) + "%" : right / BI.pixRatio + BI.pixUnit
+                "margin-right": this._optimiseGap(right)
             });
         }
         // 这里的代码是关键
         if (o.vgap + o.hgap + o.bgap + (item.bgap || 0) + (item.vgap || 0) !== 0) {
-            var bottom = (index === o.items.length - 1 ? o.vgap : o.hgap) + o.bgap + (item.bgap || 0) + (item.vgap || 0);
+            var bottom = (index === o.items.length - 1 ? o.vgap : o.hgap) + (index === o.items.length - 1 ? o.bgap : 0) + (item.bgap || 0) + (item.vgap || 0);
             w.element.css({
-                "margin-bottom": bottom > 0 && bottom < 1 ? (bottom * 100).toFixed(1) + "%" : bottom / BI.pixRatio + BI.pixUnit
+                "margin-bottom": this._optimiseGap(bottom)
             });
         }
     },

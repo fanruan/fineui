@@ -25,57 +25,57 @@ BI.AbsoluteLayout = BI.inherit(BI.Layout, {
         var w = BI.AbsoluteLayout.superclass._addElement.apply(this, arguments);
         var left = 0, right = 0, top = 0, bottom = 0;
         if (BI.isNotNull(item.left)) {
-            w.element.css({left: BI.isNumber(item.left) ? item.left / BI.pixRatio + BI.pixUnit : item.left});
+            w.element.css({left: BI.isNumber(item.left) ? this._optimiseGap(item.left) : item.left});
             left += item.left;
         }
         if (BI.isNotNull(item.right)) {
-            w.element.css({right: BI.isNumber(item.right) ? item.right / BI.pixRatio + BI.pixUnit : item.right});
+            w.element.css({right: BI.isNumber(item.right) ? this._optimiseGap(item.right) : item.right});
             right += item.right;
         }
         if (BI.isNotNull(item.top)) {
-            w.element.css({top: BI.isNumber(item.top) ? item.top / BI.pixRatio + BI.pixUnit : item.top});
+            w.element.css({top: BI.isNumber(item.top) ? this._optimiseGap(item.top) : item.top});
             top += item.top;
         }
         if (BI.isNotNull(item.bottom)) {
-            w.element.css({bottom: BI.isNumber(item.bottom) ? item.bottom / BI.pixRatio + BI.pixUnit : item.bottom});
+            w.element.css({bottom: BI.isNumber(item.bottom) ? this._optimiseGap(item.bottom) : item.bottom});
             bottom += item.bottom;
         }
 
         if (BI.isNotNull(o.hgap)) {
             left += o.hgap;
-            w.element.css({left: left / BI.pixRatio + BI.pixUnit});
+            w.element.css({left: this._optimiseGap(left)});
             right += o.hgap;
-            w.element.css({right: right / BI.pixRatio + BI.pixUnit});
+            w.element.css({right: this._optimiseGap(right)});
         }
         if (BI.isNotNull(o.vgap)) {
             top += o.vgap;
-            w.element.css({top: top / BI.pixRatio + BI.pixUnit});
+            w.element.css({top: this._optimiseGap(top)});
             bottom += o.vgap;
-            w.element.css({bottom: bottom / BI.pixRatio + BI.pixUnit});
+            w.element.css({bottom: this._optimiseGap(bottom)});
         }
 
         if (BI.isNotNull(o.lgap)) {
             left += o.lgap;
-            w.element.css({left: left / BI.pixRatio + BI.pixUnit});
+            w.element.css({left: this._optimiseGap(left)});
         }
         if (BI.isNotNull(o.rgap)) {
             right += o.rgap;
-            w.element.css({right: right / BI.pixRatio + BI.pixUnit});
+            w.element.css({right: this._optimiseGap(right)});
         }
         if (BI.isNotNull(o.tgap)) {
             top += o.tgap;
-            w.element.css({top: top / BI.pixRatio + BI.pixUnit});
+            w.element.css({top: this._optimiseGap(top)});
         }
         if (BI.isNotNull(o.bgap)) {
             bottom += o.bgap;
-            w.element.css({bottom: bottom / BI.pixRatio + BI.pixUnit});
+            w.element.css({bottom: this._optimiseGap(bottom)});
         }
 
         if (BI.isNotNull(item.width)) {
-            w.element.css({width: BI.isNumber(item.width) ? item.width / BI.pixRatio + BI.pixUnit : item.width});
+            w.element.css({width: BI.isNumber(item.width) ? this._optimiseGap(item.width) : item.width});
         }
         if (BI.isNotNull(item.height)) {
-            w.element.css({height: BI.isNumber(item.height) ? item.height / BI.pixRatio + BI.pixUnit : item.height});
+            w.element.css({height: BI.isNumber(item.height) ? this._optimiseGap(item.height) : item.height});
         }
         w.element.css({position: "absolute"});
         return w;

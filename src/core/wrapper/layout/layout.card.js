@@ -38,7 +38,13 @@ BI.CardLayout = BI.inherit(BI.Layout, {
                 } else {
                     var w = self.getWidgetByName(self._getChildName(item.cardName));
                 }
-                w.element.css({position: "absolute", top: "0", right: "0", bottom: "0", left: "0"});
+                w.element.css({
+                    position: "relative",
+                    top: "0",
+                    left: "0",
+                    width: "100%",
+                    height: "100%"
+                });
                 w.setVisible(false);
             }
         });
