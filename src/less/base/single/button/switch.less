@@ -3,7 +3,7 @@
 .bi-switch{
   .border-radius(40px 40px 40px 40px);
   background-color: @color-bi-background-dark-gray;
-  &:active, &.active {
+  &.active {
     background-color: @color-bi-background-highlight;
   }
   & .circle-button{
@@ -11,23 +11,17 @@
   }
   &.disabled {
     background-color: @color-bi-background-disabled;
-    &:active {
-      background-color: @color-bi-background-disabled;
-    }
   }
 }
 
 .bi-theme-dark {
   .bi-switch{
     background-color: @color-bi-background-dark-gray-theme-dark;
-    &:active, &.active {
+    &.active {
       background-color: @color-bi-background-highlight;
     }
     &.disabled {
       background-color: @color-bi-background-disabled-theme-dark;
-      &:active {
-        background-color: @color-bi-background-disabled-theme-dark;
-      }
     }
   }
 }
