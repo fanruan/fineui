@@ -1,5 +1,6 @@
 # 更新日志
 2.0(2021-12)
+- BI.Msg.alert支持message传json格式
 - 支持BI.config(function(){})进行系统配置
 
 2.0(2021-11)
