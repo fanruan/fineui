@@ -768,8 +768,40 @@
         }
     };
 
-    BI.watch = function (watch, handler) {
+    BI.useContext = function () {
+        return BI.Model.target;
+    };
+
+    BI.watch = function (vm, watch, handler) {
+        if (vm instanceof BI.Model) {
+            var watchers = [];
+            if (BI.isKey(watch)) {
+                var k = watch;
+                watch = {};
+                watch[k] = handler;
+            }
+            for (var key in watch) {
+                var innerHandler = watch[key];
+                if (BI.isArray(handler)) {
+                    for (var i = 0; i < handler.length; i++) {
+                        watchers.push(Fix.watch(vm.model, key, innerHandler, {
+                            store: vm
+                        }));
+                    }
+                } else {
+                    watchers.push(Fix.watch(vm.model, key, innerHandler, {
+                        store: vm
+                    }));
+                }
+            }
+            // vm中一定有_widget
+            vm._widget._watchers || (vm._widget._watchers = []);
+            vm._widget._watchers = vm._widget._watchers.concat(watchers);
+            return;
+        }
         if (BI.Widget.current) {
+            handler = watch;
+            watch = vm;
             BI.Widget.current.$watchDelayCallbacks || (BI.Widget.current.$watchDelayCallbacks = []);
             BI.Widget.current.$watchDelayCallbacks.push([watch, handler]);
         }
