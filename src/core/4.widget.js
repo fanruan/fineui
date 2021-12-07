@@ -774,7 +774,6 @@
 
     BI.watch = function (vm, watch, handler) {
         if (BI.Widget.current) {
-            options = options || {};
             if (vm instanceof BI.Model) {
                 BI.Widget.current._watchers || (BI.Widget.current._watchers = []);
                 if (BI.isKey(watch)) {
