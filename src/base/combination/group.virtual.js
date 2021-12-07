@@ -44,8 +44,8 @@ BI.VirtualGroup = BI.inherit(BI.Widget, {
     },
 
     _packageLayout: function (items) {
-        var o = this.options, layouts = BI.isArray(o.layouts) ? o.layouts : [o.layouts];
-        var layout = BI.deepClone(layouts[0]);
+        var o = this.options, layout = BI.deepClone(o.layouts[0]);
+
         var lay = BI.formatEL(layout).el;
         while (lay && lay.items && !BI.isEmpty(lay.items)) {
             lay = BI.formatEL(lay.items[0]).el;
