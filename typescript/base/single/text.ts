@@ -3,6 +3,10 @@ import { Single } from "./single";
 export declare class Text extends Single {
     static xtype: string;
 
+    static addTextFormatter: (fn: (str: string) => string) => void;
+
+    static formatText: (str: string) => string;
+
     props: {
         text?: string;
         textAlign?: "left" | "center" | "right",
