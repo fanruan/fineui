@@ -773,34 +773,40 @@
     };
 
     BI.watch = function (vm, watch, handler) {
-        if (BI.Widget.current) {
-            if (vm instanceof BI.Model) {
-                BI.Widget.current._watchers || (BI.Widget.current._watchers = []);
-                if (BI.isKey(watch)) {
-                    var k = watch;
-                    watch = {};
-                    watch[k] = handler;
-                }
-                for (var key in watch) {
-                    var handler = watch[key];
-                    if (BI.isArray(handler)) {
-                        for (var i = 0; i < handler.length; i++) {
-                            BI.Widget.current._watchers.push(Fix.watch(vm.model, key, handler, {
-                                store: vm
-                            }));
-                        }
-                    } else {
-                        BI.Widget.current._watchers.push(Fix.watch(vm.model, key, handler, {
+        if (vm instanceof BI.Model) {
+            var watchers = [];
+            if (BI.isKey(watch)) {
+                var k = watch;
+                watch = {};
+                watch[k] = handler;
+            }
+            for (var key in watch) {
+                var innerHandler = watch[key];
+                if (BI.isArray(handler)) {
+                    for (var i = 0; i < handler.length; i++) {
+                        watchers.push(Fix.watch(vm.model, key, innerHandler, {
                             store: vm
                         }));
                     }
+                } else {
+                    watchers.push(Fix.watch(vm.model, key, innerHandler, {
+                        store: vm
+                    }));
                 }
-            } else {
-                handler = watch;
-                watch = vm;
-                BI.Widget.current.$watchDelayCallbacks || (BI.Widget.current.$watchDelayCallbacks = []);
-                BI.Widget.current.$watchDelayCallbacks.push([watch, handler]);
             }
+            if (vm._widget) {
+                vm._widget._watchers || (vm._widget._watchers = []);
+                vm._widget._watchers = vm._widget._watchers.concat(watchers);
+            }
+            return;
+        }
+        if (BI.Widget.current) {
+
+            handler = watch;
+            watch = vm;
+            BI.Widget.current.$watchDelayCallbacks || (BI.Widget.current.$watchDelayCallbacks = []);
+            BI.Widget.current.$watchDelayCallbacks.push([watch, handler]);
+
         }
     };
 
