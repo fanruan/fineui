@@ -40,13 +40,16 @@
             setInterval(function () {
                 context.toggle();
             }, 1000);
-            BI.watch(context, "expand", function () {
-                label.setText(context.model.text);
-            });
+            // BI.watch(context, "expand", function () {
+            //     label.setText(context.model.text);
+            // });
             return {
                 type: "bi.label",
                 ref: function (_ref) {
                     label = _ref;
+                },
+                effect: function (w) {
+                    w.setText(context.model.text)
                 },
                 text: function () {
                     return context.model.text;
