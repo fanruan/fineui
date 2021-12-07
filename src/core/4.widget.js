@@ -772,7 +772,7 @@
         return BI.Model.target;
     };
 
-    BI.watch = function (vm, watch, handler, options) {
+    BI.watch = function (vm, watch, handler) {
         if (BI.Widget.current) {
             options = options || {};
             if (vm instanceof BI.Model) {
@@ -786,14 +786,14 @@
                     var handler = watch[key];
                     if (BI.isArray(handler)) {
                         for (var i = 0; i < handler.length; i++) {
-                            BI.Widget.current._watchers.push(Fix.watch(vm.model, key, handler, BI.extend(options, {
-                                store: vm.store
-                            })));
+                            BI.Widget.current._watchers.push(Fix.watch(vm.model, key, handler, {
+                                store: vm
+                            }));
                         }
                     } else {
-                        BI.Widget.current._watchers.push(Fix.watch(vm.model, key, handler, BI.extend(options, {
-                            store: vm.store
-                        })));
+                        BI.Widget.current._watchers.push(Fix.watch(vm.model, key, handler, {
+                            store: vm
+                        }));
                     }
                 }
             } else {
