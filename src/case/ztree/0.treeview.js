@@ -55,7 +55,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
         });
         BI.createWidget({
             type: "bi.default",
-            element: this.element,
+            element: this,
             items: [this.tree]
         });
     },

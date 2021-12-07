@@ -55,6 +55,8 @@
         Fix.Model.target = target = targetStack.pop();
     }
 
+    BI.Model = Fix.Model;
+
     var oldWatch = Fix.watch;
     Fix.watch = function (model, expOrFn, cb, options) {
         if (BI.isPlainObject(cb)) {

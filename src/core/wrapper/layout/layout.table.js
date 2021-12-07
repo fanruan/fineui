@@ -69,8 +69,8 @@ BI.TableLayout = BI.inherit(BI.Layout, {
                 abs.push(BI.extend({
                     top: 0,
                     bottom: 0,
-                    left: o.columnSize[i] < 1 ? (left * 100).toFixed(1) + "%" : left,
-                    width: o.columnSize[i] < 1 ? (o.columnSize[i] * 100).toFixed(1) + "%" : o.columnSize[i]
+                    left: this._optimiseGap(left),
+                    width: this._optimiseGap(o.columnSize[i])
                 }, arr[i]));
                 left += o.columnSize[i] + (o.columnSize[i] < 1 ? 0 : o.hgap);
             } else {
@@ -83,8 +83,8 @@ BI.TableLayout = BI.inherit(BI.Layout, {
                 abs.push(BI.extend({
                     top: 0,
                     bottom: 0,
-                    right: o.columnSize[j] < 1 ? (right * 100).toFixed(1) + "%" : right,
-                    width: o.columnSize[j] < 1 ? (o.columnSize[j] * 100).toFixed(1) + "%" : o.columnSize[j]
+                    right: this._optimiseGap(right),
+                    width: this._optimiseGap(o.columnSize[j])
                 }, arr[j]));
                 right += o.columnSize[j] + (o.columnSize[j] < 1 ? 0 : o.hgap);
             } else {
@@ -96,8 +96,8 @@ BI.TableLayout = BI.inherit(BI.Layout, {
             abs.push(BI.extend({
                 top: 0,
                 bottom: 0,
-                left: left < 1 ? (left * 100).toFixed(1) + "%" : left,
-                right: right < 1 ? (right * 100).toFixed(1) + "%" : right
+                left: this._optimiseGap(left),
+                right: this._optimiseGap(right)
             }, arr[i]));
         }
         var w = BI._lazyCreateWidget({
@@ -107,7 +107,7 @@ BI.TableLayout = BI.inherit(BI.Layout, {
         });
         if (this.rows > 0) {
             this.getWidgetByName(this._getChildName(this.rows - 1)).element.css({
-                "margin-bottom": o.vgap / BI.pixRatio + BI.pixUnit
+                "margin-bottom": this._optimiseGap(o.vgap)
             });
         }
         w.element.css({

@@ -267,26 +267,73 @@ BI.Layout = BI.inherit(BI.Widget, {
         this.options.items.splice(index, 1);
     },
 
+    _clearGap: function (w) {
+        w.element.css({
+            "margin-top": "",
+            "margin-bottom": "",
+            "margin-left": "",
+            "margin-right": "",
+        })
+    },
+
+    _optimiseGap: function (gap) {
+        return gap > 0 && gap < 1 ? (gap * 100).toFixed(1) + "%" : gap / BI.pixRatio + BI.pixUnit;
+    },
+
     _handleGap: function (w, item, hIndex, vIndex) {
         var o = this.options;
         if (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
+            var top = ((BI.isNull(vIndex) || vIndex === 0) ? o.vgap : 0) + o.tgap + (item.tgap || 0) + (item.vgap || 0);
             w.element.css({
-                "margin-top": (((BI.isNull(vIndex) || vIndex === 0) ? o.vgap : 0) + o.tgap + (item.tgap || 0) + (item.vgap || 0)) / BI.pixRatio + BI.pixUnit
+                "margin-top": this._optimiseGap(top)
             });
         }
         if (o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0) !== 0) {
+            var left = ((BI.isNull(hIndex) || hIndex === 0) ? o.hgap : 0) + o.lgap + (item.lgap || 0) + (item.hgap || 0);
             w.element.css({
-                "margin-left": (((BI.isNull(hIndex) || hIndex === 0) ? o.hgap : 0) + o.lgap + (item.lgap || 0) + (item.hgap || 0)) / BI.pixRatio + BI.pixUnit
+                "margin-left": this._optimiseGap(left)
             });
         }
         if (o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0) !== 0) {
+            var right = o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0);
             w.element.css({
-                "margin-right": (o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0)) / BI.pixRatio + BI.pixUnit
+                "margin-right": this._optimiseGap(right)
             });
         }
         if (o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0) !== 0) {
+            var bottom = o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0);
             w.element.css({
-                "margin-bottom": (o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0)) / BI.pixRatio + BI.pixUnit
+                "margin-bottom": this._optimiseGap(bottom)
+            });
+        }
+    },
+
+    // 横向换纵向
+    _handleReverseGap: function (w, item, index) {
+        var o = this.options;
+        if (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
+            var top = (index === 0 ? o.vgap : 0) + (index === 0 ? o.tgap : 0) + (item.tgap || 0) + (item.vgap || 0);
+            w.element.css({
+                "margin-top": this._optimiseGap(top)
+            });
+        }
+        if (o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0) !== 0) {
+            var left = o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0);
+            w.element.css({
+                "margin-left": this._optimiseGap(left)
+            });
+        }
+        if (o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0) !== 0) {
+            var right = o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0);
+            w.element.css({
+                "margin-right": this._optimiseGap(right)
+            });
+        }
+        // 这里的代码是关键
+        if (o.vgap + o.hgap + o.bgap + (item.bgap || 0) + (item.vgap || 0) !== 0) {
+            var bottom = (index === o.items.length - 1 ? o.vgap : o.hgap) + (index === o.items.length - 1 ? o.bgap : 0) + (item.bgap || 0) + (item.vgap || 0);
+            w.element.css({
+                "margin-bottom": this._optimiseGap(bottom)
             });
         }
     },

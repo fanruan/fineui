@@ -70,7 +70,7 @@ BI.FlexWrapperVerticalLayout = BI.inherit(BI.Layout, {
             }
         }
         if (rowSize > 0) {
-            w.element.height(rowSize < 1 ? ((rowSize * 100).toFixed(1) + "%") : (rowSize / BI.pixRatio + BI.pixUnit));
+            w.element.height(this._optimiseGap(rowSize));
         }
         if (rowSize === "fill") {
             w.element.addClass("f-f");

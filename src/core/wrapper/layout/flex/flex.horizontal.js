@@ -74,7 +74,7 @@ BI.FlexHorizontalLayout = BI.inherit(BI.Layout, {
             }
         }
         if (columnSize > 0) {
-            w.element.width(columnSize < 1 ? ((columnSize * 100).toFixed(1) + "%") : (columnSize / BI.pixRatio + BI.pixUnit));
+            w.element.width(this._optimiseGap(columnSize));
         }
         if (columnSize === "fill") {
             w.element.addClass("f-f");

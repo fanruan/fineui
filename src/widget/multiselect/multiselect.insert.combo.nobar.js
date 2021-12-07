@@ -76,7 +76,7 @@ BI.MultiSelectInsertNoBarCombo = BI.inherit(BI.Single, {
             var last = BI.last(keywords);
             keywords = BI.initial(keywords || []);
             if (keywords.length > 0) {
-                self._joinKeywords(keywords, function () {
+                self._joinKeywords(keywords.slice(0, 2000), function () {
                     if (BI.endWith(last, BI.BlankSplitChar)) {
                         self.combo.setValue(self.storeValue);
                         assertShowValue();
@@ -88,6 +88,7 @@ BI.MultiSelectInsertNoBarCombo = BI.inherit(BI.Single, {
                     }
                     self._dataChange = true;
                 });
+                keywords.length > 2000 && BI.Msg.alert(BI.i18nText("BI-Basic_Prompt"), BI.i18nText("BI-Basic_Too_Much_Value_Get_Two_Thousand"));
             }
         });
 

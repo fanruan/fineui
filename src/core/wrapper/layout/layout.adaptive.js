@@ -21,32 +21,32 @@ BI.AdaptiveLayout = BI.inherit(BI.Layout, {
         w.element.css({position: "relative"});
         if (BI.isNotNull(item.left)) {
             w.element.css({
-                left: BI.isNumber(item.left) ? item.left / BI.pixRatio + BI.pixUnit : item.left
+                left: BI.isNumber(item.left) ? this._optimiseGap(item.left) : item.left
             });
         }
         if (BI.isNotNull(item.right)) {
             w.element.css({
-                right: BI.isNumber(item.right) ? item.right / BI.pixRatio + BI.pixUnit : item.right
+                right: BI.isNumber(item.right) ? this._optimiseGap(item.right) : item.right
             });
         }
         if (BI.isNotNull(item.top)) {
             w.element.css({
-                top: BI.isNumber(item.top) ? item.top / BI.pixRatio + BI.pixUnit : item.top
+                top: BI.isNumber(item.top) ? this._optimiseGap(item.top) : item.top
             });
         }
         if (BI.isNotNull(item.bottom)) {
             w.element.css({
-                bottom: BI.isNumber(item.bottom) ? item.bottom / BI.pixRatio + BI.pixUnit : item.bottom
+                bottom: BI.isNumber(item.bottom) ? this._optimiseGap(item.bottom) : item.bottom
             });
         }
 
         this._handleGap(w, item);
 
         if (BI.isNotNull(item.width)) {
-            w.element.css({width: BI.isNumber(item.width) ? item.width / BI.pixRatio + BI.pixUnit : item.width});
+            w.element.css({width: BI.isNumber(item.width) ? this._optimiseGap(item.width) : item.width});
         }
         if (BI.isNotNull(item.height)) {
-            w.element.css({height: BI.isNumber(item.height) ? item.height / BI.pixRatio + BI.pixUnit : item.height});
+            w.element.css({height: BI.isNumber(item.height) ? this._optimiseGap(item.height) : item.height});
         }
         return w;
     },

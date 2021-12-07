@@ -1,6 +1,13 @@
 # 更新日志
+2.0(2021-12)
+- 支持BI.config(function(){})进行系统配置
+
+2.0(2021-11)
+- 限制了复选下拉框一次粘贴添加值个数最大2000
+
 2.0(2021-10)
 - combo增加window.blur事件触发隐藏
+
 2.0(2021-09)
 - 支持自动watch
 - 支持h函数传递left、right，优化left_right_vertical_adapt布局的jsx写法
