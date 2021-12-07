@@ -150,11 +150,12 @@
         }
     };
     BI.config = BI.config || function (type, configFn, opt) {
-        opt = opt || {};
         if (BI.isFunction(type)) {
+            opt = configFn;
             configFn = type;
             type = "bi.provider.system";
         }
+        opt = opt || {};
 
         // 系统配置直接执行
         if ("bi.provider.system" === type) {
