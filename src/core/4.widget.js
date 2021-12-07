@@ -794,19 +794,16 @@
                     }));
                 }
             }
-            if (vm._widget) {
-                vm._widget._watchers || (vm._widget._watchers = []);
-                vm._widget._watchers = vm._widget._watchers.concat(watchers);
-            }
+            // vm中一定有_widget
+            vm._widget._watchers || (vm._widget._watchers = []);
+            vm._widget._watchers = vm._widget._watchers.concat(watchers);
             return;
         }
         if (BI.Widget.current) {
-
             handler = watch;
             watch = vm;
             BI.Widget.current.$watchDelayCallbacks || (BI.Widget.current.$watchDelayCallbacks = []);
             BI.Widget.current.$watchDelayCallbacks.push([watch, handler]);
-
         }
     };
 
