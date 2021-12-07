@@ -768,10 +768,40 @@
         }
     };
 
-    BI.watch = function (watch, handler) {
+    BI.useContext = function () {
+        return BI.Model.target;
+    };
+
+    BI.watch = function (vm, watch, handler, options) {
         if (BI.Widget.current) {
-            BI.Widget.current.$watchDelayCallbacks || (BI.Widget.current.$watchDelayCallbacks = []);
-            BI.Widget.current.$watchDelayCallbacks.push([watch, handler]);
+            options = options || {};
+            if (vm instanceof BI.Model) {
+                BI.Widget.current._watchers || (BI.Widget.current._watchers = []);
+                if (BI.isKey(watch)) {
+                    var k = watch;
+                    watch = {};
+                    watch[k] = handler;
+                }
+                for (var key in watch) {
+                    var handler = watch[key];
+                    if (BI.isArray(handler)) {
+                        for (var i = 0; i < handler.length; i++) {
+                            BI.Widget.current._watchers.push(Fix.watch(vm.model, key, handler, BI.extend(options, {
+                                store: vm.store
+                            })));
+                        }
+                    } else {
+                        BI.Widget.current._watchers.push(Fix.watch(vm.model, key, handler, BI.extend(options, {
+                            store: vm.store
+                        })));
+                    }
+                }
+            } else {
+                handler = watch;
+                watch = vm;
+                BI.Widget.current.$watchDelayCallbacks || (BI.Widget.current.$watchDelayCallbacks = []);
+                BI.Widget.current.$watchDelayCallbacks.push([watch, handler]);
+            }
         }
     };
 
