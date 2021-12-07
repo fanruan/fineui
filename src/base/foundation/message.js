@@ -164,7 +164,7 @@ BI.Msg = function () {
                                 height: 40
                             },
                             center: {
-                                el: {
+                                el: BI.isPlainObject(message) ? message : {
                                     type: "bi.label",
                                     vgap: 10,
                                     hgap: 20,
