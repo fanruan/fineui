@@ -768,7 +768,18 @@
         }
     };
 
-    BI.useContext = function () {
+    BI.useContext = function (inject) {
+        if (BI.Model.target) {
+            var p = BI.Model.target;
+            if (inject) {
+                while (p) {
+                    if (p.$$context && inject in p.$$context) {
+                        return p;
+                    }
+                    p = p._parent;
+                }
+            }
+        }
         return BI.Model.target;
     };
 
