@@ -134,8 +134,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 setImmediate(nextTickHandler);
             };
         } else if (typeof MessageChannel !== 'undefined' && (isNative(MessageChannel) ||
-            // PhantomJS
-            MessageChannel.toString() === '[object MessageChannelConstructor]')) {
+        // PhantomJS
+        MessageChannel.toString() === '[object MessageChannelConstructor]')) {
             var channel = new MessageChannel();
             var port = channel.port2;
             channel.port1.onmessage = nextTickHandler;
@@ -144,18 +144,18 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             };
         } else
             /* istanbul ignore next */
-        if (typeof Promise !== 'undefined' && isNative(Promise)) {
-            // use microtask in non-DOM environments, e.g. Weex
-            var p = Promise.resolve();
-            timerFunc = function timerFunc() {
-                p.then(nextTickHandler);
-            };
-        } else {
-            // fallback to setTimeout
-            timerFunc = function timerFunc() {
-                setTimeout(nextTickHandler, 0);
-            };
-        }
+            if (typeof Promise !== 'undefined' && isNative(Promise)) {
+                // use microtask in non-DOM environments, e.g. Weex
+                var p = Promise.resolve();
+                timerFunc = function timerFunc() {
+                    p.then(nextTickHandler);
+                };
+            } else {
+                // fallback to setTimeout
+                timerFunc = function timerFunc() {
+                    setTimeout(nextTickHandler, 0);
+                };
+            }
 
         return function queueNextTick(cb, ctx) {
             var _resolve = void 0;
@@ -294,7 +294,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         if (isIE9Below) {
             var VBClassPool = {};
             window.execScript([// jshint ignore:line
-                'Function parseVB(code)', '\tExecuteGlobal(code)', 'End Function' //转换一段文本为VB代码
+            'Function parseVB(code)', '\tExecuteGlobal(code)', 'End Function' //转换一段文本为VB代码
             ].join('\n'), 'VBScript');
 
             var VBMediator = function VBMediator(instance, accessors, name, value) {
@@ -310,7 +310,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 // jshint ignore:line
                 var buffer = [];
                 buffer.push('\tPrivate [$vbsetter]', '\tPublic  [$accessors]', '\tPublic Default Function [$vbthis](ac' + timeBucket + ', s' + timeBucket + ')', '\t\tSet  [$accessors] = ac' + timeBucket + ': set [$vbsetter] = s' + timeBucket, '\t\tSet  [$vbthis]    = Me', //链式调用
-                    '\tEnd Function');
+                '\tEnd Function');
                 //添加普通属性,因为VBScript对象不能像JS那样随意增删属性，必须在这里预先定义好
                 var uniq = {
                     $vbthis: true,
@@ -323,19 +323,19 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                         uniq[name] = true;
                     }
                 }
-                //添加访问器属性
+                //添加访问器属性 
                 for (name in accessors) {
                     if (uniq[name]) {
                         continue;
                     }
                     uniq[name] = true;
                     buffer.push(
-                        //由于不知对方会传入什么,因此set, let都用上
-                        '\tPublic Property Let [' + name + '](val' + timeBucket + ')', //setter
-                        '\t\tCall [$vbsetter](Me, [$accessors], "' + name + '", val' + timeBucket + ')', '\tEnd Property', '\tPublic Property Set [' + name + '](val' + timeBucket + ')', //setter
-                        '\t\tCall [$vbsetter](Me, [$accessors], "' + name + '", val' + timeBucket + ')', '\tEnd Property', '\tPublic Property Get [' + name + ']', //getter
-                        '\tOn Error Resume Next', //必须优先使用set语句,否则它会误将数组当字符串返回
-                        '\t\tSet[' + name + '] = [$vbsetter](Me, [$accessors],"' + name + '")', '\tIf Err.Number <> 0 Then', '\t\t[' + name + '] = [$vbsetter](Me, [$accessors],"' + name + '")', '\tEnd If', '\tOn Error Goto 0', '\tEnd Property');
+                    //由于不知对方会传入什么,因此set, let都用上
+                    '\tPublic Property Let [' + name + '](val' + timeBucket + ')', //setter
+                    '\t\tCall [$vbsetter](Me, [$accessors], "' + name + '", val' + timeBucket + ')', '\tEnd Property', '\tPublic Property Set [' + name + '](val' + timeBucket + ')', //setter
+                    '\t\tCall [$vbsetter](Me, [$accessors], "' + name + '", val' + timeBucket + ')', '\tEnd Property', '\tPublic Property Get [' + name + ']', //getter
+                    '\tOn Error Resume Next', //必须优先使用set语句,否则它会误将数组当字符串返回
+                    '\t\tSet[' + name + '] = [$vbsetter](Me, [$accessors],"' + name + '")', '\tIf Err.Number <> 0 Then', '\t\t[' + name + '] = [$vbsetter](Me, [$accessors],"' + name + '")', '\tEnd If', '\tOn Error Goto 0', '\tEnd Property');
                 }
 
                 for (name in properties) {
@@ -353,7 +353,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                     className = makeHashCode('VBClass');
                     window.parseVB('Class ' + className + body);
                     window.parseVB(['Function ' + className + 'Factory(acc, vbm)', //创建实例并传入两个关键的参数
-                        '\tDim o', '\tSet o = (New ' + className + ')(acc, vbm)', '\tSet ' + className + 'Factory = o', 'End Function'].join('\r\n'));
+                    '\tDim o', '\tSet o = (New ' + className + ')(acc, vbm)', '\tSet ' + className + 'Factory = o', 'End Function'].join('\r\n'));
                     VBClassPool[body] = className;
                 }
                 var ret = window[className + 'Factory'](accessors, VBMediator); //得到其产品
@@ -537,10 +537,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             if (this.active) {
                 var value = this.get();
                 if (value !== this.value ||
-                    // Deep watchers and watchers on Object/Arrays should fire even
-                    // when the value is the same, because the value may
-                    // have mutated.
-                    _.isObject(value) && options && options.refresh || this.deep) {
+                // Deep watchers and watchers on Object/Arrays should fire even
+                // when the value is the same, because the value may
+                // have mutated.
+                _.isObject(value) && options && options.refresh || this.deep) {
                     // set new value
                     var oldValue = this.value;
                     this.value = value;
@@ -1420,12 +1420,15 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             var context = this.context;
             var inject = this.inject;
             var childContext = this.childContext;
+            var provide = this.provide;
             var watch$$1 = this.watch;
             var actions = this.actions;
             var keys = _.keys(this.$$model).concat(_.keys(state)).concat(_.keys(computed)).concat(inject || []).concat(context || []);
             var mixins = this.mixins;
             defineProps(this, keys);
+            // deprecated
             childContext && defineContext(this, childContext);
+            provide && defineContext(this, provide);
             this.$$model && (this.model.__ob__ = this.$$model.__ob__);
             initMixins(this, mixins);
             this.init();
