@@ -25,6 +25,29 @@
   padding: 0 0 0 18px
 }
 
+// 此处不用2倍图，改用css画虚线
+// z-tree的line是一整块子节点区域，所以不能使用background-size: contain
+// 使用1倍图太模糊，这边就使用css自己画了，calc属性支持IE9, IE8反正会走hack, 不影响
+.ztree li ul.line {
+  position: relative;
+  &:before {
+    position: absolute;
+    content: '';
+    border-left: 1px dashed @border-color-dark-gray-line;
+    height: calc(~"100% - 3px");
+    left: 11px;
+    margin-top: 1px;
+  }
+}
+
+.bi-theme-dark {
+  .ztree li ul.line {
+    &:before {
+      border-left: 1px dashed @border-color-dark-gray-line;
+    }
+  }
+}
+
 .ztree li a {
   padding: 1px 3px 0 0;
   margin: 0;
