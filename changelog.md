@@ -1,5 +1,6 @@
 # 更新日志
 2.0(2021-12)
+- BI.point支持widget添加埋点
 - childContext废弃，替换成provide
 - 支持BI.useContext获取上下文环境
 - BI.Msg.alert支持message传json格式
