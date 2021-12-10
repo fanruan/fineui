@@ -2073,7 +2073,12 @@
           watchers.push(innerWatch(function () {
             return watchExp(_v2, _getter);
           }, function (newValue, oldValue) {
-            callback(i, newValue, oldValue, _.extend({
+            // a.** 在a变化的时候不会触发change
+            if (oldValue !== newValue) {
+              return;
+            }
+
+            callback(i, NaN, NaN, _.extend({
               index: i
             }));
           }, _.extend({
@@ -2135,7 +2140,7 @@
           changes = [];
 
           if (newValue === true) {
-            callback(i, undefined, undefined, _.extend({
+            callback(i, NaN, NaN, _.extend({
               index: i
             }));
           }
