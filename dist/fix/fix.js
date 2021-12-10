@@ -90,12 +90,13 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         }
     }
 
-    var bailRE = /[^\w.$]/;
+    // const bailRE = /[^\w.$]/
 
     function parsePath(path) {
-        if (bailRE.test(path)) {
-            return;
-        }
+        // 正常表达式比较慢，能不要的就不要了
+        // if (bailRE.test(path)) {
+        //     return
+        // }
         var segments = path.split('.');
         return function (obj) {
             for (var i = 0; i < segments.length; i++) {
@@ -975,7 +976,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         options = options || {};
         options.user = true;
         var exps = void 0;
-        if (_.isFunction(expOrFn) || !(exps = expOrFn.match(/[a-zA-Z0-9_.*]+|[|][|]|[&][&]|[(]|[)]/g)) || exps.length === 1 && !/\*/.test(expOrFn)) {
+        if (_.isFunction(expOrFn) || !(exps = expOrFn.match(/[a-zA-Z0-9_.*]+|[|][|]|[&][&]|[(]|[)]/g)) || exps.length === 1 && expOrFn.indexOf("*") < 0) {
             var watcher = new Watcher(model, expOrFn, cb, options);
             if (options.immediate) {
                 cb(watcher.value);
@@ -1016,45 +1017,96 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             if (_.has(operators, exp)) {
                 return;
             }
-            //a.**或a.*形式
-            if (/^[1-9a-zA-Z.]+(\*\*$|\*$)/.test(exp) || exp === "**") {
-                var isGlobal = /\*\*$/.test(exp);
-                if (isGlobal) {
-                    //a.**的形式
-                    exp = exp.replace(".**", "");
-                } else {
-                    //a.*的形式
-                    exp = exp.replace(".*", "");
+            if (exp.indexOf("*") >= 0) {
+                //a.**或a.*形式
+                if (/^[1-9a-zA-Z.]+(\*\*$|\*$)/.test(exp) || exp === "**" || exp === "*") {
+                    var isGlobal = exp.indexOf("**") >= 0;
+                    if (isGlobal) {
+                        //a.**的形式
+                        exp = exp.replace(".**", "");
+                    } else {
+                        //a.*的形式
+                        exp = exp.replace(".*", "");
+                    }
+                    var getter = exp === "**" || exp === "*" ? function (m) {
+                        return m;
+                    } : parsePath(exp);
+                    var v = getter.call(model, model);
+                    var _dep = new Dep();
+                    if (isGlobal) {
+                        (v.__ob__._scopeDeps || (v.__ob__._scopeDeps = [])).push(_dep);
+                    } else {
+                        (v.__ob__._deps || (v.__ob__._deps = [])).push(_dep);
+                    }
+                    var _w = new Watcher(model, function () {
+                        _dep.depend();
+                        return NaN;
+                    }, function (newValue, oldValue, attrs) {
+                        callback(i, newValue, oldValue, _.extend({ index: i }, attrs));
+                    }, options);
+                    watchers.push(function unwatchFn() {
+                        _w.teardown();
+                        v.__ob__._scopeDeps && remove(v.__ob__._scopeDeps, _dep);
+                        v.__ob__._deps && remove(v.__ob__._deps, _dep);
+                    });
+                    return;
                 }
-                var getter = exp === "**" ? function (m) {
-                    return m;
-                } : parsePath(exp);
-                var v = getter.call(model, model);
-                var dep = new Dep();
-                if (isGlobal) {
-                    (v.__ob__._scopeDeps || (v.__ob__._scopeDeps = [])).push(dep);
-                } else {
-                    (v.__ob__._deps || (v.__ob__._deps = [])).push(dep);
+                // **.a.**的情况，场景：a.b.c, 如果用b.**监听, a被重新赋值b上的_scopeDes就不存在了
+                if (/^(\*\*\.)+[1-9a-zA-Z]+(\.\*\*$)/.test(exp)) {
+                    //先获取到能获取到的对象
+                    var _paths = exp.split(".");
+                    var _currentModel = model[_paths[1]];
+                    exp = _paths[1] + ".**";
+                    //补全路径
+                    var _parent = _currentModel.__ob__.parent,
+                        _root = _currentModel.__ob__;
+                    while (_parent) {
+                        exp = '*.' + exp;
+                        _root = _parent;
+                        _parent = _parent.parent;
+                    }
+                    var _regStr = routeToRegExp(exp);
+                    var _dep2 = new Dep();
+                    _root._globalDeps || (_root._globalDeps = {});
+                    if (_.isArray(_root._globalDeps[_regStr])) {
+                        _root._globalDeps[_regStr].push(_dep2);
+                    } else {
+                        _root._globalDeps[_regStr] = [_dep2];
+                    }
+
+                    var _w2 = new Watcher(_currentModel, function () {
+                        _dep2.depend();
+                        return NaN;
+                    }, function (newValue, oldValue, attrs) {
+                        callback(i, newValue, oldValue, _.extend({ index: i }, attrs));
+                    }, options);
+                    watchers.push(function unwatchFn() {
+                        if (_root._globalDeps) {
+                            remove(_root._globalDeps[_regStr], _dep2);
+
+                            if (_root._globalDeps[_regStr].length === 0) {
+                                delete _root._globalDeps[_regStr];
+                                _w2.teardown();
+                            }
+                        }
+                    });
+                    return;
                 }
-                var w = new Watcher(model, function () {
-                    dep.depend();
-                    return NaN;
-                }, function (newValue, oldValue, attrs) {
-                    callback(i, newValue, oldValue, _.extend({ index: i }, attrs));
-                }, options);
-                watchers.push(function unwatchFn() {
-                    w.teardown();
-                    v.__ob__._scopeDeps && remove(v.__ob__._scopeDeps, dep);
-                    v.__ob__._deps && remove(v.__ob__._deps, dep);
-                });
-                return;
-            }
-            // **.a.**的情况，场景：a.b.c, 如果用b.**监听, a被重新赋值b上的_scopeDes就不存在了
-            if (/^(\*\*\.)+[1-9a-zA-Z]+(\.\*\*$)/.test(exp)) {
+                // 再有结尾有*的就不支持了
+                if (exp[exp.length - 1] === "*") {
+                    throw new Error('not support');
+                }
+                //其他含有*的情况，如*.a,*.*.a,a.*.a
+                var currentModel = model;
                 //先获取到能获取到的对象
                 var paths = exp.split(".");
-                var currentModel = model[paths[1]];
-                exp = paths[1] + ".**";
+                for (var _i = 0, len = paths.length; _i < len; _i++) {
+                    if (paths[_i] === "*") {
+                        break;
+                    }
+                    currentModel = model[paths[_i]];
+                }
+                exp = exp.substr(exp.indexOf("*"));
                 //补全路径
                 var parent = currentModel.__ob__.parent,
                     root = currentModel.__ob__;
@@ -1064,77 +1116,26 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                     parent = parent.parent;
                 }
                 var regStr = routeToRegExp(exp);
-                var _dep = new Dep();
+                var dep = new Dep();
                 root._globalDeps || (root._globalDeps = {});
                 if (_.isArray(root._globalDeps[regStr])) {
-                    root._globalDeps[regStr].push(_dep);
+                    root._globalDeps[regStr].push(dep);
                 } else {
-                    root._globalDeps[regStr] = [_dep];
+                    root._globalDeps[regStr] = [dep];
                 }
 
-                var _w = new Watcher(currentModel, function () {
-                    _dep.depend();
+                var w = new Watcher(currentModel, function () {
+                    dep.depend();
                     return NaN;
                 }, function (newValue, oldValue, attrs) {
                     callback(i, newValue, oldValue, _.extend({ index: i }, attrs));
                 }, options);
                 watchers.push(function unwatchFn() {
                     if (root._globalDeps) {
-                        remove(root._globalDeps[regStr], _dep);
-
+                        remove(root._globalDeps[regStr], dep);
                         if (root._globalDeps[regStr].length === 0) {
                             delete root._globalDeps[regStr];
-                            _w.teardown();
-                        }
-                    }
-                });
-                return;
-            }
-            if (/\*\*$|\*$/.test(exp)) {
-                throw new Error('not support');
-            }
-            //其他含有*的情况，如*.a,*.*.a,a.*.a
-            if (/\*/.test(exp)) {
-                var _currentModel = model;
-                //先获取到能获取到的对象
-                var _paths = exp.split(".");
-                for (var _i = 0, len = _paths.length; _i < len; _i++) {
-                    if (_paths[_i] === "*") {
-                        break;
-                    }
-                    _currentModel = model[_paths[_i]];
-                }
-                exp = exp.substr(exp.indexOf("*"));
-                //补全路径
-                var _parent = _currentModel.__ob__.parent,
-                    _root = _currentModel.__ob__;
-                while (_parent) {
-                    exp = '*.' + exp;
-                    _root = _parent;
-                    _parent = _parent.parent;
-                }
-                var _regStr = routeToRegExp(exp);
-                var _dep2 = new Dep();
-                _root._globalDeps || (_root._globalDeps = {});
-                if (_.isArray(_root._globalDeps[_regStr])) {
-                    _root._globalDeps[_regStr].push(_dep2);
-                } else {
-                    _root._globalDeps[_regStr] = [_dep2];
-                }
-
-                var _w2 = new Watcher(_currentModel, function () {
-                    _dep2.depend();
-                    return NaN;
-                }, function (newValue, oldValue, attrs) {
-                    callback(i, newValue, oldValue, _.extend({ index: i }, attrs));
-                }, options);
-                watchers.push(function unwatchFn() {
-                    if (_root._globalDeps) {
-                        remove(_root._globalDeps[_regStr], _dep2);
-
-                        if (_root._globalDeps[_regStr].length === 0) {
-                            delete _root._globalDeps[_regStr];
-                            _w2.teardown();
+                            w.teardown();
                         }
                     }
                 });
