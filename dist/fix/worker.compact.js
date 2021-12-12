@@ -88,7 +88,7 @@
                     name: name,
                     eventType: "create",
                     options: options,
-                    watches: BI.map(this.watch, function (key) {
+                    watches: BI.map(this.$watch || this.watch, function (key) {
                         return key;
                     })
                 });
