@@ -99,22 +99,12 @@
         }
     }
 
-    // _.each(["populate", "addItems", "prependItems"], function (name) {
-    //     var old = BI.Loader.prototype[name];
-    //     BI.Loader.prototype[name] = function () {
-    //         BI.Widget.pushContext(this);
-    //         try {
-    //             var result = old.apply(this, arguments);
-    //         } catch (e) {
-    //             console.error(e);
-    //         }
-    //         BI.Widget.popContext();
-    //         return result;
-    //     };
-    // });
-
     function createStore () {
         var needPop = false;
+        var workerMode = BI.Providers.getProvider("bi.provider.system").getWorkerMode();
+        if (workerMode && this._worker) {
+            return;
+        }
         if (this._store) {
             var store = findStore(this.options.context || this._parent || this.options.element || this._context);
             if (store) {
