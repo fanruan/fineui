@@ -1,5 +1,5 @@
 !(function () {
-    BI.initWorker = function () {
+    BI.useInWorker = function () {
         function createWatcher (model, keyOrFn, cb, options) {
             options = options || {};
             return Fix.watch(model, keyOrFn, cb, BI.extend(options, {
