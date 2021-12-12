@@ -326,7 +326,9 @@
         _initElement: function () {
             var self = this;
             this.__isMounting = true;
-            var render = BI.isFunction(this.options.render) ? this.options.render : this.render;
+            // 当开启worker模式时，可以通过$render来实现另一种效果
+            var workerMode = BI.Providers.getProvider("bi.provider.system").getWorkerMode();
+            var render = BI.isFunction(this.options.render) ? this.options.render : (workerMode ? (this.$render || this.render) : this.render);
             var els = render && render.call(this);
             els = BI.Plugin.getRender(this.options.type, els);
             if (BI.isPlainObject(els)) {

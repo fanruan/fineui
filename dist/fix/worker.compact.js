@@ -8,6 +8,10 @@
         if (init) {
             return init;
         }
+        // 开启Worker模式
+        BI.config("bi.provider.system", function (provider) {
+            provider.setWorkerMode(true);
+        });
         var _init = BI.Widget.prototype._init;
         BI.Widget.prototype._init = function () {
             this.$destroyWorker = createWorker.call(this);
@@ -32,7 +36,7 @@
             }
         };
         BI.Widget.prototype._initRender = function () {
-            if (this._worker) {
+            if (WORKER && this._worker) {
                 this.__asking = true;
                 this.__async = true;
             } else {
@@ -52,7 +56,11 @@
         init = postMessage;
         return postMessage;
     };
+
     BI.useWorker = function (wk) {
+        if (!_global.Worker || !_global.Proxy) {
+            return;
+        }
         var postMessage = enableWorker();
         WORKER = wk;
         if (WORKER) {
