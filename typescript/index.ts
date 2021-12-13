@@ -44,8 +44,8 @@ import { _inject } from "./core/inject";
 import { Layout } from "./core/wrapper/layout";
 import { AbsoluteLayout } from "./core/wrapper/layout/layout.absolute";
 import { HTapeLayout, VTapeLayout } from "./core/wrapper/layout/layout.tape";
-import {HorizontalFillLayout} from "./core/wrapper/layout/fill/fill.horizontal";
-import {VerticalFillLayout} from "./core/wrapper/layout/fill/fill.vertical";
+import { HorizontalFillLayout } from "./core/wrapper/layout/fill/fill.horizontal";
+import { VerticalFillLayout } from "./core/wrapper/layout/fill/fill.vertical";
 import { VerticalLayout } from "./core/wrapper/layout/layout.vertical";
 import { DefaultLayout } from "./core/wrapper/layout/layout.default";
 import { DownListCombo } from "./widget/downlist/combo.downlist";
@@ -179,6 +179,7 @@ import { TreeValueChooserPane } from './component/treevaluechooser/pane.treevalu
 import { TdLayout } from './core/wrapper/layout/layout.td';
 import { MultiLayerSelectLevelTree } from './widget/multilayerselecttree/multilayerselecttree.leveltree';
 import { SelectTreeExpander } from './widget/selecttree/selecttree.expander';
+import { DownListGroupItem } from "./widget/downlist/item.downlistgroup";
 
 
 export interface BI extends _func, _i18n, _base, _inject, _var, _web, _utils {
@@ -365,6 +366,7 @@ export interface BI extends _func, _i18n, _base, _inject, _var, _web, _utils {
     TdLayout: typeof TdLayout;
     MultiLayerSelectLevelTree: typeof MultiLayerSelectLevelTree;
     SelectTreeExpander: typeof SelectTreeExpander;
+    DownListGroupItem: typeof DownListGroupItem;
 }
 
 export default {
@@ -551,4 +553,5 @@ export {
     MultiLayerSelectLevelTree,
     SelectTreeExpander,
     DirectionPager,
+    DownListGroupItem,
 };
