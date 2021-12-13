@@ -1,6 +1,10 @@
 !(function () {
-    BI.initWorker = function () {
+    BI.useInWorker = function () {
         function createWatcher (model, keyOrFn, cb, options) {
+            if (BI.isPlainObject(cb)) {
+                options = cb;
+                cb = cb.handler;
+            }
             options = options || {};
             return Fix.watch(model, keyOrFn, cb, BI.extend(options, {
                 store: model
