@@ -129,7 +129,7 @@ BI.MultiSelectInsertNoBarList = BI.inherit(BI.Single, {
                     var last = BI.last(keywords);
                     keywords = BI.initial(keywords || []);
                     if (keywords.length > 0) {
-                        self._joinKeywords(keywords.slice(0, 2000), function () {
+                        self._joinKeywords(keywords.slice(0, last === BI.BlankSplitChar ? 1999 : 2000), function () {
                             if (BI.endWith(last, BI.BlankSplitChar)) {
                                 self.adapter.setValue(self.storeValue);
                                 assertShowValue();
