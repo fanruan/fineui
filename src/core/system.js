@@ -8,6 +8,7 @@
     var system = {
         dependencies: {},
         responsiveMode: false,
+        workerMode: false,
         size: { // 尺寸
             TOOL_BAR_HEIGHT: 24,
             LIST_ITEM_HEIGHT: 24,
@@ -26,6 +27,10 @@
 
         this.setResponsiveMode = function (mode) {
             system.responsiveMode = !!mode;
+        };
+
+        this.setWorkerMode = function (mode) {
+            system.workerMode = !!mode;
         };
 
         this.addDependency = function (moduleId, minVersion, maxVersion) {
@@ -48,6 +53,10 @@
 
                 getResponsiveMode: function () {
                     return system.responsiveMode;
+                },
+
+                getWorkerMode: function () {
+                    return system.workerMode;
                 },
 
                 getDependencies: function () {

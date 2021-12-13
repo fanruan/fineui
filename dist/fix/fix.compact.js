@@ -99,23 +99,13 @@
         }
     }
 
-    // _.each(["populate", "addItems", "prependItems"], function (name) {
-    //     var old = BI.Loader.prototype[name];
-    //     BI.Loader.prototype[name] = function () {
-    //         BI.Widget.pushContext(this);
-    //         try {
-    //             var result = old.apply(this, arguments);
-    //         } catch (e) {
-    //             console.error(e);
-    //         }
-    //         BI.Widget.popContext();
-    //         return result;
-    //     };
-    // });
-
     function createStore () {
         var needPop = false;
-        if (_global.Fix && this._store) {
+        var workerMode = BI.Providers.getProvider("bi.provider.system").getWorkerMode();
+        if (workerMode && this._worker) {
+            return;
+        }
+        if (this._store) {
             var store = findStore(this.options.context || this._parent || this.options.element || this._context);
             if (store) {
                 pushTarget(store);
@@ -151,7 +141,11 @@
     var __initWatch = BI.Widget.prototype.__initWatch;
     BI.Widget.prototype.__initWatch = function () {
         __initWatch.apply(this, arguments);
-        if (_global.Fix && this._store) {
+        var workerMode = BI.Providers.getProvider("bi.provider.system").getWorkerMode();
+        if (workerMode && this._worker) {
+            return;
+        }
+        if (this._store) {
             initWatch(this, this.watch);
         }
     };

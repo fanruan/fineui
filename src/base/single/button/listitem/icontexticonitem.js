@@ -44,7 +44,7 @@ BI.IconTextIconItem = BI.inherit(BI.BasicButton, {
         var icon1 = BI.createWidget({
             type: "bi.icon_label",
             cls: o.iconCls1,
-            width: o.leftIconWrapperWidth,
+            width: o.leftIconWrapperWidth || o.height,
             height: o.height,
             iconWidth: o.iconWidth,
             iconHeight: o.iconHeight
@@ -60,7 +60,7 @@ BI.IconTextIconItem = BI.inherit(BI.BasicButton, {
                 el: {
                     type: "bi.icon_label",
                     cls: o.iconCls2,
-                    width: o.rightIconWrapperWidth,
+                    width: o.rightIconWrapperWidth || o.height,
                     height: o.height,
                     iconWidth: o.iconWidth,
                     iconHeight: o.iconHeight

@@ -2,18 +2,6 @@
 @import "../lib/icon";
 @import "../lib/background";
 
-.bi-farbtastic .wheel {
-  .imagePath(@background-farbtastic-wheel);
-}
-
-.bi-farbtastic .overlay {
-  .imagePath(@background-farbtastic-overlay);
-}
-
-.bi-farbtastic .marker {
-  .imagePath(@background-farbtastic-marker);
-}
-
 .bi-display-tree {
   & .ztree li span.button.switch.center_open {
     .image2xPath(@icon-tree-vertical-line-3);
@@ -40,31 +28,11 @@
   }
 }
 
-// 此处不用2倍图，改用css画虚线
-// z-tree的line是一整块子节点区域，所以不能使用background-size: contain
-// 使用1倍图太模糊，这边就使用css自己画了，calc属性支持IE9, IE8反正会走hack, 不影响
-.ztree li ul.line {
-  position: relative;
-  &:before {
-    position: absolute;
-    content: '';
-    border-left: 1px dashed #D0D4DA;
-    height: calc(~"100% - 3px");
-    left: 11px;
-    margin-top: 1px;
-  }
-}
-
 .ztree.hack li ul.line {
   .imagePath(@icon-tree-vertical-line-1, 0, 1px, repeat-y);
 }
 
 .bi-theme-dark {
-  .ztree li ul.line {
-    &:before {
-      border-left: 1px dashed #606479;
-    }
-  }
   .ztree.hack li ul.line {
     .imagePath(@icon-tree-vertical-line-1-theme-dark, 0, 1px, repeat-y);
   }

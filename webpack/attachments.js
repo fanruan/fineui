@@ -60,7 +60,7 @@ const basicAttachmentMap = {
         "src/core/func/**/*.js",
         "src/core/2.base.js",
         "src/core/3.ob.js",
-        "src/core/6.inject.js",
+        "src/core/5.inject.js",
         "src/core/utils/*.js",
         "i18n/i18n.cn.js",
         "_mobile/date.i18n.cn.js",
