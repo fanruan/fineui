@@ -57,7 +57,161 @@
     return obj;
   }
 
-  var EMPTY_OBJ = Object.freeze({});
+  function _slicedToArray(arr, i) {
+    return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest();
+  }
+
+  function _toConsumableArray(arr) {
+    return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread();
+  }
+
+  function _arrayWithoutHoles(arr) {
+    if (Array.isArray(arr)) return _arrayLikeToArray(arr);
+  }
+
+  function _arrayWithHoles(arr) {
+    if (Array.isArray(arr)) return arr;
+  }
+
+  function _iterableToArray(iter) {
+    if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter);
+  }
+
+  function _iterableToArrayLimit(arr, i) {
+    var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"];
+
+    if (_i == null) return;
+    var _arr = [];
+    var _n = true;
+    var _d = false;
+
+    var _s, _e;
+
+    try {
+      for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) {
+        _arr.push(_s.value);
+
+        if (i && _arr.length === i) break;
+      }
+    } catch (err) {
+      _d = true;
+      _e = err;
+    } finally {
+      try {
+        if (!_n && _i["return"] != null) _i["return"]();
+      } finally {
+        if (_d) throw _e;
+      }
+    }
+
+    return _arr;
+  }
+
+  function _unsupportedIterableToArray(o, minLen) {
+    if (!o) return;
+    if (typeof o === "string") return _arrayLikeToArray(o, minLen);
+    var n = Object.prototype.toString.call(o).slice(8, -1);
+    if (n === "Object" && o.constructor) n = o.constructor.name;
+    if (n === "Map" || n === "Set") return Array.from(o);
+    if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen);
+  }
+
+  function _arrayLikeToArray(arr, len) {
+    if (len == null || len > arr.length) len = arr.length;
+
+    for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i];
+
+    return arr2;
+  }
+
+  function _nonIterableSpread() {
+    throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+  }
+
+  function _nonIterableRest() {
+    throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+  }
+
+  function _createForOfIteratorHelper(o, allowArrayLike) {
+    var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];
+
+    if (!it) {
+      if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {
+        if (it) o = it;
+        var i = 0;
+
+        var F = function () {};
+
+        return {
+          s: F,
+          n: function () {
+            if (i >= o.length) return {
+              done: true
+            };
+            return {
+              done: false,
+              value: o[i++]
+            };
+          },
+          e: function (e) {
+            throw e;
+          },
+          f: F
+        };
+      }
+
+      throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+    }
+
+    var normalCompletion = true,
+        didErr = false,
+        err;
+    return {
+      s: function () {
+        it = it.call(o);
+      },
+      n: function () {
+        var step = it.next();
+        normalCompletion = step.done;
+        return step;
+      },
+      e: function (e) {
+        didErr = true;
+        err = e;
+      },
+      f: function () {
+        try {
+          if (!normalCompletion && it.return != null) it.return();
+        } finally {
+          if (didErr) throw err;
+        }
+      }
+    };
+  }
+
+  /**
+   * Make a map and return a function for checking if a key
+   * is in that map.
+   * IMPORTANT: all calls of this function must be prefixed with
+   * \/\*#\_\_PURE\_\_\*\/
+   * So that rollup can tree-shake them if necessary.
+   */
+  function makeMap(str, expectsLowerCase) {
+    var map = Object.create(null);
+    var list = str.split(',');
+
+    for (var i = 0; i < list.length; i++) {
+      map[list[i]] = true;
+    }
+
+    return expectsLowerCase ? function (val) {
+      return !!map[val.toLowerCase()];
+    } : function (val) {
+      return !!map[val];
+    };
+  }
+
+  Object.freeze({});
   Object.freeze([]);
   var extend = Object.assign;
   var hasOwnProperty = Object.prototype.hasOwnProperty;
@@ -69,23 +223,23 @@
   var isArray = Array.isArray;
 
   var isMap$1 = function isMap(val) {
-    return toTypeString$1(val) === "[object Map]";
+    return toTypeString$1(val) === '[object Map]';
   };
 
   var isFunction = function isFunction(val) {
-    return typeof val === "function";
+    return typeof val === 'function';
   };
 
   var isString = function isString(val) {
-    return typeof val === "string";
+    return typeof val === 'string';
   };
 
   var isSymbol = function isSymbol(val) {
-    return _typeof(val) === "symbol";
+    return _typeof(val) === 'symbol';
   };
 
   var isObject = function isObject(val) {
-    return val !== null && _typeof(val) === "object";
+    return val !== null && _typeof(val) === 'object';
   };
 
   var objectToString$1 = Object.prototype.toString;
@@ -95,13 +249,12 @@
   };
 
   var toRawType = function toRawType(value) {
-    return (// extract "RawType" from strings like "[object RawType]"
-      toTypeString$1(value).slice(8, -1)
-    );
+    // extract "RawType" from strings like "[object RawType]"
+    return toTypeString$1(value).slice(8, -1);
   };
 
   var isIntegerKey = function isIntegerKey(key) {
-    return isString(key) && key !== "NaN" && key[0] !== "-" && "".concat(parseInt(key, 10)) === key;
+    return isString(key) && key !== 'NaN' && key[0] !== '-' && '' + parseInt(key, 10) === key;
   };
 
   var cacheStringFunction = function cacheStringFunction(fn) {
@@ -121,82 +274,150 @@
   }); // compare whether a value has changed, accounting for NaN.
 
   var hasChanged$1 = function hasChanged(value, oldValue) {
-    return value !== oldValue && (value === value || oldValue === oldValue);
+    return !Object.is(value, oldValue);
   };
 
-  var targetMap = new WeakMap();
+  var activeEffectScope;
+
+  function recordEffectScope(effect, scope) {
+    scope = scope || activeEffectScope;
+
+    if (scope && scope.active) {
+      scope.effects.push(effect);
+    }
+  }
+
+  var createDep = function createDep(effects) {
+    var dep = new Set(effects);
+    dep.w = 0;
+    dep.n = 0;
+    return dep;
+  };
+
+  var wasTracked = function wasTracked(dep) {
+    return (dep.w & trackOpBit) > 0;
+  };
+
+  var newTracked = function newTracked(dep) {
+    return (dep.n & trackOpBit) > 0;
+  };
+
+  var initDepMarkers = function initDepMarkers(_ref) {
+    var deps = _ref.deps;
+
+    if (deps.length) {
+      for (var i = 0; i < deps.length; i++) {
+        deps[i].w |= trackOpBit; // set was tracked
+      }
+    }
+  };
+
+  var finalizeDepMarkers = function finalizeDepMarkers(effect) {
+    var deps = effect.deps;
+
+    if (deps.length) {
+      var ptr = 0;
+
+      for (var i = 0; i < deps.length; i++) {
+        var dep = deps[i];
+
+        if (wasTracked(dep) && !newTracked(dep)) {
+          dep.delete(effect);
+        } else {
+          deps[ptr++] = dep;
+        } // clear bits
+
+
+        dep.w &= ~trackOpBit;
+        dep.n &= ~trackOpBit;
+      }
+
+      deps.length = ptr;
+    }
+  };
+
+  var targetMap = new WeakMap(); // The number of effects currently being tracked recursively.
+
+  var effectTrackDepth = 0;
+  var trackOpBit = 1;
+  /**
+   * The bitwise track markers support at most 30 levels of recursion.
+   * This value is chosen to enable modern JS engines to use a SMI on all platforms.
+   * When recursion depth is greater, fall back to using a full cleanup.
+   */
+
+  var maxMarkerBits = 30;
   var effectStack = [];
   var activeEffect;
-  var ITERATE_KEY = Symbol("iterate");
-  var MAP_KEY_ITERATE_KEY = Symbol("Map key iterate");
+  var ITERATE_KEY = Symbol('iterate');
+  var MAP_KEY_ITERATE_KEY = Symbol('Map key iterate');
 
-  function isEffect(fn) {
-    return fn && fn._isEffect === true;
-  }
+  var ReactiveEffect = /*#__PURE__*/function () {
+    function ReactiveEffect(fn) {
+      var scheduler = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+      var scope = arguments.length > 2 ? arguments[2] : undefined;
 
-  function effect(fn) {
-    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : EMPTY_OBJ;
+      _classCallCheck(this, ReactiveEffect);
 
-    if (isEffect(fn)) {
-      fn = fn.raw;
+      this.fn = fn;
+      this.scheduler = scheduler;
+      this.active = true;
+      this.deps = [];
+      recordEffectScope(this, scope);
     }
 
-    var effect = createReactiveEffect(fn, options);
+    _createClass(ReactiveEffect, [{
+      key: "run",
+      value: function run() {
+        if (!this.active) {
+          return this.fn();
+        }
 
-    if (!options.lazy) {
-      effect();
-    }
+        if (!effectStack.includes(this)) {
+          try {
+            effectStack.push(activeEffect = this);
+            enableTracking();
+            trackOpBit = 1 << ++effectTrackDepth;
 
-    return effect;
-  }
+            if (effectTrackDepth <= maxMarkerBits) {
+              initDepMarkers(this);
+            } else {
+              cleanupEffect(this);
+            }
 
-  function stop(effect) {
-    if (effect.active) {
-      cleanup(effect);
+            return this.fn();
+          } finally {
+            if (effectTrackDepth <= maxMarkerBits) {
+              finalizeDepMarkers(this);
+            }
 
-      if (effect.options.onStop) {
-        effect.options.onStop();
-      }
-
-      effect.active = false;
-    }
-  }
-
-  var uid$1 = 0;
-
-  function createReactiveEffect(fn, options) {
-    var effect = function reactiveEffect() {
-      if (!effect.active) {
-        return options.scheduler ? undefined : fn();
-      }
-
-      if (!effectStack.includes(effect)) {
-        cleanup(effect);
-
-        try {
-          enableTracking();
-          effectStack.push(effect);
-          activeEffect = effect;
-          return fn();
-        } finally {
-          effectStack.pop();
-          resetTracking();
-          activeEffect = effectStack[effectStack.length - 1];
+            trackOpBit = 1 << --effectTrackDepth;
+            resetTracking();
+            effectStack.pop();
+            var n = effectStack.length;
+            activeEffect = n > 0 ? effectStack[n - 1] : undefined;
+          }
         }
       }
-    };
+    }, {
+      key: "stop",
+      value: function stop() {
+        if (this.active) {
+          cleanupEffect(this);
 
-    effect.id = uid$1++;
-    effect.allowRecurse = !!options.allowRecurse;
-    effect._isEffect = true;
-    effect.active = true;
-    effect.raw = fn;
-    effect.deps = [];
-    effect.options = options;
-    return effect;
-  }
+          if (this.onStop) {
+            this.onStop();
+          }
 
-  function cleanup(effect) {
+          this.active = false;
+        }
+      }
+    }]);
+
+    return ReactiveEffect;
+  }();
+
+  function cleanupEffect(effect) {
     var deps = effect.deps;
 
     if (deps.length) {
@@ -206,6 +427,32 @@
 
       deps.length = 0;
     }
+  }
+
+  function effect(fn, options) {
+    if (fn.effect) {
+      fn = fn.effect.fn;
+    }
+
+    var _effect = new ReactiveEffect(fn);
+
+    if (options) {
+      extend(_effect, options);
+      if (options.scope) recordEffectScope(_effect, options.scope);
+    }
+
+    if (!options || !options.lazy) {
+      _effect.run();
+    }
+
+    var runner = _effect.run.bind(_effect);
+
+    runner.effect = _effect;
+    return runner;
+  }
+
+  function stop(runner) {
+    runner.effect.stop();
   }
 
   var shouldTrack = true;
@@ -227,7 +474,7 @@
   }
 
   function track(target, type, key) {
-    if (!shouldTrack || activeEffect === undefined) {
+    if (!isTracking()) {
       return;
     }
 
@@ -240,20 +487,44 @@
     var dep = depsMap.get(key);
 
     if (!dep) {
-      depsMap.set(key, dep = new Set());
+      depsMap.set(key, dep = createDep());
     }
 
-    if (!dep.has(activeEffect)) {
+    var eventInfo = {
+      effect: activeEffect,
+      target: target,
+      type: type,
+      key: key
+    };
+    trackEffects(dep, eventInfo);
+  }
+
+  function isTracking() {
+    return shouldTrack && activeEffect !== undefined;
+  }
+
+  function trackEffects(dep, debuggerEventExtraInfo) {
+    var shouldTrack = false;
+
+    if (effectTrackDepth <= maxMarkerBits) {
+      if (!newTracked(dep)) {
+        dep.n |= trackOpBit; // set newly tracked
+
+        shouldTrack = !wasTracked(dep);
+      }
+    } else {
+      // Full cleanup mode.
+      shouldTrack = !dep.has(activeEffect);
+    }
+
+    if (shouldTrack) {
       dep.add(activeEffect);
       activeEffect.deps.push(dep);
 
-      if (activeEffect.options.onTrack) {
-        activeEffect.options.onTrack({
-          effect: activeEffect,
-          target: target,
-          type: type,
-          key: key
-        });
+      if (activeEffect.onTrack) {
+        activeEffect.onTrack(Object.assign({
+          effect: activeEffect
+        }, debuggerEventExtraInfo));
       }
     }
   }
@@ -266,34 +537,24 @@
       return;
     }
 
-    var effects = new Set();
-
-    var add = function add(effectsToAdd) {
-      if (effectsToAdd) {
-        effectsToAdd.forEach(function (effect) {
-          if (effect !== activeEffect || effect.allowRecurse) {
-            effects.add(effect);
-          }
-        });
-      }
-    };
+    var deps = [];
 
     if (type === "clear"
     /* CLEAR */
     ) {
         // collection being cleared
         // trigger all effects for target
-        depsMap.forEach(add);
-      } else if (key === "length" && isArray(target)) {
+        deps = _toConsumableArray(depsMap.values());
+      } else if (key === 'length' && isArray(target)) {
       depsMap.forEach(function (dep, key) {
-        if (key === "length" || key >= newValue) {
-          add(dep);
+        if (key === 'length' || key >= newValue) {
+          deps.push(dep);
         }
       });
     } else {
       // schedule runs for SET | ADD | DELETE
       if (key !== void 0) {
-        add(depsMap.get(key));
+        deps.push(depsMap.get(key));
       } // also run for iteration key on ADD | DELETE | Map.SET
 
 
@@ -302,14 +563,14 @@
         /* ADD */
         :
           if (!isArray(target)) {
-            add(depsMap.get(ITERATE_KEY));
+            deps.push(depsMap.get(ITERATE_KEY));
 
             if (isMap$1(target)) {
-              add(depsMap.get(MAP_KEY_ITERATE_KEY));
+              deps.push(depsMap.get(MAP_KEY_ITERATE_KEY));
             }
           } else if (isIntegerKey(key)) {
             // new index added to array -> length changes
-            add(depsMap.get("length"));
+            deps.push(depsMap.get('length'));
           }
 
           break;
@@ -318,10 +579,10 @@
         /* DELETE */
         :
           if (!isArray(target)) {
-            add(depsMap.get(ITERATE_KEY));
+            deps.push(depsMap.get(ITERATE_KEY));
 
             if (isMap$1(target)) {
-              add(depsMap.get(MAP_KEY_ITERATE_KEY));
+              deps.push(depsMap.get(MAP_KEY_ITERATE_KEY));
             }
           }
 
@@ -331,86 +592,134 @@
         /* SET */
         :
           if (isMap$1(target)) {
-            add(depsMap.get(ITERATE_KEY));
+            deps.push(depsMap.get(ITERATE_KEY));
           }
 
           break;
       }
     }
 
-    var run = function run(effect) {
-      if (effect.options.onTrigger) {
-        effect.options.onTrigger({
-          effect: effect,
-          target: target,
-          key: key,
-          type: type,
-          newValue: newValue,
-          oldValue: oldValue,
-          oldTarget: oldTarget
-        });
-      }
-
-      if (effect.options.scheduler) {
-        effect.options.scheduler(effect);
-      } else {
-        effect();
-      }
+    var eventInfo = {
+      target: target,
+      type: type,
+      key: key,
+      newValue: newValue,
+      oldValue: oldValue,
+      oldTarget: oldTarget
     };
 
-    effects.forEach(run);
+    if (deps.length === 1) {
+      if (deps[0]) {
+        {
+          triggerEffects(deps[0], eventInfo);
+        }
+      }
+    } else {
+      var effects = [];
+
+      var _iterator = _createForOfIteratorHelper(deps),
+          _step;
+
+      try {
+        for (_iterator.s(); !(_step = _iterator.n()).done;) {
+          var dep = _step.value;
+
+          if (dep) {
+            effects.push.apply(effects, _toConsumableArray(dep));
+          }
+        }
+      } catch (err) {
+        _iterator.e(err);
+      } finally {
+        _iterator.f();
+      }
+
+      {
+        triggerEffects(createDep(effects), eventInfo);
+      }
+    }
   }
 
+  function triggerEffects(dep, debuggerEventExtraInfo) {
+    // spread into array for stabilization
+    var _iterator2 = _createForOfIteratorHelper(isArray(dep) ? dep : _toConsumableArray(dep)),
+        _step2;
+
+    try {
+      for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
+        var _effect2 = _step2.value;
+
+        if (_effect2 !== activeEffect || _effect2.allowRecurse) {
+          if (_effect2.onTrigger) {
+            _effect2.onTrigger(extend({
+              effect: _effect2
+            }, debuggerEventExtraInfo));
+          }
+
+          if (_effect2.scheduler) {
+            _effect2.scheduler();
+          } else {
+            _effect2.run();
+          }
+        }
+      }
+    } catch (err) {
+      _iterator2.e(err);
+    } finally {
+      _iterator2.f();
+    }
+  }
+
+  var isNonTrackableKeys = /*#__PURE__*/makeMap("__proto__,__v_isRef,__isVue");
   var builtInSymbols = new Set(Object.getOwnPropertyNames(Symbol).map(function (key) {
     return Symbol[key];
   }).filter(isSymbol));
-  var get = /* #__PURE__*/createGetter();
-  var shallowGet = /* #__PURE__*/createGetter(false, true);
-  var readonlyGet = /* #__PURE__*/createGetter(true);
-  var shallowReadonlyGet = /* #__PURE__*/createGetter(true, true);
-  var arrayInstrumentations = {};
-  ["includes", "indexOf", "lastIndexOf"].forEach(function (key) {
-    var method = Array.prototype[key];
+  var get = /*#__PURE__*/createGetter();
+  var readonlyGet = /*#__PURE__*/createGetter(true);
+  var arrayInstrumentations = /*#__PURE__*/createArrayInstrumentations();
 
-    arrayInstrumentations[key] = function () {
-      var arr = toRaw(this);
+  function createArrayInstrumentations() {
+    var instrumentations = {};
+    ['includes', 'indexOf', 'lastIndexOf'].forEach(function (key) {
+      instrumentations[key] = function () {
+        var arr = toRaw(this);
 
-      for (var i = 0, l = this.length; i < l; i++) {
-        track(arr, "get"
-        /* GET */
-        , "".concat(i));
-      } // we run the method using the original args first (which may be reactive)
+        for (var i = 0, l = this.length; i < l; i++) {
+          track(arr, "get"
+          /* GET */
+          , i + '');
+        } // we run the method using the original args first (which may be reactive)
 
 
-      for (var _len = arguments.length, args = new Array(_len), _key2 = 0; _key2 < _len; _key2++) {
-        args[_key2] = arguments[_key2];
-      }
+        for (var _len2 = arguments.length, args = new Array(_len2), _key3 = 0; _key3 < _len2; _key3++) {
+          args[_key3] = arguments[_key3];
+        }
 
-      var res = method.apply(arr, args);
+        var res = arr[key].apply(arr, args);
 
-      if (res === -1 || res === false) {
-        // if that didn't work, run it again using raw values.
-        return method.apply(arr, args.map(toRaw));
-      } else {
+        if (res === -1 || res === false) {
+          // if that didn't work, run it again using raw values.
+          return arr[key].apply(arr, _toConsumableArray(args.map(toRaw)));
+        } else {
+          return res;
+        }
+      };
+    });
+    ['push', 'pop', 'shift', 'unshift', 'splice'].forEach(function (key) {
+      instrumentations[key] = function () {
+        pauseTracking();
+
+        for (var _len3 = arguments.length, args = new Array(_len3), _key4 = 0; _key4 < _len3; _key4++) {
+          args[_key4] = arguments[_key4];
+        }
+
+        var res = toRaw(this)[key].apply(this, args);
+        resetTracking();
         return res;
-      }
-    };
-  });
-  ["push", "pop", "shift", "unshift", "splice"].forEach(function (key) {
-    var method = Array.prototype[key];
-
-    arrayInstrumentations[key] = function () {
-      pauseTracking();
-
-      for (var _len2 = arguments.length, args = new Array(_len2), _key3 = 0; _key3 < _len2; _key3++) {
-        args[_key3] = arguments[_key3];
-      }
-
-      var res = method.apply(this, args);
-      resetTracking();
-      return res;
-    };
-  });
+      };
+    });
+    return instrumentations;
+  }
 
   function createGetter() {
     var isReadonly = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
@@ -426,19 +735,19 @@
           return isReadonly;
         } else if (key === "__v_raw"
       /* RAW */
-      && receiver === (isReadonly ? readonlyMap : reactiveMap).get(target)) {
+      && receiver === (isReadonly ? shallow ? shallowReadonlyMap : readonlyMap : shallow ? shallowReactiveMap : reactiveMap).get(target)) {
         return target;
       }
 
       var targetIsArray = isArray(target);
 
-      if (targetIsArray && hasOwn(arrayInstrumentations, key)) {
+      if (!isReadonly && targetIsArray && hasOwn(arrayInstrumentations, key)) {
         return Reflect.get(arrayInstrumentations, key, receiver);
       }
 
       var res = Reflect.get(target, key, receiver);
 
-      if (isSymbol(key) ? builtInSymbols.has(key) : key === "__proto__" || key === "__v_isRef") {
+      if (isSymbol(key) ? builtInSymbols.has(key) : isNonTrackableKeys(key)) {
         return res;
       }
 
@@ -469,16 +778,16 @@
     };
   }
 
-  var set$1 = /* #__PURE__*/createSetter();
-  var shallowSet = /* #__PURE__*/createSetter(true);
+  var set$1 = /*#__PURE__*/createSetter();
 
   function createSetter() {
     var shallow = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
     return function set(target, key, value, receiver) {
       var oldValue = target[key];
 
-      if (!shallow) {
+      if (!shallow && !isReadonly(value)) {
         value = toRaw(value);
+        oldValue = toRaw(oldValue);
 
         if (!isArray(target) && isRef(oldValue) && !isRef(value)) {
           oldValue.value = value;
@@ -494,7 +803,7 @@
           trigger(target, "add"
           /* ADD */
           , key, value);
-        } else if (hasChanged$1(value, oldValue) || key === "length") {
+        } else if (hasChanged$1(value, oldValue)) {
           trigger(target, "set"
           /* SET */
           , key, value, oldValue);
@@ -534,7 +843,7 @@
   function ownKeys(target) {
     track(target, "iterate"
     /* ITERATE */
-    , isArray(target) ? "length" : ITERATE_KEY);
+    , isArray(target) ? 'length' : ITERATE_KEY);
     return Reflect.ownKeys(target);
   }
 
@@ -559,24 +868,6 @@
       }
       return true;
     }
-  };
-  extend({}, mutableHandlers, {
-    get: shallowGet,
-    set: shallowSet
-  }); // Props handlers are special in the sense that it should not unwrap top-level
-  // refs (in order to allow refs to be explicitly passed down), but should
-  // retain the reactivity of the normal readonly object.
-
-  extend({}, readonlyHandlers, {
-    get: shallowReadonlyGet
-  });
-
-  var toReactive = function toReactive(value) {
-    return isObject(value) ? reactive(value) : value;
-  };
-
-  var toReadonly = function toReadonly(value) {
-    return isObject(value) ? readonly(value) : value;
   };
 
   var toShallow = function toShallow(value) {
@@ -611,12 +902,16 @@
     var _getProto = getProto(rawTarget),
         has = _getProto.has;
 
-    var wrap = isReadonly ? toReadonly : isShallow ? toShallow : toReactive;
+    var wrap = isShallow ? toShallow : isReadonly ? toReadonly : toReactive;
 
     if (has.call(rawTarget, key)) {
       return wrap(target.get(key));
     } else if (has.call(rawTarget, rawKey)) {
       return wrap(target.get(rawKey));
+    } else if (target !== rawTarget) {
+      // #3602 readonly(reactive(Map))
+      // ensure that the nested reactive `Map` can do tracking for itself
+      target.get(key);
     }
   }
 
@@ -648,7 +943,7 @@
     !isReadonly && track(toRaw(target), "iterate"
     /* ITERATE */
     , ITERATE_KEY);
-    return Reflect.get(target, "size", target);
+    return Reflect.get(target, 'size', target);
   }
 
   function add(value) {
@@ -656,15 +951,15 @@
     var target = toRaw(this);
     var proto = getProto(target);
     var hadKey = proto.has.call(target, value);
-    var result = target.add(value);
 
     if (!hadKey) {
+      target.add(value);
       trigger(target, "add"
       /* ADD */
       , value, value);
     }
 
-    return result;
+    return this;
   }
 
   function set$1$1(key, value) {
@@ -685,19 +980,19 @@
     }
 
     var oldValue = get.call(target, key);
-    var result = target.set(key, value);
+    target.set(key, value);
 
     if (!hadKey) {
       trigger(target, "add"
       /* ADD */
       , key, value);
-    } else if (hasChanged$1(value, oldValue) || key === "length") {
+    } else if (hasChanged$1(value, oldValue)) {
       trigger(target, "set"
       /* SET */
       , key, value, oldValue);
     }
 
-    return result;
+    return this;
   }
 
   function deleteEntry(key) {
@@ -752,16 +1047,15 @@
       /* RAW */
       ];
       var rawTarget = toRaw(target);
-      var wrap = isReadonly ? toReadonly : isShallow ? toShallow : toReactive;
+      var wrap = isShallow ? toShallow : isReadonly ? toReadonly : toReactive;
       !isReadonly && track(rawTarget, "iterate"
       /* ITERATE */
       , ITERATE_KEY);
       return target.forEach(function (value, key) {
-        return (// important: make sure the callback is
-          // 1. invoked with the reactive map as `this` and 3rd arg
-          // 2. the value received should be a corresponding reactive/readonly.
-          callback.call(thisArg, wrap(value), wrap(key), observed)
-        );
+        // important: make sure the callback is
+        // 1. invoked with the reactive map as `this` and 3rd arg
+        // 2. the value received should be a corresponding reactive/readonly.
+        return callback.call(thisArg, wrap(value), wrap(key), observed);
       });
     };
   }
@@ -773,10 +1067,10 @@
       ];
       var rawTarget = toRaw(target);
       var targetIsMap = isMap$1(rawTarget);
-      var isPair = method === "entries" || method === Symbol.iterator && targetIsMap;
-      var isKeyOnly = method === "keys" && targetIsMap;
+      var isPair = method === 'entries' || method === Symbol.iterator && targetIsMap;
+      var isKeyOnly = method === 'keys' && targetIsMap;
       var innerIterator = target[method].apply(target, arguments);
-      var wrap = isReadonly ? toReadonly : isShallow ? toShallow : toReactive;
+      var wrap = isShallow ? toShallow : isReadonly ? toReadonly : toReactive;
       !isReadonly && track(rawTarget, "iterate"
       /* ITERATE */
       , isKeyOnly ? MAP_KEY_ITERATE_KEY : ITERATE_KEY); // return a wrapped iterator which returns observed versions of the
@@ -815,73 +1109,110 @@
     };
   }
 
-  var mutableInstrumentations = {
-    get: function get(key) {
-      return get$1(this, key);
-    },
+  function createInstrumentations() {
+    var mutableInstrumentations = {
+      get: function get(key) {
+        return get$1(this, key);
+      },
 
-    get size() {
-      return size(this);
-    },
+      get size() {
+        return size(this);
+      },
 
-    has: has$1$1,
-    add: add,
-    set: set$1$1,
-    delete: deleteEntry,
-    clear: clear,
-    forEach: createForEach(false, false)
-  };
-  var shallowInstrumentations = {
-    get: function get(key) {
-      return get$1(this, key, false, true);
-    },
+      has: has$1$1,
+      add: add,
+      set: set$1$1,
+      delete: deleteEntry,
+      clear: clear,
+      forEach: createForEach(false, false)
+    };
+    var shallowInstrumentations = {
+      get: function get(key) {
+        return get$1(this, key, false, true);
+      },
 
-    get size() {
-      return size(this);
-    },
+      get size() {
+        return size(this);
+      },
 
-    has: has$1$1,
-    add: add,
-    set: set$1$1,
-    delete: deleteEntry,
-    clear: clear,
-    forEach: createForEach(false, true)
-  };
-  var readonlyInstrumentations = {
-    get: function get(key) {
-      return get$1(this, key, true);
-    },
+      has: has$1$1,
+      add: add,
+      set: set$1$1,
+      delete: deleteEntry,
+      clear: clear,
+      forEach: createForEach(false, true)
+    };
+    var readonlyInstrumentations = {
+      get: function get(key) {
+        return get$1(this, key, true);
+      },
 
-    get size() {
-      return size(this, true);
-    },
+      get size() {
+        return size(this, true);
+      },
 
-    has: function has(key) {
-      return has$1$1.call(this, key, true);
-    },
-    add: createReadonlyMethod("add"
-    /* ADD */
-    ),
-    set: createReadonlyMethod("set"
-    /* SET */
-    ),
-    delete: createReadonlyMethod("delete"
-    /* DELETE */
-    ),
-    clear: createReadonlyMethod("clear"
-    /* CLEAR */
-    ),
-    forEach: createForEach(true, false)
-  };
-  var iteratorMethods = ["keys", "values", "entries", Symbol.iterator];
-  iteratorMethods.forEach(function (method) {
-    mutableInstrumentations[method] = createIterableMethod(method, false, false);
-    readonlyInstrumentations[method] = createIterableMethod(method, true, false);
-    shallowInstrumentations[method] = createIterableMethod(method, false, true);
-  });
+      has: function has(key) {
+        return has$1$1.call(this, key, true);
+      },
+      add: createReadonlyMethod("add"
+      /* ADD */
+      ),
+      set: createReadonlyMethod("set"
+      /* SET */
+      ),
+      delete: createReadonlyMethod("delete"
+      /* DELETE */
+      ),
+      clear: createReadonlyMethod("clear"
+      /* CLEAR */
+      ),
+      forEach: createForEach(true, false)
+    };
+    var shallowReadonlyInstrumentations = {
+      get: function get(key) {
+        return get$1(this, key, true, true);
+      },
+
+      get size() {
+        return size(this, true);
+      },
+
+      has: function has(key) {
+        return has$1$1.call(this, key, true);
+      },
+      add: createReadonlyMethod("add"
+      /* ADD */
+      ),
+      set: createReadonlyMethod("set"
+      /* SET */
+      ),
+      delete: createReadonlyMethod("delete"
+      /* DELETE */
+      ),
+      clear: createReadonlyMethod("clear"
+      /* CLEAR */
+      ),
+      forEach: createForEach(true, true)
+    };
+    var iteratorMethods = ['keys', 'values', 'entries', Symbol.iterator];
+    iteratorMethods.forEach(function (method) {
+      mutableInstrumentations[method] = createIterableMethod(method, false, false);
+      readonlyInstrumentations[method] = createIterableMethod(method, true, false);
+      shallowInstrumentations[method] = createIterableMethod(method, false, true);
+      shallowReadonlyInstrumentations[method] = createIterableMethod(method, true, true);
+    });
+    return [mutableInstrumentations, readonlyInstrumentations, shallowInstrumentations, shallowReadonlyInstrumentations];
+  }
+
+  var _createInstrumentatio = /* #__PURE__*/createInstrumentations(),
+      _createInstrumentatio2 = _slicedToArray(_createInstrumentatio, 4),
+      mutableInstrumentations = _createInstrumentatio2[0],
+      readonlyInstrumentations = _createInstrumentatio2[1],
+      shallowInstrumentations = _createInstrumentatio2[2],
+      shallowReadonlyInstrumentations = _createInstrumentatio2[3];
 
   function createInstrumentationGetter(isReadonly, shallow) {
-    var instrumentations = shallow ? shallowInstrumentations : isReadonly ? readonlyInstrumentations : mutableInstrumentations;
+    var instrumentations = shallow ? isReadonly ? shallowReadonlyInstrumentations : shallowInstrumentations : isReadonly ? readonlyInstrumentations : mutableInstrumentations;
     return function (target, key, receiver) {
       if (key === "__v_isReactive"
       /* IS_REACTIVE */
@@ -902,10 +1233,10 @@
   }
 
   var mutableCollectionHandlers = {
-    get: createInstrumentationGetter(false, false)
+    get: /*#__PURE__*/createInstrumentationGetter(false, false)
   };
   var readonlyCollectionHandlers = {
-    get: createInstrumentationGetter(true, false)
+    get: /*#__PURE__*/createInstrumentationGetter(true, false)
   };
 
   function checkIdentityKeys(target, has, key) {
@@ -918,22 +1249,30 @@
   }
 
   var reactiveMap = new WeakMap();
+  var shallowReactiveMap = new WeakMap();
   var readonlyMap = new WeakMap();
+  var shallowReadonlyMap = new WeakMap();
 
   function targetTypeMap(rawType) {
     switch (rawType) {
-      case "Object":
-      case "Array":
-        return 1;
+      case 'Object':
+      case 'Array':
+        return 1
+        /* COMMON */
+        ;
 
-      case "Map":
-      case "Set":
-      case "WeakMap":
-      case "WeakSet":
-        return 2;
+      case 'Map':
+      case 'Set':
+      case 'WeakMap':
+      case 'WeakSet':
+        return 2
+        /* COLLECTION */
+        ;
 
       default:
-        return 0;
+        return 0
+        /* INVALID */
+        ;
     }
   }
 
@@ -953,14 +1292,19 @@
       return target;
     }
 
-    return createReactiveObject(target, false, mutableHandlers, mutableCollectionHandlers);
-  } // Return a reactive-copy of the original object, where only the root level
+    return createReactiveObject(target, false, mutableHandlers, mutableCollectionHandlers, reactiveMap);
+  }
+  /**
+   * Creates a readonly copy of the original object. Note the returned copy is not
+   * made reactive, but `readonly` can be called on an already reactive object.
+   */
+
 
   function readonly(target) {
-    return createReactiveObject(target, true, readonlyHandlers, readonlyCollectionHandlers);
-  } // Return a reactive-copy of the original object, where only the root level
+    return createReactiveObject(target, true, readonlyHandlers, readonlyCollectionHandlers, readonlyMap);
+  }
 
-  function createReactiveObject(target, isReadonly, baseHandlers, collectionHandlers) {
+  function createReactiveObject(target, isReadonly, baseHandlers, collectionHandlers, proxyMap) {
     if (!isObject(target)) {
       {
         console.warn("value cannot be made reactive: ".concat(String(target)));
@@ -979,7 +1323,6 @@
     } // target already has corresponding Proxy
 
 
-    var proxyMap = isReadonly ? readonlyMap : reactiveMap;
     var existingProxy = proxyMap.get(target);
 
     if (existingProxy) {
@@ -1021,9 +1364,55 @@
   }
 
   function toRaw(observed) {
-    return observed && toRaw(observed["__v_raw"
+    var raw = observed && observed["__v_raw"
     /* RAW */
-    ]) || observed;
+    ];
+    return raw ? toRaw(raw) : observed;
+  }
+
+  var toReactive = function toReactive(value) {
+    return isObject(value) ? reactive(value) : value;
+  };
+
+  var toReadonly = function toReadonly(value) {
+    return isObject(value) ? readonly(value) : value;
+  };
+
+  function trackRefValue(ref) {
+    if (isTracking()) {
+      ref = toRaw(ref);
+
+      if (!ref.dep) {
+        ref.dep = createDep();
+      }
+
+      {
+        trackEffects(ref.dep, {
+          target: ref,
+          type: "get"
+          /* GET */
+          ,
+          key: 'value'
+        });
+      }
+    }
+  }
+
+  function triggerRefValue(ref, newVal) {
+    ref = toRaw(ref);
+
+    if (ref.dep) {
+      {
+        triggerEffects(ref.dep, {
+          target: ref,
+          type: "set"
+          /* SET */
+          ,
+          key: 'value',
+          newValue: newVal
+        });
+      }
+    }
   }
 
   function isRef(r) {
@@ -1037,17 +1426,13 @@
       _classCallCheck(this, ComputedRefImpl);
 
       this._setter = _setter;
+      this.dep = undefined;
       this._dirty = true;
       this.__v_isRef = true;
-      this.effect = effect(getter, {
-        lazy: true,
-        scheduler: function scheduler() {
-          if (!_this2._dirty) {
-            _this2._dirty = true;
-            trigger(toRaw(_this2), "set"
-            /* SET */
-            , "value");
-          }
+      this.effect = new ReactiveEffect(getter, function () {
+        if (!_this2._dirty) {
+          _this2._dirty = true;
+          triggerRefValue(_this2);
         }
       });
       this["__v_isReadonly"
@@ -1058,15 +1443,16 @@
     _createClass(ComputedRefImpl, [{
       key: "value",
       get: function get() {
-        if (this._dirty) {
-          this._value = this.effect();
-          this._dirty = false;
+        // the computed ref may get wrapped by other proxies e.g. readonly() #3376
+        var self = toRaw(this);
+        trackRefValue(self);
+
+        if (self._dirty) {
+          self._dirty = false;
+          self._value = self.effect.run();
         }
 
-        track(toRaw(this), "get"
-        /* GET */
-        , "value");
-        return this._value;
+        return self._value;
       },
       set: function set(newValue) {
         this._setter(newValue);
@@ -1076,23 +1462,33 @@
     return ComputedRefImpl;
   }();
 
-  function computed(getterOrOptions) {
+  function computed(getterOrOptions, debugOptions) {
     var getter;
     var setter;
+    var onlyGetter = isFunction(getterOrOptions);
 
-    if (isFunction(getterOrOptions)) {
+    if (onlyGetter) {
       getter = getterOrOptions;
 
       setter = function setter() {
-        console.warn("Write operation failed: computed value is readonly");
+        console.warn('Write operation failed: computed value is readonly');
       };
     } else {
       getter = getterOrOptions.get;
       setter = getterOrOptions.set;
     }
 
-    return new ComputedRefImpl(getter, setter, isFunction(getterOrOptions) || !getterOrOptions.set);
+    var cRef = new ComputedRefImpl(getter, setter, onlyGetter || !setter);
+
+    if (debugOptions) {
+      cRef.effect.onTrack = debugOptions.onTrack;
+      cRef.effect.onTrigger = debugOptions.onTrigger;
+    }
+
+    return cRef;
   }
+
+  Promise.resolve();
 
   function noop() {}
   function isNative(Ctor) {
@@ -1133,13 +1529,12 @@
   function isPlainObject(obj) {
     return _toString.call(obj) === "[object Object]";
   }
-  var bailRE = /[^\w.$]/;
-  function parsePath(path) {
-    if (bailRE.test(path)) {
-      return;
-    }
 
-    var segments = path.split(".");
+  function parsePath(path) {
+    // if (bailRE.test(path)) {
+    // return;
+    // }
+    var segments = path.length > 0 ? path.split(".") : [];
     return function (obj) {
       for (var i = 0; i < segments.length; i++) {
         if (!obj) return;
@@ -1439,10 +1834,10 @@
     var oldValue = _.isArray(source) ? [] : INITIAL_WATCHER_VALUE;
 
     var job = function job() {
-      if (!runner.active) {
-        return;
-      }
-
+      // 这里去掉的原因是，新增属性没有生效也会触发变化监听
+      // if (!runner.active) {
+      //   return;
+      // }
       if (cb) {
         // watch(source, cb)
         var newValue = runner();
@@ -1554,8 +1949,7 @@
     return new Function("return " + expr)();
   }
 
-  function watchExp(model, exp) {
-    var getter = parsePath(exp);
+  function watchExp(model, getter) {
     var result = getter.call(model, model);
 
     if (_.isArray(result)) {
@@ -1579,12 +1973,26 @@
     options.user = true;
     var exps;
 
-    if (_.isFunction(expOrFn) || !(exps = expOrFn.match(/[a-zA-Z0-9_.*]+|[|][|]|[&][&]|[(]|[)]/g)) || exps.length === 1 && !/\*/.test(expOrFn)) {
-      var watcher = innerWatch(_.isFunction(expOrFn) ? expOrFn : function () {
-        return watchExp(model, expOrFn);
-      }, cb, options);
+    if (_.isFunction(expOrFn)) {
+      var watcher = innerWatch(expOrFn, cb, options);
       return function unwatchFn() {
         watcher();
+      };
+    }
+
+    if (!(exps = expOrFn.match(/[a-zA-Z0-9_.*]+|[|][|]|[&][&]|[(]|[)]/g)) || exps.length === 1 && !/\*/.test(expOrFn)) {
+      var paths = expOrFn.split(".");
+      var prePaths = paths.slice(0, paths.length - 1);
+      var preGetter = parsePath(prePaths.join("."));
+      var v = preGetter.call(model, model);
+      var getter = parsePath(paths[paths.length - 1]);
+
+      var _watcher = innerWatch(function () {
+        return watchExp(v, getter);
+      }, cb, options);
+
+      return function unwatchFn() {
+        _watcher();
       };
     }
 
@@ -1624,35 +2032,12 @@
     _.each(exps, function (exp, i) {
       if (_.has(operators, exp)) {
         return;
-      } //a.**形式
-
-
-      if (/^[1-9a-zA-Z.]+\*\*$/.test(exp) || exp === "**") {
-        exp = exp.replace(".**", "");
-        var getter = exp === "**" ? function (m) {
-          return m;
-        } : parsePath(exp);
-        watchers.push(innerWatch(function () {
-          return getter.call(model, model);
-        }, function (newValue, oldValue) {
-          callback(i, newValue, oldValue, _.extend({
-            index: i
-          }));
-        }, _.extend({
-          deep: true
-        }, options)));
-        return;
       }
 
-      if (/^(\*\*\.)+[1-9a-zA-Z]+(\.\*\*$)/.test(exp)) {
-        throw new Error("not support");
-      } //含有*的情况，如a.*,如*.a,*.*.a,a.*.a
-
-
-      if (/\*/.test(exp)) {
+      if (exp.indexOf("*") >= 0) {
         // eslint-disable-next-line no-inner-declarations
         var travers = function travers(root, deps, parent, key, res) {
-          if (deps.length === paths.length) {
+          if (deps.length === _paths.length) {
             root !== undefined && res.push({
               parent: parent,
               k: key
@@ -1661,45 +2046,84 @@
           }
 
           if (root) {
-            if (paths[deps.length] === "*") {
+            if (_paths[deps.length] === "*") {
               // 遍历所有节点
               for (var k in root) {
                 travers(root[k], deps.concat([k]), root, k, res);
               }
             } else {
-              var nextKey = paths[deps.length];
+              var nextKey = _paths[deps.length];
               travers(root[nextKey], deps.concat([nextKey]), root, nextKey, res);
             }
           }
         };
 
-        //先获取到能获取到的对象
-        var paths = exp.split(".");
-        var prePaths = [];
+        //a.**形式
+        if (/^[1-9a-zA-Z.]+\*\*$/.test(exp) || exp === "**") {
+          exp = exp.replace(".**", "");
 
-        for (var _i = 0, len = paths.length; _i < len; _i++) {
-          if (paths[_i] === "*") {
+          var _paths2 = exp.split(".");
+
+          var _prePaths2 = _paths2.slice(0, _paths2.length - 1);
+
+          var _preGetter = parsePath(_prePaths2.join("."));
+
+          var _v2 = _preGetter.call(model, model);
+
+          var _getter = exp === "**" ? function (m) {
+            return m;
+          } : parsePath(_paths2[_paths2.length - 1]);
+
+          watchers.push(innerWatch(function () {
+            return watchExp(_v2, _getter);
+          }, function (newValue, oldValue) {
+            // a.** 在a变化的时候不会触发change
+            if (!_.isArray(newValue) && oldValue !== newValue) {
+              return;
+            }
+
+            callback(i, NaN, NaN, _.extend({
+              index: i
+            }));
+          }, _.extend({
+            deep: true
+          }, options)));
+          return;
+        }
+
+        if (/^(\*\*\.)+[1-9a-zA-Z]+(\.\*\*$)/.test(exp)) {
+          throw new Error("not support");
+        } //含有*的情况，如a.*,如*.a,*.*.a,a.*.a
+        //先获取到能获取到的对象
+
+
+        var _paths = exp.split(".");
+
+        var _prePaths = [];
+
+        for (var _i = 0, len = _paths.length; _i < len; _i++) {
+          if (_paths[_i] === "*") {
             break;
           }
 
-          prePaths[_i] = paths[_i];
+          _prePaths[_i] = _paths[_i];
         }
 
-        var v;
+        var _v;
 
-        if (prePaths.length > 0) {
-          var _getter = parsePath(prePaths.join("."));
+        if (_prePaths.length > 0) {
+          var _getter2 = parsePath(_prePaths.join("."));
 
-          v = _getter.call(model, model);
+          _v = _getter2.call(model, model);
         } else {
-          v = model;
+          _v = model;
         }
 
-        paths = paths.slice(prePaths.length);
+        _paths = _paths.slice(_prePaths.length);
         var changes = [];
         watchers.push(innerWatch(function () {
           var routes = [];
-          travers(v, [], v, null, routes);
+          travers(_v, [], _v, null, routes);
 
           for (var _i2 = 0, _len = routes.length; _i2 < _len; _i2++) {
             var _routes$_i = routes[_i2],
@@ -1720,11 +2144,11 @@
           changes = [];
 
           if (newValue === true) {
-            callback(i, undefined, undefined, _.extend({
+            callback(i, NaN, NaN, _.extend({
               index: i
             }));
           }
-        }, BI.extend({}, options, {
+        }, _.extend({}, options, {
           deep: true,
           onTrigger: function onTrigger(_ref) {
             var target = _ref.target,
@@ -1738,8 +2162,9 @@
         return;
       }
 
+      var getter = parsePath(exp);
       watchers.push(innerWatch(function () {
-        return watchExp(model, exp);
+        return watchExp(model, getter);
       }, function (newValue, oldValue) {
         callback(i, newValue, oldValue, _.extend({
           index: i
