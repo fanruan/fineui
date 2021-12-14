@@ -74,18 +74,21 @@
   }
 
   function _iterableToArray(iter) {
-    if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter);
+    if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter);
   }
 
   function _iterableToArrayLimit(arr, i) {
-    if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return;
+    var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"];
+
+    if (_i == null) return;
     var _arr = [];
     var _n = true;
     var _d = false;
-    var _e = undefined;
+
+    var _s, _e;
 
     try {
-      for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {
+      for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) {
         _arr.push(_s.value);
 
         if (i && _arr.length === i) break;
@@ -130,9 +133,9 @@
   }
 
   function _createForOfIteratorHelper(o, allowArrayLike) {
-    var it;
+    var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];
 
-    if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) {
+    if (!it) {
       if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {
         if (it) o = it;
         var i = 0;
@@ -165,7 +168,7 @@
         err;
     return {
       s: function () {
-        it = o[Symbol.iterator]();
+        it = it.call(o);
       },
       n: function () {
         var step = it.next();
@@ -1485,6 +1488,8 @@
     return cRef;
   }
 
+  Promise.resolve();
+
   function noop() {}
   function isNative(Ctor) {
     return typeof Ctor === "function" && /native code/.test(Ctor.toString());
@@ -1630,14 +1635,13 @@
   }
 
   var queue = [];
-  var activatedChildren = [];
   var has = {};
   var waiting = false;
   var flushing = false;
   var index = 0;
 
   function resetSchedulerState() {
-    index = queue.length = activatedChildren.length = 0;
+    index = queue.length = 0;
     has = {};
     waiting = flushing = false;
   }
@@ -2074,7 +2078,7 @@
             return watchExp(_v2, _getter);
           }, function (newValue, oldValue) {
             // a.** 在a变化的时候不会触发change
-            if (oldValue !== newValue) {
+            if (!_.isArray(newValue) && oldValue !== newValue) {
               return;
             }
 
@@ -2144,7 +2148,7 @@
               index: i
             }));
           }
-        }, BI.extend({}, options, {
+        }, _.extend({}, options, {
           deep: true,
           onTrigger: function onTrigger(_ref) {
             var target = _ref.target,
