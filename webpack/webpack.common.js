@@ -24,9 +24,7 @@ module.exports = {
         demo: attachments.demo,
         // 用于启动dev模式时，工程引用调试
         fineui: attachments.fineui,
-        "fineui.old": attachments.fineui_old,
         "fineui.proxy": attachments.fineuiProxy,
-        "fineui.proxy.old": attachments.fineuiProxy_old,
     },
     externals: {
         lodash: '_',
