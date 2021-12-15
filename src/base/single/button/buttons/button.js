@@ -61,7 +61,7 @@ BI.Button = BI.inherit(BI.BasicButton, {
                 type: "bi.icon_label",
                 cls: o.iconCls,
                 width: this._const.iconWidth,
-                height: o.height,
+                height: lineHeight,
                 lineHeight: lineHeight,
                 iconWidth: o.iconWidth,
                 iconHeight: o.iconHeight
@@ -71,7 +71,7 @@ BI.Button = BI.inherit(BI.BasicButton, {
                 text: o.text,
                 textWidth: BI.isNotNull(o.textWidth) ? o.textWidth - this._const.iconWidth : null,
                 textHeight: textHeight,
-                height: o.height,
+                height: lineHeight,
                 value: o.value
             });
             BI.createWidget({
@@ -88,7 +88,7 @@ BI.Button = BI.inherit(BI.BasicButton, {
         } else {
             this.text = BI.createWidget({
                 type: "bi.label",
-                height: o.height,
+                height: lineHeight,
                 textAlign: o.textAlign,
                 whiteSpace: o.whiteSpace,
                 textWidth: o.textWidth,
