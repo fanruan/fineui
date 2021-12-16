@@ -141,7 +141,7 @@ BI.MultiSelectInsertNoBarList = BI.inherit(BI.Single, {
                             }
                             self.fireEvent(BI.MultiSelectInsertNoBarList.EVENT_CHANGE);
                         });
-                        keywords.length > 2000 && BI.Msg.alert(BI.i18nText("BI-Basic_Prompt"), BI.i18nText("BI-Basic_Too_Much_Value_Get_Two_Thousand"));
+                        self._getKeywordsLength() > 2000 && BI.Msg.alert(BI.i18nText("BI-Basic_Prompt"), BI.i18nText("BI-Basic_Too_Much_Value_Get_Two_Thousand"));
                     }
                 }
             }, {
@@ -201,6 +201,12 @@ BI.MultiSelectInsertNoBarList = BI.inherit(BI.Single, {
         }
 
         return keywords;
+    },
+
+    _getKeywordsLength: function () {
+        var keywords = this._getKeywords();
+
+        return keywords[keywords.length - 1] === BI.BlankSplitChar ? keywords.length - 1 : keywords.length;
     },
 
     _showAdapter: function () {
