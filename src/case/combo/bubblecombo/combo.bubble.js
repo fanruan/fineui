@@ -137,6 +137,7 @@ BI.BubbleCombo = BI.inherit(BI.Widget, {
         this.triangle && this.triangle.destroy();
         this.triangle = BI.createWidget(op, {
             type: "bi.center_adapt",
+            scrollable: false,
             cls: "button-combo-triangle-wrapper",
             items: [{
                 type: "bi.layout",
