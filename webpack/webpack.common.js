@@ -38,7 +38,7 @@ module.exports = {
         rules: [
             {
                 test: /\.(js|ts)$/,
-                include: [dirs.NODE_MODULES, dirs.PRIVATE, dirs.TYPESCRIPT],
+                include: [dirs.NODE_MODULES, dirs.PRIVATE, dirs.TYPESCRIPT, dirs.ROUTER],
                 exclude: /node_modules(\/|\\)core-js/,
                 use: [
                     {

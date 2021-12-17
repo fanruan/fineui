@@ -5,6 +5,7 @@ module.exports = {
     PRIVATE: path.resolve(__dirname, "../private"),
     BABEL_CONFIG: path.resolve(__dirname, "../babel.config.js"),
     TYPESCRIPT: path.resolve(__dirname, "../typescript"),
+    ROUTER: path.resolve(__dirname, "../src/router"),
     SRC: path.resolve(__dirname, "../src"),
     DEMO: path.resolve(__dirname, "../demo"),
     PUBLIC: path.resolve(__dirname, "../public"),
