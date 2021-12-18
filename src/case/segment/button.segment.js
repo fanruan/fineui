@@ -10,7 +10,7 @@ BI.SegmentButton = BI.inherit(BI.BasicButton, {
     _defaultConfig: function () {
         var conf = BI.SegmentButton.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
-            baseCls: (conf.baseCls || "") + " bi-segment-button bi-list-item-select",
+            baseCls: (conf.baseCls || "") + " bi-segment-button bi-list-item-select bi-card",
             shadow: true,
             readonly: true,
             hgap: 5
