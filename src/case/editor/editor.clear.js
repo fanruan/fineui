@@ -32,7 +32,7 @@ BI.ClearEditor = BI.inherit(BI.Widget, {
         this.clear = BI.createWidget({
             type: "bi.icon_button",
             stopEvent: true,
-            invisible: BI.isKey(o.value),
+            invisible: !BI.isKey(o.value),
             cls: "search-close-h-font"
         });
         this.clear.on(BI.IconButton.EVENT_CHANGE, function () {
