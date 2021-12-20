@@ -32,6 +32,7 @@ BI.Msg = function () {
                 cls: "bi-message-animate bi-message-leave",
                 level: level,
                 autoClose: autoClose,
+                closable: options.closable,
                 text: message,
                 listeners: [{
                     eventName: BI.Toast.EVENT_DESTORY,
@@ -67,6 +68,10 @@ BI.Msg = function () {
                 toast.element.removeClass("bi-message-enter").addClass("bi-message-leave");
                 toast.destroy();
             }, 5000);
+            return function () {
+                toast.element.removeClass("bi-message-enter").addClass("bi-message-leave");
+                toast.destroy();
+            };
         },
         _show: function (hasCancel, title, message, callback) {
             BI.isNull($mask) && ($mask = BI.Widget._renderEngine.createElement("<div class=\"bi-z-index-mask\">").css({
