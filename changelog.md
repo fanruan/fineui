@@ -1,5 +1,6 @@
 # 更新日志
 2.0(2021-12)
+- toast支持closable属性，可控制是否显示关闭按钮
 - 新增气泡弹框控件
 - BI.point支持widget添加埋点
 - childContext废弃，替换成provide
