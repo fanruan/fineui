@@ -114,6 +114,7 @@ BI.DownListPopup = BI.inherit(BI.Pane, {
                         maxHeight: 378
                     };
                     item.el.childValues = [];
+                    item.items = item.children;
                     BI.each(item.children, function (i, child) {
                         var fatherValue = BI.deepClone(item.el.value);
                         var childValue = BI.deepClone(child.value);
