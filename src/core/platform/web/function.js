@@ -44,7 +44,7 @@ _.extend(BI, {
         if(!_global.navigator) {
             return false;
         }
-        return /edge/i.test(navigator.userAgent.toLowerCase());
+        return /edg/i.test(navigator.userAgent.toLowerCase());
     },
 
     isChrome: function () {

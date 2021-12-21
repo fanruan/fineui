@@ -15,7 +15,9 @@ BI.Toast = BI.inherit(BI.Tip, {
         return BI.extend(BI.Toast.superclass._defaultConfig.apply(this, arguments), {
             extraCls: "bi-toast",
             text: "",
-            level: "success" // success或warning
+            level: "success", // success或warning
+            autoClose: true,
+            closable: null
         });
     },
 
@@ -56,6 +58,9 @@ BI.Toast = BI.inherit(BI.Tip, {
                 break;
         }
 
+        var hasCloseIcon = function () {
+            return o.closable === true || (o.closable === null && o.autoClose === false);
+        };
         var items = [{
             type: "bi.icon_label",
             cls: cls + " toast-icon",
@@ -68,12 +73,12 @@ BI.Toast = BI.inherit(BI.Tip, {
                 textHeight: 16,
                 textAlign: "left"
             },
-            rgap: o.autoClose ? this._const.hgap : 0
+            rgap: hasCloseIcon() ? 0 : this._const.hgap
         }];
 
         var columnSize = [36, "fill"];
 
-        if (o.autoClose === false) {
+        if (hasCloseIcon()) {
             items.push({
                 type: "bi.icon_button",
                 cls: "close-font toast-icon",

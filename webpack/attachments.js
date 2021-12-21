@@ -183,11 +183,11 @@ const fineuiWithoutJqueryAndPolyfillJs = [].concat(
 const demo = [].concat(
     basicAttachmentMap.polyfill,
     basicAttachmentMap.core,
-    basicAttachmentMap.router,
     basicAttachmentMap.fix,
     basicAttachmentMap.base,
     basicAttachmentMap.case,
     basicAttachmentMap.widget,
+    basicAttachmentMap.router,
     sync(["public/less/app.less", "public/less/**/*.less"]),
     [fixCompact, workerCompact],
     basicAttachmentMap.config,

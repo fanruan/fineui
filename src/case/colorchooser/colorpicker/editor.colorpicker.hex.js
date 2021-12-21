@@ -61,7 +61,7 @@ BI.HexColorPickerEditor = BI.inherit(BI.Widget, {
                     tgap: 10,
                     items: [{
                         type: 'bi.vertical_adapt',
-                        columnSize: [0.5, 'fill'],
+                        columnSize: ["fill", 'fill'],
                         height: 24,
                         items: [{
                             type: "bi.color_picker_show_button",

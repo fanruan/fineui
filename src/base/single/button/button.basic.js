@@ -31,7 +31,7 @@ BI.BasicButton = BI.inherit(BI.Single, {
     _init: function () {
         BI.BasicButton.superclass._init.apply(this, arguments);
         var opts = this.options;
-        
+
         if (opts.shadow) {
             this._createShadow();
         }
@@ -44,7 +44,8 @@ BI.BasicButton = BI.inherit(BI.Single, {
         if (this.options.selected === true) {
             this.setSelected(true);
         }
-        this.bindEvent();
+        // 延迟绑定事件，这样可以将自己绑定的事情优先执行
+        BI.nextTick(this.bindEvent.bind(this));
         BI.BasicButton.superclass._initRef.apply(this, arguments);
     },
 

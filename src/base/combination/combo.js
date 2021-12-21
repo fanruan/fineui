@@ -4,9 +4,9 @@
      * @class BI.Combo
      * @extends BI.Widget
      */
-    BI.Combo = BI.inherit(BI.Widget, {
+    BI.Combo = BI.inherit(BI.Bubble, {
         _defaultConfig: function () {
-            var conf = BI.Combo.superclass._defaultConfig.apply(this, arguments);
+            var conf = BI.Bubble.superclass._defaultConfig.apply(this, arguments);
             return BI.extend(conf, {
                 baseCls: (conf.baseCls || "") + " bi-combo" + (BI.isIE() ? " hack" : ""),
                 attributes: {
@@ -23,6 +23,7 @@
                 destroyWhenHide: false,
                 hideWhenBlur: true,
                 hideWhenAnotherComboOpen: false,
+                hideWhenClickOutside: true,
                 isNeedAdjustHeight: true, // 是否需要高度调整
                 isNeedAdjustWidth: true,
                 stopEvent: false,
@@ -43,7 +44,8 @@
         render: function () {
             var self = this, o = this.options;
             this._initCombo();
-            this._initPullDownAction();
+            // 延迟绑定事件，这样可以将自己绑定的事情优先执行
+            BI.nextTick(this._initPullDownAction.bind(this));
             this.combo.on(BI.Controller.EVENT_CHANGE, function (type, value, obj) {
                 if (self.isEnabled() && self.isValid()) {
                     if (type === BI.Events.EXPAND) {
@@ -93,137 +95,6 @@
             }, this));
         },
 
-        _toggle: function (e) {
-            this._assertPopupViewRender();
-            if (this.popupView.isVisible()) {
-                this._hideView(e);
-            } else {
-                if (this.isEnabled()) {
-                    this._popupView(e);
-                }
-            }
-        },
-
-        _initPullDownAction: function () {
-            var self = this, o = this.options;
-            var evs = (this.options.trigger || "").split(",");
-            var st = function (e) {
-                if (o.stopEvent) {
-                    e.stopEvent();
-                }
-                if (o.stopPropagation) {
-                    e.stopPropagation();
-                }
-            };
-
-            var enterPopup = false;
-
-            function hide(e) {
-                if (self.isEnabled() && self.isValid() && self.combo.isEnabled() && self.combo.isValid() && o.toggle === true) {
-                    self._hideView(e);
-                    self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.COLLAPSE, "", self.combo);
-                    self.fireEvent(BI.Combo.EVENT_COLLAPSE);
-                }
-                self.popupView && self.popupView.element.off("mouseenter." + self.getName()).off("mouseleave." + self.getName());
-                enterPopup = false;
-            }
-
-            BI.each(evs, function (i, ev) {
-                switch (ev) {
-                    case "hover":
-                        self.element.on("mouseenter." + self.getName(), function (e) {
-                            if (self.isEnabled() && self.isValid() && self.combo.isEnabled() && self.combo.isValid()) {
-                                self._popupView(e);
-                                self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.EXPAND, "", self.combo);
-                                self.fireEvent(BI.Combo.EVENT_EXPAND);
-                            }
-                        });
-                        self.element.on("mouseleave." + self.getName(), function (e) {
-                            if (self.popupView) {
-                                self.popupView.element.on("mouseenter." + self.getName(), function (e) {
-                                    enterPopup = true;
-                                    self.popupView.element.on("mouseleave." + self.getName(), function (e) {
-                                        hide(e);
-                                    });
-                                    self.popupView.element.off("mouseenter." + self.getName());
-                                });
-                                BI.defer(function () {
-                                    if (!enterPopup) {
-                                        hide(e);
-                                    }
-                                }, 50);
-                            }
-                        });
-                        break;
-                    case "click":
-                        var debounce = BI.debounce(function (e) {
-                            if (self.combo.element.__isMouseInBounds__(e)) {
-                                if (self.isEnabled() && self.isValid() && self.combo.isEnabled() && self.combo.isValid()) {
-                                    // if (!o.toggle && self.isViewVisible()) {
-                                    //     return;
-                                    // }
-                                    o.toggle ? self._toggle(e) : self._popupView(e);
-                                    if (self.isViewVisible()) {
-                                        self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.EXPAND, "", self.combo);
-                                        self.fireEvent(BI.Combo.EVENT_EXPAND);
-                                    } else {
-                                        self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.COLLAPSE, "", self.combo);
-                                        self.fireEvent(BI.Combo.EVENT_COLLAPSE);
-                                    }
-                                }
-                            }
-                        }, BI.EVENT_RESPONSE_TIME, {
-                            "leading": true,
-                            "trailing": false
-                        });
-                        self.element.off(ev + "." + self.getName()).on(ev + "." + self.getName(), function (e) {
-                            debounce(e);
-                            st(e);
-                        });
-                        break;
-                    case "click-hover":
-                        var debounce = BI.debounce(function (e) {
-                            if (self.combo.element.__isMouseInBounds__(e)) {
-                                if (self.isEnabled() && self.isValid() && self.combo.isEnabled() && self.combo.isValid()) {
-                                    // if (self.isViewVisible()) {
-                                    //     return;
-                                    // }
-                                    self._popupView(e);
-                                    if (self.isViewVisible()) {
-                                        self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.EXPAND, "", self.combo);
-                                        self.fireEvent(BI.Combo.EVENT_EXPAND);
-                                    }
-                                }
-                            }
-                        }, BI.EVENT_RESPONSE_TIME, {
-                            "leading": true,
-                            "trailing": false
-                        });
-                        self.element.off("click." + self.getName()).on("click." + self.getName(), function (e) {
-                            debounce(e);
-                            st(e);
-                        });
-                        self.element.on("mouseleave." + self.getName(), function (e) {
-                            if (self.popupView) {
-                                self.popupView.element.on("mouseenter." + self.getName(), function (e) {
-                                    enterPopup = true;
-                                    self.popupView.element.on("mouseleave." + self.getName(), function (e) {
-                                        hide(e);
-                                    });
-                                    self.popupView.element.off("mouseenter." + self.getName());
-                                });
-                                BI.delay(function () {
-                                    if (!enterPopup) {
-                                        hide(e);
-                                    }
-                                }, 50);
-                            }
-                        });
-                        break;
-                }
-            });
-        },
-
         _initCombo: function () {
             this.combo = BI.createWidget(this.options.el, {
                 value: this.options.value
@@ -249,46 +120,6 @@
                     self.fireEvent(BI.Combo.EVENT_AFTER_INIT);
                 });
             }
-        },
-
-        _assertPopupViewRender: function () {
-            this._assertPopupView();
-            if (!this._rendered) {
-                BI.createWidget({
-                    type: "bi.vertical",
-                    scrolly: false,
-                    element: this.options.container || this,
-                    items: [
-                        { el: this.popupView }
-                    ]
-                });
-                this._rendered = true;
-            }
-        },
-
-        _hideIf: function (e, skipTriggerChecker) {
-            // if (this.element.__isMouseInBounds__(e) || (this.popupView && this.popupView.element.__isMouseInBounds__(e))) {
-            //     return;
-            // }
-            // BI-10290 公式combo双击公式内容会收起
-            if (e && ((skipTriggerChecker !== true && this.element.find(e.target).length > 0)
-                || (this.popupView && this.popupView.element.find(e.target).length > 0)
-                || e.target.className === "CodeMirror-cursor" || BI.Widget._renderEngine.createElement(e.target).closest(".CodeMirror-hints").length > 0)) {// BI-9887 CodeMirror的公式弹框需要特殊处理下
-                var directions = this.options.direction.split(",");
-                if (BI.contains(directions, "innerLeft") || BI.contains(directions, "innerRight")) {
-                    // popup可以出现在trigger内部的combo，滚动时不需要消失，而是调整位置
-                    this.adjustWidth();
-                    this.adjustHeight();
-                }
-
-                return;
-            }
-            var isHide = this.options.hideChecker.apply(this, [e]);
-            if (isHide === false) {
-                return;
-            }
-            this._hideView(e);
-            return true;
         },
 
         _hideView: function (e) {
@@ -335,40 +166,14 @@
             this.adjustHeight(e);
 
             this.element.addClass(this.options.comboClass);
-            BI.Widget._renderEngine.createElement(document).unbind("mousedown." + this.getName()).unbind("mousewheel." + this.getName());
+            o.hideWhenClickOutside && BI.Widget._renderEngine.createElement(document).unbind("mousedown." + this.getName()).unbind("mousewheel." + this.getName());
+            BI.Widget._renderEngine.createElement(document).unbind("mousewheel." + this.getName());
             BI.EVENT_BLUR && o.hideWhenBlur && BI.Widget._renderEngine.createElement(window).unbind("blur." + this.getName());
 
-            BI.Widget._renderEngine.createElement(document).bind("mousedown." + this.getName(), BI.bind(this._hideIf, this)).bind("mousewheel." + this.getName(), BI.bind(this._hideIf, this));
+            o.hideWhenClickOutside && BI.Widget._renderEngine.createElement(document).bind("mousedown." + this.getName(), BI.bind(this._hideIf, this)).bind("mousewheel." + this.getName(), BI.bind(this._hideIf, this));
+            BI.Widget._renderEngine.createElement(document).bind("mousewheel." + this.getName(), BI.bind(this._hideIf, this));
             BI.EVENT_BLUR && o.hideWhenBlur && BI.Widget._renderEngine.createElement(window).bind("blur." + this.getName(), BI.bind(this._hideIf, this));
             this.fireEvent(BI.Combo.EVENT_AFTER_POPUPVIEW);
-        },
-
-        adjustWidth: function (e) {
-            var o = this.options;
-            if (!this.popupView) {
-                return;
-            }
-            if (o.isNeedAdjustWidth === true) {
-                this.resetListWidth("");
-                var width = this.popupView.element.outerWidth();
-                var maxW = this.element.outerWidth() || o.width;
-                // BI-93885 最大列宽算法调整
-                if (maxW < 500) {
-                    if (width >= 500) {
-                        maxW = 500;
-                    } else if(width > maxW) {
-                        // 防止小数导致差那么一点
-                        maxW = width + 1;
-                    }
-                }
-
-                // if (width > maxW + 80) {
-                //     maxW = maxW + 80;
-                // } else if (width > maxW) {
-                //     maxW = width;
-                // }
-                this.resetListWidth(maxW < 100 ? 100 : maxW);
-            }
         },
 
         adjustHeight: function (e) {
@@ -483,84 +288,12 @@
             this.popupView.setVisible(isVisible);
         },
 
-        resetListHeight: function (h) {
-            this._assertPopupView();
-            this.popupView.resetHeight && this.popupView.resetHeight(h);
-        },
-
-        resetListWidth: function (w) {
-            this._assertPopupView();
-            this.popupView.resetWidth && this.popupView.resetWidth(w);
-        },
-
-        populate: function (items) {
-            this._assertPopupView();
-            this.popupView.populate.apply(this.popupView, arguments);
-            this.combo.populate && this.combo.populate.apply(this.combo, arguments);
-        },
-
-        _setEnable: function (arg) {
-            BI.Combo.superclass._setEnable.apply(this, arguments);
-            if (arg === true) {
-                this.element.removeClass("base-disabled disabled");
-            } else if (arg === false) {
-                this.element.addClass("base-disabled disabled");
-            }
-            !arg && this.element.removeClass(this.options.hoverClass);
-            !arg && this.isViewVisible() && this._hideView();
-        },
-
-        setValue: function (v) {
-            this.combo.setValue(v);
-            if (BI.isNull(this.popupView)) {
-                this.options.popup.value = v;
-            } else {
-                this.popupView.setValue(v);
-            }
-        },
-
-        getValue: function () {
-            if (BI.isNull(this.popupView)) {
-                return this.options.popup.value;
-            } else {
-                return this.popupView.getValue();
-            }
-        },
-
-        isViewVisible: function () {
-            return this.isEnabled() && this.combo.isEnabled() && !!this.popupView && this.popupView.isVisible();
-        },
-
-        showView: function (e) {
-            // 减少popup 调整宽高的次数
-            if (this.isEnabled() && this.combo.isEnabled() && !this.isViewVisible()) {
-                this._popupView(e);
-            }
-        },
-
-        hideView: function (e) {
-            this._hideView(e);
-        },
-
-        getView: function () {
-            return this.popupView;
-        },
-
-        getPopupPosition: function () {
-            return this.position;
-        },
-
-        toggle: function () {
-            this._toggle();
-        },
-
         destroyed: function () {
             BI.Widget._renderEngine.createElement(document)
                 .unbind("click." + this.getName())
                 .unbind("mousedown." + this.getName())
                 .unbind("mousewheel." + this.getName())
                 .unbind("mouseenter." + this.getName())
-                .unbind("mousemove." + this.getName())
                 .unbind("mouseleave." + this.getName());
             BI.Widget._renderEngine.createElement(window)
                 .unbind("blur." + this.getName());
