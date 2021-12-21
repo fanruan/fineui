@@ -155,6 +155,7 @@ BI.MultiLayerDownListPopup = BI.inherit(BI.Pane, {
     _createChildren: function (item) {
         var self = this;
         this._formatEL(item).el.childValues = [];
+        item.items = item.children;
         BI.each(item.children, function (i, child) {
             child = child.el ? BI.extend(child.el, {children: child.children}) : child;
             var fatherValue = BI.deepClone(self._formatEL(item).el.value);
