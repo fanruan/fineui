@@ -96,6 +96,7 @@ BI.Calendar = BI.inherit(BI.Widget, {
         this.days = BI.createWidget({
             type: "bi.button_group",
             items: BI.createItems(this._getItems(), {}),
+            value: o.year + "-" + o.month + "-" + o.day,
             layouts: [BI.LogicFactory.createLogic("table", BI.extend({}, o.logic, {
                 columns: 7,
                 rows: 6,
