@@ -33,6 +33,7 @@ BI.ColorChooser = BI.inherit(BI.Widget, {
                 ref: function (_ref) {
                     self.trigger = _ref;
                 },
+                value: o.value,
                 width: o.el.type ? o.width : o.width - 2,
                 height: o.el.type ? o.height : o.height - 2
             }, o.el),

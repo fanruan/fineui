@@ -141,6 +141,7 @@ BI.HexColorChooserPopup = BI.inherit(BI.Widget, {
                         title: BI.i18nText("BI-Custom_Color"),
                         el: {
                             type: "bi.custom_color_chooser",
+                            value: o.value,
                             editor: o.editor,
                             ref: function (_ref) {
                                 self.customColorChooser = _ref;

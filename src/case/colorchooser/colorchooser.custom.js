@@ -19,13 +19,15 @@ BI.CustomColorChooser = BI.inherit(BI.Widget, {
         BI.CustomColorChooser.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
         this.editor = BI.createWidget(o.editor, {
-            type: "bi.simple_hex_color_picker_editor"
+            type: "bi.simple_hex_color_picker_editor",
+            value: o.value
         });
         this.editor.on(BI.ColorPickerEditor.EVENT_CHANGE, function () {
             self.setValue(this.getValue());
         });
         this.farbtastic = BI.createWidget({
-            type: "bi.farbtastic"
+            type: "bi.farbtastic",
+            value: o.value
         });
         this.farbtastic.on(BI.Farbtastic.EVENT_CHANGE, function () {
             self.setValue(this.getValue());
