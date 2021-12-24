@@ -3,7 +3,7 @@
 .bi-checkbox {
   & .checkbox-content, &.checkbox-content {
     .border-radius(2px);
-    border: 1px solid @color-bi-border-dark-line;
+    border: 1px solid @color-bi-border-checkbox;
     box-sizing: border-box;
     &:after {
       position: absolute;
@@ -20,12 +20,12 @@
       content: '';
     }
     &.hover, &:hover {
-      border-color: @color-bi-border-highlight;
+      border-color: @color-bi-border-hover-active-checkbox;
     }
   }
   &.active, &:active {
     & .checkbox-content, &.checkbox-content{
-      border-color: @color-bi-border-highlight;
+      border-color: @color-bi-border-hover-active-checkbox;
       &:after {
         border-color: @color-bi-border-default;
         opacity: 1;
@@ -34,15 +34,15 @@
   }
   &.disabled {
     & .checkbox-content, &.checkbox-content {
-      background-color: @color-bi-background-disabled;
-      border-color: @color-bi-border-disabled;
+      background-color: @color-bi-background-disabled-checkbox;
+      border-color: @color-bi-border-disabled-checkbox;
     }
     & .checkbox-content:after, &.checkbox-content:after {
       opacity: 0;
     }
     &.active {
       & .checkbox-content, &.checkbox-content {
-        background-color: @color-bi-background-dark-gray;
+        background-color: @color-bi-background-disabled-active-checkbox;
         &:after {
           opacity: 1;
         }
@@ -54,24 +54,24 @@
 .bi-theme-dark {
   .bi-checkbox {
     & .checkbox-content, &.checkbox-content {
-      border-color: @color-bi-border-dark-line-theme-dark;
+      border-color: @color-bi-border-checkbox-theme-dark;
       &.hover, &:hover {
-        border-color: @color-bi-border-highlight;
+        border-color: @color-bi-border-hover-active-checkbox-theme-dark;
       }
     }
     &.active, &:active {
       & .checkbox-content, &.checkbox-content {
-        border-color: @color-bi-border-highlight;
+        border-color: @color-bi-border-hover-active-checkbox-theme-dark;
       }
     }
     &.disabled {
       & .checkbox-content, &.checkbox-content {
-        background-color: @color-bi-background-disabled-theme-dark;
+        background-color: @color-bi-background-disabled-checkbox-theme-dark;
       }
       &.active {
         & .checkbox-content, &.checkbox-content {
-          background-color: @color-bi-background-dark-gray-theme-dark;
-          border-color: @color-bi-border-disabled-theme-dark;
+          background-color: @color-bi-background-disabled-active-checkbox-theme-dark;
+          border-color: @color-bi-border-disabled-checkbox-theme-dark;
         }
       }
     }
