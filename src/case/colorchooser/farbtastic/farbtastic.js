@@ -127,42 +127,11 @@ BI.Farbtastic = BI.inherit(BI.BasicButton, {
     },
 
     _HSLToRGB: function (hsl) {
-        var m1, m2, r, g, b;
-        var h = hsl[0], s = hsl[1], l = hsl[2];
-        m2 = (l <= 0.5) ? l * (s + 1) : l + s - l * s;
-        m1 = l * 2 - m2;
-        return [this._hueToRGB(m1, m2, h + 0.33333),
-            this._hueToRGB(m1, m2, h),
-            this._hueToRGB(m1, m2, h - 0.33333)];
-    },
-
-    _hueToRGB: function (m1, m2, h) {
-        h = (h < 0) ? h + 1 : ((h > 1) ? h - 1 : h);
-        if (h * 6 < 1) return m1 + (m2 - m1) * h * 6;
-        if (h * 2 < 1) return m2;
-        if (h * 3 < 2) return m1 + (m2 - m1) * (0.66666 - h) * 6;
-        return m1;
+        return BI.DOM.hsl2rgb(hsl);
     },
 
     _RGBToHSL: function (rgb) {
-        var min, max, delta, h, s, l;
-        var r = rgb[0], g = rgb[1], b = rgb[2];
-        min = Math.min(r, Math.min(g, b));
-        max = Math.max(r, Math.max(g, b));
-        delta = max - min;
-        l = (min + max) / 2;
-        s = 0;
-        if (l > 0 && l < 1) {
-            s = delta / (l < 0.5 ? (2 * l) : (2 - 2 * l));
-        }
-        h = 0;
-        if (delta > 0) {
-            if (max == r && max != g) h += (g - b) / delta;
-            if (max == g && max != b) h += (2 + (b - r) / delta);
-            if (max == b && max != r) h += (4 + (r - g) / delta);
-            h /= 6;
-        }
-        return [h, s, l];
+        return BI.DOM.rgb2hsl(rgb);
     },
 
     _updateDisplay: function () {
