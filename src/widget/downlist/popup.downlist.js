@@ -128,6 +128,7 @@ BI.DownListPopup = BI.inherit(BI.Pane, {
                             dynamic: true
                         };
                         child.father = fatherValue;
+                        child.childValue = child.value;
                         self.fatherValueMap[self._createChildValue(fatherValue, childValue)] = fatherValue;
                         self.childValueMap[self._createChildValue(fatherValue, childValue)] = childValue;
                         child.value = self._createChildValue(fatherValue, childValue);
