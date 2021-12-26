@@ -132,7 +132,7 @@ BI.Pane = BI.inherit(BI.Widget, {
     setTipVisible: function (b) {
         if (b === true) {
             this._assertTip();
-            this._tipText.setVisible(true);
+            this._tipText && this._tipText.setVisible(true);
         } else {
             this._tipText && this._tipText.setVisible(false);
         }
