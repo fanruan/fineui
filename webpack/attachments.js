@@ -148,6 +148,7 @@ const fineuiModern = [].concat(
 );
 
 const fineuiProxy = [].concat(
+    basicAttachmentMap.polyfill,
     basicAttachmentMap.core,
     basicAttachmentMap.fixProxy,
     basicAttachmentMap.base,
