@@ -16,6 +16,7 @@ export declare class MultifileEditor extends Widget {
         attach_id: string;
         attach_type: string;
         filename: string;
+        [key: string]: any;
     }[];
 
     upload(): void;

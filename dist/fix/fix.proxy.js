@@ -1835,9 +1835,9 @@
 
     var job = function job() {
       // 这里去掉的原因是，新增属性没有生效也会触发变化监听
-      // if (!runner.active) {
-      //   return;
-      // }
+      if (!runner.effect.active) {
+        return;
+      }
       if (cb) {
         // watch(source, cb)
         var newValue = runner();
