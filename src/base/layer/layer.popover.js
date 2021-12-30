@@ -59,36 +59,29 @@ BI.Popover = BI.inherit(BI.Widget, {
                     self.dragger = _ref;
                 },
                 items: [{
-                    type: "bi.absolute",
-                    items: [{
-                        el: BI.isPlainObject(o.header) ? BI.extend({}, o.header, {
-                            extraCls: "bi-font-bold",
-                        }) : {
-                            type: "bi.label",
-                            cls: "bi-font-bold",
-                            height: o.headerHeight,
-                            text: o.header,
-                            title: o.header,
-                            textAlign: "left",
-                        },
-                        left: 20,
-                        top: 0,
-                        right: 0,
-                        bottom: 0,
-                    }],
-                }, {
-                    el: o.closable ? {
+                    el: BI.isPlainObject(o.header) ? BI.extend({}, o.header, {
+                        extraCls: "bi-font-bold",
+                    }) : {
+                        type: "bi.label",
+                        cls: "bi-font-bold",
+                        height: o.headerHeight,
+                        text: o.header,
+                        title: o.header,
+                        textAlign: "left",
+                    },
+                    lgap: 20,
+                    rgap: o.closable ? 0 : 20
+                }, o.closable ? {
+                    el: {
                         type: "bi.icon_button",
                         cls: "bi-message-close close-font",
                         height: o.headerHeight,
                         handler: function () {
                             self.close();
                         },
-                    } : {
-                        type: "bi.layout",
                     },
                     width: 56,
-                }],
+                }: null],
                 height: o.headerHeight,
             },
             height: o.headerHeight,
