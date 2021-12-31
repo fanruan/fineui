@@ -27,7 +27,7 @@
   }
   & .bubble-combo-triangle-left, & .bubble-combo-triangle-right, & .bubble-combo-triangle-top, & .bubble-combo-triangle-bottom {
     &:before {
-      background-color: @color-bi-background-default;
+      background-color: @color-bi-background-bubble-combo-triangle;
     }
   }
 }
@@ -78,7 +78,7 @@
       height: 10px;
       position: absolute;
       content: "";
-      background: @color-bi-background-default;
+      background: @color-bi-background-bubble-combo-triangle;
       top: 0;
       left: 0;
       transition: transform 0.2s ease-out 0s, visibility 0.2s ease-out 0s;
@@ -92,14 +92,14 @@
 
 .bi-theme-dark {
   .bubble-arrow:before {
-    background: @color-bi-background-default-theme-dark;
+    background: @color-bi-background-bubble-combo-triangle-theme-dark;
   }
   .bi-bubble-combo {
     & .bubble-combo-triangle-left, & .bubble-combo-triangle-right, & .bubble-combo-triangle-top, & .bubble-combo-triangle-bottom {
       &:before {
-        background-color: @color-bi-background-default-theme-dark;
-        border-bottom: 1px solid @border-color-light-line-theme-dark;
-        border-right: 1px solid @border-color-light-line-theme-dark;
+        background-color: @color-bi-background-bubble-combo-triangle-theme-dark;
+        border-bottom: 1px solid @color-bi-border-bubble-combo-triangle-theme-dark;
+        border-right: 1px solid @color-bi-border-bubble-combo-triangle-theme-dark;
       }
     }
   }
