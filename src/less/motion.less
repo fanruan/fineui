@@ -53,26 +53,8 @@
   }
 }
 
-.fade-motion-enter() {
-  opacity: 0;
-  animation-timing-function: linear;
-  .motion-common(@animation-duration-base);
-
-  animation-name: biFadeIn;
-  animation-play-state: running;
-}
-
-.fade-motion-leave() {
-  animation-timing-function: linear;
-  .motion-common-leave(@animation-duration-base);
-
-  animation-name: biFadeOut;
-  animation-play-state: running;
-  pointer-events: none;
-}
-
 .zoom-big-motion-enter() {
-  transform: scale(0); // need this by yiminghe
+  transform: scale(0);
   opacity: 0;
   animation-timing-function: @ease-out-circ;
 
