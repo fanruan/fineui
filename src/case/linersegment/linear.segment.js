@@ -6,7 +6,7 @@ BI.LinearSegment = BI.inherit(BI.Widget, {
         layouts: [{
             type: "bi.center"
         }],
-        height: 29
+        height: 30
     },
 
     render: function () {
@@ -15,7 +15,7 @@ BI.LinearSegment = BI.inherit(BI.Widget, {
             type: "bi.button_group",
             items: BI.createItems(o.items, {
                 type: "bi.linear_segment_button",
-                height: o.height - 1
+                height: o.height
             }),
             layouts: o.layouts,
             value: o.value,
