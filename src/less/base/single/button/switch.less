@@ -3,11 +3,13 @@
 .bi-switch{
   .border-radius(40px 40px 40px 40px);
   background-color: @color-bi-background-switch;
+  .transition(all .2s);
   &.active {
     background-color: @color-bi-background-active-switch;
   }
   & .circle-button{
     .border-radius(9px 9px 9px 9px);
+    .transition(all .2s ease-in-out);
   }
   &.disabled {
     background-color: @color-bi-background-disabled-switch;
