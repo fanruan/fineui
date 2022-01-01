@@ -162,7 +162,7 @@ BI.Msg = function () {
                                                     }
                                                 }
                                             },
-                                            width: 60
+                                            width: 56
                                         }
                                     }
                                 },
