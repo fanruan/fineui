@@ -18,6 +18,7 @@ BI.LinearSegment = BI.inherit(BI.Widget, {
                 height: o.height - 1
             }),
             layouts: o.layouts,
+            value: o.value,
             listeners: [{
                 eventName: "__EVENT_CHANGE__",
                 action: function () {
