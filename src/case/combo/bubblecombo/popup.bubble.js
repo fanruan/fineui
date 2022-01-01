@@ -8,12 +8,12 @@ BI.BubblePopupView = BI.inherit(BI.PopupView, {
     _defaultConfig: function () {
         var config = BI.BubblePopupView.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(config, {
-            baseCls: config.baseCls + " bi-bubble-popup-view bi-zoom-big-leave bi-zoom-big-leave-active",
+            baseCls: config.baseCls + " bi-bubble-popup-view bi-zoom-big-enter bi-zoom-big-enter-active",
             minWidth: 220,
             maxWidth: 300,
             minHeight: 90
         });
-    }
+    },
 });
 
 BI.shortcut("bi.bubble_popup_view", BI.BubblePopupView);
@@ -102,7 +102,7 @@ BI.TextBubblePopupBarView = BI.inherit(BI.Widget, {
 
     props: function () {
         return {
-            baseCls: "bi-text-bubble-bar-popup-view bi-bubble-popup-view",
+            baseCls: "bi-text-bubble-bar-popup-view",
             text: "",
             buttons: [{
                 level: "ignore",
@@ -155,7 +155,7 @@ BI.TextBubblePopupBarView = BI.inherit(BI.Widget, {
 
     populate: function (v) {
         this.text.setText(v || this.options.text);
-    }
+    },
 });
 BI.TextBubblePopupBarView.EVENT_CHANGE = "EVENT_CLICK_TOOLBAR_BUTTON";
 BI.shortcut("bi.text_bubble_bar_popup_view", BI.TextBubblePopupBarView);
