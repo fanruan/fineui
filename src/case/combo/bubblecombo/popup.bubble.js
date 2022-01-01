@@ -8,7 +8,7 @@ BI.BubblePopupView = BI.inherit(BI.PopupView, {
     _defaultConfig: function () {
         var config = BI.BubblePopupView.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(config, {
-            baseCls: config.baseCls + " bi-bubble-popup-view bi-zoom-big-enter bi-zoom-big-enter-active",
+            baseCls: config.baseCls + " bi-bubble-popup-view",
             minWidth: 220,
             maxWidth: 300,
             minHeight: 90
