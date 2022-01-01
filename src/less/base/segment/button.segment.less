@@ -1,6 +1,7 @@
 @import "../../index";
 
 .bi-segment-button {
-  .transition(color .3s,background .3s,border-color .3s,box-shadow .3s);
+  @transition: color .3s,background .3s,border-color .3s,box-shadow .3s;
+  .transition(@transition);
   color: @color-bi-text-highlight;
 }

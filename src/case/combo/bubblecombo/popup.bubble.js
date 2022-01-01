@@ -8,7 +8,7 @@ BI.BubblePopupView = BI.inherit(BI.PopupView, {
     _defaultConfig: function () {
         var config = BI.BubblePopupView.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(config, {
-            baseCls: config.baseCls + " bi-bubble-popup-view",
+            baseCls: config.baseCls + " bi-bubble-popup-view bi-zoom-big-leave bi-zoom-big-leave-active",
             minWidth: 220,
             maxWidth: 300,
             minHeight: 90
@@ -102,7 +102,7 @@ BI.TextBubblePopupBarView = BI.inherit(BI.Widget, {
 
     props: function () {
         return {
-            baseCls: "bi-text-bubble-bar-popup-view",
+            baseCls: "bi-text-bubble-bar-popup-view bi-bubble-popup-view",
             text: "",
             buttons: [{
                 level: "ignore",
