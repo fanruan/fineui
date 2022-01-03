@@ -29,7 +29,7 @@
 .zoom-motion(bi-zoom-left, biZoomLeft);
 .zoom-motion(bi-zoom-right, biZoomRight);
 
-@keyframes biZoomIn {
+.keyframes(biZoomIn, {
   0% {
     transform: scale(0.2);
     opacity: 0;
@@ -39,20 +39,14 @@
     transform: scale(1);
     opacity: 1;
   }
-}
+});
 
-@keyframes biZoomOut {
-  0% {
-    transform: scale(1);
-  }
+.keyframes(biZoomOut, {
+  0% { transform: scale(1); }
+  100% { transform: scale(0.2); opacity: 0; }
+});
 
-  100% {
-    transform: scale(0.2);
-    opacity: 0;
-  }
-}
-
-@keyframes biZoomBigIn {
+.keyframes(biZoomBigIn, {
   0% {
     transform: scale(0.8);
     opacity: 0;
@@ -62,9 +56,9 @@
     transform: scale(1);
     opacity: 1;
   }
-}
+});
 
-@keyframes biZoomBigOut {
+.keyframes(biZoomBigOut, {
   0% {
     transform: scale(1);
   }
@@ -73,9 +67,9 @@
     transform: scale(0.8);
     opacity: 0;
   }
-}
+});
 
-@keyframes biZoomUpIn {
+.keyframes(biZoomUpIn, {
   0% {
     transform: scale(0.8);
     transform-origin: 50% 0%;
@@ -86,9 +80,9 @@
     transform: scale(1);
     transform-origin: 50% 0%;
   }
-}
+});
 
-@keyframes biZoomUpOut {
+.keyframes(biZoomUpOut, {
   0% {
     transform: scale(1);
     transform-origin: 50% 0%;
@@ -99,9 +93,9 @@
     transform-origin: 50% 0%;
     opacity: 0;
   }
-}
+});
 
-@keyframes biZoomLeftIn {
+.keyframes(biZoomLeftIn, {
   0% {
     transform: scale(0.8);
     transform-origin: 0% 50%;
@@ -112,9 +106,9 @@
     transform: scale(1);
     transform-origin: 0% 50%;
   }
-}
+});
 
-@keyframes biZoomLeftOut {
+.keyframes(biZoomLeftOut, {
   0% {
     transform: scale(1);
     transform-origin: 0% 50%;
@@ -125,9 +119,9 @@
     transform-origin: 0% 50%;
     opacity: 0;
   }
-}
+});
 
-@keyframes biZoomRightIn {
+.keyframes(biZoomRightIn, {
   0% {
     transform: scale(0.8);
     transform-origin: 100% 50%;
@@ -138,9 +132,9 @@
     transform: scale(1);
     transform-origin: 100% 50%;
   }
-}
+});
 
-@keyframes biZoomRightOut {
+.keyframes(biZoomRightOut, {
   0% {
     transform: scale(1);
     transform-origin: 100% 50%;
@@ -151,9 +145,9 @@
     transform-origin: 100% 50%;
     opacity: 0;
   }
-}
+});
 
-@keyframes biZoomDownIn {
+.keyframes(biZoomDownIn, {
   0% {
     transform: scale(0.8);
     transform-origin: 50% 100%;
@@ -164,9 +158,9 @@
     transform: scale(1);
     transform-origin: 50% 100%;
   }
-}
+});
 
-@keyframes biZoomDownOut {
+.keyframes(biZoomDownOut, {
   0% {
     transform: scale(1);
     transform-origin: 50% 100%;
@@ -177,4 +171,4 @@
     transform-origin: 50% 100%;
     opacity: 0;
   }
-}
+});
