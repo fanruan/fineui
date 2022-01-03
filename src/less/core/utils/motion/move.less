@@ -17,7 +17,7 @@
 .move-motion(bi-move-left, biMoveLeft);
 .move-motion(bi-move-right, biMoveRight);
 
-@keyframes biMoveDownIn {
+.keyframes(biMoveDownIn, {
   0% {
     transform: translateY(100%);
     transform-origin: 0 0;
@@ -29,9 +29,9 @@
     transform-origin: 0 0;
     opacity: 1;
   }
-}
+});
 
-@keyframes biMoveDownOut {
+.keyframes(biMoveDownOut, {
   0% {
     transform: translateY(0%);
     transform-origin: 0 0;
@@ -43,9 +43,9 @@
     transform-origin: 0 0;
     opacity: 0;
   }
-}
+});
 
-@keyframes biMoveLeftIn {
+.keyframes(biMoveLeftIn, {
   0% {
     transform: translateX(-100%);
     transform-origin: 0 0;
@@ -57,9 +57,9 @@
     transform-origin: 0 0;
     opacity: 1;
   }
-}
+});
 
-@keyframes biMoveLeftOut {
+.keyframes(biMoveLeftOut, {
   0% {
     transform: translateX(0%);
     transform-origin: 0 0;
@@ -71,9 +71,9 @@
     transform-origin: 0 0;
     opacity: 0;
   }
-}
+});
 
-@keyframes biMoveRightIn {
+.keyframes(biMoveRightIn, {
   0% {
     transform: translateX(100%);
     transform-origin: 0 0;
@@ -85,9 +85,9 @@
     transform-origin: 0 0;
     opacity: 1;
   }
-}
+});
 
-@keyframes biMoveRightOut {
+.keyframes(biMoveRightOut, {
   0% {
     transform: translateX(0%);
     transform-origin: 0 0;
@@ -99,9 +99,9 @@
     transform-origin: 0 0;
     opacity: 0;
   }
-}
+});
 
-@keyframes biMoveUpIn {
+.keyframes(biMoveUpIn, {
   0% {
     transform: translateY(-100%);
     transform-origin: 0 0;
@@ -113,9 +113,9 @@
     transform-origin: 0 0;
     opacity: 1;
   }
-}
+});
 
-@keyframes biMoveUpOut {
+.keyframes(biMoveUpOut, {
   0% {
     transform: translateY(0%);
     transform-origin: 0 0;
@@ -127,4 +127,4 @@
     transform-origin: 0 0;
     opacity: 0;
   }
-}
+});

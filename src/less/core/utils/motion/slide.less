@@ -17,7 +17,7 @@
 .slide-motion(bi-slide-left, biSlideLeft);
 .slide-motion(bi-slide-right, biSlideRight);
 
-@keyframes biSlideUpIn {
+.keyframes(biSlideUpIn, {
   0% {
     transform: scaleY(0.8);
     transform-origin: 0% 0%;
@@ -29,9 +29,9 @@
     transform-origin: 0% 0%;
     opacity: 1;
   }
-}
+});
 
-@keyframes biSlideUpOut {
+.keyframes(biSlideUpOut, {
   0% {
     transform: scaleY(1);
     transform-origin: 0% 0%;
@@ -43,9 +43,9 @@
     transform-origin: 0% 0%;
     opacity: 0;
   }
-}
+});
 
-@keyframes biSlideDownIn {
+.keyframes(biSlideDownIn, {
   0% {
     transform: scaleY(0.8);
     transform-origin: 100% 100%;
@@ -57,9 +57,9 @@
     transform-origin: 100% 100%;
     opacity: 1;
   }
-}
+});
 
-@keyframes biSlideDownOut {
+.keyframes(biSlideDownOut, {
   0% {
     transform: scaleY(1);
     transform-origin: 100% 100%;
@@ -71,9 +71,9 @@
     transform-origin: 100% 100%;
     opacity: 0;
   }
-}
+});
 
-@keyframes biSlideLeftIn {
+.keyframes(biSlideLeftIn, {
   0% {
     transform: scaleX(0.8);
     transform-origin: 0% 0%;
@@ -85,9 +85,9 @@
     transform-origin: 0% 0%;
     opacity: 1;
   }
-}
+});
 
-@keyframes biSlideLeftOut {
+.keyframes(biSlideLeftOut, {
   0% {
     transform: scaleX(1);
     transform-origin: 0% 0%;
@@ -99,9 +99,9 @@
     transform-origin: 0% 0%;
     opacity: 0;
   }
-}
+});
 
-@keyframes biSlideRightIn {
+.keyframes(biSlideRightIn, {
   0% {
     transform: scaleX(0.8);
     transform-origin: 100% 0%;
@@ -113,9 +113,9 @@
     transform-origin: 100% 0%;
     opacity: 1;
   }
-}
+});
 
-@keyframes biSlideRightOut {
+.keyframes(biSlideRightOut, {
   0% {
     transform: scaleX(1);
     transform-origin: 100% 0%;
@@ -127,4 +127,4 @@
     transform-origin: 100% 0%;
     opacity: 0;
   }
-}
+});
