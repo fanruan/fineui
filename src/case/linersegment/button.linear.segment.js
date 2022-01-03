@@ -5,7 +5,7 @@ BI.LinearSegmentButton = BI.inherit(BI.BasicButton, {
         once: true,
         readonly: true,
         hgap: 10,
-        height: 25
+        height: 24
     },
 
     render: function () {
@@ -15,6 +15,7 @@ BI.LinearSegmentButton = BI.inherit(BI.BasicButton, {
             type: "bi.label",
             text: o.text,
             height: o.height,
+            textHeight: o.height - 2,
             value: o.value,
             hgap: o.hgap,
             ref: function () {
