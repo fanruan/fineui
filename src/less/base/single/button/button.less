@@ -38,31 +38,31 @@ body .bi-button, #body .bi-button {
   }
   &.button-common {
     &, & .b-font:before {
-      color: @color-bi-text;
+      color: @color-bi-text-common-button;
     }
     &.clear, &.clear .b-font:before {
-      color: @color-bi-text-highlight;
+      color: @color-bi-text-common-clear-button;
     }
     &.ghost{
       &, & .b-font:before{
-        color: @color-bi-text-highlight;
+        color: @color-bi-text-common-ghost-button;
       }
       &:hover{
         color: @color-bi-text;
-        background-color: @color-bi-background-highlight;
+        background-color: @color-bi-background-hover-common-ghost-button;
       }
       &:active{
-        background-color: @color-bi-background-highlight;
+        background-color: @color-bi-background-active-common-ghost-button;
       }
     }
   }
   &.button-ignore {
     & {
       &, & .b-font:before {
-        color: @color-bi-text-highlight;
+        color: @color-bi-text-ignore-button;
       }
       background-color: transparent;
-      border-color: @color-bi-border-highlight;
+      border-color: @color-bi-border-ignore-button;
     }
     &.clear {
       background-color: transparent;
@@ -72,14 +72,14 @@ body .bi-button, #body .bi-button {
   &.button-success {
     & {
       &, & .b-font:before {
-        color: @color-bi-text;
+        color: @color-bi-text-success-button;
       }
-      background-color: @color-bi-background-success;
-      border-color: @color-bi-border-success;
+      background-color: @color-bi-background-success-button;
+      border-color: @color-bi-border-success-button;
     }
     &.clear {
       &, & .b-font:before {
-        color: @color-bi-text-success;
+        color: @color-bi-text-success-clear-button;
       }
       background-color: transparent;
       border-width: 0;
@@ -88,14 +88,14 @@ body .bi-button, #body .bi-button {
   &.button-warning {
     & {
       &, & .b-font:before {
-        color: @color-bi-text;
+        color: @color-bi-text-warning-button;
       }
-      background-color: @color-bi-background-warning;
-      border-color: @color-bi-border-warning;
+      background-color: @color-bi-background-warning-button;
+      border-color: @color-bi-border-warning-button;
     }
     &.clear {
       &, & .b-font:before {
-        color: @color-bi-text-redmark;
+        color: @color-bi-text-warning-clear-button;
       }
       background-color: transparent;
       border-width: 0;
@@ -104,14 +104,14 @@ body .bi-button, #body .bi-button {
   &.button-error {
     & {
       &, & .b-font:before {
-        color: @color-bi-text;
+        color: @color-bi-text-error-button;
       }
-      background-color: @color-bi-background-failure;
-      border-color: @color-bi-border-failure;
+      background-color: @color-bi-background-error-button;
+      border-color: @color-bi-border-error-button;
     }
     &.clear {
       &, & .b-font:before {
-        color: @color-bi-text-failure;
+        color: @color-bi-text-clear-error-button;
       }
       background-color: transparent;
       border-width: 0;
@@ -123,12 +123,12 @@ body .bi-button, #body .bi-button {
   &.button-warning.disabled {
     &, &.base-disabled {
       &, & .b-font:before {
-        color: @color-bi-text-disabled !important;
+        color: @color-bi-text-disabled-button !important;
       }
-      background-color: fade(@color-bi-background-light-disabled, 20%) !important;
-      @ieColor: argb(fade(@color-bi-background-light-disabled, 20%));
+      background-color: fade(@color-bi-background-disabled-button, 20%) !important;
+      @ieColor: argb(fade(@color-bi-background-disabled-button, 20%));
       filter: ~"progid:DXImageTransform.Microsoft.gradient(startColorstr=@{ieColor},endColorstr=@{ieColor})";
-      border-color: @color-bi-border-disabled !important;
+      border-color: @color-bi-border-disabled-button !important;
     }
     &:after {
       display: none;
@@ -136,10 +136,10 @@ body .bi-button, #body .bi-button {
   }
   &.button-ignore.disabled {
     &, & .b-font:before {
-      color: @color-bi-text-disabled !important;
+      color: @color-bi-text-disabled-ignore-button !important;
     }
-    background: @color-bi-background-default !important;
-    border-color: @color-bi-border-line !important;
+    background: @color-bi-background-disabled-ignore-button !important;
+    border-color: @color-bi-border-disabled-ignore-button !important;
     &:after {
       display: none;
     }
@@ -151,7 +151,7 @@ body .bi-button, #body .bi-button {
   &.button-ignore.disabled {
     &.clear {
       &, & .b-font:before {
-        color: @color-bi-text-disabled !important;
+        color: @color-bi-text-disabled-ignore-clear-button !important;
       }
       background: transparent !important;
       border-width: 0 !important;
@@ -161,10 +161,10 @@ body .bi-button, #body .bi-button {
     }
     &.ghost {
       &, & .b-font:before {
-        color: @color-bi-text-highlight !important;
+        color: @color-bi-text-disabled-ignore-ghost-button !important;
       }
       background: transparent !important;
-      border-color: @color-bi-text-highlight !important;
+      border-color: @color-bi-border-disabled-ignore-ghost-button !important;
       .opacity(0.5);
     }
   }
@@ -198,7 +198,7 @@ body .bi-button, #body .bi-button {
     &:hover{
       & .bi-button-mask {
         .opacity(0.1);
-        background-color: @color-bi-background-default;
+        background-color: @color-bi-background-hover-button-mask;
         .transition(@hoverVal);
       }
     }
@@ -206,7 +206,7 @@ body .bi-button, #body .bi-button {
   &.button-ignore {
     &:after {
       content: "";
-      background-color: @color-bi-background-highlight;
+      background-color: @color-bi-background-ignore-button-mask;
       .border-radius(10px);
       display: block;
       width: 100%;
@@ -228,7 +228,7 @@ body .bi-button, #body .bi-button {
       .transition(@activeStopVal)
     }
     &:hover{
-      background-color: @color-bi-blue-10;
+      background-color: @color-bi-background-hover-ignore-button-mask;
       .transition(@hoverVal);
     }
   }
@@ -242,33 +242,33 @@ body .bi-button, #body .bi-button {
     &.button-common {
       &.ghost{
         &, & .b-font:before{
-          color: @color-bi-text;
-          border-color: @color-bi-border-default;
+          color: @color-bi-text-common-ghost-button-theme-dark;
+          border-color: @color-bi-border-common-ghost-button-theme-dark;
         }
         &:hover{
-          color: @color-bi-text-normal;
-          background-color: @color-bi-background-default;
+          color: @color-bi-text-hover-common-ghost-button-theme-dark;
+          background-color: @color-bi-background-hover-common-ghost-button-theme-dark;
         }
         &:active{
-          .background-color(@color-bi-background-default, 90%);
+          .background-color(@color-bi-background-active-common-ghost-button-theme-dark, 90%);
         }
       }
     }
     &.button-ignore {
       &:hover{
-        background-color: @color-bi-blue-10;
+        background-color: @color-bi-background-hover-ignore-button-theme-dark;
       }
       &:active{
-        background-color: @color-bi-blue-10;
+        background-color: @color-bi-background-active-ignore-button-theme-dark;
       }
     }
     &.button-common.disabled{
       &.ghost {
         &, & .b-font:before {
-          color: @color-bi-text !important;
+          color: @color-bi-text-disabled-common-ghost-button-theme-dark !important;
         }
         background: transparent !important;
-        border-color: @color-bi-border-default !important;
+        border-color: @color-bi-border-disabled-common-ghost-button-theme-dark !important;
         .opacity(0.5);
       }
     }
@@ -277,8 +277,8 @@ body .bi-button, #body .bi-button {
     &.button-warning.disabled,
     &.button-ignore.disabled {
       &, &.base-disabled {
-        background-color: fade(@color-bi-background-light-disabled-theme-dark, 20%) !important;
-        @ieColor: argb(fade(@color-bi-background-light-disabled-theme-dark, 20%));
+        background-color: fade(@color-bi-background-disabled-button-theme-dark, 20%) !important;
+        @ieColor: argb(fade(@color-bi-background-disabled-button-theme-dark, 20%));
         filter: ~"progid:DXImageTransform.Microsoft.gradient(startColorstr=@{ieColor},endColorstr=@{ieColor})";
       }
     }
