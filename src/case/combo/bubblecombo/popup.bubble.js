@@ -13,7 +13,7 @@ BI.BubblePopupView = BI.inherit(BI.PopupView, {
             maxWidth: 300,
             minHeight: 90
         });
-    }
+    },
 });
 
 BI.shortcut("bi.bubble_popup_view", BI.BubblePopupView);
@@ -155,7 +155,7 @@ BI.TextBubblePopupBarView = BI.inherit(BI.Widget, {
 
     populate: function (v) {
         this.text.setText(v || this.options.text);
-    }
+    },
 });
 BI.TextBubblePopupBarView.EVENT_CHANGE = "EVENT_CLICK_TOOLBAR_BUTTON";
 BI.shortcut("bi.text_bubble_bar_popup_view", BI.TextBubblePopupBarView);
