@@ -34,7 +34,7 @@ module.exports = {
     calendar: basicAttachmentMap.calendar,
     color_chooser: basicAttachmentMap.color_chooser,
     segment: basicAttachmentMap.segment,
-    line_segment: basicAttachmentMap.line_segment,
+    linear_segment: basicAttachmentMap.linear_segment,
     date: basicAttachmentMap.date,
     down_list: basicAttachmentMap.down_list,
     text_value_down_list_combo: basicAttachmentMap.text_value_down_list_combo

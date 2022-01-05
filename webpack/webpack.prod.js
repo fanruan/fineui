@@ -33,7 +33,6 @@ module.exports = merge.smart(common, {
         "2.0/core_without_platform.min": attachments.coreWithoutPlatform,
         core: attachments.coreJs,
         resource: attachments.resource,
-        // 组件库独立组件
         "components/single": components.single,
         "components/button_group": components.button_group,
         "components/buttons": components.buttons,
@@ -43,10 +42,10 @@ module.exports = merge.smart(common, {
         "components/calendar": components.calendar,
         "components/color_chooser": components.color_chooser,
         "components/segment": components.segment,
-        "components/line_segment": components.line_segment,
+        "components/linear_segment": components.linear_segment,
         "components/date": components.date,
         "components/down_list": components.down_list,
-        "components/text_value_down_list_combo": components.text_value_down_list_combo
+        "components/text_value_down_list_combo": components.text_value_down_list_combo,
     },
     optimization: {
         minimizer: [
