@@ -42,6 +42,7 @@ const basicAttachmentMap = {
         "src/router/**/*.js",
     ]),
     core_without_platform: sync([
+        "src/core/0.foundation.js",
         lodashJs,
         "src/core/**/*.js",
         "src/data/**/*.js",
