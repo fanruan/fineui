@@ -4,12 +4,14 @@
   & .checkbox-content, &.checkbox-content {
     .border-radius(2px);
     border: 1px solid @color-bi-border-checkbox;
-    box-sizing: border-box;
+    .box-sizing(border-box);
+    .transition(all .1s);
     &:after {
       position: absolute;
       display: table;
-      top: 50%;
-      left: 20%;
+      // 百分比会出现像素误差
+      top: 6px;
+      left: 2px;
       border: 2px solid transparent;
       border-top: 0;
       border-left: 0;
@@ -17,6 +19,8 @@
       height: 9px;
       .box-sizing(border-box);
       .transform(rotate(45deg) scale(1) translate(-50%, -50%));
+      @transition: all .1s cubic-bezier(.71,-.46,.88,.6),opacity .1s;
+      .transition(@transition);
       content: '';
     }
     &.hover, &:hover {

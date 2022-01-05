@@ -5,6 +5,7 @@
     .border-radius(8px);
     border: 1px solid @color-bi-border-radio;
     .box-sizing(border-box);
+    .transition(all .1s);
     &:after {
       content: "";
     }
@@ -25,6 +26,8 @@
         .border-radius(3px);
         background-color: @color-bi-background-radio;
         .transform(translate(-50%, -50%));
+        @transition: all .1s cubic-bezier(.71,-.46,.88,.6),opacity .1s;
+        .transition(@transition);
       }
     }
   }
