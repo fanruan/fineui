@@ -41,7 +41,14 @@ const basicAttachmentMap = {
     router: sync([
         "src/router/**/*.js",
     ]),
-    'core_without_normalize': sync(
+    core_without_platform: sync([
+        lodashJs,
+        "src/core/**/*.js",
+        "src/data/**/*.js",
+        "!src/core/platform/**/*.js",
+        "!src/core/controller/**/*.js",
+    ]),
+    core_without_normalize: sync(
         ["src/less/core/**/*.less", "src/less/theme/**/*.less", "!src/less/core/normalize.less", "!src/less/core/normalize2.less"],
     ),
     resource: sync(["src/less/resource/**/*.less"]),
@@ -211,6 +218,7 @@ module.exports = {
     fineuiWithoutJqueryAndPolyfillJs: uniq(fineuiWithoutJqueryAndPolyfillJs),
     utils: uniq(basicAttachmentMap.utils),
     demo: uniq(demo),
+    coreWithoutPlatform: uniq(basicAttachmentMap.core_without_platform),
     coreJs: uniq(coreJs),
     resource: uniq((resource)),
     config: uniq(config),
