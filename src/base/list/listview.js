@@ -13,7 +13,10 @@ BI.ListView = BI.inherit(BI.Widget, {
             blockSize: 10,
             scrollTop: 0,
             el: {},
-            items: []
+            items: [],
+            itemFormatter: function (item, index) {
+                return item;
+            }
         };
     },
 
@@ -71,7 +74,9 @@ BI.ListView = BI.inherit(BI.Widget, {
         };
         while ((lastHeight = getElementHeight()) < minContentHeight && index < o.items.length) {
             var items = o.items.slice(index, index + o.blockSize);
-            this.container.addItems(items, this);
+            this.container.addItems(items.map(function (item, i) {
+                return o.itemFormatter(item, index + i);
+            }), this);
             var addedHeight = getElementHeight() - lastHeight;
             this.cache[cnt] = {
                 index: index,
