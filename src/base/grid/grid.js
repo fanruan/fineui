@@ -21,7 +21,10 @@ BI.GridView = BI.inherit(BI.Widget, {
             // estimatedRowSize: 30, //rowHeightGetter为function时必设
             scrollLeft: 0,
             scrollTop: 0,
-            items: []
+            items: [],
+            itemFormatter: function (item, row, col) {
+                return item;
+            }
         });
     },
 
@@ -172,12 +175,13 @@ BI.GridView = BI.inherit(BI.Widget, {
                         child = this.renderedCells[index].el;
                         renderedCells.push(this.renderedCells[index]);
                     } else {
+                        var item = o.itemFormatter(o.items[rowIndex][columnIndex], rowIndex, columnIndex);
                         child = BI._lazyCreateWidget(BI.extend({
                             type: "bi.label",
                             width: columnDatum.size,
                             height: rowDatum.size
-                        }, o.items[rowIndex][columnIndex], {
-                            cls: (o.items[rowIndex][columnIndex].cls || "") + " grid-cell" + (rowIndex === 0 ? " first-row" : "") + (columnIndex === 0 ? " first-col" : ""),
+                        }, item, {
+                            cls: (item.cls || "") + " grid-cell" + (rowIndex === 0 ? " first-row" : "") + (columnIndex === 0 ? " first-col" : ""),
                             _rowIndex: rowIndex,
                             _columnIndex: columnIndex,
                             _left: columnDatum.offset + horizontalOffsetAdjustment,

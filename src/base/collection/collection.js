@@ -18,7 +18,10 @@ BI.CollectionView = BI.inherit(BI.Widget, {
             verticalOverscanSize: 0,
             scrollLeft: 0,
             scrollTop: 0,
-            items: []
+            items: [],
+            itemFormatter: function (item, index) {
+                return item;
+            }
         });
     },
 
@@ -176,12 +179,13 @@ BI.CollectionView = BI.inherit(BI.Widget, {
                     // }
                     renderedCells.push(child = this.renderedCells[index]);
                 } else {
+                    var item = o.itemFormatter(o.items[datum.index], datum.index);
                     child = BI._lazyCreateWidget(BI.extend({
                         type: "bi.label",
                         width: datum.width,
                         height: datum.height
-                    }, o.items[datum.index], {
-                        cls: (o.items[datum.index].cls || "") + " collection-cell" + (datum.y === 0 ? " first-row" : "") + (datum.x === 0 ? " first-col" : ""),
+                    }, item, {
+                        cls: (item.cls || "") + " collection-cell" + (datum.y === 0 ? " first-row" : "") + (datum.x === 0 ? " first-col" : ""),
                         _left: datum.x,
                         _top: datum.y
                     }));
