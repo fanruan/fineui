@@ -8,22 +8,14 @@
     background-color: @color-bi-background-active-switch;
   }
   & .circle-button{
-    .border-radius(9px 9px 9px 9px);
+    .border-radius(6px 6px 6px 6px);
     .transition(all .2s ease-in-out);
+    background-color: @color-bi-background-active-switch-content;
   }
   &.disabled {
-    background-color: @color-bi-background-disabled-switch;
+    opacity: 0.5;
   }
-}
-
-.bi-theme-dark {
-  .bi-switch{
-    background-color: @color-bi-background-switch-theme-dark;
-    &.active {
-      background-color: @color-bi-background-active-switch-theme-dark;
-    }
-    &.disabled {
-      background-color: @color-bi-background-disabled-switch-theme-dark;
-    }
+  & .content-tip {
+    color: @color-bi-font-switch-tip;
   }
 }

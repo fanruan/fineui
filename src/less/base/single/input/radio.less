@@ -16,6 +16,7 @@
   &:active, &.active {
     & .radio-content, &.radio-content {
       border-color:  @color-bi-border-hover-active-radio;
+      background-color: @color-bi-background-active-radio;
       &:after {
         width: 6px;
         height: 6px;
@@ -24,7 +25,7 @@
         top: 50%;
         left: 50%;
         .border-radius(3px);
-        background-color: @color-bi-background-radio;
+        background-color: @color-bi-background-active-radio-content;
         .transform(translate(-50%, -50%));
         @transition: all .1s cubic-bezier(.71,-.46,.88,.6),opacity .1s;
         .transition(@transition);
@@ -43,7 +44,7 @@
       & .radio-content, &.radio-content {
         background-color: @color-bi-background-disabled-active-radio;
         &:after {
-          background-color: @color-bi-background-radio;
+          background-color: @color-bi-background-disabled-active-radio-content;
         }
       }
     }
@@ -61,6 +62,9 @@
     &.active, &:active {
       & .radio-content, &.radio-content {
         border-color:@color-bi-border-hover-active-radio-theme-dark;
+        &:after {
+          background-color: @color-bi-background-active-radio-content-theme-dark;
+        }
       }
     }
     &.disabled {
@@ -74,6 +78,9 @@
         & .radio-content, &.radio-content {
           background-color: @color-bi-background-disabled-active-radio-theme-dark;
           border-color: @color-bi-border-disabled-radio-theme-dark;
+          &:after {
+            background-color: @color-bi-background-disabled-active-radio-content-theme-dark;
+          }
         }
       }
     }
