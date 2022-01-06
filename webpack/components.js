@@ -10,8 +10,11 @@ function sync (patterns) {
 
 const basicAttachmentMap = {
     single: sync(["src/base/single/**/*.js"]),
+    layer: sync(["src/base/layer/**/*.js"]),
+    pane: sync(["src/base/1.pane.js"]),
     button_group: sync(["src/base/combination/group.button.js"]),
     buttons: sync(["src/case/button/**/*.js"]),
+    checkboxes: sync(["src/case/checkbox/**/*.js"]),
     combos: sync(["src/case/combo/**/*.js"]),
     editors: sync(["src/case/editor/**/*.js"]),
     triggers: sync(["src/case/trigger/**/*.js"]),
@@ -26,8 +29,11 @@ const basicAttachmentMap = {
 
 module.exports = {
     single: basicAttachmentMap.single,
+    layer: basicAttachmentMap.layer,
+    pane: basicAttachmentMap.pane,
     button_group: basicAttachmentMap.button_group,
     buttons: basicAttachmentMap.buttons,
+    checkboxes: basicAttachmentMap.checkboxes,
     combos: basicAttachmentMap.combos,
     editors: basicAttachmentMap.editors,
     triggers: basicAttachmentMap.triggers,
