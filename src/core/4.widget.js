@@ -7,6 +7,15 @@
  */
 
 !(function () {
+    var cancelAnimationFrame =
+        _global.cancelAnimationFrame ||
+        _global.webkitCancelAnimationFrame ||
+        _global.mozCancelAnimationFrame ||
+        _global.oCancelAnimationFrame ||
+        _global.msCancelAnimationFrame ||
+        _global.clearTimeout;
+
+    var requestAnimationFrame = _global.requestAnimationFrame || _global.webkitRequestAnimationFrame || _global.mozRequestAnimationFrame || _global.oRequestAnimationFrame || _global.msRequestAnimationFrame || _global.setTimeout;
     function callLifeHook (self, life) {
         var hooks = [], hook;
         hook = self[life];
@@ -34,6 +43,8 @@
                 tag: null,
                 disabled: false,
                 invisible: false,
+                animation: "",
+                animationDuring: 0,
                 invalid: false,
                 baseCls: "",
                 extraCls: "",
@@ -467,13 +478,49 @@
         },
 
         setVisible: function (visible) {
+            var self = this, o = this.options;
+            var lastVisible = !o.invisible;
             this._setVisible(visible);
             if (visible === true) {
                 // 用this.element.show()会把display属性改成block
                 this.element.css("display", "");
                 this._mount();
+                if (o.animation && !lastVisible) {
+                    this.element.removeClass(o.animation + "-leave").removeClass(o.animation + "-leave-active").addClass(o.animation + "-enter");
+                    if (this._requestAnimationFrame) {
+                        cancelAnimationFrame(this._requestAnimationFrame);
+                    }
+                    this._requestAnimationFrame = function () {
+                        self.element.addClass(o.animation + "-enter-active");
+                    };
+                    requestAnimationFrame(this._requestAnimationFrame);
+                    if (this._animationDuring){
+                        clearTimeout(this._animationDuring);
+                    }
+                    this._animationDuring = setTimeout(function () {
+                        self.element.removeClass(o.animation + "-enter").removeClass(o.animation + "-enter-active");
+                    }, o.animationDuring);
+                }
             } else if (visible === false) {
-                this.element.css("display", "none");
+                if (o.animation && lastVisible) {
+                    this.element.removeClass(o.animation + "-enter").removeClass(o.animation + "-enter-active").addClass(o.animation + "-leave");
+                    if (this._requestAnimationFrame) {
+                        cancelAnimationFrame(this._requestAnimationFrame);
+                    }
+                    this._requestAnimationFrame = function () {
+                        self.element.addClass(o.animation + "-leave-active");
+                    };
+                    requestAnimationFrame(this._requestAnimationFrame);
+                    if (this._animationDuring){
+                        clearTimeout(this._animationDuring);
+                    }
+                    this._animationDuring = setTimeout(function () {
+                        self.element.removeClass(o.animation + "-leave").removeClass(o.animation + "-leave-active");
+                        self.element.css("display", "none");
+                    }, o.animationDuring);
+                } else {
+                    this.element.css("display", "none");
+                }
             }
             this.fireEvent(BI.Events.VIEW, visible);
         },
