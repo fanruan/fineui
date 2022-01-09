@@ -84,6 +84,19 @@ body .bi-button, #body .bi-button {
       background-color: transparent;
       border-width: 0;
     }
+    &.ghost {
+      &, & .b-font:before {
+        color: @color-bi-text-success-ghost-button;
+      }
+      background-color: transparent;
+      &:hover {
+        color: @color-bi-text;
+        background-color: @color-bi-background-success-button;
+      }
+      &:active {
+        background-color: @color-bi-background-success-button;
+      }
+    }
   }
   &.button-warning {
     & {
@@ -100,6 +113,19 @@ body .bi-button, #body .bi-button {
       background-color: transparent;
       border-width: 0;
     }
+    &.ghost {
+      &, & .b-font:before {
+        color: @color-bi-text-warning-ghost-button;
+      }
+      background-color: transparent;
+      &:hover {
+        color: @color-bi-text;
+        background-color: @color-bi-background-warning-button;
+      }
+      &:active {
+        background-color: @color-bi-background-warning-button;
+      }
+    }
   }
   &.button-error {
     & {
@@ -111,10 +137,23 @@ body .bi-button, #body .bi-button {
     }
     &.clear {
       &, & .b-font:before {
-        color: @color-bi-text-clear-error-button;
+        color: @color-bi-text-error-clear-button;
       }
       background-color: transparent;
       border-width: 0;
+    }
+    &.ghost {
+      &, & .b-font:before {
+        color: @color-bi-text-error-ghost-button;
+      }
+      background-color: transparent;
+      &:hover {
+        color: @color-bi-text;
+        background-color: @color-bi-background-error-button;
+      }
+      &:active {
+        background-color: @color-bi-background-error-button;
+      }
     }
   }
   &.button-common.disabled,
@@ -161,11 +200,43 @@ body .bi-button, #body .bi-button {
     }
     &.ghost {
       &, & .b-font:before {
-        color: @color-bi-text-disabled-ignore-ghost-button !important;
+        // color: @color-bi-text-disabled-ignore-ghost-button !important;
       }
       background: transparent !important;
-      border-color: @color-bi-border-disabled-ignore-ghost-button !important;
+      // border-color: @color-bi-border-disabled-ignore-ghost-button !important;
       .opacity(0.5);
+    }
+  }
+  &.button-common.disabled {
+    &.ghost {
+      &, & .b-font:before {
+        color: @color-bi-text-disabled-common-ghost-button !important;
+      }
+      border-color: @color-bi-border-disabled-common-ghost-button !important;
+    }
+  }
+  &.button-success.disabled {
+    &.ghost {
+      &, & .b-font:before {
+        color: @color-bi-text-disabled-success-ghost-button !important;
+      }
+      border-color: @color-bi-border-disabled-success-ghost-button !important;
+    }
+  }
+  &.button-warning.disabled {
+    &.ghost {
+      &, & .b-font:before {
+        color: @color-bi-text-disabled-warning-ghost-button !important;
+      }
+      border-color: @color-bi-border-disabled-warning-ghost-button !important;
+    }
+  }
+  &.button-error.disabled {
+    &.ghost {
+      &, & .b-font:before {
+        color: @color-bi-text-disabled-error-ghost-button !important;
+      }
+      border-color: @color-bi-border-disabled-error-ghost-button !important;
     }
   }
 }
