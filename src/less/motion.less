@@ -52,27 +52,3 @@
     pointer-events: none;
   }
 }
-
-.zoom-big-motion-enter() {
-  transform: scale(0);
-  opacity: 0;
-  animation-timing-function: @ease-out-circ;
-
-  .motion-common(@animation-duration-base);
-  animation-play-state: paused;
-}
-.zoom-big-motion-enter-active() {
-  animation-name: biZoomBigIn;
-  animation-play-state: running;
-}
-
-.zoom-big-motion-leave() {
-  animation-timing-function: @ease-in-out-circ;
-
-  .motion-common-leave(@animation-duration-base);
-}
-.zoom-big-motion-leave-active() {
-  animation-name: biZoomBigOut;
-  animation-play-state: running;
-  pointer-events: none;
-}

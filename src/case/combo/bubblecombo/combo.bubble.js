@@ -55,9 +55,9 @@ BI.BubbleCombo = BI.inherit(BI.Widget, {
             el: o.el,
             popup: BI.extend({
                 type: "bi.bubble_popup_view",
-            }, o.popup, {
-                cls: (o.popup.cls || "") + " bi-zoom-big-enter bi-zoom-big-enter-active"
-            })
+                animation: "bi-zoom-big",
+                animationDuring: 200,
+            }, o.popup)
         });
         this.combo.on(BI.Combo.EVENT_TRIGGER_CHANGE, function () {
             self.fireEvent(BI.BubbleCombo.EVENT_TRIGGER_CHANGE, arguments);
