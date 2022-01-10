@@ -30,8 +30,9 @@
   &.active, &:active {
     & .checkbox-content, &.checkbox-content{
       border-color: @color-bi-border-hover-active-checkbox;
+      background-color: @color-bi-background-active-checkbox;
       &:after {
-        border-color: @color-bi-border-default;
+        border-color: @color-bi-background-active-checkbox-content;
         opacity: 1;
       }
     }
@@ -49,6 +50,7 @@
         background-color: @color-bi-background-disabled-active-checkbox;
         &:after {
           opacity: 1;
+          border-color: @color-bi-background-disabled-active-checkbox-content;
         }
       }
     }
@@ -66,6 +68,10 @@
     &.active, &:active {
       & .checkbox-content, &.checkbox-content {
         border-color: @color-bi-border-hover-active-checkbox-theme-dark;
+        background-color: @color-bi-background-active-checkbox-theme-dark;
+        &:after {
+          border-color: @color-bi-background-active-checkbox-content-theme-dark;
+        }
       }
     }
     &.disabled {
@@ -76,6 +82,9 @@
         & .checkbox-content, &.checkbox-content {
           background-color: @color-bi-background-disabled-active-checkbox-theme-dark;
           border-color: @color-bi-border-disabled-checkbox-theme-dark;
+          &:after {
+            border-color: @color-bi-background-disabled-active-checkbox-content-theme-dark;
+          }
         }
       }
     }
