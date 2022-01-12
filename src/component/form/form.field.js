@@ -29,6 +29,11 @@ BI.FormField = BI.inherit(BI.Widget, {
                         action: function () {
                             self.fireEvent("EVENT_CHANGE");
                         }
+                    }, {
+                        eventName: "EVENT_CONFIRM",
+                        action: function () {
+                            self.fireEvent("EVENT_CHANGE");
+                        }
                     }]
                 }),
                 left: 0,
