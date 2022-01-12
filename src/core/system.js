@@ -16,8 +16,6 @@
             LIST_ITEM_HEIGHT: 24,
             TRIGGER_HEIGHT: 24,
             TOAST_TOP: 10,
-            // 根据控件类型特化尺寸
-            DATE_LIST_ITEM_HEIGHT: 24
         }
     };
 

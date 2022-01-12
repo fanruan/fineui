@@ -31,11 +31,10 @@ BI.MonthPopup = BI.inherit(BI.Widget, {
                 columns: 2,
                 rows: 6,
                 columnSize: [1 / 2, 1 / 2],
-                rowSize: BI.SIZE_CONSANTS.DATE_LIST_ITEM_HEIGHT + 1
+                rowSize: BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT + 1
             })), {
                 type: "bi.center_adapt",
-                vgap: 1,
-                hgap: 2
+                vgap: 2,
             }],
             value: o.value
         });
@@ -63,13 +62,13 @@ BI.MonthPopup = BI.inherit(BI.Widget, {
             return BI.map(item, function (j, td) {
                 return {
                     type: "bi.text_item",
-                    cls: "bi-list-item-select",
+                    cls: "bi-border-radius bi-list-item-select",
                     textAlign: "center",
                     whiteSpace: "nowrap",
                     once: false,
                     forceSelected: true,
-                    height: BI.SIZE_CONSANTS.DATE_LIST_ITEM_HEIGHT - 1,
-                    width: 38,
+                    height: BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT - 1,
+                    width: 30,
                     value: td,
                     text: td,
                     disabled: !BI.contains(m, td)

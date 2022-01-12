@@ -41,9 +41,13 @@ BI.MonthDateCombo = BI.inherit(BI.Trigger, {
             isNeedAdjustWidth: false,
             el: this.trigger,
             popup: {
-                minWidth: 85,
+                minWidth: 100,
                 stopPropagation: false,
-                el: this.popup
+                el: {
+                    type: "bi.vertical",
+                    hgap: 6,
+                    items: [this.popup]
+                }
             }
         });
         this.combo.on(BI.Combo.EVENT_CHANGE, function () {
