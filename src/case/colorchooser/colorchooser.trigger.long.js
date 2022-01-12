@@ -7,10 +7,10 @@
  */
 BI.LongColorChooserTrigger = BI.inherit(BI.Trigger, {
 
-    _defaultConfig: function () {
+    _defaultConfig: function (config) {
         var conf = BI.LongColorChooserTrigger.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
-            baseCls: (conf.baseCls || "") + " bi-color-chooser-trigger bi-border bi-focus-shadow",
+            baseCls: (conf.baseCls || "") + " bi-color-chooser-trigger bi-focus-shadow " + (config.simple ? "bi-border-bottom" : "bi-border"),
             height: 24
         });
     },

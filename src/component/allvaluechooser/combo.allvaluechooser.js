@@ -27,6 +27,7 @@ BI.AllValueChooserCombo = BI.inherit(BI.AbstractAllValueChooser, {
         }
         this.combo = BI.createWidget({
             type: "bi.multi_select_combo",
+            simple: o.simple,
             text: o.text,
             element: this,
             itemsCreator: BI.bind(this._itemsCreator, this),

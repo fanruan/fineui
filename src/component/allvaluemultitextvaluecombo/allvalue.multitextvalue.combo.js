@@ -12,6 +12,7 @@ BI.AllValueMultiTextValueCombo = BI.inherit(BI.Widget, {
         var value = this._digestValue(o.value);
         return {
             type: "bi.search_multi_text_value_combo",
+            simple: o.simple,
             text: o.text,
             height: o.height,
             items: o.items,

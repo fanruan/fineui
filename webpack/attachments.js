@@ -35,6 +35,7 @@ const basicAttachmentMap = {
     ]),
     widget: sync([
         "src/less/widget/**/*.less",
+        "src/less/component/**/*.less",
         "src/widget/**/*.js",
         "src/component/**/*.js",
     ]),
@@ -118,6 +119,7 @@ const bundleWithoutNormalize = [].concat(
     sync([
         "src/less/base/**/*.less",
         "src/less/widget/**/*.less",
+        "src/less/component/**/*.less",
         "public/less/**/*.less",
         "!public/less/app.less",
         // ts的less
@@ -129,6 +131,7 @@ const fineuiWithoutNormalize = [].concat(
     sync([
         "src/less/base/**/*.less",
         "src/less/widget/**/*.less",
+        "src/less/component/**/*.less",
         'ui/less/app.less',
         'ui/less/**/*.less',
     ]),

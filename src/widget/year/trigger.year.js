@@ -24,6 +24,7 @@ BI.DynamicYearTrigger = BI.inherit(BI.Trigger, {
         var self = this, o = this.options, c = this._const;
         this.editor = BI.createWidget({
             type: "bi.sign_editor",
+            simple: o.simple,
             height: o.height,
             validationChecker: function (v) {
                 return v === "" || (BI.isPositiveInteger(v) && !BI.checkDateVoid(v, 1, 1, o.min, o.max)[0]);

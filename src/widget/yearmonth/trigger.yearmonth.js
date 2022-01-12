@@ -64,6 +64,7 @@ BI.DynamicYearMonthTrigger = BI.inherit(BI.Trigger, {
         var self = this, o = this.options, c = this._const;
         var editor = BI.createWidget({
             type: "bi.sign_editor",
+            simple: o.simple,
             height: o.height,
             validationChecker: function (v) {
                 if (isYear) {
