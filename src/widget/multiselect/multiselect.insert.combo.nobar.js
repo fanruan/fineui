@@ -117,7 +117,7 @@ BI.MultiSelectInsertNoBarCombo = BI.inherit(BI.Single, {
 
         this.combo = BI.createWidget({
             type: "bi.combo",
-            cls: "bi-border bi-border-radius",
+            cls: (o.simple ? "bi-border-bottom" : "bi-border") + " bi-border-radius",
             toggle: false,
             container: o.container,
             el: this.trigger,

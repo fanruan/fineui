@@ -87,7 +87,7 @@ BI.DateCalendarPopup = BI.inherit(BI.Widget, {
             type: "bi.vertical",
             items: [{
                 el: this.calendar,
-                hgap: 5,
+                hgap: 12,
                 bgap: 7
             }]
         }, {

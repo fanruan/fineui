@@ -30,24 +30,25 @@ BI.DynamicDateCombo = BI.inherit(BI.Single, {
         this.storeTriggerValue = "";
         var date = BI.getDate();
         this.storeValue = opts.value;
+        var border = opts.simple ? 1 : 2;
 
         return {
             type: "bi.absolute",
             items: [{
                 el: {
                     type: "bi.htape",
-                    cls: "bi-border bi-border-radius bi-focus-shadow",
+                    cls: (opts.simple ? "bi-border-bottom" : "bi-border") + " bi-border-radius bi-focus-shadow",
                     items: [{
                         el: {
                             type: "bi.icon_button",
                             cls: "bi-trigger-icon-button date-change-h-font",
-                            width: opts.height - 2,
-                            height: opts.height - 2,
+                            width: opts.height - border,
+                            height: opts.height - border,
                             ref: function () {
                                 self.changeIcon = this;
                             }
                         },
-                        width: opts.height - 2
+                        width: opts.height - border
                     }, {
                         type: "bi.absolute",
                         items: [{
@@ -63,12 +64,13 @@ BI.DynamicDateCombo = BI.inherit(BI.Single, {
                                 destroyWhenHide: true,
                                 el: {
                                     type: "bi.dynamic_date_trigger",
+                                    simple: opts.simple,
                                     min: opts.minDate,
                                     max: opts.maxDate,
                                     format: opts.format,
                                     allowEdit: opts.allowEdit,
                                     watermark: opts.watermark,
-                                    height: opts.height - 2,
+                                    height: opts.height - border,
                                     value: opts.value,
                                     ref: function () {
                                         self.trigger = this;
@@ -112,11 +114,13 @@ BI.DynamicDateCombo = BI.inherit(BI.Single, {
                                                     month: date.getMonth() + 1
                                                 }
                                             };
+                                            self.comboWrapper.element.addClass("error");
                                             self.fireEvent(BI.DynamicDateCombo.EVENT_ERROR);
                                         }
                                     }, {
                                         eventName: BI.DynamicDateTrigger.EVENT_VALID,
                                         action: function () {
+                                            self.comboWrapper.element.removeClass("error");
                                             self.fireEvent(BI.DynamicDateCombo.EVENT_VALID);
                                         }
                                     }, {
@@ -226,8 +230,8 @@ BI.DynamicDateCombo = BI.inherit(BI.Single, {
                             el: {
                                 type: "bi.icon_button",
                                 cls: "bi-trigger-icon-button date-font",
-                                width: opts.height - 2,
-                                height: opts.height - 2,
+                                width: opts.height - border,
+                                height: opts.height - border,
                                 listeners: [{
                                     eventName: BI.IconButton.EVENT_CHANGE,
                                     action: function () {
@@ -271,7 +275,7 @@ BI.DynamicDateCombo = BI.inherit(BI.Single, {
         switch (type) {
             case BI.DynamicDateCombo.Dynamic:
                 this.changeIcon.setVisible(true);
-                this.comboWrapper.attr("items")[0].width = o.height - 2;
+                this.comboWrapper.attr("items")[0].width = o.height - this.options.simple ? 1 : 2;
                 this.comboWrapper.resize();
                 break;
             default:

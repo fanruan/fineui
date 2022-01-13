@@ -101,7 +101,7 @@ BI.Calendar = BI.inherit(BI.Widget, {
                 columns: 7,
                 rows: 6,
                 columnSize: [1 / 7, 1 / 7, 1 / 7, 1 / 7, 1 / 7, 1 / 7, 1 / 7],
-                rowSize: BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT + 10
+                rowSize: BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT + 8
             }))]
         });
         this.days.on(BI.Controller.EVENT_CHANGE, function () {
@@ -162,13 +162,13 @@ BI.Calendar = BI.inherit(BI.Widget, {
                     whiteSpace: "normal",
                     once: false,
                     forceSelected: true,
-                    height: BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT + 10,
+                    height: BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT + 8,
                     value: o.year + "-" + month + "-" + td.text,
                     disabled: td.lastMonth || td.nextMonth || td.disabled,
-                    lgap: 5,
-                    rgap: 5,
-                    tgap: 5,
-                    bgap: 5
+                    lgap: 2,
+                    rgap: 2,
+                    tgap: 4,
+                    bgap: 4
                     // selected: td.currentDay
                 });
             });

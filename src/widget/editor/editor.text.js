@@ -4,10 +4,10 @@
  * @extends BI.Single
  */
 BI.TextEditor = BI.inherit(BI.Widget, {
-    _defaultConfig: function () {
+    _defaultConfig: function (config) {
         var conf = BI.TextEditor.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
-            extraCls: "bi-text-editor bi-border bi-focus-shadow",
+            extraCls: "bi-text-editor bi-focus-shadow " + (config.simple ? "bi-border-bottom" : "bi-border"),
             hgap: 4,
             vgap: 2,
             lgap: 0,
@@ -26,15 +26,17 @@ BI.TextEditor = BI.inherit(BI.Widget, {
     _init: function () {
         BI.TextEditor.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
+        var border = o.simple ? 1 : 2;
         if (BI.isNumber(o.height)) {
-            this.element.css({height: o.height - 2});
+            this.element.css({height: o.height - border});
         }
         if (BI.isNumber(o.width)) {
-            this.element.css({width: o.width - 2});
+            this.element.css({width: o.width - border});
         }
         this.editor = BI.createWidget({
             type: "bi.editor",
-            height: o.height - 2,
+            simple: o.simple,
+            height: o.height - border,
             hgap: o.hgap,
             vgap: o.vgap,
             lgap: o.lgap,

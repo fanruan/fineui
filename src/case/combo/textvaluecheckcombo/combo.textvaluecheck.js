@@ -4,9 +4,9 @@
  * combo : text + icon, popup : check + text
  */
 BI.TextValueCheckCombo = BI.inherit(BI.Widget, {
-    _defaultConfig: function () {
+    _defaultConfig: function (config) {
         return BI.extend(BI.TextValueCheckCombo.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-text-value-check-combo bi-border",
+            baseCls: "bi-text-value-check-combo " + (config.simple ? "bi-border-bottom" : "bi-border"),
             width: 100,
             height: 24,
             chooseType: BI.ButtonGroup.CHOOSE_TYPE_SINGLE,

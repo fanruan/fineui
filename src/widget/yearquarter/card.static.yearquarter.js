@@ -23,7 +23,7 @@ BI.StaticYearQuarterCard = BI.inherit(BI.Widget, {
         return BI.map(items, function (j, item) {
             return BI.extend(item, {
                 type: "bi.text_item",
-                cls: "bi-list-item-select",
+                cls: "bi-border-radius bi-list-item-select",
                 textAlign: "center",
                 whiteSpace: "nowrap",
                 once: false,
@@ -72,7 +72,8 @@ BI.StaticYearQuarterCard = BI.inherit(BI.Widget, {
                     items: this._createQuarter(),
                     layouts: [{
                         type: "bi.vertical",
-                        vgap: 10
+                        vgap: 10,
+                        hgap: 12,
                     }],
                     value: o.value,
                     listeners: [{

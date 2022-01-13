@@ -24,6 +24,7 @@ BI.DynamicDateTimeTrigger = BI.inherit(BI.Trigger, {
         this.storeTriggerValue = "";
         this.editor = BI.createWidget({
             type: "bi.sign_editor",
+            simple: o.simple,
             height: o.height,
             validationChecker: function (v) {
                 var formatStr = self._getStandardDateStr(v);

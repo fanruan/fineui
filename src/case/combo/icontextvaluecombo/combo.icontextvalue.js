@@ -3,9 +3,9 @@
  * combo : icon + text + icon, popup : icon + text
  */
 BI.IconTextValueCombo = BI.inherit(BI.Widget, {
-    _defaultConfig: function () {
+    _defaultConfig: function (config) {
         return BI.extend(BI.IconTextValueCombo.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-icon-text-value-combo bi-border bi-border-radius",
+            baseCls: "bi-icon-text-value-combo bi-border-radius " + (config.simple ? "bi-border-bottom" : "bi-border"),
             height: 24,
             iconHeight: null,
             iconWidth: null,

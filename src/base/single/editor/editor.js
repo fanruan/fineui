@@ -109,12 +109,14 @@ BI.Editor = BI.inherit(BI.Single, {
         this.editor.on(BI.Input.EVENT_VALID, function () {
             self._checkWaterMark();
             self._setErrorVisible(false);
+            self.element.removeClass("error");
             self.fireEvent(BI.Editor.EVENT_VALID, arguments);
         });
         this.editor.on(BI.Input.EVENT_ERROR, function () {
             self._checkWaterMark();
             self.fireEvent(BI.Editor.EVENT_ERROR, arguments);
             self._setErrorVisible(self.isEditing());
+            self.element.addClass("error");
         });
         this.editor.on(BI.Input.EVENT_RESTRICT, function () {
             self._checkWaterMark();
@@ -269,7 +271,7 @@ BI.Editor = BI.inherit(BI.Single, {
         }
         if (!this.disabledError && BI.isKey(errorText)) {
             BI.Bubbles[b ? "show" : "hide"](this.getName(), errorText, this, {
-                adjustYOffset: 2
+                adjustYOffset: o.simple ? 1 : 2
             });
             this._checkToolTip();
         }

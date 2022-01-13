@@ -82,7 +82,7 @@ BI.SingleSelectCombo = BI.inherit(BI.Single, {
 
         this.combo = BI.createWidget({
             type: "bi.combo",
-            cls: "bi-border bi-border-radius",
+            cls: (o.simple ? "bi-border-bottom" : "bi-border") + " bi-border-radius",
             container: o.container,
             toggle: false,
             el: this.trigger,

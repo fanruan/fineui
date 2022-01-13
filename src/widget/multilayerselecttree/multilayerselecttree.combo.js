@@ -75,7 +75,7 @@ BI.MultiLayerSelectTreeCombo = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
         return {
             type: "bi.combo",
-            cls: "bi-border bi-border-radius",
+            cls: (o.simple ? "bi-border-bottom" : "bi-border") + " bi-border-radius",
             container: o.container,
             destroyWhenHide: o.destroyWhenHide,
             adjustLength: 2,
