@@ -58,15 +58,28 @@ body .bi-button, #body .bi-button {
   }
   &.button-ignore {
     & {
+      background-color: transparent;
+      &:not(.clear, .ghost) {
+        border-color: @color-bi-border-ignore-button;
+      }
+    }
+    &:not(.clear, .ghost) {
       &, & .b-font:before {
         color: @color-bi-text-ignore-button;
       }
-      background-color: transparent;
-      border-color: @color-bi-border-ignore-button;
     }
     &.clear {
       background-color: transparent;
       border-width: 0;
+    }
+    &.ghost {
+      &:hover {
+        &, & .b-font:before {
+          color: @color-bi-text-ignore-button;
+        }
+      }
+      background-color: transparent;
+      border-color: @color-bi-border-dark-gray-line;
     }
   }
   &.button-success {
@@ -298,8 +311,10 @@ body .bi-button, #body .bi-button {
       .opacity(0.1);
       .transition(@activeStopVal)
     }
-    &:hover{
-      background-color: @color-bi-background-hover-ignore-button-mask;
+    &:hover {
+      &:not(.clear, .ghost) {
+        background-color: @color-bi-background-hover-ignore-button-mask;
+      }
       .transition(@hoverVal);
     }
   }
