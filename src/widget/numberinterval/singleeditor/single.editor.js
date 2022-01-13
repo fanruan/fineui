@@ -12,6 +12,7 @@ BI.NumberIntervalSingleEidtor = BI.inherit(BI.Single, {
             type: "bi.vertical",
             items: [{
                 type: "bi.editor",
+                simple: o.simple,
                 ref: function (_ref) {
                     self.editor = _ref;
                 },

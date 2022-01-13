@@ -7,17 +7,18 @@
     border-style: solid;
     .border-radius(8px);
     background-color: @color-bi-background-slider-button;
-    height: 12px;
-    width: 12px;
-    top: 6px;
-    left: -8px;
+    height: 8px;
+    width: 8px;
+    top: 8px;
+    left: -6px;
     &:hover, &.hover {
       .border-radius(10px);
       background-color: @color-bi-background-hover-slider-button;
-      width: 16px;
-      height: 16px;
-      top: 4px;
-      left: -10px;
+      width: 12px;
+      height: 12px;
+      top: 6px;
+      left: -8px;
+      .box-shadow(0 2px 4px 1px,rgba(0, 35, 11, 20%));
     }
     &.disabled {
       border-color: @color-bi-border-disabled-slider-button;

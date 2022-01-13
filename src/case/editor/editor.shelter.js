@@ -30,6 +30,7 @@ BI.ShelterEditor = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
         this.editor = BI.createWidget({
             type: "bi.editor",
+            simple: o.simple,
             height: o.height,
             hgap: o.hgap,
             vgap: o.vgap,

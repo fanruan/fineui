@@ -4,9 +4,9 @@
  */
 BI.SingleTreeCombo = BI.inherit(BI.Widget, {
 
-    _defaultConfig: function () {
+    _defaultConfig: function (config) {
         return BI.extend(BI.SingleTreeCombo.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-single-tree-combo bi-border bi-border-radius",
+            baseCls: "bi-single-tree-combo bi-border-radius " + (config.simple ? "bi-border-bottom" : "bi-border"),
             trigger: {},
             height: 24,
             text: "",

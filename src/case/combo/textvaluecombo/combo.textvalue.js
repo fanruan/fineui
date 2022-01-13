@@ -5,9 +5,9 @@
  * 参见场景dashboard布局方式选择
  */
 BI.TextValueCombo = BI.inherit(BI.Widget, {
-    _defaultConfig: function () {
+    _defaultConfig: function (config) {
         return BI.extend(BI.TextValueCombo.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-text-value-combo bi-border",
+            baseCls: "bi-text-value-combo " + (config.simple ? "bi-border-bottom" : "bi-border"),
             height: 24,
             chooseType: BI.ButtonGroup.CHOOSE_TYPE_SINGLE,
             text: "",

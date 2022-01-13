@@ -25,7 +25,8 @@ BI.TreeValueChooserCombo = BI.inherit(BI.AbstractTreeValueChooser, {
             this._initData(o.items);
         }
         this.combo = BI.createWidget({
-            type: "bi.multi_tree_combo",
+            type: "bi.multi_tree_list_combo",
+            simple: o.simple,
             text: o.text,
             allowEdit: o.allowEdit,
             value: o.value,

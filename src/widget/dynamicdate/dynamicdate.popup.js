@@ -1,11 +1,11 @@
 BI.DynamicDatePopup = BI.inherit(BI.Widget, {
     constants: {
-        tabHeight: 30,
+        tabHeight: 40,
     },
 
     props: {
         baseCls: "bi-dynamic-date-popup",
-        width: 248,
+        width: 272,
         supportDynamic: true,
     },
 

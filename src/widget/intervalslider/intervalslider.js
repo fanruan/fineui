@@ -5,7 +5,7 @@ BI.IntervalSlider = BI.inherit(BI.Single, {
     _constant: {
         EDITOR_WIDTH: 58,
         EDITOR_R_GAP: 60,
-        EDITOR_HEIGHT: 30,
+        EDITOR_HEIGHT: 20,
         SLIDER_WIDTH_HALF: 15,
         SLIDER_WIDTH: 30,
         SLIDER_HEIGHT: 30,
@@ -49,7 +49,8 @@ BI.IntervalSlider = BI.inherit(BI.Single, {
             cls: "slider-editor-button",
             text: this.options.unit,
             allowBlank: false,
-            width: c.EDITOR_WIDTH,
+            width: c.EDITOR_WIDTH - 2,
+            height: c.EDITOR_HEIGHT - 2,
             validationChecker: function (v) {
                 return self._checkValidation(v);
             }
@@ -76,7 +77,8 @@ BI.IntervalSlider = BI.inherit(BI.Single, {
             cls: "slider-editor-button",
             text: this.options.unit,
             allowBlank: false,
-            width: c.EDITOR_WIDTH,
+            width: c.EDITOR_WIDTH - 2,
+            height: c.EDITOR_HEIGHT - 2,
             validationChecker: function (v) {
                 return self._checkValidation(v);
             }

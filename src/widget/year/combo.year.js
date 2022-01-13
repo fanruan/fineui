@@ -13,11 +13,13 @@ BI.DynamicYearCombo = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
         BI.DynamicYearCombo.superclass._init.apply(this, arguments);
         this.storeValue = o.value;
+        var border = o.simple ? 1 : 2;
         this.trigger = BI.createWidget({
             type: "bi.dynamic_year_trigger",
+            simple: o.simple,
             min: o.minDate,
             max: o.maxDate,
-            height: o.height - 2,
+            height: o.height - border,
             value: o.value || ""
         });
         this.trigger.on(BI.DynamicYearTrigger.EVENT_KEY_DOWN, function () {
@@ -37,9 +39,11 @@ BI.DynamicYearCombo = BI.inherit(BI.Widget, {
         });
         this.trigger.on(BI.DynamicYearTrigger.EVENT_ERROR, function () {
             self.combo.isViewVisible() && self.combo.hideView();
+            self.comboWrapper.element.addClass("error");
             self.fireEvent(BI.DynamicYearCombo.EVENT_ERROR);
         });
         this.trigger.on(BI.DynamicYearTrigger.EVENT_VALID, function () {
+            self.comboWrapper.element.removeClass("error");
             self.fireEvent(BI.DynamicYearCombo.EVENT_VALID);
         });
         this.trigger.on(BI.DynamicYearTrigger.EVENT_CONFIRM, function () {
@@ -124,21 +128,21 @@ BI.DynamicYearCombo = BI.inherit(BI.Widget, {
             items: [{
                 el: {
                     type: "bi.htape",
-                    cls: "bi-border bi-border-radius bi-focus-shadow",
+                    cls: (o.simple ? "bi-border-bottom" : "bi-border") + " bi-border-radius bi-focus-shadow",
                     ref: function () {
                         self.comboWrapper = this;
                     },
                     items: [{
                         el: {
                             type: "bi.icon_button",
-                            cls: "bi-trigger-icon-button date-change-h-font",
-                            width: o.height - 2,
-                            height: o.height - 2,
+                            cls: "bi-trigger-icon-button",
+                            width: o.height - border,
+                            height: o.height - border,
                             ref: function () {
                                 self.changeIcon = this;
                             }
                         },
-                        width: o.height - 2
+                        width: o.height - border
                     }, this.combo]
                 },
                 top: 0,
@@ -158,7 +162,7 @@ BI.DynamicYearCombo = BI.inherit(BI.Widget, {
         switch (type) {
             case BI.DynamicYearCombo.Dynamic:
                 this.changeIcon.setVisible(true);
-                this.comboWrapper.attr("items")[0].width = this.options.height - 2,
+                this.comboWrapper.attr("items")[0].width = this.options.height - this.options.simple ? 1 : 2;
                 this.comboWrapper.resize();
                 break;
             default:

@@ -43,30 +43,44 @@ body .bi-button, #body .bi-button {
     &.clear, &.clear .b-font:before {
       color: @color-bi-text-common-clear-button;
     }
-    &.ghost{
-      &, & .b-font:before{
+    &.ghost {
+      &, & .b-font:before {
         color: @color-bi-text-common-ghost-button;
       }
-      &:hover{
+      &:hover {
         color: @color-bi-text;
         background-color: @color-bi-background-hover-common-ghost-button;
       }
-      &:active{
+      &:active {
         background-color: @color-bi-background-active-common-ghost-button;
       }
     }
   }
   &.button-ignore {
     & {
+      background-color: @color-bi-background-ignore-button;
+      &:not(.clear, .ghost) {
+        border-color: @color-bi-border-ignore-button;
+      }
+    }
+    &:not(.clear, .ghost) {
       &, & .b-font:before {
         color: @color-bi-text-ignore-button;
       }
-      background-color: transparent;
-      border-color: @color-bi-border-ignore-button;
     }
     &.clear {
       background-color: transparent;
       border-width: 0;
+    }
+    &.ghost {
+      &:hover {
+        border-color: @color-bi-border-ignore-button;
+        &, & .b-font:before {
+          color: @color-bi-text-ignore-button;
+        }
+      }
+      background-color: transparent;
+      border-color: @color-bi-border-dark-gray-line;
     }
   }
   &.button-success {
@@ -298,8 +312,10 @@ body .bi-button, #body .bi-button {
       .opacity(0.1);
       .transition(@activeStopVal)
     }
-    &:hover{
-      background-color: @color-bi-background-hover-ignore-button-mask;
+    &:hover {
+      &:not(.clear, .ghost) {
+        background-color: @color-bi-background-hover-ignore-button-mask;
+      }
       .transition(@hoverVal);
     }
   }
@@ -326,6 +342,7 @@ body .bi-button, #body .bi-button {
       }
     }
     &.button-ignore {
+      background-color: @color-bi-background-ignore-button-theme-dark;
       &:hover{
         background-color: @color-bi-background-hover-ignore-button-theme-dark;
       }
@@ -345,12 +362,16 @@ body .bi-button, #body .bi-button {
     }
     &.button-success.disabled,
     &.button-error.disabled,
-    &.button-warning.disabled,
-    &.button-ignore.disabled {
+    &.button-warning.disabled {
       &, &.base-disabled {
         background-color: fade(@color-bi-background-disabled-button-theme-dark, 20%) !important;
         @ieColor: argb(fade(@color-bi-background-disabled-button-theme-dark, 20%));
         filter: ~"progid:DXImageTransform.Microsoft.gradient(startColorstr=@{ieColor},endColorstr=@{ieColor})";
+      }
+    }
+    &.button-ignore.disabled {
+      &, &.base-disabled {
+        background-color: @color-bi-background-ignore-button-theme-dark !important;
       }
     }
   }

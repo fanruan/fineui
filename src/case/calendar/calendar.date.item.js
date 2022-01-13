@@ -10,7 +10,7 @@ BI.CalendarDateItem = BI.inherit(BI.BasicButton, {
             items: [{
                 el: {
                     type: "bi.text_item",
-                    cls: "bi-list-item-select",
+                    cls: "bi-border-radius bi-list-item-select",
                     textAlign: "center",
                     whiteSpace: "normal",
                     text: o.text,
@@ -22,7 +22,7 @@ BI.CalendarDateItem = BI.inherit(BI.BasicButton, {
                 left: o.lgap,
                 right: o.rgap,
                 top: o.tgap,
-                bottom: o.rgap
+                bottom: o.bgap
             }]
         };
     },
