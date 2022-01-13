@@ -63,7 +63,14 @@ interface ElementClassProps<T> extends UIProps {
     destroyed(): void;
 }
 
+type Widget = import('./index').Widget;
+type Props<T extends Widget = any> = Partial<ElementClassProps<T> & AdditionalProps>;
+
 declare namespace JSX {
+    interface Element extends Props {
+        type: string;
+    }
+    interface ElementClass extends Widget {}
     // for undefined
     interface IntrinsicElements {
         [elemName: string]: Partial<UIProps & AdditionalProps>;
