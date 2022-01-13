@@ -2,7 +2,7 @@
 @hoverVal: opacity .3s ease;
 @activeVal: transform .5s ease, opacity 1s ease;
 @activeStopVal: transform 0s;
-body .bi-button, #body .bi-button {
+.bi-button, #body .bi-button {
   &.hack {
     .border-radius(0px);
   }
@@ -221,6 +221,11 @@ body .bi-button, #body .bi-button {
       .opacity(0.5);
     }
   }
+  &.button-ignore.disabled {
+    &.ghost {
+      .opacity(1);
+    }
+  }
   &.button-common.disabled {
     &.ghost {
       &, & .b-font:before {
@@ -361,7 +366,7 @@ body .bi-button, #body .bi-button {
             color: @color-bi-text-disabled-theme-dark !important;
           }
           background: transparent !important;
-          .opacity(0.8);
+          .opacity(1);
         }
       }
     }
@@ -377,7 +382,7 @@ body .bi-button, #body .bi-button {
         }
         &.ghost {
           background: transparent !important;
-          .opacity(0.8);
+          .opacity(1);
         }
       }
     }
