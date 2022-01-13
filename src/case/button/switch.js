@@ -3,6 +3,10 @@
  */
 BI.Switch = BI.inherit(BI.BasicButton, {
 
+    constants: {
+        CIRCLE_SIZE: 12
+    },
+
     props: {
         extraCls: "bi-switch",
         height: 20,
@@ -14,7 +18,8 @@ BI.Switch = BI.inherit(BI.BasicButton, {
     },
 
     render: function () {
-        var self = this, o = this.options;
+        var self = this, o = this.options, c = this.constants;
+        var tgap = (o.height - c.CIRCLE_SIZE) / 2;
         return {
             type: "bi.absolute",
             ref: function () {
@@ -27,14 +32,14 @@ BI.Switch = BI.inherit(BI.BasicButton, {
                 },
                 width: 12,
                 height: 12,
-                top: 4,
+                top: tgap,
                 left: this.options.selected ? 28 : 4
             }, {
                 type: "bi.label",
                 text: BI.i18nText("BI-Basic_Open"),
                 cls: "content-tip",
                 left: 8,
-                top: 2,
+                top: tgap - 2,
                 invisible: !o.showTip,
                 ref: function (ref) {
                     self.openTip = ref;
@@ -44,7 +49,7 @@ BI.Switch = BI.inherit(BI.BasicButton, {
                 text: BI.i18nText("BI-Basic_Close"),
                 cls: "content-tip",
                 right: 8,
-                top: 2,
+                top: tgap - 2,
                 invisible: !o.showTip,
                 ref: function (ref) {
                     self.closeTip = ref;
