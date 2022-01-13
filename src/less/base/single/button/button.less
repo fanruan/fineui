@@ -325,22 +325,7 @@ body .bi-button, #body .bi-button {
 }
 
 .bi-theme-dark {
-  body .bi-button, #body .bi-button {
-    &.button-common {
-      &.ghost{
-        &, & .b-font:before{
-          color: @color-bi-text-common-ghost-button-theme-dark;
-          border-color: @color-bi-border-common-ghost-button-theme-dark;
-        }
-        &:hover{
-          color: @color-bi-text-hover-common-ghost-button-theme-dark;
-          background-color: @color-bi-background-hover-common-ghost-button-theme-dark;
-        }
-        &:active{
-          .background-color(@color-bi-background-active-common-ghost-button-theme-dark, 90%);
-        }
-      }
-    }
+  .bi-button, #body .bi-button {
     &.button-ignore {
       background-color: @color-bi-background-ignore-button-theme-dark;
       &:hover{
@@ -349,29 +334,51 @@ body .bi-button, #body .bi-button {
       &:active{
         background-color: @color-bi-background-active-ignore-button-theme-dark;
       }
-    }
-    &.button-common.disabled{
+      &.clear {
+        background-color: transparent;
+      }
       &.ghost {
-        &, & .b-font:before {
-          color: @color-bi-text-disabled-common-ghost-button-theme-dark !important;
-        }
-        background: transparent !important;
-        border-color: @color-bi-border-disabled-common-ghost-button-theme-dark !important;
-        .opacity(0.5);
+        border-color: @color-bi-border-dark-gray-line-theme-dark;
       }
     }
+
+    &.button-common.disabled,
     &.button-success.disabled,
     &.button-error.disabled,
     &.button-warning.disabled {
       &, &.base-disabled {
+        border-color: @color-bi-border-dark-gray-line-theme-dark !important;
         background-color: fade(@color-bi-background-disabled-button-theme-dark, 20%) !important;
         @ieColor: argb(fade(@color-bi-background-disabled-button-theme-dark, 20%));
         filter: ~"progid:DXImageTransform.Microsoft.gradient(startColorstr=@{ieColor},endColorstr=@{ieColor})";
+
+        &.clear {
+          background-color: transparent !important;
+        }
+        &.ghost {
+          // 深色系下灰化就统一用灰化色
+          &, & .b-font:before {
+            color: @color-bi-text-disabled-theme-dark !important;
+          }
+          background: transparent !important;
+          .opacity(0.8);
+        }
       }
     }
     &.button-ignore.disabled {
       &, &.base-disabled {
+        &, & .b-font:before {
+          color: @color-bi-text-disabled-theme-dark !important;
+        }
+        border-color: @color-bi-border-dark-gray-line-theme-dark !important;
         background-color: @color-bi-background-ignore-button-theme-dark !important;
+        &.clear {
+          background-color: transparent !important;
+        }
+        &.ghost {
+          background: transparent !important;
+          .opacity(0.8);
+        }
       }
     }
   }
