@@ -4,9 +4,9 @@ interface UIProps {
     width: number | string;
     height: number | string;
     top: number;
-    left: number;
+    left: number | JSX.Element;
     bottom: number;
-    right: number;
+    right: number | JSX.Element;
     rgap: number;
     lgap: number;
     tgap: number;
@@ -63,7 +63,14 @@ interface ElementClassProps<T> extends UIProps {
     destroyed(): void;
 }
 
+type Widget = import('./index').Widget;
+type Props<T extends Widget = any> = Partial<ElementClassProps<T> & AdditionalProps & Record<string, any>>;
+
 declare namespace JSX {
+    interface Element extends Props {
+        type: string;
+    }
+    interface ElementClass extends Widget {}
     // for undefined
     interface IntrinsicElements {
         [elemName: string]: Partial<UIProps & AdditionalProps>;

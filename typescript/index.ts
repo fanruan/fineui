@@ -180,6 +180,7 @@ import { TdLayout } from './core/wrapper/layout/layout.td';
 import { MultiLayerSelectLevelTree } from './widget/multilayerselecttree/multilayerselecttree.leveltree';
 import { SelectTreeExpander } from './widget/selecttree/selecttree.expander';
 import { DownListGroupItem } from "./widget/downlist/item.downlistgroup";
+import './shims-tsx';
 
 
 export interface BI extends _func, _i18n, _base, _inject, _var, _web, _utils {
