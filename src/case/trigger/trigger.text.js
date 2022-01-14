@@ -72,6 +72,7 @@ BI.TextTrigger = BI.inherit(BI.Trigger, {
 
     setTipType: function (v) {
         this.text.options.tipType = v;
+        this.options.tipType = v;
     }
 });
 BI.shortcut("bi.text_trigger", BI.TextTrigger);
