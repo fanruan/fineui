@@ -1,5 +1,3 @@
-// @ts-nocheck
-
 /**
  * 文件
  *
@@ -8,7 +6,6 @@
  * @extends BI.Single
  * @abstract
  */
-
 (function (document) {
 
     /**
