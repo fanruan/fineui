@@ -13,6 +13,7 @@ BI.DynamicDateTimeTrigger = BI.inherit(BI.Trigger, {
         min: "1900-01-01", // 最小日期
         max: "2099-12-31", // 最大日期
         height: 24,
+        iconWidth: 24,
         format: "", // 显示的日期格式化方式
         allowEdit: true, // 是否允许编辑
         watermark: ""
@@ -120,8 +121,11 @@ BI.DynamicDateTimeTrigger = BI.inherit(BI.Trigger, {
             items: [{
                 el: this.editor
             }, {
-                el: BI.createWidget(),
-                width: 24
+                el: {
+                    type: "bi.icon_button",
+                    cls: "bi-trigger-icon-button date-font",
+                },
+                width: o.iconWidth
             }]
         });
 
@@ -134,7 +138,7 @@ BI.DynamicDateTimeTrigger = BI.inherit(BI.Trigger, {
                     title: BI.bind(this._getTitle, this)
                 },
                 left: 0,
-                right: 24,
+                right: o.iconWidth,
                 top: 0,
                 bottom: 0
             }]
