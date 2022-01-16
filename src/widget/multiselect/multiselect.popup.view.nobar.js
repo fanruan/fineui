@@ -38,7 +38,7 @@ BI.MultiSelectNoBarPopupView = BI.inherit(BI.Widget, {
             minWidth: opts.minWidth,
             maxHeight: opts.maxHeight,
             element: this,
-            buttons: [BI.i18nText("BI-Basic_Clears"), BI.i18nText("BI-Basic_Sure")],
+            buttons: [BI.i18nText("BI-Basic_Clears"), BI.i18nText("BI-Basic_OK")],
             el: this.loader,
             value: opts.value
         });
