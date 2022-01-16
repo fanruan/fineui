@@ -16,6 +16,7 @@
         _global.clearTimeout;
 
     var requestAnimationFrame = _global.requestAnimationFrame || _global.webkitRequestAnimationFrame || _global.mozRequestAnimationFrame || _global.oRequestAnimationFrame || _global.msRequestAnimationFrame || _global.setTimeout;
+
     function callLifeHook (self, life) {
         var hooks = [], hook;
         hook = self[life];
@@ -477,7 +478,7 @@
             }
         },
 
-        setVisible: function (visible) {
+        _innerSetVisible: function (visible) {
             var self = this, o = this.options;
             var lastVisible = !o.invisible;
             this._setVisible(visible);
@@ -494,7 +495,7 @@
                         self.element.addClass(o.animation + "-enter-active");
                     };
                     requestAnimationFrame(this._requestAnimationFrame);
-                    if (this._animationDuring){
+                    if (this._animationDuring) {
                         clearTimeout(this._animationDuring);
                     }
                     this._animationDuring = setTimeout(function () {
@@ -511,7 +512,7 @@
                         self.element.addClass(o.animation + "-leave-active");
                     };
                     requestAnimationFrame(this._requestAnimationFrame);
-                    if (this._animationDuring){
+                    if (this._animationDuring) {
                         clearTimeout(this._animationDuring);
                     }
                     this._animationDuring = setTimeout(function () {
@@ -522,6 +523,10 @@
                     this.element.css("display", "none");
                 }
             }
+        },
+
+        setVisible: function (visible) {
+            this._innerSetVisible(visible);
             this.fireEvent(BI.Events.VIEW, visible);
         },
 
@@ -753,8 +758,16 @@
         },
 
         destroy: function () {
+            var self = this, o = this.options;
             this.__d();
-            this.element.destroy();
+            if (o.animation) {
+                this._innerSetVisible(false);
+                setTimeout(function () {
+                    self.element.destroy();
+                }, o.animationDuring);
+            } else {
+                this.element.destroy();
+            }
             this.fireEvent(BI.Events.UNMOUNT);
             this.fireEvent(BI.Events.DESTROY);
             this._purgeRef();
