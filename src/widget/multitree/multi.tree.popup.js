@@ -42,7 +42,7 @@ BI.MultiTreePopup = BI.inherit(BI.Pane, {
             maxWidth: opts.maxWidth,
             minWidth: opts.minWidth,
             maxHeight: opts.maxHeight,
-            buttons: [BI.i18nText("BI-Basic_Clears"), BI.i18nText("BI-Basic_Sure")],
+            buttons: [BI.i18nText("BI-Basic_Clears"), BI.i18nText("BI-Basic_OK")],
             el: this.tree
         });
 

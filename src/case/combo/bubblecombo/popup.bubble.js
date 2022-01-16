@@ -33,7 +33,7 @@ BI.BubblePopupBarView = BI.inherit(BI.BubblePopupView, {
                 text: BI.i18nText("BI-Basic_Cancel"),
                 ghost: true
             }, {
-                text: BI.i18nText(BI.i18nText("BI-Basic_Sure")),
+                text: BI.i18nText(BI.i18nText("BI-Basic_OK")),
                 value: true
             }]
         });
@@ -112,7 +112,7 @@ BI.TextBubblePopupBarView = BI.inherit(BI.Widget, {
             }, {
                 value: true,
                 stopPropagation: true,
-                text: BI.i18nText("BI-Basic_Sure")
+                text: BI.i18nText("BI-Basic_OK")
             }]
         };
     },
