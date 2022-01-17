@@ -696,9 +696,9 @@
         _setEnable: function (enable) {
             BI.File.superclass._setEnable.apply(this, arguments);
             if (enable === true) {
-                this.element.attr("disabled", "disabled");
-            } else {
                 this.element.removeAttr("disabled");
+            } else {
+                this.element.attr("disabled", "disabled");
             }
         }
     });
