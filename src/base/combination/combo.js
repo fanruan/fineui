@@ -1,6 +1,6 @@
 !(function () {
     var needHideWhenAnotherComboOpen = {};
-    var currentOpenedCombo;
+    var currentOpenedCombos = {};
     /**
      * @class BI.Combo
      * @extends BI.Widget
@@ -142,9 +142,7 @@
 
             this.element.removeClass(this.options.comboClass);
             delete needHideWhenAnotherComboOpen[this.getName()];
-            if (currentOpenedCombo === this) {
-                currentOpenedCombo = null;
-            }
+            delete currentOpenedCombos[this.getName()];
 
             BI.Widget._renderEngine.createElement(document).unbind("mousedown." + this.getName()).unbind("mousewheel." + this.getName());
             BI.EVENT_BLUR && o.hideWhenBlur && BI.Widget._renderEngine.createElement(window).unbind("blur." + this.getName());
@@ -165,7 +163,7 @@
                     }
                 }
             });
-            !this.options.hideWhenAnotherComboOpen && (currentOpenedCombo = this);
+            currentOpenedCombos[this.getName()] = this;
             this.options.hideWhenAnotherComboOpen && (needHideWhenAnotherComboOpen[this.getName()] = this);
             this.adjustWidth(e);
             this.adjustHeight(e);
@@ -305,19 +303,16 @@
             BI.Resizers.remove(this.getName());
             this.popupView && this.popupView._destroy();
             delete needHideWhenAnotherComboOpen[this.getName()];
-            if (currentOpenedCombo === this) {
-                currentOpenedCombo = null;
-            }
+            delete currentOpenedCombos[this.getName()];
         }
     });
     BI.Combo.closeAll = function () {
-        currentOpenedCombo && currentOpenedCombo.hideView();
-        BI.each(needHideWhenAnotherComboOpen, function (i, combo) {
+        BI.each(currentOpenedCombos, function (i, combo) {
             if (combo) {
                 combo.hideView();
             }
         });
-        currentOpenedCombo = null;
+        currentOpenedCombos = {};
         needHideWhenAnotherComboOpen = {};
     };
     BI.Combo.EVENT_TRIGGER_CHANGE = "EVENT_TRIGGER_CHANGE";
