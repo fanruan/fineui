@@ -83,7 +83,7 @@
                 element: this
             }, BI.LogicFactory.createLogic("vertical", BI.extend(o.logic, {
                 items: [
-                    { el: this.combo }
+                    {el: this.combo}
                 ]
             }))));
             o.isDefaultInit && (this._assertPopupView());
@@ -152,7 +152,7 @@
             this._assertPopupViewRender();
             this.fireEvent(BI.Combo.EVENT_BEFORE_POPUPVIEW);
             // popupVisible是为了获取其宽高, 放到可视范围之外以防止在IE下闪一下
-            this.popupView.css({ left: -999999999, top: -99999999 });
+            this.popupView.css({left: -999999999, top: -99999999});
             this.popupView.visible();
             BI.each(needHideWhenAnotherComboOpen, function (i, combo) {
                 if (i !== self.getName()) {
@@ -302,6 +302,14 @@
             delete needHideWhenAnotherComboOpen[this.getName()];
         }
     });
+    BI.Combo.closeAll = function () {
+        BI.each(needHideWhenAnotherComboOpen, function (i, combo) {
+            if (combo) {
+                combo.hideView();
+            }
+        });
+        needHideWhenAnotherComboOpen = {};
+    };
     BI.Combo.EVENT_TRIGGER_CHANGE = "EVENT_TRIGGER_CHANGE";
     BI.Combo.EVENT_CHANGE = "EVENT_CHANGE";
     BI.Combo.EVENT_EXPAND = "EVENT_EXPAND";
