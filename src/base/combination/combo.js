@@ -142,7 +142,9 @@
 
             this.element.removeClass(this.options.comboClass);
             delete needHideWhenAnotherComboOpen[this.getName()];
-            currentOpenedCombo = null;
+            if (currentOpenedCombo === this) {
+                currentOpenedCombo = null;
+            }
 
             BI.Widget._renderEngine.createElement(document).unbind("mousedown." + this.getName()).unbind("mousewheel." + this.getName());
             BI.EVENT_BLUR && o.hideWhenBlur && BI.Widget._renderEngine.createElement(window).unbind("blur." + this.getName());
