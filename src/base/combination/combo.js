@@ -303,6 +303,9 @@
             BI.Resizers.remove(this.getName());
             this.popupView && this.popupView._destroy();
             delete needHideWhenAnotherComboOpen[this.getName()];
+            if (currentOpenedCombo === this) {
+                currentOpenedCombo = null;
+            }
         }
     });
     BI.Combo.closeAll = function () {
