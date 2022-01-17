@@ -1,5 +1,6 @@
 !(function () {
     var needHideWhenAnotherComboOpen = {};
+    var currentOpenedCombo;
     /**
      * @class BI.Combo
      * @extends BI.Widget
@@ -141,6 +142,7 @@
 
             this.element.removeClass(this.options.comboClass);
             delete needHideWhenAnotherComboOpen[this.getName()];
+            currentOpenedCombo = null;
 
             BI.Widget._renderEngine.createElement(document).unbind("mousedown." + this.getName()).unbind("mousewheel." + this.getName());
             BI.EVENT_BLUR && o.hideWhenBlur && BI.Widget._renderEngine.createElement(window).unbind("blur." + this.getName());
@@ -161,6 +163,7 @@
                     }
                 }
             });
+            !this.options.hideWhenAnotherComboOpen && (currentOpenedCombo = this);
             this.options.hideWhenAnotherComboOpen && (needHideWhenAnotherComboOpen[this.getName()] = this);
             this.adjustWidth(e);
             this.adjustHeight(e);
@@ -303,11 +306,13 @@
         }
     });
     BI.Combo.closeAll = function () {
+        currentOpenedCombo && currentOpenedCombo.hideView();
         BI.each(needHideWhenAnotherComboOpen, function (i, combo) {
             if (combo) {
                 combo.hideView();
             }
         });
+        currentOpenedCombo = null;
         needHideWhenAnotherComboOpen = {};
     };
     BI.Combo.EVENT_TRIGGER_CHANGE = "EVENT_TRIGGER_CHANGE";
