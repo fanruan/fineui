@@ -31,10 +31,10 @@ BI.RootTreeLeafItem = BI.inherit(BI.BasicButton, {
 
         var type = BI.LogicFactory.createLogicTypeByDirection(BI.Direction.Left);
         var items = BI.LogicFactory.createLogicItemsByDirection(BI.Direction.Left, {
-            width: 24,
+            width: BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT,
             el: {
                 type: "bi.layout",
-                width: 24,
+                width: BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT,
                 height: o.height
             }
         }, {

@@ -28,19 +28,19 @@ BI.LastTreeLeafItem = BI.inherit(BI.BasicButton, {
         });
         var type = BI.LogicFactory.createLogicTypeByDirection(BI.Direction.Left);
         var items = BI.LogicFactory.createLogicItemsByDirection(BI.Direction.Left, ((o.layer === 0) ? "" : {
-            width: 12,
+            width: BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT / 2,
             el: {
                 type: "bi.layout",
-                cls: (o.pNode && o.pNode.isLastNode) ? "" : "base-line-conn-background",
-                width: 12,
+                cls: (o.pNode && o.pNode.isLastNode) ? "" : this._getBaseLineCls(),
+                width: BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT / 2,
                 height: o.height
             }
         }), {
-            width: 24,
+            width: BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT,
             el: {
                 type: "bi.layout",
-                cls: "last-line-conn-background",
-                width: 24,
+                cls: this._getLastLineCls(),
+                width: BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT,
                 height: o.height
             }
         }, {
@@ -51,6 +51,24 @@ BI.LastTreeLeafItem = BI.inherit(BI.BasicButton, {
         }, BI.LogicFactory.createLogic(type, BI.extend(o.logic, {
             items: items
         }))));
+    },
+
+    _getBaseLineCls: function () {
+        switch (BI.STYLE_CONSTANTS.LINK_LINE_TYPE) {
+            case "solid":
+                return "base-solid-line-conn-background";
+            default:
+                return "base-line-conn-background";
+        }
+    },
+
+    _getLastLineCls: function () {
+        switch (BI.STYLE_CONSTANTS.LINK_LINE_TYPE) {
+            case "solid":
+                return "last-solid-line-conn-background";
+            default:
+                return "last-line-conn-background";
+        }
     },
 
     doRedMark: function () {
