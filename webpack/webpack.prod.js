@@ -18,7 +18,6 @@ module.exports = merge.smart(common, {
         font: attachments.font,
         "fineui.min": attachments.fineui,
         "fineui_without_normalize.min": attachments.fineuiWithoutNormalize,
-        "fineui.modern.min": attachments.fineuiModern,
         "fineui.proxy.min": attachments.fineuiProxy,
         "core_without_platform": attachments.coreWithoutPlatform,
         utils: attachments.utils,
