@@ -95,7 +95,7 @@ BI.SingleSelectSearchLoader = BI.inherit(BI.Widget, {
                 type: o.allowNoSelect ? "bi.single_select_item" : "bi.single_select_radio_item",
                 logic: o.logic,
                 cls: "bi-list-item-active",
-                height: 24,
+                height: BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT,
                 selected: false,
                 iconWrapperWidth: 26,
                 hgap: o.allowNoSelect ? 10 : 0,

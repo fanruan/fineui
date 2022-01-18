@@ -51,7 +51,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
         }
         this.tree = BI.createWidget({
             type: "bi.layout",
-            element: "<ul id='" + this.id + "' class='ztree'></ul>"
+            element: "<ul id='" + this.id + "' class='ztree" + (BI.STYLE_CONSTANTS.LINK_LINE_TYPE === "solid" ? " solid'" : "'") + "></ul>"
         });
         BI.createWidget({
             type: "bi.default",

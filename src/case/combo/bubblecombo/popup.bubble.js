@@ -60,7 +60,7 @@ BI.BubblePopupBarView = BI.inherit(BI.BubblePopupView, {
         });
         return BI.createWidget({
             type: "bi.center",
-            height: 44,
+            height: 48,
             rgap: 15,
             items: [{
                 type: "bi.right_vertical_adapt",
@@ -84,7 +84,7 @@ BI.BubblePopupBarView = BI.inherit(BI.BubblePopupView, {
             }]
         });
 
-        button.element.css("min-height", o.minHeight - 44);
+        button.element.css("min-height", o.minHeight - 48);
 
         return button;
     }

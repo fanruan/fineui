@@ -73,4 +73,7 @@
 
 BI.prepares.push(function () {
     BI.SIZE_CONSANTS = BI.Providers.getProvider("bi.provider.system").getSize();
+    // 不再增加线型的配置了,之后不维护前置版本直接删掉，都用实线连接线
+    BI.STYLE_CONSTANTS = {};
+    BI.STYLE_CONSTANTS.LINK_LINE_TYPE = BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT === 24 ? "dashed" : "solid";
 });

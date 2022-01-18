@@ -25,6 +25,11 @@
   padding: 0 0 0 18px
 }
 
+.ztree.solid li ul {
+  margin: 0;
+  padding: 0 0 0 24px
+}
+
 // 此处不用2倍图，改用css画虚线
 // z-tree的line是一整块子节点区域，所以不能使用background-size: contain
 // 使用1倍图太模糊，这边就使用css自己画了，calc属性支持IE9, IE8反正会走hack, 不影响
@@ -40,10 +45,24 @@
   }
 }
 
+.ztree.solid li ul.line {
+  &:before {
+    border-left: 1px solid @border-color-dark-gray-line;
+    height: 100%;
+    left: 15px;
+    margin-top: 0;
+  }
+}
+
 .bi-theme-dark {
   .ztree li ul.line {
     &:before {
       border-left: 1px dashed @border-color-dark-gray-line;
+    }
+  }
+  .ztree.solid li ul.line {
+    &:before {
+      border-left: 1px solid @border-color-dark-gray-line;
     }
   }
 }
@@ -52,7 +71,7 @@
   padding: 1px 3px 0 0;
   margin: 0;
   cursor: pointer;
-  height: 24px;
+  height: 23px;
   background-color: transparent;
   text-decoration: none;
   vertical-align: top;
@@ -64,6 +83,10 @@
     color: @color-bi-text-highlight;
     .background-color(@color-bi-background-highlight, 15%);
   }
+}
+
+.ztree.solid li a {
+  height: 31px;
 }
 
 .ztree li a.curSelectedNode {
@@ -111,6 +134,10 @@
   &.bi-keyword-red-mark {
     margin-right: 0px;
   }
+}
+
+.ztree.solid li span {
+  line-height: 32px;
 }
 
 .ztree li span.button {
@@ -227,6 +254,11 @@
 .ztree li span.button.switch {
   width: 24px;
   height: 24px
+}
+
+.ztree.solid li span.button.switch {
+  width: 32px;
+  height: 32px
 }
 
 .ztree li span.button.switch.noline_open {

@@ -22,7 +22,9 @@ BI.PlusGroupNode = BI.inherit(BI.NodeButton, {
         BI.PlusGroupNode.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
         this.checkbox = BI.createWidget({
-            type: "bi.tree_node_checkbox"
+            type: "bi.tree_node_checkbox",
+            iconHeight: o.height,
+            iconWidth: o.height
         });
         this.text = BI.createWidget({
             type: "bi.label",
