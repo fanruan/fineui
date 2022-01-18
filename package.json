@@ -54,7 +54,7 @@
   },
   "scripts": {
     "webpack:dev": "node --max_old_space_size=4096 node_modules/webpack-dev-server/bin/webpack-dev-server.js -p --progress --host 0.0.0.0 --config=webpack/webpack.dev.js --mode development",
-    "webpack:prod": "node --max_old_space_size=4096 node_modules/webpack/bin/webpack -p --progress --config=webpack/webpack.prod.js --mode production",
+    "webpack:prod": "node --max_old_space_size=4096 node_modules/webpack/bin/webpack -p --progress --config=webpack/webpack.prod.js --mode production && npm run biCss && npm run jsyCss",
     "webpack:css": "node --max_old_space_size=4096 node_modules/webpack/bin/webpack -p --progress --config=webpack/webpack.css.js --mode production",
     "start": "node server.js",
     "build": "npm run webpack:prod && tsc",
