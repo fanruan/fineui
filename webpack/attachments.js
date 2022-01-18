@@ -105,10 +105,10 @@ const bundleCss = [].concat(
     sync(["public/less/app.less", "public/less/**/*.less"]),
 );
 
-const bundleModern = [].concat(
-    sync(["src/less/modern.less"]),
-    sync(["public/modern/app.less", "public/modern/**/*.less"]),
-);
+// const bundleModern = [].concat(
+//     sync(["src/less/modern.less"]),
+//     sync(["public/modern/app.less", "public/modern/**/*.less"]),
+// );
 
 const coreJs = [].concat(
     basicAttachmentMap.polyfill,
@@ -225,7 +225,6 @@ module.exports = {
     lodash: lodashJs,
     font: basicAttachmentMap.font,
     bundle: uniq(bundle),
-    bundleModern: uniq(bundleModern),
     fineuiWithoutNormalize: uniq(fineuiWithoutNormalize),
     bundleWithoutNormalize: uniq(bundleWithoutNormalize),
     fineui: uniq(fineui),

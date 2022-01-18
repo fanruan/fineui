@@ -26,7 +26,6 @@ module.exports = merge.smart(common, {
         "fineui_without_jquery_polyfill": attachments.fineuiWithoutJqueryAndPolyfillJs,
         "2.0/fineui": attachments.bundle,
         "2.0/fineui.min": attachments.bundle,
-        "2.0/fineui.modern.min": attachments.bundleModern,
         "2.0/fineui_without_normalize": attachments.bundleWithoutNormalize,
         "2.0/fineui_without_normalize.min": attachments.bundleWithoutNormalize,
         "2.0/core_without_platform": attachments.coreWithoutPlatform,
