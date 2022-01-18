@@ -1,0 +1,13 @@
+{
+  "font-color-normal": "#031b4e",
+  "font-color-highlight": "#305bd3",
+  "font-color-light-gray": "#0d1540",
+  "font-color-disabled": "fade(#031b4e, 40)",
+  "font-color-light-disabled": "fade(#0d1540, 20)",
+
+  "background-color-highlight": "#305bd3",
+  "background-color-light-disabled": "fade(#0d1540, 5)",
+
+  "border-color-highlight": "#305bd3",
+  "border-color-disabled": "#e8eaed"
+}
