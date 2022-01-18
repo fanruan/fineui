@@ -10,7 +10,7 @@ const attachments = require("./attachments");
 module.exports = merge.smart(common, {
     mode: "production",
     entry: {
-        [`2.0/${process.env.LESS_FILE_NAME}`]: attachments.bundleCss,
+        [`2.0/${process.env.LESS_FILE_NAME}.min`]: attachments.bundleCss,
     },
 
     output: {
