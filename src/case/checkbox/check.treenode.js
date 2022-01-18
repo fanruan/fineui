@@ -15,9 +15,9 @@ BI.TreeNodeCheckbox = BI.inherit(BI.IconButton, {
     getLineCls: function () {
         switch (BI.STYLE_CONSTANTS.LINK_LINE_TYPE) {
             case "solid":
-                return "tree-solid-collapse-icon-type1";
+                return "tree-solid-expand-icon-type1";
             default:
-                return "tree-collapse-icon-type1";
+                return "tree-expand-icon-type1";
         }
     },
 
