@@ -77,6 +77,13 @@ const basicAttachmentMap = {
     ]),
     fix: [fixJs],
     fixProxy: [fixProxyJs],
+    less: sync([
+        "src/less/core/**/*.less",
+        "src/less/theme/**/*.less",
+        "src/less/base/**/*.less",
+        "src/less/widget/**/*.less",
+        "src/less/component/**/*.less",
+    ]),
 };
 
 const bundle = [].concat(
@@ -91,6 +98,11 @@ const bundle = [].concat(
     basicAttachmentMap.router,
     sync(["public/js/**/*.js", "public/js/index.js", "i18n/i18n.cn.js"]),
     basicAttachmentMap.ts,
+);
+
+const bundleCss = [].concat(
+    basicAttachmentMap.less,
+    sync(["public/less/app.less", "public/less/**/*.less"]),
 );
 
 const bundleModern = [].concat(
@@ -226,4 +238,5 @@ module.exports = {
     coreJs: uniq(coreJs),
     resource: uniq((resource)),
     config: uniq(config),
+    bundleCss: uniq(bundleCss),
 };
