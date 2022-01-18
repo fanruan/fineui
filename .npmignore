@@ -37,3 +37,5 @@
 !babel.config.js
 !babel.config.ie8.js
 !.eslintrc
+!dist/2.0/jsy.min.css
+!dist/2.0/bi.min.css
