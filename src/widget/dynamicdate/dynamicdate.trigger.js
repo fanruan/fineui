@@ -308,19 +308,8 @@ BI.DynamicDateTrigger = BI.inherit(BI.Trigger, {
     },
     getValue: function () {
         return this.storeValue;
-    },
-
-    focus: function () {
-        this.editor.focus();
-    },
-
-    blur: function () {
-        this.editor.blur();
-    },
-
-    setWaterMark: function (v) {
-        this.editor.setWaterMark(v);
     }
+
 });
 
 BI.DynamicDateTrigger.EVENT_BLUR = "EVENT_BLUR";

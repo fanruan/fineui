@@ -379,19 +379,8 @@ BI.DynamicDateTimeTrigger = BI.inherit(BI.Trigger, {
 
     isValid: function () {
         return this.editor.isValid();
-    },
-
-    focus: function () {
-        this.editor.focus();
-    },
-
-    blur: function () {
-        this.editor.blur();
-    },
-
-    setWaterMark: function (v) {
-        this.editor.setWaterMark(v);
     }
+
 });
 
 BI.DynamicDateTimeTrigger.EVENT_BLUR = "EVENT_BLUR";

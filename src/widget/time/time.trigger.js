@@ -180,19 +180,8 @@
 
         getValue: function () {
             return this.storeValue;
-        },
-
-        focus: function () {
-            this.editor.focus();
-        },
-    
-        blur: function () {
-            this.editor.blur();
-        },
-    
-        setWaterMark: function (v) {
-            this.editor.setWaterMark(v);
         }
+
     });
     BI.shortcut("bi.time_trigger", BI.TimeTrigger);
 })();

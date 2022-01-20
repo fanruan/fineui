@@ -10,12 +10,4 @@ export declare class TimeCombo extends Single {
     static EVENT_BEFORE_POPUPVIEW: string;
 
     hidePopupView(): void;
-
-    hideView(): void;
-
-    focus(): void;
-
-    blur(): void;
-
-    setWaterMark(v: string): void;
 }
