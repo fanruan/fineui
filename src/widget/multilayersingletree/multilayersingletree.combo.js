@@ -176,6 +176,7 @@ BI.MultiLayerSingleTreeCombo = BI.inherit(BI.Widget, {
                         var value = self.trigger.getSearcher().getKeyword();
                         self.combo.setValue([value]);
                         self.combo.hideView();
+                        self.fireEvent(BI.MultiLayerSingleTreeCombo.EVENT_CHANGE);
                     }
                 }]
             },
