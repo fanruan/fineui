@@ -9,9 +9,9 @@ BI.BubblePopupView = BI.inherit(BI.PopupView, {
         var config = BI.BubblePopupView.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(config, {
             baseCls: config.baseCls + " bi-bubble-popup-view",
-            minWidth: 220,
+            minWidth: 70,
             maxWidth: 300,
-            minHeight: 90
+            minHeight: 50
         });
     },
 });
@@ -60,11 +60,11 @@ BI.BubblePopupBarView = BI.inherit(BI.BubblePopupView, {
         });
         return BI.createWidget({
             type: "bi.center",
-            height: 44,
-            rgap: 15,
+            height: 54,
+            rgap: 20,
             items: [{
                 type: "bi.right_vertical_adapt",
-                lgap: 10,
+                lgap: 15,
                 items: items
             }]
         });
@@ -79,12 +79,12 @@ BI.BubblePopupBarView = BI.inherit(BI.BubblePopupView, {
             layouts: [{
                 type: "bi.vertical",
                 cls: "bar-popup-container",
-                hgap: 15,
-                tgap: 10
+                hgap: 20,
+                tgap: 15
             }]
         });
 
-        button.element.css("min-height", o.minHeight - 44);
+        button.element.css("min-height", o.minHeight - 54);
 
         return button;
     }
@@ -134,6 +134,7 @@ BI.TextBubblePopupBarView = BI.inherit(BI.Widget, {
         });
         return {
             type: "bi.bubble_bar_popup_view",
+            primary: o.primary,
             minWidth: o.minWidth,
             maxWidth: o.maxWidth,
             minHeight: o.minHeight,

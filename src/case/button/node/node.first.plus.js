@@ -23,7 +23,9 @@ BI.FirstPlusGroupNode = BI.inherit(BI.NodeButton, {
         var self = this, o = this.options;
         this.checkbox = BI.createWidget({
             type: "bi.first_tree_node_checkbox",
-            stopPropagation: true
+            stopPropagation: true,
+            iconHeight: o.height,
+            iconWidth: o.height
         });
         this.text = BI.createWidget({
             type: "bi.label",

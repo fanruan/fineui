@@ -13,6 +13,7 @@ BI.BubbleCombo = BI.inherit(BI.Widget, {
             baseCls: "bi-bubble-combo",
             trigger: "click",
             toggle: true,
+            primary: false,
             direction: "bottom,left", // top||bottom||left||right||top,left||top,right||bottom,left||bottom,right
             isDefaultInit: false,
             destroyWhenHide: false,
@@ -57,6 +58,7 @@ BI.BubbleCombo = BI.inherit(BI.Widget, {
                 type: "bi.bubble_popup_view",
                 animation: "bi-zoom-big",
                 animationDuring: 200,
+                primary: o.primary
             }, o.popup)
         });
         this.combo.on(BI.Combo.EVENT_TRIGGER_CHANGE, function () {
@@ -95,7 +97,7 @@ BI.BubbleCombo = BI.inherit(BI.Widget, {
     },
 
     _createTriangle: function (direction) {
-        var pos = {}, op = {};
+        var o = this.options, pos = {}, op = {};
         var adjustLength = this.options.adjustLength;
         var offset = this.element.offset();
         var left = offset.left, right = offset.left + this.element.outerWidth();
@@ -143,7 +145,7 @@ BI.BubbleCombo = BI.inherit(BI.Widget, {
             cls: "button-combo-triangle-wrapper",
             items: [{
                 type: "bi.layout",
-                cls: "bubble-combo-triangle-" + direction
+                cls: "bubble-combo-triangle-" + direction + (o.primary ? " bi-primary": "")
             }]
         });
         pos.el = this.triangle;

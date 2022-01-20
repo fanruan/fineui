@@ -77,6 +77,13 @@ const basicAttachmentMap = {
     ]),
     fix: [fixJs],
     fixProxy: [fixProxyJs],
+    less: sync([
+        "src/less/core/**/*.less",
+        "src/less/theme/**/*.less",
+        "src/less/base/**/*.less",
+        "src/less/widget/**/*.less",
+        "src/less/component/**/*.less",
+    ]),
 };
 
 const bundle = [].concat(
@@ -93,10 +100,15 @@ const bundle = [].concat(
     basicAttachmentMap.ts,
 );
 
-const bundleModern = [].concat(
-    sync(["src/less/modern.less"]),
-    sync(["public/modern/app.less", "public/modern/**/*.less"]),
+const bundleCss = [].concat(
+    basicAttachmentMap.less,
+    sync(["public/less/app.less", "public/less/**/*.less"]),
 );
+
+// const bundleModern = [].concat(
+//     sync(["src/less/modern.less"]),
+//     sync(["public/modern/app.less", "public/modern/**/*.less"]),
+// );
 
 const coreJs = [].concat(
     basicAttachmentMap.polyfill,
@@ -150,13 +162,13 @@ const fineui = [].concat(
     basicAttachmentMap.ts,
 );
 
-const fineuiModern = [].concat(
-    sync(["src/less/modern.less"]),
-    sync([
-        'ui/modern/app.less',
-        'ui/modern/**/*.less',
-    ]),
-);
+// const fineuiModern = [].concat(
+//     sync(["src/less/modern.less"]),
+//     sync([
+//         'ui/modern/app.less',
+//         'ui/modern/**/*.less',
+//     ]),
+// );
 
 const fineuiProxy = [].concat(
     basicAttachmentMap.polyfill,
@@ -213,11 +225,9 @@ module.exports = {
     lodash: lodashJs,
     font: basicAttachmentMap.font,
     bundle: uniq(bundle),
-    bundleModern: uniq(bundleModern),
     fineuiWithoutNormalize: uniq(fineuiWithoutNormalize),
     bundleWithoutNormalize: uniq(bundleWithoutNormalize),
     fineui: uniq(fineui),
-    fineuiModern: uniq(fineuiModern),
     fineuiProxy: uniq(fineuiProxy),
     fineuiWithoutJqueryAndPolyfillJs: uniq(fineuiWithoutJqueryAndPolyfillJs),
     utils: uniq(basicAttachmentMap.utils),
@@ -226,4 +236,5 @@ module.exports = {
     coreJs: uniq(coreJs),
     resource: uniq((resource)),
     config: uniq(config),
+    bundleCss: uniq(bundleCss),
 };

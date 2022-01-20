@@ -80,6 +80,7 @@ BI.TextEditor = BI.inherit(BI.Widget, {
 
 
         this.editor.on(BI.Editor.EVENT_VALID, function () {
+            self.element.removeClass("error");
             self.fireEvent(BI.TextEditor.EVENT_VALID);
         });
         this.editor.on(BI.Editor.EVENT_CONFIRM, function () {
@@ -101,6 +102,7 @@ BI.TextEditor = BI.inherit(BI.Widget, {
             self.fireEvent(BI.TextEditor.EVENT_STOP);
         });
         this.editor.on(BI.Editor.EVENT_ERROR, function () {
+            self.element.addClass("error");
             self.fireEvent(BI.TextEditor.EVENT_ERROR, arguments);
         });
         this.editor.on(BI.Editor.EVENT_ENTER, function () {

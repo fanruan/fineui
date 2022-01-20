@@ -1,5 +1,6 @@
 !(function () {
     var needHideWhenAnotherComboOpen = {};
+    var currentOpenedCombos = {};
     /**
      * @class BI.Combo
      * @extends BI.Widget
@@ -83,7 +84,7 @@
                 element: this
             }, BI.LogicFactory.createLogic("vertical", BI.extend(o.logic, {
                 items: [
-                    { el: this.combo }
+                    {el: this.combo}
                 ]
             }))));
             o.isDefaultInit && (this._assertPopupView());
@@ -141,6 +142,7 @@
 
             this.element.removeClass(this.options.comboClass);
             delete needHideWhenAnotherComboOpen[this.getName()];
+            delete currentOpenedCombos[this.getName()];
 
             BI.Widget._renderEngine.createElement(document).unbind("mousedown." + this.getName()).unbind("mousewheel." + this.getName());
             BI.EVENT_BLUR && o.hideWhenBlur && BI.Widget._renderEngine.createElement(window).unbind("blur." + this.getName());
@@ -152,7 +154,7 @@
             this._assertPopupViewRender();
             this.fireEvent(BI.Combo.EVENT_BEFORE_POPUPVIEW);
             // popupVisible是为了获取其宽高, 放到可视范围之外以防止在IE下闪一下
-            this.popupView.css({ left: -999999999, top: -99999999 });
+            this.popupView.css({left: -999999999, top: -99999999});
             this.popupView.visible();
             BI.each(needHideWhenAnotherComboOpen, function (i, combo) {
                 if (i !== self.getName()) {
@@ -161,6 +163,7 @@
                     }
                 }
             });
+            currentOpenedCombos[this.getName()] = this;
             this.options.hideWhenAnotherComboOpen && (needHideWhenAnotherComboOpen[this.getName()] = this);
             this.adjustWidth(e);
             this.adjustHeight(e);
@@ -300,8 +303,18 @@
             BI.Resizers.remove(this.getName());
             this.popupView && this.popupView._destroy();
             delete needHideWhenAnotherComboOpen[this.getName()];
+            delete currentOpenedCombos[this.getName()];
         }
     });
+    BI.Combo.closeAll = function () {
+        BI.each(currentOpenedCombos, function (i, combo) {
+            if (combo) {
+                combo.hideView();
+            }
+        });
+        currentOpenedCombos = {};
+        needHideWhenAnotherComboOpen = {};
+    };
     BI.Combo.EVENT_TRIGGER_CHANGE = "EVENT_TRIGGER_CHANGE";
     BI.Combo.EVENT_CHANGE = "EVENT_CHANGE";
     BI.Combo.EVENT_EXPAND = "EVENT_EXPAND";
