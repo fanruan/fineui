@@ -4,9 +4,9 @@
  * @extends BI.Widget
  */
 BI.PopupView = BI.inherit(BI.Widget, {
-    _defaultConfig: function () {
+    _defaultConfig: function (props) {
         return BI.extend(BI.PopupView.superclass._defaultConfig.apply(this, arguments), {
-            _baseCls: "bi-popup-view",
+            _baseCls: "bi-popup-view" + (props.primary ? " bi-primary"  : ""),
             // 品牌色
             primary: false,
             maxWidth: "auto",
