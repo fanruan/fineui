@@ -99,7 +99,7 @@ BI.BubbleCombo = BI.inherit(BI.Widget, {
     },
 
     _createTriangle: function (direction) {
-        var o = this.options, pos = {}, op = {};
+        var self = this, o = this.options, pos = {}, op = {};
         var adjustLength = this.options.adjustLength;
         var offset = this.element.offset();
         var left = offset.left, right = offset.left + this.element.outerWidth();
@@ -147,15 +147,18 @@ BI.BubbleCombo = BI.inherit(BI.Widget, {
             cls: "button-combo-triangle-wrapper",
             items: [{
                 type: "bi.layout",
-                cls: "bubble-combo-triangle-" + direction + (o.primary ? " bi-primary": "")
+                cls: "bubble-combo-triangle-" + direction + (o.primary ? " bi-primary" : "")
             }]
         });
         pos.el = this.triangle;
-        BI.createWidget({
-            type: "bi.absolute",
-            element: this,
-            items: [pos]
-        });
+        // 动画结束后再画三角
+        setTimeout(function () {
+            BI.createWidget({
+                type: "bi.absolute",
+                element: self,
+                items: [pos]
+            });
+        }, 200);
     },
 
     _createLeftTriangle: function () {
