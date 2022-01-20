@@ -306,6 +306,22 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
 
     isValid: function () {
         return this.trigger.isValid();
+    },
+
+    hideView: function () {
+        this.combo.hideView();
+    },
+
+    focus: function () {
+        this.trigger.focus();
+    },
+
+    blur: function () {
+        this.trigger.blur();
+    },
+
+    setWaterMark: function (v) {
+        this.trigger.setWaterMark(v);
     }
 });
 
