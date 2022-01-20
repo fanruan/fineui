@@ -7,6 +7,8 @@ BI.PopupView = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.PopupView.superclass._defaultConfig.apply(this, arguments), {
             _baseCls: "bi-popup-view",
+            // 品牌色
+            primary: false,
             maxWidth: "auto",
             minWidth: 100,
             // maxHeight: 200,
@@ -84,7 +86,7 @@ BI.PopupView = BI.inherit(BI.Widget, {
             hgap: o.hgap,
             items: BI.LogicFactory.createLogicItemsByDirection(o.direction,
                 BI.extend({
-                    cls: "list-view-outer bi-card list-view-shadow"
+                    cls: "list-view-outer bi-card list-view-shadow" + (o.primary ? " bi-primary" : "")
                 }, BI.LogicFactory.createLogic(BI.LogicFactory.createLogicTypeByDirection(o.direction), BI.extend({}, o.logic, {
                     items: BI.LogicFactory.createLogicItemsByDirection(o.direction, this.tool, this.tab, this.view, this.toolbar)
                 })))
