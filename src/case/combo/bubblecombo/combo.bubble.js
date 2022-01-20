@@ -17,6 +17,7 @@ BI.BubbleCombo = BI.inherit(BI.Widget, {
             direction: "bottom,left", // top||bottom||left||right||top,left||top,right||bottom,left||bottom,right
             isDefaultInit: false,
             destroyWhenHide: false,
+            hideWhenClickOutside: true,
             hideWhenBlur: true,
             isNeedAdjustHeight: true, // 是否需要高度调整
             isNeedAdjustWidth: true,
@@ -43,6 +44,7 @@ BI.BubbleCombo = BI.inherit(BI.Widget, {
             direction: o.direction,
             isDefaultInit: o.isDefaultInit,
             hideWhenBlur: o.hideWhenBlur,
+            hideWhenClickOutside: o.hideWhenClickOutside,
             destroyWhenHide: o.destroyWhenHide,
             hideWhenAnotherComboOpen: o.hideWhenAnotherComboOpen,
             isNeedAdjustHeight: o.isNeedAdjustHeight,

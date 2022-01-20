@@ -144,7 +144,7 @@
             delete needHideWhenAnotherComboOpen[this.getName()];
             delete currentOpenedCombos[this.getName()];
 
-            BI.Widget._renderEngine.createElement(document).unbind("mousedown." + this.getName()).unbind("mousewheel." + this.getName());
+            o.hideWhenClickOutside && BI.Widget._renderEngine.createElement(document).unbind("mousedown." + this.getName()).unbind("mousewheel." + this.getName());
             BI.EVENT_BLUR && o.hideWhenBlur && BI.Widget._renderEngine.createElement(window).unbind("blur." + this.getName());
             this.fireEvent(BI.Combo.EVENT_AFTER_HIDEVIEW);
         },
@@ -170,11 +170,11 @@
 
             this.element.addClass(this.options.comboClass);
             o.hideWhenClickOutside && BI.Widget._renderEngine.createElement(document).unbind("mousedown." + this.getName()).unbind("mousewheel." + this.getName());
-            BI.Widget._renderEngine.createElement(document).unbind("mousewheel." + this.getName());
+            o.hideWhenClickOutside && BI.Widget._renderEngine.createElement(document).unbind("mousewheel." + this.getName());
             BI.EVENT_BLUR && o.hideWhenBlur && BI.Widget._renderEngine.createElement(window).unbind("blur." + this.getName());
 
             o.hideWhenClickOutside && BI.Widget._renderEngine.createElement(document).bind("mousedown." + this.getName(), BI.bind(this._hideIf, this)).bind("mousewheel." + this.getName(), BI.bind(this._hideIf, this));
-            BI.Widget._renderEngine.createElement(document).bind("mousewheel." + this.getName(), BI.bind(this._hideIf, this));
+            o.hideWhenClickOutside && BI.Widget._renderEngine.createElement(document).bind("mousewheel." + this.getName(), BI.bind(this._hideIf, this));
             BI.EVENT_BLUR && o.hideWhenBlur && BI.Widget._renderEngine.createElement(window).bind("blur." + this.getName(), BI.bind(this._hideIf, this));
             this.fireEvent(BI.Combo.EVENT_AFTER_POPUPVIEW);
         },
