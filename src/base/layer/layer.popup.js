@@ -181,10 +181,10 @@ BI.PopupView = BI.inherit(BI.Widget, {
                 case "bottom,right":
                     direction = "bottom";
                     style = {
-                        left: size.width / 2 - 6
+                        // 5表示留出一定的空间
+                        left: Math.min(size.width / 2 - 6, this.element.outerWidth() - 12 - 5)
                     };
                     placeholderStyle = {
-                        width: size.width,
                         left: 0,
                         right: 0,
                         height: this._const.TRIANGLE_LENGTH,
@@ -195,11 +195,10 @@ BI.PopupView = BI.inherit(BI.Widget, {
                 case "bottom,left":
                     direction = "bottom";
                     style = {
-                        right: size.width / 2 - 6
+                        right: Math.min(size.width / 2 - 6, this.element.outerWidth() - 12 - 5)
                     };
                     placeholderStyle = {
-                        width: size.width,
-                        left: "",
+                        left: 0,
                         right: 0,
                         height: this._const.TRIANGLE_LENGTH,
                         top: -this._const.TRIANGLE_LENGTH,
@@ -210,10 +209,9 @@ BI.PopupView = BI.inherit(BI.Widget, {
                 case "top,right":
                     direction = "top";
                     style = {
-                        left: size.width / 2 - 6
+                        left: Math.min(size.width / 2 - 6, this.element.outerWidth() - 12 - 5)
                     };
                     placeholderStyle = {
-                        width: size.width,
                         left: 0,
                         right: 0,
                         height: this._const.TRIANGLE_LENGTH,
@@ -224,11 +222,10 @@ BI.PopupView = BI.inherit(BI.Widget, {
                 case "top,left":
                     direction = "top";
                     style = {
-                        right: size.width / 2 - 6
+                        right: Math.min(size.width / 2 - 6, this.element.outerWidth() - 12 - 5)
                     };
                     placeholderStyle = {
-                        width: size.width,
-                        left: "",
+                        left: 0,
                         right: 0,
                         height: this._const.TRIANGLE_LENGTH,
                         top: "",
@@ -239,10 +236,9 @@ BI.PopupView = BI.inherit(BI.Widget, {
                 case "left,bottom":
                     direction = "left";
                     style = {
-                        top: size.height / 2 - 6
+                        top: Math.min(size.height / 2 - 6, this.element.outerHeight() - 12 - 5)
                     };
                     placeholderStyle = {
-                        height: size.height,
                         top: 0,
                         bottom: 0,
                         width: this._const.TRIANGLE_LENGTH,
@@ -253,11 +249,10 @@ BI.PopupView = BI.inherit(BI.Widget, {
                 case "left,top":
                     direction = "left";
                     style = {
-                        bottom: size.height / 2 - 6
+                        bottom: Math.min(size.height / 2 - 6, this.element.outerHeight() - 12 - 5)
                     };
                     placeholderStyle = {
-                        height: size.height,
-                        top: "",
+                        top: 0,
                         bottom: 0,
                         width: this._const.TRIANGLE_LENGTH,
                         right: -this._const.TRIANGLE_LENGTH,
@@ -268,10 +263,9 @@ BI.PopupView = BI.inherit(BI.Widget, {
                 case "right,bottom":
                     direction = "right";
                     style = {
-                        top: size.height / 2 - 6
+                        top: Math.min(size.height / 2 - 6, this.element.outerHeight() - 12 - 5)
                     };
                     placeholderStyle = {
-                        height: size.height,
                         top: 0,
                         bottom: 0,
                         width: this._const.TRIANGLE_LENGTH,
@@ -282,11 +276,10 @@ BI.PopupView = BI.inherit(BI.Widget, {
                 case "right,top":
                     direction = "right";
                     style = {
-                        bottom: size.height / 2 - 6
+                        bottom: Math.min(size.height / 2 - 6, this.element.outerHeight() - 12 - 5)
                     };
                     placeholderStyle = {
-                        height: size.height,
-                        top: "",
+                        top: 0,
                         bottom: 0,
                         width: this._const.TRIANGLE_LENGTH,
                         left: -this._const.TRIANGLE_LENGTH,
