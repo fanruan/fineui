@@ -100,12 +100,6 @@
             }, this));
         },
 
-        _initCombo: function () {
-            this.combo = BI.createWidget(this.options.el, {
-                value: this.options.value
-            });
-        },
-
         _assertPopupView: function () {
             var self = this, o = this.options;
             if (this.popupView == null) {
