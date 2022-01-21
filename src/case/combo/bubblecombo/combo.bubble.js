@@ -5,9 +5,6 @@
  * @extends BI.Widget
  */
 BI.BubbleCombo = BI.inherit(BI.Widget, {
-    _const: {
-        TRIANGLE_LENGTH: 9
-    },
     _defaultConfig: function () {
         return BI.extend(BI.BubbleCombo.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-bubble-combo",
@@ -49,12 +46,12 @@ BI.BubbleCombo = BI.inherit(BI.Widget, {
             hideWhenAnotherComboOpen: o.hideWhenAnotherComboOpen,
             isNeedAdjustHeight: o.isNeedAdjustHeight,
             isNeedAdjustWidth: o.isNeedAdjustWidth,
-            adjustLength: this._getAdjustLength(),
             stopPropagation: o.stopPropagation,
             adjustXOffset: 0,
             adjustYOffset: 0,
             hideChecker: o.hideChecker,
             offsetStyle: o.offsetStyle,
+            showArrow: true,
             el: o.el,
             popup: BI.extend({
                 type: "bi.bubble_popup_view",
@@ -82,11 +79,9 @@ BI.BubbleCombo = BI.inherit(BI.Widget, {
             self.fireEvent(BI.BubbleCombo.EVENT_BEFORE_POPUPVIEW, arguments);
         });
         this.combo.on(BI.Combo.EVENT_AFTER_POPUPVIEW, function () {
-            self._showTriangle();
             self.fireEvent(BI.BubbleCombo.EVENT_AFTER_POPUPVIEW, arguments);
         });
         this.combo.on(BI.Combo.EVENT_BEFORE_HIDEVIEW, function () {
-            self._hideTriangle();
             self.fireEvent(BI.BubbleCombo.EVENT_BEFORE_HIDEVIEW, arguments);
         });
         this.combo.on(BI.Combo.EVENT_AFTER_HIDEVIEW, function () {
@@ -94,118 +89,7 @@ BI.BubbleCombo = BI.inherit(BI.Widget, {
         });
     },
 
-    _getAdjustLength: function () {
-        return this._const.TRIANGLE_LENGTH + this.options.adjustLength;
-    },
-
-    _createTriangle: function (direction) {
-        var self = this, o = this.options, pos = {}, op = {};
-        var adjustLength = this.options.adjustLength;
-        var offset = this.element.offset();
-        var left = offset.left, right = offset.left + this.element.outerWidth();
-        var top = offset.top, bottom = offset.top + this.element.outerHeight();
-        switch (direction) {
-            case "left":
-                pos = {
-                    top: top,
-                    height: this.element.outerHeight(),
-                    left: left - adjustLength - this._const.TRIANGLE_LENGTH
-                };
-                op = {width: this._const.TRIANGLE_LENGTH};
-                break;
-            case "right":
-                pos = {
-                    top: top,
-                    height: this.element.outerHeight(),
-                    left: right + adjustLength
-                };
-                op = {width: this._const.TRIANGLE_LENGTH};
-                break;
-            case "top":
-                pos = {
-                    left: left,
-                    width: this.element.outerWidth(),
-                    top: top - adjustLength - this._const.TRIANGLE_LENGTH
-                };
-                op = {height: this._const.TRIANGLE_LENGTH};
-                break;
-            case "bottom":
-                pos = {
-                    left: left,
-                    width: this.element.outerWidth(),
-                    top: bottom + adjustLength
-                };
-                op = {height: this._const.TRIANGLE_LENGTH};
-                break;
-            default:
-                break;
-        }
-        this.triangle && this.triangle.destroy();
-        this.triangle = BI.createWidget(op, {
-            type: "bi.center_adapt",
-            scrollable: false,
-            cls: "button-combo-triangle-wrapper",
-            items: [{
-                type: "bi.layout",
-                cls: "bubble-combo-triangle-" + direction + (o.primary ? " bi-primary" : "")
-            }]
-        });
-        pos.el = this.triangle;
-        // 动画结束后再画三角
-        setTimeout(function () {
-            BI.createWidget({
-                type: "bi.absolute",
-                element: self,
-                items: [pos]
-            });
-        }, 200);
-    },
-
-    _createLeftTriangle: function () {
-        this._createTriangle("left");
-    },
-
-    _createRightTriangle: function () {
-        this._createTriangle("right");
-    },
-
-    _createTopTriangle: function () {
-        this._createTriangle("top");
-    },
-
-    _createBottomTriangle: function () {
-        this._createTriangle("bottom");
-    },
-
-    _showTriangle: function () {
-        var pos = this.combo.getPopupPosition();
-        switch (pos.dir) {
-            case "left,top":
-            case "left,bottom":
-                this._createLeftTriangle();
-                break;
-            case "right,top":
-            case "right,bottom":
-                this._createRightTriangle();
-                break;
-            case "top,left":
-            case "top,right":
-                this._createTopTriangle();
-                break;
-            case "bottom,left":
-            case "bottom,right":
-                this._createBottomTriangle();
-                break;
-        }
-    },
-
-    _hideTriangle: function () {
-        this.triangle && this.triangle.destroy();
-        this.triangle = null;
-    },
-
     hideView: function () {
-        this._hideTriangle();
         this.combo && this.combo.hideView();
     },
 
