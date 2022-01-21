@@ -28,6 +28,7 @@
                 hideWhenBlur: true,
                 hideWhenAnotherComboOpen: false,
                 hideWhenClickOutside: true,
+                showArrow: false,
                 isNeedAdjustHeight: true, // 是否需要高度调整
                 isNeedAdjustWidth: true,
                 stopEvent: false,
