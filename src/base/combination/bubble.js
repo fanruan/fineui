@@ -22,7 +22,7 @@
                 isDefaultInit: false,
                 destroyWhenHide: false,
                 hideWhenClickOutside: true,
-                showArrow: false,
+                showArrow: true,
                 hideWhenBlur: false,
                 isNeedAdjustHeight: true, // 是否需要高度调整
                 isNeedAdjustWidth: true,
@@ -321,7 +321,7 @@
             this._assertPopupViewRender();
             this.fireEvent(BI.Bubble.EVENT_BEFORE_POPUPVIEW);
             // popupVisible是为了获取其宽高, 放到可视范围之外以防止在IE下闪一下
-            this.popupView.css({left: -999999999, top: -99999999});
+            // this.popupView.css({left: -999999999, top: -99999999});
             this.popupView.visible();
             this.adjustWidth(e);
 

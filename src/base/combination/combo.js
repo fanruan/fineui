@@ -28,6 +28,7 @@
                 hideWhenBlur: true,
                 hideWhenAnotherComboOpen: false,
                 hideWhenClickOutside: true,
+                showArrow: false,
                 isNeedAdjustHeight: true, // 是否需要高度调整
                 isNeedAdjustWidth: true,
                 stopEvent: false,
@@ -103,6 +104,28 @@
             this.combo = BI.createWidget(this.options.el, {
                 value: this.options.value
             });
+        },
+
+        _assertPopupView: function () {
+            var self = this, o = this.options;
+            if (this.popupView == null) {
+                this.popupView = BI.createWidget(this.options.popup, {
+                    type: "bi.popup_view",
+                    showArrow: o.showArrow,
+                    value: o.value
+                }, this);
+                this.popupView.on(BI.Controller.EVENT_CHANGE, function (type, value, obj) {
+                    if (type === BI.Events.CLICK) {
+                        self.combo.setValue(self.getValue());
+                        self.fireEvent(BI.Bubble.EVENT_CHANGE, value, obj);
+                    }
+                    self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
+                });
+                this.popupView.setVisible(false);
+                BI.nextTick(function () {
+                    self.fireEvent(BI.Bubble.EVENT_AFTER_INIT);
+                });
+            }
         },
 
         _hideView: function (e) {
