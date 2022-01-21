@@ -199,7 +199,7 @@ BI.PopupView = BI.inherit(BI.Widget, {
                     };
                     placeholderStyle = {
                         width: size.width,
-                        left: 0,
+                        left: "",
                         right: 0,
                         height: this._const.TRIANGLE_LENGTH,
                         top: -this._const.TRIANGLE_LENGTH,
@@ -228,11 +228,11 @@ BI.PopupView = BI.inherit(BI.Widget, {
                     };
                     placeholderStyle = {
                         width: size.width,
-                        left: 0,
+                        left: "",
                         right: 0,
                         height: this._const.TRIANGLE_LENGTH,
-                        top: -this._const.TRIANGLE_LENGTH,
-                        bottom: ""
+                        top: "",
+                        bottom: -this._const.TRIANGLE_LENGTH
                     };
                     break;
                 case "left":
@@ -257,7 +257,7 @@ BI.PopupView = BI.inherit(BI.Widget, {
                     };
                     placeholderStyle = {
                         height: size.height,
-                        top: 0,
+                        top: "",
                         bottom: 0,
                         width: this._const.TRIANGLE_LENGTH,
                         right: -this._const.TRIANGLE_LENGTH,
@@ -286,7 +286,7 @@ BI.PopupView = BI.inherit(BI.Widget, {
                     };
                     placeholderStyle = {
                         height: size.height,
-                        top: 0,
+                        top: "",
                         bottom: 0,
                         width: this._const.TRIANGLE_LENGTH,
                         left: -this._const.TRIANGLE_LENGTH,
