@@ -222,6 +222,18 @@
             this.setValue(nowTome);
             this.hidePopupView();
             this.fireEvent(BI.TimeCombo.EVENT_CONFIRM);
+        },
+
+        focus: function () {
+            this.trigger.focus();
+        },
+    
+        blur: function () {
+            this.trigger.blur();
+        },
+
+        setWaterMark: function (v) {
+            this.trigger.setWaterMark(v);
         }
     });
 

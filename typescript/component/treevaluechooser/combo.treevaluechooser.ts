@@ -24,4 +24,8 @@ export declare class TreeValueChooserCombo extends AbstractTreeValueChooser {
     populate<T>(items: T[]): void;
 
     getSearcher(): Widget;
+
+    focus(): void;
+
+    blur(): void;
 }

@@ -156,6 +156,10 @@ BI.MultiLayerSelectTreeCombo = BI.inherit(BI.Widget, {
                 }, {
                     eventName: BI.MultiLayerSelectTreeTrigger.EVENT_FOCUS,
                     action: function () {
+                        if (!self.combo.isViewVisible()) {
+                            self.combo.showView();
+                        }
+
                         self.fireEvent(BI.MultiLayerSelectTreeCombo.EVENT_FOCUS);
                     }
                 }, {
@@ -238,6 +242,14 @@ BI.MultiLayerSelectTreeCombo = BI.inherit(BI.Widget, {
 
     populate: function (items) {
         this.combo.populate(items);
+    },
+
+    focus: function () {
+        this.trigger.focus();
+    },
+
+    blur: function () {
+        this.trigger.blur();
     }
 });
 

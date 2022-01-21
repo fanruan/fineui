@@ -184,6 +184,14 @@ BI.MultiTreeSearcher = BI.inherit(BI.Widget, {
 
     populate: function (items) {
         this.searcher.populate.apply(this.searcher, arguments);
+    },
+
+    focus: function () {
+        this.editor.focus();
+    },
+
+    blur: function () {
+        this.editor.blur();
     }
 });
 

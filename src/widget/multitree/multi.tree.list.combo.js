@@ -158,6 +158,9 @@ BI.MultiTreeListCombo = BI.inherit(BI.Single, {
         };
 
         this.trigger.on(BI.MultiSelectTrigger.EVENT_FOCUS, function () {
+            if (!self.combo.isViewVisible()) {
+                self.combo.showView();
+            }
             self.fireEvent(BI.MultiTreeListCombo.EVENT_FOCUS);
         });
         this.trigger.on(BI.MultiSelectTrigger.EVENT_BLUR, function () {
@@ -378,6 +381,14 @@ BI.MultiTreeListCombo = BI.inherit(BI.Single, {
 
     populate: function () {
         this.combo.populate();
+    },
+
+    focus: function () {
+        this.trigger.focus();
+    },
+
+    blur: function () {
+        this.trigger.blur();
     }
 });
 
