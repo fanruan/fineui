@@ -13,7 +13,7 @@ BI.BubblePopupView = BI.inherit(BI.PopupView, {
             maxWidth: 300,
             minHeight: 50
         });
-    },
+    }
 });
 
 BI.shortcut("bi.bubble_popup_view", BI.BubblePopupView);
@@ -47,33 +47,36 @@ BI.BubblePopupBarView = BI.inherit(BI.BubblePopupView, {
         var items = [];
         BI.each(o.buttons, function (i, buttonOpt) {
             if (BI.isWidget(buttonOpt)) {
-                items.push(buttonOpt);
+                items.push({
+                    el: buttonOpt,
+                    lgap: i === 0 ? 20 : 15,
+                    rgap: i === o.buttons.length - 1 ? 20 : 0
+                });
             } else {
-                items.push(BI.extend({
-                    type: "bi.button",
-                    height: 24,
-                    handler: function (v) {
-                        self.fireEvent(BI.BubblePopupBarView.EVENT_CLICK_TOOLBAR_BUTTON, v);
-                    }
-                }, buttonOpt));
+                items.push({
+                    el: BI.extend({
+                        type: "bi.button",
+                        height: 24,
+                        handler: function (v) {
+                            self.fireEvent(BI.BubblePopupBarView.EVENT_CLICK_TOOLBAR_BUTTON, v);
+                        }
+                    }, buttonOpt),
+                    lgap: i === 0 ? 20 : 15,
+                    rgap: i === o.buttons.length - 1 ? 20 : 0
+                });
             }
         });
         return BI.createWidget({
-            type: "bi.center",
+            type: "bi.right_vertical_adapt",
             height: 54,
-            rgap: 20,
-            items: [{
-                type: "bi.right_vertical_adapt",
-                lgap: 15,
-                items: items
-            }]
+            items: items
         });
     },
 
     _createView: function () {
         var o = this.options;
 
-        var button =  BI.createWidget({
+        var button = BI.createWidget({
             type: "bi.button_group",
             items: [o.el],
             layouts: [{
@@ -156,7 +159,7 @@ BI.TextBubblePopupBarView = BI.inherit(BI.Widget, {
 
     populate: function (v) {
         this.text.setText(v || this.options.text);
-    },
+    }
 });
 BI.TextBubblePopupBarView.EVENT_CHANGE = "EVENT_CLICK_TOOLBAR_BUTTON";
 BI.shortcut("bi.text_bubble_bar_popup_view", BI.TextBubblePopupBarView);
