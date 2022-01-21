@@ -138,6 +138,7 @@ BI.TextBubblePopupBarView = BI.inherit(BI.Widget, {
         return {
             type: "bi.bubble_bar_popup_view",
             primary: o.primary,
+            showArrow: o.showArrow,
             minWidth: o.minWidth,
             maxWidth: o.maxWidth,
             minHeight: o.minHeight,
@@ -157,6 +158,9 @@ BI.TextBubblePopupBarView = BI.inherit(BI.Widget, {
         };
     },
 
+    setDirection: function (direction, size) {
+        this.popup.setDirection(direction, size);
+    },
     populate: function (v) {
         this.text.setText(v || this.options.text);
     }
