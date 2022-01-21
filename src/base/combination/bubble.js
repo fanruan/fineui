@@ -22,7 +22,7 @@
                 isDefaultInit: false,
                 destroyWhenHide: false,
                 hideWhenClickOutside: true,
-                showArrow: true,
+                showArrow: false,
                 hideWhenBlur: false,
                 isNeedAdjustHeight: true, // 是否需要高度调整
                 isNeedAdjustWidth: true,
