@@ -1838,6 +1838,7 @@
       if (!runner.effect.active) {
         return;
       }
+
       if (cb) {
         // watch(source, cb)
         var newValue = runner();
@@ -2404,6 +2405,15 @@
     }
 
     target[key] = val;
+    return target;
+  }
+  function freeze(value) {
+    Object.defineProperty(value, '__v_skip', {
+      configurable: true,
+      enumerable: false,
+      value: value
+    });
+    return value;
   }
   function del(target, key) {
     if (_.isArray(target)) {
@@ -2456,6 +2466,7 @@
   exports.config = config;
   exports.define = define;
   exports.del = del;
+  exports.freeze = freeze;
   exports.mixin = mixin;
   exports.set = set;
   exports.toJSON = toJSON;
