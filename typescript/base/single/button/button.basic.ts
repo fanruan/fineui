@@ -52,7 +52,7 @@ export declare class BasicButton extends Single {
 
     beforeClick(): void;
 
-    doClick(): void;
+    doClick(e: Event): void;
 
     handle(): BasicButton;
 
