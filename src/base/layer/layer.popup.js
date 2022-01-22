@@ -24,7 +24,7 @@ BI.PopupView = BI.inherit(BI.Widget, {
             hgap: 0,
             innerVGap: 0,
             innerHGap: 0,
-            showArrow: true,
+            showArrow: false,
             direction: BI.Direction.Top, // 工具栏的方向
             stopEvent: false, // 是否停止mousedown、mouseup事件
             stopPropagation: false, // 是否停止mousedown、mouseup向上冒泡
