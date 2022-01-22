@@ -84,6 +84,10 @@ BI.MultiTreePopup = BI.inherit(BI.Pane, {
         return this.tree.hasChecked();
     },
 
+    setDirection: function (direction, position) {
+        this.popupView.setDirection(direction, position);
+    },
+
     resetHeight: function (h) {
         this.popupView.resetHeight(h);
     },
