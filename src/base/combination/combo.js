@@ -284,7 +284,9 @@
             var height = this.combo.element.outerHeight();
             this.popupView.setDirection(p.dir, {
                 width: width,
-                height: height
+                height: height,
+                offsetStyle: o.offsetStyle,
+                offset: this.combo.element.offset()
             });
             if ("left" in p) {
                 this.popupView.element.css({
