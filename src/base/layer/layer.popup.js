@@ -173,16 +173,34 @@ BI.PopupView = BI.inherit(BI.Widget, {
         });
     },
 
-    setDirection: function (direction, size) {
+    setDirection: function (direction, position) {
         if (this.options.showArrow) {
             var style, placeholderStyle;
+            var bodyBounds = BI.Widget._renderEngine.createElement("body").bounds();
+            var bodyWidth = bodyBounds.width;
+            var bodyHeight = bodyBounds.height;
+            var popupWidth = this.element.outerWidth();
+            var popupHeight = this.element.outerHeight();
+            var offset = position.offset;
+            var offsetStyle = position.offsetStyle;
+            var middle = offsetStyle === "center" || offsetStyle === "middle";
+
+            var minLeft = Math.max(5, offset.left + 5 + popupWidth - bodyWidth);
+            var minRight = Math.max(5, popupWidth - (offset.left + 5));
+            var minTop = Math.max(5, offset.top + 5 + popupHeight - bodyHeight);
+            var minBottom = Math.max(5, popupHeight - (offset.top + 5));
+
+            var maxLeft = Math.min(popupWidth - 12 - 5, offset.left + position.width - 12 - 5);
+            var maxRight = Math.min(popupWidth - 12 - 5, bodyWidth - (offset.left + position.width - 12 - 5));
+            var maxTop = Math.min(popupHeight - 12 - 5, offset.top + position.height - 12 - 5);
+            var maxBottom = Math.min(popupHeight - 12 - 5, bodyHeight - (offset.top + position.height - 12 - 5));
             switch (direction) {
                 case "bottom":
                 case "bottom,right":
                     direction = "bottom";
                     style = {
                         // 5表示留出一定的空间
-                        left: Math.min(size.width / 2 - 6, this.element.outerWidth() - 12 - 5)
+                        left: BI.clamp((middle ? popupWidth : position.width) / 2 - 6, minLeft, maxLeft)
                     };
                     placeholderStyle = {
                         left: 0,
@@ -195,7 +213,7 @@ BI.PopupView = BI.inherit(BI.Widget, {
                 case "bottom,left":
                     direction = "bottom";
                     style = {
-                        right: Math.min(size.width / 2 - 6, this.element.outerWidth() - 12 - 5)
+                        right: BI.clamp((middle ? popupWidth : position.width) / 2 - 6, minRight, maxRight)
                     };
                     placeholderStyle = {
                         left: 0,
@@ -209,7 +227,7 @@ BI.PopupView = BI.inherit(BI.Widget, {
                 case "top,right":
                     direction = "top";
                     style = {
-                        left: Math.min(size.width / 2 - 6, this.element.outerWidth() - 12 - 5)
+                        left: BI.clamp((middle ? popupWidth : position.width) / 2 - 6, minLeft, maxLeft)
                     };
                     placeholderStyle = {
                         left: 0,
@@ -222,7 +240,7 @@ BI.PopupView = BI.inherit(BI.Widget, {
                 case "top,left":
                     direction = "top";
                     style = {
-                        right: Math.min(size.width / 2 - 6, this.element.outerWidth() - 12 - 5)
+                        right: BI.clamp((middle ? popupWidth : position.width) / 2 - 6, minRight, maxRight)
                     };
                     placeholderStyle = {
                         left: 0,
@@ -236,7 +254,7 @@ BI.PopupView = BI.inherit(BI.Widget, {
                 case "left,bottom":
                     direction = "left";
                     style = {
-                        top: Math.min(size.height / 2 - 6, this.element.outerHeight() - 12 - 5)
+                        top: BI.clamp((middle ? popupHeight : position.height) / 2 - 6, minTop, maxTop)
                     };
                     placeholderStyle = {
                         top: 0,
@@ -249,7 +267,7 @@ BI.PopupView = BI.inherit(BI.Widget, {
                 case "left,top":
                     direction = "left";
                     style = {
-                        bottom: Math.min(size.height / 2 - 6, this.element.outerHeight() - 12 - 5)
+                        bottom: BI.clamp((middle ? popupHeight : position.height) / 2 - 6, minBottom, maxBottom)
                     };
                     placeholderStyle = {
                         top: 0,
@@ -263,7 +281,7 @@ BI.PopupView = BI.inherit(BI.Widget, {
                 case "right,bottom":
                     direction = "right";
                     style = {
-                        top: Math.min(size.height / 2 - 6, this.element.outerHeight() - 12 - 5)
+                        top: BI.clamp((middle ? popupHeight : position.height) / 2 - 6, minTop, maxTop)
                     };
                     placeholderStyle = {
                         top: 0,
@@ -276,7 +294,7 @@ BI.PopupView = BI.inherit(BI.Widget, {
                 case "right,top":
                     direction = "right";
                     style = {
-                        bottom: Math.min(size.height / 2 - 6, this.element.outerHeight() - 12 - 5)
+                        bottom: BI.clamp((middle ? popupHeight : position.height) / 2 - 6, minBottom, maxBottom)
                     };
                     placeholderStyle = {
                         top: 0,
