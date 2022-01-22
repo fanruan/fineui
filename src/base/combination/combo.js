@@ -282,7 +282,7 @@
             }
             var width = this.combo.element.outerWidth();
             var height = this.combo.element.outerHeight();
-            this.popupView.setDirection(p.dir, {
+            this.popupView.setDirection && this.popupView.setDirection(p.dir, {
                 width: width,
                 height: height,
                 offsetStyle: o.offsetStyle,
