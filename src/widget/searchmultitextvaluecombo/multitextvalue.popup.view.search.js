@@ -77,7 +77,11 @@ BI.SearchMultiSelectPopupView = BI.inherit(BI.Widget, {
 
     resetWidth: function (w) {
         this.popupView.resetWidth(w);
-    }
+    },
+
+    setDirection: function (direction, position) {
+        this.popupView.setDirection(direction, position);
+    },
 });
 
 BI.SearchMultiSelectPopupView.EVENT_CHANGE = "EVENT_CHANGE";

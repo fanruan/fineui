@@ -158,8 +158,8 @@ BI.TextBubblePopupBarView = BI.inherit(BI.Widget, {
         };
     },
 
-    setDirection: function (direction, size) {
-        this.popup.setDirection(direction, size);
+    setDirection: function (direction, position) {
+        this.popup.setDirection(direction, position);
     },
     populate: function (v) {
         this.text.setText(v || this.options.text);
