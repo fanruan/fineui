@@ -286,6 +286,8 @@
                 width: width,
                 height: height,
                 offsetStyle: o.offsetStyle,
+                adjustXOffset: o.adjustXOffset,
+                adjustYOffset: o.adjustYOffset,
                 offset: this.combo.element.offset()
             });
             if ("left" in p) {

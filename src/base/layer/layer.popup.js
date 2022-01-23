@@ -176,6 +176,8 @@ BI.PopupView = BI.inherit(BI.Widget, {
     setDirection: function (direction, position) {
         if (this.options.showArrow) {
             var style, placeholderStyle;
+            var adjustXOffset = position.adjustXOffset || 0;
+            var adjustYOffset = position.adjustYOffset || 0;
             var bodyBounds = BI.Widget._renderEngine.createElement("body").bounds();
             var bodyWidth = bodyBounds.width;
             var bodyHeight = bodyBounds.height;
@@ -200,7 +202,7 @@ BI.PopupView = BI.inherit(BI.Widget, {
                     direction = "bottom";
                     style = {
                         // 5表示留出一定的空间
-                        left: BI.clamp((middle ? popupWidth : position.width) / 2 - 6, minLeft, maxLeft)
+                        left: BI.clamp(((middle ? popupWidth : position.width) - adjustXOffset) / 2 - 6, minLeft, maxLeft)
                     };
                     placeholderStyle = {
                         left: 0,
@@ -213,7 +215,7 @@ BI.PopupView = BI.inherit(BI.Widget, {
                 case "bottom,left":
                     direction = "bottom";
                     style = {
-                        right: BI.clamp((middle ? popupWidth : position.width) / 2 - 6, minRight, maxRight)
+                        right: BI.clamp(((middle ? popupWidth : position.width) + adjustXOffset) / 2 - 6, minRight, maxRight)
                     };
                     placeholderStyle = {
                         left: 0,
@@ -227,7 +229,7 @@ BI.PopupView = BI.inherit(BI.Widget, {
                 case "top,right":
                     direction = "top";
                     style = {
-                        left: BI.clamp((middle ? popupWidth : position.width) / 2 - 6, minLeft, maxLeft)
+                        left: BI.clamp(((middle ? popupWidth : position.width) - adjustXOffset) / 2 - 6, minLeft, maxLeft)
                     };
                     placeholderStyle = {
                         left: 0,
@@ -240,7 +242,7 @@ BI.PopupView = BI.inherit(BI.Widget, {
                 case "top,left":
                     direction = "top";
                     style = {
-                        right: BI.clamp((middle ? popupWidth : position.width) / 2 - 6, minRight, maxRight)
+                        right: BI.clamp(((middle ? popupWidth : position.width) + adjustXOffset) / 2 - 6, minRight, maxRight)
                     };
                     placeholderStyle = {
                         left: 0,
@@ -254,7 +256,7 @@ BI.PopupView = BI.inherit(BI.Widget, {
                 case "left,bottom":
                     direction = "left";
                     style = {
-                        top: BI.clamp((middle ? popupHeight : position.height) / 2 - 6, minTop, maxTop)
+                        top: BI.clamp(((middle ? popupHeight : position.height) - adjustYOffset) / 2 - 6, minTop, maxTop)
                     };
                     placeholderStyle = {
                         top: 0,
@@ -267,7 +269,7 @@ BI.PopupView = BI.inherit(BI.Widget, {
                 case "left,top":
                     direction = "left";
                     style = {
-                        bottom: BI.clamp((middle ? popupHeight : position.height) / 2 - 6, minBottom, maxBottom)
+                        bottom: BI.clamp(((middle ? popupHeight : position.height) + adjustYOffset) / 2 - 6, minBottom, maxBottom)
                     };
                     placeholderStyle = {
                         top: 0,
@@ -281,7 +283,7 @@ BI.PopupView = BI.inherit(BI.Widget, {
                 case "right,bottom":
                     direction = "right";
                     style = {
-                        top: BI.clamp((middle ? popupHeight : position.height) / 2 - 6, minTop, maxTop)
+                        top: BI.clamp(((middle ? popupHeight : position.height) - adjustYOffset) / 2 - 6, minTop, maxTop)
                     };
                     placeholderStyle = {
                         top: 0,
@@ -294,7 +296,7 @@ BI.PopupView = BI.inherit(BI.Widget, {
                 case "right,top":
                     direction = "right";
                     style = {
-                        bottom: BI.clamp((middle ? popupHeight : position.height) / 2 - 6, minBottom, maxBottom)
+                        bottom: BI.clamp(((middle ? popupHeight : position.height) + adjustYOffset) / 2 - 6, minBottom, maxBottom)
                     };
                     placeholderStyle = {
                         top: 0,
