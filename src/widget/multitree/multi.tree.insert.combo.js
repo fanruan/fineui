@@ -140,9 +140,6 @@ BI.MultiTreeInsertCombo = BI.inherit(BI.Single, {
         };
 
         this.trigger.on(BI.MultiSelectTrigger.EVENT_FOCUS, function () {
-            if (!self.combo.isViewVisible()) {
-                self.combo.showView();
-            }
             self.fireEvent(BI.MultiTreeInsertCombo.EVENT_FOCUS);
         });
         this.trigger.on(BI.MultiSelectTrigger.EVENT_BLUR, function () {

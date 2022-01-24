@@ -158,9 +158,6 @@ BI.MultiLayerSingleTreeCombo = BI.inherit(BI.Widget, {
                 }, {
                     eventName: BI.MultiLayerSingleTreeTrigger.EVENT_FOCUS,
                     action: function () {
-                        if (!self.combo.isViewVisible()) {
-                            self.combo.showView();
-                        }
                         self.fireEvent(BI.MultiLayerSingleTreeCombo.EVENT_FOCUS);
                     }
                 }, {
