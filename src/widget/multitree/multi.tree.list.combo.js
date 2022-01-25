@@ -30,7 +30,7 @@ BI.MultiTreeListCombo = BI.inherit(BI.Single, {
             allowEdit: o.allowEdit,
             text: o.text,
             watermark: o.watermark,
-            height: o.height - 2,
+            height: o.height - (o.simple ? 1 : 2),
             valueFormatter: o.valueFormatter,
             // adapter: this.popup,
             masker: {

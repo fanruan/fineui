@@ -31,7 +31,7 @@ BI.SingleSelectInsertCombo = BI.inherit(BI.Single, {
         this.trigger = BI.createWidget({
             type: "bi.single_select_trigger",
             watermark: o.watermark,
-            height: o.height - 2,
+            height: o.height - (o.simple ? 1 : 2),
             allowNoSelect: o.allowNoSelect,
             allowEdit: o.allowEdit,
             // adapter: this.popup,
