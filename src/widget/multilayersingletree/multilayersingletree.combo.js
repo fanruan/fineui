@@ -142,7 +142,7 @@ BI.MultiLayerSingleTreeCombo = BI.inherit(BI.Widget, {
                 items: o.items,
                 itemsCreator: o.itemsCreator,
                 valueFormatter: o.valueFormatter,
-                height: o.height - 2,
+                height: o.height - (o.simple ? 1 : 2),
                 text: o.text,
                 value: o.value,
                 tipType: o.tipType,
