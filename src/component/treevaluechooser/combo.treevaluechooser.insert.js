@@ -101,6 +101,14 @@ BI.TreeValueChooserInsertCombo = BI.inherit(BI.AbstractTreeValueChooser, {
             this._initData(items);
         }
         this.combo.populate();
+    },
+
+    focus: function () {
+        this.combo.focus();
+    },
+
+    blur: function () {
+        this.combo.blur();
     }
 });
 

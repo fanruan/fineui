@@ -36,6 +36,12 @@ export declare class DynamicDateCombo extends Single {
     hidePopupView(): void;
 
     getValue(): DynamicDataComboValue;
+
+    focus(): void;
+
+    blur(): void;
+
+    setWaterMark(v: string): void;
 }
 
 export interface DynamicDataComboValue {

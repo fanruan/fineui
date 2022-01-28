@@ -344,6 +344,14 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
 
     populate: function () {
         this.combo.populate();
+    },
+
+    focus: function () {
+        this.trigger.focus();
+    },
+
+    blur: function () {
+        this.trigger.blur();
     }
 });
 

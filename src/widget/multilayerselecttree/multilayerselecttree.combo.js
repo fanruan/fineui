@@ -238,6 +238,14 @@ BI.MultiLayerSelectTreeCombo = BI.inherit(BI.Widget, {
 
     populate: function (items) {
         this.combo.populate(items);
+    },
+
+    focus: function () {
+        this.trigger.focus();
+    },
+
+    blur: function () {
+        this.trigger.blur();
     }
 });
 
