@@ -133,6 +133,31 @@ BI.Msg = function () {
                 items: [
                     {
                         type: "bi.border",
+                        attributes: {
+                            tabIndex: 1
+                        },
+                        mounted: function () {
+                            this.element.keyup(function (e) {
+                                if (e.keyCode === BI.KeyCode.ENTER) {
+                                    close();
+                                    if (BI.isFunction(callback)) {
+                                        callback.apply(null, [true]);
+                                    }
+                                } else if (e.keyCode === BI.KeyCode.ESCAPE) {
+                                    close();
+                                    if (hasCancel === true) {
+                                        if (BI.isFunction(callback)) {
+                                            callback.apply(null, [false]);
+                                        }
+                                    }
+                                }
+                            });
+                            try {
+                                this.element.focus();
+                            } catch (e) {
+
+                            }
+                        },
                         cls: "bi-card",
                         items: {
                             north: {

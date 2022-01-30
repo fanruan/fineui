@@ -11,9 +11,6 @@ BI.BasicButton = BI.inherit(BI.Single, {
         return BI.extend(conf, {
             _baseCls: (conf._baseCls || "") + " bi-basic-button" + (conf.invalid ? "" : " cursor-pointer") + ((BI.isIE() && BI.getIEVersion() < 10) ? " hack" : ""),
             // el: {} // 可以通过el来创建button元素
-            attributes: {
-                tabIndex: 1
-            },
             value: "",
             stopEvent: false,
             stopPropagation: false,
@@ -412,10 +409,8 @@ BI.BasicButton = BI.inherit(BI.Single, {
         BI.BasicButton.superclass._setEnable.apply(this, arguments);
         if (enable === true) {
             this.element.removeClass("base-disabled disabled");
-            this.element.attr("tabIndex", 1);
         } else if (enable === false) {
             this.element.addClass("base-disabled disabled");
-            this.element.removeAttr("tabIndex");
         }
         if (!enable) {
             if (this.options.shadow) {

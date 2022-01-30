@@ -57,6 +57,13 @@ BI.IconTextItem = BI.inherit(BI.BasicButton, {
         }))));
     },
 
+    doClick: function () {
+        BI.IconTextItem.superclass.doClick.apply(this, arguments);
+        if (this.isValid()) {
+            this.fireEvent(BI.IconTextItem.EVENT_CHANGE, this.getValue(), this);
+        }
+    },
+
     setValue: function () {
         if (!this.isReadOnly()) {
             this.text.setValue.apply(this.text, arguments);
@@ -73,13 +80,6 @@ BI.IconTextItem = BI.inherit(BI.BasicButton, {
 
     getText: function () {
         return this.text.getText();
-    },
-
-    doClick: function () {
-        BI.IconTextItem.superclass.doClick.apply(this, arguments);
-        if (this.isValid()) {
-            this.fireEvent(BI.IconTextItem.EVENT_CHANGE, this.getValue(), this);
-        }
     },
 
     doRedMark: function () {
