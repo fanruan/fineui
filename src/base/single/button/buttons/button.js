@@ -16,6 +16,9 @@ BI.Button = BI.inherit(BI.BasicButton, {
         var conf = BI.Button.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
             baseCls: (conf.baseCls || "") + " bi-button" + ((BI.isIE() && BI.isIE9Below()) ? " hack" : ""),
+            attributes: {
+                tabIndex: 1
+            },
             minWidth: (props.block === true || props.clear === true) ? 0 : 80,
             height: 24,
             shadow: props.clear !== true,
@@ -122,6 +125,15 @@ BI.Button = BI.inherit(BI.BasicButton, {
         BI.Button.superclass.doClick.apply(this, arguments);
         if (this.isValid()) {
             this.fireEvent(BI.Button.EVENT_CHANGE, this);
+        }
+    },
+
+    _setEnable: function (enable) {
+        BI.Button.superclass._setEnable.apply(this, arguments);
+        if (enable === true) {
+            this.element.attr("tabIndex", 1);
+        } else if (enable === false) {
+            this.element.removeAttr("tabIndex");
         }
     },
 

@@ -8,6 +8,9 @@ BI.SingleSelectIconTextItem = BI.inherit(BI.Single, {
     _defaultConfig: function () {
         return BI.extend(BI.SingleSelectIconTextItem.superclass._defaultConfig.apply(this, arguments), {
             extraCls: "bi-single-select-icon-text-item bi-list-item-active",
+            attributes: {
+                tabIndex: 1
+            },
             iconCls: "",
             height: 24
         });
@@ -35,6 +38,15 @@ BI.SingleSelectIconTextItem = BI.inherit(BI.Single, {
         });
     },
 
+    _setEnable: function (enable) {
+        BI.SingleSelectIconTextItem.superclass._setEnable.apply(this, arguments);
+        if (enable === true) {
+            this.element.attr("tabIndex", 1);
+        } else if (enable === false) {
+            this.element.removeAttr("tabIndex");
+        }
+    },
+
     isSelected: function () {
         return this.text.isSelected();
     },
@@ -49,10 +61,6 @@ BI.SingleSelectIconTextItem = BI.inherit(BI.Single, {
 
     unRedMark: function () {
         this.text.unRedMark.apply(this.text, arguments);
-    },
-
-    doClick: function () {
-        BI.SingleSelectIconTextItem.superclass.doClick.apply(this, arguments);
     }
 });
 

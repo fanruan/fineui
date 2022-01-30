@@ -7,6 +7,9 @@ BI.MultiSelectItem = BI.inherit(BI.BasicButton, {
     _defaultConfig: function () {
         return BI.extend(BI.MultiSelectItem.superclass._defaultConfig.apply(this, arguments), {
             extraCls: "bi-multi-select-item",
+            attributes: {
+                tabIndex: 1
+            },
             height: 24,
             logic: {
                 dynamic: false
@@ -53,6 +56,15 @@ BI.MultiSelectItem = BI.inherit(BI.BasicButton, {
                 width: o.iconWrapperWidth
             }, this.text)
         }))));
+    },
+
+    _setEnable: function (enable) {
+        BI.MultiSelectItem.superclass._setEnable.apply(this, arguments);
+        if (enable === true) {
+            this.element.attr("tabIndex", 1);
+        } else if (enable === false) {
+            this.element.removeAttr("tabIndex");
+        }
     },
 
     doRedMark: function () {

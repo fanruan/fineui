@@ -2,6 +2,9 @@ BI.SingleSelectItem = BI.inherit(BI.BasicButton, {
     _defaultConfig: function () {
         return BI.extend(BI.SingleSelectItem.superclass._defaultConfig.apply(this, arguments), {
             extraCls: "bi-single-select-item bi-list-item-active",
+            attributes: {
+                tabIndex: 1
+            },
             hgap: 10,
             height: 24,
             textAlign: "left"
@@ -23,6 +26,15 @@ BI.SingleSelectItem = BI.inherit(BI.BasicButton, {
             value: o.value,
             py: o.py
         });
+    },
+
+    _setEnable: function (enable) {
+        BI.SingleSelectItem.superclass._setEnable.apply(this, arguments);
+        if (enable === true) {
+            this.element.attr("tabIndex", 1);
+        } else if (enable === false) {
+            this.element.removeAttr("tabIndex");
+        }
     },
 
     doRedMark: function () {

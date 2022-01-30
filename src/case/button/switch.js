@@ -9,6 +9,9 @@ BI.Switch = BI.inherit(BI.BasicButton, {
 
     props: {
         extraCls: "bi-switch",
+        attributes: {
+            tabIndex: 1
+        },
         height: 20,
         width: 44,
         logic: {
@@ -56,6 +59,15 @@ BI.Switch = BI.inherit(BI.BasicButton, {
                 }
             }]
         };
+    },
+
+    _setEnable: function (enable) {
+        BI.Switch.superclass._setEnable.apply(this, arguments);
+        if (enable === true) {
+            this.element.attr("tabIndex", 1);
+        } else if (enable === false) {
+            this.element.removeAttr("tabIndex");
+        }
     },
 
     setSelected: function (v) {
