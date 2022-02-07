@@ -11,6 +11,7 @@ export declare class Combo extends Widget {
     static EVENT_AFTER_POPUPVIEW: string;
     static EVENT_BEFORE_HIDEVIEW: string;
     static EVENT_AFTER_HIDEVIEW: string;
+    static closeAll: Function;
 
     props: {
         trigger?: 'click' | 'hover' | 'click-hover' | '';
