@@ -93,6 +93,7 @@ BI.Toast = BI.inherit(BI.Tip, {
         this.text = BI.createWidget({
             type: "bi.horizontal",
             horizontalAlign: BI.HorizontalAlign.Stretch,
+            verticalAlign: BI.VerticalAlign.Middle,
             element: this,
             items: items,
             vgap: 7,
