@@ -13,20 +13,22 @@ BI.Popover = BI.inherit(BI.Widget, {
         MAX_HEIGHT: 600
     },
 
-    props: {
-        baseCls: "bi-popover bi-card bi-border-radius",
-        size: "normal", // small, normal, big
-        logic: {
-            dynamic: false
-        },
-        header: null,
-        headerHeight: 40,
-        body: null,
-        footer: null,
-        footerHeight: 44,
-        closable: true, // BI-40839 是否显示右上角的关闭按钮
-        bodyHgap: 20,
-        bodyTgap: 10
+    props: function () {
+        return {
+            baseCls: "bi-popover bi-card bi-border-radius",
+            size: "normal", // small, normal, big
+            logic: {
+                dynamic: false
+            },
+            header: null,
+            headerHeight: 40,
+            body: null,
+            footer: null,
+            footerHeight: 44,
+            closable: true, // BI-40839 是否显示右上角的关闭按钮
+            bodyHgap: BI.SIZE_CONSANTS.H_GAP_SIZE,
+            bodyTgap: 10
+        };
     },
 
     render: function () {
@@ -73,8 +75,8 @@ BI.Popover = BI.inherit(BI.Widget, {
                                 title: o.header,
                                 textAlign: "left"
                             },
-                            left: 20,
-                            right: o.closable ? 0 : 20
+                            left: BI.SIZE_CONSANTS.H_GAP_SIZE,
+                            right: o.closable ? 0 : BI.SIZE_CONSANTS.H_GAP_SIZE
                         }]
                     }
                 }, o.closable ? {
@@ -127,9 +129,9 @@ BI.Popover = BI.inherit(BI.Widget, {
                     type: "bi.absolute",
                     items: [{
                         el: o.footer,
-                        left: 20,
+                        left: BI.SIZE_CONSANTS.H_GAP_SIZE,
                         top: 0,
-                        right: 20,
+                        right: BI.SIZE_CONSANTS.H_GAP_SIZE,
                         bottom: 0
                     }],
                     height: o.footerHeight
