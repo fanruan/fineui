@@ -53,6 +53,13 @@ BI.IconTextNode = BI.inherit(BI.NodeButton, {
         }))));
     },
 
+    doClick: function () {
+        BI.IconTextNode.superclass.doClick.apply(this, arguments);
+        if (this.isValid()) {
+            this.fireEvent(BI.IconTextNode.EVENT_CHANGE, this.getValue(), this);
+        }
+    },
+
     setValue: function () {
         if (!this.isReadOnly()) {
             this.text.setValue.apply(this.text, arguments);
@@ -69,13 +76,6 @@ BI.IconTextNode = BI.inherit(BI.NodeButton, {
 
     getText: function () {
         return this.text.getText();
-    },
-
-    doClick: function () {
-        BI.IconTextNode.superclass.doClick.apply(this, arguments);
-        if (this.isValid()) {
-            this.fireEvent(BI.IconTextNode.EVENT_CHANGE, this.getValue(), this);
-        }
     },
 
     doRedMark: function () {

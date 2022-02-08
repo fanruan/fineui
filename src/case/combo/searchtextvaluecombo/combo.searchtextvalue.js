@@ -35,7 +35,7 @@ BI.SearchTextValueCombo = BI.inherit(BI.Widget, {
                             self.trigger = this;
                         },
                         items: o.items,
-                        height: o.height - 2,
+                        height: o.height - (o.simple ? 1 : 2),
                         text: o.text,
                         defaultText: o.defaultText,
                         value: o.value,

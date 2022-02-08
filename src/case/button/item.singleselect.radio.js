@@ -7,6 +7,9 @@ BI.SingleSelectRadioItem = BI.inherit(BI.BasicButton, {
     _defaultConfig: function () {
         return BI.extend(BI.SingleSelectRadioItem.superclass._defaultConfig.apply(this, arguments), {
             extraCls: "bi-single-select-radio-item",
+            attributes: {
+                tabIndex: 1
+            },
             logic: {
                 dynamic: false
             },
@@ -49,6 +52,15 @@ BI.SingleSelectRadioItem = BI.inherit(BI.BasicButton, {
                 width: o.iconWrapperWidth
             }, this.text)
         }))));
+    },
+
+    _setEnable: function (enable) {
+        BI.SingleSelectRadioItem.superclass._setEnable.apply(this, arguments);
+        if (enable === true) {
+            this.element.attr("tabIndex", 1);
+        } else if (enable === false) {
+            this.element.removeAttr("tabIndex");
+        }
     },
 
     doRedMark: function () {

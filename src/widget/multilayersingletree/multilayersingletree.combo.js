@@ -142,7 +142,7 @@ BI.MultiLayerSingleTreeCombo = BI.inherit(BI.Widget, {
                 items: o.items,
                 itemsCreator: o.itemsCreator,
                 valueFormatter: o.valueFormatter,
-                height: o.height - 2,
+                height: o.height - (o.simple ? 1 : 2),
                 text: o.text,
                 value: o.value,
                 tipType: o.tipType,
@@ -176,6 +176,7 @@ BI.MultiLayerSingleTreeCombo = BI.inherit(BI.Widget, {
                         var value = self.trigger.getSearcher().getKeyword();
                         self.combo.setValue([value]);
                         self.combo.hideView();
+                        self.fireEvent(BI.MultiLayerSingleTreeCombo.EVENT_CHANGE);
                     }
                 }]
             },
@@ -238,6 +239,14 @@ BI.MultiLayerSingleTreeCombo = BI.inherit(BI.Widget, {
 
     populate: function (items) {
         this.combo.populate(items);
+    },
+
+    focus: function () {
+        this.trigger.focus();
+    },
+
+    blur: function () {
+        this.trigger.blur();
     }
 });
 

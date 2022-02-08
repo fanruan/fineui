@@ -239,6 +239,14 @@ BI.MultiLayerSingleTreeTrigger = BI.inherit(BI.Trigger, {
 
     getValue: function () {
         return this.searcher.getValue();
+    },
+
+    focus: function () {
+        this.searcher.focus();
+    },
+
+    blur: function () {
+        this.searcher.blur();
     }
 });
 BI.MultiLayerSingleTreeTrigger.EVENT_FOCUS = "EVENT_FOCUS";

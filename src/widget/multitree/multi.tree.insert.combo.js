@@ -28,7 +28,7 @@ BI.MultiTreeInsertCombo = BI.inherit(BI.Single, {
         this.trigger = BI.createWidget({
             type: "bi.multi_select_trigger",
             allowEdit: o.allowEdit,
-            height: o.height - 2,
+            height: o.height - (o.simple ? 1 : 2),
             valueFormatter: o.valueFormatter,
             // adapter: this.popup,
             masker: {
@@ -360,6 +360,14 @@ BI.MultiTreeInsertCombo = BI.inherit(BI.Single, {
 
     populate: function () {
         this.combo.populate();
+    },
+
+    focus: function () {
+        this.trigger.focus();
+    },
+
+    blur: function () {
+        this.trigger.blur();
     }
 });
 

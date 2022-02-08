@@ -223,17 +223,6 @@
             this.combo = BI.createWidget(this.options.el, {
                 value: this.options.value
             });
-
-            if (this.options.showArrow) {
-                this.arrow = BI.createWidget({
-                    type: "bi.absolute",
-                    cls: "bi-bubble-arrow",
-                    items: [{
-                        type: "bi.layout",
-                        cls: "bubble-arrow"
-                    }]
-                });
-            }
         },
 
         _assertPopupView: function () {
@@ -241,17 +230,9 @@
             if (this.popupView == null) {
                 this.popupView = BI.createWidget(this.options.popup, {
                     type: "bi.bubble_popup_view",
+                    showArrow: o.showArrow,
                     value: o.value
                 }, this);
-                if (this.options.showArrow) {
-                    BI.createWidget({
-                        type: "bi.absolute",
-                        element: this.popupView,
-                        items: [{
-                            el: this.arrow
-                        }]
-                    });
-                }
                 this.popupView.on(BI.Controller.EVENT_CHANGE, function (type, value, obj) {
                     if (type === BI.Events.CLICK) {
                         self.combo.setValue(self.getValue());
@@ -340,7 +321,7 @@
             this._assertPopupViewRender();
             this.fireEvent(BI.Bubble.EVENT_BEFORE_POPUPVIEW);
             // popupVisible是为了获取其宽高, 放到可视范围之外以防止在IE下闪一下
-            this.popupView.css({left: -999999999, top: -99999999});
+            // this.popupView.css({left: -999999999, top: -99999999});
             this.popupView.visible();
             this.adjustWidth(e);
 
@@ -360,7 +341,7 @@
                     name: "arrow",
                     options: {
                         padding: 5,
-                        element: this.arrow.element[0]
+                        element: this.popupView.arrow.element[0]
                     }
                 });
             }

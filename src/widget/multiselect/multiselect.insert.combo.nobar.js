@@ -41,7 +41,7 @@ BI.MultiSelectInsertNoBarCombo = BI.inherit(BI.Single, {
 
         this.trigger = BI.createWidget({
             type: "bi.multi_select_insert_trigger",
-            height: o.height - 2,
+            height: o.height - (o.simple ? 1 : 2),
             text: o.text,
             // adapter: this.popup,
             masker: {

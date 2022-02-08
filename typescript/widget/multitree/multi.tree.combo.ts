@@ -15,4 +15,8 @@ export declare class MultiTreeCombo extends Single {
     hideView(): void;
 
     getSearcher(): Widget;
+
+    focus(): void;
+
+    blur(): void;
 }

@@ -904,6 +904,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         return target;
     }
 
+    function freeze() {
+        return Object.freeze.apply(null, arguments);
+    }
+
     /**
      * Delete a property and trigger change if necessary.
      */
@@ -1519,6 +1523,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     exports.notify = notify;
     exports.defineReactive = defineReactive;
     exports.set = set;
+    exports.freeze = freeze;
     exports.del = del;
     exports.Watcher = Watcher;
     exports.pushTarget = pushTarget;
