@@ -31,7 +31,7 @@ BI.BubblePopupBarView = BI.inherit(BI.BubblePopupView, {
             buttons: [{
                 value: false,
                 text: BI.i18nText("BI-Basic_Cancel"),
-                ghost: true
+                level: "ignore"
             }, {
                 text: BI.i18nText(BI.i18nText("BI-Basic_OK")),
                 value: true
