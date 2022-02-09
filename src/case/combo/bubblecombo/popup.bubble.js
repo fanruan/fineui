@@ -82,8 +82,8 @@ BI.BubblePopupBarView = BI.inherit(BI.BubblePopupView, {
             layouts: [{
                 type: "bi.vertical",
                 cls: "bar-popup-container",
-                hgap: 20,
-                tgap: 15
+                hgap: BI.SIZE_CONSANTS.H_GAP_SIZE,
+                tgap: BI.SIZE_CONSANTS.V_GAP_SIZE
             }]
         });
 

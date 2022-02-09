@@ -16,7 +16,16 @@
             LIST_ITEM_HEIGHT: 24,
             TRIGGER_HEIGHT: 24,
             TOAST_TOP: 10,
+            H_GAP_SIZE: "M",
+            V_GAP_SIZE: "M"
         }
+    };
+
+    // 具体尺寸还没定，先写着
+    var sizeMap = {
+        "S": 16,
+        "M" : 20,
+        "L": 24
     };
 
     var provider = function () {
@@ -50,7 +59,14 @@
             return BI.inherit(BI.OB, {
 
                 getSize: function () {
-                    return system.size;
+                    var size = system.size;
+                    var H_GAP_SIZE = sizeMap[size.H_GAP_SIZE];
+                    var V_GAP_SIZE = sizeMap[size.V_GAP_SIZE];
+
+                    return BI.extend({}, size, {
+                        H_GAP_SIZE: H_GAP_SIZE,
+                        V_GAP_SIZE: V_GAP_SIZE
+                    });
                 },
 
                 getResponsiveMode: function () {
