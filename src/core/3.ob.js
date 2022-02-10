@@ -62,9 +62,12 @@
         _initListeners: function () {
             var self = this;
             if (this.options.listeners != null) {
-                _.each(this.options.listeners, function (lis) {
-                    (lis.target ? lis.target : self)[lis.once ? "once" : "on"]
-                    (lis.eventName, _.bind(lis.action, self));
+                _.each(this.options.listeners, function (lis, eventName) {
+                    if (_.isFunction(lis)) {
+                        self.on(eventName, lis);
+                        return;
+                    }
+                    (lis.target ? lis.target : self)[lis.once ? "once" : "on"](lis.eventName, lis.action);
                 });
                 delete this.options.listeners;
             }

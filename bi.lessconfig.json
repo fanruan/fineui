@@ -7,7 +7,7 @@
   "@color-black": "#000A19",
   "@color-light-gray": "#ECEEF3",
   "@color-light-gray-theme-dark": "#292F45",
-  "@color-dim-gray": "#2E3A4D",
+  "@border-color-dark-line": "#2E3A4D",
   "@color-sliver-theme-dark": "363E55",
   "@border-color-disabled": "#E7E8EB",
 
@@ -16,5 +16,16 @@
   "@color-bi-background-disabled-active-radio-content": "#D0D4DA",
   "@color-bi-background-disabled-active-radio-content-theme-dark": "#606479",
   "@color-bi-background-disabled-active-checkbox-content": "#D0D4DA",
-  "@color-bi-background-disabled-active-checkbox-content-theme-dark": "#606479"
+  "@color-bi-background-disabled-active-checkbox-content-theme-dark": "#606479",
+  "@color-bi-background-tooltip-success": "#2E3A4D",
+  "@color-bi-border-tooltip-success": "#2E3A4D",
+  "@color-bi-background-toast-success": "#FFFFFF",
+  "@color-bi-background-toast-warning": "#FFFFFF",
+  "@color-bi-background-toast-error": "#FFFFFF",
+  "@color-bi-background-toast-normal": "#FFFFFF",
+  "@color-bi-color-toast-success": "#3FC47B",
+  "@color-bi-color-toast-warning": "#FAAA39",
+  "@color-bi-color-toast-error": "#E65251",
+  "@color-bi-color-toast-normal": "#2C60DB",
+  "@color-bi-color-toast-text": "#000A19"
 }

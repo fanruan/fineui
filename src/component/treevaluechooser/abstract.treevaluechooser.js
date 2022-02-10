@@ -556,6 +556,7 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
             BI.each(nodes, function (idx, node) {
                 allNodes = BI.concat(allNodes, self._getAllChildren(parentValues.concat([node.value])));
             });
+            var lastFind;
             BI.each(allNodes, function (idx, node) {
                 var valueMap = dealWithSelectedValue(node.parentValues, selectedValues);
                 // REPORT-24409 fix: 设置节点全部展开，添加的节点没有给状态
@@ -566,7 +567,13 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
                 if (find) {
                     parentCheckState.checked = find.halfCheck ? false : find.checked;
                     parentCheckState.half = find.halfCheck;
+                    // 默认展开也需要重置父节点的halfCheck
+                    if (BI.isNotNull(lastFind) && (lastFind !== find || allNodes.length - 1 === idx)) {
+                        lastFind.half = lastFind.halfCheck;
+                        lastFind.halfCheck = false;
+                    }
                 }
+                lastFind = find;
                 var state = getCheckState(node.value, node.parentValues, valueMap, parentCheckState);
                 result.push({
                     id: node.id,
