@@ -213,64 +213,64 @@
             switch (o.direction) {
                 case "bottom":
                 case "bottom,right":
-                    p = BI.DOM.getComboPosition(combo, this.popupView, o.adjustXOffset, (o.adjustYOffset || o.adjustLength) + (o.showArrow ? this._const.TRIANGLE_LENGTH : 0), o.isNeedAdjustHeight, ["bottom", "top", "right", "left"], o.offsetStyle);
+                    p = BI.DOM.getComboPosition(combo, this.popupView, o.adjustXOffset, (o.adjustYOffset + o.adjustLength) + (o.showArrow ? this._const.TRIANGLE_LENGTH : 0), o.isNeedAdjustHeight, ["bottom", "top", "right", "left"], o.offsetStyle);
                     break;
                 case "top":
                 case "top,right":
-                    p = BI.DOM.getComboPosition(combo, this.popupView, o.adjustXOffset, (o.adjustYOffset || o.adjustLength) + (o.showArrow ? this._const.TRIANGLE_LENGTH : 0), o.isNeedAdjustHeight, ["top", "bottom", "right", "left"], o.offsetStyle);
+                    p = BI.DOM.getComboPosition(combo, this.popupView, o.adjustXOffset, (o.adjustYOffset + o.adjustLength) + (o.showArrow ? this._const.TRIANGLE_LENGTH : 0), o.isNeedAdjustHeight, ["top", "bottom", "right", "left"], o.offsetStyle);
                     break;
                 case "left":
                 case "left,bottom":
-                    p = BI.DOM.getComboPosition(combo, this.popupView, (o.adjustXOffset || o.adjustLength) + (o.showArrow ? this._const.TRIANGLE_LENGTH : 0), o.adjustYOffset, o.isNeedAdjustHeight, ["left", "right", "bottom", "top"], o.offsetStyle);
+                    p = BI.DOM.getComboPosition(combo, this.popupView, (o.adjustXOffset + o.adjustLength) + (o.showArrow ? this._const.TRIANGLE_LENGTH : 0), o.adjustYOffset, o.isNeedAdjustHeight, ["left", "right", "bottom", "top"], o.offsetStyle);
                     break;
                 case "right":
                 case "right,bottom":
-                    p = BI.DOM.getComboPosition(combo, this.popupView, (o.adjustXOffset || o.adjustLength) + (o.showArrow ? this._const.TRIANGLE_LENGTH : 0), o.adjustYOffset, o.isNeedAdjustHeight, ["right", "left", "bottom", "top"], o.offsetStyle);
+                    p = BI.DOM.getComboPosition(combo, this.popupView, (o.adjustXOffset + o.adjustLength) + (o.showArrow ? this._const.TRIANGLE_LENGTH : 0), o.adjustYOffset, o.isNeedAdjustHeight, ["right", "left", "bottom", "top"], o.offsetStyle);
                     break;
                 case "top,left":
-                    p = BI.DOM.getComboPosition(combo, this.popupView, o.adjustXOffset, (o.adjustYOffset || o.adjustLength) + (o.showArrow ? this._const.TRIANGLE_LENGTH : 0), o.isNeedAdjustHeight, ["top", "bottom", "left", "right"], o.offsetStyle);
+                    p = BI.DOM.getComboPosition(combo, this.popupView, o.adjustXOffset, (o.adjustYOffset + o.adjustLength) + (o.showArrow ? this._const.TRIANGLE_LENGTH : 0), o.isNeedAdjustHeight, ["top", "bottom", "left", "right"], o.offsetStyle);
                     break;
                 case "bottom,left":
-                    p = BI.DOM.getComboPosition(combo, this.popupView, o.adjustXOffset, (o.adjustYOffset || o.adjustLength) + (o.showArrow ? this._const.TRIANGLE_LENGTH : 0), o.isNeedAdjustHeight, ["bottom", "top", "left", "right"], o.offsetStyle);
+                    p = BI.DOM.getComboPosition(combo, this.popupView, o.adjustXOffset, (o.adjustYOffset + o.adjustLength) + (o.showArrow ? this._const.TRIANGLE_LENGTH : 0), o.isNeedAdjustHeight, ["bottom", "top", "left", "right"], o.offsetStyle);
                     break;
                 case "left,top":
-                    p = BI.DOM.getComboPosition(combo, this.popupView, (o.adjustXOffset || o.adjustLength) + (o.showArrow ? this._const.TRIANGLE_LENGTH : 0), o.adjustYOffset, o.isNeedAdjustHeight, ["left", "right", "top", "bottom"], o.offsetStyle);
+                    p = BI.DOM.getComboPosition(combo, this.popupView, (o.adjustXOffset + o.adjustLength) + (o.showArrow ? this._const.TRIANGLE_LENGTH : 0), o.adjustYOffset, o.isNeedAdjustHeight, ["left", "right", "top", "bottom"], o.offsetStyle);
                     break;
                 case "right,top":
-                    p = BI.DOM.getComboPosition(combo, this.popupView, (o.adjustXOffset || o.adjustLength) + (o.showArrow ? this._const.TRIANGLE_LENGTH : 0), o.adjustYOffset, o.isNeedAdjustHeight, ["right", "left", "top", "bottom"], o.offsetStyle);
+                    p = BI.DOM.getComboPosition(combo, this.popupView, (o.adjustXOffset + o.adjustLength) + (o.showArrow ? this._const.TRIANGLE_LENGTH : 0), o.adjustYOffset, o.isNeedAdjustHeight, ["right", "left", "top", "bottom"], o.offsetStyle);
                     break;
                 case "right,innerRight":
-                    p = BI.DOM.getComboPosition(combo, this.popupView, (o.adjustXOffset || o.adjustLength) + (o.showArrow ? this._const.TRIANGLE_LENGTH : 0), o.adjustYOffset, o.isNeedAdjustHeight, ["right", "left", "innerRight", "innerLeft", "bottom", "top"], o.offsetStyle);
+                    p = BI.DOM.getComboPosition(combo, this.popupView, (o.adjustXOffset + o.adjustLength) + (o.showArrow ? this._const.TRIANGLE_LENGTH : 0), o.adjustYOffset, o.isNeedAdjustHeight, ["right", "left", "innerRight", "innerLeft", "bottom", "top"], o.offsetStyle);
                     break;
                 case "right,innerLeft":
-                    p = BI.DOM.getComboPosition(combo, this.popupView, (o.adjustXOffset || o.adjustLength) + (o.showArrow ? this._const.TRIANGLE_LENGTH : 0), o.adjustYOffset, o.isNeedAdjustHeight, ["right", "left", "innerLeft", "innerRight", "bottom", "top"], o.offsetStyle);
+                    p = BI.DOM.getComboPosition(combo, this.popupView, (o.adjustXOffset + o.adjustLength) + (o.showArrow ? this._const.TRIANGLE_LENGTH : 0), o.adjustYOffset, o.isNeedAdjustHeight, ["right", "left", "innerLeft", "innerRight", "bottom", "top"], o.offsetStyle);
                     break;
                 case "innerRight":
-                    p = BI.DOM.getComboPosition(combo, this.popupView, (o.adjustXOffset || o.adjustLength) + (o.showArrow ? this._const.TRIANGLE_LENGTH : 0), o.adjustYOffset, o.isNeedAdjustHeight, ["innerRight", "innerLeft", "right", "left", "bottom", "top"], o.offsetStyle);
+                    p = BI.DOM.getComboPosition(combo, this.popupView, (o.adjustXOffset + o.adjustLength) + (o.showArrow ? this._const.TRIANGLE_LENGTH : 0), o.adjustYOffset, o.isNeedAdjustHeight, ["innerRight", "innerLeft", "right", "left", "bottom", "top"], o.offsetStyle);
                     break;
                 case "innerLeft":
-                    p = BI.DOM.getComboPosition(combo, this.popupView, (o.adjustXOffset || o.adjustLength) + (o.showArrow ? this._const.TRIANGLE_LENGTH : 0), o.adjustYOffset, o.isNeedAdjustHeight, ["innerLeft", "innerRight", "left", "right", "bottom", "top"], o.offsetStyle);
+                    p = BI.DOM.getComboPosition(combo, this.popupView, (o.adjustXOffset + o.adjustLength) + (o.showArrow ? this._const.TRIANGLE_LENGTH : 0), o.adjustYOffset, o.isNeedAdjustHeight, ["innerLeft", "innerRight", "left", "right", "bottom", "top"], o.offsetStyle);
                     break;
                 case "top,custom":
                 case "custom,top":
-                    p = BI.DOM.getTopAdaptPosition(combo, this.popupView, (o.adjustYOffset || o.adjustLength) + (o.showArrow ? this._const.TRIANGLE_LENGTH : 0), o.isNeedAdjustHeight);
+                    p = BI.DOM.getTopAdaptPosition(combo, this.popupView, (o.adjustYOffset + o.adjustLength) + (o.showArrow ? this._const.TRIANGLE_LENGTH : 0), o.isNeedAdjustHeight);
                     p.dir = "top";
                     break;
                 case "custom,bottom":
                 case "bottom,custom":
-                    p = BI.DOM.getBottomAdaptPosition(combo, this.popupView, (o.adjustYOffset || o.adjustLength) + (o.showArrow ? this._const.TRIANGLE_LENGTH : 0), o.isNeedAdjustHeight);
+                    p = BI.DOM.getBottomAdaptPosition(combo, this.popupView, (o.adjustYOffset + o.adjustLength) + (o.showArrow ? this._const.TRIANGLE_LENGTH : 0), o.isNeedAdjustHeight);
                     p.dir = "bottom";
                     break;
                 case "left,custom":
                 case "custom,left":
-                    p = BI.DOM.getLeftAdaptPosition(combo, this.popupView, (o.adjustXOffset || o.adjustLength) + (o.showArrow ? this._const.TRIANGLE_LENGTH : 0));
+                    p = BI.DOM.getLeftAdaptPosition(combo, this.popupView, (o.adjustXOffset + o.adjustLength) + (o.showArrow ? this._const.TRIANGLE_LENGTH : 0));
                     delete p.top;
                     delete p.adaptHeight;
                     p.dir = "left";
                     break;
                 case "custom,right":
                 case "right,custom":
-                    p = BI.DOM.getRightAdaptPosition(combo, this.popupView, (o.adjustXOffset || o.adjustLength) + (o.showArrow ? this._const.TRIANGLE_LENGTH : 0));
+                    p = BI.DOM.getRightAdaptPosition(combo, this.popupView, (o.adjustXOffset + o.adjustLength) + (o.showArrow ? this._const.TRIANGLE_LENGTH : 0));
                     delete p.top;
                     delete p.adaptHeight;
                     p.dir = "right";
