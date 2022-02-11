@@ -233,7 +233,7 @@ BI.PopupView = BI.inherit(BI.Widget, {
                         right: BI.clamp(((middle ? popupWidth : position.width) + adjustXOffset) / 2 - 6, minRight, maxRight)
                     };
                     wrapperStyle = {
-                        bottom: o.tgap + o.vgap,
+                        bottom: o.bgap + o.vgap,
                         left: "",
                         right: 0,
                         top: "",
@@ -253,14 +253,10 @@ BI.PopupView = BI.inherit(BI.Widget, {
                         left: BI.clamp(((middle ? popupWidth : position.width) - adjustXOffset) / 2 - 6, minLeft, maxLeft)
                     };
                     wrapperStyle = {
-                        bottom: o.tgap + o.vgap,
+                        bottom: o.bgap + o.vgap,
                         left: 0,
                         right: "",
                         top: "",
-                    };
-                    wrapperStyle = {
-                        bottom: o.tgap + o.vgap,
-                        left: 0
                     };
                     placeholderStyle = {
                         left: 0,
@@ -276,7 +272,7 @@ BI.PopupView = BI.inherit(BI.Widget, {
                         right: BI.clamp(((middle ? popupWidth : position.width) + adjustXOffset) / 2 - 6, minRight, maxRight)
                     };
                     wrapperStyle = {
-                        bottom: o.tgap + o.vgap,
+                        bottom: o.bgap + o.vgap,
                         right: 0,
                         left: "",
                         top: "",
@@ -296,7 +292,7 @@ BI.PopupView = BI.inherit(BI.Widget, {
                         top: BI.clamp(((middle ? popupHeight : position.height) - adjustYOffset) / 2 - 6, minTop, maxTop)
                     };
                     wrapperStyle = {
-                        right: o.tgap + o.vgap,
+                        right: o.rgap + o.hgap,
                         top: 0,
                         bottom: "",
                         left: "",
@@ -315,7 +311,7 @@ BI.PopupView = BI.inherit(BI.Widget, {
                         bottom: BI.clamp(((middle ? popupHeight : position.height) + adjustYOffset) / 2 - 6, minBottom, maxBottom)
                     };
                     wrapperStyle = {
-                        right: o.tgap + o.vgap,
+                        right: o.rgap + o.hgap,
                         bottom: 0,
                         top: "",
                         left: "",
@@ -335,7 +331,7 @@ BI.PopupView = BI.inherit(BI.Widget, {
                         top: BI.clamp(((middle ? popupHeight : position.height) - adjustYOffset) / 2 - 6, minTop, maxTop)
                     };
                     wrapperStyle = {
-                        left: o.tgap + o.vgap,
+                        left: o.lgap + o.hgap,
                         top: 0,
                         bottom: "",
                         right: "",
@@ -354,7 +350,7 @@ BI.PopupView = BI.inherit(BI.Widget, {
                         bottom: BI.clamp(((middle ? popupHeight : position.height) + adjustYOffset) / 2 - 6, minBottom, maxBottom)
                     };
                     wrapperStyle = {
-                        left: o.tgap + o.vgap,
+                        left: o.lgap + o.hgap,
                         bottom: 0,
                         top: "",
                         right: "",
