@@ -104,6 +104,12 @@ BI.PopupView = BI.inherit(BI.Widget, {
                     cls: "bubble-arrow"
                 }]
             });
+            this.arrowWrapper = BI.createWidget({
+                type: "bi.absolute",
+                items: [{
+                    el: this.arrow,
+                }]
+            })
             // 因为三角符号的原因位置变大了，需要占位
             this.placeholder = BI.createWidget({
                 type: "bi.layout"
@@ -112,7 +118,9 @@ BI.PopupView = BI.inherit(BI.Widget, {
                 type: "bi.absolute",
                 element: this,
                 items: [{
-                    el: this.arrow
+                    el: this.arrowWrapper,
+                    left: 0,
+                    top: 0,
                 }, {
                     el: this.placeholder
                 }]
@@ -174,8 +182,9 @@ BI.PopupView = BI.inherit(BI.Widget, {
     },
 
     setDirection: function (direction, position) {
-        if (this.options.showArrow) {
-            var style, placeholderStyle;
+        var o = this.options;
+        if (o.showArrow) {
+            var style, wrapperStyle, placeholderStyle;
             var adjustXOffset = position.adjustXOffset || 0;
             var adjustYOffset = position.adjustYOffset || 0;
             var bodyBounds = BI.Widget._renderEngine.createElement("body").bounds();
@@ -204,6 +213,12 @@ BI.PopupView = BI.inherit(BI.Widget, {
                         // 5表示留出一定的空间
                         left: BI.clamp(((middle ? popupWidth : position.width) - adjustXOffset) / 2 - 6, minLeft, maxLeft)
                     };
+                    wrapperStyle = {
+                        top: o.tgap + o.vgap,
+                        left: 0,
+                        right: "",
+                        bottom: "",
+                    };
                     placeholderStyle = {
                         left: 0,
                         right: 0,
@@ -216,6 +231,12 @@ BI.PopupView = BI.inherit(BI.Widget, {
                     direction = "bottom";
                     style = {
                         right: BI.clamp(((middle ? popupWidth : position.width) + adjustXOffset) / 2 - 6, minRight, maxRight)
+                    };
+                    wrapperStyle = {
+                        bottom: o.tgap + o.vgap,
+                        left: "",
+                        right: 0,
+                        top: "",
                     };
                     placeholderStyle = {
                         left: 0,
@@ -231,12 +252,22 @@ BI.PopupView = BI.inherit(BI.Widget, {
                     style = {
                         left: BI.clamp(((middle ? popupWidth : position.width) - adjustXOffset) / 2 - 6, minLeft, maxLeft)
                     };
+                    wrapperStyle = {
+                        bottom: o.tgap + o.vgap,
+                        left: 0,
+                        right: "",
+                        top: "",
+                    };
+                    wrapperStyle = {
+                        bottom: o.tgap + o.vgap,
+                        left: 0
+                    };
                     placeholderStyle = {
                         left: 0,
                         right: 0,
                         height: this._const.TRIANGLE_LENGTH,
                         top: "",
-                        bottom: -this._const.TRIANGLE_LENGTH
+                        bottom: -this._const.TRIANGLE_LENGTH,
                     };
                     break;
                 case "top,left":
@@ -244,12 +275,18 @@ BI.PopupView = BI.inherit(BI.Widget, {
                     style = {
                         right: BI.clamp(((middle ? popupWidth : position.width) + adjustXOffset) / 2 - 6, minRight, maxRight)
                     };
+                    wrapperStyle = {
+                        bottom: o.tgap + o.vgap,
+                        right: 0,
+                        left: "",
+                        top: "",
+                    };
                     placeholderStyle = {
                         left: 0,
                         right: 0,
                         height: this._const.TRIANGLE_LENGTH,
                         top: "",
-                        bottom: -this._const.TRIANGLE_LENGTH
+                        bottom: -this._const.TRIANGLE_LENGTH,
                     };
                     break;
                 case "left":
@@ -257,6 +294,12 @@ BI.PopupView = BI.inherit(BI.Widget, {
                     direction = "left";
                     style = {
                         top: BI.clamp(((middle ? popupHeight : position.height) - adjustYOffset) / 2 - 6, minTop, maxTop)
+                    };
+                    wrapperStyle = {
+                        right: o.tgap + o.vgap,
+                        top: 0,
+                        bottom: "",
+                        left: "",
                     };
                     placeholderStyle = {
                         top: 0,
@@ -270,6 +313,12 @@ BI.PopupView = BI.inherit(BI.Widget, {
                     direction = "left";
                     style = {
                         bottom: BI.clamp(((middle ? popupHeight : position.height) + adjustYOffset) / 2 - 6, minBottom, maxBottom)
+                    };
+                    wrapperStyle = {
+                        right: o.tgap + o.vgap,
+                        bottom: 0,
+                        top: "",
+                        left: "",
                     };
                     placeholderStyle = {
                         top: 0,
@@ -285,6 +334,12 @@ BI.PopupView = BI.inherit(BI.Widget, {
                     style = {
                         top: BI.clamp(((middle ? popupHeight : position.height) - adjustYOffset) / 2 - 6, minTop, maxTop)
                     };
+                    wrapperStyle = {
+                        left: o.tgap + o.vgap,
+                        top: 0,
+                        bottom: "",
+                        right: "",
+                    };
                     placeholderStyle = {
                         top: 0,
                         bottom: 0,
@@ -297,6 +352,12 @@ BI.PopupView = BI.inherit(BI.Widget, {
                     direction = "right";
                     style = {
                         bottom: BI.clamp(((middle ? popupHeight : position.height) + adjustYOffset) / 2 - 6, minBottom, maxBottom)
+                    };
+                    wrapperStyle = {
+                        left: o.tgap + o.vgap,
+                        bottom: 0,
+                        top: "",
+                        right: "",
                     };
                     placeholderStyle = {
                         top: 0,
@@ -317,6 +378,7 @@ BI.PopupView = BI.inherit(BI.Widget, {
             }
             this.element.removeClass("left").removeClass("right").removeClass("top").removeClass("bottom").addClass(direction);
             this.arrow.element.css(style);
+            this.arrowWrapper.element.css(wrapperStyle);
             this.placeholder.element.css(placeholderStyle);
         }
     },
