@@ -6,8 +6,4 @@ export declare class DownListPopup extends Widget {
     static EVENT_SON_VALUE_CHANGE: string;
 
     populate: (items: any) => void;
-
-    setValue: (v: any) => void;
-
-    getValue: () => any;
 }
