@@ -76,12 +76,16 @@
   text-decoration: none;
   vertical-align: top;
   display: inline-block;
-  &:hover {
-    .background-color(@color-bi-background-highlight, 10%);
-  }
-  &:active {
-    color: @color-bi-text-highlight;
-    .background-color(@color-bi-background-highlight, 15%);
+  .tree-node-text {
+    &:not(.disabled) {
+      &:hover {
+        .background-color(@color-bi-background-highlight, 10%);
+      }
+      &:active {
+        color: @color-bi-text-highlight;
+        .background-color(@color-bi-background-highlight, 15%);
+      }
+    }
   }
 }
 
