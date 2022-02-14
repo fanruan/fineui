@@ -165,7 +165,14 @@
     box-sizing: border-box;
     &.active {
       background-color: @color-bi-background-highlight;
-      border-color: @color-bi-border-highlight;;
+      border-color: @color-bi-border-highlight;
+    }
+    &.disabled {
+      border: 1px solid @color-bi-border-disabled;
+      background-color: @color-bi-background-disabled;
+      &.active {
+        border-color: @color-bi-border-disabled;
+      }
     }
   }
   &.bi-half-button {
