@@ -7,7 +7,7 @@
   "devDependencies": {
     "@babel/core": "^7.17.4",
     "@babel/polyfill": "7.6.0",
-    "@fui/babel-preset-fineui": "^1.0.0",
+    "@fui/babel-preset-fineui": "^1.1.0",
     "@fui/eslint-plugin": "1.0.11",
     "@types/node": "15.6.1",
     "autoprefixer": "9.6.1",
