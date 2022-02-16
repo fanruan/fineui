@@ -19,4 +19,6 @@ export declare class MultiLayerSingleTreeCombo extends Widget {
     focus(): void;
 
     blur(): void;
+
+    showView(): void;
 }
