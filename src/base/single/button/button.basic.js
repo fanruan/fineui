@@ -205,7 +205,7 @@ BI.BasicButton = BI.inherit(BI.Single, {
                     }
                     hand.click(clk);
                     // enter键等同于点击
-                    hand.keyup(function (e) {
+                    o.attributes && o.attributes.zIndex >= 0 && hand.keyup(function (e) {
                         if (e.keyCode === BI.KeyCode.ENTER) {
                            clk(e);
                         }
