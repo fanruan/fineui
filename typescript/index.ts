@@ -49,6 +49,7 @@ import { VerticalFillLayout } from "./core/wrapper/layout/fill/fill.vertical";
 import { VerticalLayout } from "./core/wrapper/layout/layout.vertical";
 import { DefaultLayout } from "./core/wrapper/layout/layout.default";
 import { DownListCombo } from "./widget/downlist/combo.downlist";
+import { DownListPopup } from "./widget/downlist/popup.downlist";
 import { Icon } from "./base/single/icon/icon";
 import { LeftVerticalAdaptLayout } from "./core/wrapper/layout/adapt/adapt.leftvertical";
 import { LeftRightVerticalAdaptLayout, RightVerticalAdaptLayout } from "./core/wrapper/layout/adapt/adapt.leftrightvertical";
@@ -245,6 +246,7 @@ export interface BI extends _func, _i18n, _base, _inject, _var, _web, _utils {
     MultiTreeInsertCombo: typeof MultiTreeInsertCombo;
     Decorators: typeof decorator;
     DownListCombo: typeof DownListCombo;
+    DownListPopup: typeof DownListPopup;
     Iframe: typeof Iframe;
     AbsoluteLayout: typeof AbsoluteLayout;
     HorizontalFillLayout: typeof HorizontalFillLayout;
@@ -423,6 +425,7 @@ export {
     Label,
     TextButton,
     DownListCombo,
+    DownListPopup,
     IconChangeButton,
     Button,
     TextEditor,

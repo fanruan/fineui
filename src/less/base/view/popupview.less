@@ -28,34 +28,42 @@
 }
 
 .bi-popup-view[data-popper-placement^='top'], .bi-popup-view.top {
-  > .bi-bubble-arrow {
+  > div > .bi-bubble-arrow {
     bottom: -12px;
+    width: 14px;
     > .bubble-arrow {
       bottom: 8px;
+      left: 1px;
     }
   }
 }
 .bi-popup-view[data-popper-placement^='bottom'], .bi-popup-view.bottom {
-  > .bi-bubble-arrow {
+  > div > .bi-bubble-arrow {
     top: -12px;
+    width: 14px;
     > .bubble-arrow {
       top: 8px;
+      left: 1px;
     }
   }
 }
 .bi-popup-view[data-popper-placement^='left'], .bi-popup-view.left {
-  > .bi-bubble-arrow {
+  > div > .bi-bubble-arrow {
     right: -12px;
+    height: 14px;
     > .bubble-arrow {
       right: 8px;
+      top: 1px;
     }
   }
 }
 .bi-popup-view[data-popper-placement^='right'], .bi-popup-view.right {
-  > .bi-bubble-arrow {
+  > div > .bi-bubble-arrow {
     left: -12px;
+    height: 14px;
     > .bubble-arrow {
       left: 8px;
+      top: 1px;
     }
   }
 }
@@ -63,6 +71,8 @@
 .bi-bubble-arrow {
   width: 12px;
   height: 12px;
+  // 消除祖先节点设置的line-height:normal对空白节点的行高影响
+  line-height: 0;
   overflow: hidden;
   .bubble-arrow {
     width: 12px;

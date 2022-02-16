@@ -140,7 +140,9 @@ BI.TreeView = BI.inherit(BI.Pane, {
                 }
                 return true;
             }
-            BI.Msg.toast("Please Wait。", "warning"); // 不展开节点，也不触发onExpand事件
+            BI.Msg.toast("Please Wait。", {
+                level: "warning"
+            }); // 不展开节点，也不触发onExpand事件
             return false;
 
         }
@@ -184,6 +186,9 @@ BI.TreeView = BI.inherit(BI.Pane, {
         }
 
         function beforeCheck (treeId, treeNode) {
+            if (treeNode.disabled) {
+                return false;
+            }
             // 下面主动修改了node的halfCheck属性, 节点属性的判断依赖halfCheck，改之前就获取一下
             var status = treeNode.getCheckStatus();
             treeNode.halfCheck = false;
@@ -213,14 +218,23 @@ BI.TreeView = BI.inherit(BI.Pane, {
         }
 
         function onCheck (event, treeId, treeNode) {
+            if (treeNode.disabled) {
+                return false;
+            }
             self._selectTreeNode(treeId, treeNode);
         }
 
         function onExpand (event, treeId, treeNode) {
+            if (treeNode.disabled) {
+                return false;
+            }
             treeNode.halfCheck = false;
         }
 
         function onCollapse (event, treeId, treeNode) {
+            if (treeNode.disabled) {
+                return false;
+            }
         }
 
         return setting;
@@ -335,22 +349,33 @@ BI.TreeView = BI.inherit(BI.Pane, {
         var ns = BI.Tree.arrayFormat(nodes);
         BI.each(ns, function (i, n) {
             n.isParent = n.isParent || n.parent;
-            n.value = BI.isUndefined(n.value) ? n.text : n.value;
-            n.text = BI.isUndefined(n.text) ? n.value : n.text;
-            if (n.text === null) {
-                n.text = "";
-            }
+            // n.value = BI.isUndefined(n.value) ? n.text : n.value;
+            // n.text = BI.isUndefined(n.text) ? n.value : n.text;
+            // if (n.text === null) {
+            //     n.text = "";
+            // }
             if (BI.isNull(n.title)) {
                 n.title = n.text;
             }
-            // 处理标红
-            if (BI.isNotNull(n.text)) {
-                if (BI.isKey(o.paras.keyword)) {
-                    n.text = BI.$("<div>").__textKeywordMarked__(BI.Text.formatText(n.text + ""), o.paras.keyword, n.py).html();
-                } else {
-                    n.text = BI.htmlEncode(BI.Text.formatText(n.text + ""));
-                }
-            }
+            var text = BI.createWidget(BI.extend({
+                type: "bi.text",
+                cls: "tree-node-text",
+                css: {
+                    display: "inline"
+                },
+                root: true
+            }, n));
+            var fragment = BI.Widget._renderEngine.createElement("<div>");
+            fragment.append(text.element[0]);
+            n.text = fragment.html();
+            // // 处理标红
+            // if (BI.isNotNull(n.text)) {
+            //     if (BI.isKey(o.paras.keyword)) {
+            //         n.text = BI.$("<div>").__textKeywordMarked__(BI.Text.formatText(n.text + ""), o.paras.keyword, n.py).html();
+            //     } else {
+            //         n.text = BI.htmlEncode(BI.Text.formatText(n.text + ""));
+            //     }
+            // }
         });
         return nodes;
     },
