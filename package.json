@@ -4,8 +4,8 @@
   "description": "fineui",
   "main": "dist/fineui.min.js",
   "types": "dist/lib/index.d.ts",
-  "dependencies": {},
   "devDependencies": {
+    "@babel/core": "^7.17.4",
     "@babel/polyfill": "7.6.0",
     "@fui/babel-preset-fineui": "^1.0.0",
     "@fui/eslint-plugin": "1.0.11",
