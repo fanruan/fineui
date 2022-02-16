@@ -363,6 +363,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
                 css: {
                     display: "inline"
                 },
+                whiteSpace: "nowrap",
                 root: true
             }, n));
             var fragment = BI.Widget._renderEngine.createElement("<div>");

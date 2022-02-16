@@ -145,7 +145,8 @@ BI.AbstractListTreeValueChooser = BI.inherit(BI.AbstractTreeValueChooser, {
                 open: isOpen,
                 checked: checked,
                 halfCheck: false,
-                flag: flag
+                flag: flag,
+                disabled: node.disabled
             });
         }
 
@@ -218,7 +219,8 @@ BI.AbstractListTreeValueChooser = BI.inherit(BI.AbstractTreeValueChooser, {
                 isParent: nodes[i].getChildrenLength() > 0,
                 checked: checked,
                 halfCheck: false,
-                open: o.open
+                open: o.open,
+                disabled: nodes[i].disabled
             });
         }
         // 如果指定节点全部打开
@@ -240,7 +242,8 @@ BI.AbstractListTreeValueChooser = BI.inherit(BI.AbstractTreeValueChooser, {
                     isParent: node.getChildrenLength() > 0,
                     checked: checked,
                     halfCheck: false,
-                    open: o.open
+                    open: o.open,
+                    disabled: node.disabled
                 });
             });
         }
