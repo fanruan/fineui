@@ -233,10 +233,10 @@ BI.PopupView = BI.inherit(BI.Widget, {
                         right: BI.clamp(((middle ? popupWidth : position.width) + adjustXOffset) / 2 - 6, minRight, maxRight)
                     };
                     wrapperStyle = {
-                        bottom: o.bgap + o.vgap,
+                        top: o.bgap + o.vgap,
                         left: "",
                         right: 0,
-                        top: "",
+                        bottom: "",
                     };
                     placeholderStyle = {
                         left: 0,
