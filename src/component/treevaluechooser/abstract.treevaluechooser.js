@@ -129,7 +129,8 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
                 pId: pId,
                 text: node.text + (llen > 0 ? ("(" + BI.i18nText("BI-Basic_Altogether") + llen + BI.i18nText("BI-Basic_Count") + ")") : ""),
                 value: node.value,
-                open: true
+                open: true,
+                disabled: node.disabled
             });
         }
     },
@@ -463,7 +464,8 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
                 open: isOpen,
                 checked: checked,
                 halfCheck: half,
-                flag: flag
+                flag: flag,
+                disabled: node.disabled
             });
         }
 
@@ -546,7 +548,8 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
                 isParent: nodes[i].getChildrenLength() > 0,
                 checked: state[0],
                 halfCheck: state[1],
-                open: o.open
+                open: o.open,
+                disabled: nodes[i].disabled
             });
         }
         // 如果指定节点全部打开
@@ -584,7 +587,8 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
                     isParent: node.getChildrenLength() > 0,
                     checked: state[0],
                     halfCheck: state[1],
-                    open: self.options.open
+                    open: self.options.open,
+                    disabled: node.disabled
                 });
             });
         }
