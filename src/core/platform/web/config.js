@@ -12,6 +12,19 @@ BI.prepares.push(function () {
         }
         return _isSupportFlex;
     };
+    // 判断浏览器是否支持sticky 属性
+    var isSupportSticky = (function () {
+        var vendorList = ["", "-webkit-", "-ms-", "-moz-", "-o-"],
+            vendorListLength = vendorList.length,
+            stickyElement = document.createElement("div");
+        for (var i = 0; i < vendorListLength; i++) {
+            stickyElement.style.position = vendorList[i] + "sticky";
+            if (stickyElement.style.position !== "") {
+                return true;
+            }
+        }
+        return false;
+    })();
     BI.Plugin.configWidget("bi.horizontal", function (ob) {
         var supportFlex = isSupportFlex();
         // // 在横向自适应场景下我们需要使用table的自适应撑出滚动条的特性（flex处理不了这种情况）
@@ -149,6 +162,16 @@ BI.prepares.push(function () {
                 return [item];
             })
         });
+    });
+    BI.Plugin.configWidget("bi.horizontal_sticky", function (ob) {
+        if (isSupportSticky) {
+            return BI.extend({}, ob, {type: "bi.horizontal_fill"});
+        }
+    });
+    BI.Plugin.configWidget("bi.vertical_sticky", function (ob) {
+        if (isSupportSticky) {
+            return BI.extend({}, ob, {type: "bi.vertical_fill"});
+        }
     });
 
     BI.Plugin.configWidget("bi.left_right_vertical_adapt", function (ob) {
