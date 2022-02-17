@@ -55,6 +55,20 @@ BI.Layout = BI.inherit(BI.Widget, {
         if (this.options.right) {
             this.element.css("right", BI.isNumber(this.options.right) ? this.options.right / BI.pixRatio + BI.pixUnit : this.options.right);
         }
+        if (this.options.padding) {
+            if (this.options.padding.left) {
+                this.element.css("padding-left", BI.isNumber(this.options.padding.left) ? this.options.padding.left / BI.pixRatio + BI.pixUnit : this.options.padding.left);
+            }
+            if (this.options.padding.right) {
+                this.element.css("padding-right", BI.isNumber(this.options.padding.right) ? this.options.padding.right / BI.pixRatio + BI.pixUnit : this.options.padding.right);
+            }
+            if (this.options.padding.top) {
+                this.element.css("padding-top", BI.isNumber(this.options.padding.top) ? this.options.padding.top / BI.pixRatio + BI.pixUnit : this.options.padding.top);
+            }
+            if (this.options.padding.bottom) {
+                this.element.css("padding-bottom", BI.isNumber(this.options.padding.bottom) ? this.options.padding.bottom / BI.pixRatio + BI.pixUnit : this.options.padding.bottom);
+            }
+        }
     },
 
     _init4Scroll: function () {
@@ -272,8 +286,8 @@ BI.Layout = BI.inherit(BI.Widget, {
             "margin-top": "",
             "margin-bottom": "",
             "margin-left": "",
-            "margin-right": "",
-        })
+            "margin-right": ""
+        });
     },
 
     _optimiseGap: function (gap) {
