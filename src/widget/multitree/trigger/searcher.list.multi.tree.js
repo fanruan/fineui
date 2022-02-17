@@ -31,7 +31,18 @@ BI.MultiListTreeSearcher = BI.inherit(BI.Widget, {
             el: {
                 type: "bi.simple_state_editor",
                 height: o.height
-            }
+            },
+            listeners: [{
+                eventName: BI.MultiSelectEditor.EVENT_FOCUS,
+                action: function () {
+                    self.fireEvent(BI.MultiSelectSearcher.EVENT_FOCUS);
+                }
+            }, {
+                eventName: BI.MultiSelectEditor.EVENT_BLUR,
+                action: function () {
+                    self.fireEvent(BI.MultiSelectSearcher.EVENT_BLUR);
+                }
+            }]
         });
 
         this.searcher = BI.createWidget({

@@ -455,7 +455,7 @@
 					chClass += ' bi-checkbox checkbox-content';
 					break;
 			}
-			return chClass;
+			return chClass + (node.disabled ? " disabled" : "");
 		},
 		repairAllChk: function(setting, checked) {
 			if (setting.check.enable && setting.check.chkStyle === consts.checkbox.STYLE) {
