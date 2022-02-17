@@ -164,12 +164,12 @@ BI.prepares.push(function () {
         });
     });
     BI.Plugin.configWidget("bi.horizontal_sticky", function (ob) {
-        if (isSupportSticky) {
+        if (!isSupportSticky) {
             return BI.extend({}, ob, {type: "bi.horizontal_fill"});
         }
     });
     BI.Plugin.configWidget("bi.vertical_sticky", function (ob) {
-        if (isSupportSticky) {
+        if (!isSupportSticky) {
             return BI.extend({}, ob, {type: "bi.vertical_fill"});
         }
     });
