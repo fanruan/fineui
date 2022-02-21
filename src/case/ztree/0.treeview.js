@@ -366,7 +366,8 @@ BI.TreeView = BI.inherit(BI.Pane, {
                     display: "inline"
                 },
                 whiteSpace: "nowrap",
-                root: true
+                root: true,
+                keyword: o.paras.keyword
             }, n, {
                 type: "bi.text"
             }));
