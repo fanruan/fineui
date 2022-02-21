@@ -357,6 +357,9 @@ BI.TreeView = BI.inherit(BI.Pane, {
             if (BI.isNull(n.title)) {
                 n.title = n.text;
             }
+            if (n.disabled) {
+                n.title = n.warningTitle || n.title;
+            }
             var text = BI.createWidget(BI.extend({
                 cls: "tree-node-text",
                 css: {
