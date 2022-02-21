@@ -3,10 +3,11 @@
  * @version 2.0
  * Created by windy on 2022/1/11
  */
-BI.Form = BI.inherit(BI.Widget, {
+ BI.Form = BI.inherit(BI.Widget, {
 
     props: {
         baseCls: "bi-form",
+        labelAlign: "right",
         layout: {
             type: "bi.vertical",
             vgap: 20
@@ -40,6 +41,7 @@ BI.Form = BI.inherit(BI.Widget, {
             return {
                 type: "bi.form_field",
                 height: item.el.height || 28,
+                labelAlign: o.labelAlign,
                 labelWidth: o.labelWidth,
                 el: item.el,
                 label: item.label,
