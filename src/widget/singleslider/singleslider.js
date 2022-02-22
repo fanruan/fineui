@@ -127,7 +127,7 @@ BI.SingleSlider = BI.inherit(BI.Single, {
                 width: "100%"
             }, {
                 el: {
-                    type: "bi.vertical_adapt",
+                    type: "bi.vertical",
                     items: [{
                         type: "bi.horizontal_auto",
                         items: [this.label]
