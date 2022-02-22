@@ -75,6 +75,8 @@ BI.Popover = BI.inherit(BI.Widget, {
                                 title: o.header,
                                 textAlign: "left"
                             },
+                            top: 0,
+                            bottom: 0,
                             left: BI.SIZE_CONSANTS.H_GAP_SIZE,
                             right: o.closable ? 0 : BI.SIZE_CONSANTS.H_GAP_SIZE
                         }]

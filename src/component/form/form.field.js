@@ -3,13 +3,16 @@
  * @version 2.0
  * Created by windy on 2022/1/11
  */
-BI.FormField = BI.inherit(BI.Widget, {
+ BI.FormField = BI.inherit(BI.Widget, {
 
     props: {
         baseCls: "bi-form-field",
         label: "",
         el: {},
-        validate: BI.emptyFn
+        labelAlign: "right", // 文字默认右对齐
+        validate: function () {
+            return true;
+        } // 默认返回true
     },
 
     render: function () {
@@ -24,7 +27,7 @@ BI.FormField = BI.inherit(BI.Widget, {
                         o.el.ref && o.el.ref.call(this, _ref);
                     },
                     height: o.el.height || 28,
-                    listeners: [{
+                    listeners: BI.concat(o.el.listeners, [{
                         eventName: "EVENT_CHANGE",
                         action: function () {
                             self.fireEvent("EVENT_CHANGE");
@@ -32,9 +35,9 @@ BI.FormField = BI.inherit(BI.Widget, {
                     }, {
                         eventName: "EVENT_CONFIRM",
                         action: function () {
-                            self.fireEvent("EVENT_CHANGE");
+                            self.fireEvent("EVENT_CONFIRM");
                         }
-                    }]
+                    }])
                 }),
                 left: 0,
                 bottom: 0,
@@ -60,11 +63,14 @@ BI.FormField = BI.inherit(BI.Widget, {
             type: "bi.vertical_adapt",
             columnSize: ["auto", "fill"],
             verticalAlign: BI.VerticalAlign.Stretch,
-            hgap: 5,
             items: BI.isKey(o.label) ? [{
-                type: "bi.label",
-                text: o.label + ":",
-                width: o.labelWidth
+                el: {
+                    type: "bi.label",
+                    textAlign: o.labelAlign,
+                    text: o.label,
+                    width: o.labelWidth,
+                    rgap: 20 // 表单文字与右侧输入间距均为20px
+                }
             }, field] : [field]
         };
     },
@@ -77,7 +83,7 @@ BI.FormField = BI.inherit(BI.Widget, {
         var isValid = this.validateWithNoTip();
         !isValid && this.error.setText(this.options.tip(this.field.getValue(), this.field));
         this.error.setVisible(!isValid);
-        this.element[isValid ? "removeClass" : "addClass"]("error");
+        this.field.element[isValid ? "removeClass" : "addClass"]("bi-error");
 
         return isValid;
     },

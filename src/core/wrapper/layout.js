@@ -492,7 +492,7 @@ BI.Layout = BI.inherit(BI.Widget, {
         }
     },
 
-    updateChildren: function (oldCh, newCh) {
+    updateChildren: function (oldCh, newCh, context) {
         var self = this;
         var oldStartIdx = 0, newStartIdx = 0;
         var oldEndIdx = oldCh.length - 1;
@@ -546,7 +546,7 @@ BI.Layout = BI.inherit(BI.Widget, {
             } else {
                 var sameOldVnode = findOldVnode(oldCh, newStartVnode, oldStartIdx, oldEndIdx);
                 if (BI.isNull(sameOldVnode[0])) {  //  不存在就把新的放到左边
-                    var node = addNode(newStartVnode, newStartIdx);
+                    var node = addNode(newStartVnode, newStartIdx, context);
                     insertBefore(node, oldStartVnode);
                 } else {   //  如果新节点在旧节点区间中存在就复用一下
                     var sameOldIndex = sameOldVnode[1];
@@ -561,7 +561,7 @@ BI.Layout = BI.inherit(BI.Widget, {
         }
         if (oldStartIdx > oldEndIdx) {
             before = BI.isNull(newCh[newEndIdx + 1]) ? null : newCh[newEndIdx + 1];
-            addVnodes(before, newCh, newStartIdx, newEndIdx);
+            addVnodes(before, newCh, newStartIdx, newEndIdx, context);
         } else if (newStartIdx > newEndIdx) {
             removeVnodes(oldCh, oldStartIdx, oldEndIdx);
         }
@@ -586,15 +586,15 @@ BI.Layout = BI.inherit(BI.Widget, {
             }
         }
 
-        function addNode (vnode, index) {
+        function addNode (vnode, index, context) {
             var opt = self._getOptions(vnode);
             var key = opt.key == null ? index : opt.key;
-            return children[key] = self._newElement(index, vnode);
+            return children[key] = self._newElement(index, vnode, context);
         }
 
-        function addVnodes (before, vnodes, startIdx, endIdx) {
+        function addVnodes (before, vnodes, startIdx, endIdx, context) {
             for (; startIdx <= endIdx; ++startIdx) {
-                var node = addNode(vnodes[startIdx], startIdx);
+                var node = addNode(vnodes[startIdx], startIdx, context);
                 insertBefore(node, before, false, startIdx);
             }
         }
@@ -662,16 +662,18 @@ BI.Layout = BI.inherit(BI.Widget, {
     update: function (opt) {
         var o = this.options;
         var items = opt.items || [];
+        var context = opt.context;
         var oldItems = o.items;
         this.options.items = items;
-        return this.updateChildren(oldItems, items);
+        return this.updateChildren(oldItems, items, context);
     },
 
-    stroke: function (items) {
+    stroke: function (items, options) {
+        options = options || {};
         var self = this;
         BI.each(items, function (i, item) {
             if (item) {
-                self._addElement(i, item);
+                self._addElement(i, item, options.context);
             }
         });
     },
@@ -702,14 +704,18 @@ BI.Layout = BI.inherit(BI.Widget, {
         this.options.items = [];
     },
 
-    populate: function (items) {
+    populate: function (items, options) {
         items = items || [];
+        options = options || {};
         if (this._isMounted) {
-            this.update({items: items});
+            this.update({
+                items: items,
+                context: options.context
+            });
             return;
         }
         this.options.items = items;
-        this.stroke(items);
+        this.stroke(items, options);
     },
 
     resize: function () {

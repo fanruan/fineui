@@ -357,15 +357,20 @@ BI.TreeView = BI.inherit(BI.Pane, {
             if (BI.isNull(n.title)) {
                 n.title = n.text;
             }
+            if (n.disabled) {
+                n.title = n.warningTitle || n.title;
+            }
             var text = BI.createWidget(BI.extend({
-                type: "bi.text",
                 cls: "tree-node-text",
                 css: {
                     display: "inline"
                 },
                 whiteSpace: "nowrap",
-                root: true
-            }, n));
+                root: true,
+                keyword: o.paras.keyword
+            }, n, {
+                type: "bi.text"
+            }));
             var fragment = BI.Widget._renderEngine.createElement("<div>");
             fragment.append(text.element[0]);
             n.text = fragment.html();
