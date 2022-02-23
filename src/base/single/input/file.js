@@ -333,11 +333,10 @@
                 if (isFunction(handler.onloadstart)) {
                     handler.onloadstart(rpe, {});
                 }
-                with (document.body || document.documentElement) {
-                    appendChild(iframe);
-                    appendChild(form);
-                    form.submit();
-                }
+                var d = document.body || document.documentElement;
+                d.appendChild(iframe);
+                d.appendChild(form);
+                form.submit();
 
                 return handler;
             };
@@ -652,7 +651,7 @@
             });
         },
 
-        setMaxFileLength: function(v) {
+        setMaxFileLength: function (v) {
             this.options.maxLength = v;
             if (this.wrap) {
                 this.wrap.maxLength = v;
