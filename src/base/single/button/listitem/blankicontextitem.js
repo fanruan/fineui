@@ -30,10 +30,17 @@ BI.BlankIconTextItem = BI.inherit(BI.BasicButton, {
 
         return {
             type: "bi.vertical_adapt",
-            columnSize: [o.blankWidth, "fill", o.iconWrapperWidth || o.height],
+            columnSize: [o.blankWidth, o.iconWrapperWidth || o.height, "fill"],
             items: [{
                 type: "bi.layout",
                 width: o.blankWidth
+            }, {
+                type: "bi.icon_label",
+                cls: o.iconCls,
+                width: o.iconWrapperWidth || o.height,
+                height: o.height,
+                iconWidth: o.iconWidth,
+                iconHeight: o.iconHeight
             }, {
                 type: "bi.label",
                 ref: function (_ref) {
@@ -49,13 +56,6 @@ BI.BlankIconTextItem = BI.inherit(BI.BasicButton, {
                 value: o.value,
                 keyword: o.keyword,
                 height: o.height
-            }, {
-                type: "bi.icon_label",
-                cls: o.iconCls,
-                width: o.iconWrapperWidth || o.height,
-                height: o.height,
-                iconWidth: o.iconWidth,
-                iconHeight: o.iconHeight
             }]
         };
     },
