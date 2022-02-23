@@ -67,7 +67,7 @@
                         self.on(eventName, lis);
                         return;
                     }
-                    (lis.target ? lis.target : self)[lis.once ? "once" : "on"](lis.eventName, lis.action);
+                    (lis.target ? lis.target : self)[lis.once ? "once" : "on"](lis.eventName, _.bind(lis.action, self));
                 });
                 delete this.options.listeners;
             }
