@@ -14,7 +14,9 @@ BI.Layout = BI.inherit(BI.Widget, {
             scrollable: null, // true, false, null
             scrollx: false, // true, false
             scrolly: false, // true, false
-            items: []
+            items: [],
+            paddingHgap: 0,
+            paddingVgap: 0,
         };
     },
 
@@ -54,20 +56,6 @@ BI.Layout = BI.inherit(BI.Widget, {
         }
         if (this.options.right) {
             this.element.css("right", BI.isNumber(this.options.right) ? this.options.right / BI.pixRatio + BI.pixUnit : this.options.right);
-        }
-        if (this.options.padding) {
-            if (this.options.padding.left) {
-                this.element.css("padding-left", BI.isNumber(this.options.padding.left) ? this.options.padding.left / BI.pixRatio + BI.pixUnit : this.options.padding.left);
-            }
-            if (this.options.padding.right) {
-                this.element.css("padding-right", BI.isNumber(this.options.padding.right) ? this.options.padding.right / BI.pixRatio + BI.pixUnit : this.options.padding.right);
-            }
-            if (this.options.padding.top) {
-                this.element.css("padding-top", BI.isNumber(this.options.padding.top) ? this.options.padding.top / BI.pixRatio + BI.pixUnit : this.options.padding.top);
-            }
-            if (this.options.padding.bottom) {
-                this.element.css("padding-bottom", BI.isNumber(this.options.padding.bottom) ? this.options.padding.bottom / BI.pixRatio + BI.pixUnit : this.options.padding.bottom);
-            }
         }
     },
 
@@ -296,26 +284,36 @@ BI.Layout = BI.inherit(BI.Widget, {
 
     _handleGap: function (w, item, hIndex, vIndex) {
         var o = this.options;
-        if (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
-            var top = ((BI.isNull(vIndex) || vIndex === 0) ? o.vgap : 0) + o.tgap + (item.tgap || 0) + (item.vgap || 0);
+        var innerLgap, innerRgap, innerTgap, innerBgap;
+        if (BI.isNull(vIndex)) {
+            innerTgap = innerBgap = o.paddingVgap;
+            innerLgap = hIndex === 0 ? o.paddingHgap : 0;
+            innerRgap = hIndex === o.items.length - 1 ? o.paddingHgap : 0;
+        } else {
+            innerLgap = innerRgap = o.paddingHgap;
+            innerTgap = vIndex === 0 ? o.paddingVgap : 0;
+            innerBgap = vIndex === o.items.length - 1 ? o.paddingVgap : 0;
+        }
+        if (o.vgap + o.tgap + innerTgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
+            var top = ((BI.isNull(vIndex) || vIndex === 0) ? o.vgap : 0) + o.tgap + innerTgap + (item.tgap || 0) + (item.vgap || 0);
             w.element.css({
                 "margin-top": this._optimiseGap(top)
             });
         }
-        if (o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0) !== 0) {
-            var left = ((BI.isNull(hIndex) || hIndex === 0) ? o.hgap : 0) + o.lgap + (item.lgap || 0) + (item.hgap || 0);
+        if (o.hgap + o.lgap + innerLgap + (item.lgap || 0) + (item.hgap || 0) !== 0) {
+            var left = ((BI.isNull(hIndex) || hIndex === 0) ? o.hgap : 0) + o.lgap + innerLgap + (item.lgap || 0) + (item.hgap || 0);
             w.element.css({
                 "margin-left": this._optimiseGap(left)
             });
         }
-        if (o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0) !== 0) {
-            var right = o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0);
+        if (o.hgap + o.rgap + innerRgap + (item.rgap || 0) + (item.hgap || 0) !== 0) {
+            var right = o.hgap + o.rgap + innerRgap + (item.rgap || 0) + (item.hgap || 0);
             w.element.css({
                 "margin-right": this._optimiseGap(right)
             });
         }
-        if (o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0) !== 0) {
-            var bottom = o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0);
+        if (o.vgap + o.bgap + innerBgap + (item.bgap || 0) + (item.vgap || 0) !== 0) {
+            var bottom = o.vgap + o.bgap + innerBgap + (item.bgap || 0) + (item.vgap || 0);
             w.element.css({
                 "margin-bottom": this._optimiseGap(bottom)
             });

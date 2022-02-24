@@ -2,12 +2,12 @@ BI.AdaptiveLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.AdaptiveLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-adaptive",
-            hgap: null,
-            vgap: null,
-            lgap: null,
-            rgap: null,
-            tgap: null,
-            bgap: null
+            hgap: 0,
+            vgap: 0,
+            lgap: 0,
+            rgap: 0,
+            tgap: 0,
+            bgap: 0
         });
     },
     render: function () {
