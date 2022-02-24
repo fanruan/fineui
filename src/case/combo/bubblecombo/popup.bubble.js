@@ -106,11 +106,12 @@ BI.shortcut("bi.bubble_bar_popup_view", BI.BubblePopupBarView);
  */
 BI.TextBubblePopupBarView = BI.inherit(BI.BubblePopupBarView, {
 
-    props: function () {
-        return {
-            baseCls: "bi-text-bubble-bar-popup-view",
+    _defaultConfig: function () {
+        var config = BI.TextBubblePopupBarView.superclass._defaultConfig.apply(this, arguments);
+        return BI.extend(config, {
+            baseCls: config.baseCls + " bi-text-bubble-bar-popup-view",
             text: "",
-        };
+        });
     },
 
     _createContent: function () {
