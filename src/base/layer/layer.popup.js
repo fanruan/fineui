@@ -106,10 +106,11 @@ BI.PopupView = BI.inherit(BI.Widget, {
             });
             this.arrowWrapper = BI.createWidget({
                 type: "bi.absolute",
+                cls: "bi-bubble-arrow-wrapper",
                 items: [{
                     el: this.arrow,
                 }]
-            })
+            });
             // 因为三角符号的原因位置变大了，需要占位
             this.placeholder = BI.createWidget({
                 type: "bi.layout"
