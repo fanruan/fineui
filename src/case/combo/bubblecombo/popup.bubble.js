@@ -39,9 +39,7 @@ BI.BubblePopupBarView = BI.inherit(BI.BubblePopupView, {
             }]
         });
     },
-    _init: function () {
-        BI.BubblePopupBarView.superclass._init.apply(this, arguments);
-    },
+
     _createToolBar: function () {
         var o = this.options, self = this;
 
@@ -74,12 +72,16 @@ BI.BubblePopupBarView = BI.inherit(BI.BubblePopupView, {
         });
     },
 
+    _createContent: function () {
+        return this.options.el;
+    },
+
     _createView: function () {
         var o = this.options;
 
         var button = BI.createWidget({
             type: "bi.button_group",
-            items: [o.el],
+            items: [this._createContent()],
             layouts: [{
                 type: "bi.vertical",
                 cls: "bar-popup-container",
@@ -102,66 +104,28 @@ BI.shortcut("bi.bubble_bar_popup_view", BI.BubblePopupBarView);
  * @class BI.TextBubblePopupBarView
  * @extends BI.BubblePopupView
  */
-BI.TextBubblePopupBarView = BI.inherit(BI.Widget, {
+BI.TextBubblePopupBarView = BI.inherit(BI.BubblePopupBarView, {
 
     props: function () {
         return {
             baseCls: "bi-text-bubble-bar-popup-view",
             text: "",
-            buttons: [{
-                level: "ignore",
-                value: false,
-                stopPropagation: true,
-                text: BI.i18nText("BI-Basic_Cancel")
-            }, {
-                value: true,
-                stopPropagation: true,
-                text: BI.i18nText("BI-Basic_OK")
-            }]
         };
     },
 
-    render: function () {
+    _createContent: function () {
         var self = this, o = this.options;
-        var buttons = BI.map(o.buttons, function (index, buttonOpt) {
-            if (BI.isWidget(buttonOpt)) {
-                return buttonOpt;
-            }
-            return BI.extend({
-                type: "bi.button",
-                height: 24,
-                handler: function (v) {
-                    self.fireEvent(BI.TextBubblePopupBarView.EVENT_CHANGE, v);
-                }
-            }, buttonOpt);
-
-        });
         return {
-            type: "bi.bubble_bar_popup_view",
-            primary: o.primary,
-            showArrow: o.showArrow,
-            minWidth: o.minWidth,
-            maxWidth: o.maxWidth,
-            minHeight: o.minHeight,
+            type: "bi.label",
+            text: o.text,
+            whiteSpace: "normal",
+            textAlign: "left",
             ref: function () {
-                self.popup = this;
-            },
-            el: {
-                type: "bi.label",
-                text: o.text,
-                whiteSpace: "normal",
-                textAlign: "left",
-                ref: function () {
-                    self.text = this;
-                }
-            },
-            buttons: buttons
+                self.text = this;
+            }
         };
     },
 
-    setDirection: function (direction, position) {
-        this.popup.setDirection(direction, position);
-    },
     populate: function (v) {
         this.text.setText(v || this.options.text);
     }
