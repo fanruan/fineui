@@ -323,27 +323,37 @@ BI.Layout = BI.inherit(BI.Widget, {
     // 横向换纵向
     _handleReverseGap: function (w, item, index) {
         var o = this.options;
-        if (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
-            var top = (index === 0 ? o.vgap : 0) + (index === 0 ? o.tgap : 0) + (item.tgap || 0) + (item.vgap || 0);
+        var innerLgap, innerRgap, innerTgap, innerBgap;
+        if (BI.isNull(vIndex)) {
+            innerTgap = innerBgap = o.paddingVgap;
+            innerLgap = hIndex === 0 ? o.paddingHgap : 0;
+            innerRgap = hIndex === o.items.length - 1 ? o.paddingHgap : 0;
+        } else {
+            innerLgap = innerRgap = o.paddingHgap;
+            innerTgap = vIndex === 0 ? o.paddingVgap : 0;
+            innerBgap = vIndex === o.items.length - 1 ? o.paddingVgap : 0;
+        }
+        if (o.vgap + o.tgap + innerTgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
+            var top = (index === 0 ? o.vgap : 0) + (index === 0 ? o.tgap : 0) + innerTgap + (item.tgap || 0) + (item.vgap || 0);
             w.element.css({
                 "margin-top": this._optimiseGap(top)
             });
         }
-        if (o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0) !== 0) {
-            var left = o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0);
+        if (o.hgap + o.lgap + innerLgap + (item.lgap || 0) + (item.hgap || 0) !== 0) {
+            var left = o.hgap + o.lgap + innerLgap + (item.lgap || 0) + (item.hgap || 0);
             w.element.css({
                 "margin-left": this._optimiseGap(left)
             });
         }
-        if (o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0) !== 0) {
-            var right = o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0);
+        if (o.hgap + o.rgap + innerRgap + (item.rgap || 0) + (item.hgap || 0) !== 0) {
+            var right = o.hgap + o.rgap + innerRgap + (item.rgap || 0) + (item.hgap || 0);
             w.element.css({
                 "margin-right": this._optimiseGap(right)
             });
         }
         // 这里的代码是关键
-        if (o.vgap + o.hgap + o.bgap + (item.bgap || 0) + (item.vgap || 0) !== 0) {
-            var bottom = (index === o.items.length - 1 ? o.vgap : o.hgap) + (index === o.items.length - 1 ? o.bgap : 0) + (item.bgap || 0) + (item.vgap || 0);
+        if (o.vgap + o.hgap + o.bgap + innerBgap + (item.bgap || 0) + (item.vgap || 0) !== 0) {
+            var bottom = (index === o.items.length - 1 ? o.vgap : o.hgap) + (index === o.items.length - 1 ? o.bgap : 0) + innerBgap + (item.bgap || 0) + (item.vgap || 0);
             w.element.css({
                 "margin-bottom": this._optimiseGap(bottom)
             });
