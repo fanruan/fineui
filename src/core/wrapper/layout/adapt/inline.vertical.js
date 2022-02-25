@@ -40,7 +40,9 @@ BI.InlineVerticalAdaptLayout = BI.inherit(BI.Layout, {
             lgap: o.lgap,
             rgap: o.rgap,
             tgap: o.tgap,
-            bgap: o.bgap
+            bgap: o.bgap,
+            innerHGap: o.innerHGap,
+            innerVGap: o.innerVGap,
         };
     },
 
