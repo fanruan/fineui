@@ -22,6 +22,18 @@ BI.FloatLeftLayout = BI.inherit(BI.Layout, {
     render: function () {
         BI.FloatLeftLayout.superclass.render.apply(this, arguments);
         var o = this.options;
+        if (o.innerHGap !== 0) {
+            this.element.css({
+                paddingLeft: this._optimiseGap(o.innerHgap),
+                paddingRight: this._optimiseGap(o.innerHgap)
+            })
+        }
+        if (o.innerVGap !== 0) {
+            this.element.css({
+                paddingTop: this._optimiseGap(o.innerVGap),
+                paddingBottom: this._optimiseGap(o.innerVGap)
+            })
+        }
         this.populate(this.options.items);
     },
 

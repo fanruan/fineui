@@ -52,7 +52,7 @@ BI.InlineLayout = BI.inherit(BI.Layout, {
         });
         w.element.addClass("i-item");
         if (columnSize === "fill" || columnSize === "") {
-            var length  = 0, gap = o.hgap;
+            var length  = 0, gap = o.hgap + o.innerHGap;
             var fillCount = 0, autoCount = 0;
             for (var k = 0, len = o.columnSize.length || o.items.length; k < len; k++) {
                 var cz = o.columnSize.length > 0 ? o.columnSize[k] : o.items[k].width;
@@ -81,8 +81,8 @@ BI.InlineLayout = BI.inherit(BI.Layout, {
         }
         this._handleGap(w, item, i);
         if (o.verticalAlign === BI.VerticalAlign.Stretch && BI.isNull(item.height)) {
-            var top = o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0),
-                bottom = o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0);
+            var top = o.innerVGap + o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0),
+                bottom = o.innerVGap + o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0);
             var gap = (top + bottom) > 0 && (top + bottom) < 1 ? ((top + bottom) * 100).toFixed(1) + "%" : (top + bottom) / BI.pixRatio + BI.pixUnit;
             w.element.css("height", "calc(100% - " + gap + ")");
         }
