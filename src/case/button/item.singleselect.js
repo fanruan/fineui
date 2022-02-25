@@ -10,8 +10,8 @@ BI.SingleSelectItem = BI.inherit(BI.BasicButton, {
             textAlign: "left"
         });
     },
-    _init: function () {
-        BI.SingleSelectItem.superclass._init.apply(this, arguments);
+
+    render: function () {
         var self = this, o = this.options;
         this.text = BI.createWidget({
             type: "bi.label",

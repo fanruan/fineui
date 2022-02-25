@@ -21,37 +21,36 @@ BI.SingleSelectRadioItem = BI.inherit(BI.BasicButton, {
             textRgap: 0
         });
     },
-    _init: function () {
-        BI.SingleSelectRadioItem.superclass._init.apply(this, arguments);
-        var self = this, o = this.options;
-        this.radio = BI.createWidget({
-            type: "bi.radio"
-        });
-        this.text = BI.createWidget({
-            type: "bi.label",
-            cls: "list-item-text",
-            textAlign: "left",
-            whiteSpace: "nowrap",
-            textHeight: o.height,
-            height: o.height,
-            hgap: o.hgap,
-            rgap: o.textRgap,
-            lgap: o.textLgap,
-            text: o.text,
-            keyword: o.keyword,
-            value: o.value,
-            py: o.py
-        });
 
-        BI.createWidget(BI.extend({
-            element: this
-        }, BI.LogicFactory.createLogic("horizontal", BI.extend(o.logic, {
-            items: BI.LogicFactory.createLogicItemsByDirection("left", {
+    render: function () {
+        var self = this, o = this.options;
+        return {
+            type: "bi.vertical_adapt",
+            columnSize: [o.iconWrapperWidth || o.height, "fill"],
+            items: [{
                 type: "bi.center_adapt",
-                items: [this.radio],
-                width: o.iconWrapperWidth
-            }, this.text)
-        }))));
+                items: [{
+                    type: "bi.radio"
+                }]
+            }, {
+                type: "bi.label",
+                ref: function (_ref) {
+                    self.text = _ref;
+                },
+                cls: "list-item-text",
+                textAlign: "left",
+                whiteSpace: "nowrap",
+                textHeight: o.height,
+                height: o.height,
+                hgap: o.hgap,
+                rgap: o.textRgap,
+                lgap: o.textLgap,
+                text: o.text,
+                keyword: o.keyword,
+                value: o.value,
+                py: o.py
+            }]
+        };
     },
 
     _setEnable: function (enable) {
