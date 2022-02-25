@@ -30,7 +30,10 @@ BI.SingleSelectRadioItem = BI.inherit(BI.BasicButton, {
             items: [{
                 type: "bi.center_adapt",
                 items: [{
-                    type: "bi.radio"
+                    type: "bi.radio",
+                    ref: function (_ref) {
+                        self.radio = _ref;
+                    },
                 }]
             }, {
                 type: "bi.label",
