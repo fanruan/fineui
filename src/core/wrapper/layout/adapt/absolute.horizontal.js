@@ -38,8 +38,8 @@ BI.AbsoluteHorizontalLayout = BI.inherit(BI.Layout, {
             rgap: o.rgap,
             tgap: o.tgap,
             bgap: o.bgap,
-            innerHGap: o.innerHGap,
-            innerVGap: o.innerVGap,
+            innerHgap: o.innerHgap,
+            innerVgap: o.innerVgap,
         };
     },
 

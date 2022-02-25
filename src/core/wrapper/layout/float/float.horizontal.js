@@ -51,8 +51,8 @@ BI.FloatHorizontalLayout = BI.inherit(BI.Layout, {
             }],
             horizontalAlign: o.horizontalAlign,
             verticalAlign: o.verticalAlign,
-            innerHGap: o.innerHGap,
-            innerVGap: o.innerVGap,
+            innerHgap: o.innerHgap,
+            innerVgap: o.innerVgap,
             scrollx: o.scrollx,
             scrolly: o.scrolly,
             scrollable: o.scrollable
