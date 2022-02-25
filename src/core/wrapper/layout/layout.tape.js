@@ -43,8 +43,8 @@ BI.HTapeLayout = BI.inherit(BI.Layout, {
             }
             w.element.css({
                 position: "absolute",
-                top: self._optimiseGap((item.vgap || 0) + (item.tgap || 0) + o.paddingVgap + o.vgap + o.tgap),
-                bottom: self._optimiseGap((item.bgap || 0) + (item.vgap || 0) + o.paddingVgap + o.vgap + o.bgap)
+                top: self._optimiseGap((item.vgap || 0) + (item.tgap || 0) + o.innerVGap + o.vgap + o.tgap),
+                bottom: self._optimiseGap((item.bgap || 0) + (item.vgap || 0) + o.innerVGap + o.vgap + o.bgap)
             });
             if (o.verticalAlign === BI.VerticalAlign.Middle) {
                 w.element.css({
