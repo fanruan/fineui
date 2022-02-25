@@ -11,7 +11,7 @@ BI.BubbleCombo = BI.inherit(BI.Widget, {
             trigger: "click",
             toggle: true,
             primary: false,
-            direction: "bottom,left", // top||bottom||left||right||top,left||top,right||bottom,left||bottom,right
+            direction: "bottom", // top||bottom||left||right||top,left||top,right||bottom,left||bottom,right
             isDefaultInit: false,
             destroyWhenHide: false,
             hideWhenClickOutside: true,
