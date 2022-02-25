@@ -43,8 +43,8 @@ BI.HTapeLayout = BI.inherit(BI.Layout, {
             }
             w.element.css({
                 position: "absolute",
-                top: self._optimiseGap((item.vgap || 0) + (item.tgap || 0) + o.innerVGap + o.vgap + o.tgap),
-                bottom: self._optimiseGap((item.bgap || 0) + (item.vgap || 0) + o.innerVGap + o.vgap + o.bgap)
+                top: self._optimiseGap((item.vgap || 0) + (item.tgap || 0) + o.innerVgap + o.vgap + o.tgap),
+                bottom: self._optimiseGap((item.bgap || 0) + (item.vgap || 0) + o.innerVgap + o.vgap + o.bgap)
             });
             if (o.verticalAlign === BI.VerticalAlign.Middle) {
                 w.element.css({
@@ -59,8 +59,8 @@ BI.HTapeLayout = BI.inherit(BI.Layout, {
         });
 
         var left = {}, right = {};
-        left[0] = o.innerHGap;
-        right[items.length - 1] = o.innerHGap;
+        left[0] = o.innerHgap;
+        right[items.length - 1] = o.innerHgap;
 
         BI.any(items, function (i, item) {
             if (BI.isEmptyObject(item)) {
@@ -163,8 +163,8 @@ BI.VTapeLayout = BI.inherit(BI.Layout, {
             }
             w.element.css({
                 position: "absolute",
-                left: self._optimiseGap((item.lgap || 0) + (item.hgap || 0) + o.innerHGap + o.hgap + o.lgap),
-                right: self._optimiseGap((item.hgap || 0) + (item.rgap || 0) + o.innerHGap + o.hgap + o.rgap)
+                left: self._optimiseGap((item.lgap || 0) + (item.hgap || 0) + o.innerHgap + o.hgap + o.lgap),
+                right: self._optimiseGap((item.hgap || 0) + (item.rgap || 0) + o.innerHgap + o.hgap + o.rgap)
             });
             if (o.horizontalAlign === BI.HorizontalAlign.Center) {
                 w.element.css({
@@ -179,8 +179,8 @@ BI.VTapeLayout = BI.inherit(BI.Layout, {
         });
 
         var top = {}, bottom = {};
-        top[0] = o.innerVGap;
-        bottom[items.length - 1] = o.innerVGap;
+        top[0] = o.innerVgap;
+        bottom[items.length - 1] = o.innerVgap;
 
         BI.any(items, function (i, item) {
             if (BI.isEmptyObject(item)) {

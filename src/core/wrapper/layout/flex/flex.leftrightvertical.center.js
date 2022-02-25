@@ -29,8 +29,8 @@ BI.FlexLeftRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
             scrollx: o.scrollx,
             scrolly: o.scrolly,
             scrollable: o.scrollable,
-            innerHGap: o.innerHGap,
-            innerVGap: o.innerVGap,
+            innerHgap: o.innerHgap,
+            innerVgap: o.innerVgap,
         };
     },
 

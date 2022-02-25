@@ -15,8 +15,8 @@ BI.Layout = BI.inherit(BI.Widget, {
             scrollx: false, // true, false
             scrolly: false, // true, false
             items: [],
-            innerHGap: 0,
-            innerVGap: 0,
+            innerHgap: 0,
+            innerVgap: 0,
         };
     },
 
@@ -286,13 +286,13 @@ BI.Layout = BI.inherit(BI.Widget, {
         var o = this.options;
         var innerLgap, innerRgap, innerTgap, innerBgap;
         if (BI.isNull(vIndex)) {
-            innerTgap = innerBgap = o.innerVGap;
-            innerLgap = hIndex === 0 ? o.innerHGap : 0;
-            innerRgap = hIndex === o.items.length - 1 ? o.innerHGap : 0;
+            innerTgap = innerBgap = o.innerVgap;
+            innerLgap = hIndex === 0 ? o.innerHgap : 0;
+            innerRgap = hIndex === o.items.length - 1 ? o.innerHgap : 0;
         } else {
-            innerLgap = innerRgap = o.innerHGap;
-            innerTgap = vIndex === 0 ? o.innerVGap : 0;
-            innerBgap = vIndex === o.items.length - 1 ? o.innerVGap : 0;
+            innerLgap = innerRgap = o.innerHgap;
+            innerTgap = vIndex === 0 ? o.innerVgap : 0;
+            innerBgap = vIndex === o.items.length - 1 ? o.innerVgap : 0;
         }
         if (o.vgap + o.tgap + innerTgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
             var top = ((BI.isNull(vIndex) || vIndex === 0) ? o.vgap : 0) + o.tgap + innerTgap + (item.tgap || 0) + (item.vgap || 0);
@@ -324,9 +324,9 @@ BI.Layout = BI.inherit(BI.Widget, {
     _handleReverseGap: function (w, item, index) {
         var o = this.options;
         var innerLgap, innerRgap, innerTgap, innerBgap;
-        innerLgap = innerRgap = o.innerHGap;
-        innerTgap = index === 0 ? o.innerVGap : 0;
-        innerBgap = index === o.items.length - 1 ? o.innerVGap : 0;
+        innerLgap = innerRgap = o.innerHgap;
+        innerTgap = index === 0 ? o.innerVgap : 0;
+        innerBgap = index === o.items.length - 1 ? o.innerVgap : 0;
         if (o.vgap + o.tgap + innerTgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
             var top = (index === 0 ? o.vgap : 0) + (index === 0 ? o.tgap : 0) + innerTgap + (item.tgap || 0) + (item.vgap || 0);
             w.element.css({

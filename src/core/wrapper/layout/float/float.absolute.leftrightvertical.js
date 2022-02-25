@@ -29,8 +29,8 @@ BI.FloatAbsoluteLeftRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
             verticalAlign: o.verticalAlign,
             items: this._formatItems(o.items),
             vgap: "50%",
-            innerHGap: o.innerHGap,
-            innerVGap: o.innerVGap,
+            innerHgap: o.innerHgap,
+            innerVgap: o.innerVgap,
             scrollx: o.scrollx,
             scrolly: o.scrolly,
             scrollable: o.scrollable
