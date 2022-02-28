@@ -8,7 +8,7 @@
   "@color-light-gray": "#ECEEF3",
   "@color-light-gray-theme-dark": "#292F45",
   "@border-color-dark-line": "#2E3A4D",
-  "@color-sliver-theme-dark": "363E55",
+  "@color-sliver-theme-dark": "#363E55",
   "@border-color-disabled": "#E7E8EB",
 
   "@color-bi-background-active-radio": "transparent",
@@ -18,7 +18,7 @@
   "@color-bi-background-disabled-active-checkbox-content": "#D0D4DA",
   "@color-bi-background-disabled-active-checkbox-content-theme-dark": "#606479",
   "@color-bi-background-tooltip-success": "#2E3A4D",
-  "@color-bi-text-header-background": "#f2f4f7",
+  "@color-bi-text-header-background": "#647185",
   "@color-bi-border-tooltip-success": "#2E3A4D",
   "@color-bi-background-toast-success": "#FFFFFF",
   "@color-bi-background-toast-warning": "#FFFFFF",
