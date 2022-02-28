@@ -156,6 +156,8 @@ BI.StateEditor = BI.inherit(BI.Widget, {
 
     setWaterMark: function (v) {
         this.options.watermark = v;
+        this.options.defaultText = v;
+        this.setState(BI.isNull(this.stateValue) || this.stateValue === "" ? v : this.stateValue);
         this.editor.setWaterMark(v);
     },
 
