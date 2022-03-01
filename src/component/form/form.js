@@ -35,6 +35,7 @@
     },
 
     _createItems: function () {
+        var self = this;
         var o = this.options;
 
         return BI.map(o.items, function (idx, item) {
@@ -51,6 +52,11 @@
                     eventName: "EVENT_CHANGE",
                     action: function () {
                         this.validate();
+                        if (self.isAllValid()) {
+                            self.fireEvent("EVENT_VALID");
+                        } else {
+                            self.fireEvent("EVENT_ERROR");
+                        }
                     }
                 }]
             };
@@ -88,4 +94,6 @@
     }
 });
 
+BI.Form.EVENT_VALID = "EVENT_VALID";
+BI.Form.EVENT_ERROR = "EVENT_ERROR";
 BI.shortcut("bi.custom_form", BI.Form);
