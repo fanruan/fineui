@@ -109,7 +109,9 @@ BI.VirtualGroup = BI.inherit(BI.Widget, {
         if (!this.layouts) {
             this.layouts = BI.createWidget(BI.extend({element: this}, this._packageLayout(items)));
         } else {
-            this.layouts.populate(items);
+            this.layouts.populate(items, {
+                context: this
+            });
         }
     }
 });

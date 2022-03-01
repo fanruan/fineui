@@ -22,8 +22,8 @@ BI.PopupView = BI.inherit(BI.Widget, {
             bgap: 0,
             vgap: 0,
             hgap: 0,
-            innerVGap: 0,
-            innerHGap: 0,
+            innerVgap: 0,
+            innerHgap: 0,
             showArrow: false,
             direction: BI.Direction.Top, // 工具栏的方向
             stopEvent: false, // 是否停止mousedown、mouseup事件
@@ -106,10 +106,11 @@ BI.PopupView = BI.inherit(BI.Widget, {
             });
             this.arrowWrapper = BI.createWidget({
                 type: "bi.absolute",
+                cls: "bi-bubble-arrow-wrapper",
                 items: [{
                     el: this.arrow,
                 }]
-            })
+            });
             // 因为三角符号的原因位置变大了，需要占位
             this.placeholder = BI.createWidget({
                 type: "bi.layout"
@@ -133,10 +134,10 @@ BI.PopupView = BI.inherit(BI.Widget, {
         this.button_group = BI.createWidget(o.el, {type: "bi.button_group", value: o.value});
         this.button_group.element.css({
             "min-height": BI.isNumeric(o.minHeight) ? (o.minHeight / BI.pixRatio + BI.pixUnit) : o.minHeight,
-            "padding-top": o.innerVGap / BI.pixRatio + BI.pixUnit,
-            "padding-bottom": o.innerVGap / BI.pixRatio + BI.pixUnit,
-            "padding-left": o.innerHGap / BI.pixRatio + BI.pixUnit,
-            "padding-right": o.innerHGap / BI.pixRatio + BI.pixUnit
+            "padding-top": o.innerVgap / BI.pixRatio + BI.pixUnit,
+            "padding-bottom": o.innerVgap / BI.pixRatio + BI.pixUnit,
+            "padding-left": o.innerHgap / BI.pixRatio + BI.pixUnit,
+            "padding-right": o.innerHgap / BI.pixRatio + BI.pixUnit
         });
         return this.button_group;
     },
@@ -396,7 +397,7 @@ BI.PopupView = BI.inherit(BI.Widget, {
         var tbHeight = this.toolbar ? (this.toolbar.attr("height") || 24) : 0,
             tabHeight = this.tab ? (this.tab.attr("height") || 24) : 0,
             toolHeight = ((this.tool && this.tool.attr("height")) || 24) * ((this.tool && this.tool.isVisible()) ? 1 : 0);
-        var resetHeight = h - tbHeight - tabHeight - toolHeight - 2 * this.options.innerVGap;
+        var resetHeight = h - tbHeight - tabHeight - toolHeight - 2 * this.options.innerVgap;
         this.view.resetHeight ? this.view.resetHeight(resetHeight) :
             this.view.element.css({"max-height": resetHeight / BI.pixRatio + BI.pixUnit});
     },

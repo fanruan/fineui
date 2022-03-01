@@ -14,7 +14,9 @@ BI.Layout = BI.inherit(BI.Widget, {
             scrollable: null, // true, false, null
             scrollx: false, // true, false
             scrolly: false, // true, false
-            items: []
+            items: [],
+            innerHgap: 0,
+            innerVgap: 0,
         };
     },
 
@@ -54,20 +56,6 @@ BI.Layout = BI.inherit(BI.Widget, {
         }
         if (this.options.right) {
             this.element.css("right", BI.isNumber(this.options.right) ? this.options.right / BI.pixRatio + BI.pixUnit : this.options.right);
-        }
-        if (this.options.padding) {
-            if (this.options.padding.left) {
-                this.element.css("padding-left", BI.isNumber(this.options.padding.left) ? this.options.padding.left / BI.pixRatio + BI.pixUnit : this.options.padding.left);
-            }
-            if (this.options.padding.right) {
-                this.element.css("padding-right", BI.isNumber(this.options.padding.right) ? this.options.padding.right / BI.pixRatio + BI.pixUnit : this.options.padding.right);
-            }
-            if (this.options.padding.top) {
-                this.element.css("padding-top", BI.isNumber(this.options.padding.top) ? this.options.padding.top / BI.pixRatio + BI.pixUnit : this.options.padding.top);
-            }
-            if (this.options.padding.bottom) {
-                this.element.css("padding-bottom", BI.isNumber(this.options.padding.bottom) ? this.options.padding.bottom / BI.pixRatio + BI.pixUnit : this.options.padding.bottom);
-            }
         }
     },
 
@@ -296,26 +284,36 @@ BI.Layout = BI.inherit(BI.Widget, {
 
     _handleGap: function (w, item, hIndex, vIndex) {
         var o = this.options;
-        if (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
-            var top = ((BI.isNull(vIndex) || vIndex === 0) ? o.vgap : 0) + o.tgap + (item.tgap || 0) + (item.vgap || 0);
+        var innerLgap, innerRgap, innerTgap, innerBgap;
+        if (BI.isNull(vIndex)) {
+            innerTgap = innerBgap = o.innerVgap;
+            innerLgap = hIndex === 0 ? o.innerHgap : 0;
+            innerRgap = hIndex === o.items.length - 1 ? o.innerHgap : 0;
+        } else {
+            innerLgap = innerRgap = o.innerHgap;
+            innerTgap = vIndex === 0 ? o.innerVgap : 0;
+            innerBgap = vIndex === o.items.length - 1 ? o.innerVgap : 0;
+        }
+        if (o.vgap + o.tgap + innerTgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
+            var top = ((BI.isNull(vIndex) || vIndex === 0) ? o.vgap : 0) + o.tgap + innerTgap + (item.tgap || 0) + (item.vgap || 0);
             w.element.css({
                 "margin-top": this._optimiseGap(top)
             });
         }
-        if (o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0) !== 0) {
-            var left = ((BI.isNull(hIndex) || hIndex === 0) ? o.hgap : 0) + o.lgap + (item.lgap || 0) + (item.hgap || 0);
+        if (o.hgap + o.lgap + innerLgap + (item.lgap || 0) + (item.hgap || 0) !== 0) {
+            var left = ((BI.isNull(hIndex) || hIndex === 0) ? o.hgap : 0) + o.lgap + innerLgap + (item.lgap || 0) + (item.hgap || 0);
             w.element.css({
                 "margin-left": this._optimiseGap(left)
             });
         }
-        if (o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0) !== 0) {
-            var right = o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0);
+        if (o.hgap + o.rgap + innerRgap + (item.rgap || 0) + (item.hgap || 0) !== 0) {
+            var right = o.hgap + o.rgap + innerRgap + (item.rgap || 0) + (item.hgap || 0);
             w.element.css({
                 "margin-right": this._optimiseGap(right)
             });
         }
-        if (o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0) !== 0) {
-            var bottom = o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0);
+        if (o.vgap + o.bgap + innerBgap + (item.bgap || 0) + (item.vgap || 0) !== 0) {
+            var bottom = o.vgap + o.bgap + innerBgap + (item.bgap || 0) + (item.vgap || 0);
             w.element.css({
                 "margin-bottom": this._optimiseGap(bottom)
             });
@@ -325,27 +323,31 @@ BI.Layout = BI.inherit(BI.Widget, {
     // 横向换纵向
     _handleReverseGap: function (w, item, index) {
         var o = this.options;
-        if (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
-            var top = (index === 0 ? o.vgap : 0) + (index === 0 ? o.tgap : 0) + (item.tgap || 0) + (item.vgap || 0);
+        var innerLgap, innerRgap, innerTgap, innerBgap;
+        innerLgap = innerRgap = o.innerHgap;
+        innerTgap = index === 0 ? o.innerVgap : 0;
+        innerBgap = index === o.items.length - 1 ? o.innerVgap : 0;
+        if (o.vgap + o.tgap + innerTgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
+            var top = (index === 0 ? o.vgap : 0) + (index === 0 ? o.tgap : 0) + innerTgap + (item.tgap || 0) + (item.vgap || 0);
             w.element.css({
                 "margin-top": this._optimiseGap(top)
             });
         }
-        if (o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0) !== 0) {
-            var left = o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0);
+        if (o.hgap + o.lgap + innerLgap + (item.lgap || 0) + (item.hgap || 0) !== 0) {
+            var left = o.hgap + o.lgap + innerLgap + (item.lgap || 0) + (item.hgap || 0);
             w.element.css({
                 "margin-left": this._optimiseGap(left)
             });
         }
-        if (o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0) !== 0) {
-            var right = o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0);
+        if (o.hgap + o.rgap + innerRgap + (item.rgap || 0) + (item.hgap || 0) !== 0) {
+            var right = o.hgap + o.rgap + innerRgap + (item.rgap || 0) + (item.hgap || 0);
             w.element.css({
                 "margin-right": this._optimiseGap(right)
             });
         }
         // 这里的代码是关键
-        if (o.vgap + o.hgap + o.bgap + (item.bgap || 0) + (item.vgap || 0) !== 0) {
-            var bottom = (index === o.items.length - 1 ? o.vgap : o.hgap) + (index === o.items.length - 1 ? o.bgap : 0) + (item.bgap || 0) + (item.vgap || 0);
+        if (o.vgap + o.hgap + o.bgap + innerBgap + (item.bgap || 0) + (item.vgap || 0) !== 0) {
+            var bottom = (index === o.items.length - 1 ? o.vgap : o.hgap) + (index === o.items.length - 1 ? o.bgap : 0) + innerBgap + (item.bgap || 0) + (item.vgap || 0);
             w.element.css({
                 "margin-bottom": this._optimiseGap(bottom)
             });
@@ -492,7 +494,7 @@ BI.Layout = BI.inherit(BI.Widget, {
         }
     },
 
-    updateChildren: function (oldCh, newCh) {
+    updateChildren: function (oldCh, newCh, context) {
         var self = this;
         var oldStartIdx = 0, newStartIdx = 0;
         var oldEndIdx = oldCh.length - 1;
@@ -546,7 +548,7 @@ BI.Layout = BI.inherit(BI.Widget, {
             } else {
                 var sameOldVnode = findOldVnode(oldCh, newStartVnode, oldStartIdx, oldEndIdx);
                 if (BI.isNull(sameOldVnode[0])) {  //  不存在就把新的放到左边
-                    var node = addNode(newStartVnode, newStartIdx);
+                    var node = addNode(newStartVnode, newStartIdx, context);
                     insertBefore(node, oldStartVnode);
                 } else {   //  如果新节点在旧节点区间中存在就复用一下
                     var sameOldIndex = sameOldVnode[1];
@@ -561,7 +563,7 @@ BI.Layout = BI.inherit(BI.Widget, {
         }
         if (oldStartIdx > oldEndIdx) {
             before = BI.isNull(newCh[newEndIdx + 1]) ? null : newCh[newEndIdx + 1];
-            addVnodes(before, newCh, newStartIdx, newEndIdx);
+            addVnodes(before, newCh, newStartIdx, newEndIdx, context);
         } else if (newStartIdx > newEndIdx) {
             removeVnodes(oldCh, oldStartIdx, oldEndIdx);
         }
@@ -586,15 +588,15 @@ BI.Layout = BI.inherit(BI.Widget, {
             }
         }
 
-        function addNode (vnode, index) {
+        function addNode (vnode, index, context) {
             var opt = self._getOptions(vnode);
             var key = opt.key == null ? index : opt.key;
-            return children[key] = self._newElement(index, vnode);
+            return children[key] = self._newElement(index, vnode, context);
         }
 
-        function addVnodes (before, vnodes, startIdx, endIdx) {
+        function addVnodes (before, vnodes, startIdx, endIdx, context) {
             for (; startIdx <= endIdx; ++startIdx) {
-                var node = addNode(vnodes[startIdx], startIdx);
+                var node = addNode(vnodes[startIdx], startIdx, context);
                 insertBefore(node, before, false, startIdx);
             }
         }
@@ -662,16 +664,18 @@ BI.Layout = BI.inherit(BI.Widget, {
     update: function (opt) {
         var o = this.options;
         var items = opt.items || [];
+        var context = opt.context;
         var oldItems = o.items;
         this.options.items = items;
-        return this.updateChildren(oldItems, items);
+        return this.updateChildren(oldItems, items, context);
     },
 
-    stroke: function (items) {
+    stroke: function (items, options) {
+        options = options || {};
         var self = this;
         BI.each(items, function (i, item) {
             if (item) {
-                self._addElement(i, item);
+                self._addElement(i, item, options.context);
             }
         });
     },
@@ -702,14 +706,18 @@ BI.Layout = BI.inherit(BI.Widget, {
         this.options.items = [];
     },
 
-    populate: function (items) {
+    populate: function (items, options) {
         items = items || [];
+        options = options || {};
         if (this._isMounted) {
-            this.update({items: items});
+            this.update({
+                items: items,
+                context: options.context
+            });
             return;
         }
         this.options.items = items;
-        this.stroke(items);
+        this.stroke(items, options);
     },
 
     resize: function () {

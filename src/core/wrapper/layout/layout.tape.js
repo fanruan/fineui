@@ -43,8 +43,8 @@ BI.HTapeLayout = BI.inherit(BI.Layout, {
             }
             w.element.css({
                 position: "absolute",
-                top: self._optimiseGap((item.vgap || 0) + (item.tgap || 0) + o.vgap + o.tgap),
-                bottom: self._optimiseGap((item.bgap || 0) + (item.vgap || 0) + o.vgap + o.bgap)
+                top: self._optimiseGap((item.vgap || 0) + (item.tgap || 0) + o.innerVgap + o.vgap + o.tgap),
+                bottom: self._optimiseGap((item.bgap || 0) + (item.vgap || 0) + o.innerVgap + o.vgap + o.bgap)
             });
             if (o.verticalAlign === BI.VerticalAlign.Middle) {
                 w.element.css({
@@ -59,8 +59,8 @@ BI.HTapeLayout = BI.inherit(BI.Layout, {
         });
 
         var left = {}, right = {};
-        left[0] = 0;
-        right[items.length - 1] = 0;
+        left[0] = o.innerHgap;
+        right[items.length - 1] = o.innerHgap;
 
         BI.any(items, function (i, item) {
             if (BI.isEmptyObject(item)) {
@@ -81,7 +81,7 @@ BI.HTapeLayout = BI.inherit(BI.Layout, {
                 left: self._optimiseGap(left[i] + (item.lgap || 0) + (item.hgap || 0) + o.hgap + o.lgap),
                 width: BI.isNumber(columnSize) ? self._optimiseGap(columnSize) : ""
             });
-            
+
             if (columnSize === "" || columnSize === "fill") {
                 return true;
             }
@@ -100,7 +100,7 @@ BI.HTapeLayout = BI.inherit(BI.Layout, {
                 right: self._optimiseGap(right[i] + (item.rgap || 0) + (item.hgap || 0) + o.hgap + o.rgap),
                 width: BI.isNumber(columnSize) ? self._optimiseGap(columnSize) : ""
             });
-            
+
             if (columnSize === "" || columnSize === "fill") {
                 return true;
             }
@@ -163,8 +163,8 @@ BI.VTapeLayout = BI.inherit(BI.Layout, {
             }
             w.element.css({
                 position: "absolute",
-                left: self._optimiseGap((item.lgap || 0) + (item.hgap || 0) + o.hgap + o.lgap),
-                right: self._optimiseGap((item.hgap || 0) + (item.rgap || 0) + o.hgap + o.rgap)
+                left: self._optimiseGap((item.lgap || 0) + (item.hgap || 0) + o.innerHgap + o.hgap + o.lgap),
+                right: self._optimiseGap((item.hgap || 0) + (item.rgap || 0) + o.innerHgap + o.hgap + o.rgap)
             });
             if (o.horizontalAlign === BI.HorizontalAlign.Center) {
                 w.element.css({
@@ -179,8 +179,8 @@ BI.VTapeLayout = BI.inherit(BI.Layout, {
         });
 
         var top = {}, bottom = {};
-        top[0] = 0;
-        bottom[items.length - 1] = 0;
+        top[0] = o.innerVgap;
+        bottom[items.length - 1] = o.innerVgap;
 
         BI.any(items, function (i, item) {
             if (BI.isEmptyObject(item)) {
@@ -201,7 +201,7 @@ BI.VTapeLayout = BI.inherit(BI.Layout, {
                 top: self._optimiseGap(top[i] + (item.vgap || 0) + (item.tgap || 0) + o.vgap + o.tgap),
                 height: BI.isNumber(rowSize) ? self._optimiseGap(rowSize) : ""
             });
-            
+
             if (rowSize === "" || rowSize === "fill") {
                 return true;
             }
@@ -220,7 +220,7 @@ BI.VTapeLayout = BI.inherit(BI.Layout, {
                 bottom: self._optimiseGap(bottom[i] + (item.vgap || 0) + (item.bgap || 0) + o.vgap + o.bgap),
                 height: BI.isNumber(rowSize) ? self._optimiseGap(rowSize) : ""
             });
-            
+
             if (rowSize === "" || rowSize === "fill") {
                 return true;
             }

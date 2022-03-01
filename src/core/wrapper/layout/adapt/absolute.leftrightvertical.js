@@ -23,6 +23,8 @@ BI.AbsoluteLeftRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
         BI.AbsoluteLeftRightVerticalAdaptLayout.superclass.render.apply(this, arguments);
         return {
             type: "bi.htape",
+            innerHgap: o.innerHgap,
+            innerVgap: o.innerVgap,
             ref: function (_ref) {
                 self.layout = _ref;
             },

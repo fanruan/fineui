@@ -7,8 +7,11 @@
  */
 BI.Toast = BI.inherit(BI.Tip, {
     _const: {
-        minWidth: 200,
-        hgap: 10
+        closableMinWidth: 146,
+        minWidth: 124,
+        closableMaxWidth: 410,
+        maxWidth: 400,
+        hgap: 8
     },
 
     _defaultConfig: function () {
@@ -22,9 +25,10 @@ BI.Toast = BI.inherit(BI.Tip, {
     },
 
     render: function () {
-        var self = this, o = this.options;
+        var self = this, o = this.options, c = this._const;
         this.element.css({
-            minWidth: this._const.minWidth / BI.pixRatio + BI.pixUnit
+            minWidth: (o.closable ? c.closableMinWidth : c.minWidth) / BI.pixRatio + BI.pixUnit,
+            maxWidth: (o.closable ? c.closableMaxWidth : c.maxWidth) / BI.pixRatio + BI.pixUnit
         });
         this.element.addClass("toast-" + o.level);
         var fn = function (e) {
@@ -93,10 +97,9 @@ BI.Toast = BI.inherit(BI.Tip, {
         this.text = BI.createWidget({
             type: "bi.horizontal",
             horizontalAlign: BI.HorizontalAlign.Stretch,
-            verticalAlign: BI.VerticalAlign.Middle,
             element: this,
             items: items,
-            vgap: 7,
+            vgap: 12,
             columnSize: columnSize
         });
     },

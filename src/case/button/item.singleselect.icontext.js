@@ -15,8 +15,8 @@ BI.SingleSelectIconTextItem = BI.inherit(BI.Single, {
             height: 24
         });
     },
-    _init: function () {
-        BI.SingleSelectIconTextItem.superclass._init.apply(this, arguments);
+
+    render: function () {
         var self = this, o = this.options;
         this.text = BI.createWidget({
             type: "bi.icon_text_item",

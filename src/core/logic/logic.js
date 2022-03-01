@@ -43,7 +43,6 @@ BI.LogicFactory = {
             case BI.Direction.Bottom:
             case BI.Direction.Custom:
                 return BI.LogicFactory.Type.Vertical;
-                break;
             case BI.Direction.Left:
             case BI.Direction.Right:
                 return BI.LogicFactory.Type.Horizontal;
@@ -53,6 +52,7 @@ BI.LogicFactory = {
     createLogicItemsByDirection: function (direction) {
         var layout;
         var items = Array.prototype.slice.call(arguments, 1);
+        items = BI.compact(items);
         items = BI.map(items, function (i, item) {
             if (BI.isWidget(item)) {
                 return {

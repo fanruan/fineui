@@ -34,6 +34,7 @@ export declare class Combo extends Widget {
         adjustYOffset?: number;
         hideChecker?: Function;
         offsetStyle?: 'left' | 'right' | 'center';
+        value?:any;
         el?: any;
         popup?: any;
         comboClass?: string;

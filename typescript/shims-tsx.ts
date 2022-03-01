@@ -19,8 +19,8 @@ interface UIProps {
 interface AdditionalProps {
     column: number;
     row: number;
-    innerVGap: number;
-    innerHGap: number;
+    innerVgap: number;
+    innerHgap: number;
 }
 
 interface ElementClassProps<T> extends UIProps {

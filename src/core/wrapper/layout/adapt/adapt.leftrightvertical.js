@@ -34,6 +34,8 @@ BI.LeftRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
         if (leftRight.left || "left" in o.items) {
             layoutArray.push({
                 type: "bi.left",
+                lgap: o.innerHgap,
+                vgap: o.innerVgap,
                 items: [{
                     el: {
                         type: "bi.vertical_adapt",
@@ -55,6 +57,8 @@ BI.LeftRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
         if (leftRight.right || "right" in o.items) {
             layoutArray.push({
                 type: "bi.right",
+                rgap: o.innerHgap,
+                vgap: o.innerVgap,
                 items: [{
                     el: {
                         type: "bi.vertical_adapt",
@@ -144,6 +148,8 @@ BI.LeftVerticalAdaptLayout = BI.inherit(BI.Layout, {
             tgap: o.tgap,
             bgap: o.bgap,
             vgap: o.vgap,
+            innerHgap: o.innerHgap,
+            innerVgap: o.innerVgap,
             scrollx: o.scrollx,
             scrolly: o.scrolly,
             scrollable: o.scrollable
@@ -196,6 +202,8 @@ BI.RightVerticalAdaptLayout = BI.inherit(BI.Layout, {
             tgap: o.tgap,
             bgap: o.bgap,
             vgap: o.vgap,
+            innerHgap: o.innerHgap,
+            innerVgap: o.innerVgap,
             scrollx: o.scrollx,
             scrolly: o.scrolly,
             scrollable: o.scrollable

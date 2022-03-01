@@ -51,7 +51,9 @@
             if (BI.isFunction(this.props)) {
                 props = this.props(config);
             }
-            this.options = extend(this._defaultConfig(config), props, config);
+            var defaultProps = this._defaultConfig(config);
+            var modifiedDefaultProps = (config && config.type && BI.OB.configFunctions[config.type + ".props"]) ? BI.OB.configFunctions[config.type + ".props"](config, defaultProps) : null;
+            this.options = extend(defaultProps, props, modifiedDefaultProps, config);
         },
 
         _init: function () {
@@ -67,7 +69,7 @@
                         self.on(eventName, lis);
                         return;
                     }
-                    (lis.target ? lis.target : self)[lis.once ? "once" : "on"](lis.eventName, lis.action);
+                    (lis.target ? lis.target : self)[lis.once ? "once" : "on"](lis.eventName, _.bind(lis.action, self));
                 });
                 delete this.options.listeners;
             }
