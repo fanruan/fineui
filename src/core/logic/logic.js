@@ -30,7 +30,7 @@ BI.LogicFactory = {
             case BI.LogicFactory.Type.HorizontalFill:
                 logic = BI.HorizontalFillLayoutLogic;
                 break;
-            default :
+            default:
                 logic = BI.Logic;
                 break;
         }
@@ -52,7 +52,6 @@ BI.LogicFactory = {
     createLogicItemsByDirection: function (direction) {
         var layout;
         var items = Array.prototype.slice.call(arguments, 1);
-        items = BI.compact(items);
         items = BI.map(items, function (i, item) {
             if (BI.isWidget(item)) {
                 return {
