@@ -1,5 +1,8 @@
 BI.DynamicYearQuarterCombo = BI.inherit(BI.Widget, {
 
+    _consts:{
+        iconWidth: 24
+    },
     props: {
         baseCls: "bi-year-quarter-combo",
         behaviors: {},
@@ -140,13 +143,13 @@ BI.DynamicYearQuarterCombo = BI.inherit(BI.Widget, {
                         el: {
                             type: "bi.icon_button",
                             cls: "bi-trigger-icon-button",
-                            width: o.height - border,
+                            width: this._consts.iconWidth,
                             height: o.height - border,
                             ref: function () {
                                 self.changeIcon = this;
                             }
                         },
-                        width: o.height - border
+                        width: this._consts.iconWidth
                     }, this.combo]
                 },
                 top: 0,
