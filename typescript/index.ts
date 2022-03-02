@@ -25,6 +25,7 @@ import { SearchTextValueCombo } from "./case/combo/searchtextvaluecombo/combo.se
 import { SignEditor } from "./case/editor/editor.sign";
 import { StateEditor } from './case/editor/editor.state';
 import { AllValueMultiTextValueCombo } from "./component/allvaluemultitextvaluecombo/allvalue.multitextvalue.combo";
+import { Form } from './component/form/form';
 import { AbstractTreeValueChooser } from "./component/treevaluechooser/abstract.treevaluechooser";
 import { AbstractListTreeValueChooser } from "./component/treevaluechooser/abstract.treevaluechooser.list";
 import { Action, ActionFactory } from "./core/action/action";
@@ -218,6 +219,7 @@ export interface BI extends _func, _i18n, _base, _inject, _var, _web, _utils {
     SmallTextValueCombo: typeof SmallTextValueCombo;
     BubbleCombo: typeof BubbleCombo;
     AllValueMultiTextValueCombo: typeof AllValueMultiTextValueCombo;
+    Form: typeof Form;
     IconTextItem: typeof IconTextItem;
     MultiSelectItem: typeof MultiSelectItem;
     AbstractLabel: typeof AbstractLabel;
@@ -512,6 +514,7 @@ export {
     Switch,
     HorizontalLayout,
     ShelterEditor,
+    Form,
     TextTrigger,
     SelectTextTrigger,
     DateInterval,
