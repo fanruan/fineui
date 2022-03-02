@@ -2,8 +2,7 @@ import { Widget } from "../../core/widget";
 
 export declare class Form extends Widget {
     static xtype: string;
-    static EVENT_VALID: string;
-    static EVENT_ERROR: string;
+    static EVENT_CHANGE: string;
 
     isAllValid(): boolean;
 
