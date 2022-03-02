@@ -32,19 +32,21 @@ BI.ArrowNode = BI.inherit(BI.NodeButton, {
             type: "bi.vertical_adapt",
             columnSize: [o.iconWrapperWidth || o.height, "fill"],
             items: [this.checkbox, {
-                type: "bi.label",
-                ref: function (_ref) {
-                    self.text = _ref;
-                },
-                textAlign: "left",
-                whiteSpace: "nowrap",
-                textHeight: o.height,
-                height: o.height,
-                hgap: o.hgap,
-                text: o.text,
-                value: o.value,
-                py: o.py,
-                keyword: o.keyword
+                el: {
+                    type: "bi.label",
+                    ref: function (_ref) {
+                        self.text = _ref;
+                    },
+                    textAlign: "left",
+                    whiteSpace: "nowrap",
+                    textHeight: o.height,
+                    height: o.height,
+                    hgap: o.hgap,
+                    text: o.text,
+                    value: o.value,
+                    py: o.py,
+                    keyword: o.keyword
+                }
             }]
         };
     },

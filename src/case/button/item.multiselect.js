@@ -38,22 +38,24 @@ BI.MultiSelectItem = BI.inherit(BI.BasicButton, {
                 type: "bi.center_adapt",
                 items: [this.checkbox]
             }, {
-                type: "bi.label",
-                ref: function (_ref) {
-                    self.text = _ref;
-                },
-                cls: "list-item-text",
-                textAlign: "left",
-                whiteSpace: "nowrap",
-                textHeight: o.height,
-                height: o.height,
-                hgap: o.hgap,
-                rgap: o.rgap,
-                lgap: o.textLgap,
-                text: o.text,
-                keyword: o.keyword,
-                value: o.value,
-                py: o.py
+                el: {
+                    type: "bi.label",
+                    ref: function (_ref) {
+                        self.text = _ref;
+                    },
+                    cls: "list-item-text",
+                    textAlign: "left",
+                    whiteSpace: "nowrap",
+                    textHeight: o.height,
+                    height: o.height,
+                    hgap: o.hgap,
+                    rgap: o.rgap,
+                    lgap: o.textLgap,
+                    text: o.text,
+                    keyword: o.keyword,
+                    value: o.value,
+                    py: o.py
+                }
             }]
         };
     },
