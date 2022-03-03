@@ -28,7 +28,7 @@ BI.TextTrigger = BI.inherit(BI.Trigger, {
             textAlign: "left",
             height: o.height,
             text: o.text,
-            title: function () {
+            title: o.title || function () {
                 return self.text.getText();
             },
             tipType: o.tipType,
