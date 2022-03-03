@@ -51,12 +51,7 @@
                 listeners: [{
                     eventName: "EVENT_CHANGE",
                     action: function () {
-                        this.validate();
-                        if (self.isAllValid()) {
-                            self.fireEvent("EVENT_VALID");
-                        } else {
-                            self.fireEvent("EVENT_ERROR");
-                        }
+                        self.fireEvent(BI.Form.EVENT_CHANGE, this.validate());
                     }
                 }]
             };
@@ -94,6 +89,5 @@
     }
 });
 
-BI.Form.EVENT_VALID = "EVENT_VALID";
-BI.Form.EVENT_ERROR = "EVENT_ERROR";
+BI.Form.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.custom_form", BI.Form);
