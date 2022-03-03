@@ -29,7 +29,7 @@ BI.YearInterval = BI.inherit(BI.Single, {
         return [{
             type: "bi.center",
             hgap: 15,
-            height: this.constants.height,
+            height: o.height,
             items: [{
                 type: "bi.absolute",
                 items: [{
@@ -53,7 +53,7 @@ BI.YearInterval = BI.inherit(BI.Single, {
             type: "bi.horizontal_auto",
             items: [{
                 type: "bi.label",
-                height: this.constants.height,
+                height: o.height,
                 width: this.constants.width,
                 text: "-",
                 ref: function (_ref) {
@@ -70,6 +70,7 @@ BI.YearInterval = BI.inherit(BI.Single, {
             supportDynamic: o.supportDynamic,
             minDate: o.minDate,
             maxDate: o.maxDate,
+            height: o.height,
             behaviors: o.behaviors,
             value: v,
             listeners: [{

@@ -3,7 +3,8 @@ BI.DynamicDateCombo = BI.inherit(BI.Single, {
         popupHeight: 259,
         popupWidth: 270,
         comboAdjustHeight: 1,
-        border: 1
+        border: 1,
+        iconWidth: 24
     },
 
     props: {
@@ -48,7 +49,7 @@ BI.DynamicDateCombo = BI.inherit(BI.Single, {
                     destroyWhenHide: true,
                     el: {
                         type: "bi.horizontal_fill",
-                        columnSize: [opts.height - border, "fill"],
+                        columnSize: [this.constants.iconWidth, "fill"],
                         height: opts.height - border,
                         items: [{
                             el: {
