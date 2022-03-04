@@ -11,11 +11,15 @@ BI.TextTrigger = BI.inherit(BI.Trigger, {
     },
 
     _defaultConfig: function () {
+        var self = this;
         var conf = BI.TextTrigger.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
             baseCls: (conf.baseCls || "") + " bi-text-trigger",
             height: 24,
-            textCls: ""
+            textCls: "",
+            title: function () {
+                return self.text.getText();
+            }
         });
     },
 
@@ -28,9 +32,6 @@ BI.TextTrigger = BI.inherit(BI.Trigger, {
             textAlign: "left",
             height: o.height,
             text: o.text,
-            title: o.title || function () {
-                return self.text.getText();
-            },
             tipType: o.tipType,
             warningTitle: o.warningTitle,
             hgap: c.hgap,
