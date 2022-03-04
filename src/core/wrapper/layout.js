@@ -62,10 +62,23 @@ BI.Layout = BI.inherit(BI.Widget, {
     _init4Scroll: function () {
         switch (this.options.scrollable) {
             case true:
+            case "xy":
                 this.element.css("overflow", "auto");
                 break;
             case false:
                 this.element.css("overflow", "hidden");
+                break;
+            case "x":
+                this.element.css({
+                    "overflow-x": "auto",
+                    "overflow-y": "hidden"
+                });
+                break;
+            case "y":
+                this.element.css({
+                    "overflow-x": "hidden",
+                    "overflow-y": "auto"
+                });
                 break;
             default :
                 break;
