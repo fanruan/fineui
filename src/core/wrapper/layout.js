@@ -88,6 +88,7 @@ BI.Layout = BI.inherit(BI.Widget, {
                 "overflow-x": "auto",
                 "overflow-y": "hidden"
             });
+            return;
         }
         if (this.options.scrolly) {
             this.element.css({
