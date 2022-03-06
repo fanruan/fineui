@@ -241,7 +241,7 @@
                 }, (handler && function (v) {
                     handler.call(self, self, v);
                 }) || BI.emptyFn, BI.extend({deep: true}, options));
-                this._watchers.push(function unwatchFn() {
+                this._watchers.push(function unwatchFn () {
                     watcher.teardown();
                 });
                 return watcher.value;
