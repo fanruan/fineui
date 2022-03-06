@@ -57,14 +57,14 @@ BI.GridView = BI.inherit(BI.Widget, {
         });
         // 兼容一下
         var scrollable = o.scrollable, scrollx = o.scrollx, scrolly = o.scrolly;
-        if (overflowX === false) {
-            if (overflowY === false) {
+        if (o.overflowX === false) {
+            if (o.overflowY === false) {
                 scrollable = false;
             } else {
                 scrollable = "y"
             }
         } else {
-            if (overflowY === false) {
+            if (o.overflowY === false) {
                 scrollable = "x";
             }
         }
