@@ -42,7 +42,7 @@ BI.AbsoluteLayout = BI.inherit(BI.Layout, {
                     break
                 case 4:
                 default:
-                    offsets = {top: insets[0], right: insets[0], bottom: insets[0], left: insets[0]}
+                    offsets = {top: insets[0], right: insets[1], bottom: insets[2], left: insets[3]}
                     break;
             }
         }
