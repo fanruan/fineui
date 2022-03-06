@@ -712,7 +712,10 @@
         },
 
         _empty: function () {
-            this.__d();
+            BI.each(this._children, function (i, widget) {
+                widget && widget._unMount && widget._unMount();
+            });
+            this._children = {};
             this.element.empty();
         },
 
@@ -741,7 +744,8 @@
             // }
             // this._isMounted = false;
             // this.purgeListeners();
-            this._empty();
+            this.__d();
+            this.element.empty();
             this.element.unbind();
             this._initCurrent();
             this._init();
