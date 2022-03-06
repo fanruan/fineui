@@ -55,6 +55,9 @@ BI.Single = BI.inherit(BI.Widget, {
                 container: o.container
             });
         }
+        o.value = BI.isFunction(o.value) ? this.__watch(o.value, function (context, newValue) {
+            self.setValue(newValue);
+        }) : o.value;
     },
 
     _clearTimeOut: function () {

@@ -224,8 +224,6 @@
                             }
                         }
                         self.element.css(css = newValue);
-                    }, {
-                        deep: true
                     });
                     this.element.css(css);
                 } else {
@@ -242,7 +240,7 @@
                     return getter.call(self, self);
                 }, (handler && function (v) {
                     handler.call(self, self, v);
-                }) || BI.emptyFn, options);
+                }) || BI.emptyFn, BI.extend({deep: true}, options));
                 this._watchers.push(watcher);
                 return watcher.value;
             } else {
@@ -312,14 +310,10 @@
                 if (BI.isArray(o.effect)) {
                     if (BI.isArray(o.effect[0])) {
                         BI.each(o.effect, function (i, effect) {
-                            self.__watch(effect[0], effect[1], {
-                                deep: true
-                            });
+                            self.__watch(effect[0], effect[1]);
                         });
                     } else {
-                        self.__watch(o.effect[0], o.effect[1], {
-                            deep: true
-                        });
+                        self.__watch(o.effect[0], o.effect[1]);
                     }
                 } else {
                     this.__watch(o.effect);
