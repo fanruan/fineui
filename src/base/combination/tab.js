@@ -54,6 +54,12 @@ BI.Tab = BI.inherit(BI.Widget, {
         listener.on(BI.ShowListener.EVENT_CHANGE, function (value) {
             self.fireEvent(BI.Tab.EVENT_CHANGE, value, self);
         });
+
+        if (BI.isFunction(o.showIndex)) {
+            this.__watch(o.showIndex, function (context, newValue) {
+                self.setSelect(newValue);
+            })
+        }
     },
 
     _deleteOtherCards: function (currCardName) {
