@@ -688,12 +688,17 @@
         },
 
         __d: function () {
-            callLifeHook(this, "beforeDestroy");
-            this.beforeDestroy = null;
             BI.each(this._children, function (i, widget) {
                 widget && widget._unMount && widget._unMount();
             });
             this._children = {};
+        },
+
+        // 主要是因为_destroy已经提供了protected方法
+        __destroy: function () {
+            callLifeHook(this, "beforeDestroy");
+            this.beforeDestroy = null;
+            this.__d();
             this._parent = null;
             this._isMounted = false;
             callLifeHook(this, "destroyed");
@@ -701,16 +706,13 @@
         },
 
         _unMount: function () {
-            this.__d();
+            this.__destroy();
             this.fireEvent(BI.Events.UNMOUNT);
             this.purgeListeners();
         },
 
         _empty: function () {
-            BI.each(this._children, function (i, widget) {
-                widget && widget._unMount && widget._unMount();
-            });
-            this._children = {};
+            this.__d();
             this.element.empty();
         },
 
@@ -748,14 +750,14 @@
         },
 
         _destroy: function () {
-            this.__d();
+            this.__destroy();
             this.element.destroy();
             this.purgeListeners();
         },
 
         destroy: function () {
             var self = this, o = this.options;
-            this.__d();
+            this.__destroy();
             if (o.animation) {
                 this._innerSetVisible(false);
                 setTimeout(function () {
