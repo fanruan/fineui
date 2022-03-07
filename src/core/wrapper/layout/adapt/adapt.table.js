@@ -19,8 +19,8 @@ BI.TableAdaptLayout = BI.inherit(BI.Layout, {
         });
     },
     render: function () {
-        var o = this.options;
         BI.TableAdaptLayout.superclass.render.apply(this, arguments);
+        var self = this, o = this.options;
         this.$table = BI.Widget._renderEngine.createElement("<div>").css({
             position: "relative",
             display: "table",
@@ -28,7 +28,10 @@ BI.TableAdaptLayout = BI.inherit(BI.Layout, {
             height: (o.verticalAlign !== BI.VerticalAlign.Top) ? "100%" : "auto",
             "white-space": "nowrap"
         });
-        this.populate(this.options.items);
+        var items = BI.isFunction(o.items) ? this.__watch(o.items, function (context, newValue) {
+            self.populate(newValue);
+        }) : o.items;
+        this.populate(items);
     },
 
     _hasFill: function () {
