@@ -48,7 +48,7 @@ BI.h = function (type, props, children) {
         if (BI.isFunction(children[0])) {
             return BI.extend({
                 type: type
-            }, { text: children[0], items: children[0] }, props);
+            }, { items: children[0] }, props);
         }
     }
 
