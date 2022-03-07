@@ -13,6 +13,7 @@ interface UIProps {
     bgap: number;
     vgap: number;
     hgap: number;
+    inset: number | string;
 }
 
 // 一些布局的附加属性
