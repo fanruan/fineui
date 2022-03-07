@@ -573,6 +573,9 @@
             if(!this.isEnabled()){
                 widget._setEnable(false);
             }
+            if(!this.isValid()){
+                widget._setValid(false);
+            }
             widget.on(BI.Events.DESTROY, function () {
                 BI.remove(self._children, this);
             });
