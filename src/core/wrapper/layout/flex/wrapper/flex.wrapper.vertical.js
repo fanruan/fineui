@@ -24,10 +24,13 @@ BI.FlexWrapperVerticalLayout = BI.inherit(BI.Layout, {
     },
     render: function () {
         BI.FlexWrapperVerticalLayout.superclass.render.apply(this, arguments);
-        var o = this.options;
+        var self = this, o = this.options;
         this.element.addClass("v-" + o.verticalAlign).addClass("h-" + o.horizontalAlign);
         this.$wrapper = BI.Widget._renderEngine.createElement("<div>").addClass("f-s-v-w h-" + o.horizontalAlign).addClass("v-" + o.verticalAlign);
-        this.populate(this.options.items);
+        var items = BI.isFunction(o.items) ? this.__watch(o.items, function (context, newValue) {
+            self.populate(newValue);
+        }) : o.items;
+        this.populate(items);
     },
 
     _hasFill: function () {

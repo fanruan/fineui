@@ -20,7 +20,11 @@ BI.HTapeLayout = BI.inherit(BI.Layout, {
     },
     render: function () {
         BI.HTapeLayout.superclass.render.apply(this, arguments);
-        this.populate(this.options.items);
+        var self = this, o = this.options;
+        var items = BI.isFunction(o.items) ? this.__watch(o.items, function (context, newValue) {
+            self.populate(newValue);
+        }) : o.items;
+        this.populate(items);
     },
 
     addItem: function (item) {

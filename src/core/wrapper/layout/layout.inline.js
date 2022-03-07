@@ -27,11 +27,14 @@ BI.InlineLayout = BI.inherit(BI.Layout, {
 
     render: function () {
         BI.InlineLayout.superclass.render.apply(this, arguments);
-        var o = this.options;
+        var self = this, o = this.options;
         this.element.css({
             textAlign: o.horizontalAlign
         });
-        this.populate(o.items);
+        var items = BI.isFunction(o.items) ? this.__watch(o.items, function (context, newValue) {
+            self.populate(newValue);
+        }) : o.items;
+        this.populate(items);
     },
 
     _addElement: function (i, item) {
