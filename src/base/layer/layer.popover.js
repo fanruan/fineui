@@ -27,7 +27,7 @@ BI.Popover = BI.inherit(BI.Widget, {
             footerHeight: 44,
             closable: true, // BI-40839 是否显示右上角的关闭按钮
             bodyHgap: BI.SIZE_CONSANTS.H_GAP_SIZE,
-            bodyTgap: 10
+            bodyTgap: BI.SIZE_CONSANTS.V_GAP_SIZE
         };
     },
 
@@ -109,10 +109,10 @@ BI.Popover = BI.inherit(BI.Widget, {
                 },
                 items: [{
                     el: o.body
-                }]
-            },
-            hgap: o.bodyHgap,
-            tgap: o.bodyTgap
+                }],
+                hgap: o.bodyHgap,
+                tgap: o.bodyTgap
+            }
         } : {
             el: {
                 type: "bi.absolute",
@@ -143,7 +143,6 @@ BI.Popover = BI.inherit(BI.Widget, {
         }
 
         return BI.extend({
-            type: o.logic.dynamic ? "bi.vertical" : "bi.vtape",
             items: items,
             width: this._getSuitableWidth(size.width)
         }, o.logic.dynamic ? {

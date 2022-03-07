@@ -5,7 +5,8 @@ BI.DynamicDateTrigger = BI.inherit(BI.Trigger, {
         yearLength: 4,
         yearMonthLength: 6,
         yearFullMonthLength: 7,
-        compareFormat: "%Y-%X-%d"
+        compareFormat: "%Y-%X-%d",
+        iconWidth: 24
     },
 
     props: {
@@ -120,15 +121,16 @@ BI.DynamicDateTrigger = BI.inherit(BI.Trigger, {
         BI.createWidget({
             type: "bi.htape",
             element: this,
+            columnSize: ["", this._const.iconWidth],
             items: [{
                 el: this.editor
             }, {
                 el: {
                     type: "bi.icon_button",
                     cls: "bi-trigger-icon-button date-font",
-                    width: o.iconWidth
+                    width: this._const.iconWidth
                 },
-                width: o.iconWidth
+                width: this._const.iconWidth
             }]
         });
         !o.allowEdit && BI.createWidget({

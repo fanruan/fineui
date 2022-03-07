@@ -91,7 +91,7 @@
         };
     };
 
-    var configFunctions = {};
+    var configFunctions = BI.OB.configFunctions = {};
     var runConfigFunction = function (type) {
         if (!type || !configFunctions[type]) {
             return false;

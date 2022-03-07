@@ -11,7 +11,7 @@ BI.BubblePopupView = BI.inherit(BI.PopupView, {
             baseCls: config.baseCls + " bi-bubble-popup-view",
             minWidth: 70,
             maxWidth: 300,
-            minHeight: 50,
+            // minHeight: 50,
             showArrow: true,
         });
     }

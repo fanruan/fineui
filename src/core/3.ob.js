@@ -51,7 +51,9 @@
             if (BI.isFunction(this.props)) {
                 props = this.props(config);
             }
-            this.options = extend(this._defaultConfig(config), props, config);
+            var defaultProps = this._defaultConfig(config);
+            var modifiedDefaultProps = (config && config.type && BI.OB.configFunctions[config.type + ".props"]) ? BI.OB.configFunctions[config.type + ".props"](config, defaultProps) : null;
+            this.options = extend(defaultProps, props, modifiedDefaultProps, config);
         },
 
         _init: function () {

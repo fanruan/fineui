@@ -24,21 +24,43 @@ BI.AbsoluteLayout = BI.inherit(BI.Layout, {
         var o = this.options;
         var w = BI.AbsoluteLayout.superclass._addElement.apply(this, arguments);
         var left = 0, right = 0, top = 0, bottom = 0;
-        if (BI.isNotNull(item.left)) {
-            w.element.css({left: BI.isNumber(item.left) ? this._optimiseGap(item.left) : item.left});
-            left += item.left;
+        var offsets = BI.pick(item, ["top", "right", "bottom", "left"]);
+
+        if (BI.isKey(item.inset)) {
+            var insets = BI.map((item.inset + "").split(" "), function (i, str) {
+                return BI.parseFloat(str);
+            });
+            switch (insets.length) {
+                case 1:
+                    offsets = {top: insets[0], bottom: insets[0], left: insets[0], right: insets[0]}
+                    break;
+                case 2:
+                    offsets = {top: insets[0], bottom: insets[0], left: insets[1], right: insets[1]}
+                    break;
+                case 3:
+                    offsets = {top: insets[0], left: insets[1], right: insets[1], bottom: insets[2]}
+                    break
+                case 4:
+                default:
+                    offsets = {top: insets[0], right: insets[1], bottom: insets[2], left: insets[3]}
+                    break;
+            }
         }
-        if (BI.isNotNull(item.right)) {
-            w.element.css({right: BI.isNumber(item.right) ? this._optimiseGap(item.right) : item.right});
-            right += item.right;
+        if (BI.isNotNull(offsets.left)) {
+            w.element.css({left: BI.isNumber(offsets.left) ? this._optimiseGap(offsets.left) : offsets.left});
+            left += offsets.left;
         }
-        if (BI.isNotNull(item.top)) {
-            w.element.css({top: BI.isNumber(item.top) ? this._optimiseGap(item.top) : item.top});
-            top += item.top;
+        if (BI.isNotNull(offsets.right)) {
+            w.element.css({right: BI.isNumber(offsets.right) ? this._optimiseGap(offsets.right) : offsets.right});
+            right += offsets.right;
         }
-        if (BI.isNotNull(item.bottom)) {
-            w.element.css({bottom: BI.isNumber(item.bottom) ? this._optimiseGap(item.bottom) : item.bottom});
-            bottom += item.bottom;
+        if (BI.isNotNull(offsets.top)) {
+            w.element.css({top: BI.isNumber(offsets.top) ? this._optimiseGap(offsets.top) : offsets.top});
+            top += offsets.top;
+        }
+        if (BI.isNotNull(offsets.bottom)) {
+            w.element.css({bottom: BI.isNumber(offsets.bottom) ? this._optimiseGap(offsets.bottom) : offsets.bottom});
+            bottom += offsets.bottom;
         }
 
         if (BI.isNotNull(o.hgap)) {

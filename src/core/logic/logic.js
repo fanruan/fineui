@@ -30,7 +30,7 @@ BI.LogicFactory = {
             case BI.LogicFactory.Type.HorizontalFill:
                 logic = BI.HorizontalFillLayoutLogic;
                 break;
-            default :
+            default:
                 logic = BI.Logic;
                 break;
         }
@@ -43,7 +43,6 @@ BI.LogicFactory = {
             case BI.Direction.Bottom:
             case BI.Direction.Custom:
                 return BI.LogicFactory.Type.Vertical;
-                break;
             case BI.Direction.Left:
             case BI.Direction.Right:
                 return BI.LogicFactory.Type.Horizontal;
