@@ -570,6 +570,9 @@
                 throw new Error("组件：组件名已存在，不能进行添加");
             }
             widget._setParent && widget._setParent(this);
+            if(!this.isEnabled()){
+                widget._setEnable(false);
+            }
             widget.on(BI.Events.DESTROY, function () {
                 BI.remove(self._children, this);
             });
