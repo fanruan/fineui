@@ -61,10 +61,17 @@ BI.VirtualGroupList = BI.inherit(BI.Widget, {
             self.populate(newValue);
         }) : o.items;
         this._populate();
-        this.element.scroll(BI.debounce(function (e) {
+        this.ticking = false;
+        this.element.scroll(function() {
             o.scrollTop = self.element.scrollTop();
-            self._calculateBlocksToRender();
-        }, 30));
+            if (!self.ticking) {
+                requestAnimationFrame(function () {
+                    self._calculateBlocksToRender();
+                    self.ticking = false;
+                });
+                self.ticking = true;
+            }
+        });
         BI.ResizeDetector.addResizeListener(this, function () {
             self._calculateBlocksToRender();
         });
