@@ -50,7 +50,9 @@ BI.TextEditor = BI.inherit(BI.Widget, {
             quitChecker: o.quitChecker,
             allowBlank: o.allowBlank,
             watermark: o.watermark,
-            errorText: o.errorText
+            errorText: o.errorText,
+            inputType: o.inputType,
+            autocomplete: o.autocomplete
         });
         this.editor.on(BI.Controller.EVENT_CHANGE, function () {
             self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
