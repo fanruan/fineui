@@ -315,6 +315,10 @@ BI.Searcher = BI.inherit(BI.Widget, {
 
     blur: function () {
         this.editor.blur();
+    },
+
+    setWaterMark: function (v) {
+        this.editor.setWaterMark(v);
     }
 });
 BI.Searcher.EVENT_CHANGE = "EVENT_CHANGE";

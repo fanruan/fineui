@@ -26,4 +26,6 @@ export declare class TreeValueChooserInsertCombo extends AbstractTreeValueChoose
     focus(): void;
 
     blur(): void;
+
+    setWaterMark(v: string): void;
 }

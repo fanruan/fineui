@@ -26,4 +26,6 @@ export declare class MultiTreeListCombo extends Single {
     focus(): void;
 
     blur(): void;
+
+    setWaterMark(v: string): void;
 }

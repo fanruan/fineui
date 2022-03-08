@@ -247,6 +247,10 @@ BI.MultiLayerSingleTreeTrigger = BI.inherit(BI.Trigger, {
 
     blur: function () {
         this.searcher.blur();
+    },
+
+    setWaterMark: function (v) {
+        this.searcher.setWaterMark(v);
     }
 });
 BI.MultiLayerSingleTreeTrigger.EVENT_FOCUS = "EVENT_FOCUS";

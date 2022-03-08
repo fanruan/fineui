@@ -27,4 +27,6 @@ export declare class ListTreeValueChooserInsertCombo extends AbstractListTreeVal
     focus(): void;
 
     blur(): void;
+
+    setWaterMark(v: string): void;
 }
