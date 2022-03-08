@@ -21,7 +21,7 @@ BI.ButtonGroup = BI.inherit(BI.Widget, {
     },
 
     render: function () {
-        var o = this.options;
+        var self = this, o = this.options;
         var behaviors = {};
         BI.each(o.behaviors, function (key, rule) {
             behaviors[key] = BI.BehaviorFactory.createBehavior(key, {
@@ -29,7 +29,15 @@ BI.ButtonGroup = BI.inherit(BI.Widget, {
             });
         });
         this.behaviors = behaviors;
-        this.populate(o.items);
+        var items = BI.isFunction(o.items) ? this.__watch(o.items, function (context, newValue) {
+            self.populate(newValue);
+        }) : o.items;
+        this.populate(items);
+        if (BI.isFunction(o.value)) {
+            this.__watch(o.value, function (context, newValue) {
+                self.setValue(newValue);
+            })
+        }
         if (BI.isKey(o.value) || BI.isNotEmptyArray(o.value)) {
             this.setValue(o.value);
         }

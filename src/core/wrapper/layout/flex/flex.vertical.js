@@ -22,7 +22,7 @@ BI.FlexVerticalLayout = BI.inherit(BI.Layout, {
     },
     render: function () {
         BI.FlexVerticalLayout.superclass.render.apply(this, arguments);
-        var o = this.options;
+        var self = this, o = this.options;
         this.element.addClass("h-" + o.horizontalAlign).addClass("v-" + o.verticalAlign);
         if (o.scrollable === true || o.scrollx === true) {
             this.element.addClass("f-scroll-x");
@@ -30,7 +30,10 @@ BI.FlexVerticalLayout = BI.inherit(BI.Layout, {
         if (o.scrollable === true || o.scrolly === true) {
             this.element.addClass("f-scroll-y");
         }
-        this.populate(this.options.items);
+        var items = BI.isFunction(o.items) ? this.__watch(o.items, function (context, newValue) {
+            self.populate(newValue);
+        }) : o.items;
+        this.populate(items);
     },
 
     _hasFill: function () {

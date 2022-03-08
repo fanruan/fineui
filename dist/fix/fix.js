@@ -324,7 +324,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                         uniq[name] = true;
                     }
                 }
-                //添加访问器属性 
+                //添加访问器属性
                 for (name in accessors) {
                     if (uniq[name]) {
                         continue;
@@ -579,7 +579,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 // remove self from vm's watcher list
                 // this is a somewhat expensive operation so we skip it
                 // if the vm is being destroyed.
-                remove(this.vm._watchers, this);
+                remove(this.vm && this.vm._watchers, this);
                 var i = this.deps.length;
                 while (i--) {
                     this.deps[i].removeSub(this);

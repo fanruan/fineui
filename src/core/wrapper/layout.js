@@ -29,8 +29,6 @@ BI.Layout = BI.inherit(BI.Widget, {
             o.columnSize = this.__watch(columnSizeFn, function (context, newValue) {
                 o.columnSize = newValue;
                 self.resize();
-            }, {
-                deep: true
             });
         }
         if (BI.isFunction(o.rowSize)) {
@@ -38,8 +36,6 @@ BI.Layout = BI.inherit(BI.Widget, {
             o.rowSize = this.__watch(rowSizeFn, function (context, newValue) {
                 o.rowSize = newValue;
                 self.resize();
-            }, {
-                deep: true
             });
         }
     },

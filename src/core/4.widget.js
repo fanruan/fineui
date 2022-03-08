@@ -224,8 +224,6 @@
                             }
                         }
                         self.element.css(css = newValue);
-                    }, {
-                        deep: true
                     });
                     this.element.css(css);
                 } else {
@@ -242,8 +240,10 @@
                     return getter.call(self, self);
                 }, (handler && function (v) {
                     handler.call(self, self, v);
-                }) || BI.emptyFn, options);
-                this._watchers.push(watcher);
+                }) || BI.emptyFn, BI.extend({deep: true}, options));
+                this._watchers.push(function unwatchFn () {
+                    watcher.teardown();
+                });
                 return watcher.value;
             } else {
                 return getter();
@@ -312,14 +312,10 @@
                 if (BI.isArray(o.effect)) {
                     if (BI.isArray(o.effect[0])) {
                         BI.each(o.effect, function (i, effect) {
-                            self.__watch(effect[0], effect[1], {
-                                deep: true
-                            });
+                            self.__watch(effect[0], effect[1]);
                         });
                     } else {
-                        self.__watch(o.effect[0], o.effect[1], {
-                            deep: true
-                        });
+                        self.__watch(o.effect[0], o.effect[1]);
                     }
                 } else {
                     this.__watch(o.effect);
@@ -574,6 +570,12 @@
                 throw new Error("组件：组件名已存在，不能进行添加");
             }
             widget._setParent && widget._setParent(this);
+            // if(!this.isEnabled()){
+            //     widget._setEnable(false);
+            // }
+            // if(!this.isValid()){
+            //     widget._setValid(false);
+            // }
             widget.on(BI.Events.DESTROY, function () {
                 BI.remove(self._children, this);
             });
@@ -692,12 +694,17 @@
         },
 
         __d: function () {
-            callLifeHook(this, "beforeDestroy");
-            this.beforeDestroy = null;
             BI.each(this._children, function (i, widget) {
                 widget && widget._unMount && widget._unMount();
             });
             this._children = {};
+        },
+
+        // 主要是因为_destroy已经提供了protected方法
+        __destroy: function () {
+            callLifeHook(this, "beforeDestroy");
+            this.beforeDestroy = null;
+            this.__d();
             this._parent = null;
             this._isMounted = false;
             callLifeHook(this, "destroyed");
@@ -705,7 +712,7 @@
         },
 
         _unMount: function () {
-            this.__d();
+            this.__destroy();
             this.fireEvent(BI.Events.UNMOUNT);
             this.purgeListeners();
         },
@@ -743,7 +750,8 @@
             // }
             // this._isMounted = false;
             // this.purgeListeners();
-            this._empty();
+            this.__d();
+            this.element.empty();
             this.element.unbind();
             this._initCurrent();
             this._init();
@@ -752,14 +760,14 @@
         },
 
         _destroy: function () {
-            this.__d();
+            this.__destroy();
             this.element.destroy();
             this.purgeListeners();
         },
 
         destroy: function () {
             var self = this, o = this.options;
-            this.__d();
+            this.__destroy();
             if (o.animation) {
                 this._innerSetVisible(false);
                 setTimeout(function () {

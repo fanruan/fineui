@@ -21,7 +21,7 @@ BI.FloatLeftLayout = BI.inherit(BI.Layout, {
     },
     render: function () {
         BI.FloatLeftLayout.superclass.render.apply(this, arguments);
-        var o = this.options;
+        var self = this, o = this.options;
         if (o.innerHgap !== 0) {
             this.element.css({
                 paddingLeft: this._optimiseGap(o.innerHgap),
@@ -34,7 +34,10 @@ BI.FloatLeftLayout = BI.inherit(BI.Layout, {
                 paddingBottom: this._optimiseGap(o.innerVgap)
             })
         }
-        this.populate(this.options.items);
+        var items = BI.isFunction(o.items) ? this.__watch(o.items, function (context, newValue) {
+            self.populate(newValue);
+        }) : o.items;
+        this.populate(items);
     },
 
     _addElement: function (i, item) {
@@ -110,8 +113,23 @@ BI.FloatRightLayout = BI.inherit(BI.Layout, {
     },
     render: function () {
         BI.FloatRightLayout.superclass.render.apply(this, arguments);
-        var o = this.options;
-        this.populate(this.options.items);
+        var self = this, o = this.options;
+        if (o.innerHgap !== 0) {
+            this.element.css({
+                paddingLeft: this._optimiseGap(o.innerHgap),
+                paddingRight: this._optimiseGap(o.innerHgap)
+            })
+        }
+        if (o.innerVgap !== 0) {
+            this.element.css({
+                paddingTop: this._optimiseGap(o.innerVgap),
+                paddingBottom: this._optimiseGap(o.innerVgap)
+            })
+        }
+        var items = BI.isFunction(o.items) ? this.__watch(o.items, function (context, newValue) {
+            self.populate(newValue);
+        }) : o.items;
+        this.populate(items);
     },
 
     _addElement: function (i, item) {
