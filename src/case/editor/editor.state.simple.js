@@ -143,8 +143,6 @@ BI.SimpleStateEditor = BI.inherit(BI.Widget, {
 
     setWaterMark: function (v) {
         this.options.watermark = v;
-        this.options.text = v;
-        this.setState(this.stateValue);
         this.editor.setWaterMark(v);
     },
 
@@ -234,7 +232,6 @@ BI.SimpleStateEditor = BI.inherit(BI.Widget, {
     setState: function (v) {
         var o = this.options;
         BI.SimpleStateEditor.superclass.setValue.apply(this, arguments);
-        this.stateValue = v;
         if (BI.isNumber(v)) {
             if (v === BI.Selection.All) {
                 this._setText(BI.i18nText("BI-Already_Selected"));
