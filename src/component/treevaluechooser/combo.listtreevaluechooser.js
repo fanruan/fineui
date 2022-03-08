@@ -110,6 +110,10 @@ BI.ListTreeValueChooserInsertCombo = BI.inherit(BI.AbstractListTreeValueChooser,
 
     blur: function () {
         this.combo.blur();
+    },
+
+    setWaterMark: function (v) {
+        this.combo.setWaterMark(v);
     }
 });
 

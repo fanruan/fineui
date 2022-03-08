@@ -27,4 +27,6 @@ export declare class MultiTreeInsertCombo extends Single {
     focus(): void;
 
     blur(): void;
+
+    setWaterMark(v: string): void;
 }
