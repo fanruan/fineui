@@ -3179,7 +3179,8 @@
           ref: function (_ref) {
             self.tab = _ref;
           },
-          single: false, // 是不是单页面
+          single: o.single, // 是不是单页面
+          keepAlives: o.keepAlives,
           logic: {
             dynamic: false
           },
