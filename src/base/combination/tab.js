@@ -15,7 +15,8 @@ BI.Tab = BI.inherit(BI.Widget, {
             tab: false,
             cardCreator: function (v) {
                 return BI.createWidget();
-            }
+            },
+            keepAlives: []
         });
     },
 
@@ -66,7 +67,7 @@ BI.Tab = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
         if (o.single === true) {
             BI.each(this.cardMap, function (name, card) {
-                if (name !== (currCardName + "")) {
+                if (name !== (currCardName + "") && self._keepAlive(name) !== true) {
                     self.layout.deleteCardByName(name);
                     delete self.cardMap[name];
                 }
@@ -80,6 +81,12 @@ BI.Tab = BI.inherit(BI.Widget, {
             this.cardMap[v] = card;
             this.layout.addCardByName(v, card);
         }
+    },
+
+    _keepAlive: function (v) {
+        var o = this.options;
+        return BI.isFunction(o.keepAlives) ? o.keepAlives(v) : BI.contains(o.keepAlives, v);
+
     },
 
     created: function () {
