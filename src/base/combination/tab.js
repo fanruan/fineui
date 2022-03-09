@@ -85,8 +85,8 @@ BI.Tab = BI.inherit(BI.Widget, {
 
     _keepAlive: function (v) {
         var o = this.options;
-        var keepAlives = BI.isFunction(o.keepAlives) ? o.keepAlives() : o.keepAlives;
-        return BI.contains(keepAlives, v);
+        return BI.isFunction(o.keepAlives) ? o.keepAlives(v) : BI.contains(o.keepAlives, v);
+
     },
 
     created: function () {
