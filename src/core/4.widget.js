@@ -147,7 +147,7 @@
                     self.__async = true;
                     var beforeRenderResult = (self.options.beforeRender || self.beforeRender).call(self, render);
                     if (beforeRenderResult instanceof Promise) {
-                        beforeRenderResult.then(render);
+                        beforeRenderResult.then(render).catch(render);
                     }
                 } else {
                     self._render();
