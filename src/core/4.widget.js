@@ -147,7 +147,10 @@
                     self.__async = true;
                     var beforeRenderResult = (self.options.beforeRender || self.beforeRender).call(self, render);
                     if (beforeRenderResult instanceof Promise) {
-                        beforeRenderResult.then(render).catch(render);
+                        beforeRenderResult.then(render).catch(function (e) {
+                            _global.console && console.error(e);
+                            render();
+                        });
                     }
                 } else {
                     self._render();
@@ -159,7 +162,10 @@
                 this.__asking = true;
                 var beforeInitResult = (this.options.beforeInit || this.beforeInit).call(this, init);
                 if (beforeInitResult instanceof Promise) {
-                    beforeInitResult.then(init).catch(init);
+                    beforeInitResult.then(init).catch(function (e) {
+                        _global.console && console.error(e);
+                        init();
+                    });
                 }
             } else {
                 init();
