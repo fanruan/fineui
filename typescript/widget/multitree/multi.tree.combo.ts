@@ -19,4 +19,6 @@ export declare class MultiTreeCombo extends Single {
     focus(): void;
 
     blur(): void;
+
+    setWaterMark(v: string): void;
 }

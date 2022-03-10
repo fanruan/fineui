@@ -192,6 +192,10 @@ BI.MultiTreeSearcher = BI.inherit(BI.Widget, {
 
     blur: function () {
         this.editor.blur();
+    },
+
+    setWaterMark: function (v) {
+        this.editor.setWaterMark(v);
     }
 });
 

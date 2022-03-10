@@ -28,4 +28,6 @@ export declare class TreeValueChooserCombo extends AbstractTreeValueChooser {
     focus(): void;
 
     blur(): void;
+    
+    setWaterMark(v: string): void;
 }

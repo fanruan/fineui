@@ -250,6 +250,10 @@ BI.MultiLayerSelectTreeCombo = BI.inherit(BI.Widget, {
 
     showView: function () {
         this.combo.showView();
+    },
+
+    setWaterMark: function (v) {
+        this.trigger.setWaterMark(v);
     }
 });
 
