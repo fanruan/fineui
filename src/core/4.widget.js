@@ -159,7 +159,7 @@
                 this.__asking = true;
                 var beforeInitResult = (this.options.beforeInit || this.beforeInit).call(this, init);
                 if (beforeInitResult instanceof Promise) {
-                    beforeInitResult.then(init);
+                    beforeInitResult.then(init).catch(init);
                 }
             } else {
                 init();
