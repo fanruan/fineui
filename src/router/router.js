@@ -3191,7 +3191,7 @@
         };
       },
       destroyed: function () {
-        cbs.remove(this._callbackListener);
+        BI.remove(cbs, this._callbackListener);
       }
     });
     BI.shortcut("bi.router_view", BI.RouterView);
