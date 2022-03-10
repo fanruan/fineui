@@ -150,8 +150,8 @@
         }
     };
 
-    var unMount = BI.Widget.prototype.__d;
-    BI.Widget.prototype.__d = function () {
+    var unMount = BI.Widget.prototype.__destroy;
+    BI.Widget.prototype.__destroy = function () {
         try {
             unMount.apply(this, arguments);
         } catch (e) {

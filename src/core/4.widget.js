@@ -753,7 +753,7 @@
             this.__d();
             this.element.empty();
             this.element.unbind();
-            this._initCurrent();
+            // this._initCurrent();
             this._init();
             this._mount();
             // this._initRef();
