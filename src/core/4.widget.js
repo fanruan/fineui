@@ -570,11 +570,11 @@
                 throw new Error("组件：组件名已存在，不能进行添加");
             }
             widget._setParent && widget._setParent(this);
-            if (!this.options.disabled) {
-                widget.options && (widget.options.disabled = false);
+            if (this.options.disabled) {
+                widget.options && (widget.options.disabled = true);
             }
-            if (!this.options.invalid) {
-                widget.options && (widget.options.invalid = false);
+            if (this.options.invalid) {
+                widget.options && (widget.options.invalid = true);
             }
             widget.on(BI.Events.DESTROY, function () {
                 BI.remove(self._children, this);
