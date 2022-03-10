@@ -1,7 +1,4 @@
 *
-!src/less/*.less
-!src/less/lib/*.less
-!src/less/resource/*.less
 !dist/lib/*.d.ts
 !dist/lib/**/*.d.ts
 !dist/font.css
