@@ -750,10 +750,19 @@
             // }
             // this._isMounted = false;
             // this.purgeListeners();
+
+            // 去掉组件绑定的watcher
+            BI.each(this._watchers, function (i, unwatches) {
+                unwatches = BI.isArray(unwatches) ? unwatches : [unwatches];
+                BI.each(unwatches, function (j, unwatch) {
+                    unwatch();
+                });
+            });
+            this._watchers && (this._watchers = []);
             this.__d();
             this.element.empty();
             this.element.unbind();
-            // this._initCurrent();
+            this._initCurrent();
             this._init();
             // this._initRef();
         },
