@@ -299,7 +299,7 @@
         _initVisual: function () {
             var self = this, o = this.options;
             if (o.invisible) {
-                var invisible = BI.isFunction(o.invisible) ? this.__watch(o.invisible, function (newValue) {
+                var invisible = BI.isFunction(o.invisible) ? this.__watch(o.invisible, function (context, newValue) {
                     self.setVisible(!newValue);
                 }) : o.invisible;
                 if (invisible) {
@@ -313,7 +313,7 @@
             var self = this, o = this.options;
             if (o.disabled || o.invalid) {
                 if (this.options.disabled) {
-                    var disabled = BI.isFunction(o.disabled) ? this.__watch(o.disabled, function (newValue) {
+                    var disabled = BI.isFunction(o.disabled) ? this.__watch(o.disabled, function (context, newValue) {
                         self.setEnable(!newValue);
                     }) : o.disabled;
                     if (disabled) {
@@ -321,7 +321,7 @@
                     }
                 }
                 if (this.options.invalid) {
-                    var invalid = BI.isFunction(o.invalid) ? this.__watch(o.invalid, function (newValue) {
+                    var invalid = BI.isFunction(o.invalid) ? this.__watch(o.invalid, function (context, newValue) {
                         self.setEnable(!newValue);
                     }) : o.invalid;
                     if (invalid) {
