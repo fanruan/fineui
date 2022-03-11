@@ -291,10 +291,15 @@
         },
 
         _initVisual: function () {
-            var o = this.options;
+            var self = this, o = this.options;
             if (o.invisible) {
-                // 用display属性做显示和隐藏，否则jquery会在显示时将display设为block会覆盖掉display:flex属性
-                this.element.css("display", "none");
+                var invisible = BI.isFunction(o.invisible) ? this.__watch(o.invisible, function (newValue) {
+                    self.setVisible(!newValue);
+                }) : o.invisible;
+                if (invisible) {
+                    // 用display属性做显示和隐藏，否则jquery会在显示时将display设为block会覆盖掉display:flex属性
+                    this.element.css("display", "none");
+                }
             }
         },
 
@@ -302,10 +307,20 @@
             var self = this, o = this.options;
             if (o.disabled || o.invalid) {
                 if (this.options.disabled) {
-                    this.setEnable(false);
+                    var disabled = BI.isFunction(o.disabled) ? this.__watch(o.disabled, function (newValue) {
+                        self.setEnable(!newValue);
+                    }) : o.disabled;
+                    if (disabled) {
+                        this.setEnable(false);
+                    }
                 }
                 if (this.options.invalid) {
-                    this.setValid(false);
+                    var invalid = BI.isFunction(o.invalid) ? this.__watch(o.invalid, function (newValue) {
+                        self.setEnable(!newValue);
+                    }) : o.invalid;
+                    if (invalid) {
+                        this.setValid(false);
+                    }
                 }
             }
             if (o.effect) {
