@@ -105,6 +105,10 @@
         if (workerMode && this._worker) {
             return;
         }
+        if (this.store) {
+            pushTarget(this.store);
+            return true;
+        }
         if (this._store) {
             var store = findStore(this.options.context || this._parent || this.options.element || this._context);
             if (store) {
@@ -150,8 +154,8 @@
         }
     };
 
-    var unMount = BI.Widget.prototype.__d;
-    BI.Widget.prototype.__d = function () {
+    var unMount = BI.Widget.prototype.__destroy;
+    BI.Widget.prototype.__destroy = function () {
         try {
             unMount.apply(this, arguments);
         } catch (e) {

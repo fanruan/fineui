@@ -35,6 +35,7 @@
     },
 
     _createItems: function () {
+        var self = this;
         var o = this.options;
 
         return BI.map(o.items, function (idx, item) {
@@ -50,7 +51,7 @@
                 listeners: [{
                     eventName: "EVENT_CHANGE",
                     action: function () {
-                        this.validate();
+                        self.fireEvent(BI.Form.EVENT_CHANGE, this.validate());
                     }
                 }]
             };
@@ -88,4 +89,5 @@
     }
 });
 
+BI.Form.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.custom_form", BI.Form);

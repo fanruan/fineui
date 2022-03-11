@@ -10,7 +10,9 @@
 
         render: function () {
             var self = this, o = this.options;
-            var text = this._getShowText();
+            var text = BI.isFunction(o.text) ? this.__watch(o.text, function (context, newValue) {
+                self.setText(newValue);
+            }) : o.text;
             if (BI.isKey(text)) {
                 this.setText(text);
             } else if (BI.isKey(o.value)) {

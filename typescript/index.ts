@@ -25,6 +25,7 @@ import { SearchTextValueCombo } from "./case/combo/searchtextvaluecombo/combo.se
 import { SignEditor } from "./case/editor/editor.sign";
 import { StateEditor } from './case/editor/editor.state';
 import { AllValueMultiTextValueCombo } from "./component/allvaluemultitextvaluecombo/allvalue.multitextvalue.combo";
+import { Form } from './component/form/form';
 import { AbstractTreeValueChooser } from "./component/treevaluechooser/abstract.treevaluechooser";
 import { AbstractListTreeValueChooser } from "./component/treevaluechooser/abstract.treevaluechooser.list";
 import { Action, ActionFactory } from "./core/action/action";
@@ -145,6 +146,7 @@ import { MultiSelectInsertList } from "./widget/multiselectlist/multiselectlist.
 import { YearMonthInterval } from "./widget/yearmonthinterval/yearmonthinterval";
 import { NumberEditor } from "./widget/numbereditor/numbereditor";
 import { TextValueCheckCombo } from "./case/combo/textvaluecheckcombo/combo.textvaluecheck";
+import { Segment } from "./case/segment/segment";
 import { LinearSegment } from "./case/linersegment/linear.segment";
 import { Img } from "./base/single/img/img";
 import { EditorIconCheckCombo } from "./case/combo/editoriconcheckcombo/combo.editiconcheck";
@@ -218,6 +220,7 @@ export interface BI extends _func, _i18n, _base, _inject, _var, _web, _utils {
     SmallTextValueCombo: typeof SmallTextValueCombo;
     BubbleCombo: typeof BubbleCombo;
     AllValueMultiTextValueCombo: typeof AllValueMultiTextValueCombo;
+    Form: typeof Form;
     IconTextItem: typeof IconTextItem;
     MultiSelectItem: typeof MultiSelectItem;
     AbstractLabel: typeof AbstractLabel;
@@ -343,6 +346,7 @@ export interface BI extends _func, _i18n, _base, _inject, _var, _web, _utils {
     YearMonthInterval: typeof YearMonthInterval;
     TextValueCheckCombo: typeof TextValueCheckCombo;
     NumberEditor: typeof NumberEditor;
+    Segment: typeof Segment;
     LinearSegment: typeof LinearSegment;
     Img: typeof Img;
     EditorIconCheckCombo: typeof EditorIconCheckCombo;
@@ -512,6 +516,7 @@ export {
     Switch,
     HorizontalLayout,
     ShelterEditor,
+    Form,
     TextTrigger,
     SelectTextTrigger,
     DateInterval,
@@ -531,6 +536,7 @@ export {
     YearMonthInterval,
     TextValueCheckCombo,
     NumberEditor,
+    Segment,
     LinearSegment,
     Img,
     EditorIconCheckCombo,

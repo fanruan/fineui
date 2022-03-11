@@ -144,6 +144,10 @@ BI.MultiSelectTrigger = BI.inherit(BI.Trigger, {
 
     blur: function () {
         this.searcher.blur();
+    },
+
+    setWaterMark: function (v) {
+        this.searcher.setWaterMark(v);
     }
 });
 

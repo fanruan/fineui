@@ -11,6 +11,9 @@ BI.CollectionView = BI.inherit(BI.Widget, {
             baseCls: "bi-collection",
             // width: 400, //必设
             // height: 300, //必设
+            scrollable: true,
+            scrollx: false,
+            scrolly: false,
             overflowX: true,
             overflowY: true,
             cellSizeAndPositionGetter: BI.emptyFn,
@@ -49,14 +52,30 @@ BI.CollectionView = BI.inherit(BI.Widget, {
                 scrollTop: o.scrollTop
             });
         });
+        // 兼容一下
+        var scrollable = o.scrollable, scrollx = o.scrollx, scrolly = o.scrolly;
+        if (o.overflowX === false) {
+            if (o.overflowY === false) {
+                scrollable = false;
+            } else {
+                scrollable = "y"
+            }
+        } else {
+            if (o.overflowY === false) {
+                scrollable = "x";
+            }
+        }
         BI._lazyCreateWidget({
             type: "bi.vertical",
             element: this,
-            scrollable: o.overflowX === true && o.overflowY === true,
-            scrolly: o.overflowX === false && o.overflowY === true,
-            scrollx: o.overflowX === true && o.overflowY === false,
+            scrollable: scrollable,
+            scrolly: scrolly,
+            scrollx: scrollx,
             items: [this.container]
         });
+        o.items = BI.isFunction(o.items) ? this.__watch(o.items, function (context, newValue) {
+            self.populate(newValue);
+        }) : o.items;
         if (o.items.length > 0) {
             this._calculateSizeAndPositionData();
             this._populate();

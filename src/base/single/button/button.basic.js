@@ -29,8 +29,12 @@ BI.BasicButton = BI.inherit(BI.Single, {
     },
 
     _init: function () {
-        BI.BasicButton.superclass._init.apply(this, arguments);
+        var self = this;
         var opts = this.options;
+        opts.selected = BI.isFunction(opts.selected) ? this.__watch(opts.selected, function (context, newValue) {
+            self.setSelected(newValue);
+        }) : opts.selected;
+        BI.BasicButton.superclass._init.apply(this, arguments);
 
         if (opts.shadow) {
             this._createShadow();

@@ -46,8 +46,11 @@ BI.Single = BI.inherit(BI.Widget, {
     },
 
     _init: function () {
-        BI.Single.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
+        o.value = BI.isFunction(o.value) ? this.__watch(o.value, function (context, newValue) {
+            self.setValue(newValue);
+        }) : o.value;
+        BI.Single.superclass._init.apply(this, arguments);
         if (BI.isKey(o.title) || BI.isKey(o.warningTitle)
             || BI.isFunction(o.title) || BI.isFunction(o.warningTitle)) {
             this.enableHover({

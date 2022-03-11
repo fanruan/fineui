@@ -17,13 +17,13 @@
             TRIGGER_HEIGHT: 24,
             TOAST_TOP: 10,
             H_GAP_SIZE: "M",
-            V_GAP_SIZE: "M"
+            V_GAP_SIZE: "S"
         }
     };
 
     // 具体尺寸还没定，先写着
     var sizeMap = {
-        "S": 16,
+        "S": 10,
         "M" : 20,
         "L": 24
     };

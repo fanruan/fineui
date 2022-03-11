@@ -53,6 +53,9 @@ BI.VirtualList = BI.inherit(BI.Widget, {
     // mounted之后绑定事件
     mounted: function () {
         var self = this, o = this.options;
+        o.items = BI.isFunction(o.items) ? this.__watch(o.items, function (context, newValue) {
+            self.populate(newValue);
+        }) : o.items;
         this._populate();
         this.element.scroll(function (e) {
             o.scrollTop = self.element.scrollTop();

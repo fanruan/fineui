@@ -109,8 +109,11 @@ BI.Loader = BI.inherit(BI.Widget, {
         o.isDefaultInit && BI.isEmpty(o.items) && BI.nextTick(BI.bind(function () {
             o.isDefaultInit && BI.isEmpty(o.items) && this._populate();
         }, this));
-        if (BI.isNotEmptyArray(o.items)) {
-            this._populate(o.items);
+        var items = BI.isFunction(o.items) ? this.__watch(o.items, function (context, newValue) {
+            self.populate(newValue);
+        }) : o.items;
+        if (BI.isNotEmptyArray(items)) {
+            this._populate(items);
         }
     },
 
@@ -161,7 +164,6 @@ BI.Loader = BI.inherit(BI.Widget, {
         }
         this.button_group.addItems.apply(this.button_group, arguments);
     },
-
 
     _populate: function (items) {
         var self = this, o = this.options;

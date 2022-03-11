@@ -147,7 +147,10 @@
                     self.__async = true;
                     var beforeRenderResult = (self.options.beforeRender || self.beforeRender).call(self, render);
                     if (beforeRenderResult instanceof Promise) {
-                        beforeRenderResult.then(render);
+                        beforeRenderResult.then(render).catch(function (e) {
+                            _global.console && console.error(e);
+                            render();
+                        });
                     }
                 } else {
                     self._render();
@@ -159,7 +162,10 @@
                 this.__asking = true;
                 var beforeInitResult = (this.options.beforeInit || this.beforeInit).call(this, init);
                 if (beforeInitResult instanceof Promise) {
-                    beforeInitResult.then(init);
+                    beforeInitResult.then(init).catch(function (e) {
+                        _global.console && console.error(e);
+                        init();
+                    });
                 }
             } else {
                 init();
@@ -224,8 +230,6 @@
                             }
                         }
                         self.element.css(css = newValue);
-                    }, {
-                        deep: true
                     });
                     this.element.css(css);
                 } else {
@@ -242,8 +246,10 @@
                     return getter.call(self, self);
                 }, (handler && function (v) {
                     handler.call(self, self, v);
-                }) || BI.emptyFn, options);
-                this._watchers.push(watcher);
+                }) || BI.emptyFn, BI.extend({deep: true}, options));
+                this._watchers.push(function unwatchFn () {
+                    watcher.teardown();
+                });
                 return watcher.value;
             } else {
                 return getter();
@@ -291,10 +297,15 @@
         },
 
         _initVisual: function () {
-            var o = this.options;
+            var self = this, o = this.options;
             if (o.invisible) {
-                // 用display属性做显示和隐藏，否则jquery会在显示时将display设为block会覆盖掉display:flex属性
-                this.element.css("display", "none");
+                var invisible = BI.isFunction(o.invisible) ? this.__watch(o.invisible, function (context, newValue) {
+                    self.setVisible(!newValue);
+                }) : o.invisible;
+                if (invisible) {
+                    // 用display属性做显示和隐藏，否则jquery会在显示时将display设为block会覆盖掉display:flex属性
+                    this.element.css("display", "none");
+                }
             }
         },
 
@@ -302,24 +313,30 @@
             var self = this, o = this.options;
             if (o.disabled || o.invalid) {
                 if (this.options.disabled) {
-                    this.setEnable(false);
+                    var disabled = BI.isFunction(o.disabled) ? this.__watch(o.disabled, function (context, newValue) {
+                        self.setEnable(!newValue);
+                    }) : o.disabled;
+                    if (disabled) {
+                        this.setEnable(false);
+                    }
                 }
                 if (this.options.invalid) {
-                    this.setValid(false);
+                    var invalid = BI.isFunction(o.invalid) ? this.__watch(o.invalid, function (context, newValue) {
+                        self.setEnable(!newValue);
+                    }) : o.invalid;
+                    if (invalid) {
+                        this.setValid(false);
+                    }
                 }
             }
             if (o.effect) {
                 if (BI.isArray(o.effect)) {
                     if (BI.isArray(o.effect[0])) {
                         BI.each(o.effect, function (i, effect) {
-                            self.__watch(effect[0], effect[1], {
-                                deep: true
-                            });
+                            self.__watch(effect[0], effect[1]);
                         });
                     } else {
-                        self.__watch(o.effect[0], o.effect[1], {
-                            deep: true
-                        });
+                        self.__watch(o.effect[0], o.effect[1]);
                     }
                 } else {
                     this.__watch(o.effect);
@@ -574,6 +591,12 @@
                 throw new Error("组件：组件名已存在，不能进行添加");
             }
             widget._setParent && widget._setParent(this);
+            if (this.options.disabled) {
+                widget.options && (widget.options.disabled = true);
+            }
+            if (this.options.invalid) {
+                widget.options && (widget.options.invalid = true);
+            }
             widget.on(BI.Events.DESTROY, function () {
                 BI.remove(self._children, this);
             });
@@ -692,12 +715,17 @@
         },
 
         __d: function () {
-            callLifeHook(this, "beforeDestroy");
-            this.beforeDestroy = null;
             BI.each(this._children, function (i, widget) {
                 widget && widget._unMount && widget._unMount();
             });
             this._children = {};
+        },
+
+        // 主要是因为_destroy已经提供了protected方法
+        __destroy: function () {
+            callLifeHook(this, "beforeDestroy");
+            this.beforeDestroy = null;
+            this.__d();
             this._parent = null;
             this._isMounted = false;
             callLifeHook(this, "destroyed");
@@ -705,7 +733,7 @@
         },
 
         _unMount: function () {
-            this.__d();
+            this.__destroy();
             this.fireEvent(BI.Events.UNMOUNT);
             this.purgeListeners();
         },
@@ -743,23 +771,32 @@
             // }
             // this._isMounted = false;
             // this.purgeListeners();
-            this._empty();
+
+            // 去掉组件绑定的watcher
+            BI.each(this._watchers, function (i, unwatches) {
+                unwatches = BI.isArray(unwatches) ? unwatches : [unwatches];
+                BI.each(unwatches, function (j, unwatch) {
+                    unwatch();
+                });
+            });
+            this._watchers && (this._watchers = []);
+            this.__d();
+            this.element.empty();
             this.element.unbind();
             this._initCurrent();
             this._init();
-            this._mount();
             // this._initRef();
         },
 
         _destroy: function () {
-            this.__d();
+            this.__destroy();
             this.element.destroy();
             this.purgeListeners();
         },
 
         destroy: function () {
             var self = this, o = this.options;
-            this.__d();
+            this.__destroy();
             if (o.animation) {
                 this._innerSetVisible(false);
                 setTimeout(function () {

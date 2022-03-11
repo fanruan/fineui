@@ -93,6 +93,10 @@ BI.MultiSelectEditor = BI.inherit(BI.Widget, {
 
     populate: function (items) {
 
+    },
+
+    setWaterMark: function (v) {
+        this.editor.setWaterMark(v);
     }
 });
 

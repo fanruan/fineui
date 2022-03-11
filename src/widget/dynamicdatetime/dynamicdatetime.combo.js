@@ -3,7 +3,8 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
         popupHeight: 259,
         popupWidth: 270,
         comboAdjustHeight: 1,
-        border: 1
+        border: 1,
+        iconWidth: 24
     },
 
     props: {
@@ -48,13 +49,13 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
                     isNeedAdjustWidth: opts.isNeedAdjustWidth,
                     el: {
                         type: "bi.horizontal_fill",
-                        columnSize: [opts.height - border, "fill"],
+                        columnSize: [this.constants.iconWidth, "fill"],
                         height: opts.height - border,
                         items: [{
                             el: {
                                 type: "bi.icon_button",
                                 cls: "bi-trigger-icon-button date-change-h-font",
-                                width: opts.height - border,
+                                width: this.constants.iconWidth,
                                 height: opts.height - border,
                                 ref: function () {
                                     self.changeIcon = this;
@@ -68,7 +69,7 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
                             allowEdit: opts.allowEdit,
                             watermark: opts.watermark,
                             format: opts.format,
-                            iconWidth: opts.height - border,
+                            iconWidth: this.constants.iconWidth,
                             height: opts.height - border,
                             value: opts.value,
                             ref: function () {
