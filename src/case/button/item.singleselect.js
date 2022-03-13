@@ -5,7 +5,7 @@ BI.SingleSelectItem = BI.inherit(BI.BasicButton, {
             attributes: {
                 tabIndex: 1
             },
-            hgap: 10,
+            textHgap: 10,
             height: 24,
             textAlign: "left"
         });
@@ -20,7 +20,10 @@ BI.SingleSelectItem = BI.inherit(BI.BasicButton, {
             whiteSpace: "nowrap",
             textHeight: o.height,
             height: o.height,
-            hgap: o.hgap,
+            hgap: o.hgap || o.textHgap,
+            vgap: o.textVgap,
+            lgap: o.textLgap,
+            rgap: o.textRgap,
             text: o.text,
             keyword: o.keyword,
             value: o.value,

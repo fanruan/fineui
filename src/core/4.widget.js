@@ -147,7 +147,10 @@
                     self.__async = true;
                     var beforeRenderResult = (self.options.beforeRender || self.beforeRender).call(self, render);
                     if (beforeRenderResult instanceof Promise) {
-                        beforeRenderResult.then(render);
+                        beforeRenderResult.then(render).catch(function (e) {
+                            _global.console && console.error(e);
+                            render();
+                        });
                     }
                 } else {
                     self._render();
@@ -159,7 +162,10 @@
                 this.__asking = true;
                 var beforeInitResult = (this.options.beforeInit || this.beforeInit).call(this, init);
                 if (beforeInitResult instanceof Promise) {
-                    beforeInitResult.then(init);
+                    beforeInitResult.then(init).catch(function (e) {
+                        _global.console && console.error(e);
+                        init();
+                    });
                 }
             } else {
                 init();
@@ -291,10 +297,15 @@
         },
 
         _initVisual: function () {
-            var o = this.options;
+            var self = this, o = this.options;
             if (o.invisible) {
-                // 用display属性做显示和隐藏，否则jquery会在显示时将display设为block会覆盖掉display:flex属性
-                this.element.css("display", "none");
+                var invisible = BI.isFunction(o.invisible) ? this.__watch(o.invisible, function (context, newValue) {
+                    self.setVisible(!newValue);
+                }) : o.invisible;
+                if (invisible) {
+                    // 用display属性做显示和隐藏，否则jquery会在显示时将display设为block会覆盖掉display:flex属性
+                    this.element.css("display", "none");
+                }
             }
         },
 
@@ -302,10 +313,20 @@
             var self = this, o = this.options;
             if (o.disabled || o.invalid) {
                 if (this.options.disabled) {
-                    this.setEnable(false);
+                    var disabled = BI.isFunction(o.disabled) ? this.__watch(o.disabled, function (context, newValue) {
+                        self.setEnable(!newValue);
+                    }) : o.disabled;
+                    if (disabled) {
+                        this.setEnable(false);
+                    }
                 }
                 if (this.options.invalid) {
-                    this.setValid(false);
+                    var invalid = BI.isFunction(o.invalid) ? this.__watch(o.invalid, function (context, newValue) {
+                        self.setEnable(!newValue);
+                    }) : o.invalid;
+                    if (invalid) {
+                        this.setValid(false);
+                    }
                 }
             }
             if (o.effect) {
@@ -750,12 +771,20 @@
             // }
             // this._isMounted = false;
             // this.purgeListeners();
+
+            // 去掉组件绑定的watcher
+            BI.each(this._watchers, function (i, unwatches) {
+                unwatches = BI.isArray(unwatches) ? unwatches : [unwatches];
+                BI.each(unwatches, function (j, unwatch) {
+                    unwatch();
+                });
+            });
+            this._watchers && (this._watchers = []);
             this.__d();
             this.element.empty();
             this.element.unbind();
             this._initCurrent();
             this._init();
-            this._mount();
             // this._initRef();
         },
 

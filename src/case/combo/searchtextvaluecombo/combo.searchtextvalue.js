@@ -15,6 +15,12 @@ BI.SearchTextValueCombo = BI.inherit(BI.Widget, {
 
     render: function () {
         var self = this, o = this.options;
+        o.value = BI.isFunction(o.value) ? this.__watch(o.value, function (context, newValue) {
+            self.setValue(newValue);
+        }) : o.value;
+        o.items = BI.isFunction(o.items) ? this.__watch(o.items, function (context, newValue) {
+            self.populate(newValue);
+        }) : o.items;
         return {
             type: "bi.absolute",
             items: [{
