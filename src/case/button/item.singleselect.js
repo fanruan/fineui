@@ -6,7 +6,7 @@ BI.SingleSelectItem = BI.inherit(BI.BasicButton, {
                 tabIndex: 1
             },
             textHgap: 10,
-            height: 24,
+            height: BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT,
             textAlign: "left"
         });
     },

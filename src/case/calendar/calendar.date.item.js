@@ -2,6 +2,11 @@
  * 专门为calendar的视觉加的button，作为私有button,不能配置任何属性，也不要用这个玩意
  */
 BI.CalendarDateItem = BI.inherit(BI.BasicButton, {
+    props: function() {
+        return {
+            height: BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT + 8,
+        } 
+    },
 
     render: function () {
         var self = this, o = this.options;
