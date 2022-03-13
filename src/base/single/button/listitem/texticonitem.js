@@ -33,20 +33,22 @@ BI.TextIconItem = BI.inherit(BI.BasicButton, {
             type: "bi.vertical_adapt",
             columnSize: ["fill", o.iconWrapperWidth || o.height],
             items: [{
-                type: "bi.label",
-                ref: function (_ref) {
-                    self.text = _ref;
-                },
-                cls: "list-item-text",
-                textAlign: "left",
-                hgap: o.textHgap,
-                vgap: o.textVgap,
-                lgap: o.textLgap,
-                rgap: o.textRgap,
-                text: o.text,
-                value: o.value,
-                keyword: o.keyword,
-                height: o.height
+                el: {
+                    type: "bi.label",
+                    ref: function (_ref) {
+                        self.text = _ref;
+                    },
+                    cls: "list-item-text",
+                    textAlign: "left",
+                    hgap: o.textHgap,
+                    vgap: o.textVgap,
+                    lgap: o.textLgap,
+                    rgap: o.textRgap,
+                    text: o.text,
+                    value: o.value,
+                    keyword: o.keyword,
+                    height: o.height
+                }
             }, {
                 type: "bi.icon_label",
                 cls: o.iconCls,
