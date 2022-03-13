@@ -6,9 +6,6 @@
  * @extends BI.Trigger
  */
 BI.TextTrigger = BI.inherit(BI.Trigger, {
-    _const: {
-        hgap: 6
-    },
 
     _defaultConfig: function () {
         var self = this;
@@ -16,6 +13,12 @@ BI.TextTrigger = BI.inherit(BI.Trigger, {
         return BI.extend(conf, {
             baseCls: (conf.baseCls || "") + " bi-text-trigger",
             height: 24,
+            textHgap: 6,
+            textVgap: 0,
+            textLgap: 0,
+            textRgap: 0,
+            textTgap: 0,
+            textBgap: 0,
             textCls: "",
             title: function () {
                 return self.text.getText();
@@ -34,7 +37,12 @@ BI.TextTrigger = BI.inherit(BI.Trigger, {
             text: o.text,
             tipType: o.tipType,
             warningTitle: o.warningTitle,
-            hgap: c.hgap,
+            hgap: o.textHgap,
+            vgap: o.textVgap,
+            lgap: o.textLgap,
+            rgap: o.textRgap,
+            tgap: o.textTgap,
+            bgap: o.textBgap,
             readonly: o.readonly
         });
         this.trigerButton = BI.createWidget({
