@@ -12,7 +12,7 @@ BI.SingleSelectIconTextItem = BI.inherit(BI.Single, {
                 tabIndex: 1
             },
             iconCls: "",
-            height: 24
+            height: BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT
         });
     },
 

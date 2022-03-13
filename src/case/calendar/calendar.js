@@ -162,7 +162,6 @@ BI.Calendar = BI.inherit(BI.Widget, {
                     whiteSpace: "normal",
                     once: false,
                     forceSelected: true,
-                    height: BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT + 8,
                     value: o.year + "-" + month + "-" + td.text,
                     disabled: td.lastMonth || td.nextMonth || td.disabled,
                     lgap: 2,

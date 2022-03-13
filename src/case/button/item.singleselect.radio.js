@@ -13,7 +13,7 @@ BI.SingleSelectRadioItem = BI.inherit(BI.BasicButton, {
             logic: {
                 dynamic: false
             },
-            height: 24,
+            height: BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT,
             iconWrapperWidth: 16,
             textHgap: 10,
             textVgap: 0,

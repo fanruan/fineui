@@ -41,7 +41,6 @@ BI.TextValueCheckComboPopup = BI.inherit(BI.Pane, {
                 type: "bi.single_select_item",
                 cls: "bi-list-item",
                 textAlign: o.textAlign,
-                height: BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT,
                 title: item.title || item.text
             }, item);
         });

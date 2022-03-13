@@ -47,7 +47,6 @@ BI.SearchTextValueComboPopup = BI.inherit(BI.Pane, {
             return BI.extend({
                 type: "bi.single_select_item",
                 textAlign: o.textAlign,
-                height: BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT,
                 title: item.title || item.text
             }, item);
         });

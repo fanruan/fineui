@@ -10,7 +10,7 @@ BI.MultiSelectItem = BI.inherit(BI.BasicButton, {
             attributes: {
                 tabIndex: 1
             },
-            height: 24,
+            height: BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT,
             logic: {
                 dynamic: false
             },
