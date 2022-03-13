@@ -17,7 +17,8 @@ BI.MultiSelectItem = BI.inherit(BI.BasicButton, {
             iconWrapperWidth: 26,
             textHgap: 0,
             textLgap: 0,
-            textRgap: 0
+            textRgap: 0,
+            textVgap: 0,
         });
     },
 
@@ -48,9 +49,10 @@ BI.MultiSelectItem = BI.inherit(BI.BasicButton, {
                     whiteSpace: "nowrap",
                     textHeight: o.height,
                     height: o.height,
-                    hgap: o.hgap,
-                    rgap: o.rgap,
+                    hgap: o.textHgap,
+                    rgap: o.textRgap,
                     lgap: o.textLgap,
+                    vgap: o.textVgap,
                     text: o.text,
                     keyword: o.keyword,
                     value: o.value,

@@ -37,20 +37,22 @@ BI.IconTextNode = BI.inherit(BI.NodeButton, {
                 iconWidth: o.iconWidth,
                 iconHeight: o.iconHeight
             }, {
-                type: "bi.label",
-                ref: function (_ref) {
-                    self.text = _ref;
-                },
-                cls: "list-item-text",
-                textAlign: "left",
-                hgap: o.textHgap,
-                vgap: o.textVgap,
-                lgap: o.textLgap,
-                rgap: o.textRgap,
-                text: o.text,
-                value: o.value,
-                keyword: o.keyword,
-                height: o.height
+                el: {
+                    type: "bi.label",
+                    ref: function (_ref) {
+                        self.text = _ref;
+                    },
+                    cls: "list-item-text",
+                    textAlign: "left",
+                    hgap: o.textHgap,
+                    vgap: o.textVgap,
+                    lgap: o.textLgap,
+                    rgap: o.textRgap,
+                    text: o.text,
+                    value: o.value,
+                    keyword: o.keyword,
+                    height: o.height
+                }
             }]
         };
     },
