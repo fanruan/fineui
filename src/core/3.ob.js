@@ -51,9 +51,11 @@
             if (BI.isFunction(this.props)) {
                 props = this.props(config);
             }
-            var defaultProps = this._defaultConfig(config);
-            var modifiedDefaultProps = (config && config.type && BI.OB.configFunctions[config.type + ".props"]) ? BI.OB.configFunctions[config.type + ".props"](config, defaultProps) : null;
-            this.options = extend(defaultProps, props, modifiedDefaultProps, config);
+            var defaultProps = extend(this._defaultConfig(config), props);
+            var modifiedDefaultProps = (config && config.type && BI.OB.configFunctions[config.type + ".props"]) ? BI.reduce(BI.OB.configFunctions[config.type + ".props"], function (value, conf, index) {
+                return extend({}, conf, value.fn(defaultProps, config, value.opt));
+            }, {}) : null;
+            this.options = extend(defaultProps, modifiedDefaultProps, config);
         },
 
         _init: function () {
