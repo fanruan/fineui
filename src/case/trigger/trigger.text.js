@@ -44,10 +44,11 @@ BI.TextTrigger = BI.inherit(BI.Trigger, {
 
         BI.createWidget({
             element: this,
-            type: "bi.htape",
+            type: "bi.horizontal_fill",
             items: [
                 {
-                    el: this.text
+                    el: this.text,
+                    width: "fill"
                 }, {
                     el: this.trigerButton,
                     width: o.triggerWidth || o.height

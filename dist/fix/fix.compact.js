@@ -105,6 +105,10 @@
         if (workerMode && this._worker) {
             return;
         }
+        if (this.store) {
+            pushTarget(this.store);
+            return true;
+        }
         if (this._store) {
             var store = findStore(this.options.context || this._parent || this.options.element || this._context);
             if (store) {
