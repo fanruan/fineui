@@ -9,7 +9,13 @@ BI.SmallSelectTextTrigger = BI.inherit(BI.Trigger, {
     _defaultConfig: function () {
         return BI.extend(BI.SmallSelectTextTrigger.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-small-select-text-trigger bi-border",
-            height: 20
+            height: 20,
+            textHgap: 6,
+            textVgap: 0,
+            textLgap: 0,
+            textRgap: 0,
+            textTgap: 0,
+            textBgap: 0,
         });
     },
 
@@ -23,7 +29,13 @@ BI.SmallSelectTextTrigger = BI.inherit(BI.Trigger, {
             element: this,
             height: o.height,
             text: obj.text,
-            cls: obj.cls
+            cls: obj.cls,
+            textHgap: o.textHgap,
+            textVgap: o.textVgap,
+            textLgap: o.textLgap,
+            textRgap: o.textRgap,
+            textTgap: o.textTgap,
+            textBgap: o.textBgap,
         });
     },
 
