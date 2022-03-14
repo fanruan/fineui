@@ -398,10 +398,16 @@
             lifeHook !== false && !this.__async && callLifeHook(this, "beforeMount");
             this._isMounted = true;
             this.__isMounting = false;
+            if (this._parent) {
+                if (!this._parent.isEnabled()) {
+                    this._setEnable(false);
+                }
+                if (!this._parent.isValid()) {
+                    this._setValid(false);
+                }
+            }
             for (var key in this._children) {
                 var child = this._children[key];
-                !self.isEnabled() && child._setEnable(false);
-                !self.isValid() && child._setValid(false);
                 child._mount && child._mount(deep ? force : false, deep, lifeHook, predicate, layer + 1);
             }
             this._mountChildren && this._mountChildren();
@@ -591,12 +597,12 @@
                 throw new Error("组件：组件名已存在，不能进行添加");
             }
             widget._setParent && widget._setParent(this);
-            if (this.options.disabled) {
-                widget.options && (widget.options.disabled = true);
-            }
-            if (this.options.invalid) {
-                widget.options && (widget.options.invalid = true);
-            }
+            // if (this.options.disabled) {
+            //     widget.options && (widget.options.disabled = true);
+            // }
+            // if (this.options.invalid) {
+            //     widget.options && (widget.options.invalid = true);
+            // }
             widget.on(BI.Events.DESTROY, function () {
                 BI.remove(self._children, this);
             });
