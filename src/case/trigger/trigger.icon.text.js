@@ -48,6 +48,7 @@ BI.IconTextTrigger = BI.inherit(BI.Trigger, {
         BI.createWidget({
             element: this,
             type: "bi.horizontal_fill",
+            columnSize: [BI.isEmptyString(o.iconCls) ? 0 : (o.iconWrapperWidth || o.height), "fill", o.triggerWidth || o.height],
             ref: function (_ref) {
                 self.wrapper = _ref;
             },
@@ -62,18 +63,13 @@ BI.IconTextTrigger = BI.inherit(BI.Trigger, {
                     iconHeight: o.iconHeight,
                     iconWidth: o.iconWidth,
                     disableSelected: true
-                },
-                width: BI.isEmptyString(o.iconCls) ? 0 : (o.iconWrapperWidth || o.height)
-            },
-                {
-                    el: this.text,
-                    lgap: BI.isEmptyString(o.iconCls) ? 5 : 0,
-                    width: "fill"
-                }, {
-                    el: this.trigerButton,
-                    width: o.triggerWidth || o.height
                 }
-            ]
+            }, {
+                el: this.text,
+                lgap: BI.isEmptyString(o.iconCls) ? 5 : 0
+            }, {
+                el: this.trigerButton
+            }]
         });
     },
 
