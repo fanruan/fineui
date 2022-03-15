@@ -45,10 +45,17 @@ BI.HTapeLayout = BI.inherit(BI.Layout, {
             } else {
                 w = self.getWidgetByName(self._getChildName(i));
             }
+            var columnSize = o.columnSize.length > 0 ? o.columnSize[i] : item.width;
+            if (o.columnSize.length > 0) {
+                if (item.width >= 1 && o.columnSize[i] >= 1 && o.columnSize[i] !== item.width) {
+                    columnSize = item.width;
+                }
+            }
             w.element.css({
                 position: "absolute",
                 top: self._optimiseGap((item.vgap || 0) + (item.tgap || 0) + o.innerVgap + o.vgap + o.tgap),
-                bottom: self._optimiseGap((item.bgap || 0) + (item.vgap || 0) + o.innerVgap + o.vgap + o.bgap)
+                bottom: self._optimiseGap((item.bgap || 0) + (item.vgap || 0) + o.innerVgap + o.vgap + o.bgap),
+                width: BI.isNumber(columnSize) ? self._optimiseGap(columnSize) : ""
             });
             if (o.verticalAlign === BI.VerticalAlign.Middle) {
                 w.element.css({
@@ -82,8 +89,7 @@ BI.HTapeLayout = BI.inherit(BI.Layout, {
                 left[i] = left[i - 1] + preColumnSize + (items[i - 1].lgap || 0) + (items[i - 1].rgap || 0) + 2 * (items[i - 1].hgap || 0) + o.hgap + o.lgap + o.rgap;
             }
             w.element.css({
-                left: self._optimiseGap(left[i] + (item.lgap || 0) + (item.hgap || 0) + o.hgap + o.lgap),
-                width: BI.isNumber(columnSize) ? self._optimiseGap(columnSize) : ""
+                left: self._optimiseGap(left[i] + (item.lgap || 0) + (item.hgap || 0) + o.hgap + o.lgap)
             });
 
             if (columnSize === "" || columnSize === "fill") {
@@ -101,8 +107,7 @@ BI.HTapeLayout = BI.inherit(BI.Layout, {
                 right[i] = right[i + 1] + nextColumnSize + (items[i + 1].lgap || 0) + (items[i + 1].rgap || 0) + 2 * (items[i + 1].hgap || 0) + o.hgap + o.lgap + o.rgap;
             }
             w.element.css({
-                right: self._optimiseGap(right[i] + (item.rgap || 0) + (item.hgap || 0) + o.hgap + o.rgap),
-                width: BI.isNumber(columnSize) ? self._optimiseGap(columnSize) : ""
+                right: self._optimiseGap(right[i] + (item.rgap || 0) + (item.hgap || 0) + o.hgap + o.rgap)
             });
 
             if (columnSize === "" || columnSize === "fill") {
@@ -165,10 +170,17 @@ BI.VTapeLayout = BI.inherit(BI.Layout, {
             } else {
                 w = self.getWidgetByName(self._getChildName(i));
             }
+            var rowSize = o.rowSize.length > 0 ? o.rowSize[i] : item.height;
+            if (o.rowSize.length > 0) {
+                if (item.height >= 1 && o.rowSize[i] >= 1 && o.rowSize[i] !== item.height) {
+                    rowSize = item.height;
+                }
+            }
             w.element.css({
                 position: "absolute",
                 left: self._optimiseGap((item.lgap || 0) + (item.hgap || 0) + o.innerHgap + o.hgap + o.lgap),
-                right: self._optimiseGap((item.hgap || 0) + (item.rgap || 0) + o.innerHgap + o.hgap + o.rgap)
+                right: self._optimiseGap((item.hgap || 0) + (item.rgap || 0) + o.innerHgap + o.hgap + o.rgap),
+                height: BI.isNumber(rowSize) ? self._optimiseGap(rowSize) : ""
             });
             if (o.horizontalAlign === BI.HorizontalAlign.Center) {
                 w.element.css({
@@ -202,8 +214,7 @@ BI.VTapeLayout = BI.inherit(BI.Layout, {
                 top[i] = top[i - 1] + preRowSize + (items[i - 1].tgap || 0) + (items[i - 1].bgap || 0) + 2 * (items[i - 1].vgap || 0) + o.vgap + o.tgap + o.bgap;
             }
             w.element.css({
-                top: self._optimiseGap(top[i] + (item.vgap || 0) + (item.tgap || 0) + o.vgap + o.tgap),
-                height: BI.isNumber(rowSize) ? self._optimiseGap(rowSize) : ""
+                top: self._optimiseGap(top[i] + (item.vgap || 0) + (item.tgap || 0) + o.vgap + o.tgap)
             });
 
             if (rowSize === "" || rowSize === "fill") {
@@ -221,8 +232,7 @@ BI.VTapeLayout = BI.inherit(BI.Layout, {
                 bottom[i] = bottom[i + 1] + nextRowSize + (items[i + 1].tgap || 0) + (items[i + 1].bgap || 0) + 2 * (items[i + 1].vgap || 0) + o.vgap + o.tgap + o.bgap;
             }
             w.element.css({
-                bottom: self._optimiseGap(bottom[i] + (item.vgap || 0) + (item.bgap || 0) + o.vgap + o.bgap),
-                height: BI.isNumber(rowSize) ? self._optimiseGap(rowSize) : ""
+                bottom: self._optimiseGap(bottom[i] + (item.vgap || 0) + (item.bgap || 0) + o.vgap + o.bgap)
             });
 
             if (rowSize === "" || rowSize === "fill") {

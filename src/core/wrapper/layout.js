@@ -289,7 +289,7 @@ BI.Layout = BI.inherit(BI.Widget, {
     },
 
     _optimiseGap: function (gap) {
-        return gap > 0 && gap < 1 ? (gap * 100).toFixed(1) + "%" : gap / BI.pixRatio + BI.pixUnit;
+        return (gap > 0 && gap < 1) ? (gap * 100).toFixed(1) + "%" : gap / BI.pixRatio + BI.pixUnit;
     },
 
     _handleGap: function (w, item, hIndex, vIndex) {
