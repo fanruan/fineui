@@ -322,7 +322,7 @@
                 }
                 if (this.options.invalid) {
                     var invalid = BI.isFunction(o.invalid) ? this.__watch(o.invalid, function (context, newValue) {
-                        self.setEnable(!newValue);
+                        self.setValid(!newValue);
                     }) : o.invalid;
                     if (invalid) {
                         this.setValid(false);
