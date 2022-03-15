@@ -1,12 +1,4 @@
-const grunt = require("grunt");
-
-function uniq(names) {
-    return [...new Set(names)];
-}
-
-function sync(patterns) {
-    return uniq(grunt.file.expand({ filter: path => !new RegExp(/__test__/g).test(path) }, patterns)).map(name => `./${name}`);
-}
+const { sync, uniq } = require("./utils");
 
 const fixJs = "./dist/fix/fix.js";
 const fixProxyJs = './dist/fix/fix.proxy.js';
@@ -47,11 +39,12 @@ const basicAttachmentMap = {
         lodashJs,
         "src/core/**/*.js",
         "src/data/**/*.js",
-        "!src/core/platform/**/*.js",
-        "!src/core/controller/**/*.js",
+    ], [
+        "src/core/platform/**/*.js",
+        "src/core/controller/**/*.js",
     ]),
     core_without_normalize: sync(
-        ["src/less/core/**/*.less", "src/less/theme/**/*.less", "!src/less/core/normalize.less", "!src/less/core/normalize2.less"],
+        ["src/less/core/**/*.less", "src/less/theme/**/*.less"], ["src/less/core/normalize.less", "src/less/core/normalize2.less"]
     ),
     resource: sync(["src/less/resource/**/*.less"]),
     font: sync(["public/less/font.less"]),
@@ -133,8 +126,9 @@ const bundleWithoutNormalize = [].concat(
         "src/less/widget/**/*.less",
         "src/less/component/**/*.less",
         "public/less/**/*.less",
-        "!public/less/app.less",
         // ts的less
+    ], [
+        "public/less/app.less",
     ]),
 );
 
@@ -189,15 +183,16 @@ const fineuiWithoutJqueryAndPolyfillJs = [].concat(
         lodashJs,
         "src/core/**/*.js",
         "src/data/**/*.js",
-        "!src/core/platform/web/**/*.js",
+    ], [
+        "src/core/platform/web/**/*.js",
     ]),
     basicAttachmentMap.fix,
     sync([
         "src/base/**/*.js",
         "src/case/**/*.js",
-
-        "!src/base/single/input/file.js",
-        "!src/case/ztree/**/*.js",
+    ], [
+        "src/base/single/input/file.js",
+        "src/case/ztree/**/*.js",
     ]),
     basicAttachmentMap.widget,
     sync([fixCompact, workerCompact, "ui/js/**/*.js"]),
