@@ -256,10 +256,12 @@
     }
 
     > .f-s-n {
-      -webkit-flex-shrink: 0;
-      -moz-flex-shrink: 0;
-      -ms-flex-shrink: 0;
-      flex-shrink: 0;
+      &, &.f-f {
+        -webkit-flex-shrink: 0;
+        -moz-flex-shrink: 0;
+        -ms-flex-shrink: 0;
+        flex-shrink: 0;
+      }
     }
 
     > .f-f {
@@ -267,6 +269,11 @@
       -moz-flex-grow: 1;
       -ms-flex-grow: 1;
       flex-grow: 1;
+      // IE10下默认shrink为0
+      -webkit-flex-shrink: 1;
+      -moz-flex-shrink: 1;
+      -ms-flex-shrink: 1;
+      flex-shrink: 1;
     }
   }
 }
