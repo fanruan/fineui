@@ -8,14 +8,14 @@ export declare class Text extends Single {
     static formatText: (str: string) => string;
 
     props: {
-        text?: string;
+        text?: string | ((context: any) => string);
         textAlign?: "left" | "center" | "right",
         whiteSpace?: "nowrap" | "normal",
         lineHeight?: null | number;
         py?: string;
         highLight?: boolean;
         maxWidth?: null | number;
-    } & Single['props'];
+    } & Single["props"];
 
     doRedMark(keyword: string): void;
 
