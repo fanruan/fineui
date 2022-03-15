@@ -25,7 +25,7 @@ interface AdditionalProps {
 }
 
 interface ElementClassProps<T> extends UIProps {
-    cls: string | (() => string);
+    cls: string | ((context: any) => string);
     extraCls: string;
     ref: (ref: T) => void;
     listeners: {
@@ -33,9 +33,9 @@ interface ElementClassProps<T> extends UIProps {
         action: (...args: any[]) => any;
         once?: boolean;
     }[];
-    disabled: boolean;
-    invisible: boolean;
-    invalid: boolean;
+    disabled: boolean | ((context: any) => boolean);
+    invisible: boolean | ((context: any) => boolean);
+    invalid: boolean | ((context: any) => boolean);
     attributes: {
         [key: string]: any;
     };
