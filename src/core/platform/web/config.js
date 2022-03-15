@@ -156,12 +156,32 @@ BI.prepares.push(function () {
                 scrolly: false
             }, ob, {type: "bi.flex_vertical"});
         }
-        return BI.extend({}, ob, {
-            type: "bi.td",
-            items: BI.map(ob.items, function (i, item) {
-                return [item];
-            })
-        });
+        if (ob.scrollable === true || ob.scrollx === true || ob.scrolly === true) {
+            // 有滚动条，降级到table布局处理
+            return BI.extend({}, ob, {
+                type: "bi.td",
+                items: BI.map(ob.items, function (i, item) {
+                    return [item];
+                })
+            });
+        }
+        var hasAuto = false;
+        if (ob.rowSize && ob.rowSize.length > 0) {
+            if (ob.rowSize.indexOf("") >= 0) {
+                hasAuto = true;
+            }
+        } else {
+            BI.each(ob.items, function (i, item) {
+                if (BI.isNull(item.height) || item.height === "") {
+                    hasAuto = true;
+                }
+            });
+        }
+        if (hasAuto) {
+            // 有自动高的时候
+            return BI.extend({}, ob, {type: "bi.vtape_auto"});
+        }
+        return BI.extend({}, ob, {type: "bi.vtape"});
     });
     BI.Plugin.configWidget("bi.horizontal_sticky", function (ob) {
         if (!isSupportSticky) {
