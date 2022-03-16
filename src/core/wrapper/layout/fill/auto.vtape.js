@@ -94,6 +94,10 @@ BI.AutoVerticalTapeLayout = BI.inherit(BI.Layout, {
     },
 
     mounted: function () {
+        if (window.ResizeObserver) {
+            this.resizeObserver = new window.ResizeObserver(this._handleResize.bind(this));
+            this.resizeObserver.observe(this.element[0]);
+        }
         if (window.MutationObserver) {
             this.mutationObserver = new window.MutationObserver(this._handleResize.bind(this));
             this.mutationObserver.observe(this.element[0], {
@@ -103,6 +107,11 @@ BI.AutoVerticalTapeLayout = BI.inherit(BI.Layout, {
             });
         }
         this._handleResize();
+    },
+
+    destroyed: function () {
+        this.resizeObserver && this.resizeObserver.unobserve(this.element[0]);
+        this.mutationObserver && this.mutationObserver.disconnect();
     },
 
     resize: function () {
