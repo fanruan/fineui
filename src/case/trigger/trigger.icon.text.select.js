@@ -9,12 +9,6 @@ BI.SelectIconTextTrigger = BI.inherit(BI.Trigger, {
             height: 24,
             iconHeight: null,
             iconWidth: null,
-            textHgap: 0,
-            textVgap: 0,
-            textLgap: 0,
-            textRgap: 0,
-            textTgap: 0,
-            textBgap: 0,
             iconCls: ""
         });
     },

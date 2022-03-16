@@ -12,12 +12,6 @@ BI.IconTextTrigger = BI.inherit(BI.Trigger, {
         return BI.extend(conf, {
             baseCls: (conf.baseCls || "") + " bi-text-trigger",
             height: 24,
-            textHgap: 0,
-            textVgap: 0,
-            textLgap: 0,
-            textRgap: 0,
-            textTgap: 0,
-            textBgap: 0,
             iconHeight: null,
             iconWidth: null,
             textCls: ""

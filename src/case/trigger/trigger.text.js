@@ -14,11 +14,6 @@ BI.TextTrigger = BI.inherit(BI.Trigger, {
             baseCls: (conf.baseCls || "") + " bi-text-trigger",
             height: 24,
             textHgap: 6,
-            textVgap: 0,
-            textLgap: 0,
-            textRgap: 0,
-            textTgap: 0,
-            textBgap: 0,
             textCls: "",
             title: function () {
                 return self.text.getText();

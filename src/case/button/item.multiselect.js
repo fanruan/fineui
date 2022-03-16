@@ -15,10 +15,6 @@ BI.MultiSelectItem = BI.inherit(BI.BasicButton, {
                 dynamic: false
             },
             iconWrapperWidth: 26,
-            textHgap: 0,
-            textLgap: 0,
-            textRgap: 0,
-            textVgap: 0,
         });
     },
 
