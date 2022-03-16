@@ -10,12 +10,6 @@ BI.SmallSelectTextTrigger = BI.inherit(BI.Trigger, {
         return BI.extend(BI.SmallSelectTextTrigger.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-small-select-text-trigger bi-border",
             height: 20,
-            textHgap: 6,
-            textVgap: 0,
-            textLgap: 0,
-            textRgap: 0,
-            textTgap: 0,
-            textBgap: 0,
         });
     },
 

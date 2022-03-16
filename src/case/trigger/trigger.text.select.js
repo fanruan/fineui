@@ -11,12 +11,6 @@ BI.SelectTextTrigger = BI.inherit(BI.Trigger, {
         return BI.extend(BI.SelectTextTrigger.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-select-text-trigger",
             height: 24,
-            textHgap: 6,
-            textVgap: 0,
-            textLgap: 0,
-            textRgap: 0,
-            textTgap: 0,
-            textBgap: 0,
         });
     },
 

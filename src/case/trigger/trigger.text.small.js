@@ -11,11 +11,6 @@ BI.SmallTextTrigger = BI.inherit(BI.Trigger, {
             baseCls: (conf.baseCls || "") + " bi-text-trigger",
             height: 20,
             textHgap: 6,
-            textVgap: 0,
-            textLgap: 0,
-            textRgap: 0,
-            textTgap: 0,
-            textBgap: 0,
         });
     },
 
