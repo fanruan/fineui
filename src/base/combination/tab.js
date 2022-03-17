@@ -45,8 +45,8 @@ BI.Tab = BI.inherit(BI.Widget, {
             cardCreator: function (v) {
                 var card = o.cardCreator.apply(self, arguments);
                 self.cardMap[v] = card;
-                
-return card;
+
+                return card;
             },
             afterCardShow: function (v) {
                 self._deleteOtherCards(v);
@@ -114,8 +114,8 @@ return card;
             if (BI.isEqual(name, (cardname + ""))) {
                 self.layout.deleteCardByName(name);
                 delete self.cardMap[name];
-                
-return true;
+
+                return true;
             }
         });
     },
@@ -134,7 +134,7 @@ return true;
 
     getTab: function (v) {
         this._assertCard(v);
-        
+
 return this.layout.getCardByName(v);
     },
 
