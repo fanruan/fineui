@@ -23,7 +23,7 @@ BI.Tab = BI.inherit(BI.Widget, {
     render: function () {
         var self = this, o = this.options;
         if (BI.isObject(o.tab)) {
-            this.tab = BI.createWidget(this.options.tab, {type: "bi.button_group"});
+            this.tab = BI.createWidget(this.options.tab, { type: "bi.button_group" });
             this.tab.on(BI.Controller.EVENT_CHANGE, function (type, value, obj) {
                 self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
             });
@@ -45,7 +45,8 @@ BI.Tab = BI.inherit(BI.Widget, {
             cardCreator: function (v) {
                 var card = o.cardCreator.apply(self, arguments);
                 self.cardMap[v] = card;
-                return card;
+                
+return card;
             },
             afterCardShow: function (v) {
                 self._deleteOtherCards(v);
@@ -91,8 +92,9 @@ BI.Tab = BI.inherit(BI.Widget, {
                     self.setSelect(newValue);
                 });
                 this.setSelect(v);
+            } else {
+                this.setSelect(o.showIndex);
             }
-            this.setSelect(o.showIndex);
         }
     },
 
@@ -112,7 +114,8 @@ BI.Tab = BI.inherit(BI.Widget, {
             if (BI.isEqual(name, (cardname + ""))) {
                 self.layout.deleteCardByName(name);
                 delete self.cardMap[name];
-                return true;
+                
+return true;
             }
         });
     },
@@ -131,7 +134,8 @@ BI.Tab = BI.inherit(BI.Widget, {
 
     getTab: function (v) {
         this._assertCard(v);
-        return this.layout.getCardByName(v);
+        
+return this.layout.getCardByName(v);
     },
 
     setValue: function (v) {
