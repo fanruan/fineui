@@ -23,7 +23,7 @@ BI.Tab = BI.inherit(BI.Widget, {
     render: function () {
         var self = this, o = this.options;
         if (BI.isObject(o.tab)) {
-            this.tab = BI.createWidget(this.options.tab, {type: "bi.button_group"});
+            this.tab = BI.createWidget(this.options.tab, { type: "bi.button_group" });
             this.tab.on(BI.Controller.EVENT_CHANGE, function (type, value, obj) {
                 self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
             });
@@ -45,6 +45,7 @@ BI.Tab = BI.inherit(BI.Widget, {
             cardCreator: function (v) {
                 var card = o.cardCreator.apply(self, arguments);
                 self.cardMap[v] = card;
+
                 return card;
             },
             afterCardShow: function (v) {
@@ -55,12 +56,6 @@ BI.Tab = BI.inherit(BI.Widget, {
         listener.on(BI.ShowListener.EVENT_CHANGE, function (value) {
             self.fireEvent(BI.Tab.EVENT_CHANGE, value, self);
         });
-
-        if (BI.isFunction(o.showIndex)) {
-            this.__watch(o.showIndex, function (context, newValue) {
-                self.setSelect(newValue);
-            })
-        }
     },
 
     _deleteOtherCards: function (currCardName) {
@@ -85,14 +80,21 @@ BI.Tab = BI.inherit(BI.Widget, {
 
     _keepAlive: function (v) {
         var o = this.options;
-        return BI.isFunction(o.keepAlives) ? o.keepAlives(v) : BI.contains(o.keepAlives, v);
 
+        return BI.isFunction(o.keepAlives) ? o.keepAlives(v) : BI.contains(o.keepAlives, v);
     },
 
     created: function () {
-        var o = this.options;
+        var self = this, o = this.options;
         if (o.showIndex !== false) {
-            this.setSelect(o.showIndex);
+            if (BI.isFunction(o.showIndex)) {
+                var v = this.__watch(o.showIndex, function (context, newValue) {
+                    self.setSelect(newValue);
+                });
+                this.setSelect(v);
+            } else {
+                this.setSelect(o.showIndex);
+            }
         }
     },
 
@@ -112,6 +114,7 @@ BI.Tab = BI.inherit(BI.Widget, {
             if (BI.isEqual(name, (cardname + ""))) {
                 self.layout.deleteCardByName(name);
                 delete self.cardMap[name];
+
                 return true;
             }
         });
@@ -131,7 +134,8 @@ BI.Tab = BI.inherit(BI.Widget, {
 
     getTab: function (v) {
         this._assertCard(v);
-        return this.layout.getCardByName(v);
+
+return this.layout.getCardByName(v);
     },
 
     setValue: function (v) {
