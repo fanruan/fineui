@@ -92,7 +92,7 @@ BI.Tab = BI.inherit(BI.Widget, {
     created: function () {
         var o = this.options;
         if (o.showIndex !== false) {
-            this.setSelect(o.showIndex);
+            this.setSelect(BI.isFunction(o.showIndex) ? o.showIndex() : o.showIndex);
         }
     },
 
