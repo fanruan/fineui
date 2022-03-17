@@ -55,12 +55,6 @@ BI.Tab = BI.inherit(BI.Widget, {
         listener.on(BI.ShowListener.EVENT_CHANGE, function (value) {
             self.fireEvent(BI.Tab.EVENT_CHANGE, value, self);
         });
-
-        if (BI.isFunction(o.showIndex)) {
-            this.__watch(o.showIndex, function (context, newValue) {
-                self.setSelect(newValue);
-            })
-        }
     },
 
     _deleteOtherCards: function (currCardName) {
@@ -85,14 +79,20 @@ BI.Tab = BI.inherit(BI.Widget, {
 
     _keepAlive: function (v) {
         var o = this.options;
-        return BI.isFunction(o.keepAlives) ? o.keepAlives(v) : BI.contains(o.keepAlives, v);
 
+        return BI.isFunction(o.keepAlives) ? o.keepAlives(v) : BI.contains(o.keepAlives, v);
     },
 
     created: function () {
-        var o = this.options;
+        var self = this, o = this.options;
         if (o.showIndex !== false) {
-            this.setSelect(BI.isFunction(o.showIndex) ? o.showIndex() : o.showIndex);
+            if (BI.isFunction(o.showIndex)) {
+                var v = this.__watch(o.showIndex, function (context, newValue) {
+                    self.setSelect(newValue);
+                });
+                this.setSelect(v);
+            }
+            this.setSelect(o.showIndex);
         }
     },
 
