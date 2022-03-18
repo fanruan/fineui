@@ -1,6 +1,6 @@
 *
 !public/less/*.less
-!src/less/**/*.less
+!src/less/**/*
 !dist/lib/*.d.ts
 !dist/lib/**/*.d.ts
 !dist/font.css
