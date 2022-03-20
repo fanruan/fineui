@@ -10,7 +10,7 @@ BI.TableLayout = BI.inherit(BI.Layout, {
             baseCls: "bi-t",
             scrolly: true,
             columnSize: [],
-            rowSize: 30,  // or [30,30,30]
+            // rowSize: 30,  // or [30,30,30]
             hgap: 0,
             vgap: 0,
             items: []
@@ -18,18 +18,44 @@ BI.TableLayout = BI.inherit(BI.Layout, {
     },
     render: function () {
         BI.TableLayout.superclass.render.apply(this, arguments);
-        this.rows = 0;
         var self = this, o = this.options;
         var items = BI.isFunction(o.items) ? this.__watch(o.items, function (context, newValue) {
             self.populate(newValue);
         }) : o.items;
-        this.populate(items);
+
+        var columnSize = o.columnSize.length > 0 ? o.columnSize : BI.range(items[0].length).fill("");
+        
+        if (columnSize.length > 0) {
+            var template = [];
+            for (var i = 0; i < columnSize.length; i++) {
+                if (columnSize[i] === "") {
+                    template.push("auto");
+                } else if (columnSize[i] === "fill") {
+                    template.push("1fr");
+                } else {
+                    template.push(this._optimiseGap(columnSize[i]));
+                }
+            }
+            this.element.css({
+                "grid-template-columns": template.join(" "),
+                "grid-template-rows": BI.isArray(o.rowSize) ? BI.map(o.rowSize, function (i, size) {
+                    return self._optimiseGap(size);
+                }).join(" ") : BI.range(o.items.length).fill(this._optimiseGap(o.rowSize)).join(" "),
+                "grid-row-gap": this._optimiseGap(o.vgap),
+                "grid-column-gap": this._optimiseGap(o.hgap),
+            })
+        }
+        return {
+            type: "bi.default",
+            ref: function (_ref) {
+                self.layout = _ref;
+            },
+            items: this._formatItems(items)
+        };
     },
 
-    _addElement: function (idx, arr) {
+    _formatItems: function (items) {
         var o = this.options;
-        var abs = [], left = 0, right = 0, i, j;
-
         function firstElement (item, row, col) {
             if (row === 0) {
                 item.addClass("first-row");
@@ -40,6 +66,7 @@ BI.TableLayout = BI.inherit(BI.Layout, {
             item.addClass(BI.isOdd(row + 1) ? "odd-row" : "even-row");
             item.addClass(BI.isOdd(col + 1) ? "odd-col" : "even-col");
             item.addClass("center-element");
+            return item;
         }
 
         function firstObject (item, row, col) {
@@ -53,85 +80,38 @@ BI.TableLayout = BI.inherit(BI.Layout, {
             BI.isOdd(row + 1) ? (cls += " odd-row") : (cls += " even-row");
             BI.isOdd(col + 1) ? (cls += " odd-col") : (cls += " even-col");
             item.cls = (item.cls || "") + cls + " center-element";
+            return item;
         }
 
         function first (item, row, col) {
             if (item instanceof BI.Widget) {
-                firstElement(item.element, row, col);
+                return firstElement(item.element, row, col);
             } else if (item.el instanceof BI.Widget) {
-                firstElement(item.el.element, row, col);
+                return firstElement(item.el.element, row, col);
             } else if (item.el) {
-                firstObject(item.el, row, col);
+                return firstObject(item.el, row, col);
             } else {
-                firstObject(item, row, col);
+                return firstObject(item, row, col);
             }
         }
-
-        for (i = 0; i < arr.length; i++) {
-            if (BI.isNumber(o.columnSize[i])) {
-                first(arr[i], this.rows, i);
-                abs.push(BI.extend({
-                    top: 0,
-                    bottom: 0,
-                    left: this._optimiseGap(left),
-                    width: this._optimiseGap(o.columnSize[i])
-                }, arr[i]));
-                left += o.columnSize[i] + (o.columnSize[i] < 1 ? 0 : o.hgap);
-            } else {
-                break;
-            }
-        }
-        for (j = arr.length - 1; j > i; j--) {
-            if (BI.isNumber(o.columnSize[j])) {
-                first(arr[j], this.rows, j);
-                abs.push(BI.extend({
-                    top: 0,
-                    bottom: 0,
-                    right: this._optimiseGap(right),
-                    width: this._optimiseGap(o.columnSize[j])
-                }, arr[j]));
-                right += o.columnSize[j] + (o.columnSize[j] < 1 ? 0 : o.hgap);
-            } else {
-                throw new Error("构造错误", arr);
-            }
-        }
-        if (i >= 0 && i < arr.length) {
-            first(arr[i], this.rows, i);
-            abs.push(BI.extend({
-                top: 0,
-                bottom: 0,
-                left: this._optimiseGap(left),
-                right: this._optimiseGap(right)
-            }, arr[i]));
-        }
-        var w = BI._lazyCreateWidget({
-            type: "bi.absolute",
-            height: BI.isArray(o.rowSize) ? o.rowSize[this.rows] : o.rowSize,
-            items: abs
-        });
-        if (this.rows > 0) {
-            this.getWidgetByName(this._getChildName(this.rows - 1)).element.css({
-                "margin-bottom": this._optimiseGap(o.vgap)
-            });
-        }
-        w.element.css({
-            position: "relative"
-        });
-        this.addWidget(this._getChildName(this.rows++), w);
-        return w;
+        return BI.reduce(items, function (row, result, i) {
+            return result.concat(BI.map(row, function (j, item) {
+                if (BI.isEmpty(item)) {
+                    return {
+                        type: "bi.layout"
+                    }
+                }
+                return first(item, i, j);
+            }));
+        }, []);
     },
 
     resize: function () {
         // console.log("table布局不需要resize");
     },
 
-    update: function (opt) {
-        return this.forceUpdate(opt);
-    },
-
     populate: function (items) {
-        BI.TableLayout.superclass.populate.apply(this, arguments);
-        this._mount();
+        this.layout.populate(this._formatItems(items));
     }
 });
 BI.shortcut("bi.table", BI.TableLayout);

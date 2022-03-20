@@ -78,7 +78,7 @@ BI.TdLayout = BI.inherit(BI.Layout, {
             }
         }
 
-        var height = o.rowSize[idx] === "" ? this._optimiseGap(1) : this._optimiseGap(o.rowSize[idx]);
+        var height = BI.isNumber(o.rowSize) ? this._optimiseGap(o.rowSize) : (o.rowSize[idx] === "" ? this._optimiseGap(1) : this._optimiseGap(o.rowSize[idx]));
         var tr = BI._lazyCreateWidget({
             type: "bi.default",
             tagName: "tr",
