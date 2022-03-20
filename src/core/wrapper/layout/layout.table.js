@@ -10,6 +10,7 @@ BI.TableLayout = BI.inherit(BI.Layout, {
             baseCls: "bi-t",
             scrolly: true,
             columnSize: [],
+            rowSize: [],
             // rowSize: 30,  // or [30,30,30]
             hgap: 0,
             vgap: 0,
