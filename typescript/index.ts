@@ -185,6 +185,7 @@ import { SelectTreeExpander } from './widget/selecttree/selecttree.expander';
 import { DownListGroupItem } from "./widget/downlist/item.downlistgroup";
 import { VerticalStickyLayout } from "./core/wrapper/layout/sticky/sticky.vertical";
 import { HorizontalStickyLayout } from "./core/wrapper/layout/sticky/sticky.horizontal";
+import { TableLayout } from "./core/wrapper/layout/layout.table";
 import './shims-tsx';
 
 
@@ -378,6 +379,7 @@ export interface BI extends _func, _i18n, _base, _inject, _var, _web, _utils {
     DownListGroupItem: typeof DownListGroupItem;
     VerticalStickyLayout: typeof VerticalStickyLayout;
     HorizontalStickyLayout: typeof HorizontalStickyLayout;
+    TableLayout: typeof TableLayout;
 }
 
 export default {
@@ -570,4 +572,5 @@ export {
     DownListGroupItem,
     HorizontalStickyLayout,
     VerticalStickyLayout,
+    TableLayout,
 };
