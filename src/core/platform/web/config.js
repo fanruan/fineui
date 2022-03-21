@@ -5,12 +5,18 @@ BI.prepares.push(function () {
     // 1、支持flex的浏览器下使用flex布局
     // 2、不支持flex的浏览器下使用inline布局
     // 3、当列宽既需要自动列宽又需要自适应列宽时，inline布局也处理不了了。当横向出滚动条时使用table布局，不出滚动条时使用float布局
-    var _isSupportFlex;
+    var _isSupportFlex, _isSupportGrid;
     var isSupportFlex = function () {
         if (_isSupportFlex == null) {
             _isSupportFlex = !!(BI.isSupportCss3 && BI.isSupportCss3("flex"));
         }
         return _isSupportFlex;
+    };
+    var isSupportGrid = function () {
+        if (_isSupportGrid == null) {
+            _isSupportGrid = !!(BI.isSupportCss3 && BI.isSupportCss3("grid"));
+        }
+        return _isSupportGrid;
     };
     // 判断浏览器是否支持sticky 属性
     var isSupportSticky = (function () {
@@ -222,6 +228,13 @@ BI.prepares.push(function () {
                 return BI.extend({}, ob, {type: "bi.flex_scrollable_vertical"});
             }
         }
+    });
+
+    BI.Plugin.configWidget("bi.table", function (ob) {
+        if (!isSupportGrid()) {
+            return BI.extend({}, ob, {type: "bi.td"});
+        }
+        return ob;
     });
 
     BI.Plugin.configWidget("bi.radio", function (ob) {
