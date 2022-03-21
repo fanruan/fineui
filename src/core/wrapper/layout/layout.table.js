@@ -8,9 +8,11 @@ BI.TableLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.TableLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-t",
-            scrolly: true,
+            // scrolly: true,
             columnSize: [],
             rowSize: [],
+            horizontalAlign: BI.HorizontalAlign.Stretch,
+            verticalAlign: BI.VerticalAlign.Stretch,
             // rowSize: 30,  // or [30,30,30]
             hgap: 0,
             vgap: 0,
@@ -25,7 +27,7 @@ BI.TableLayout = BI.inherit(BI.Layout, {
         }) : o.items;
 
         var columnSize = o.columnSize.length > 0 ? o.columnSize : BI.range(items[0].length).fill("");
-        
+
         if (columnSize.length > 0) {
             var template = [];
             for (var i = 0; i < columnSize.length; i++) {
@@ -43,8 +45,8 @@ BI.TableLayout = BI.inherit(BI.Layout, {
                     return self._optimiseGap(size);
                 }).join(" ") : BI.range(o.items.length).fill(this._optimiseGap(o.rowSize)).join(" "),
                 "grid-row-gap": this._optimiseGap(o.vgap),
-                "grid-column-gap": this._optimiseGap(o.hgap),
-            })
+                "grid-column-gap": this._optimiseGap(o.hgap)
+            });
         }
         return {
             type: "bi.default",
@@ -57,6 +59,7 @@ BI.TableLayout = BI.inherit(BI.Layout, {
 
     _formatItems: function (items) {
         var o = this.options;
+
         function firstElement (item, row, col) {
             if (row === 0) {
                 item.addClass("first-row");
@@ -95,14 +98,25 @@ BI.TableLayout = BI.inherit(BI.Layout, {
                 return firstObject(item, row, col);
             }
         }
+
+        function wrapLayout (item) {
+            return {
+                type: "bi.horizontal_fill",
+                columnSize: ["fill"],
+                horizontalAlign: o.horizontalAlign,
+                verticalAlign: o.verticalAlign,
+                items: [BI.formatEL(item)]
+            };
+        }
+
         return BI.reduce(items, function (row, result, i) {
             return result.concat(BI.map(row, function (j, item) {
                 if (BI.isEmpty(item)) {
-                    return {
+                    return first(wrapLayout({
                         type: "bi.layout"
-                    }
+                    }), i, j);
                 }
-                return first(item, i, j);
+                return first(wrapLayout(item), i, j);
             }));
         }, []);
     },
