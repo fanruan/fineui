@@ -16,6 +16,7 @@ BI.Farbtastic = BI.inherit(BI.BasicButton, {
 
     render: function () {
         var self = this;
+        this._defaultState();
         return {
             type: "bi.absolute",
             items: [{
@@ -85,6 +86,10 @@ BI.Farbtastic = BI.inherit(BI.BasicButton, {
         if (BI.isKey(o.value)) {
             this.setValue(o.value);
         }
+    },
+
+    _defaultState: function () {
+        this.hsl = [0, 0, 0];
     },
 
     _unpack: function (color) {
