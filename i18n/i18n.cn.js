@@ -199,6 +199,6 @@ BI.i18n = {
     "BI-Basic_Search_And_Patch_Paste": "搜索，支持批量粘贴、粘贴值通过换行识别",
     "BI-Basic_Recommend_Color": "推荐色",
     "BI-Basic_Too_Much_Value_Get_Two_Thousand": "粘贴的值过多，只能识别出前2000个值",
-    "BI-Basic_Open": "开",
-    "BI-Basic_Close": "关",
+    "BI-Basic_Simple_Open": "开",
+    "BI-Basic_Simple_Close": "关",
 };
