@@ -39,7 +39,7 @@ BI.Switch = BI.inherit(BI.BasicButton, {
                 left: this.options.selected ? 28 : 4
             }, {
                 type: "bi.label",
-                text: BI.i18nText("BI-Basic_Open"),
+                text: BI.i18nText("BI-Basic_Simple_Open"),
                 cls: "content-tip",
                 left: 8,
                 top: tgap - 2,
@@ -49,7 +49,7 @@ BI.Switch = BI.inherit(BI.BasicButton, {
                 }
             }, {
                 type: "bi.label",
-                text: BI.i18nText("BI-Basic_Close"),
+                text: BI.i18nText("BI-Basic_Simple_Close"),
                 cls: "content-tip",
                 right: 8,
                 top: tgap - 2,
