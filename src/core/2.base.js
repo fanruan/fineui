@@ -3,20 +3,6 @@
  * Create By GUY 2014\11\17
  *
  */
-_global = undefined;
-if (typeof window !== "undefined") {
-    _global = window;
-} else if (typeof global !== "undefined") {
-    _global = global;
-} else if (typeof self !== "undefined") {
-    _global = self;
-} else {
-    _global = this;
-}
-if (!_global.BI) {
-    _global.BI = {};
-}
-
 !(function (undefined) {
     var traverse = function (func, context) {
         return function (value, key, obj) {

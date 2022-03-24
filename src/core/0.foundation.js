@@ -4,7 +4,7 @@
 /**
  * 初始化BI对象
  */
-_global = undefined;
+var _global = undefined;
 if (typeof window !== "undefined") {
     _global = window;
 } else if (typeof global !== "undefined") {
@@ -14,6 +14,11 @@ if (typeof window !== "undefined") {
 } else {
     _global = this;
 }
+
+if (_global) {
+    _global._global = _global;
+}
+
 if (_global.BI == null) {
     _global.BI = {prepares: []};
 }
