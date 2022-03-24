@@ -103,7 +103,7 @@
         _assertPopupView: function () {
             var self = this, o = this.options;
             if (this.popupView == null) {
-                this.popupView = BI.createWidget(this.options.popup, {
+                this.popupView = BI.createWidget(BI.isFunction(this.options.popup) ? this.options.popup() : this.options.popup, {
                     type: "bi.popup_view",
                     showArrow: o.showArrow,
                     value: o.value
