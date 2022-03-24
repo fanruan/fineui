@@ -194,4 +194,12 @@ Demo.WIDGET_CONFIG = [{
     id: 420,
     text: "滚动sliders",
     value: "demo.slider"
+}, {
+    pId: 4,
+    id: 414,
+    text: "折叠面板"
+}, {
+    pId: 414,
+    text: "bi.collapse",
+    value: "demo.collapse"
 }];
