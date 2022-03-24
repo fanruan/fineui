@@ -50,7 +50,7 @@ BI.MidPlusGroupNode = BI.inherit(BI.NodeButton, {
         });
         var type = BI.LogicFactory.createLogicTypeByDirection(BI.Direction.Left);
         var items = BI.LogicFactory.createLogicItemsByDirection(BI.Direction.Left, {
-            width: BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT / 2,
+            width: BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT,
             el: this.checkbox
         }, this.text);
         BI.createWidget(BI.extend({
