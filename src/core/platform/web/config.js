@@ -49,7 +49,7 @@ BI.prepares.push(function () {
         // 当列宽既需要自动列宽又需要自适应列宽时，inline布局也处理不了了，降级table处理吧
         var hasAutoAndFillColumnSize = false;
         if (ob.columnSize && ob.columnSize.length > 0) {
-            if (ob.columnSize.indexOf("") >= 0 && ob.columnSize.indexOf("fill") >= 0) {
+            if ((ob.columnSize.indexOf("") >= 0 || ob.columnSize.indexOf("auto") >= 0) && ob.columnSize.indexOf("fill") >= 0) {
                 hasAutoAndFillColumnSize = true;
             }
         } else {
@@ -57,7 +57,7 @@ BI.prepares.push(function () {
             BI.each(ob.items, function (i, item) {
                 if (item.width === "fill") {
                     hasFill = true;
-                } else if (BI.isNull(item.width) || item.width === "") {
+                } else if (BI.isNull(item.width) || item.width === "" || item.width === "auto") {
                     hasAuto = true;
                 }
             });
@@ -173,7 +173,7 @@ BI.prepares.push(function () {
         }
         var hasAuto = false;
         if (ob.rowSize && ob.rowSize.length > 0) {
-            if (ob.rowSize.indexOf("") >= 0) {
+            if (ob.rowSize.indexOf("") >= 0 || ob.rowSize.indexOf("auto") >= 0) {
                 hasAuto = true;
             }
         } else {

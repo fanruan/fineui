@@ -36,10 +36,10 @@ BI.FlexWrapperVerticalLayout = BI.inherit(BI.Layout, {
     _hasFill: function () {
         var o = this.options;
         if (o.rowSize.length > 0) {
-            return o.rowSize.indexOf("fill") >= 0;
+            return o.rowSize.indexOf("fill") >= 0 || o.rowSize.indexOf("auto") >= 0;
         }
         return BI.some(o.items, function (i, item) {
-            if (item.height === "fill") {
+            if (item.height === "fill" || item.height === "auto") {
                 return true;
             }
         });
