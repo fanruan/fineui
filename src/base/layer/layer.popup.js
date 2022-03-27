@@ -5,7 +5,7 @@
  */
 BI.PopupView = BI.inherit(BI.Widget, {
     _const: {
-        TRIANGLE_LENGTH: 9
+        TRIANGLE_LENGTH: 14
     },
     _defaultConfig: function (props) {
         return BI.extend(BI.PopupView.superclass._defaultConfig.apply(this, arguments), {

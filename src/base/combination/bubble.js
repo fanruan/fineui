@@ -332,7 +332,7 @@
                 name: "offset",
                 options: {
                     offset: function () {
-                        return [o.adjustXOffset, (o.showArrow ? 9 : 0) + (o.adjustYOffset + o.adjustLength)];
+                        return [o.adjustXOffset, (o.showArrow ? 14 : 0) + (o.adjustYOffset + o.adjustLength)];
                     }
                 }
             }];
