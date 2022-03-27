@@ -332,7 +332,7 @@
                 name: "offset",
                 options: {
                     offset: function () {
-                        return [o.adjustXOffset, (o.showArrow ? 14 : 0) + (o.adjustYOffset + o.adjustLength)];
+                        return [o.adjustXOffset, (o.showArrow ? 12 : 0) + (o.adjustYOffset + o.adjustLength)];
                     }
                 }
             }];
@@ -340,7 +340,7 @@
                 modifiers.push({
                     name: "arrow",
                     options: {
-                        padding: 5,
+                        padding: 4,
                         element: this.popupView.arrow.element[0]
                     }
                 });
