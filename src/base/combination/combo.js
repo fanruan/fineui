@@ -7,7 +7,7 @@
      */
     BI.Combo = BI.inherit(BI.Bubble, {
         _const: {
-            TRIANGLE_LENGTH: 9
+            TRIANGLE_LENGTH: 12
         },
         _defaultConfig: function () {
             var conf = BI.Combo.superclass._defaultConfig.apply(this, arguments);
