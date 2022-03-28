@@ -689,7 +689,7 @@
         },
 
         isVisible: function () {
-            return !this.options.invisible
+            return !this.options.invisible;
         },
 
         disable: function () {
