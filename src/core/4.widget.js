@@ -581,10 +581,6 @@
             return this.options.height;
         },
 
-        isValid: function () {
-            return !this.options.invalid;
-        },
-
         addWidget: function (name, widget) {
             var self = this;
             if (name instanceof BI.Widget) {
@@ -685,11 +681,15 @@
         },
 
         isEnabled: function () {
-            return this.options.disabled !== null ? !this.options.disabled : !this.options._disabled;
+            return this.options.disabled === true ? false: !this.options._disabled;
+        },
+
+        isValid: function () {
+            return this.options.invalid === true ? false: !this.options._invalid;
         },
 
         isVisible: function () {
-            return this.options.invalid !== null ? !this.options.invalid : !this.options._invalid;
+            return !this.options.invisible
         },
 
         disable: function () {
