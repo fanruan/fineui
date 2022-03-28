@@ -42,11 +42,11 @@
                 key: null,
 
                 tag: null,
-                disabled: null,
+                disabled: false,
                 invisible: false,
                 animation: "",
                 animationDuring: 0,
-                invalid: null,
+                invalid: false,
                 baseCls: "",
                 extraCls: "",
                 cls: "",
