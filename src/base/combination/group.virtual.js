@@ -66,11 +66,11 @@ BI.VirtualGroup = BI.inherit(BI.Widget, {
     },
 
     addItems: function (items) {
-        this.layouts.addItems(items);
+        this.layouts.addItems(items, this);
     },
 
     prependItems: function (items) {
-        this.layouts.prependItems(items);
+        this.layouts.prependItems(items, this);
     },
 
     setValue: function (v) {
