@@ -10,6 +10,7 @@ BI.SingleSelectCombo = BI.inherit(BI.Single, {
             baseCls: "bi-single-select-combo",
             allowNoSelect: false,
             itemsCreator: BI.emptyFn,
+            itemWrapper: BI.emptyFn,
             valueFormatter: BI.emptyFn,
             height: 24,
             allowEdit: true
@@ -107,6 +108,7 @@ BI.SingleSelectCombo = BI.inherit(BI.Single, {
                     }
                 }],
                 itemsCreator: o.itemsCreator,
+                itemWrapper: o.itemWrapper,
                 valueFormatter: o.valueFormatter,
                 onLoaded: function () {
                     BI.nextTick(function () {

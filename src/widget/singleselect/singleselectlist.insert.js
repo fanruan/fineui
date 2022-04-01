@@ -9,6 +9,7 @@ BI.SingleSelectInsertList = BI.inherit(BI.Single, {
             baseCls: "bi-multi-select-insert-list",
             allowNoSelect: false,
             itemsCreator: BI.emptyFn,
+            itemWrapper: BI.emptyFn,
             valueFormatter: BI.emptyFn,
             searcherHeight: 24,
         });
@@ -30,6 +31,7 @@ BI.SingleSelectInsertList = BI.inherit(BI.Single, {
             cls: "popup-single-select-list bi-border-left bi-border-right bi-border-bottom",
             itemsCreator: o.itemsCreator,
             valueFormatter: o.valueFormatter,
+            itemWrapper: o.itemWrapper,
             logic: {
                 dynamic: true
             },
