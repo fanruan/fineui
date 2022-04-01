@@ -22,6 +22,7 @@ BI.SingleSelectLoader = BI.inherit(BI.Widget, {
             allowNoSelect: false,
             valueFormatter: BI.emptyFn,
             itemsCreator: BI.emptyFn,
+            itemWrapper: BI.emptyFn,
             onLoaded: BI.emptyFn
         });
     },
@@ -69,7 +70,12 @@ BI.SingleSelectLoader = BI.inherit(BI.Widget, {
                     if (op.times === 1 && !BI.isUndefined(self.storeValue)) {
                         var json = BI.map([self.storeValue], function (i, v) {
                             var txt = opts.valueFormatter(v) || v;
-                            return {
+                            return opts.itemWrapper({
+                                text: txt,
+                                value: v,
+                                title: txt,
+                                selected: true
+                            }) || {
                                 text: txt,
                                 value: v,
                                 title: txt,
@@ -117,7 +123,7 @@ BI.SingleSelectLoader = BI.inherit(BI.Widget, {
                 height: BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT,
                 selected: false,
                 iconWrapperWidth: 26,
-                hgap: o.allowNoSelect ? 10 : 0,
+                textHgap: o.allowNoSelect ? 10 : 0,
                 title: item.title || item.text
             }, item);
         });
