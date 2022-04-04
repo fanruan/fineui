@@ -635,12 +635,12 @@
                         firstDir = "top";
                     }
                     if (leftRight[0] === "right") {
-                        pos = BI.DOM.getLeftAlignPosition(combo, popup, extraWidth, needAdaptHeight).left;
+                        pos = BI.DOM.getLeftAlignPosition(combo, popup, extraWidth, needAdaptHeight);
                         pos.top = top;
                         pos.dir = firstDir + "," + pos.dir;
                         return pos;
                     }
-                    pos = BI.DOM.getRightAlignPosition(combo, popup, extraWidth).left;
+                    pos = BI.DOM.getRightAlignPosition(combo, popup, extraWidth);
                     pos.top = top;
                     pos.dir = firstDir + "," + pos.dir;
                     return pos;

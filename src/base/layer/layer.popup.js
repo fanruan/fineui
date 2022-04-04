@@ -185,7 +185,7 @@ BI.PopupView = BI.inherit(BI.Widget, {
     setDirection: function (direction, position) {
         var o = this.options;
         if (o.showArrow) {
-            var style, wrapperStyle, placeholderStyle;
+            var style = {}, wrapperStyle = {}, placeholderStyle = {};
             var adjustXOffset = position.adjustXOffset || 0;
             var adjustYOffset = position.adjustYOffset || 0;
             var bodyBounds = BI.Widget._renderEngine.createElement("body").bounds();
