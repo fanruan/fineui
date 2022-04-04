@@ -628,20 +628,20 @@
                     return pos;
                 default :
                     if (BI.DOM.isBottomSpaceLarger(combo)) {
-                        pos = BI.DOM.getBottomAdaptPosition(combo, popup, extraHeight, needAdaptHeight);
+                        top = BI.DOM.getBottomAdaptPosition(combo, popup, extraHeight, needAdaptHeight).top;
                         firstDir = "bottom";
                     } else {
-                        pos = BI.DOM.getTopAdaptPosition(combo, popup, extraHeight, needAdaptHeight);
+                        top = BI.DOM.getTopAdaptPosition(combo, popup, extraHeight, needAdaptHeight).top;
                         firstDir = "top";
                     }
                     if (leftRight[0] === "right") {
-                        left = BI.DOM.getLeftAlignPosition(combo, popup, extraWidth, needAdaptHeight).left;
-                        pos.left = left;
+                        pos = BI.DOM.getLeftAlignPosition(combo, popup, extraWidth, needAdaptHeight);
+                        pos.top = top;
                         pos.dir = firstDir + "," + pos.dir;
                         return pos;
                     }
-                    left = BI.DOM.getRightAlignPosition(combo, popup, extraWidth).left;
-                    pos.left = left;
+                    pos = BI.DOM.getRightAlignPosition(combo, popup, extraWidth);
+                    pos.top = top;
                     pos.dir = firstDir + "," + pos.dir;
                     return pos;
             }
