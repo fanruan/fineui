@@ -368,7 +368,8 @@ BI.TreeView = BI.inherit(BI.Pane, {
                 root: true,
                 keyword: o.paras.keyword
             }, newNode, {
-                type: "bi.text"
+                type: "bi.text",
+                text: BI.replaceAll(newNode.text, "\n", " ")
             }));
             var fragment = BI.Widget._renderEngine.createElement("<div>");
             fragment.append(text.element[0]);
