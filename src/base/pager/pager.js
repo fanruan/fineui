@@ -98,7 +98,7 @@ BI.Pager = BI.inherit(BI.Widget, {
                 value: "first",
                 disabled: !(dict.index > 1 && groups !== 0)
             });
-            if (dict.index > 1 && groups !== 0) {
+            if (dict.index > 1 && groups !== 0 && groups !== pages - 1) {
                 view.push({
                     type: "bi.label",
                     cls: "page-ellipsis",
@@ -140,7 +140,7 @@ BI.Pager = BI.inherit(BI.Widget, {
 
         // 总页数大于连续分页数，且当前组最大页小于总页，输出尾页
         if (((!o.dynamicShow && !o.dynamicShowFirstLast) || (pages > groups && dict.end < pages && groups !== 0)) && last) {
-            if (pages > groups && dict.end < pages && groups !== 0) {
+            if (pages > groups && dict.end < pages && groups !== 0 && groups !== pages - 1) {
                 view.push({
                     type: "bi.label",
                     cls: "page-ellipsis",
