@@ -238,10 +238,6 @@ BI.Pager = BI.inherit(BI.Widget, {
         this.options.pages = pages;
     },
 
-    setGroups: function(groups) {
-        this.options.groups = groups;
-    },
-
     hasPrev: function (v) {
         v || (v = 1);
         var o = this.options;

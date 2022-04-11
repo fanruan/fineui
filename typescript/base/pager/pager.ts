@@ -17,7 +17,5 @@ export declare class Pager extends Widget {
 
     setAllPages(v: number): void;
 
-    setGroups(v: number): void;
-
     populate(): void;
 }
