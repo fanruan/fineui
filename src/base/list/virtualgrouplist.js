@@ -21,7 +21,6 @@ BI.VirtualGroupList = BI.inherit(BI.Widget, {
     },
 
     init: function () {
-        var self = this;
         this.renderedIndex = -1;
     },
 
@@ -90,10 +89,10 @@ BI.VirtualGroupList = BI.inherit(BI.Widget, {
         var getElementHeight = function () {
             return self.container.element.height() + self.topBlank.element.height() + self.bottomBlank.element.height();
         };
-        while ((lastHeight = getElementHeight()) < minContentHeight && index < o.items.length) {
+        while ((lastHeight = this.renderedIndex === -1 ? 0 : getElementHeight()) < minContentHeight && index < o.items.length) {
             var items = o.items.slice(index, index + o.blockSize);
-            this.container.addItems(items.map(function (item, i) {
-                return o.itemFormatter(item, index + i)
+            this.container[self.renderedIndex === -1 ? "populate" : "addItems"](items.map(function (item, i) {
+                return o.itemFormatter(item, index + i);
             }), this);
             var addedHeight = getElementHeight() - lastHeight;
             this.tree.set(cnt, addedHeight);
@@ -142,7 +141,9 @@ BI.VirtualGroupList = BI.inherit(BI.Widget, {
     _populate: function (items) {
         var o = this.options;
         if (items && this.options.items !== items) {
+            // 重新populate一组items,需要重新对线段树分块
             this.options.items = items;
+            this._restore();
         }
         this.tree = BI.PrefixIntervalTree.uniform(Math.ceil(o.items.length / o.blockSize), this._isAutoHeight() ? 0 : o.rowHeight * o.blockSize);
 
@@ -153,12 +154,16 @@ BI.VirtualGroupList = BI.inherit(BI.Widget, {
         }
     },
 
-    restore: function () {
+    _restore: function () {
         this.renderedIndex = -1;
-        this.options.scrollTop = 0;
         // 依赖于cache的占位元素也要初始化
         this.topBlank.setHeight(0);
         this.bottomBlank.setHeight(0);
+    },
+
+    restore: function () {
+        this.options.scrollTop = 0;
+        this._restore();
     },
 
     populate: function (items) {

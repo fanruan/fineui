@@ -33,9 +33,9 @@
     left: 0;
     > .bi-bubble-arrow {
       bottom: -12px;
-      width: 14px;
+      width: 16px;
       > .bubble-arrow {
-        bottom: 8px;
+        bottom: 7px;
         left: 1px;
       }
     }
@@ -47,9 +47,9 @@
     left: 0;
     > .bi-bubble-arrow {
       top: -12px;
-      width: 14px;
+      width: 16px;
       > .bubble-arrow {
-        top: 8px;
+        top: 7px;
         left: 1px;
       }
     }
@@ -61,9 +61,9 @@
     top: 0;
     > .bi-bubble-arrow {
       right: -12px;
-      height: 14px;
+      height: 16px;
       > .bubble-arrow {
-        right: 8px;
+        right: 7px;
         top: 1px;
       }
     }
@@ -75,9 +75,9 @@
     top: 0;
     > .bi-bubble-arrow {
       left: -12px;
-      height: 14px;
+      height: 16px;
       > .bubble-arrow {
-        left: 8px;
+        left: 7px;
         top: 1px;
       }
     }
@@ -85,18 +85,18 @@
 }
 
 .bi-bubble-arrow {
-  width: 12px;
-  height: 12px;
+  width: 14px;
+  height: 14px;
   // 消除祖先节点设置的line-height:normal对空白节点的行高影响
   line-height: 0;
   overflow: hidden;
   .bubble-arrow {
-    width: 12px;
-    height: 12px;
+    width: 14px;
+    height: 14px;
     position: absolute;
     &:before {
-      width: 12px;
-      height: 12px;
+      width: 14px;
+      height: 14px;
       position: absolute;
       content: "";
       background: @color-bi-background-default;
@@ -106,7 +106,8 @@
       visibility: visible;
       transform: translateX(0px) rotate(-135deg);
       transform-origin: center center;
-      .box-shadow(3px 3px 10px 0,rgba(0,0,0,6%));
+      .box-shadow(3px 3px 10px 0,rgba(0, 0, 0, 6%));
+      .border-radius(2px);
     }
   }
 }

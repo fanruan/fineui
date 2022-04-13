@@ -5,7 +5,7 @@
  */
 BI.PopupView = BI.inherit(BI.Widget, {
     _const: {
-        TRIANGLE_LENGTH: 9
+        TRIANGLE_LENGTH: 12
     },
     _defaultConfig: function (props) {
         return BI.extend(BI.PopupView.superclass._defaultConfig.apply(this, arguments), {
@@ -185,7 +185,7 @@ BI.PopupView = BI.inherit(BI.Widget, {
     setDirection: function (direction, position) {
         var o = this.options;
         if (o.showArrow) {
-            var style, wrapperStyle, placeholderStyle;
+            var style = {}, wrapperStyle = {}, placeholderStyle = {};
             var adjustXOffset = position.adjustXOffset || 0;
             var adjustYOffset = position.adjustYOffset || 0;
             var bodyBounds = BI.Widget._renderEngine.createElement("body").bounds();
@@ -197,22 +197,22 @@ BI.PopupView = BI.inherit(BI.Widget, {
             var offsetStyle = position.offsetStyle;
             var middle = offsetStyle === "center" || offsetStyle === "middle";
 
-            var minLeft = Math.max(5, offset.left + 5 + popupWidth - bodyWidth);
-            var minRight = Math.max(5, popupWidth - (offset.left + 5));
-            var minTop = Math.max(5, offset.top + 5 + popupHeight - bodyHeight);
-            var minBottom = Math.max(5, popupHeight - (offset.top + 5));
+            var minLeft = Math.max(4, offset.left + 4 + popupWidth - bodyWidth);
+            var minRight = Math.max(4, popupWidth - (offset.left + 4));
+            var minTop = Math.max(4, offset.top + 4 + popupHeight - bodyHeight);
+            var minBottom = Math.max(4, popupHeight - (offset.top + 4));
 
-            var maxLeft = Math.min(popupWidth - 12 - 5, offset.left + position.width - 12 - 5);
-            var maxRight = Math.min(popupWidth - 12 - 5, bodyWidth - (offset.left + position.width - 12 - 5));
-            var maxTop = Math.min(popupHeight - 12 - 5, offset.top + position.height - 12 - 5);
-            var maxBottom = Math.min(popupHeight - 12 - 5, bodyHeight - (offset.top + position.height - 12 - 5));
+            var maxLeft = Math.min(popupWidth - 16 - 4, offset.left + position.width - 16 - 4);
+            var maxRight = Math.min(popupWidth - 16 - 4, bodyWidth - (offset.left + position.width - 16 - 4));
+            var maxTop = Math.min(popupHeight - 16 - 4, offset.top + position.height - 16 - 4);
+            var maxBottom = Math.min(popupHeight - 16 - 4, bodyHeight - (offset.top + position.height - 16 - 4));
             switch (direction) {
                 case "bottom":
                 case "bottom,right":
                     direction = "bottom";
                     style = {
                         // 5表示留出一定的空间
-                        left: BI.clamp(((middle ? popupWidth : position.width) - adjustXOffset) / 2 - 6, minLeft, maxLeft)
+                        left: BI.clamp(((middle ? popupWidth : position.width) - adjustXOffset) / 2 - 8, minLeft, maxLeft)
                     };
                     wrapperStyle = {
                         top: o.tgap + o.vgap,
@@ -231,7 +231,7 @@ BI.PopupView = BI.inherit(BI.Widget, {
                 case "bottom,left":
                     direction = "bottom";
                     style = {
-                        right: BI.clamp(((middle ? popupWidth : position.width) + adjustXOffset) / 2 - 6, minRight, maxRight)
+                        right: BI.clamp(((middle ? popupWidth : position.width) + adjustXOffset) / 2 - 8, minRight, maxRight)
                     };
                     wrapperStyle = {
                         top: o.bgap + o.vgap,
@@ -251,7 +251,7 @@ BI.PopupView = BI.inherit(BI.Widget, {
                 case "top,right":
                     direction = "top";
                     style = {
-                        left: BI.clamp(((middle ? popupWidth : position.width) - adjustXOffset) / 2 - 6, minLeft, maxLeft)
+                        left: BI.clamp(((middle ? popupWidth : position.width) - adjustXOffset) / 2 - 8, minLeft, maxLeft)
                     };
                     wrapperStyle = {
                         bottom: o.bgap + o.vgap,
@@ -270,7 +270,7 @@ BI.PopupView = BI.inherit(BI.Widget, {
                 case "top,left":
                     direction = "top";
                     style = {
-                        right: BI.clamp(((middle ? popupWidth : position.width) + adjustXOffset) / 2 - 6, minRight, maxRight)
+                        right: BI.clamp(((middle ? popupWidth : position.width) + adjustXOffset) / 2 - 8, minRight, maxRight)
                     };
                     wrapperStyle = {
                         bottom: o.bgap + o.vgap,
@@ -290,7 +290,7 @@ BI.PopupView = BI.inherit(BI.Widget, {
                 case "left,bottom":
                     direction = "left";
                     style = {
-                        top: BI.clamp(((middle ? popupHeight : position.height) - adjustYOffset) / 2 - 6, minTop, maxTop)
+                        top: BI.clamp(((middle ? popupHeight : position.height) - adjustYOffset) / 2 - 8, minTop, maxTop)
                     };
                     wrapperStyle = {
                         right: o.rgap + o.hgap,
@@ -309,7 +309,7 @@ BI.PopupView = BI.inherit(BI.Widget, {
                 case "left,top":
                     direction = "left";
                     style = {
-                        bottom: BI.clamp(((middle ? popupHeight : position.height) + adjustYOffset) / 2 - 6, minBottom, maxBottom)
+                        bottom: BI.clamp(((middle ? popupHeight : position.height) + adjustYOffset) / 2 - 8, minBottom, maxBottom)
                     };
                     wrapperStyle = {
                         right: o.rgap + o.hgap,
@@ -329,7 +329,7 @@ BI.PopupView = BI.inherit(BI.Widget, {
                 case "right,bottom":
                     direction = "right";
                     style = {
-                        top: BI.clamp(((middle ? popupHeight : position.height) - adjustYOffset) / 2 - 6, minTop, maxTop)
+                        top: BI.clamp(((middle ? popupHeight : position.height) - adjustYOffset) / 2 - 8, minTop, maxTop)
                     };
                     wrapperStyle = {
                         left: o.lgap + o.hgap,
@@ -348,7 +348,7 @@ BI.PopupView = BI.inherit(BI.Widget, {
                 case "right,top":
                     direction = "right";
                     style = {
-                        bottom: BI.clamp(((middle ? popupHeight : position.height) + adjustYOffset) / 2 - 6, minBottom, maxBottom)
+                        bottom: BI.clamp(((middle ? popupHeight : position.height) + adjustYOffset) / 2 - 8, minBottom, maxBottom)
                     };
                     wrapperStyle = {
                         left: o.lgap + o.hgap,

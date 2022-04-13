@@ -40,10 +40,10 @@ BI.FlexHorizontalLayout = BI.inherit(BI.Layout, {
     _hasFill: function () {
         var o = this.options;
         if (o.columnSize.length > 0) {
-            return o.columnSize.indexOf("fill") >= 0;
+            return o.columnSize.indexOf("fill") >= 0 || o.columnSize.indexOf("auto") >= 0;
         }
         return BI.some(o.items, function (i, item) {
-            if (item.width === "fill") {
+            if (item.width === "fill" || item.width === "auto") {
                 return true;
             }
         });

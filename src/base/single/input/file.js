@@ -97,7 +97,7 @@
             split = "onabort.onerror.onloadstart.onprogress".split("."),
             length = split.length,
             CRLF = "\r\n",
-            xhr = this.XMLHttpRequest ? new XMLHttpRequest : new ActiveXObject("Microsoft.XMLHTTP"),
+            xhr = XMLHttpRequest ? new XMLHttpRequest : new ActiveXObject("Microsoft.XMLHTTP"),
             sendFile;
 
         // FireFox 3+, Safari 4 beta (Chrome 2 beta file is buggy and will not work)

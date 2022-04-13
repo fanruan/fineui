@@ -398,6 +398,10 @@
             lifeHook !== false && !this.__async && callLifeHook(this, "beforeMount");
             this._isMounted = true;
             this.__isMounting = false;
+            for (var key in this._children) {
+                var child = this._children[key];
+                child._mount && child._mount(deep ? force : false, deep, lifeHook, predicate, layer + 1);
+            }
             if (this._parent) {
                 if (!this._parent.isEnabled()) {
                     this._setEnable(false);
@@ -405,10 +409,6 @@
                 if (!this._parent.isValid()) {
                     this._setValid(false);
                 }
-            }
-            for (var key in this._children) {
-                var child = this._children[key];
-                child._mount && child._mount(deep ? force : false, deep, lifeHook, predicate, layer + 1);
             }
             this._mountChildren && this._mountChildren();
             if (layer === 0) {
@@ -461,9 +461,9 @@
 
         _setEnable: function (enable) {
             if (enable === true) {
-                this.options.disabled = false;
+                this.options._disabled = false;
             } else if (enable === false) {
-                this.options.disabled = true;
+                this.options._disabled = true;
             }
             // 递归将所有子组件使能
             BI.each(this._children, function (i, child) {
@@ -473,9 +473,9 @@
 
         _setValid: function (valid) {
             if (valid === true) {
-                this.options.invalid = false;
+                this.options._invalid = false;
             } else if (valid === false) {
-                this.options.invalid = true;
+                this.options._invalid = true;
             }
             // 递归将所有子组件使有效
             BI.each(this._children, function (i, child) {
@@ -493,6 +493,7 @@
 
         setEnable: function (enable) {
             this._manualSetEnable = true;
+            this.options.disabled = !enable;
             this._setEnable(enable);
             if (enable === true) {
                 this.element.removeClass("base-disabled disabled");
@@ -555,6 +556,7 @@
 
         setValid: function (valid) {
             this._manualSetValid = true;
+            this.options.invalid = !valid;
             this._setValid(valid);
             if (valid === true) {
                 this.element.removeClass("base-invalid invalid");
@@ -579,10 +581,6 @@
             return this.options.height;
         },
 
-        isValid: function () {
-            return !this.options.invalid;
-        },
-
         addWidget: function (name, widget) {
             var self = this;
             if (name instanceof BI.Widget) {
@@ -597,12 +595,6 @@
                 throw new Error("组件：组件名已存在，不能进行添加");
             }
             widget._setParent && widget._setParent(this);
-            // if (this.options.disabled) {
-            //     widget.options && (widget.options.disabled = true);
-            // }
-            // if (this.options.invalid) {
-            //     widget.options && (widget.options.invalid = true);
-            // }
             widget.on(BI.Events.DESTROY, function () {
                 BI.remove(self._children, this);
             });
@@ -689,7 +681,11 @@
         },
 
         isEnabled: function () {
-            return !this.options.disabled;
+            return this.options.disabled === true ? false: !this.options._disabled;
+        },
+
+        isValid: function () {
+            return this.options.invalid === true ? false: !this.options._invalid;
         },
 
         isVisible: function () {
