@@ -10,15 +10,19 @@
 }
 
 .bi-tree-expander-popup.line.solid:before {
-  border-left: 1px solid @color-bi-border-tree-expander-popup-line;
-  left: 15px;
+  .imagePath(@icon-tree-solid-vertical-line-1, 0, 0, repeat-y);
+  width: 24px;
+  left:4px;
 }
 
 .bi-theme-dark {
   .bi-tree-expander-popup.line:before {
-    border-left: 1px dashed @color-bi-border-tree-expander-popup-line-theme-dark;
+    width: 24px;
+    .imagePath(@icon-tree-vertical-line-1-theme-dark, 0, 0, repeat-y);
   }
   .bi-tree-expander-popup.line.solid:before {
-    border-left: 1px solid @color-bi-border-tree-expander-popup-line-theme-dark;
+    .imagePath(@icon-tree-solid-vertical-line-1-theme-dark, 0, 0, repeat-y);
+    width: 24px;
+    left:4px;
   }
 }
