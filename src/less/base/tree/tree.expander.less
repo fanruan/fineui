@@ -1,10 +1,12 @@
 @import "../../index";
+@import "../../image";
+@import "../../lib/icon";
 .bi-tree-expander-popup.line:before {
   position: absolute;
   content: "";
-  border-left: 1px dashed @color-bi-border-tree-expander-popup-line;
   height: 100%;
-  left: 11px;
+  width: 24px;
+  .imagePath(@icon-tree-vertical-line-1, 0, 0, repeat-y);
 }
 
 .bi-tree-expander-popup.line.solid:before {
