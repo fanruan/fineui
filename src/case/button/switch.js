@@ -36,14 +36,14 @@ BI.Switch = BI.inherit(BI.BasicButton, {
                 width: 12,
                 height: 12,
                 top: tgap,
-                left: this.options.selected ? 28 : 4
+                left: o.selected ? 28 : 4
             }, {
                 type: "bi.label",
                 text: BI.i18nText("BI-Basic_Simple_Open"),
                 cls: "content-tip",
                 left: 8,
                 top: tgap - 2,
-                invisible: !o.showTip,
+                invisible: !(o.showTip && o.selected),
                 ref: function (ref) {
                     self.openTip = ref;
                 }
@@ -53,7 +53,7 @@ BI.Switch = BI.inherit(BI.BasicButton, {
                 cls: "content-tip",
                 right: 8,
                 top: tgap - 2,
-                invisible: !o.showTip,
+                invisible: !(o.showTip && !o.selected),
                 ref: function (ref) {
                     self.closeTip = ref;
                 }
