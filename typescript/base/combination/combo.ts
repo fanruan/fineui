@@ -59,7 +59,7 @@ export declare class Combo extends Widget {
 
     getPopupPosition(): any;
 
-    adjustHeight(e?:MouseEvent): void;
+    adjustWidth(e?:MouseEvent): void;
 
     adjustHeight(e?: MouseEvent): void;
 
