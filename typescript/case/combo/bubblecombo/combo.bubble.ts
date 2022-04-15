@@ -17,4 +17,8 @@ export declare class BubbleCombo extends Widget {
     showView(): void;
 
     isViewVisible(): boolean;
+
+    adjustHeight(e?:MouseEvent): void;
+
+    adjustHeight(e?: MouseEvent): void;
 }

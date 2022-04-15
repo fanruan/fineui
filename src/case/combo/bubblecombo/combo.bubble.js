@@ -99,6 +99,14 @@ BI.BubbleCombo = BI.inherit(BI.Widget, {
 
     isViewVisible: function () {
         return this.combo.isViewVisible();
+    },
+
+    adjustWidth: function () {
+        this.combo.adjustWidth();
+    },
+
+    adjustHeight: function () {
+        this.combo.adjustHeight();
     }
 });
 
