@@ -735,20 +735,6 @@
         BI[name] = _apply(name);
     });
     _.extend(BI, {
-        getTime: function () {
-            if (_global.performance && _global.performance.now) {
-                return _global.performance.now();
-            }
-            if (_global.performance && _global.performance.webkitNow) {
-                return _global.performance.webkitNow();
-            }
-            if (Date.now) {
-                return Date.now();
-            }
-            return BI.getDate().getTime();
-
-
-        },
 
         parseInt: function (number) {
             var radix = 10;
