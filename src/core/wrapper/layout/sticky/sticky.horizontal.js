@@ -13,7 +13,7 @@ BI.HorizontalStickyLayout = BI.inherit(BI.FlexHorizontalLayout, {
     _addElement: function (i, item) {
         var o = this.options;
         var w = BI.HorizontalStickyLayout.superclass._addElement.apply(this, arguments);
-        var columnSize = o.columnSize.length > 0 ? o.columnSize[i] : item.width >= 1 ? null : item.width;
+        var columnSize = o.columnSize.length > 0 ? o.columnSize[i] : item.width;
         if (o.columnSize.length > 0) {
             if (item.width >= 1 && o.columnSize[i] >= 1 && o.columnSize[i] !== item.width) {
                 columnSize = null;
