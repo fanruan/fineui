@@ -22,6 +22,7 @@ BI.Msg = function () {
             // BI.Msg.prompt(title, message, value, callback, min_width);
         },
         toast: function (message, options, context) {
+            BI.isString(options) && (options = { level: options })
             options = options || {};
             context = context || BI.Widget._renderEngine.createElement("body");
             var level = options.level || "common";
