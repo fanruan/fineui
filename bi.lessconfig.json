@@ -15,7 +15,7 @@
   "@color-bi-background-active-radio-content": "#2C60DB",
   "@color-bi-background-disabled-active-radio-content": "#D0D4DA",
   "@color-bi-background-disabled-active-radio-content-theme-dark": "#606479",
-  "@color-bi-background-disabled-active-checkbox-content": "#D0D4DA",
+  "@color-bi-background-disabled-active-checkbox-content": "#FFFFFF",
   "@color-bi-background-disabled-active-checkbox-content-theme-dark": "#606479",
   "@color-bi-background-tooltip-success": "#2E3A4D",
   "@color-bi-text-header-background": "#647185",
