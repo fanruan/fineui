@@ -159,7 +159,6 @@ BI.prepares.push(function () {
             return BI.extend({
                 horizontalAlign: BI.HorizontalAlign.Stretch,
                 verticalAlign: BI.VerticalAlign.Stretch,
-                scrolly: false
             }, ob, {type: "bi.flex_vertical"});
         }
         if (ob.scrollable === true || ob.scrollx === true || ob.scrolly === true) {
