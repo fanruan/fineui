@@ -23,7 +23,7 @@ BI.MultiSelectNoBarCombo = BI.inherit(BI.Single, {
                 if (self.storeValue.type === BI.Selection.All) {
                     BI.remove(self.storeValue.value, self._startValue);
                     self.storeValue.assist = self.storeValue.assist || [];
-                    self.storeValue.assist.pushDistinct(self._startValue);
+                    BI.pushDistinct(self.storeValue.assist, self._startValue);
                 } else {
                     BI.pushDistinct(self.storeValue.value, self._startValue);
                     BI.remove(self.storeValue.assist, self._startValue);
@@ -461,11 +461,11 @@ BI.MultiSelectNoBarCombo = BI.inherit(BI.Single, {
         this.combo.populate.apply(this.combo, arguments);
     },
 
-    showView:function (){
+    showView: function () {
         this.combo.showView();
     },
 
-    hideView:function (){
+    hideView: function () {
         this.combo.hideView();
     },
 
