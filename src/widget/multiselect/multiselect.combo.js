@@ -17,14 +17,15 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
     },
 
     _init: function () {
-        var self = this; var o = this.options;
+        var self = this;
+        var o = this.options;
         BI.MultiSelectCombo.superclass._init.apply(this, arguments);
         var assertShowValue = function () {
             if (BI.isKey(self._startValue)) {
                 if (self.storeValue.type === BI.Selection.All) {
                     BI.remove(self.storeValue.value, self._startValue);
                     self.storeValue.assist = self.storeValue.assist || [];
-                    self.storeValue.assist.pushDistinct(self._startValue);
+                    BI.pushDistinct(self.storeValue.assist, self._startValue);
                 } else {
                     BI.pushDistinct(self.storeValue.value, self._startValue);
                     BI.remove(self.storeValue.assist, self._startValue);
@@ -280,7 +281,8 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
     },
 
     _itemsCreator4Trigger: function (op, callback) {
-        var self = this; var o = this.options;
+        var self = this;
+        var o = this.options;
         o.itemsCreator(op, function (res) {
             if (op.times === 1 && BI.isNotNull(op.keywords)) {
                 // 预防trigger内部把当前的storeValue改掉
@@ -311,7 +313,8 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
     },
 
     _joinKeywords: function (keywords, callback) {
-        var self = this; var o = this.options;
+        var self = this;
+        var o = this.options;
         this._assertValue(this.storeValue);
         this.requesting = true;
         o.itemsCreator({
@@ -322,7 +325,7 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
             digest(values);
         });
 
-        function digest (items) {
+        function digest(items) {
             var selectedMap = self._makeMap(items);
             BI.each(keywords, function (i, val) {
                 if (BI.isNotNull(selectedMap[val])) {
@@ -334,7 +337,8 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
     },
 
     _joinAll: function (res, callback) {
-        var self = this; var o = this.options;
+        var self = this;
+        var o = this.options;
         this._assertValue(res);
         this.requesting = true;
         if (this.storeValue.type === res.type) {
@@ -385,11 +389,12 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
     },
 
     _adjust: function (callback) {
-        var self = this; var o = this.options;
+        var self = this;
+        var o = this.options;
         adjust();
         callback();
 
-        function adjust () {
+        function adjust() {
             if (self.wants2Quit === true) {
                 self._dataChange && self.fireEvent(BI.MultiSelectCombo.EVENT_CONFIRM);
                 self.wants2Quit = false;
@@ -399,7 +404,8 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
     },
 
     _join: function (res, callback) {
-        var self = this; var o = this.options;
+        var self = this;
+        var o = this.options;
         this._assertValue(res);
         this._assertValue(this.storeValue);
         if (this.storeValue.type === res.type) {
