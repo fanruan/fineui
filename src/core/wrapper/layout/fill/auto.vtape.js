@@ -1,7 +1,7 @@
 BI.AutoVerticalTapeLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.AutoVerticalTapeLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-auto-vtape",
+            baseCls: "bi-auto-htape",
             horizontalAlign: BI.HorizontalAlign.Stretch,
             verticalAlign: BI.VerticalAlign.Stretch,
             hgap: 0,
