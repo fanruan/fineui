@@ -23,7 +23,7 @@ BI.MultiSelectInsertNoBarCombo = BI.inherit(BI.Single, {
                 if (self.storeValue.type === BI.Selection.All) {
                     BI.remove(self.storeValue.value, self._startValue);
                     self.storeValue.assist = self.storeValue.assist || [];
-                    self.storeValue.assist.pushDistinct(self._startValue);
+                    BI.pushDistinct(self.storeValue.assist, self._startValue);
                 } else {
                     BI.pushDistinct(self.storeValue.value, self._startValue);
                     BI.remove(self.storeValue.assist, self._startValue);
@@ -279,7 +279,7 @@ BI.MultiSelectInsertNoBarCombo = BI.inherit(BI.Single, {
         });
     },
 
-    _itemsCreator4Trigger: function(op, callback) {
+    _itemsCreator4Trigger: function (op, callback) {
         var self = this, o = this.options;
         o.itemsCreator(op, function (res) {
             if (op.times === 1 && BI.isNotNull(op.keywords)) {
@@ -310,7 +310,7 @@ BI.MultiSelectInsertNoBarCombo = BI.inherit(BI.Single, {
         });
     },
 
-    _stopEditing: function() {
+    _stopEditing: function () {
         this.trigger.stopEditing();
         this.numberCounter.hideView();
     },
@@ -337,7 +337,7 @@ BI.MultiSelectInsertNoBarCombo = BI.inherit(BI.Single, {
 
         digest();
 
-        function digest () {
+        function digest() {
             BI.each(keywords, function (i, val) {
                 self.storeValue.type === BI.Selection.Multi ? BI.pushDistinct(self.storeValue.value, val) : BI.remove(self.storeValue.value, val);
             });
@@ -400,7 +400,8 @@ BI.MultiSelectInsertNoBarCombo = BI.inherit(BI.Single, {
         var self = this, o = this.options;
         adjust();
         callback();
-        function adjust () {
+
+        function adjust() {
             if (self.wants2Quit === true) {
                 self._dataChange && self.fireEvent(BI.MultiSelectInsertNoBarCombo.EVENT_CONFIRM);
                 self.wants2Quit = false;
@@ -446,11 +447,11 @@ BI.MultiSelectInsertNoBarCombo = BI.inherit(BI.Single, {
         this.combo.populate.apply(this.combo, arguments);
     },
 
-    showView:function (){
+    showView: function () {
         this.combo.showView();
     },
 
-    hideView:function (){
+    hideView: function () {
         this.combo.hideView();
     },
 
