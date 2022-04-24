@@ -106,6 +106,7 @@
                         "line-height": o.height / BI.pixRatio + BI.pixUnit
                     });
                     json.textAlign = o.textAlign;
+                    delete json.maxWidth;
                     this.text = BI.createWidget(BI.extend(json, {
                         element: this,
                         hgap: o.hgap,
@@ -175,6 +176,7 @@
                     "line-height": o.height / BI.pixRatio + BI.pixUnit
                 });
                 json.textAlign = o.textAlign;
+                delete json.maxWidth;
                 this.text = BI.createWidget(BI.extend(json, {
                     element: this,
                     hgap: o.hgap,
@@ -251,6 +253,7 @@
                             "line-height": (o.height - (o.vgap * 2)) / BI.pixRatio + BI.pixUnit
                         });
                     }
+                    delete json.maxWidth;
                     this.text = BI.createWidget(BI.extend(json, {
                         element: this,
                         hgap: o.hgap,
@@ -309,6 +312,7 @@
                         "line-height": (o.height - (o.vgap * 2)) / BI.pixRatio + BI.pixUnit
                     });
                 }
+                delete json.maxWidth;
                 this.text = BI.createWidget(BI.extend(json, { // 2.6
                     element: this,
                     hgap: o.hgap,

@@ -1,12 +1,4 @@
-const grunt = require("grunt");
-
-function uniq(names) {
-    return [...new Set(names)];
-}
-
-function sync(patterns) {
-    return uniq(grunt.file.expand({ filter: path => !new RegExp(/__test__/g).test(path) }, patterns)).map(name => `./${name}`);
-}
+const { sync, uniq } = require("./utils");
 
 const fixJs = "./dist/fix/fix.js";
 const fixProxyJs = './dist/fix/fix.proxy.js';
@@ -35,14 +27,24 @@ const basicAttachmentMap = {
     ]),
     widget: sync([
         "src/less/widget/**/*.less",
+        "src/less/component/**/*.less",
         "src/widget/**/*.js",
         "src/component/**/*.js",
     ]),
     router: sync([
         "src/router/**/*.js",
     ]),
-    'core_without_normalize': sync(
-        ["src/less/core/**/*.less", "src/less/theme/**/*.less", "!src/less/core/normalize.less", "!src/less/core/normalize2.less"],
+    core_without_platform: sync([
+        "src/core/0.foundation.js",
+        lodashJs,
+        "src/core/**/*.js",
+        "src/data/**/*.js",
+    ], [
+        "src/core/platform/**/*.js",
+        "src/core/controller/**/*.js",
+    ]),
+    core_without_normalize: sync(
+        ["src/less/core/**/*.less", "src/less/theme/**/*.less"], ["src/less/core/normalize.less", "src/less/core/normalize2.less"]
     ),
     resource: sync(["src/less/resource/**/*.less"]),
     font: sync(["public/less/font.less"]),
@@ -60,7 +62,7 @@ const basicAttachmentMap = {
         "src/core/func/**/*.js",
         "src/core/2.base.js",
         "src/core/3.ob.js",
-        "src/core/6.inject.js",
+        "src/core/5.inject.js",
         "src/core/utils/*.js",
         "i18n/i18n.cn.js",
         "_mobile/date.i18n.cn.js",
@@ -68,6 +70,13 @@ const basicAttachmentMap = {
     ]),
     fix: [fixJs],
     fixProxy: [fixProxyJs],
+    less: sync([
+        "src/less/core/**/*.less",
+        "src/less/theme/**/*.less",
+        "src/less/base/**/*.less",
+        "src/less/widget/**/*.less",
+        "src/less/component/**/*.less",
+    ]),
 };
 
 const bundle = [].concat(
@@ -84,10 +93,15 @@ const bundle = [].concat(
     basicAttachmentMap.ts,
 );
 
-const bundleModern = [].concat(
-    sync(["src/less/modern.less"]),
-    sync(["public/modern/app.less", "public/modern/**/*.less"]),
+const bundleCss = [].concat(
+    basicAttachmentMap.less,
+    sync(["public/less/app.less", "public/less/**/*.less"]),
 );
+
+// const bundleModern = [].concat(
+//     sync(["src/less/modern.less"]),
+//     sync(["public/modern/app.less", "public/modern/**/*.less"]),
+// );
 
 const coreJs = [].concat(
     basicAttachmentMap.polyfill,
@@ -110,9 +124,11 @@ const bundleWithoutNormalize = [].concat(
     sync([
         "src/less/base/**/*.less",
         "src/less/widget/**/*.less",
+        "src/less/component/**/*.less",
         "public/less/**/*.less",
-        "!public/less/app.less",
         // ts的less
+    ], [
+        "public/less/app.less",
     ]),
 );
 
@@ -121,6 +137,7 @@ const fineuiWithoutNormalize = [].concat(
     sync([
         "src/less/base/**/*.less",
         "src/less/widget/**/*.less",
+        "src/less/component/**/*.less",
         'ui/less/app.less',
         'ui/less/**/*.less',
     ]),
@@ -139,15 +156,16 @@ const fineui = [].concat(
     basicAttachmentMap.ts,
 );
 
-const fineuiModern = [].concat(
-    sync(["src/less/modern.less"]),
-    sync([
-        'ui/modern/app.less',
-        'ui/modern/**/*.less',
-    ]),
-);
+// const fineuiModern = [].concat(
+//     sync(["src/less/modern.less"]),
+//     sync([
+//         'ui/modern/app.less',
+//         'ui/modern/**/*.less',
+//     ]),
+// );
 
 const fineuiProxy = [].concat(
+    basicAttachmentMap.polyfill,
     basicAttachmentMap.core,
     basicAttachmentMap.fixProxy,
     basicAttachmentMap.base,
@@ -161,19 +179,20 @@ const fineuiProxy = [].concat(
 
 const fineuiWithoutJqueryAndPolyfillJs = [].concat(
     sync([
-        "src/core/foundation.js",
+        "src/core/0.foundation.js",
         lodashJs,
         "src/core/**/*.js",
         "src/data/**/*.js",
-        "!src/core/platform/web/**/*.js",
+    ], [
+        "src/core/platform/web/**/*.js",
     ]),
     basicAttachmentMap.fix,
     sync([
         "src/base/**/*.js",
         "src/case/**/*.js",
-
-        "!src/base/single/input/file.js",
-        "!src/case/ztree/**/*.js",
+    ], [
+        "src/base/single/input/file.js",
+        "src/case/ztree/**/*.js",
     ]),
     basicAttachmentMap.widget,
     sync([fixCompact, workerCompact, "ui/js/**/*.js"]),
@@ -183,11 +202,11 @@ const fineuiWithoutJqueryAndPolyfillJs = [].concat(
 const demo = [].concat(
     basicAttachmentMap.polyfill,
     basicAttachmentMap.core,
-    basicAttachmentMap.router,
     basicAttachmentMap.fix,
     basicAttachmentMap.base,
     basicAttachmentMap.case,
     basicAttachmentMap.widget,
+    basicAttachmentMap.router,
     sync(["public/less/app.less", "public/less/**/*.less"]),
     [fixCompact, workerCompact],
     basicAttachmentMap.config,
@@ -201,16 +220,16 @@ module.exports = {
     lodash: lodashJs,
     font: basicAttachmentMap.font,
     bundle: uniq(bundle),
-    bundleModern: uniq(bundleModern),
     fineuiWithoutNormalize: uniq(fineuiWithoutNormalize),
     bundleWithoutNormalize: uniq(bundleWithoutNormalize),
     fineui: uniq(fineui),
-    fineuiModern: uniq(fineuiModern),
     fineuiProxy: uniq(fineuiProxy),
     fineuiWithoutJqueryAndPolyfillJs: uniq(fineuiWithoutJqueryAndPolyfillJs),
     utils: uniq(basicAttachmentMap.utils),
     demo: uniq(demo),
+    coreWithoutPlatform: uniq(basicAttachmentMap.core_without_platform),
     coreJs: uniq(coreJs),
     resource: uniq((resource)),
     config: uniq(config),
+    bundleCss: uniq(bundleCss),
 };

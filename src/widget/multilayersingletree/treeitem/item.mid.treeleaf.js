@@ -46,12 +46,12 @@ BI.MultiLayerSingleTreeMidTreeLeafItem = BI.inherit(BI.BasicButton, {
 
         items.push({
             el: this.item,
-            lgap: o.layer * 12
+            lgap: o.layer * BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT / 2
         });
         BI.createWidget({
             type: "bi.horizontal_adapt",
             element: this,
-            columnSize: BI.makeArray(o.layer, 12),
+            columnSize: BI.makeArray(o.layer, BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT / 2),
             items: items
         });
     },

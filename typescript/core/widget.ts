@@ -671,6 +671,7 @@ export declare class Widget extends OB {
     /**
      * 新增子元素
      */
+    addWidget(widget: _Widget): _Widget;
     addWidget(_name: any, _widget: _Widget): _Widget;
 
     /**

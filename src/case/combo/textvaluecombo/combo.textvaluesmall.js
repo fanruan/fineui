@@ -16,8 +16,14 @@ BI.SmallTextValueCombo = BI.inherit(BI.Widget, {
     },
 
     _init: function () {
-        BI.SmallTextValueCombo.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
+        o.value = BI.isFunction(o.value) ? this.__watch(o.value, function (context, newValue) {
+            self.setValue(newValue);
+        }) : o.value;
+        o.items = BI.isFunction(o.items) ? this.__watch(o.items, function (context, newValue) {
+            self.populate(newValue);
+        }) : o.items;
+        BI.SmallTextValueCombo.superclass._init.apply(this, arguments);
         this.trigger = BI.createWidget(o.el, {
             type: "bi.small_select_text_trigger",
             items: o.items,

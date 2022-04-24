@@ -6,9 +6,6 @@
  * @extends BI.Trigger
  */
 BI.IconTextTrigger = BI.inherit(BI.Trigger, {
-    _const: {
-        hgap: 4
-    },
 
     _defaultConfig: function () {
         var conf = BI.IconTextTrigger.superclass._defaultConfig.apply(this, arguments);
@@ -23,12 +20,18 @@ BI.IconTextTrigger = BI.inherit(BI.Trigger, {
 
     _init: function () {
         BI.IconTextTrigger.superclass._init.apply(this, arguments);
-        var self = this, o = this.options, c = this._const;
+        var self = this, o = this.options;
         this.text = BI.createWidget({
             type: "bi.label",
             cls: "select-text-label" + (BI.isKey(o.textCls) ? (" " + o.textCls) : ""),
             textAlign: "left",
             height: o.height,
+            hgap: o.textHgap,
+            vgap: o.textVgap,
+            lgap: o.textLgap,
+            rgap: o.textRgap,
+            tgap: o.textTgap,
+            bgap: o.textBgap,
             text: o.text
         });
         this.trigerButton = BI.createWidget({
@@ -38,7 +41,8 @@ BI.IconTextTrigger = BI.inherit(BI.Trigger, {
 
         BI.createWidget({
             element: this,
-            type: "bi.htape",
+            type: "bi.horizontal_fill",
+            columnSize: [BI.isEmptyString(o.iconCls) ? 0 : (o.iconWrapperWidth || o.height), "fill", o.triggerWidth || o.height],
             ref: function (_ref) {
                 self.wrapper = _ref;
             },
@@ -53,17 +57,13 @@ BI.IconTextTrigger = BI.inherit(BI.Trigger, {
                     iconHeight: o.iconHeight,
                     iconWidth: o.iconWidth,
                     disableSelected: true
-                },
-                width: BI.isEmptyString(o.iconCls) ? 0 : (o.iconWrapperWidth || o.height)
-            },
-            {
+                }
+            }, {
                 el: this.text,
                 lgap: BI.isEmptyString(o.iconCls) ? 5 : 0
             }, {
-                el: this.trigerButton,
-                width: o.triggerWidth || o.height
-            }
-            ]
+                el: this.trigerButton
+            }]
         });
     },
 
@@ -76,14 +76,14 @@ BI.IconTextTrigger = BI.inherit(BI.Trigger, {
         this.icon.setIcon(iconCls);
         var iconItem = this.wrapper.attr("items")[0];
         var textItem = this.wrapper.attr("items")[1];
-        if(BI.isNull(iconCls) || BI.isEmptyString(iconCls)) {
-            if(iconItem.width !== 0) {
+        if (BI.isNull(iconCls) || BI.isEmptyString(iconCls)) {
+            if (iconItem.width !== 0) {
                 iconItem.width = 0;
                 textItem.lgap = 5;
                 this.wrapper.resize();
             }
-        }else{
-            if(iconItem.width !== (o.iconWrapperWidth || o.height)) {
+        } else {
+            if (iconItem.width !== (o.iconWrapperWidth || o.height)) {
                 iconItem.width = (o.iconWrapperWidth || o.height);
                 textItem.lgap = 0;
                 this.wrapper.resize();
@@ -91,7 +91,7 @@ BI.IconTextTrigger = BI.inherit(BI.Trigger, {
         }
     },
 
-    setTextCls: function(cls) {
+    setTextCls: function (cls) {
         var o = this.options;
         var oldCls = o.textCls;
         o.textCls = cls;

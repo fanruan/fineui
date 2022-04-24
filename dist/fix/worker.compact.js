@@ -1,10 +1,17 @@
 ;(function () {
     var contexts = {};
+    var init = false;
 
     var WORKER;
-    BI.useWorker = function (wk) {
-        WORKER = wk;
 
+    var enableWorker = function () {
+        if (init) {
+            return init;
+        }
+        // 开启Worker模式
+        BI.config("bi.provider.system", function (provider) {
+            provider.setWorkerMode(true);
+        });
         var _init = BI.Widget.prototype._init;
         BI.Widget.prototype._init = function () {
             this.$destroyWorker = createWorker.call(this);
@@ -46,7 +53,16 @@
                 console.error(e);
             }
         };
+        init = postMessage;
+        return postMessage;
+    };
 
+    BI.useWorker = function (wk) {
+        if (!_global.Worker || !_global.Proxy) {
+            return;
+        }
+        var postMessage = enableWorker();
+        WORKER = wk;
         if (WORKER) {
             WORKER.addEventListener("message", function (e) {
                 var data = e.data;
@@ -72,7 +88,7 @@
                     name: name,
                     eventType: "create",
                     options: options,
-                    watches: BI.map(this.watch, function (key) {
+                    watches: BI.map(this.$watch || this.watch, function (key) {
                         return key;
                     })
                 });
@@ -101,57 +117,7 @@
                         eventType: "destroy"
                     });
                 };
-            } else {
-                this.store = BI.Models.getModel(modelType, options);
-                this.store && (this.store._widget = this);
-                if (this.store instanceof Fix.Model) {
-                    this.model = this.store.model;
-                } else {
-                    this.model = this.store;
-                }
-                initWatch(this, this.watch);
-                return function () {
-                    this.store && BI.isFunction(this.store.destroy) && this.store.destroy();
-                    BI.each(this._watchers, function (i, unwatches) {
-                        unwatches = BI.isArray(unwatches) ? unwatches : [unwatches];
-                        BI.each(unwatches, function (j, unwatch) {
-                            unwatch();
-                        });
-                    });
-                    this._watchers && (this._watchers = []);
-                    if (this.store) {
-                        this.store._parent && (this.store._parent = null);
-                        this.store._widget && (this.store._widget = null);
-                        this.store = null;
-                    }
-                };
-            }
-
-        }
-    }
-
-    function initWatch (vm, watch) {
-        vm._watchers || (vm._watchers = []);
-        for (var key in watch) {
-            var handler = watch[key];
-            if (BI.isArray(handler)) {
-                for (var i = 0; i < handler.length; i++) {
-                    vm._watchers.push(createWatcher(vm, key, handler[i]));
-                }
-            } else {
-                vm._watchers.push(createWatcher(vm, key, handler));
             }
         }
-    }
-
-    function createWatcher (vm, keyOrFn, cb, options) {
-        if (BI.isPlainObject(cb)) {
-            options = cb;
-            cb = cb.handler;
-        }
-        options = options || {};
-        return Fix.watch(vm.model, keyOrFn, _.bind(cb, vm), BI.extend(options, {
-            store: vm.store
-        }));
     }
 }());

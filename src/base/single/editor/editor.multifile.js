@@ -78,6 +78,10 @@ BI.MultifileEditor = BI.inherit(BI.Widget, {
         this.file.select();
     },
 
+    getQueue: function () {
+        return this.file.getQueue();
+    },
+
     getValue: function () {
         return this.file.getValue();
     },
@@ -85,6 +89,12 @@ BI.MultifileEditor = BI.inherit(BI.Widget, {
     upload: function () {
         this._reset();
         this.file.upload();
+    },
+
+    sendFiles: function (files) {
+        this._reset();
+
+        this.file.sendFiles(files);
     },
 
     reset: function () {

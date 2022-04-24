@@ -48,7 +48,8 @@ BI.PopoverController = BI.inherit(BI.Controller, {
             this.floatContainer[name].visible();
             var popover = this.get(name);
             popover.show && popover.show();
-            var W = BI.Widget._renderEngine.createElement(this.options.render).width(), H = BI.Widget._renderEngine.createElement(this.options.render).height();
+            var W = BI.Widget._renderEngine.createElement(this.options.render).width(),
+                H = BI.Widget._renderEngine.createElement(this.options.render).height();
             var w = popover.element.width(), h = popover.element.height();
             var left = (W - w) / 2, top = (H - h) / 2;
             if (left < 0) {
@@ -163,5 +164,9 @@ BI.PopoverController = BI.inherit(BI.Controller, {
         this.floatOpened = {};
         this.zindexMap = {};
         return this;
+    },
+
+    _getZIndex: function () {
+        return this.zindex++;
     }
 });

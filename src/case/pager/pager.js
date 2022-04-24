@@ -12,8 +12,6 @@ BI.DetailPager = BI.inherit(BI.Widget, {
             behaviors: {},
             layouts: [{
                 type: "bi.horizontal",
-                hgap: 10,
-                vgap: 0
             }],
 
             dynamicShow: true, // 是否动态显示上一页、下一页、首页、尾页， 若为false，则指对其设置使能状态
@@ -177,8 +175,7 @@ BI.DetailPager = BI.inherit(BI.Widget, {
             element: this,
             items: BI.createItems(view, {
                 cls: "page-item bi-border bi-list-item-active",
-                height: 23,
-                hgap: 10
+                height: 23
             }),
             behaviors: o.behaviors,
             layouts: o.layouts

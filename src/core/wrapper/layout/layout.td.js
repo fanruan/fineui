@@ -32,7 +32,10 @@ BI.TdLayout = BI.inherit(BI.Layout, {
             "border-collapse": "separate"
         });
         this.rows = 0;
-        this.populate(this.options.items);
+        var items = BI.isFunction(o.items) ? this.__watch(o.items, function (context, newValue) {
+            self.populate(newValue);
+        }) : o.items;
+        this.populate(items);
     },
 
     _addElement: function (idx, arr) {
@@ -75,15 +78,14 @@ BI.TdLayout = BI.inherit(BI.Layout, {
             }
         }
 
-        var height = o.rowSize[idx] === "" ? "" : (o.rowSize[idx] < 1 ? ((o.rowSize[idx] * 100).toFixed(1) + "%") : o.rowSize[idx]);
-        var rowHeight = BI.isNumber(o.rowSize[idx]) ? (o.rowSize[idx] <= 1 ? height : height / BI.pixRatio + BI.pixUnit) : height;
+        var height = BI.isNumber(o.rowSize) ? this._optimiseGap(o.rowSize) : (o.rowSize[idx] === "" ? this._optimiseGap(1) : this._optimiseGap(o.rowSize[idx]));
         var tr = BI._lazyCreateWidget({
             type: "bi.default",
             tagName: "tr",
             height: height,
             css: {
-                "max-height": rowHeight,
-                "min-height": rowHeight
+                "max-height": height,
+                "min-height": height
             }
         });
 
@@ -92,37 +94,16 @@ BI.TdLayout = BI.inherit(BI.Layout, {
             if (o.verticalAlign === BI.VerticalAlign.Stretch) {
                 var top = o.vgap + o.tgap + (arr[i].tgap || 0) + (arr[i].vgap || 0),
                     bottom = o.vgap + o.bgap + (arr[i].bgap || 0) + (arr[i].vgap || 0);
-                w.element.css("height", "calc(100% - " + ((top + bottom) / BI.pixRatio + BI.pixUnit) + ")");
+                w.element.css("height", "calc(100% - " + this._optimiseGap(top + bottom) + ")");
             }
             w.element.css({position: "relative", top: "0", left: "0", margin: "0px auto"});
             var item = arr[i];
-            if (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
-                w.element.css({
-                    "margin-top": (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0)) / BI.pixRatio + BI.pixUnit
-                });
-            }
-            if (o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0) !== 0) {
-                w.element.css({
-                    "margin-left": ((i === 0 ? o.hgap : 0) + o.lgap + (item.lgap || 0) + (item.hgap || 0)) / BI.pixRatio + BI.pixUnit
-                });
-            }
-            if (o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0) !== 0) {
-                w.element.css({
-                    "margin-right": (o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0)) / BI.pixRatio + BI.pixUnit
-                });
-            }
-            if (o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0) !== 0) {
-                w.element.css({
-                    "margin-bottom": (o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0)) / BI.pixRatio + BI.pixUnit
-                });
-            }
+            this._handleGap(w, item, i);
             first(w, this.rows++, i);
             var width = "";
             var columnSize = o.columnSize.length > 0 ? o.columnSize[i] : item.width;
             if (columnSize > 0) {
-                width = columnSize < 1 ?
-                    ((columnSize * 100).toFixed(1) + "%")
-                    : (columnSize + (i === 0 ? o.hgap : 0) + o.hgap + o.lgap + o.rgap);
+                width = this._optimiseGap(columnSize + (i === 0 ? o.hgap : 0) + o.hgap + o.lgap + o.rgap);
             }
             function hasFill() {
                 if (o.columnSize.length > 0) {
@@ -148,10 +129,9 @@ BI.TdLayout = BI.inherit(BI.Layout, {
             // 2、不能给多个td设置最大宽度，这样只会平分宽度
             // 3、多百分比宽度就算了
             if (columnSize > 0) {
-                columnSize = columnSize < 1 ? width : width / BI.pixRatio + BI.pixUnit;
                 td.element.css({
-                    "max-width": columnSize,
-                    "min-width": columnSize
+                    "max-width": width,
+                    "min-width": width
                 });
             }
             td.element.css({

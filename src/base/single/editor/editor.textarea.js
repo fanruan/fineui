@@ -5,12 +5,12 @@
  * @extends BI.Single
  */
 BI.TextAreaEditor = BI.inherit(BI.Single, {
-    _defaultConfig: function () {
+    _defaultConfig: function (conf) {
         return BI.extend(BI.TextAreaEditor.superclass._defaultConfig.apply(), {
             baseCls: "bi-textarea-editor",
             value: "",
             errorText: "",
-            adjustYOffset: 2,
+            adjustYOffset: conf.simple ? 0 : 2,
             adjustXOffset: 0,
             offsetStyle: "left",
             validationChecker: function () {
@@ -156,7 +156,9 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
     },
 
     _checkError: function () {
-        this._setErrorVisible(this._isError());
+        var isError = this._isError();
+        this._setErrorVisible(isError);
+        this.element[isError ? "addClass" : "removeClass"]("error");
     },
 
     _focus: function () {

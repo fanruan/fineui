@@ -2,17 +2,35 @@
 BI.prepares.push(function () {
     // 注册布局
     // adapt类布局优先级规则
-    // 1、在非IE且支持flex的浏览器下使用flex布局
-    // 2、IE或者不支持flex的浏览器下使用inline布局
-    // 3、在2的情况下如果布局的items大于1的话使用display:table的布局
-    // 4、在3的情况下如果IE版本低于8使用table标签布局
-    var _isSupportFlex;
+    // 1、支持flex的浏览器下使用flex布局
+    // 2、不支持flex的浏览器下使用inline布局
+    // 3、当列宽既需要自动列宽又需要自适应列宽时，inline布局也处理不了了。当横向出滚动条时使用table布局，不出滚动条时使用float布局
+    var _isSupportFlex, _isSupportGrid;
     var isSupportFlex = function () {
         if (_isSupportFlex == null) {
             _isSupportFlex = !!(BI.isSupportCss3 && BI.isSupportCss3("flex"));
         }
         return _isSupportFlex;
     };
+    var isSupportGrid = function () {
+        if (_isSupportGrid == null) {
+            _isSupportGrid = !!(BI.isSupportCss3 && BI.isSupportCss3("grid"));
+        }
+        return _isSupportGrid;
+    };
+    // 判断浏览器是否支持sticky 属性
+    var isSupportSticky = (function () {
+        var vendorList = ["", "-webkit-", "-ms-", "-moz-", "-o-"],
+            vendorListLength = vendorList.length,
+            stickyElement = document.createElement("div");
+        for (var i = 0; i < vendorListLength; i++) {
+            stickyElement.style.position = vendorList[i] + "sticky";
+            if (stickyElement.style.position !== "") {
+                return true;
+            }
+        }
+        return false;
+    })();
     BI.Plugin.configWidget("bi.horizontal", function (ob) {
         var supportFlex = isSupportFlex();
         // // 在横向自适应场景下我们需要使用table的自适应撑出滚动条的特性（flex处理不了这种情况）
@@ -56,6 +74,9 @@ BI.prepares.push(function () {
             return BI.extend({
                 horizontalAlign: BI.HorizontalAlign.Stretch
             }, ob, {type: "bi.table_adapt"});
+        }
+        if (BI.Providers.getProvider("bi.provider.system").getResponsiveMode()) {
+            return BI.extend({}, ob, {type: "bi.responsive_inline"});
         }
         return ob;
     });
@@ -141,7 +162,42 @@ BI.prepares.push(function () {
                 scrolly: false
             }, ob, {type: "bi.flex_vertical"});
         }
+        if (ob.scrollable === true || ob.scrollx === true || ob.scrolly === true) {
+            // 有滚动条，降级到table布局处理
+            return BI.extend({}, ob, {
+                type: "bi.td",
+                items: BI.map(ob.items, function (i, item) {
+                    return [item];
+                })
+            });
+        }
+        var hasAuto = false;
+        if (ob.rowSize && ob.rowSize.length > 0) {
+            if (ob.rowSize.indexOf("") >= 0) {
+                hasAuto = true;
+            }
+        } else {
+            BI.each(ob.items, function (i, item) {
+                if (BI.isNull(item.height) || item.height === "") {
+                    hasAuto = true;
+                }
+            });
+        }
+        if (hasAuto) {
+            // 有自动高的时候
+            return BI.extend({}, ob, {type: "bi.vtape_auto"});
+        }
         return BI.extend({}, ob, {type: "bi.vtape"});
+    });
+    BI.Plugin.configWidget("bi.horizontal_sticky", function (ob) {
+        if (!isSupportSticky) {
+            return BI.extend({}, ob, {type: "bi.horizontal_fill"});
+        }
+    });
+    BI.Plugin.configWidget("bi.vertical_sticky", function (ob) {
+        if (!isSupportSticky) {
+            return BI.extend({}, ob, {type: "bi.vertical_fill"});
+        }
     });
 
     BI.Plugin.configWidget("bi.left_right_vertical_adapt", function (ob) {
@@ -155,17 +211,30 @@ BI.prepares.push(function () {
     });
     BI.Plugin.configWidget("bi.flex_horizontal", function (ob) {
         if (ob.scrollable === true || ob.scrollx !== false) {
-            if (ob.hgap > 0 || ob.rgap > 0) {// flex中最后一个margin-right不生效
+            if (ob.hgap > 0 || ob.lgap > 0 || ob.rgap > 0) {
+                if (BI.Providers.getProvider("bi.provider.system").getResponsiveMode()) {
+                    return BI.extend({}, ob, {type: "bi.responsive_flex_scrollable_horizontal"});
+                }
                 return BI.extend({}, ob, {type: "bi.flex_scrollable_horizontal"});
             }
+        }
+        if (BI.Providers.getProvider("bi.provider.system").getResponsiveMode()) {
+            return BI.extend({}, ob, {type: "bi.responsive_flex_horizontal"});
         }
     });
     BI.Plugin.configWidget("bi.flex_vertical", function (ob) {
         if (ob.scrollable === true || ob.scrollx === true) {
-            if (ob.hgap > 0 || ob.rgap > 0) {// flex中最后一个margin-right不生效
+            if (ob.hgap > 0 || ob.lgap > 0 || ob.rgap > 0) {
                 return BI.extend({}, ob, {type: "bi.flex_scrollable_vertical"});
             }
         }
+    });
+
+    BI.Plugin.configWidget("bi.table", function (ob) {
+        if (!isSupportGrid()) {
+            return BI.extend({}, ob, {type: "bi.td"});
+        }
+        return ob;
     });
 
     BI.Plugin.configWidget("bi.radio", function (ob) {

@@ -32,4 +32,10 @@ export declare class DynamicDateTimeCombo extends Single {
     getKey(): string;
 
     hidePopupView(): void;
+
+    focus(): void;
+
+    blur(): void;
+
+    setWaterMark(v: string): void
 }

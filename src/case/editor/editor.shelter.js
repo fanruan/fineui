@@ -30,6 +30,7 @@ BI.ShelterEditor = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
         this.editor = BI.createWidget({
             type: "bi.editor",
+            simple: o.simple,
             height: o.height,
             hgap: o.hgap,
             vgap: o.vgap,
@@ -141,14 +142,16 @@ BI.ShelterEditor = BI.inherit(BI.Widget, {
 
     _checkText: function () {
         var o = this.options;
-        if (this.editor.getValue() === "") {
-            this.text.setValue(o.watermark || "");
-            this.text.element.addClass("bi-water-mark");
-        } else {
-            this.text.setValue(this.editor.getValue());
-            this.text.element.removeClass("bi-water-mark");
-        }
-        BI.isKey(o.keyword) && this.text.doRedMark(o.keyword);
+        BI.nextTick(BI.bind(function () {
+            if (this.editor.getValue() === "") {
+                this.text.setValue(o.watermark || "");
+                this.text.element.addClass("bi-water-mark");
+            } else {
+                this.text.setValue(this.editor.getValue());
+                this.text.element.removeClass("bi-water-mark");
+            }
+            BI.isKey(o.keyword) && this.text.doRedMark(o.keyword);
+        }, this));
     },
 
     _showInput: function () {

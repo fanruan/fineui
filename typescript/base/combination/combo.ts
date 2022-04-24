@@ -11,6 +11,7 @@ export declare class Combo extends Widget {
     static EVENT_AFTER_POPUPVIEW: string;
     static EVENT_BEFORE_HIDEVIEW: string;
     static EVENT_AFTER_HIDEVIEW: string;
+    static closeAll: Function;
 
     props: {
         trigger?: 'click' | 'hover' | 'click-hover' | '';
@@ -22,6 +23,7 @@ export declare class Combo extends Widget {
         container?: any; // popupview放置的容器，默认为this.element
         isDefaultInit?: boolean;
         destroyWhenHide?: boolean;
+        hideWhenBlur?: boolean;
         hideWhenAnotherComboOpen?: boolean;
         isNeedAdjustHeight?: boolean; // 是否需要高度调整
         isNeedAdjustWidth?: boolean;
@@ -32,6 +34,7 @@ export declare class Combo extends Widget {
         adjustYOffset?: number;
         hideChecker?: Function;
         offsetStyle?: 'left' | 'right' | 'center';
+        value?:any;
         el?: any;
         popup?: any;
         comboClass?: string;

@@ -11,31 +11,32 @@ BI.DatePicker = BI.inherit(BI.Widget, {
             baseCls: "bi-date-picker",
             height: 40,
             min: "1900-01-01", // 最小日期
-            max: "2099-12-31", // 最大日期
+            max: "2099-12-31" // 最大日期
         });
     },
 
     _init: function () {
         BI.DatePicker.superclass._init.apply(this, arguments);
-        var self = this; var o = this.options;
+        var self = this;
+        var o = this.options;
         this._year = BI.getDate().getFullYear();
         this._month = BI.getDate().getMonth() + 1;
         this.left = BI.createWidget({
             type: "bi.icon_button",
             cls: "pre-page-h-font",
             width: 24,
-            height: 24,
+            height: 24
         });
         this.left.on(BI.IconButton.EVENT_CHANGE, function () {
             if (self._month === 1) {
                 self.setValue({
                     year: (self.year.getValue() - 1) || (BI.getDate().getFullYear() - 1),
-                    month: 12,
+                    month: 12
                 });
             } else {
                 self.setValue({
                     year: self.year.getValue() || BI.getDate().getFullYear(),
-                    month: (self.month.getValue() - 1) || BI.getDate().getMonth(),
+                    month: (self.month.getValue() - 1) || BI.getDate().getMonth()
                 });
             }
             self.fireEvent(BI.DatePicker.EVENT_CHANGE);
@@ -47,19 +48,19 @@ BI.DatePicker = BI.inherit(BI.Widget, {
             type: "bi.icon_button",
             cls: "next-page-h-font",
             width: 24,
-            height: 24,
+            height: 24
         });
 
         this.right.on(BI.IconButton.EVENT_CHANGE, function () {
             if (self._month === 12) {
                 self.setValue({
                     year: (self.year.getValue() + 1) || (BI.getDate().getFullYear() + 1),
-                    month: 1,
+                    month: 1
                 });
             } else {
                 self.setValue({
                     year: self.year.getValue() || BI.getDate().getFullYear(),
-                    month: (self.month.getValue() + 1) || (BI.getDate().getMonth() + 2),
+                    month: (self.month.getValue() + 1) || (BI.getDate().getMonth() + 2)
                 });
             }
             self.fireEvent(BI.DatePicker.EVENT_CHANGE);
@@ -71,7 +72,7 @@ BI.DatePicker = BI.inherit(BI.Widget, {
             type: "bi.year_date_combo",
             behaviors: o.behaviors,
             min: o.min,
-            max: o.max,
+            max: o.max
         });
         this.year.on(BI.YearDateCombo.EVENT_CHANGE, function () {
             self.setValue({
@@ -91,7 +92,7 @@ BI.DatePicker = BI.inherit(BI.Widget, {
         this.month.on(BI.MonthDateCombo.EVENT_CHANGE, function () {
             self.setValue({
                 year: self.year.getValue() || self._year,
-                month: self.month.getValue(),
+                month: self.month.getValue()
             });
             self.fireEvent(BI.DatePicker.EVENT_CHANGE);
         });
@@ -105,33 +106,26 @@ BI.DatePicker = BI.inherit(BI.Widget, {
             items: [{
                 el: {
                     type: "bi.center_adapt",
-                    items: [this.left],
+                    items: [this.left]
                 },
-                width: 24,
-            }, {
-                type: "bi.center_adapt",
-                items: [{
-                    el: {
-                        type: "bi.horizontal",
-                        width: 120,
-                        rgap: 10,
-                        items: [{
-                            el: this.year,
-                            lgap: 10,
-                        }, this.month],
-                    },
-                }],
+                width: 24
             }, {
                 el: {
                     type: "bi.center_adapt",
-                    items: [this.right],
+                    hgap: 10,
+                    items: [this.year, this.month]
+                }
+            }, {
+                el: {
+                    type: "bi.center_adapt",
+                    items: [this.right]
                 },
-                width: 24,
-            }],
+                width: 24
+            }]
         });
         this.setValue({
             year: this._year,
-            month: this._month,
+            month: this._month
         });
     },
 
@@ -177,7 +171,7 @@ BI.DatePicker = BI.inherit(BI.Widget, {
         return valid;
     },
 
-    _getCheckMinMaxDate: function() {
+    _getCheckMinMaxDate: function () {
         var o = this.options;
         var minDate = BI.parseDateTime(o.min, "%Y-%X-%d");
         var maxDate = BI.parseDateTime(o.max, "%Y-%X-%d");
@@ -219,9 +213,9 @@ BI.DatePicker = BI.inherit(BI.Widget, {
     getValue: function () {
         return {
             year: this.year.getValue(),
-            month: this.month.getValue(),
+            month: this.month.getValue()
         };
-    },
+    }
 });
 BI.DatePicker.EVENT_CHANGE = "EVENT_CHANGE";
 BI.DatePicker.EVENT_BEFORE_YEAR_MONTH_POPUPVIEW = "EVENT_BEFORE_YEAR_MONTH_POPUPVIEW";

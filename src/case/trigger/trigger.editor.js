@@ -6,10 +6,6 @@
  * @extends BI.Trigger
  */
 BI.EditorTrigger = BI.inherit(BI.Trigger, {
-    _const: {
-        hgap: 4
-    },
-
     _defaultConfig: function () {
         var conf = BI.EditorTrigger.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
@@ -61,10 +57,11 @@ BI.EditorTrigger = BI.inherit(BI.Trigger, {
 
         BI.createWidget({
             element: this,
-            type: "bi.htape",
+            type: "bi.horizontal_fill",
             items: [
                 {
-                    el: this.editor
+                    el: this.editor,
+                    width: "fill"
                 }, {
                     el: {
                         type: "bi.trigger_icon_button",

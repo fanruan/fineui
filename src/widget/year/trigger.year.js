@@ -1,7 +1,8 @@
 BI.DynamicYearTrigger = BI.inherit(BI.Trigger, {
     _const: {
         hgap: 4,
-        vgap: 2
+        vgap: 2,
+        iconWidth: 24
     },
 
     _defaultConfig: function () {
@@ -24,6 +25,7 @@ BI.DynamicYearTrigger = BI.inherit(BI.Trigger, {
         var self = this, o = this.options, c = this._const;
         this.editor = BI.createWidget({
             type: "bi.sign_editor",
+            simple: o.simple,
             height: o.height,
             validationChecker: function (v) {
                 return v === "" || (BI.isPositiveInteger(v) && !BI.checkDateVoid(v, 1, 1, o.min, o.max)[0]);
@@ -89,7 +91,8 @@ BI.DynamicYearTrigger = BI.inherit(BI.Trigger, {
         });
         BI.createWidget({
             element: this,
-            type: "bi.htape",
+            type: "bi.horizontal_fill",
+            columnSize: ["fill", ""],
             items: [{
                 el: this.editor
             }, {
@@ -97,15 +100,13 @@ BI.DynamicYearTrigger = BI.inherit(BI.Trigger, {
                     type: "bi.text_button",
                     baseCls: "bi-trigger-year-text",
                     text: BI.i18nText("BI-Multi_Date_Year"),
-                    width: o.height
                 },
-                width: o.height
             }, {
                 el: {
                     type: "bi.trigger_icon_button",
-                    width: o.height
+                    width: this._const.iconWidth
                 },
-                width: o.height
+                width: this._const.iconWidth
             }]
         });
         this.setValue(o.value);

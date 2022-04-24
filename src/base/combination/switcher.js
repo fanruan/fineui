@@ -25,7 +25,8 @@ BI.Switcher = BI.inherit(BI.Widget, {
     render: function () {
         var self = this, o = this.options;
         this._initSwitcher();
-        this._initPullDownAction();
+        // 延迟绑定事件，这样可以将自己绑定的事情优先执行
+        BI.nextTick(this._initPullDownAction.bind(this));
         this.switcher.on(BI.Controller.EVENT_CHANGE, function (type, value, obj) {
             if (self.isEnabled() && self.isValid()) {
                 if (type === BI.Events.EXPAND) {

@@ -16,9 +16,21 @@ export declare class MultifileEditor extends Widget {
         attach_id: string;
         attach_type: string;
         filename: string;
+        [key: string]: any;
     }[];
 
     upload(): void;
-    
+
     reset(): void;
+
+    getQueue(): {
+        fileName: string;
+        lastModified: number;
+        lastModifiedDate: Date;
+        name: string;
+        size: number;
+        type: string;
+    }[];
+
+    sendFiles(files: FileList): void;
 }

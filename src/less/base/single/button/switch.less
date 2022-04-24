@@ -1,33 +1,31 @@
 @import "../../../index";
 
-.bi-switch{
+.bi-switch {
+  font-size: @font-size-12;
   .border-radius(40px 40px 40px 40px);
-  background-color: @color-bi-background-dark-gray;
-  &:active, &.active {
-    background-color: @color-bi-background-highlight;
+  background-color: @color-bi-background-switch;
+  .transition(all .2s);
+  &.active {
+    background-color: @color-bi-background-active-switch;
   }
   & .circle-button{
-    .border-radius(9px 9px 9px 9px);
+    .border-radius(6px 6px 6px 6px);
+    .transition(all .2s ease-in-out);
+    background-color: @color-bi-background-active-switch-content;
   }
   &.disabled {
-    background-color: @color-bi-background-disabled;
-    &:active {
-      background-color: @color-bi-background-disabled;
-    }
+    opacity: 0.5;
+  }
+  & .content-tip {
+    color: @color-bi-font-switch-tip;
   }
 }
 
 .bi-theme-dark {
-  .bi-switch{
-    background-color: @color-bi-background-dark-gray-theme-dark;
-    &:active, &.active {
-      background-color: @color-bi-background-highlight;
-    }
-    &.disabled {
-      background-color: @color-bi-background-disabled-theme-dark;
-      &:active {
-        background-color: @color-bi-background-disabled-theme-dark;
-      }
+  .bi-switch {
+    background-color: @color-bi-background-switch-theme-dark;
+    &.active {
+      background-color: @color-bi-background-active-switch;
     }
   }
 }

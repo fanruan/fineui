@@ -13,7 +13,10 @@ BI.VirtualGroupList = BI.inherit(BI.Widget, {
             blockSize: 10,
             scrollTop: 0,
             rowHeight: "auto",
-            items: []
+            items: [],
+            itemFormatter: function (item, index) {
+                return item;
+            }
         };
     },
 
@@ -54,10 +57,20 @@ BI.VirtualGroupList = BI.inherit(BI.Widget, {
     // mounted之后绑定事件
     mounted: function () {
         var self = this, o = this.options;
+        o.items = BI.isFunction(o.items) ? this.__watch(o.items, function (context, newValue) {
+            self.populate(newValue);
+        }) : o.items;
         this._populate();
-        this.element.scroll(function (e) {
+        this.ticking = false;
+        this.element.scroll(function() {
             o.scrollTop = self.element.scrollTop();
-            self._calculateBlocksToRender();
+            if (!self.ticking) {
+                requestAnimationFrame(function () {
+                    self._calculateBlocksToRender();
+                    self.ticking = false;
+                });
+                self.ticking = true;
+            }
         });
         BI.ResizeDetector.addResizeListener(this, function () {
             self._calculateBlocksToRender();
@@ -79,7 +92,9 @@ BI.VirtualGroupList = BI.inherit(BI.Widget, {
         };
         while ((lastHeight = getElementHeight()) < minContentHeight && index < o.items.length) {
             var items = o.items.slice(index, index + o.blockSize);
-            this.container.addItems(items, this);
+            this.container.addItems(items.map(function (item, i) {
+                return o.itemFormatter(item, index + i)
+            }), this);
             var addedHeight = getElementHeight() - lastHeight;
             this.tree.set(cnt, addedHeight);
             this.renderedIndex = cnt;
@@ -107,7 +122,9 @@ BI.VirtualGroupList = BI.inherit(BI.Widget, {
                 }
             }
             this.bottomBlank.setHeight(this.tree.sumTo(this.renderedIndex) - this.tree.sumTo(Math.min(end, this.renderedIndex)));
-            this.container.populate(items);
+            this.container.populate(items.map(function (item, i) {
+                return o.itemFormatter(item, (start < 0 ? 0 : start) * o.blockSize + i)
+            }));
         } else {
             for (var i = (start < 0 ? 0 : start); i <= end; i++) {
                 var index = i * o.blockSize;
@@ -116,7 +133,9 @@ BI.VirtualGroupList = BI.inherit(BI.Widget, {
                 }
             }
             this.container.element.height(o.rowHeight * o.items.length - topHeight);
-            this.container.populate(items);
+            this.container.populate(items.map(function (item, i) {
+                return o.itemFormatter(item, (start < 0 ? 0 : start) * o.blockSize + i)
+            }));
         }
     },
 

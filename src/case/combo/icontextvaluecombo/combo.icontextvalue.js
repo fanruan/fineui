@@ -3,9 +3,9 @@
  * combo : icon + text + icon, popup : icon + text
  */
 BI.IconTextValueCombo = BI.inherit(BI.Widget, {
-    _defaultConfig: function () {
+    _defaultConfig: function (config) {
         return BI.extend(BI.IconTextValueCombo.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-icon-text-value-combo bi-border bi-border-radius",
+            baseCls: "bi-icon-text-value-combo bi-border-radius " + (config.simple ? "bi-border-bottom" : "bi-border"),
             height: 24,
             iconHeight: null,
             iconWidth: null,
@@ -15,8 +15,14 @@ BI.IconTextValueCombo = BI.inherit(BI.Widget, {
 
     _init: function () {
         var self = this, o = this.options;
-        o.height -= 2;
         BI.isNumeric(o.width) && (o.width -= 2);
+        BI.isNumeric(o.height) && (o.height -= 2);
+        o.value = BI.isFunction(o.value) ? this.__watch(o.value, function (context, newValue) {
+            self.setValue(newValue);
+        }) : o.value;
+        o.items = BI.isFunction(o.items) ? this.__watch(o.items, function (context, newValue) {
+            self.populate(newValue);
+        }) : o.items;
         BI.IconTextValueCombo.superclass._init.apply(this, arguments);
         this.trigger = BI.createWidget({
             type: "bi.select_icon_text_trigger",

@@ -110,10 +110,11 @@ BI.DownListPopup = BI.inherit(BI.Pane, {
                             }]
 
                         },
-                        innerVGap: 5,
+                        innerVgap: 5,
                         maxHeight: 378
                     };
                     item.el.childValues = [];
+                    item.items = item.children;
                     BI.each(item.children, function (i, child) {
                         var fatherValue = BI.deepClone(item.el.value);
                         var childValue = BI.deepClone(child.value);
@@ -127,6 +128,7 @@ BI.DownListPopup = BI.inherit(BI.Pane, {
                             dynamic: true
                         };
                         child.father = fatherValue;
+                        child.childValue = child.value;
                         self.fatherValueMap[self._createChildValue(fatherValue, childValue)] = fatherValue;
                         self.childValueMap[self._createChildValue(fatherValue, childValue)] = childValue;
                         child.value = self._createChildValue(fatherValue, childValue);

@@ -10,6 +10,7 @@ BI.BasicButton = BI.inherit(BI.Single, {
         var conf = BI.BasicButton.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
             _baseCls: (conf._baseCls || "") + " bi-basic-button" + (conf.invalid ? "" : " cursor-pointer") + ((BI.isIE() && BI.getIEVersion() < 10) ? " hack" : ""),
+            // el: {} // 可以通过el来创建button元素
             value: "",
             stopEvent: false,
             stopPropagation: false,
@@ -26,15 +27,14 @@ BI.BasicButton = BI.inherit(BI.Single, {
             bubble: null
         });
     },
+
     _init: function () {
-        BI.BasicButton.superclass._init.apply(this, arguments);
+        var self = this;
         var opts = this.options;
-        if (opts.selected === true) {
-            BI.nextTick(BI.bind(function () {
-                this.setSelected(opts.selected);
-            }, this));
-        }
-        BI.nextTick(BI.bind(this.bindEvent, this));
+        opts.selected = BI.isFunction(opts.selected) ? this.__watch(opts.selected, function (context, newValue) {
+            self.setSelected(newValue);
+        }) : opts.selected;
+        BI.BasicButton.superclass._init.apply(this, arguments);
 
         if (opts.shadow) {
             this._createShadow();
@@ -42,6 +42,20 @@ BI.BasicButton = BI.inherit(BI.Single, {
         if (opts.level) {
             this.element.addClass("button-" + opts.level);
         }
+    },
+
+    _initRef: function () {
+        if (this.options.selected === true) {
+            this.setSelected(true);
+        }
+        // 延迟绑定事件，这样可以将自己绑定的事情优先执行
+        BI.nextTick(this.bindEvent.bind(this));
+        BI.BasicButton.superclass._initRef.apply(this, arguments);
+    },
+
+    // 默认render方法
+    render: function () {
+        return this.options.el;
     },
 
     _createShadow: function () {
@@ -194,6 +208,12 @@ BI.BasicButton = BI.inherit(BI.Single, {
                         });
                     }
                     hand.click(clk);
+                    // enter键等同于点击
+                    o.attributes && o.attributes.zIndex >= 0 && hand.keyup(function (e) {
+                        if (e.keyCode === BI.KeyCode.ENTER) {
+                           clk(e);
+                        }
+                    });
                     break;
             }
         });

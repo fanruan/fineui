@@ -13,7 +13,10 @@ BI.ListView = BI.inherit(BI.Widget, {
             blockSize: 10,
             scrollTop: 0,
             el: {},
-            items: []
+            items: [],
+            itemFormatter: function (item, index) {
+                return item;
+            }
         };
     },
 
@@ -41,6 +44,9 @@ BI.ListView = BI.inherit(BI.Widget, {
     // mounted之后绑定事件
     mounted: function () {
         var self = this, o = this.options;
+        o.items = BI.isFunction(o.items) ? this.__watch(o.items, function (context, newValue) {
+            self.populate(newValue);
+        }) : o.items;
         this._populate();
         this.element.scroll(function (e) {
             o.scrollTop = self.element.scrollTop();
@@ -71,7 +77,9 @@ BI.ListView = BI.inherit(BI.Widget, {
         };
         while ((lastHeight = getElementHeight()) < minContentHeight && index < o.items.length) {
             var items = o.items.slice(index, index + o.blockSize);
-            this.container.addItems(items, this);
+            this.container.addItems(items.map(function (item, i) {
+                return o.itemFormatter(item, index + i);
+            }), this);
             var addedHeight = getElementHeight() - lastHeight;
             this.cache[cnt] = {
                 index: index,

@@ -61,7 +61,7 @@ BI.HexColorPickerEditor = BI.inherit(BI.Widget, {
                     tgap: 10,
                     items: [{
                         type: 'bi.vertical_adapt',
-                        columnSize: [0.5, 'fill'],
+                        columnSize: ["fill", 'fill'],
                         height: 24,
                         items: [{
                             type: "bi.color_picker_show_button",
@@ -72,20 +72,8 @@ BI.HexColorPickerEditor = BI.inherit(BI.Widget, {
                             listeners: [{
                                 eventName: BI.ColorChooserShowButton.EVENT_CHANGE,
                                 action: function () {
-                                    if (this.isSelected()) {
-                                        self.lastColor = self.getValue();
-                                        self.setValue("transparent");
-                                    } else {
-                                        if (self.lastColor === "transparent") {
-                                            self.lastColor = "";
-                                        }
-                                        self.setValue(self.lastColor || "#ffffff");
-                                    }
-                                    if ((self.R.isValid() && self.G.isValid() && self.B.isValid()) ||
-                                        self._isEmptyRGB()) {
-                                        self.colorShow.element.css("background-color", self.getValue());
-                                        self.fireEvent(BI.ColorPickerEditor.EVENT_CHANGE);
-                                    }
+                                    self.setValue("transparent");
+                                    self.fireEvent(BI.ColorPickerEditor.EVENT_CHANGE);
                                 }
                             }],
                             ref: function (_ref) {
@@ -101,16 +89,8 @@ BI.HexColorPickerEditor = BI.inherit(BI.Widget, {
                                 listeners: [{
                                     eventName: BI.ColorChooserShowButton.EVENT_CHANGE,
                                     action: function () {
-                                        if (this.isSelected()) {
-                                            self.lastColor = self.getValue();
-                                            self.setValue("");
-                                        } else {
-                                            self.setValue(self.lastColor || "#ffffff");
-                                        }
-                                        if ((self.R.isValid() && self.G.isValid() && self.B.isValid()) || self._isEmptyRGB()) {
-                                            self.colorShow.element.css("background-color", self.getValue());
-                                            self.fireEvent(BI.ColorPickerEditor.EVENT_CHANGE);
-                                        }
+                                        self.setValue("");
+                                        self.fireEvent(BI.ColorPickerEditor.EVENT_CHANGE);
                                     }
                                 }],
                                 ref: function (_ref) {

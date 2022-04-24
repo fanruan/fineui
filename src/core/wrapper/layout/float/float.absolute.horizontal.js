@@ -35,7 +35,9 @@ BI.FloatAbsoluteHorizontalLayout = BI.inherit(BI.Layout, {
             bgap: o.bgap,
             // lgap和rgap不传的话内部不会设置left和right
             lgap: o.lgap,
-            rgap: o.rgap
+            rgap: o.rgap,
+            innerHgap: o.innerHgap,
+            innerVgap: o.innerVgap,
         };
     },
 

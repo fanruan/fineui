@@ -28,7 +28,8 @@ BI.YearDateCombo = BI.inherit(BI.Trigger, {
             type: "bi.year_popup",
             behaviors: o.behaviors,
             min: o.min,
-            max: o.max
+            max: o.max,
+            width: 122
         });
 
         this.popup.on(BI.YearPopup.EVENT_CHANGE, function () {

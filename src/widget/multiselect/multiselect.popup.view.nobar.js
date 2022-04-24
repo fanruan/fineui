@@ -38,7 +38,7 @@ BI.MultiSelectNoBarPopupView = BI.inherit(BI.Widget, {
             minWidth: opts.minWidth,
             maxHeight: opts.maxHeight,
             element: this,
-            buttons: [BI.i18nText("BI-Basic_Clears"), BI.i18nText("BI-Basic_Sure")],
+            buttons: [BI.i18nText("BI-Basic_Clears"), BI.i18nText("BI-Basic_OK")],
             el: this.loader,
             value: opts.value
         });
@@ -80,7 +80,11 @@ BI.MultiSelectNoBarPopupView = BI.inherit(BI.Widget, {
 
     resetWidth: function (w) {
         this.popupView.resetWidth(w);
-    }
+    },
+
+    setDirection: function (direction, position) {
+        this.popupView.setDirection(direction, position);
+    },
 });
 
 BI.MultiSelectNoBarPopupView.EVENT_CHANGE = "EVENT_CHANGE";

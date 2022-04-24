@@ -1,7 +1,6 @@
 *
-!src/less/*.less
-!src/less/lib/*.less
-!src/less/resource/*.less
+!public/less/*.less
+!src/less/**/*
 !dist/lib/*.d.ts
 !dist/lib/**/*.d.ts
 !dist/font.css
@@ -37,3 +36,5 @@
 !babel.config.js
 !babel.config.ie8.js
 !.eslintrc
+!dist/2.0/jsy.min.css
+!dist/2.0/bi.min.css

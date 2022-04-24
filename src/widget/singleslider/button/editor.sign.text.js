@@ -14,6 +14,7 @@ BI.SignTextEditor = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
         this.editor = BI.createWidget({
             type: "bi.editor",
+            simple: o.simple,
             height: o.height,
             hgap: 4,
             vgap: 2,

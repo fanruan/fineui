@@ -72,16 +72,9 @@ BI.ColorPickerEditor = BI.inherit(BI.Widget, {
             title: BI.i18nText("BI-Basic_Auto")
         });
         this.none.on(BI.IconButton.EVENT_CHANGE, function () {
-            if (this.isSelected()) {
-                self.lastColor = self.getValue();
-                self.setValue("");
-            } else {
-                self.setValue(self.lastColor || "#ffffff");
-            }
-            if ((self.R.isValid() && self.G.isValid() && self.B.isValid()) || self._isEmptyRGB()) {
-                self.colorShow.element.css("background-color", self.getValue());
-                self.fireEvent(BI.ColorPickerEditor.EVENT_CHANGE);
-            }
+            var value = self.getValue();
+            self.setValue("");
+            (value !== "") && self.fireEvent(BI.ColorPickerEditor.EVENT_CHANGE);
         });
 
         this.transparent = BI.createWidget({
@@ -94,20 +87,9 @@ BI.ColorPickerEditor = BI.inherit(BI.Widget, {
             title: BI.i18nText("BI-Transparent_Color")
         });
         this.transparent.on(BI.IconButton.EVENT_CHANGE, function () {
-            if (this.isSelected()) {
-                self.lastColor = self.getValue();
-                self.setValue("transparent");
-            } else {
-                if (self.lastColor === "transparent") {
-                    self.lastColor = "";
-                }
-                self.setValue(self.lastColor || "#ffffff");
-            }
-            if ((self.R.isValid() && self.G.isValid() && self.B.isValid()) ||
-                self._isEmptyRGB()) {
-                self.colorShow.element.css("background-color", self.getValue());
-                self.fireEvent(BI.ColorPickerEditor.EVENT_CHANGE);
-            }
+            var value = self.getValue();
+            self.setValue("transparent");
+            (value !== "transparent") && self.fireEvent(BI.ColorPickerEditor.EVENT_CHANGE);
         });
 
         BI.createWidget({

@@ -8,29 +8,32 @@ BI.Popover = BI.inherit(BI.Widget, {
         SIZE: {
             SMALL: "small",
             NORMAL: "normal",
-            BIG: "big",
+            BIG: "big"
         },
         MAX_HEIGHT: 600
     },
 
-    props: {
-        baseCls: "bi-popover bi-card bi-border-radius",
-        size: "normal", // small, normal, big
-        logic: {
-            dynamic: false,
-        },
-        header: null,
-        headerHeight: 40,
-        body: null,
-        footer: null,
-        footerHeight: 44,
-        closable: true, // BI-40839 是否显示右上角的关闭按钮
-        bodyHgap: 20,
-        bodyTgap: 10
+    props: function () {
+        return {
+            baseCls: "bi-popover bi-card bi-border-radius",
+            size: "normal", // small, normal, big
+            logic: {
+                dynamic: false
+            },
+            header: null,
+            headerHeight: 40,
+            body: null,
+            footer: null,
+            footerHeight: 44,
+            closable: true, // BI-40839 是否显示右上角的关闭按钮
+            bodyHgap: BI.SIZE_CONSANTS.H_GAP_SIZE,
+            bodyTgap: BI.SIZE_CONSANTS.V_GAP_SIZE
+        };
     },
 
     render: function () {
-        var self = this; var o = this.options;
+        var self = this;
+        var o = this.options;
         var c = this._constant;
         this.startX = 0;
         this.startY = 0;
@@ -42,11 +45,11 @@ BI.Popover = BI.inherit(BI.Widget, {
             self.startY += deltaY;
             self.element.css({
                 left: BI.clamp(self.startX, 0, W - self.element.width()) + "px",
-                top: BI.clamp(self.startY, 0, H - self.element.height()) + "px",
+                top: BI.clamp(self.startY, 0, H - self.element.height()) + "px"
             });
             // BI-12134 没有什么特别好的方法
             BI.Resizers._resize({
-                target: self.element[0],
+                target: self.element[0]
             });
         }, function () {
             self.tracker.releaseMouseMoves();
@@ -55,43 +58,43 @@ BI.Popover = BI.inherit(BI.Widget, {
             el: {
                 type: "bi.htape",
                 cls: "bi-message-title bi-header-background",
-                ref: function (_ref) {
-                    self.dragger = _ref;
-                },
                 items: [{
-                    type: "bi.absolute",
-                    items: [{
-                        el: BI.isPlainObject(o.header) ? BI.extend({}, o.header, {
-                            extraCls: "bi-font-bold",
-                        }) : {
-                            type: "bi.label",
-                            cls: "bi-font-bold",
-                            height: o.headerHeight,
-                            text: o.header,
-                            title: o.header,
-                            textAlign: "left",
+                    el: {
+                        type: "bi.absolute",
+                        ref: function (_ref) {
+                            self.dragger = _ref;
                         },
-                        left: 20,
-                        top: 0,
-                        right: 0,
-                        bottom: 0,
-                    }],
-                }, {
-                    el: o.closable ? {
+                        items: [{
+                            el: BI.isPlainObject(o.header) ? BI.extend({}, o.header, {
+                                extraCls: "bi-font-bold"
+                            }) : {
+                                type: "bi.label",
+                                cls: "bi-font-bold",
+                                height: o.headerHeight,
+                                text: o.header,
+                                title: o.header,
+                                textAlign: "left"
+                            },
+                            top: 0,
+                            bottom: 0,
+                            left: BI.SIZE_CONSANTS.H_GAP_SIZE,
+                            right: o.closable ? 0 : BI.SIZE_CONSANTS.H_GAP_SIZE
+                        }]
+                    }
+                }, o.closable ? {
+                    el: {
                         type: "bi.icon_button",
                         cls: "bi-message-close close-font",
                         height: o.headerHeight,
                         handler: function () {
                             self.close();
-                        },
-                    } : {
-                        type: "bi.layout",
+                        }
                     },
-                    width: 56,
-                }],
-                height: o.headerHeight,
+                    width: 56
+                } : null],
+                height: o.headerHeight
             },
-            height: o.headerHeight,
+            height: o.headerHeight
         }, o.logic.dynamic ? {
             el: {
                 type: "bi.vertical",
@@ -102,14 +105,14 @@ BI.Popover = BI.inherit(BI.Widget, {
                 },
                 css: {
                     "max-height": this._getSuitableBodyHeight(c.MAX_HEIGHT - o.headerHeight - (o.footer ? o.footerHeight : 0) - o.bodyTgap),
-                    "min-height": this._getSuitableBodyHeight(size.height - o.headerHeight - (o.footer ? o.footerHeight : 0) - o.bodyTgap),
+                    "min-height": this._getSuitableBodyHeight(size.height - o.headerHeight - (o.footer ? o.footerHeight : 0) - o.bodyTgap)
                 },
                 items: [{
-                    el: o.body,
+                    el: o.body
                 }],
-            },
-            hgap: o.bodyHgap,
-            tgap: o.bodyTgap,
+                hgap: o.bodyHgap,
+                tgap: o.bodyTgap
+            }
         } : {
             el: {
                 type: "bi.absolute",
@@ -118,9 +121,9 @@ BI.Popover = BI.inherit(BI.Widget, {
                     left: o.bodyHgap,
                     top: o.bodyTgap,
                     right: o.bodyHgap,
-                    bottom: 0,
-                }],
-            },
+                    bottom: 0
+                }]
+            }
         }];
         if (o.footer) {
             items.push({
@@ -128,33 +131,33 @@ BI.Popover = BI.inherit(BI.Widget, {
                     type: "bi.absolute",
                     items: [{
                         el: o.footer,
-                        left: 20,
+                        left: BI.SIZE_CONSANTS.H_GAP_SIZE,
                         top: 0,
-                        right: 20,
-                        bottom: 0,
+                        right: BI.SIZE_CONSANTS.H_GAP_SIZE,
+                        bottom: 0
                     }],
-                    height: o.footerHeight,
+                    height: o.footerHeight
                 },
-                height: o.footerHeight,
+                height: o.footerHeight
             });
         }
 
         return BI.extend({
-            type: o.logic.dynamic ? "bi.vertical" : "bi.vtape",
             items: items,
-            width: this._getSuitableWidth(size.width),
+            width: this._getSuitableWidth(size.width)
         }, o.logic.dynamic ? {
             type: "bi.vertical",
-            scrolly: false,
+            scrolly: false
         } : {
             type: "bi.vtape",
-            height: this._getSuitableHeight(size.height),
+            height: this._getSuitableHeight(size.height)
         });
     },
 
     // mounted之后绑定事件
     mounted: function () {
-        var self = this; var o = this.options;
+        var self = this;
+        var o = this.options;
         this.dragger.element.mousedown(function (e) {
             var pos = self.element.offset();
             self.startX = pos.left;
@@ -202,7 +205,7 @@ BI.Popover = BI.inherit(BI.Widget, {
         return {
             width: o.width || size.width,
             height: o.height || size.height,
-            type: size.type || "default",
+            type: size.type || "default"
         };
     },
 
@@ -221,10 +224,11 @@ BI.Popover = BI.inherit(BI.Widget, {
     },
 
     setZindex: function (zindex) {
-        this.element.css({ "z-index": zindex });
+        this.element.css({"z-index": zindex});
     },
 
-    destroyed: function () {},
+    destroyed: function () {
+    }
 });
 
 BI.shortcut("bi.popover", BI.Popover);
@@ -232,12 +236,13 @@ BI.shortcut("bi.popover", BI.Popover);
 BI.BarPopover = BI.inherit(BI.Popover, {
     _defaultConfig: function () {
         return BI.extend(BI.BarPopover.superclass._defaultConfig.apply(this, arguments), {
-            btns: [BI.i18nText("BI-Basic_Sure"), BI.i18nText("BI-Basic_Cancel")],
+            btns: [BI.i18nText("BI-Basic_OK"), BI.i18nText("BI-Basic_Cancel")]
         });
     },
 
     beforeCreate: function () {
-        var self = this; var o = this.options;
+        var self = this;
+        var o = this.options;
         o.footer || (o.footer = {
             type: "bi.right_vertical_adapt",
             lgap: 10,
@@ -249,7 +254,7 @@ BI.BarPopover = BI.inherit(BI.Popover, {
                 handler: function (v) {
                     self.fireEvent(BI.Popover.EVENT_CANCEL, v);
                     self.close(v);
-                },
+                }
             }, {
                 type: "bi.button",
                 text: this.options.btns[0],
@@ -258,10 +263,10 @@ BI.BarPopover = BI.inherit(BI.Popover, {
                 handler: function (v) {
                     self.fireEvent(BI.Popover.EVENT_CONFIRM, v);
                     self.close(v);
-                },
-            }],
+                }
+            }]
         });
-    },
+    }
 });
 
 BI.shortcut("bi.bar_popover", BI.BarPopover);

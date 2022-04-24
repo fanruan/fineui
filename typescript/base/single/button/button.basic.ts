@@ -8,7 +8,7 @@ export declare class BasicButton extends Single {
     props: {
         stopEvent?: boolean;
         stopPropagation?: boolean;
-        selected?: boolean;
+        selected?: boolean | ((context: any) => boolean);
 
         /**
          * 点击一次选中有效,再点无效
@@ -39,7 +39,8 @@ export declare class BasicButton extends Single {
         handler?: Function;
         bubble?: Function | null | string;
         text?: string;
-    } & Single['props'];
+        el?: Obj;
+    } & Single["props"];
 
     _createShadow(): void;
 
@@ -51,7 +52,7 @@ export declare class BasicButton extends Single {
 
     beforeClick(): void;
 
-    doClick(): void;
+    doClick(e?: Event): void;
 
     handle(): BasicButton;
 

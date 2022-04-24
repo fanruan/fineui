@@ -30,6 +30,7 @@ BI.SignEditor = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
         this.editor = BI.createWidget({
             type: "bi.editor",
+            simple: o.simple,
             height: o.height,
             hgap: o.hgap,
             vgap: o.vgap,
@@ -176,6 +177,7 @@ BI.SignEditor = BI.inherit(BI.Widget, {
 
     setWaterMark: function (v) {
         this.options.watermark = v;
+        this._checkText();
         this.editor.setWaterMark(v);
     },
 

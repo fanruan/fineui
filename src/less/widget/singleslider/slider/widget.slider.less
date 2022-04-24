@@ -6,23 +6,24 @@
     border-width: 2px;
     border-style: solid;
     .border-radius(8px);
-    background-color: @color-bi-background-default;
-    height: 12px;
-    width: 12px;
-    top: 6px;
-    left: -8px;
+    background-color: @color-bi-background-slider-button;
+    height: 8px;
+    width: 8px;
+    top: 8px;
+    left: -6px;
     &:hover, &.hover {
       .border-radius(10px);
-      background-color: @color-bi-background-normal;
-      width: 16px;
-      height: 16px;
-      top: 4px;
-      left: -10px;
+      background-color: @color-bi-background-hover-slider-button;
+      width: 12px;
+      height: 12px;
+      top: 6px;
+      left: -8px;
+      .box-shadow(0 2px 4px 1px,rgba(0, 35, 11, 20%));
     }
     &.disabled {
-      border-color: @color-bi-border-disabled;
+      border-color: @color-bi-border-disabled-slider-button;
       &:hover, &.hover {
-        background-color: @color-bi-background-normal;
+        background-color: @color-bi-background-hover-disabled-slider-button;
         width: 12px;
         height: 12px;
         top: 6px;
@@ -35,13 +36,13 @@
 .bi-theme-dark {
   .bi-single-slider-button {
     & .slider-button {
-      background-color: @color-bi-background-default-theme-dark;
+      background-color: @color-bi-background-slider-button;
       &:hover, &.hover {
-        background-color: @color-bi-background-normal-theme-dark;
+        background-color: @color-bi-background-hover-slider-button-theme-dark;
       }
       &.disabled {
         &:hover, &.hover {
-          background-color: @color-bi-background-normal-theme-dark;
+          background-color: @color-bi-background-hover-disabled-slider-button-theme-dark;
         }
       }
     }

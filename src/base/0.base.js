@@ -5,6 +5,7 @@ BI.prepares.push(function () {
     BI.Bubbles = new BI.BubblesController();
     BI.Tooltips = new BI.TooltipsController();
     BI.Popovers = new BI.PopoverController();
+    BI.Drawers = new BI.DrawerController();
     BI.Broadcasts = new BI.BroadcastController();
     BI.StyleLoaders = new BI.StyleLoaderManager();
 });

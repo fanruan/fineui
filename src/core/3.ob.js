@@ -51,7 +51,11 @@
             if (BI.isFunction(this.props)) {
                 props = this.props(config);
             }
-            this.options = extend(this._defaultConfig(config), props, config);
+            var defaultProps = extend(this._defaultConfig(config), props);
+            var modifiedDefaultProps = (config && config.type && BI.OB.configFunctions[config.type + ".props"]) ? BI.reduce(BI.OB.configFunctions[config.type + ".props"], function (value, conf, index) {
+                return extend(conf, value.fn(defaultProps, config, value.opt));
+            }, {}) : null;
+            this.options = extend(defaultProps, modifiedDefaultProps, config);
         },
 
         _init: function () {
@@ -62,9 +66,12 @@
         _initListeners: function () {
             var self = this;
             if (this.options.listeners != null) {
-                _.each(this.options.listeners, function (lis) {
-                    (lis.target ? lis.target : self)[lis.once ? "once" : "on"]
-                    (lis.eventName, _.bind(lis.action, self));
+                _.each(this.options.listeners, function (lis, eventName) {
+                    if (_.isFunction(lis)) {
+                        self.on(eventName, lis);
+                        return;
+                    }
+                    (lis.target ? lis.target : self)[lis.once ? "once" : "on"](lis.eventName, _.bind(lis.action, self));
                 });
                 delete this.options.listeners;
             }

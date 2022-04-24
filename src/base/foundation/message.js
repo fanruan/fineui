@@ -32,6 +32,7 @@ BI.Msg = function () {
                 cls: "bi-message-animate bi-message-leave",
                 level: level,
                 autoClose: autoClose,
+                closable: options.closable,
                 text: message,
                 listeners: [{
                     eventName: BI.Toast.EVENT_DESTORY,
@@ -67,6 +68,10 @@ BI.Msg = function () {
                 toast.element.removeClass("bi-message-enter").addClass("bi-message-leave");
                 toast.destroy();
             }, 5000);
+            return function () {
+                toast.element.removeClass("bi-message-enter").addClass("bi-message-leave");
+                toast.destroy();
+            };
         },
         _show: function (hasCancel, title, message, callback) {
             BI.isNull($mask) && ($mask = BI.Widget._renderEngine.createElement("<div class=\"bi-z-index-mask\">").css({
@@ -128,6 +133,31 @@ BI.Msg = function () {
                 items: [
                     {
                         type: "bi.border",
+                        attributes: {
+                            tabIndex: 1
+                        },
+                        mounted: function () {
+                            this.element.keyup(function (e) {
+                                if (e.keyCode === BI.KeyCode.ENTER) {
+                                    close();
+                                    if (BI.isFunction(callback)) {
+                                        callback.apply(null, [true]);
+                                    }
+                                } else if (e.keyCode === BI.KeyCode.ESCAPE) {
+                                    close();
+                                    if (hasCancel === true) {
+                                        if (BI.isFunction(callback)) {
+                                            callback.apply(null, [false]);
+                                        }
+                                    }
+                                }
+                            });
+                            try {
+                                this.element.focus();
+                            } catch (e) {
+
+                            }
+                        },
                         cls: "bi-card",
                         items: {
                             north: {
@@ -157,14 +187,14 @@ BI.Msg = function () {
                                                     }
                                                 }
                                             },
-                                            width: 60
+                                            width: 56
                                         }
                                     }
                                 },
                                 height: 40
                             },
                             center: {
-                                el: {
+                                el: BI.isPlainObject(message) ? message : {
                                     type: "bi.label",
                                     vgap: 10,
                                     hgap: 20,

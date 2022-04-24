@@ -7,8 +7,9 @@ body .bi-button, #body .bi-button {
     .border-radius(0px);
   }
   .border-radius(2px);
-  border: 1px solid @color-bi-border-highlight;
-  background-color: @color-bi-background-highlight;
+  outline: 0;
+  border: 1px solid @color-bi-border-button;
+  background-color: @color-bi-background-button;
   .box-sizing(border-box);
   text-align: center;
   vertical-align: middle;
@@ -22,11 +23,11 @@ body .bi-button, #body .bi-button {
     font-size: inherit;
     border-width: 0;
     background-color: transparent;
-    &:hover {
-      .opacity(0.9);
+    &:hover, &:focus {
+      .opacity(0.8);
     }
     &:active {
-      .opacity(0.8);
+      .opacity(1);
     }
     &:after {
       display: none;
@@ -38,83 +39,136 @@ body .bi-button, #body .bi-button {
   }
   &.button-common {
     &, & .b-font:before {
-      color: @color-bi-text;
+      color: @color-bi-text-common-button;
     }
     &.clear, &.clear .b-font:before {
-      color: @color-bi-text-highlight;
+      color: @color-bi-text-common-clear-button;
     }
-    &.ghost{
-      &, & .b-font:before{
-        color: @color-bi-text-highlight;
+    &.ghost {
+      &, & .b-font:before {
+        color: @color-bi-text-common-ghost-button;
       }
-      &:hover{
+      &:hover, &:focus {
         color: @color-bi-text;
-        background-color: @color-bi-background-highlight;
+        background-color: @color-bi-background-hover-common-ghost-button;
       }
-      &:active{
-        background-color: @color-bi-background-highlight;
+      &:active {
+        background-color: @color-bi-background-active-common-ghost-button;
       }
     }
   }
   &.button-ignore {
     & {
-      &, & .b-font:before {
-        color: @color-bi-text-highlight;
+      background-color: @color-bi-background-ignore-button;
+      &:not(.clear, .ghost) {
+        border-color: @color-bi-border-ignore-button;
       }
-      background-color: transparent;
-      border-color: @color-bi-border-highlight;
+    }
+    &:not(.clear, .ghost) {
+      &, & .b-font:before {
+        color: @color-bi-text-ignore-button;
+      }
     }
     &.clear {
       background-color: transparent;
       border-width: 0;
+    }
+    &.ghost {
+      &:hover, &:focus {
+        border-color: @color-bi-border-ignore-button;
+        &, & .b-font:before {
+          color: @color-bi-text-ignore-button;
+        }
+      }
+      background-color: transparent;
+      border-color: @color-bi-border-dark-gray-line;
     }
   }
   &.button-success {
     & {
       &, & .b-font:before {
-        color: @color-bi-text;
+        color: @color-bi-text-success-button;
       }
-      background-color: @color-bi-background-success;
-      border-color: @color-bi-border-success;
+      background-color: @color-bi-background-success-button;
+      border-color: @color-bi-border-success-button;
     }
     &.clear {
       &, & .b-font:before {
-        color: @color-bi-text-success;
+        color: @color-bi-text-success-clear-button;
       }
       background-color: transparent;
       border-width: 0;
+    }
+    &.ghost {
+      &, & .b-font:before {
+        color: @color-bi-text-success-ghost-button;
+      }
+      background-color: transparent;
+      &:hover, &:focus {
+        color: @color-bi-text;
+        background-color: @color-bi-background-success-button;
+      }
+      &:active {
+        background-color: @color-bi-background-success-button;
+      }
     }
   }
   &.button-warning {
     & {
       &, & .b-font:before {
-        color: @color-bi-text;
+        color: @color-bi-text-warning-button;
       }
-      background-color: @color-bi-background-warning;
-      border-color: @color-bi-border-warning;
+      background-color: @color-bi-background-warning-button;
+      border-color: @color-bi-border-warning-button;
     }
     &.clear {
       &, & .b-font:before {
-        color: @color-bi-text-redmark;
+        color: @color-bi-text-warning-clear-button;
       }
       background-color: transparent;
       border-width: 0;
+    }
+    &.ghost {
+      &, & .b-font:before {
+        color: @color-bi-text-warning-ghost-button;
+      }
+      background-color: transparent;
+      &:hover, &:focus {
+        color: @color-bi-text;
+        background-color: @color-bi-background-warning-button;
+      }
+      &:active {
+        background-color: @color-bi-background-warning-button;
+      }
     }
   }
   &.button-error {
     & {
       &, & .b-font:before {
-        color: @color-bi-text;
+        color: @color-bi-text-error-button;
       }
-      background-color: @color-bi-background-failure;
-      border-color: @color-bi-border-failure;
+      background-color: @color-bi-background-error-button;
+      border-color: @color-bi-border-error-button;
     }
     &.clear {
       &, & .b-font:before {
-        color: @color-bi-text-failure;
+        color: @color-bi-text-error-clear-button;
       }
       background-color: transparent;
       border-width: 0;
+    }
+    &.ghost {
+      &, & .b-font:before {
+        color: @color-bi-text-error-ghost-button;
+      }
+      background-color: transparent;
+      &:hover, &:focus {
+        color: @color-bi-text;
+        background-color: @color-bi-background-error-button;
+      }
+      &:active {
+        background-color: @color-bi-background-error-button;
+      }
     }
   }
   &.button-common.disabled,
@@ -123,12 +177,12 @@ body .bi-button, #body .bi-button {
   &.button-warning.disabled {
     &, &.base-disabled {
       &, & .b-font:before {
-        color: @color-bi-text-disabled !important;
+        color: @color-bi-text-disabled-button !important;
       }
-      background-color: fade(@color-bi-background-light-disabled, 20%) !important;
-      @ieColor: argb(fade(@color-bi-background-light-disabled, 20%));
+      background-color: fade(@color-bi-background-disabled-button, 20%) !important;
+      @ieColor: argb(fade(@color-bi-background-disabled-button, 20%));
       filter: ~"progid:DXImageTransform.Microsoft.gradient(startColorstr=@{ieColor},endColorstr=@{ieColor})";
-      border-color: @color-bi-border-disabled !important;
+      border-color: @color-bi-border-disabled-button !important;
     }
     &:after {
       display: none;
@@ -136,10 +190,10 @@ body .bi-button, #body .bi-button {
   }
   &.button-ignore.disabled {
     &, & .b-font:before {
-      color: @color-bi-text-disabled !important;
+      color: @color-bi-text-disabled-ignore-button !important;
     }
-    background: @color-bi-background-default !important;
-    border-color: @color-bi-border-line !important;
+    background: @color-bi-background-disabled-ignore-button !important;
+    border-color: @color-bi-border-disabled-ignore-button !important;
     &:after {
       display: none;
     }
@@ -151,21 +205,58 @@ body .bi-button, #body .bi-button {
   &.button-ignore.disabled {
     &.clear {
       &, & .b-font:before {
-        color: @color-bi-text-disabled !important;
+        color: @color-bi-text-disabled-ignore-clear-button !important;
       }
       background: transparent !important;
       border-width: 0 !important;
-      &:hover, &:active {
+      &:hover, &:focus, &:active {
         .opacity(1);
       }
     }
     &.ghost {
       &, & .b-font:before {
-        color: @color-bi-text-highlight !important;
+        // color: @color-bi-text-disabled-ignore-ghost-button !important;
       }
       background: transparent !important;
-      border-color: @color-bi-text-highlight !important;
+      // border-color: @color-bi-border-disabled-ignore-ghost-button !important;
       .opacity(0.5);
+    }
+  }
+  &.button-ignore.disabled {
+    &.ghost {
+      .opacity(1);
+    }
+  }
+  &.button-common.disabled {
+    &.ghost {
+      &, & .b-font:before {
+        color: @color-bi-text-disabled-common-ghost-button !important;
+      }
+      border-color: @color-bi-border-disabled-common-ghost-button !important;
+    }
+  }
+  &.button-success.disabled {
+    &.ghost {
+      &, & .b-font:before {
+        color: @color-bi-text-disabled-success-ghost-button !important;
+      }
+      border-color: @color-bi-border-disabled-success-ghost-button !important;
+    }
+  }
+  &.button-warning.disabled {
+    &.ghost {
+      &, & .b-font:before {
+        color: @color-bi-text-disabled-warning-ghost-button !important;
+      }
+      border-color: @color-bi-border-disabled-warning-ghost-button !important;
+    }
+  }
+  &.button-error.disabled {
+    &.ghost {
+      &, & .b-font:before {
+        color: @color-bi-text-disabled-error-ghost-button !important;
+      }
+      border-color: @color-bi-border-disabled-error-ghost-button !important;
     }
   }
 }
@@ -195,10 +286,10 @@ body .bi-button, #body .bi-button {
       .opacity(0.1);
       .transition(@activeStopVal)
     }
-    &:hover{
+    &:hover, &:focus {
       & .bi-button-mask {
         .opacity(0.1);
-        background-color: @color-bi-background-default;
+        background-color: @color-bi-background-hover-button-mask;
         .transition(@hoverVal);
       }
     }
@@ -206,7 +297,7 @@ body .bi-button, #body .bi-button {
   &.button-ignore {
     &:after {
       content: "";
-      background-color: @color-bi-background-highlight;
+      background-color: @color-bi-background-ignore-button-mask;
       .border-radius(10px);
       display: block;
       width: 100%;
@@ -227,8 +318,10 @@ body .bi-button, #body .bi-button {
       .opacity(0.1);
       .transition(@activeStopVal)
     }
-    &:hover{
-      background-color: @color-bi-blue-10;
+    &:hover, &:focus {
+      &:not(.clear, .ghost) {
+        background-color: @color-bi-background-hover-ignore-button-mask;
+      }
       .transition(@hoverVal);
     }
   }
@@ -238,48 +331,60 @@ body .bi-button, #body .bi-button {
 }
 
 .bi-theme-dark {
-  body .bi-button, #body .bi-button {
-    &.button-common {
-      &.ghost{
-        &, & .b-font:before{
-          color: @color-bi-text;
-          border-color: @color-bi-border-default;
-        }
-        &:hover{
-          color: @color-bi-text-normal;
-          background-color: @color-bi-background-default;
-        }
-        &:active{
-          .background-color(@color-bi-background-default, 90%);
-        }
-      }
-    }
+  .bi-button, #body .bi-button {
     &.button-ignore {
-      &:hover{
-        background-color: @color-bi-blue-10;
+      background-color: @color-bi-background-ignore-button-theme-dark;
+      &:hover, &:focus {
+        background-color: @color-bi-background-hover-ignore-button-theme-dark;
       }
-      &:active{
-        background-color: @color-bi-blue-10;
+      &:active {
+        background-color: @color-bi-background-active-ignore-button-theme-dark;
       }
-    }
-    &.button-common.disabled{
+      &.clear {
+        background-color: transparent;
+      }
       &.ghost {
-        &, & .b-font:before {
-          color: @color-bi-text !important;
-        }
-        background: transparent !important;
-        border-color: @color-bi-border-default !important;
-        .opacity(0.5);
+        border-color: @color-bi-border-dark-gray-line-theme-dark;
       }
     }
+
+    &.button-common.disabled,
     &.button-success.disabled,
     &.button-error.disabled,
-    &.button-warning.disabled,
+    &.button-warning.disabled {
+      &, &.base-disabled {
+        border-color: @color-bi-border-dark-gray-line-theme-dark !important;
+        background-color: fade(@color-bi-background-disabled-button-theme-dark, 20%) !important;
+        @ieColor: argb(fade(@color-bi-background-disabled-button-theme-dark, 20%));
+        filter: ~"progid:DXImageTransform.Microsoft.gradient(startColorstr=@{ieColor},endColorstr=@{ieColor})";
+
+        &.clear {
+          background-color: transparent !important;
+        }
+        &.ghost {
+          // 深色系下灰化就统一用灰化色
+          &, & .b-font:before {
+            color: @color-bi-text-disabled-theme-dark !important;
+          }
+          background: transparent !important;
+          .opacity(1);
+        }
+      }
+    }
     &.button-ignore.disabled {
       &, &.base-disabled {
-        background-color: fade(@color-bi-background-light-disabled-theme-dark, 20%) !important;
-        @ieColor: argb(fade(@color-bi-background-light-disabled-theme-dark, 20%));
-        filter: ~"progid:DXImageTransform.Microsoft.gradient(startColorstr=@{ieColor},endColorstr=@{ieColor})";
+        &, & .b-font:before {
+          color: @color-bi-text-disabled-theme-dark !important;
+        }
+        border-color: @color-bi-border-dark-gray-line-theme-dark !important;
+        background-color: @color-bi-background-ignore-button-theme-dark !important;
+        &.clear {
+          background-color: transparent !important;
+        }
+        &.ghost {
+          background: transparent !important;
+          .opacity(1);
+        }
       }
     }
   }

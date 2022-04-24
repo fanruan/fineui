@@ -23,4 +23,10 @@ export declare class ListTreeValueChooserInsertCombo extends AbstractListTreeVal
     populate<T>(items: T[]): void;
 
     getSearcher(): Widget;
+
+    focus(): void;
+
+    blur(): void;
+
+    setWaterMark(v: string): void;
 }

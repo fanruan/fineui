@@ -42,9 +42,9 @@ BI.IconComboTrigger = BI.inherit(BI.Trigger, {
             cls: "icon-combo-down-icon trigger-triangle-font font-size-12",
             width: 12,
             height: 8,
-            selected: BI.isNotEmptyString(iconCls)
+            selected: BI.isNotEmptyString(iconCls),
+            invisible: !o.isShowDown
         });
-        this.down.setVisible(o.isShowDown);
         BI.createWidget({
             type: "bi.absolute",
             element: this,

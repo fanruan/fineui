@@ -11,6 +11,9 @@ BI.GridView = BI.inherit(BI.Widget, {
             baseCls: "bi-grid-view",
             // width: 400, //必设
             // height: 300, //必设
+            scrollable: true,
+            scrollx: false,
+            scrolly: false,
             overflowX: true,
             overflowY: true,
             overscanColumnCount: 0,
@@ -21,7 +24,10 @@ BI.GridView = BI.inherit(BI.Widget, {
             // estimatedRowSize: 30, //rowHeightGetter为function时必设
             scrollLeft: 0,
             scrollTop: 0,
-            items: []
+            items: [],
+            itemFormatter: function (item, row, col) {
+                return item;
+            }
         });
     },
 
@@ -49,14 +55,30 @@ BI.GridView = BI.inherit(BI.Widget, {
                 scrollTop: o.scrollTop
             });
         });
+        // 兼容一下
+        var scrollable = o.scrollable, scrollx = o.scrollx, scrolly = o.scrolly;
+        if (o.overflowX === false) {
+            if (o.overflowY === false) {
+                scrollable = false;
+            } else {
+                scrollable = "y"
+            }
+        } else {
+            if (o.overflowY === false) {
+                scrollable = "x";
+            }
+        }
         BI._lazyCreateWidget({
             type: "bi.vertical",
             element: this,
-            scrollable: o.overflowX === true && o.overflowY === true,
-            scrolly: o.overflowX === false && o.overflowY === true,
-            scrollx: o.overflowX === true && o.overflowY === false,
+            scrollable: scrollable,
+            scrolly: scrolly,
+            scrollx: scrollx,
             items: [this.container]
         });
+        o.items = BI.isFunction(o.items) ? this.__watch(o.items, function (context, newValue) {
+            self.populate(newValue);
+        }) : o.items;
         if (o.items.length > 0) {
             this._calculateSizeAndPositionData();
             this._populate();
@@ -172,12 +194,13 @@ BI.GridView = BI.inherit(BI.Widget, {
                         child = this.renderedCells[index].el;
                         renderedCells.push(this.renderedCells[index]);
                     } else {
+                        var item = o.itemFormatter(o.items[rowIndex][columnIndex], rowIndex, columnIndex);
                         child = BI._lazyCreateWidget(BI.extend({
                             type: "bi.label",
                             width: columnDatum.size,
                             height: rowDatum.size
-                        }, o.items[rowIndex][columnIndex], {
-                            cls: (o.items[rowIndex][columnIndex].cls || "") + " grid-cell" + (rowIndex === 0 ? " first-row" : "") + (columnIndex === 0 ? " first-col" : ""),
+                        }, item, {
+                            cls: (item.cls || "") + " grid-cell" + (rowIndex === 0 ? " first-row" : "") + (columnIndex === 0 ? " first-col" : ""),
                             _rowIndex: rowIndex,
                             _columnIndex: columnIndex,
                             _left: columnDatum.offset + horizontalOffsetAdjustment,

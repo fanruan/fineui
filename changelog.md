@@ -1,6 +1,23 @@
 # 更新日志
+2.0(2022-01)
+- 提供自定义表单
+
+2.0(2021-12)
+- 新增Context组件
+- toast支持closable属性，可控制是否显示关闭按钮
+- 新增气泡弹框控件
+- BI.point支持widget添加埋点
+- childContext废弃，替换成provide
+- 支持BI.useContext获取上下文环境
+- BI.Msg.alert支持message传json格式
+- 支持BI.config(function(){})进行系统配置
+
+2.0(2021-11)
+- 限制了复选下拉框一次粘贴添加值个数最大2000
+
 2.0(2021-10)
 - combo增加window.blur事件触发隐藏
+
 2.0(2021-09)
 - 支持自动watch
 - 支持h函数传递left、right，优化left_right_vertical_adapt布局的jsx写法

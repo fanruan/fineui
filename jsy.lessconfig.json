@@ -1,0 +1,21 @@
+{
+  "@background-color-card-primary": "#003D4D",
+  "@color-primary": "#00acbe",
+  "font-color-normal": "#0d1540",
+  "font-color-light-gray": "#0d1540",
+  "font-color-disabled": "fade(#0d1540, 40)",
+  "font-color-light-disabled": "fade(#0d1540, 20)",
+  "font-color-success": "#28b668",
+  "font-color-negative": "#e65251",
+  "font-color-warning": "#faaa39",
+  "font-color-tips": "fade(#0d1540, 40)",
+
+  "background-color-light-disabled": "fade(#0d1540, 5)",
+  "background-color-dark-success": "#28b668",
+  "background-color-negative": "#e65251",
+  "background-color-warning": "#faaa39",
+
+  "border-color-disabled": "#e8eaed",
+  "border-color-success": "#28b668",
+  "border-color-negative": "#e65251"
+}

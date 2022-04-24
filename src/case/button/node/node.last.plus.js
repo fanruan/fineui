@@ -23,7 +23,9 @@ BI.LastPlusGroupNode = BI.inherit(BI.NodeButton, {
         var self = this, o = this.options;
         this.checkbox = BI.createWidget({
             type: "bi.last_tree_node_checkbox",
-            stopPropagation: true
+            stopPropagation: true,
+            iconHeight: o.height,
+            iconWidth: o.height
         });
         this.text = BI.createWidget({
             type: "bi.label",
@@ -48,7 +50,7 @@ BI.LastPlusGroupNode = BI.inherit(BI.NodeButton, {
         });
         var type = BI.LogicFactory.createLogicTypeByDirection(BI.Direction.Left);
         var items = BI.LogicFactory.createLogicItemsByDirection(BI.Direction.Left, {
-            width: 24,
+            width: BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT,
             el: this.checkbox
         }, this.text);
         BI.createWidget(BI.extend({

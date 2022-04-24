@@ -41,7 +41,7 @@ BI.MultiSelectInsertNoBarCombo = BI.inherit(BI.Single, {
 
         this.trigger = BI.createWidget({
             type: "bi.multi_select_insert_trigger",
-            height: o.height - 2,
+            height: o.height - (o.simple ? 1 : 2),
             text: o.text,
             // adapter: this.popup,
             masker: {
@@ -88,6 +88,7 @@ BI.MultiSelectInsertNoBarCombo = BI.inherit(BI.Single, {
                     }
                     self._dataChange = true;
                 });
+                this.getSearcher().getKeywordsLength() > 2000 && BI.Msg.alert(BI.i18nText("BI-Basic_Prompt"), BI.i18nText("BI-Basic_Too_Much_Value_Get_Two_Thousand"));
             }
         });
 
@@ -116,7 +117,7 @@ BI.MultiSelectInsertNoBarCombo = BI.inherit(BI.Single, {
 
         this.combo = BI.createWidget({
             type: "bi.combo",
-            cls: "bi-border bi-border-radius",
+            cls: (o.simple ? "bi-border-bottom" : "bi-border") + " bi-border-radius",
             toggle: false,
             container: o.container,
             el: this.trigger,
@@ -401,7 +402,7 @@ BI.MultiSelectInsertNoBarCombo = BI.inherit(BI.Single, {
         callback();
         function adjust () {
             if (self.wants2Quit === true) {
-                self.fireEvent(BI.MultiSelectInsertNoBarCombo.EVENT_CONFIRM);
+                self._dataChange && self.fireEvent(BI.MultiSelectInsertNoBarCombo.EVENT_CONFIRM);
                 self.wants2Quit = false;
             }
             self.requesting = false;

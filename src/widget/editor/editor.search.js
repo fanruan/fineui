@@ -2,10 +2,10 @@
  * Created by roy on 15/9/14.
  */
 BI.SearchEditor = BI.inherit(BI.Widget, {
-    _defaultConfig: function () {
+    _defaultConfig: function (config) {
         var conf = BI.SearchEditor.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
-            baseCls: "bi-search-editor bi-border bi-focus-shadow",
+            baseCls: "bi-search-editor bi-focus-shadow " + (config.simple ? "bi-border-bottom" : "bi-border"),
             height: 24,
             errorText: "",
             watermark: BI.i18nText("BI-Basic_Search"),
@@ -14,11 +14,12 @@ BI.SearchEditor = BI.inherit(BI.Widget, {
         });
     },
     _init: function () {
-        this.options.height -= 2;
+        this.options.height -= this.options.simple ? 1 : 2;
         BI.SearchEditor.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
         this.editor = BI.createWidget(o.el, {
             type: "bi.editor",
+            simple: o.simple,
             height: o.height,
             watermark: o.watermark,
             allowBlank: true,

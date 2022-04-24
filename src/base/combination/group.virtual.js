@@ -12,8 +12,16 @@ BI.VirtualGroup = BI.inherit(BI.Widget, {
     },
 
     render: function () {
-        var o = this.options;
-        this.populate(o.items);
+        var self = this, o = this.options;
+        var items = BI.isFunction(o.items) ? this.__watch(o.items, function (context, newValue) {
+            self.populate(newValue);
+        }) : o.items;
+        this.populate(items);
+        if (BI.isFunction(o.value)) {
+            this.__watch(o.value, function (context, newValue) {
+                self.setValue(newValue);
+            })
+        }
         if (BI.isKey(o.value)) {
             this.setValue(o.value);
         }
@@ -22,12 +30,13 @@ BI.VirtualGroup = BI.inherit(BI.Widget, {
     _packageBtns: function (items) {
         var o = this.options;
         var map = this.buttonMap = {};
-        for (var i = o.layouts.length - 1; i > 0; i--) {
+        var layouts = BI.isArray(o.layouts) ? o.layouts : [o.layouts];
+        for (var i = layouts.length - 1; i > 0; i--) {
             items = BI.map(items, function (k, it) {
                 var el = BI.stripEL(it);
-                return BI.extend({}, o.layouts[i], {
+                return BI.extend({}, layouts[i], {
                     items: [
-                        BI.extend({}, o.layouts[i].el, {
+                        BI.extend({}, layouts[i].el, {
                             el: BI.extend({
                                 ref: function (_ref) {
                                     if (BI.isKey(map[el.value])) {
@@ -44,7 +53,9 @@ BI.VirtualGroup = BI.inherit(BI.Widget, {
     },
 
     _packageLayout: function (items) {
-        var o = this.options, layout = BI.deepClone(o.layouts[0]);
+        var o = this.options;
+        var layouts = BI.isArray(o.layouts) ? o.layouts : [o.layouts];
+        var layout = BI.deepClone(layouts[0]);
 
         var lay = BI.formatEL(layout).el;
         while (lay && lay.items && !BI.isEmpty(lay.items)) {
@@ -100,14 +111,15 @@ BI.VirtualGroup = BI.inherit(BI.Widget, {
     },
 
     populate: function (items) {
-        var self = this;
         items = items || [];
         this.options.items = items;
         items = this._packageBtns(items);
         if (!this.layouts) {
             this.layouts = BI.createWidget(BI.extend({element: this}, this._packageLayout(items)));
         } else {
-            this.layouts.populate(items);
+            this.layouts.populate(items, {
+                context: this
+            });
         }
     }
 });

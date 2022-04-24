@@ -26,38 +26,40 @@ BI.BlankIconTextItem = BI.inherit(BI.BasicButton, {
     },
 
     render: function () {
-        var o = this.options, c = this._const;
-        var blank = BI.createWidget({
-            type: "bi.layout",
-            width: o.blankWidth
-        });
-        this.text = BI.createWidget({
-            type: "bi.label",
-            cls: "list-item-text",
-            textAlign: "left",
-            hgap: o.textHgap,
-            vgap: o.textVgap,
-            lgap: o.textLgap,
-            rgap: o.textRgap,
-            text: o.text,
-            value: o.value,
-            keyword: o.keyword,
-            height: o.height
-        });
-        this.icon = BI.createWidget({
-            type: "bi.icon_label",
-            cls: o.iconCls,
-            width: o.height,
-            height: o.height,
-            iconWidth: o.iconWidth,
-            iconHeight: o.iconHeight
-        });
+        var self = this, o = this.options;
 
-        BI.createWidget(BI.extend({
-            element: this
-        }, BI.LogicFactory.createLogic("horizontal", BI.extend(o.logic, {
-            items: BI.LogicFactory.createLogicItemsByDirection("left", blank, this.icon, this.text)
-        }))));
+        return {
+            type: "bi.vertical_adapt",
+            columnSize: [o.blankWidth, o.iconWrapperWidth || o.height, "fill"],
+            items: [{
+                type: "bi.layout",
+                width: o.blankWidth
+            }, {
+                type: "bi.icon_label",
+                cls: o.iconCls,
+                width: o.iconWrapperWidth || o.height,
+                height: o.height,
+                iconWidth: o.iconWidth,
+                iconHeight: o.iconHeight
+            }, {
+                el: {
+                    type: "bi.label",
+                    ref: function (_ref) {
+                        self.text = _ref;
+                    },
+                    cls: "list-item-text",
+                    textAlign: "left",
+                    hgap: o.textHgap,
+                    vgap: o.textVgap,
+                    lgap: o.textLgap,
+                    rgap: o.textRgap,
+                    text: o.text,
+                    value: o.value,
+                    keyword: o.keyword,
+                    height: o.height
+                }
+            }]
+        };
     },
 
     doClick: function () {

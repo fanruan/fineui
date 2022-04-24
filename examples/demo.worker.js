@@ -1,6 +1,6 @@
 if (this.importScripts) {
-    importScripts("../dist/fineui_without_jquery_polyfill.js");
-    BI.initWorker();
+    importScripts("https://fanruan.design/fineui/fineui_without_jquery_polyfill.js");
+    BI.useInWorker();
 }
 var Model = BI.inherit(Fix.Model, {
     state: function () {

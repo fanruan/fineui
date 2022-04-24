@@ -101,7 +101,11 @@ BI.MultiSelectInsertList = BI.inherit(BI.Single, {
             }, {
                 eventName: BI.Searcher.EVENT_PAUSE,
                 action: function () {
-                    var keyword = this.getKeyword();
+                    var keywords = self._getKeywords();
+                    if (keywords[keywords.length - 1] === BI.BlankSplitChar) {
+                        keywords = keywords.slice(0, keywords.length - 1);
+                    }
+                    var keyword = BI.isEmptyArray(keywords) ? "" : keywords[keywords.length - 1];
                     self._join({
                         type: BI.Selection.Multi,
                         value: [keyword]
@@ -138,6 +142,7 @@ BI.MultiSelectInsertList = BI.inherit(BI.Single, {
                             }
                             self.fireEvent(BI.MultiSelectInsertList.EVENT_CHANGE);
                         });
+                        self._getKeywordsLength() > 2000 && BI.Msg.alert(BI.i18nText("BI-Basic_Prompt"), BI.i18nText("BI-Basic_Too_Much_Value_Get_Two_Thousand"));
                     }
                 }
             }, {
@@ -190,10 +195,17 @@ BI.MultiSelectInsertList = BI.inherit(BI.Single, {
             keywords = keywords.slice(0, keywords.length - 1);
         }
         if (/\u200b\s\u200b$/.test(val)) {
-            return keywords.concat([BI.BlankSplitChar]);
+            keywords = keywords.concat([BI.BlankSplitChar]);
         }
 
-        return keywords;
+        return keywords.length > 2000 ? keywords.slice(0, 2000).concat([BI.BlankSplitChar]) : keywords.slice(0, 2000);
+    },
+
+    _getKeywordsLength: function () {
+        var val = this.editor.getValue();
+        var keywords = val.split(/\u200b\s\u200b/);
+
+        return keywords.length - 1;
     },
 
     _showAdapter: function () {

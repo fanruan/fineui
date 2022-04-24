@@ -10,7 +10,8 @@
             popupHeight: 80,
             popupWidth: 240,
             comboAdjustHeight: 1,
-            border: 1
+            border: 1,
+            iconWidth: 24
         },
         props: {
             baseCls: "bi-time-combo",
@@ -177,7 +178,7 @@
                         el: {
                             type: "bi.icon_button",
                             cls: "bi-trigger-icon-button time-font icon-size-16",
-                            width: opts.height,
+                            width: this.constants.iconWidth,
                             height: opts.height,
                             listeners: [{
                                 eventName: BI.IconButton.EVENT_CHANGE,
@@ -222,6 +223,18 @@
             this.setValue(nowTome);
             this.hidePopupView();
             this.fireEvent(BI.TimeCombo.EVENT_CONFIRM);
+        },
+
+        focus: function () {
+            this.trigger.focus();
+        },
+    
+        blur: function () {
+            this.trigger.blur();
+        },
+
+        setWaterMark: function (v) {
+            this.trigger.setWaterMark(v);
         }
     });
 
