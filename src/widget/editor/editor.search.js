@@ -10,7 +10,8 @@ BI.SearchEditor = BI.inherit(BI.Widget, {
             errorText: "",
             watermark: BI.i18nText("BI-Basic_Search"),
             validationChecker: BI.emptyFn,
-            quitChecker: BI.emptyFn
+            quitChecker: BI.emptyFn,
+            value: ""
         });
     },
     _init: function () {
@@ -32,7 +33,8 @@ BI.SearchEditor = BI.inherit(BI.Widget, {
         this.clear = BI.createWidget({
             type: "bi.icon_button",
             stopEvent: true,
-            cls: "close-font"
+            cls: "close-font",
+            invisible: BI.isKey(o.value)
         });
         this.clear.on(BI.IconButton.EVENT_CHANGE, function () {
             self.setValue("");
@@ -123,8 +125,6 @@ BI.SearchEditor = BI.inherit(BI.Widget, {
         this.editor.on(BI.Editor.EVENT_STOP, function () {
             self.fireEvent(BI.SearchEditor.EVENT_STOP);
         });
-
-        this.clear.invisible();
     },
 
     _checkClear: function () {
