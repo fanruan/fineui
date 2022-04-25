@@ -32,7 +32,8 @@ BI.SearchEditor = BI.inherit(BI.Widget, {
         this.clear = BI.createWidget({
             type: "bi.icon_button",
             stopEvent: true,
-            cls: "close-font"
+            cls: "close-font",
+            invisible: !o.value
         });
         this.clear.on(BI.IconButton.EVENT_CHANGE, function () {
             self.setValue("");
