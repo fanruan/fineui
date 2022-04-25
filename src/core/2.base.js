@@ -281,13 +281,13 @@
             var i;
             if (BI.isArray(obj)) {
                 for (i = 0; i < obj.length; i++) {
-                    if ((isFunction && target.apply(context, [i, obj[i]]) === true) || (!isFunction && BI.contains(target, obj[i]))) {
+                    if ((isFunction && (target === obj[i] || target.apply(context, [i, obj[i]]) === true)) || (!isFunction && BI.contains(target, obj[i]))) {
                         obj.splice(i--, 1);
                     }
                 }
             } else {
                 BI.each(obj, function (i, v) {
-                    if ((isFunction && target.apply(context, [i, obj[i]]) === true) || (!isFunction && BI.contains(target, obj[i]))) {
+                    if ((isFunction && (target === obj[i] || target.apply(context, [i, obj[i]]) === true)) || (!isFunction && BI.contains(target, obj[i]))) {
                         delete obj[i];
                     }
                 });
