@@ -10,7 +10,8 @@ BI.SearchEditor = BI.inherit(BI.Widget, {
             errorText: "",
             watermark: BI.i18nText("BI-Basic_Search"),
             validationChecker: BI.emptyFn,
-            quitChecker: BI.emptyFn
+            quitChecker: BI.emptyFn,
+            value: ""
         });
     },
     _init: function () {
@@ -33,7 +34,7 @@ BI.SearchEditor = BI.inherit(BI.Widget, {
             type: "bi.icon_button",
             stopEvent: true,
             cls: "close-font",
-            invisible: !o.value
+            invisible: BI.isKey(o.value)
         });
         this.clear.on(BI.IconButton.EVENT_CHANGE, function () {
             self.setValue("");
