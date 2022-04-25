@@ -124,8 +124,6 @@ BI.SearchEditor = BI.inherit(BI.Widget, {
         this.editor.on(BI.Editor.EVENT_STOP, function () {
             self.fireEvent(BI.SearchEditor.EVENT_STOP);
         });
-
-        this.clear.invisible();
     },
 
     _checkClear: function () {
