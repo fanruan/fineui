@@ -30,7 +30,9 @@ BI.BroadcastController = BI.inherit(BI.Controller, {
     remove: function (name, fn) {
         var self = this;
         if (fn) {
-            BI.remove(this._broadcasts[name], fn);
+            BI.remove(this._broadcasts[name], function (index, cb) {
+                return fn === cb;
+            });
             if (this._broadcasts[name].length === 0) {
                 delete this._broadcasts[name];
             }
