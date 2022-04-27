@@ -81,6 +81,7 @@ BI.FlexHorizontalLayout = BI.inherit(BI.Layout, {
         }
         if (columnSize === "fill") {
             w.element.addClass("f-f");
+            w.element.css({ minWidth: 0 });
         }
         w.element.addClass("c-e");
         if (i === 0) {
