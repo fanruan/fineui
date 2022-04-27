@@ -25,6 +25,7 @@ import { SearchTextValueCombo } from "./case/combo/searchtextvaluecombo/combo.se
 import { SignEditor } from "./case/editor/editor.sign";
 import { StateEditor } from './case/editor/editor.state';
 import { AllValueMultiTextValueCombo } from "./component/allvaluemultitextvaluecombo/allvalue.multitextvalue.combo";
+import { Form } from './component/form/form';
 import { AbstractTreeValueChooser } from "./component/treevaluechooser/abstract.treevaluechooser";
 import { AbstractListTreeValueChooser } from "./component/treevaluechooser/abstract.treevaluechooser.list";
 import { Action, ActionFactory } from "./core/action/action";
@@ -44,9 +45,12 @@ import { _inject } from "./core/inject";
 import { Layout } from "./core/wrapper/layout";
 import { AbsoluteLayout } from "./core/wrapper/layout/layout.absolute";
 import { HTapeLayout, VTapeLayout } from "./core/wrapper/layout/layout.tape";
+import { HorizontalFillLayout } from "./core/wrapper/layout/fill/fill.horizontal";
+import { VerticalFillLayout } from "./core/wrapper/layout/fill/fill.vertical";
 import { VerticalLayout } from "./core/wrapper/layout/layout.vertical";
 import { DefaultLayout } from "./core/wrapper/layout/layout.default";
 import { DownListCombo } from "./widget/downlist/combo.downlist";
+import { DownListPopup } from "./widget/downlist/popup.downlist";
 import { Icon } from "./base/single/icon/icon";
 import { LeftVerticalAdaptLayout } from "./core/wrapper/layout/adapt/adapt.leftvertical";
 import { LeftRightVerticalAdaptLayout, RightVerticalAdaptLayout } from "./core/wrapper/layout/adapt/adapt.leftrightvertical";
@@ -142,6 +146,7 @@ import { MultiSelectInsertList } from "./widget/multiselectlist/multiselectlist.
 import { YearMonthInterval } from "./widget/yearmonthinterval/yearmonthinterval";
 import { NumberEditor } from "./widget/numbereditor/numbereditor";
 import { TextValueCheckCombo } from "./case/combo/textvaluecheckcombo/combo.textvaluecheck";
+import { Segment } from "./case/segment/segment";
 import { LinearSegment } from "./case/linersegment/linear.segment";
 import { Img } from "./base/single/img/img";
 import { EditorIconCheckCombo } from "./case/combo/editoriconcheckcombo/combo.editiconcheck";
@@ -177,6 +182,11 @@ import { TreeValueChooserPane } from './component/treevaluechooser/pane.treevalu
 import { TdLayout } from './core/wrapper/layout/layout.td';
 import { MultiLayerSelectLevelTree } from './widget/multilayerselecttree/multilayerselecttree.leveltree';
 import { SelectTreeExpander } from './widget/selecttree/selecttree.expander';
+import { DownListGroupItem } from "./widget/downlist/item.downlistgroup";
+import { VerticalStickyLayout } from "./core/wrapper/layout/sticky/sticky.vertical";
+import { HorizontalStickyLayout } from "./core/wrapper/layout/sticky/sticky.horizontal";
+import { TableLayout } from "./core/wrapper/layout/layout.table";
+import './shims-tsx';
 
 
 export interface BI extends _func, _i18n, _base, _inject, _var, _web, _utils {
@@ -211,6 +221,7 @@ export interface BI extends _func, _i18n, _base, _inject, _var, _web, _utils {
     SmallTextValueCombo: typeof SmallTextValueCombo;
     BubbleCombo: typeof BubbleCombo;
     AllValueMultiTextValueCombo: typeof AllValueMultiTextValueCombo;
+    Form: typeof Form;
     IconTextItem: typeof IconTextItem;
     MultiSelectItem: typeof MultiSelectItem;
     AbstractLabel: typeof AbstractLabel;
@@ -241,8 +252,11 @@ export interface BI extends _func, _i18n, _base, _inject, _var, _web, _utils {
     MultiTreeInsertCombo: typeof MultiTreeInsertCombo;
     Decorators: typeof decorator;
     DownListCombo: typeof DownListCombo;
+    DownListPopup: typeof DownListPopup;
     Iframe: typeof Iframe;
     AbsoluteLayout: typeof AbsoluteLayout;
+    HorizontalFillLayout: typeof HorizontalFillLayout;
+    VerticalFillLayout: typeof VerticalFillLayout;
     VerticalLayout: typeof VerticalLayout;
     DefaultLayout: typeof DefaultLayout;
     Input: typeof Input;
@@ -333,6 +347,7 @@ export interface BI extends _func, _i18n, _base, _inject, _var, _web, _utils {
     YearMonthInterval: typeof YearMonthInterval;
     TextValueCheckCombo: typeof TextValueCheckCombo;
     NumberEditor: typeof NumberEditor;
+    Segment: typeof Segment;
     LinearSegment: typeof LinearSegment;
     Img: typeof Img;
     EditorIconCheckCombo: typeof EditorIconCheckCombo;
@@ -361,6 +376,10 @@ export interface BI extends _func, _i18n, _base, _inject, _var, _web, _utils {
     TdLayout: typeof TdLayout;
     MultiLayerSelectLevelTree: typeof MultiLayerSelectLevelTree;
     SelectTreeExpander: typeof SelectTreeExpander;
+    DownListGroupItem: typeof DownListGroupItem;
+    VerticalStickyLayout: typeof VerticalStickyLayout;
+    HorizontalStickyLayout: typeof HorizontalStickyLayout;
+    TableLayout: typeof TableLayout;
 }
 
 export default {
@@ -389,6 +408,8 @@ export {
     HorizontalAdaptLayout,
     FloatLeftLayout,
     FloatRightLayout,
+    HorizontalFillLayout,
+    VerticalFillLayout,
     VerticalLayout,
     AbsoluteLayout,
     DefaultLayout,
@@ -414,6 +435,7 @@ export {
     Label,
     TextButton,
     DownListCombo,
+    DownListPopup,
     IconChangeButton,
     Button,
     TextEditor,
@@ -496,6 +518,7 @@ export {
     Switch,
     HorizontalLayout,
     ShelterEditor,
+    Form,
     TextTrigger,
     SelectTextTrigger,
     DateInterval,
@@ -515,6 +538,7 @@ export {
     YearMonthInterval,
     TextValueCheckCombo,
     NumberEditor,
+    Segment,
     LinearSegment,
     Img,
     EditorIconCheckCombo,
@@ -545,4 +569,8 @@ export {
     MultiLayerSelectLevelTree,
     SelectTreeExpander,
     DirectionPager,
+    DownListGroupItem,
+    HorizontalStickyLayout,
+    VerticalStickyLayout,
+    TableLayout,
 };

@@ -14,7 +14,9 @@ BI.Layout = BI.inherit(BI.Widget, {
             scrollable: null, // true, false, null
             scrollx: false, // true, false
             scrolly: false, // true, false
-            items: []
+            items: [],
+            innerHgap: 0,
+            innerVgap: 0,
         };
     },
 
@@ -27,8 +29,6 @@ BI.Layout = BI.inherit(BI.Widget, {
             o.columnSize = this.__watch(columnSizeFn, function (context, newValue) {
                 o.columnSize = newValue;
                 self.resize();
-            }, {
-                deep: true
             });
         }
         if (BI.isFunction(o.rowSize)) {
@@ -36,8 +36,6 @@ BI.Layout = BI.inherit(BI.Widget, {
             o.rowSize = this.__watch(rowSizeFn, function (context, newValue) {
                 o.rowSize = newValue;
                 self.resize();
-            }, {
-                deep: true
             });
         }
     },
@@ -60,11 +58,24 @@ BI.Layout = BI.inherit(BI.Widget, {
     _init4Scroll: function () {
         switch (this.options.scrollable) {
             case true:
+            case "xy":
                 this.element.css("overflow", "auto");
-                break;
+                return;
             case false:
                 this.element.css("overflow", "hidden");
-                break;
+                return;
+            case "x":
+                this.element.css({
+                    "overflow-x": "auto",
+                    "overflow-y": "hidden"
+                });
+                return;
+            case "y":
+                this.element.css({
+                    "overflow-x": "hidden",
+                    "overflow-y": "auto"
+                });
+                return;
             default :
                 break;
         }
@@ -73,6 +84,7 @@ BI.Layout = BI.inherit(BI.Widget, {
                 "overflow-x": "auto",
                 "overflow-y": "hidden"
             });
+            return;
         }
         if (this.options.scrolly) {
             this.element.css({
@@ -240,8 +252,8 @@ BI.Layout = BI.inherit(BI.Widget, {
         var w = this._newElement(newIndex, item);
         // 需要有个地方临时存一下新建的组件，否则如果直接使用newIndex的话，newIndex位置的元素可能会被用到
         this._children[this._getChildName(newIndex) + "-temp"] = w;
-        var nextSibling = del.element[0].nextSibling;
-        if (nextSibling) {
+        var nextSibling = del.element.next();
+        if (nextSibling.length > 0) {
             BI.Widget._renderEngine.createElement(nextSibling).before(w.element);
         } else {
             w.element.appendTo(this._getWrapper());
@@ -267,26 +279,87 @@ BI.Layout = BI.inherit(BI.Widget, {
         this.options.items.splice(index, 1);
     },
 
+    _clearGap: function (w) {
+        w.element.css({
+            "margin-top": "",
+            "margin-bottom": "",
+            "margin-left": "",
+            "margin-right": ""
+        });
+    },
+
+    _optimiseGap: function (gap) {
+        return (gap > 0 && gap < 1) ? (gap * 100).toFixed(1) + "%" : gap / BI.pixRatio + BI.pixUnit;
+    },
+
     _handleGap: function (w, item, hIndex, vIndex) {
         var o = this.options;
-        if (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
+        var innerLgap, innerRgap, innerTgap, innerBgap;
+        if (BI.isNull(vIndex)) {
+            innerTgap = innerBgap = o.innerVgap;
+            innerLgap = hIndex === 0 ? o.innerHgap : 0;
+            innerRgap = hIndex === o.items.length - 1 ? o.innerHgap : 0;
+        } else {
+            innerLgap = innerRgap = o.innerHgap;
+            innerTgap = vIndex === 0 ? o.innerVgap : 0;
+            innerBgap = vIndex === o.items.length - 1 ? o.innerVgap : 0;
+        }
+        if (o.vgap + o.tgap + innerTgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
+            var top = ((BI.isNull(vIndex) || vIndex === 0) ? o.vgap : 0) + o.tgap + innerTgap + (item.tgap || 0) + (item.vgap || 0);
             w.element.css({
-                "margin-top": (((BI.isNull(vIndex) || vIndex === 0) ? o.vgap : 0) + o.tgap + (item.tgap || 0) + (item.vgap || 0)) / BI.pixRatio + BI.pixUnit
+                "margin-top": this._optimiseGap(top)
             });
         }
-        if (o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0) !== 0) {
+        if (o.hgap + o.lgap + innerLgap + (item.lgap || 0) + (item.hgap || 0) !== 0) {
+            var left = ((BI.isNull(hIndex) || hIndex === 0) ? o.hgap : 0) + o.lgap + innerLgap + (item.lgap || 0) + (item.hgap || 0);
             w.element.css({
-                "margin-left": (((BI.isNull(hIndex) || hIndex === 0) ? o.hgap : 0) + o.lgap + (item.lgap || 0) + (item.hgap || 0)) / BI.pixRatio + BI.pixUnit
+                "margin-left": this._optimiseGap(left)
             });
         }
-        if (o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0) !== 0) {
+        if (o.hgap + o.rgap + innerRgap + (item.rgap || 0) + (item.hgap || 0) !== 0) {
+            var right = o.hgap + o.rgap + innerRgap + (item.rgap || 0) + (item.hgap || 0);
             w.element.css({
-                "margin-right": (o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0)) / BI.pixRatio + BI.pixUnit
+                "margin-right": this._optimiseGap(right)
             });
         }
-        if (o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0) !== 0) {
+        if (o.vgap + o.bgap + innerBgap + (item.bgap || 0) + (item.vgap || 0) !== 0) {
+            var bottom = o.vgap + o.bgap + innerBgap + (item.bgap || 0) + (item.vgap || 0);
             w.element.css({
-                "margin-bottom": (o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0)) / BI.pixRatio + BI.pixUnit
+                "margin-bottom": this._optimiseGap(bottom)
+            });
+        }
+    },
+
+    // 横向换纵向
+    _handleReverseGap: function (w, item, index) {
+        var o = this.options;
+        var innerLgap, innerRgap, innerTgap, innerBgap;
+        innerLgap = innerRgap = o.innerHgap;
+        innerTgap = index === 0 ? o.innerVgap : 0;
+        innerBgap = index === o.items.length - 1 ? o.innerVgap : 0;
+        if (o.vgap + o.tgap + innerTgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
+            var top = (index === 0 ? o.vgap : 0) + (index === 0 ? o.tgap : 0) + innerTgap + (item.tgap || 0) + (item.vgap || 0);
+            w.element.css({
+                "margin-top": this._optimiseGap(top)
+            });
+        }
+        if (o.hgap + o.lgap + innerLgap + (item.lgap || 0) + (item.hgap || 0) !== 0) {
+            var left = o.hgap + o.lgap + innerLgap + (item.lgap || 0) + (item.hgap || 0);
+            w.element.css({
+                "margin-left": this._optimiseGap(left)
+            });
+        }
+        if (o.hgap + o.rgap + innerRgap + (item.rgap || 0) + (item.hgap || 0) !== 0) {
+            var right = o.hgap + o.rgap + innerRgap + (item.rgap || 0) + (item.hgap || 0);
+            w.element.css({
+                "margin-right": this._optimiseGap(right)
+            });
+        }
+        // 这里的代码是关键
+        if (o.vgap + o.hgap + o.bgap + innerBgap + (item.bgap || 0) + (item.vgap || 0) !== 0) {
+            var bottom = (index === o.items.length - 1 ? o.vgap : o.hgap) + (index === o.items.length - 1 ? o.bgap : 0) + innerBgap + (item.bgap || 0) + (item.vgap || 0);
+            w.element.css({
+                "margin-bottom": this._optimiseGap(bottom)
             });
         }
     },
@@ -420,6 +493,7 @@ BI.Layout = BI.inherit(BI.Widget, {
         var shouldUpdate = this.shouldUpdateItem(oldIndex, vnode);
         var child = this._children[this._getChildName(oldIndex)];
         if (shouldUpdate) {
+            this._children[this._getChildName(newIndex) + "-temp"] = child;
             return child._update(this._getOptions(vnode), shouldUpdate);
         }
         if (shouldUpdate === null && !this._compare(oldVnode, vnode)) {
@@ -430,7 +504,7 @@ BI.Layout = BI.inherit(BI.Widget, {
         }
     },
 
-    updateChildren: function (oldCh, newCh) {
+    updateChildren: function (oldCh, newCh, context) {
         var self = this;
         var oldStartIdx = 0, newStartIdx = 0;
         var oldEndIdx = oldCh.length - 1;
@@ -484,7 +558,7 @@ BI.Layout = BI.inherit(BI.Widget, {
             } else {
                 var sameOldVnode = findOldVnode(oldCh, newStartVnode, oldStartIdx, oldEndIdx);
                 if (BI.isNull(sameOldVnode[0])) {  //  不存在就把新的放到左边
-                    var node = addNode(newStartVnode, newStartIdx);
+                    var node = addNode(newStartVnode, newStartIdx, context);
                     insertBefore(node, oldStartVnode);
                 } else {   //  如果新节点在旧节点区间中存在就复用一下
                     var sameOldIndex = sameOldVnode[1];
@@ -499,7 +573,7 @@ BI.Layout = BI.inherit(BI.Widget, {
         }
         if (oldStartIdx > oldEndIdx) {
             before = BI.isNull(newCh[newEndIdx + 1]) ? null : newCh[newEndIdx + 1];
-            addVnodes(before, newCh, newStartIdx, newEndIdx);
+            addVnodes(before, newCh, newStartIdx, newEndIdx, context);
         } else if (newStartIdx > newEndIdx) {
             removeVnodes(oldCh, oldStartIdx, oldEndIdx);
         }
@@ -524,15 +598,15 @@ BI.Layout = BI.inherit(BI.Widget, {
             }
         }
 
-        function addNode (vnode, index) {
+        function addNode (vnode, index, context) {
             var opt = self._getOptions(vnode);
             var key = opt.key == null ? index : opt.key;
-            return children[key] = self._newElement(index, vnode);
+            return children[key] = self._newElement(index, vnode, context);
         }
 
-        function addVnodes (before, vnodes, startIdx, endIdx) {
+        function addVnodes (before, vnodes, startIdx, endIdx, context) {
             for (; startIdx <= endIdx; ++startIdx) {
-                var node = addNode(vnodes[startIdx], startIdx);
+                var node = addNode(vnodes[startIdx], startIdx, context);
                 insertBefore(node, before, false, startIdx);
             }
         }
@@ -600,16 +674,18 @@ BI.Layout = BI.inherit(BI.Widget, {
     update: function (opt) {
         var o = this.options;
         var items = opt.items || [];
+        var context = opt.context;
         var oldItems = o.items;
         this.options.items = items;
-        return this.updateChildren(oldItems, items);
+        return this.updateChildren(oldItems, items, context);
     },
 
-    stroke: function (items) {
+    stroke: function (items, options) {
+        options = options || {};
         var self = this;
         BI.each(items, function (i, item) {
             if (item) {
-                self._addElement(i, item);
+                self._addElement(i, item, options.context);
             }
         });
     },
@@ -640,14 +716,18 @@ BI.Layout = BI.inherit(BI.Widget, {
         this.options.items = [];
     },
 
-    populate: function (items) {
+    populate: function (items, options) {
         items = items || [];
+        options = options || {};
         if (this._isMounted) {
-            this.update({items: items});
+            this.update({
+                items: items,
+                context: options.context
+            });
             return;
         }
         this.options.items = items;
-        this.stroke(items);
+        this.stroke(items, options);
     },
 
     resize: function () {

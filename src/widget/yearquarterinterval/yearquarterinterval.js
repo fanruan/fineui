@@ -29,7 +29,7 @@ BI.YearQuarterInterval = BI.inherit(BI.Single, {
         return [{
             type: "bi.center",
             hgap: 15,
-            height: this.constants.height,
+            height: o.height,
             items: [{
                 type: "bi.absolute",
                 items: [{
@@ -53,7 +53,7 @@ BI.YearQuarterInterval = BI.inherit(BI.Single, {
             type: "bi.horizontal_auto",
             items: [{
                 type: "bi.label",
-                height: this.constants.height,
+                height: o.height,
                 width: this.constants.width,
                 text: "-",
                 ref: function (_ref) {
@@ -72,6 +72,7 @@ BI.YearQuarterInterval = BI.inherit(BI.Single, {
             maxDate: o.maxDate,
             behaviors: o.behaviors,
             value: v,
+            height: o.height,
             listeners: [{
                 eventName: BI.DynamicYearQuarterCombo.EVENT_BEFORE_POPUPVIEW,
                 action: function () {

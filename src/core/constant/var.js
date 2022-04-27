@@ -6,6 +6,7 @@ _.extend(BI, {
     MAX: 0xfffffffffffffff,
     MIN: -0xfffffffffffffff,
     EVENT_RESPONSE_TIME: 200,
+    EVENT_BLUR: true,
     zIndex_layer: 1e5,
     zIndex_popover: 1e6,
     zIndex_popup: 1e7,

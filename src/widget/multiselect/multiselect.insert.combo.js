@@ -40,7 +40,7 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
         this.trigger = BI.createWidget({
             type: "bi.multi_select_insert_trigger",
             allowEdit: o.allowEdit,
-            height: o.height - 2,
+            height: o.height - (o.simple ? 1 : 2),
             text: o.text,
             watermark: o.watermark,
             // adapter: this.popup,
@@ -93,6 +93,7 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
                     }
                     self._dataChange = true;
                 });
+                this.getSearcher().getKeywordsLength() > 2000 && BI.Msg.alert(BI.i18nText("BI-Basic_Prompt"), BI.i18nText("BI-Basic_Too_Much_Value_Get_Two_Thousand"));
             }
             self.fireEvent(BI.MultiSelectInsertCombo.EVENT_SEARCHING);
         });
@@ -124,7 +125,7 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
 
         this.combo = BI.createWidget({
             type: "bi.combo",
-            cls: "bi-border bi-border-radius",
+            cls: (o.simple ? "bi-border-bottom" : "bi-border") + " bi-border-radius",
             toggle: !o.allowEdit,
             el: this.trigger,
             adjustLength: 1,

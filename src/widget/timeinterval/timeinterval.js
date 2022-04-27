@@ -73,6 +73,7 @@ BI.TimeInterval = BI.inherit(BI.Single, {
             minDate: o.minDate,
             maxDate: o.maxDate,
             behaviors: o.behaviors,
+            watermark: o.watermark,
             value: v,
             height: o.height,
         });

@@ -1,7 +1,8 @@
 BI.DynamicYearMonthTrigger = BI.inherit(BI.Trigger, {
     _const: {
         hgap: 4,
-        vgap: 2
+        vgap: 2,
+        iconWidth: 24
     },
 
     props: {
@@ -20,7 +21,6 @@ BI.DynamicYearMonthTrigger = BI.inherit(BI.Trigger, {
     _init: function () {
         BI.DynamicYearMonthTrigger.superclass._init.apply(this, arguments);
         var o = this.options;
-
         this.yearEditor = this._createEditor(true);
         this.monthEditor = this._createEditor(false);
 
@@ -30,31 +30,30 @@ BI.DynamicYearMonthTrigger = BI.inherit(BI.Trigger, {
             items: [{
                 type: "bi.center",
                 items: [{
-                    type: "bi.htape",
+                    type: "bi.horizontal_fill",
+                    columnSize: ["fill", ""],
                     items: [this.yearEditor, {
                         el: {
                             type: "bi.text_button",
                             text: BI.i18nText("BI-Multi_Date_Year"),
-                            width: o.height
                         },
-                        width: o.height
                     }]
                 }, {
-                    type: "bi.htape",
+                    type: "bi.horizontal_fill",
+                    columnSize: ["fill", ""],
                     items: [this.monthEditor, {
                         el: {
                             type: "bi.text_button",
                             text: BI.i18nText("BI-Multi_Date_Month"),
-                            width: o.height
                         },
-                        width: o.height}]
+                    }]
                 }]
             }, {
                 el: {
                     type: "bi.trigger_icon_button",
-                    width: o.height
+                    width: this._const.iconWidth
                 },
-                width: o.height
+                width: this._const.iconWidth
             }]
         });
         this.setValue(o.value);
@@ -64,6 +63,7 @@ BI.DynamicYearMonthTrigger = BI.inherit(BI.Trigger, {
         var self = this, o = this.options, c = this._const;
         var editor = BI.createWidget({
             type: "bi.sign_editor",
+            simple: o.simple,
             height: o.height,
             validationChecker: function (v) {
                 if (isYear) {

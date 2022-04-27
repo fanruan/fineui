@@ -417,16 +417,17 @@
         "\"": "&quot;",
         "<": "&lt;",
         ">": "&gt;",
-        " ": "&nbsp;"
+        "\x20": "&nbsp;",
+        "\n": "&#10;"
     };
     BI.htmlEncode = function (text) {
-        return BI.isNull(text) ? "" : BI.replaceAll(text + "", "&|\"|<|>|\\s", function (v) {
-            return SPECIAL_TAGS[v] ? SPECIAL_TAGS[v] : "&nbsp;";
+        return BI.isNull(text) ? "" : BI.replaceAll(text + "", BI.keys(SPECIAL_TAGS).join("|"), function (v) {
+            return SPECIAL_TAGS[v] ? SPECIAL_TAGS[v] : v;
         });
     };
     // html decode
     BI.htmlDecode = function (text) {
-        return BI.isNull(text) ? "" : BI.replaceAll(text + "", "&amp;|&quot;|&lt;|&gt;|&nbsp;", function (v) {
+        return BI.isNull(text) ? "" : BI.replaceAll(text + "", BI.values(SPECIAL_TAGS).join("|"), function (v) {
             switch (v) {
                 case "&amp;":
                     return "&";
@@ -437,8 +438,11 @@
                 case "&gt;":
                     return ">";
                 case "&nbsp;":
-                default:
                     return " ";
+                case "&#10;":
+                    return "\n";
+                default:
+                    return v;
             }
         });
     };

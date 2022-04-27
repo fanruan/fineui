@@ -1,5 +1,6 @@
 @import "../lib/font";
 @import "../lib/colors";
+@import "../lib/theme";
 @import "../image";
 
 .addFontRes();
@@ -81,10 +82,10 @@
 .font-hover-active(pull-down-ha-font, @font-down-triangle, @color-bi-text-light-gray);
 
 //toast
-.font(toast-error-font, @font-tip-error);
-.font(toast-success-font, @font-tip-success);
-.font(toast-warning-font, @font-tip-warning);
-.font(toast-message-font, @font-tip-message);
+.font(toast-error-font, @font-tip-error, @color-bi-color-toast-error);
+.font(toast-success-font, @font-tip-success, @color-bi-color-toast-success);
+.font(toast-warning-font, @font-tip-warning, @color-bi-color-toast-warning);
+.font(toast-message-font, @font-tip-message, @color-bi-color-toast-normal);
 
 //数值区间
 .font(less-font, @font-less);

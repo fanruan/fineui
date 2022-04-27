@@ -1,45 +1,12 @@
 @import "../../index";
 
-.bi-bubble-combo {
-  & .button-combo-triangle-wrapper {
-    position: fixed !important;
-    // 消除祖先节点设置的line-height:normal对空白节点的行高影响
-    line-height: 0;
-    .z-index-layer(@zIndex-popup);
-    //  ie10一下无背景色会鼠标穿透
-    .background-color(@color-bi-background-default, 0);
-  }
-  & .bubble-combo-triangle-left {
-    z-index: 1;
-    .triangle-right();
-  }
-  & .bubble-combo-triangle-right {
-    z-index: 1;
-    .triangle-left();
-  }
-  & .bubble-combo-triangle-top {
-    z-index: 1;
-    .triangle-bottom();
-  }
-  & .bubble-combo-triangle-bottom {
-    z-index: 1;
-    .triangle-top();
-  }
-  & .bubble-combo-triangle-left, & .bubble-combo-triangle-right, & .bubble-combo-triangle-top, & .bubble-combo-triangle-bottom {
-    &:before {
-      background-color: @color-bi-background-default;
-    }
-  }
-}
-
-.bi-theme-dark {
-  .bi-bubble-combo {
-    & .bubble-combo-triangle-left, & .bubble-combo-triangle-right, & .bubble-combo-triangle-top, & .bubble-combo-triangle-bottom {
-      &:before {
-        background-color: @color-bi-background-default-theme-dark;
-        border-bottom: 1px solid @border-color-light-line-theme-dark;
-        border-right: 1px solid @border-color-light-line-theme-dark;
-      }
-    }
-  }
-}
+// .bi-bubble-combo {
+//   & .button-combo-triangle-wrapper {
+//     position: fixed !important;
+//     // 消除祖先节点设置的line-height:normal对空白节点的行高影响
+//     line-height: 0;
+//     .z-index-layer(@zIndex-popup);
+//     //  ie10一下无背景色会鼠标穿透
+//     .background-color(@color-bi-background-default, 0);
+//   }
+// }

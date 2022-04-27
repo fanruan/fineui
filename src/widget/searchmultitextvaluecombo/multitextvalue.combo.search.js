@@ -333,7 +333,7 @@ BI.SearchMultiTextValueCombo = BI.inherit(BI.Single, {
             self._updateAllValue();
             self._checkError();
             if (self.wants2Quit === true) {
-                self.fireEvent(BI.SearchMultiTextValueCombo.EVENT_CONFIRM);
+                self._dataChange && self.fireEvent(BI.SearchMultiTextValueCombo.EVENT_CONFIRM);
                 self.wants2Quit = false;
             }
             self.requesting = false;

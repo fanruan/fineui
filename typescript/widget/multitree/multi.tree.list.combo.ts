@@ -22,4 +22,10 @@ export declare class MultiTreeListCombo extends Single {
     populate(): void;
 
     getSearcher(): Widget;
+    
+    focus(): void;
+
+    blur(): void;
+
+    setWaterMark(v: string): void;
 }

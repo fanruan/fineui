@@ -1,15 +1,16 @@
 @import "../../index";
 
 .bi-segment-button {
-  color: @color-bi-text-highlight;
-  &.active {
-    &:active {
-      color: @color-bi-text;
-      background-color: @color-bi-background-highlight;
-    }
+  @transition: color 0.3s, background 0.3s, border-color 0.3s, box-shadow 0.3s;
+  .transition(@transition);
+  color: @color-bi-text-segment-button;
+}
+
+.bi-line-segment-button {
+  .line-segment-button-line {
+    .transition(background 0.3s);
   }
-  &:active {
-    color: @color-bi-text-highlight;
-    .background-color(@color-bi-background-highlight, 10%);
+  &.active, &:active {
+    font-weight: bold;
   }
 }

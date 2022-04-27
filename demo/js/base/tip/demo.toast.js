@@ -10,7 +10,9 @@ Demo.Toast = BI.inherit(BI.Widget, {
                     text: "简单Toast测试(success)",
                     height: 30,
                     handler: function () {
-                        BI.Msg.toast("这是一条简单的数据");
+                        BI.Msg.toast("这是一条简单的数据", {
+                            level: "success"
+                        });
                     }
                 }
             }, {
@@ -20,7 +22,7 @@ Demo.Toast = BI.inherit(BI.Widget, {
                     height: 30,
                     handler: function () {
                         BI.Msg.toast("这是一条很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长的数据", {
-                            level: "normal"
+
                         });
                     }
                 }

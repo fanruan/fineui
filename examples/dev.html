@@ -2,67 +2,90 @@
 <head>
     <meta charset="utf-8">
     <title></title>
-    <link rel="stylesheet" type="text/css" href="../dist/2.0/fineui.css"/>
-    <!--    <script src="../dist/2.0/fineui.js"></script>-->
+    <!-- <link rel="stylesheet" type="text/css" href="../dist/2.0/fineui.min.css"/>
+    <script src="../dist/2.0/fineui.js"></script> -->
+    <link rel="stylesheet" type="text/css" href="http://fanruan.design/fineui/2.0/fineui.min.css"/>
     <script src="http://localhost:9001/fineui.js"></script>
 </head>
 <body>
 <div id="wrapper"></div>
 <script>
-    var Model = BI.inherit(Fix.Model, {
+    // tab上下文环境测试
+    var Model = BI.inherit(BI.Model, {
         state: function () {
             return {
-                columnSize: [200, "fill"]
+                expand: false
+            };
+        },
+        childContext: ["text"],
+
+        computed: {
+            text: function () {
+                return this.model.expand ? "text-yes" : "text-not";
+            }
+        },
+
+        actions: {
+            toggle: function () {
+                this.model.expand = !this.model.expand;
+            }
+        }
+    });
+    BI.model("demo.model", Model);
+
+    var Child = BI.inherit(BI.Widget, {
+        render: function () {
+            var label;
+            var context = BI.useContext();
+            setInterval(function () {
+                context.toggle();
+            }, 1000);
+            // BI.watch(context, "expand", function () {
+            //     label.setText(context.model.text);
+            // });
+            return {
+                type: "bi.label",
+                ref: function (_ref) {
+                    label = _ref;
+                },
+                effect: function (w) {
+                    w.setText(context.model.text);
+                },
+                text: function () {
+                    return context.model.text;
+                }
             };
         }
     });
-
-    BI.model("demo.model", Model);
+    BI.shortcut("demo.child", Child);
 
     var Widget = BI.inherit(BI.Widget, {
-        props: {
-            height: 200,
-            width: 600
-        },
         _store: function () {
             return BI.Models.getModel("demo.model");
         },
         setup: function () {
+            var child;
             var store = BI.useStore();
             return function () {
                 return {
-                    type: "bi.htape",
-                    columnSize: function () {
-                        return store.model.columnSize;
-                    },
+                    type: "bi.vertical",
+                    vgap: 20,
                     items: [{
-                        type: "bi.label",
-                        css: {
-                            background: "#eee"
+                        type: "demo.child",
+                        ref: function (_ref) {
+                            child = _ref;
                         }
-                    }, {
-                        type: "bi.center_adapt",
-                        css: {
-                            background: "#e0e0e0"
-                        },
-                        items: [{
-                            type: "bi.button",
-                            text: "点击",
-                            handler: function () {
-                                store.model.columnSize = [300, "fill"]
-                            }
-                        }]
                     }]
                 };
             };
         }
     });
-    BI.shortcut("demo.hooks", Widget);
+    BI.shortcut("demo.parent", Widget);
     BI.createWidget({
         type: "bi.absolute",
         items: [{
             el: {
-                type: "demo.hooks"
+                type: "demo.parent"
             },
             top: 100,
             left: 100

@@ -4,7 +4,7 @@
 BI.SingleSlider = BI.inherit(BI.Single, {
     _constant: {
         EDITOR_WIDTH: 90,
-        EDITOR_HEIGHT: 30,
+        EDITOR_HEIGHT: 20,
         SLIDER_WIDTH_HALF: 15,
         SLIDER_WIDTH: 30,
         SLIDER_HEIGHT: 30,
@@ -79,6 +79,7 @@ BI.SingleSlider = BI.inherit(BI.Single, {
             cls: "slider-editor-button",
             text: o.unit,
             width: c.EDITOR_WIDTH - 2,
+            height: c.EDITOR_HEIGHT - 2,
             allowBlank: false,
             textAlign: "center",
             validationChecker: function (v) {

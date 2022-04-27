@@ -108,14 +108,18 @@ BI.SingleSelectLoader = BI.inherit(BI.Widget, {
     },
 
     _createItems: function (items) {
-        return BI.createItems(items, {
-            type: this.options.allowNoSelect ? "bi.single_select_item" : "bi.single_select_radio_item",
-            logic: this.options.logic,
-            cls: "bi-list-item-active",
-            height: 24,
-            selected: false,
-            iconWrapperWidth: 26,
-            hgap: this.options.allowNoSelect ? 10 : 0
+        var o = this.options;
+        return BI.map(items, function (i, item) {
+            return BI.extend({
+                type: o.allowNoSelect ? "bi.single_select_item" : "bi.single_select_radio_item",
+                logic: o.logic,
+                cls: "bi-list-item-active",
+                height: BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT,
+                selected: false,
+                iconWrapperWidth: 26,
+                hgap: o.allowNoSelect ? 10 : 0,
+                title: item.title || item.text
+            }, item);
         });
     },
 
@@ -126,7 +130,8 @@ BI.SingleSelectLoader = BI.inherit(BI.Widget, {
         }, 30);
     },
 
-    _assertValue: function (val) {},
+    _assertValue: function (val) {
+    },
 
     setStartValue: function (v) {
         this._startValue = v;

@@ -36,10 +36,10 @@ BI.FloatCenterLayout = BI.inherit(BI.Layout, {
                 var w = BI._lazyCreateWidget(item);
                 w.element.css({
                     position: "absolute",
-                    left: (o.hgap + o.lgap) / BI.pixRatio + BI.pixUnit,
-                    right: (o.hgap + o.rgap) / BI.pixRatio + BI.pixUnit,
-                    top: (o.vgap + o.tgap) / BI.pixRatio + BI.pixUnit,
-                    bottom: (o.vgap + o.bgap) / BI.pixRatio + BI.pixUnit,
+                    left: self._optimiseGap(o.hgap + o.lgap),
+                    right: self._optimiseGap(o.hgap + o.rgap),
+                    top: self._optimiseGap(o.vgap + o.tgap),
+                    bottom: self._optimiseGap(o.vgap + o.bgap),
                     width: "auto",
                     height: "auto"
                 });

@@ -6,7 +6,7 @@ export declare class MultiSelectItem extends BasicButton {
     static EVENT_CHANGE: string;
 
     props: {
-        login: {
+        logic: {
             dynamic: boolean;
         }
         text: string;

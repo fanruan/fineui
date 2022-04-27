@@ -47,7 +47,7 @@ BI.Cache = {
     },
 
     addCookie: function (name, value, path, expiresHours) {
-        var cookieString = name + "=" + escape(value);
+        var cookieString = name + "=" + encodeURI(value);
         // 判断是否设置过期时间
         if (expiresHours && expiresHours > 0) {
             var date = new Date();
@@ -62,7 +62,7 @@ BI.Cache = {
     },
     getCookie: function (name) {
         var arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
-        if (arr = document.cookie.match(reg)) {return unescape(arr[2]);}
+        if (arr = document.cookie.match(reg)) {return decodeURI(arr[2]);}
         return null;
     },
     deleteCookie: function (name, path) {

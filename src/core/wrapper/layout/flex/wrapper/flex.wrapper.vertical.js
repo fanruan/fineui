@@ -24,10 +24,13 @@ BI.FlexWrapperVerticalLayout = BI.inherit(BI.Layout, {
     },
     render: function () {
         BI.FlexWrapperVerticalLayout.superclass.render.apply(this, arguments);
-        var o = this.options;
+        var self = this, o = this.options;
         this.element.addClass("v-" + o.verticalAlign).addClass("h-" + o.horizontalAlign);
         this.$wrapper = BI.Widget._renderEngine.createElement("<div>").addClass("f-s-v-w h-" + o.horizontalAlign).addClass("v-" + o.verticalAlign);
-        this.populate(this.options.items);
+        var items = BI.isFunction(o.items) ? this.__watch(o.items, function (context, newValue) {
+            self.populate(newValue);
+        }) : o.items;
+        this.populate(items);
     },
 
     _hasFill: function () {
@@ -70,7 +73,7 @@ BI.FlexWrapperVerticalLayout = BI.inherit(BI.Layout, {
             }
         }
         if (rowSize > 0) {
-            w.element.height(rowSize < 1 ? ((rowSize * 100).toFixed(1) + "%") : (rowSize / BI.pixRatio + BI.pixUnit));
+            w.element.height(this._optimiseGap(rowSize));
         }
         if (rowSize === "fill") {
             w.element.addClass("f-f");

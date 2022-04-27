@@ -7,22 +7,28 @@
  */
 BI.Toast = BI.inherit(BI.Tip, {
     _const: {
-        minWidth: 200,
-        hgap: 10
+        closableMinWidth: 146,
+        minWidth: 124,
+        closableMaxWidth: 410,
+        maxWidth: 400,
+        hgap: 8
     },
 
     _defaultConfig: function () {
         return BI.extend(BI.Toast.superclass._defaultConfig.apply(this, arguments), {
             extraCls: "bi-toast",
             text: "",
-            level: "success" // success或warning
+            level: "success", // success或warning
+            autoClose: true,
+            closable: null
         });
     },
 
     render: function () {
-        var self = this, o = this.options;
+        var self = this, o = this.options, c = this._const;
         this.element.css({
-            minWidth: this._const.minWidth / BI.pixRatio + BI.pixUnit
+            minWidth: (o.closable ? c.closableMinWidth : c.minWidth) / BI.pixRatio + BI.pixUnit,
+            maxWidth: (o.closable ? c.closableMaxWidth : c.maxWidth) / BI.pixRatio + BI.pixUnit
         });
         this.element.addClass("toast-" + o.level);
         var fn = function (e) {
@@ -56,24 +62,27 @@ BI.Toast = BI.inherit(BI.Tip, {
                 break;
         }
 
+        var hasCloseIcon = function () {
+            return o.closable === true || (o.closable === null && o.autoClose === false);
+        };
         var items = [{
             type: "bi.icon_label",
             cls: cls + " toast-icon",
             width: 36
         }, {
-            el: {
+            el: BI.isPlainObject(o.text) ? o.text : {
                 type: "bi.label",
                 whiteSpace: "normal",
                 text: o.text,
                 textHeight: 16,
                 textAlign: "left"
             },
-            rgap: o.autoClose ? this._const.hgap : 0
+            rgap: hasCloseIcon() ? 0 : this._const.hgap
         }];
 
         var columnSize = [36, "fill"];
 
-        if (o.autoClose === false) {
+        if (hasCloseIcon()) {
             items.push({
                 type: "bi.icon_button",
                 cls: "close-font toast-icon",
@@ -90,7 +99,7 @@ BI.Toast = BI.inherit(BI.Tip, {
             horizontalAlign: BI.HorizontalAlign.Stretch,
             element: this,
             items: items,
-            vgap: 7,
+            vgap: 12,
             columnSize: columnSize
         });
     },

@@ -26,7 +26,7 @@ BI.LevelTree = BI.inherit(BI.Widget, {
     _formatItems: function (nodes, layer, pNode) {
         var self = this;
         BI.each(nodes, function (i, node) {
-            var extend = { layer: layer };
+            var extend = { layer: layer, height: BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT };
             if (!BI.isKey(node.id)) {
                 node.id = BI.UUID();
             }

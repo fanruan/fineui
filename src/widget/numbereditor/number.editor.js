@@ -3,9 +3,9 @@
  * 数值微调器
  */
 BI.NumberEditor = BI.inherit(BI.Widget, {
-    _defaultConfig: function () {
+    _defaultConfig: function (conf) {
         return BI.extend(BI.NumberEditor.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-number-editor bi-border bi-focus-shadow",
+            baseCls: "bi-number-editor bi-focus-shadow " + (conf.simple ? "bi-border-bottom" : "bi-border"),
             validationChecker: BI.emptyFn,
             valueFormatter: function (v) {
                 return v;
@@ -25,6 +25,7 @@ BI.NumberEditor = BI.inherit(BI.Widget, {
         this.editor = BI.createWidget({
             type: "bi.sign_editor",
             height: o.height - 2,
+            simple: o.simple,
             allowBlank: o.allowBlank,
             value: o.valueFormatter(o.value),
             validationChecker: function (v) {
@@ -42,10 +43,12 @@ BI.NumberEditor = BI.inherit(BI.Widget, {
         this.editor.on(BI.TextEditor.EVENT_ERROR, function () {
             o.value = BI.parseFloat(this.getLastValidValue());
             self._checkAdjustDisabled(o.value);
+            self.element.addClass("error");
         });
         this.editor.on(BI.TextEditor.EVENT_VALID, function () {
             o.value = BI.parseFloat(this.getValue());
             self._checkAdjustDisabled(o.value);
+            self.element.removeClass("error");
         });
         this.editor.on(BI.TextEditor.EVENT_CONFIRM, function () {
             self.fireEvent(BI.NumberEditor.EVENT_CONFIRM);
@@ -54,7 +57,7 @@ BI.NumberEditor = BI.inherit(BI.Widget, {
             type: "bi.icon_button",
             forceNotSelected: true,
             trigger: "lclick,",
-            cls: "add-up-font top-button bi-border-left bi-list-item-active2 icon-size-12"
+            cls: (o.simple ? "solid-triangle-top-font " : "add-up-font bi-border-left ") + "top-button bi-list-item-active2 icon-size-12"
         });
         this.topBtn.on(BI.IconButton.EVENT_CHANGE, function () {
             self._finetuning(o.step);
@@ -65,7 +68,7 @@ BI.NumberEditor = BI.inherit(BI.Widget, {
             type: "bi.icon_button",
             trigger: "lclick,",
             forceNotSelected: true,
-            cls: "minus-down-font bottom-button bi-border-left bi-list-item-active2 icon-size-12"
+            cls: (o.simple ? "solid-triangle-bottom-font " : "minus-down-font bi-border-left ") + "bottom-button bi-list-item-active2 icon-size-12"
         });
         this.bottomBtn.on(BI.IconButton.EVENT_CHANGE, function () {
             self._finetuning(-o.step);

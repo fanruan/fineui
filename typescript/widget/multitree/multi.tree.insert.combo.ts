@@ -23,4 +23,10 @@ export declare class MultiTreeInsertCombo extends Single {
     populate(): void;
 
     getSearcher(): Widget;
+
+    focus(): void;
+
+    blur(): void;
+
+    setWaterMark(v: string): void;
 }

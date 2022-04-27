@@ -40,16 +40,14 @@ _.extend(BI.Func, {
      * @param items
      * @param keyword
      * @param param  搜索哪个属性
-     * @param clone  是否需要deepClone
      */
-    getSearchResult: function (items, keyword, param, clone) {
+    getSearchResult: function (items, keyword, param) {
         var isArray = BI.isArray(items);
         items = isArray ? BI.flatten(items) : items;
         param || (param = "text");
-        BI.isNull(clone) && (clone = true);
         if (!BI.isKey(keyword)) {
             return {
-                find: clone ? BI.deepClone(items) : items,
+                find: items,
                 match: isArray ? [] : {}
             };
         }
@@ -61,7 +59,6 @@ _.extend(BI.Func, {
             if (BI.isNull(item)) {
                 return;
             }
-            clone && (item = BI.deepClone(item));
             t = BI.stripEL(item);
             text = BI.find([t[param], t.text, t.value, t.name, t], function (index, val) {
                 return BI.isNotNull(val);

@@ -12,4 +12,6 @@ export declare class PopupView extends Widget {
     resetWidth(v: number): void;
 
     resetHeight(v: number): void;
+
+    setDirection(direction: string, position: any): void;
 }

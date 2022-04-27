@@ -94,6 +94,14 @@ BI.MultiSelectSearcher = BI.inherit(BI.Widget, {
         }
     },
 
+    focus: function () {
+        this.editor.focus();
+    },
+
+    blur: function () {
+        this.editor.blur();
+    },
+
     adjustView: function () {
         this.searcher.adjustView();
     },

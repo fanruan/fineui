@@ -31,7 +31,7 @@ BI.SingleSelectInsertCombo = BI.inherit(BI.Single, {
         this.trigger = BI.createWidget({
             type: "bi.single_select_trigger",
             watermark: o.watermark,
-            height: o.height - 2,
+            height: o.height - (o.simple ? 1 : 2),
             allowNoSelect: o.allowNoSelect,
             allowEdit: o.allowEdit,
             // adapter: this.popup,
@@ -75,6 +75,7 @@ BI.SingleSelectInsertCombo = BI.inherit(BI.Single, {
             self._defaultState();
         });
         this.trigger.on(BI.SingleSelectTrigger.EVENT_SEARCHING, function () {
+            self._dataChange = true;
             self.fireEvent(BI.SingleSelectInsertCombo.EVENT_SEARCHING);
         });
 
@@ -82,6 +83,7 @@ BI.SingleSelectInsertCombo = BI.inherit(BI.Single, {
             self.storeValue = this.getValue();
             assertShowValue();
             self._defaultState();
+            self._dataChange = true;
         });
         this.trigger.on(BI.SingleSelectTrigger.EVENT_COUNTER_CLICK, function () {
             if (!self.combo.isViewVisible()) {
@@ -91,7 +93,7 @@ BI.SingleSelectInsertCombo = BI.inherit(BI.Single, {
 
         this.combo = BI.createWidget({
             type: "bi.combo",
-            cls: "bi-border bi-border-radius",
+            cls: (o.simple ? "bi-border-bottom" : "bi-border") + " bi-border-radius",
             container: o.container,
             toggle: false,
             el: this.trigger,
@@ -106,6 +108,7 @@ BI.SingleSelectInsertCombo = BI.inherit(BI.Single, {
                 listeners: [{
                     eventName: BI.SingleSelectPopupView.EVENT_CHANGE,
                     action: function () {
+                        self._dataChange = true;
                         self.storeValue = this.getValue();
                         self._adjust(function () {
                             assertShowValue();
@@ -131,6 +134,9 @@ BI.SingleSelectInsertCombo = BI.inherit(BI.Single, {
         });
 
         this.combo.on(BI.Combo.EVENT_BEFORE_POPUPVIEW, function () {
+            if (!this.isViewVisible()) {
+                self._dataChange = false;// 标记数据是否发生变化
+            }
             this.setValue(self.storeValue);
             BI.nextTick(function () {
                 self.populate();
@@ -144,7 +150,7 @@ BI.SingleSelectInsertCombo = BI.inherit(BI.Single, {
             if (self.requesting === true) {
                 self.wants2Quit = true;
             } else {
-                self.fireEvent(BI.SingleSelectInsertCombo.EVENT_CONFIRM);
+                self._dataChange && self.fireEvent(BI.SingleSelectInsertCombo.EVENT_CONFIRM);
             }
         });
 
@@ -198,7 +204,7 @@ BI.SingleSelectInsertCombo = BI.inherit(BI.Single, {
 
         function adjust () {
             if (self.wants2Quit === true) {
-                self.fireEvent(BI.SingleSelectInsertCombo.EVENT_CONFIRM);
+                self._dataChange && self.fireEvent(BI.SingleSelectInsertCombo.EVENT_CONFIRM);
                 self.wants2Quit = false;
             }
             self.requesting = false;

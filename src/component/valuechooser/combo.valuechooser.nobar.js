@@ -22,6 +22,7 @@ BI.ValueChooserNoBarCombo = BI.inherit(BI.AbstractValueChooser, {
 
         return {
             type: "bi.multi_select_no_bar_combo",
+            simple: o.simple,
             allowEdit: o.allowEdit,
             text: o.text,
             value: this._assertValue(o.value),

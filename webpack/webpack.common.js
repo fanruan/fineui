@@ -37,40 +37,25 @@ module.exports = {
     module: {
         rules: [
             {
-                test: /\.(js|ts)$/,
-                include: [dirs.NODE_MODULES, dirs.PRIVATE, dirs.TYPESCRIPT],
+                test: /\.(jsx?|tsx?)$/i,
+                include: [
+                    dirs.NODE_MODULES,
+                    dirs.PRIVATE,
+                    dirs.PUBLIC,
+                    dirs.MOBILE,
+                    dirs.DEMO,
+                    dirs.I18N,
+                    dirs.UI,
+                    dirs.FIX,
+                    dirs.TYPESCRIPT,
+                    dirs.SRC,
+                ],
                 exclude: /node_modules(\/|\\)core-js/,
                 use: [
                     {
                         loader: 'babel-loader',
                         options: {
                             configFile: dirs.BABEL_CONFIG,
-                        },
-                    },
-                    {
-                        loader: 'source-map-loader',
-                        options: {
-                            enforce: 'pre',
-                        },
-                    },
-                ],
-            },
-            {
-                test: /\.js$/,
-                include: [
-                    dirs.DEMO,
-                    dirs.SRC,
-                    dirs.PUBLIC,
-                    dirs.MOBILE,
-                    dirs.I18N,
-                    dirs.UI,
-                    dirs.FIX,
-                ],
-                use: [
-                    {
-                        loader: 'source-map-loader',
-                        options: {
-                            enforce: 'pre',
                         },
                     },
                 ],

@@ -10,7 +10,7 @@ BI.SelectTextTrigger = BI.inherit(BI.Trigger, {
     _defaultConfig: function () {
         return BI.extend(BI.SelectTextTrigger.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-select-text-trigger",
-            height: 24
+            height: 24,
         });
     },
 
@@ -25,6 +25,12 @@ BI.SelectTextTrigger = BI.inherit(BI.Trigger, {
             readonly: o.readonly,
             text: obj.text,
             textCls: obj.textCls,
+            textHgap: o.textHgap,
+            textVgap: o.textVgap,
+            textLgap: o.textLgap,
+            textRgap: o.textRgap,
+            textTgap: o.textTgap,
+            textBgap: o.textBgap,
             tipType: o.tipType,
             warningTitle: o.warningTitle
         });

@@ -14,6 +14,9 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
 
     _valueFormatter: function (v) {
         var text = v;
+        if (this.options.valueFormatter) {
+            return this.options.valueFormatter(v);
+        }
         if (BI.isNotNull(this.items)) {
             BI.some(this.items, function (i, item) {
                 if (item.value === v || item.value + "" === v) {
@@ -126,7 +129,8 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
                 pId: pId,
                 text: node.text + (llen > 0 ? ("(" + BI.i18nText("BI-Basic_Altogether") + llen + BI.i18nText("BI-Basic_Count") + ")") : ""),
                 value: node.value,
-                open: true
+                open: true,
+                disabled: node.disabled
             });
         }
     },
@@ -460,7 +464,8 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
                 open: isOpen,
                 checked: checked,
                 halfCheck: half,
-                flag: flag
+                flag: flag,
+                disabled: node.disabled
             });
         }
 
@@ -543,7 +548,8 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
                 isParent: nodes[i].getChildrenLength() > 0,
                 checked: state[0],
                 halfCheck: state[1],
-                open: o.open
+                open: o.open,
+                disabled: nodes[i].disabled
             });
         }
         // 如果指定节点全部打开
@@ -553,6 +559,7 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
             BI.each(nodes, function (idx, node) {
                 allNodes = BI.concat(allNodes, self._getAllChildren(parentValues.concat([node.value])));
             });
+            var lastFind;
             BI.each(allNodes, function (idx, node) {
                 var valueMap = dealWithSelectedValue(node.parentValues, selectedValues);
                 // REPORT-24409 fix: 设置节点全部展开，添加的节点没有给状态
@@ -563,7 +570,13 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
                 if (find) {
                     parentCheckState.checked = find.halfCheck ? false : find.checked;
                     parentCheckState.half = find.halfCheck;
+                    // 默认展开也需要重置父节点的halfCheck
+                    if (BI.isNotNull(lastFind) && (lastFind !== find || allNodes.length - 1 === idx)) {
+                        lastFind.half = lastFind.halfCheck;
+                        lastFind.halfCheck = false;
+                    }
                 }
+                lastFind = find;
                 var state = getCheckState(node.value, node.parentValues, valueMap, parentCheckState);
                 result.push({
                     id: node.id,
@@ -574,7 +587,8 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
                     isParent: node.getChildrenLength() > 0,
                     checked: state[0],
                     halfCheck: state[1],
-                    open: self.options.open
+                    open: self.options.open,
+                    disabled: node.disabled
                 });
             });
         }

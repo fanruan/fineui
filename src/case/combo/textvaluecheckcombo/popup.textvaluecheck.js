@@ -35,11 +35,13 @@ BI.TextValueCheckComboPopup = BI.inherit(BI.Pane, {
     },
 
     _formatItems: function (items) {
+        var o = this.options;
         return BI.map(items, function (i, item) {
             return BI.extend({
                 type: "bi.single_select_item",
                 cls: "bi-list-item",
-                height: 24
+                textAlign: o.textAlign,
+                title: item.title || item.text
             }, item);
         });
     },

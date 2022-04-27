@@ -15,6 +15,7 @@ export declare class Tab extends Widget {
             dynamic: boolean;
         };
         tab?: Obj;
+        keepAlives?: string[] | ((cardName: string) => boolean)
     }
 
     setSelect(v: string | number, action?: Action, callback?: Function): void;

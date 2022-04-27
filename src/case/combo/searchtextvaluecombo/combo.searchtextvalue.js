@@ -15,12 +15,18 @@ BI.SearchTextValueCombo = BI.inherit(BI.Widget, {
 
     render: function () {
         var self = this, o = this.options;
+        o.value = BI.isFunction(o.value) ? this.__watch(o.value, function (context, newValue) {
+            self.setValue(newValue);
+        }) : o.value;
+        o.items = BI.isFunction(o.items) ? this.__watch(o.items, function (context, newValue) {
+            self.populate(newValue);
+        }) : o.items;
         return {
             type: "bi.absolute",
             items: [{
                 el: {
                     type: "bi.combo",
-                    cls: "bi-border bi-focus-shadow",
+                    cls: (o.simple ? "bi-border-bottom" : "bi-border") + " bi-focus-shadow",
                     container: o.container,
                     adjustLength: 2,
                     toggle: false,
@@ -35,7 +41,7 @@ BI.SearchTextValueCombo = BI.inherit(BI.Widget, {
                             self.trigger = this;
                         },
                         items: o.items,
-                        height: o.height - 2,
+                        height: o.height - (o.simple ? 1 : 2),
                         text: o.text,
                         defaultText: o.defaultText,
                         value: o.value,

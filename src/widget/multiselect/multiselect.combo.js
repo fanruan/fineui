@@ -44,7 +44,7 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
         this.trigger = BI.createWidget({
             type: "bi.multi_select_trigger",
             allowEdit: o.allowEdit,
-            height: o.height - 2,
+            height: o.height - (o.simple ? 1 : 2),
             text: o.text,
             // adapter: this.popup,
             masker: {
@@ -123,7 +123,7 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
 
         this.combo = BI.createWidget({
             type: "bi.combo",
-            cls: "bi-border bi-border-radius",
+            cls: (o.simple ? "bi-border-bottom" : "bi-border") + " bi-border-radius",
             toggle: !o.allowEdit,
             container: o.container,
             el: this.trigger,

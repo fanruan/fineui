@@ -23,7 +23,7 @@ BI.FlexHorizontalLayout = BI.inherit(BI.Layout, {
     },
     render: function () {
         BI.FlexHorizontalLayout.superclass.render.apply(this, arguments);
-        var o = this.options;
+        var self = this, o = this.options;
         this.element.addClass("v-" + o.verticalAlign).addClass("h-" + o.horizontalAlign);
         if (o.scrollable === true || o.scrollx === true) {
             this.element.addClass("f-scroll-x");
@@ -31,7 +31,10 @@ BI.FlexHorizontalLayout = BI.inherit(BI.Layout, {
         if (o.scrollable === true || o.scrolly === true) {
             this.element.addClass("f-scroll-y");
         }
-        this.populate(this.options.items);
+        var items = BI.isFunction(o.items) ? this.__watch(o.items, function (context, newValue) {
+            self.populate(newValue);
+        }) : o.items;
+        this.populate(items);
     },
 
     _hasFill: function () {
@@ -74,7 +77,7 @@ BI.FlexHorizontalLayout = BI.inherit(BI.Layout, {
             }
         }
         if (columnSize > 0) {
-            w.element.width(columnSize < 1 ? ((columnSize * 100).toFixed(1) + "%") : (columnSize / BI.pixRatio + BI.pixUnit));
+            w.element.width(this._optimiseGap(columnSize));
         }
         if (columnSize === "fill") {
             w.element.addClass("f-f");

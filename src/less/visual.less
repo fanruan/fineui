@@ -1,19 +1,19 @@
 .text-shadow(none) {
-  text-shadow: none;
-  -moz-text-shadow: none;
   -webkit-text-shadow: none;
+  -moz-text-shadow: none;
+  text-shadow: none;
 }
 
 .text-shadow(@x, @y, @blur, @color) when not (@x = none) {
-  text-shadow: @arguments;
-  -moz-text-shadow: @arguments;
   -webkit-text-shadow: @arguments;
+  -moz-text-shadow: @arguments;
+  text-shadow: @arguments;
 }
 
 .box-shadow(none) {
-  box-shadow: none;
   -webkit-box-shadow: none;
   -moz-box-shadow: none;
+  box-shadow: none;
 }
 
 .box-shadow(@style, @c) when (iscolor(@c)) {
@@ -23,15 +23,15 @@
 }
 
 .box-shadow(@x, @y, @blur, @spreed: 0px, @color, @inset: outset) when (iscolor(@color)) and (isnumber(unit(@spreed))){
-  box-shadow: @arguments;
   -webkit-box-shadow: @arguments;
   -moz-box-shadow: @arguments;
+  box-shadow: @arguments;
 }
 
 .box-shadows(@shadow1, @shadow2, @shadow3) {
-  box-shadow: @shadow1, @shadow2, @shadow3;
   -webkit-box-shadow: @shadow1, @shadow2, @shadow3;
   -moz-box-shadow: @shadow1, @shadow2, @shadow3;
+  box-shadow: @shadow1, @shadow2, @shadow3;
 }
 
 .background-color(@color, @alpha) {
@@ -51,6 +51,13 @@
   -moz-transition: @transition;
   -o-transition: @transition;
   transition: @transition;
+}
+
+.transitions(@transition1, @transition2) {
+  -webkit-transition: @transition1, @transition2;
+  -moz-transition: @transition1, @transition2;
+  -o-transition: @transition1, @transition2;
+  transition: @transition1, @transition2;
 }
 
 .rotate(@rotate) {
@@ -90,40 +97,40 @@
 }
 
 .border-corner-top-radius(@leftTop, @rightTop) {
-  -moz-border-radius-topleft: @leftTop;
   -webkit-border-top-left-radius: @leftTop;
-  -moz-border-radius-topright: @rightTop;
+  -moz-border-radius-topleft: @leftTop;
   -webkit-border-top-right-radius: @rightTop;
+  -moz-border-radius-topright: @rightTop;
 
   border-top-left-radius: @leftTop;
   border-top-right-radius: @rightTop;
 }
 
 .border-corner-bottom-radius(@leftBottom, @rightBottom) {
-  -moz-border-radius-bottomleft: @rightBottom;
   -webkit-border-bottom-left-radius: @rightBottom;
-  -moz-border-radius-bottomright: @leftBottom;
+  -moz-border-radius-bottomleft: @rightBottom;
   -webkit-border-bottom-right-radius: @rightBottom;
+  -moz-border-radius-bottomright: @leftBottom;
 
   border-bottom-right-radius: @rightBottom;
   border-bottom-left-radius: @leftBottom;
 }
 
 .border-corner-left-radius(@leftTop, @leftBottom) {
-  -moz-border-radius-topleft: @leftTop;
   -webkit-border-top-left-radius: @leftTop;
-  -moz-border-radius-bottomleft: @leftBottom;
+  -moz-border-radius-topleft: @leftTop;
   -webkit-border-bottom-left-radius: @leftBottom;
+  -moz-border-radius-bottomleft: @leftBottom;
 
   border-top-left-radius: @leftTop;
   border-bottom-left-radius: @leftBottom;
 }
 
 .border-corner-right-radius(@rightTop, @rightBottom) {
-  -moz-border-radius-topright: @rightTop;
   -webkit-border-top-right-radius: @rightTop;
-  -moz-border-radius-bottomright: @rightBottom;
+  -moz-border-radius-topright: @rightTop;
   -webkit-border-bottom-right-radius: @rightBottom;
+  -moz-border-radius-bottomright: @rightBottom;
 
   border-top-right-radius: @rightTop;
   border-bottom-right-radius: @rightBottom;

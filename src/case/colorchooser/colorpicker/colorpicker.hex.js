@@ -110,8 +110,6 @@ BI.HexColorPicker = BI.inherit(BI.Widget, {
 
     render: function () {
         var self = this, o = this.options;
-        this.colors = BI.createWidget();
-
         return {
             type: "bi.button_group",
             items: this._digest(o.items || this._items),

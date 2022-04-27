@@ -122,6 +122,10 @@
   & .bi-textarea {
     color: @color-bi-text-card;
   }
+  &.bi-primary {
+    background-color: @background-color-card-primary;
+    color: @color-card-primary;
+  }
 }
 
 .bi-theme-dark {
@@ -177,12 +181,18 @@
   &.disabled {
     border-color: @color-bi-border-disabled !important;
   }
+  &.error {
+    border-color: @border-color-negative;
+  }
 }
 
 .bi-border-top {
   border-top: 1px solid @color-bi-border-line;
   &.disabled {
     border-color: @color-bi-border-disabled !important;
+  }
+  &.error {
+    border-color: @border-color-negative;
   }
 }
 
@@ -191,6 +201,9 @@
   &.disabled {
     border-color: @color-bi-border-disabled !important;
   }
+  &.error {
+    border-color: @border-color-negative;
+  }
 }
 
 .bi-border-bottom {
@@ -198,12 +211,18 @@
   &.disabled {
     border-color: @color-bi-border-disabled !important;
   }
+  &.error {
+    border-color: @border-color-negative;
+  }
 }
 
 .bi-border-left {
   border-left: 1px solid @color-bi-border-line;
   &.disabled {
     border-color: @color-bi-border-disabled !important;
+  }
+  &.error {
+    border-color: @border-color-negative;
   }
 }
 

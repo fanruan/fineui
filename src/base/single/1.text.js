@@ -76,7 +76,9 @@
                 this.text = this;
             }
 
-            var text = this._getShowText();
+            var text = BI.isFunction(o.text) ? this.__watch(o.text, function (context, newValue) {
+                self.setText(newValue);
+            }) : o.text;
             // 只要不是undefined就可以显示text值，否则显示value
             if (!BI.isUndefined(text)) {
                 this.setText(text);

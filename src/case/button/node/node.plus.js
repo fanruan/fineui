@@ -15,26 +15,17 @@ BI.PlusGroupNode = BI.inherit(BI.NodeButton, {
             id: "",
             pId: "",
             open: false,
+            iconWrapperWidth: null,
             height: 24
         });
     },
-    _init: function () {
-        BI.PlusGroupNode.superclass._init.apply(this, arguments);
+
+    render: function () {
         var self = this, o = this.options;
         this.checkbox = BI.createWidget({
-            type: "bi.tree_node_checkbox"
-        });
-        this.text = BI.createWidget({
-            type: "bi.label",
-            textAlign: "left",
-            whiteSpace: "nowrap",
-            textHeight: o.height,
-            height: o.height,
-            hgap: o.hgap,
-            text: o.text,
-            value: o.value,
-            keyword: o.keyword,
-            py: o.py
+            type: "bi.tree_node_checkbox",
+            iconHeight: o.height,
+            iconWidth: o.iconWrapperWidth || o.height
         });
         this.checkbox.on(BI.Controller.EVENT_CHANGE, function (type) {
             if (type === BI.Events.CLICK) {
@@ -42,16 +33,30 @@ BI.PlusGroupNode = BI.inherit(BI.NodeButton, {
             }
             self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
         });
-        var type = BI.LogicFactory.createLogicTypeByDirection(BI.Direction.Left);
-        var items = BI.LogicFactory.createLogicItemsByDirection(BI.Direction.Left, {
-            width: 24,
-            el: this.checkbox
-        }, this.text);
-        BI.createWidget(BI.extend({
-            element: this
-        }, BI.LogicFactory.createLogic(type, BI.extend(o.logic, {
-            items: items
-        }))));
+        return {
+            type: "bi.vertical_adapt",
+            columnSize: [o.iconWrapperWidth || o.height, "fill"],
+            items: [this.checkbox, {
+                el: {
+                    type: "bi.label",
+                    ref: function (_ref) {
+                        self.text = _ref;
+                    },
+                    textAlign: "left",
+                    whiteSpace: "nowrap",
+                    textHeight: o.height,
+                    height: o.height,
+                    hgap: o.hgap || o.textHgap,
+                    vgap: o.textVgap,
+                    lgap: o.textLgap,
+                    rgap: o.textRgap,
+                    text: o.text,
+                    value: o.value,
+                    keyword: o.keyword,
+                    py: o.py
+                }
+            }]
+        };
     },
 
     doRedMark: function () {

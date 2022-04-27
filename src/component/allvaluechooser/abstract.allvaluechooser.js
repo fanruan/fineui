@@ -24,6 +24,9 @@ BI.AbstractAllValueChooser = BI.inherit(BI.Widget, {
 
     _valueFormatter: function (v) {
         var text = v;
+        if (this.options.valueFormatter) {
+            return this.options.valueFormatter(v);
+        }
         if (BI.isNotNull(this.items)) {
             BI.some(this.items, function (i, item) {
                 // 把value都换成字符串

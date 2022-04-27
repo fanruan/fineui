@@ -7,6 +7,16 @@
  */
 
 !(function () {
+    var cancelAnimationFrame =
+        _global.cancelAnimationFrame ||
+        _global.webkitCancelAnimationFrame ||
+        _global.mozCancelAnimationFrame ||
+        _global.oCancelAnimationFrame ||
+        _global.msCancelAnimationFrame ||
+        _global.clearTimeout;
+
+    var requestAnimationFrame = _global.requestAnimationFrame || _global.webkitRequestAnimationFrame || _global.mozRequestAnimationFrame || _global.oRequestAnimationFrame || _global.msRequestAnimationFrame || _global.setTimeout;
+
     function callLifeHook (self, life) {
         var hooks = [], hook;
         hook = self[life];
@@ -34,6 +44,8 @@
                 tag: null,
                 disabled: false,
                 invisible: false,
+                animation: "",
+                animationDuring: 0,
                 invalid: false,
                 baseCls: "",
                 extraCls: "",
@@ -133,7 +145,13 @@
 
                 if (self.options.beforeRender || self.beforeRender) {
                     self.__async = true;
-                    (self.options.beforeRender || self.beforeRender).call(self, render);
+                    var beforeRenderResult = (self.options.beforeRender || self.beforeRender).call(self, render);
+                    if (beforeRenderResult instanceof Promise) {
+                        beforeRenderResult.then(render).catch(function (e) {
+                            _global.console && console.error(e);
+                            render();
+                        });
+                    }
                 } else {
                     self._render();
                     self.__afterRender();
@@ -142,7 +160,13 @@
 
             if (this.options.beforeInit || this.beforeInit) {
                 this.__asking = true;
-                (this.options.beforeInit || this.beforeInit).call(this, init);
+                var beforeInitResult = (this.options.beforeInit || this.beforeInit).call(this, init);
+                if (beforeInitResult instanceof Promise) {
+                    beforeInitResult.then(init).catch(function (e) {
+                        _global.console && console.error(e);
+                        init();
+                    });
+                }
             } else {
                 init();
             }
@@ -206,8 +230,6 @@
                             }
                         }
                         self.element.css(css = newValue);
-                    }, {
-                        deep: true
                     });
                     this.element.css(css);
                 } else {
@@ -224,8 +246,10 @@
                     return getter.call(self, self);
                 }, (handler && function (v) {
                     handler.call(self, self, v);
-                }) || BI.emptyFn, options);
-                this._watchers.push(watcher);
+                }) || BI.emptyFn, BI.extend({deep: true}, options));
+                this._watchers.push(function unwatchFn () {
+                    watcher.teardown();
+                });
                 return watcher.value;
             } else {
                 return getter();
@@ -273,10 +297,15 @@
         },
 
         _initVisual: function () {
-            var o = this.options;
+            var self = this, o = this.options;
             if (o.invisible) {
-                // 用display属性做显示和隐藏，否则jquery会在显示时将display设为block会覆盖掉display:flex属性
-                this.element.css("display", "none");
+                var invisible = o.invisible = BI.isFunction(o.invisible) ? this.__watch(o.invisible, function (context, newValue) {
+                    self.setVisible(!newValue);
+                }) : o.invisible;
+                if (invisible) {
+                    // 用display属性做显示和隐藏，否则jquery会在显示时将display设为block会覆盖掉display:flex属性
+                    this.element.css("display", "none");
+                }
             }
         },
 
@@ -284,24 +313,30 @@
             var self = this, o = this.options;
             if (o.disabled || o.invalid) {
                 if (this.options.disabled) {
-                    this.setEnable(false);
+                    var disabled = o.disabled = BI.isFunction(o.disabled) ? this.__watch(o.disabled, function (context, newValue) {
+                        self.setEnable(!newValue);
+                    }) : o.disabled;
+                    if (disabled) {
+                        this.setEnable(false);
+                    }
                 }
                 if (this.options.invalid) {
-                    this.setValid(false);
+                    var invalid = o.invalid = BI.isFunction(o.invalid) ? this.__watch(o.invalid, function (context, newValue) {
+                        self.setValid(!newValue);
+                    }) : o.invalid;
+                    if (invalid) {
+                        this.setValid(false);
+                    }
                 }
             }
             if (o.effect) {
                 if (BI.isArray(o.effect)) {
                     if (BI.isArray(o.effect[0])) {
                         BI.each(o.effect, function (i, effect) {
-                            self.__watch(effect[0], effect[1], {
-                                deep: true
-                            });
+                            self.__watch(effect[0], effect[1]);
                         });
                     } else {
-                        self.__watch(o.effect[0], o.effect[1], {
-                            deep: true
-                        });
+                        self.__watch(o.effect[0], o.effect[1]);
                     }
                 } else {
                     this.__watch(o.effect);
@@ -313,15 +348,22 @@
             this._isMounted = false;
         },
 
+        __initWatch: function () {
+            // initWatch拦截的方法
+        },
+
         _initElement: function () {
             var self = this;
             this.__isMounting = true;
-            var render = BI.isFunction(this.options.render) ? this.options.render : this.render;
+            // 当开启worker模式时，可以通过$render来实现另一种效果
+            var workerMode = BI.Providers.getProvider("bi.provider.system").getWorkerMode();
+            var render = BI.isFunction(this.options.render) ? this.options.render : (workerMode ? (this.$render || this.render) : this.render);
             var els = render && render.call(this);
             els = BI.Plugin.getRender(this.options.type, els);
             if (BI.isPlainObject(els)) {
                 els = [els];
             }
+            this.__initWatch();
             if (BI.isArray(els)) {
                 BI.each(els, function (i, el) {
                     if (el) {
@@ -356,10 +398,16 @@
             lifeHook !== false && !this.__async && callLifeHook(this, "beforeMount");
             this._isMounted = true;
             this.__isMounting = false;
+            if (this._parent) {
+                if (!this._parent.isEnabled()) {
+                    this._setEnable(false);
+                }
+                if (!this._parent.isValid()) {
+                    this._setValid(false);
+                }
+            }
             for (var key in this._children) {
                 var child = this._children[key];
-                !self.isEnabled() && child._setEnable(false);
-                !self.isValid() && child._setValid(false);
                 child._mount && child._mount(deep ? force : false, deep, lifeHook, predicate, layer + 1);
             }
             this._mountChildren && this._mountChildren();
@@ -453,15 +501,55 @@
             }
         },
 
-        setVisible: function (visible) {
+        _innerSetVisible: function (visible) {
+            var self = this, o = this.options;
+            var lastVisible = !o.invisible;
             this._setVisible(visible);
             if (visible === true) {
                 // 用this.element.show()会把display属性改成block
                 this.element.css("display", "");
                 this._mount();
+                if (o.animation && !lastVisible) {
+                    this.element.removeClass(o.animation + "-leave").removeClass(o.animation + "-leave-active").addClass(o.animation + "-enter");
+                    if (this._requestAnimationFrame) {
+                        cancelAnimationFrame(this._requestAnimationFrame);
+                    }
+                    this._requestAnimationFrame = function () {
+                        self.element.addClass(o.animation + "-enter-active");
+                    };
+                    requestAnimationFrame(this._requestAnimationFrame);
+                    if (this._animationDuring) {
+                        clearTimeout(this._animationDuring);
+                    }
+                    this._animationDuring = setTimeout(function () {
+                        self.element.removeClass(o.animation + "-enter").removeClass(o.animation + "-enter-active");
+                    }, o.animationDuring);
+                }
             } else if (visible === false) {
-                this.element.css("display", "none");
+                if (o.animation && lastVisible) {
+                    this.element.removeClass(o.animation + "-enter").removeClass(o.animation + "-enter-active").addClass(o.animation + "-leave");
+                    if (this._requestAnimationFrame) {
+                        cancelAnimationFrame(this._requestAnimationFrame);
+                    }
+                    this._requestAnimationFrame = function () {
+                        self.element.addClass(o.animation + "-leave-active");
+                    };
+                    requestAnimationFrame(this._requestAnimationFrame);
+                    if (this._animationDuring) {
+                        clearTimeout(this._animationDuring);
+                    }
+                    this._animationDuring = setTimeout(function () {
+                        self.element.removeClass(o.animation + "-leave").removeClass(o.animation + "-leave-active");
+                        self.element.css("display", "none");
+                    }, o.animationDuring);
+                } else {
+                    this.element.css("display", "none");
+                }
             }
+        },
+
+        setVisible: function (visible) {
+            this._innerSetVisible(visible);
             this.fireEvent(BI.Events.VIEW, visible);
         },
 
@@ -509,6 +597,12 @@
                 throw new Error("组件：组件名已存在，不能进行添加");
             }
             widget._setParent && widget._setParent(this);
+            // if (this.options.disabled) {
+            //     widget.options && (widget.options.disabled = true);
+            // }
+            // if (this.options.invalid) {
+            //     widget.options && (widget.options.invalid = true);
+            // }
             widget.on(BI.Events.DESTROY, function () {
                 BI.remove(self._children, this);
             });
@@ -627,12 +721,17 @@
         },
 
         __d: function () {
-            callLifeHook(this, "beforeDestroy");
-            this.beforeDestroy = null;
             BI.each(this._children, function (i, widget) {
                 widget && widget._unMount && widget._unMount();
             });
             this._children = {};
+        },
+
+        // 主要是因为_destroy已经提供了protected方法
+        __destroy: function () {
+            callLifeHook(this, "beforeDestroy");
+            this.beforeDestroy = null;
+            this.__d();
             this._parent = null;
             this._isMounted = false;
             callLifeHook(this, "destroyed");
@@ -640,7 +739,7 @@
         },
 
         _unMount: function () {
-            this.__d();
+            this.__destroy();
             this.fireEvent(BI.Events.UNMOUNT);
             this.purgeListeners();
         },
@@ -678,23 +777,40 @@
             // }
             // this._isMounted = false;
             // this.purgeListeners();
-            this._empty();
+
+            // 去掉组件绑定的watcher
+            BI.each(this._watchers, function (i, unwatches) {
+                unwatches = BI.isArray(unwatches) ? unwatches : [unwatches];
+                BI.each(unwatches, function (j, unwatch) {
+                    unwatch();
+                });
+            });
+            this._watchers && (this._watchers = []);
+            this.__d();
+            this.element.empty();
             this.element.unbind();
             this._initCurrent();
             this._init();
-            this._mount();
             // this._initRef();
         },
 
         _destroy: function () {
-            this.__d();
+            this.__destroy();
             this.element.destroy();
             this.purgeListeners();
         },
 
         destroy: function () {
-            this.__d();
-            this.element.destroy();
+            var self = this, o = this.options;
+            this.__destroy();
+            if (o.animation) {
+                this._innerSetVisible(false);
+                setTimeout(function () {
+                    self.element.destroy();
+                }, o.animationDuring);
+            } else {
+                this.element.destroy();
+            }
             this.fireEvent(BI.Events.UNMOUNT);
             this.fireEvent(BI.Events.DESTROY);
             this._purgeRef();
@@ -757,8 +873,52 @@
         }
     };
 
-    BI.watch = function (watch, handler) {
+    BI.useContext = function (inject) {
+        if (BI.Model.target) {
+            var p = BI.Model.target;
+            if (inject) {
+                while (p) {
+                    if (p.$$context && inject in p.$$context) {
+                        return p;
+                    }
+                    p = p._parent;
+                }
+            }
+        }
+        return BI.Model.target;
+    };
+
+    BI.watch = function (vm, watch, handler) {
+        // 必须要保证组件当前环境存在
         if (BI.Widget.current) {
+            if (vm instanceof BI.Model) {
+                var watchers = [];
+                if (BI.isKey(watch)) {
+                    var k = watch;
+                    watch = {};
+                    watch[k] = handler;
+                }
+                for (var key in watch) {
+                    var innerHandler = watch[key];
+                    if (BI.isArray(handler)) {
+                        for (var i = 0; i < handler.length; i++) {
+                            watchers.push(Fix.watch(vm.model, key, innerHandler, {
+                                store: vm
+                            }));
+                        }
+                    } else {
+                        watchers.push(Fix.watch(vm.model, key, innerHandler, {
+                            store: vm
+                        }));
+                    }
+                }
+                // vm中一定有_widget
+                BI.Widget.current._watchers || (BI.Widget.current._watchers = []);
+                BI.Widget.current._watchers = BI.Widget.current._watchers.concat(watchers);
+                return;
+            }
+            handler = watch;
+            watch = vm;
             BI.Widget.current.$watchDelayCallbacks || (BI.Widget.current.$watchDelayCallbacks = []);
             BI.Widget.current.$watchDelayCallbacks.push([watch, handler]);
         }

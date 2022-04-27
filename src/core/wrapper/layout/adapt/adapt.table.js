@@ -19,8 +19,8 @@ BI.TableAdaptLayout = BI.inherit(BI.Layout, {
         });
     },
     render: function () {
-        var o = this.options;
         BI.TableAdaptLayout.superclass.render.apply(this, arguments);
+        var self = this, o = this.options;
         this.$table = BI.Widget._renderEngine.createElement("<div>").css({
             position: "relative",
             display: "table",
@@ -28,7 +28,10 @@ BI.TableAdaptLayout = BI.inherit(BI.Layout, {
             height: (o.verticalAlign !== BI.VerticalAlign.Top) ? "100%" : "auto",
             "white-space": "nowrap"
         });
-        this.populate(this.options.items);
+        var items = BI.isFunction(o.items) ? this.__watch(o.items, function (context, newValue) {
+            self.populate(newValue);
+        }) : o.items;
+        this.populate(items);
     },
 
     _hasFill: function () {
@@ -48,9 +51,7 @@ BI.TableAdaptLayout = BI.inherit(BI.Layout, {
         var td, width = "";
         var columnSize = o.columnSize.length > 0 ? o.columnSize[i] : item.width;
         if (columnSize > 0) {
-            width = columnSize < 1 ?
-                ((columnSize * 100).toFixed(1) + "%")
-                : (columnSize + (i === 0 ? o.hgap : 0) + o.hgap + o.lgap + o.rgap);
+            width = this._optimiseGap(columnSize + (i === 0 ? o.hgap : 0) + o.hgap + o.lgap + o.rgap);
         }
         if ((BI.isNull(columnSize) || columnSize === "") && this._hasFill()) {
             width = 2;
@@ -71,17 +72,16 @@ BI.TableAdaptLayout = BI.inherit(BI.Layout, {
         if (o.verticalAlign === BI.VerticalAlign.Stretch) {
             var top = o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0),
                 bottom = o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0);
-            w.element.css("height", "calc(100% - " + ((top + bottom) / BI.pixRatio + BI.pixUnit) + ")");
+            w.element.css("height", "calc(100% - " + this._optimiseGap(top + bottom) + ")");
         }
         // 对于表现为td的元素设置最大宽度，有几点需要注意
         // 1、由于直接对td设置最大宽度是在规范中未定义的, 所以要使用类似td:firstChild来迂回实现
         // 2、不能给多个td设置最大宽度，这样只会平分宽度
         // 3、多百分比宽度就算了
         if (columnSize > 0) {
-            columnSize = columnSize < 1 ? width : width / BI.pixRatio + BI.pixUnit;
             td.element.css({
-                "max-width": columnSize,
-                "min-width": columnSize
+                "max-width": width,
+                "min-width": width
             });
         }
         if (i === 0) {

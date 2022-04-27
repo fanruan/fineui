@@ -10,8 +10,11 @@
   &.combo-error {
     & .bi-search-text-value-trigger{
       & .bi-text-button {
-        color: @color-bi-text-failure;
+        color: @color-bi-text-error-hover-search-text-value-combo;
       }
+    }
+    &>.bi-border, &>.bi-border-bottom {
+      border-color: @border-color-negative;
     }
   }
   // 此combo的trigger_button是absolute上去的，与bi-combo在同一层级，独立写一下

@@ -12,7 +12,10 @@ BI.VirtualList = BI.inherit(BI.Widget, {
             overscanHeight: 100,
             blockSize: 10,
             scrollTop: 0,
-            items: []
+            items: [],
+            itemFormatter: function (item, index) {
+                return item;
+            }
         };
     },
 
@@ -50,6 +53,9 @@ BI.VirtualList = BI.inherit(BI.Widget, {
     // mounted之后绑定事件
     mounted: function () {
         var self = this, o = this.options;
+        o.items = BI.isFunction(o.items) ? this.__watch(o.items, function (context, newValue) {
+            self.populate(newValue);
+        }) : o.items;
         this._populate();
         this.element.scroll(function (e) {
             o.scrollTop = self.element.scrollTop();
@@ -71,7 +77,9 @@ BI.VirtualList = BI.inherit(BI.Widget, {
         };
         while ((lastHeight = getElementHeight()) < minContentHeight && index < o.items.length) {
             var items = o.items.slice(index, index + o.blockSize);
-            this.container.addItems(items, this);
+            this.container.addItems(items.map(function (item, i) {
+                return o.itemFormatter(item, index + i)
+            }), this);
             var addedHeight = getElementHeight() - lastHeight;
             this.tree.set(cnt, addedHeight);
             this.renderedIndex = cnt;
@@ -128,7 +136,7 @@ BI.VirtualList = BI.inherit(BI.Widget, {
             }
             if (this.cache[i].destroyed === true) {
                 for (var j = index; j < index + o.blockSize && j < o.items.length; j++) {
-                    var w = this.container._addElement(j, o.items[j], this);
+                    var w = this.container._addElement(j, o.itemFormatter(o.items[j], j), this);
                     needMount.push(w);
                     currentFragment.appendChild(w.element[0]);
                 }

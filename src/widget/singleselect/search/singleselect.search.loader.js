@@ -10,6 +10,9 @@ BI.SingleSelectSearchLoader = BI.inherit(BI.Widget, {
         return BI.extend(BI.SingleSelectSearchLoader.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-single-select-search-loader",
             allowNoSelect: false,
+            logic: {
+                dynamic: false
+            },
             itemsCreator: BI.emptyFn,
             keywordGetter: BI.emptyFn,
             valueFormatter: BI.emptyFn
@@ -86,16 +89,18 @@ BI.SingleSelectSearchLoader = BI.inherit(BI.Widget, {
     },
 
     _createItems: function (items) {
-        return BI.createItems(items, {
-            type: this.options.allowNoSelect ? "bi.single_select_item" : "bi.single_select_radio_item",
-            cls: "bi-list-item-active",
-            logic: {
-                dynamic: false
-            },
-            height: 25,
-            selected: false,
-            iconWrapperWidth: 26,
-            hgap: this.options.allowNoSelect ? 10 : 0
+        var o = this.options;
+        return BI.map(items, function (i, item) {
+            return BI.extend({
+                type: o.allowNoSelect ? "bi.single_select_item" : "bi.single_select_radio_item",
+                logic: o.logic,
+                cls: "bi-list-item-active",
+                height: BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT,
+                selected: false,
+                iconWrapperWidth: 26,
+                hgap: o.allowNoSelect ? 10 : 0,
+                title: item.title || item.text
+            }, item);
         });
     },
 

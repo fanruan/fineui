@@ -34,7 +34,8 @@ BI.MultiLayerSelectLevelTree = BI.inherit(BI.Pane, {
         BI.each(nodes, function (i, node) {
             var extend = {
                 isFirstNode: i === 0,
-                isLastNode: i === nodes.length - 1
+                isLastNode: i === nodes.length - 1,
+                height: BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT
             };
             node.layer = layer;
             if (!BI.isKey(node.id)) {

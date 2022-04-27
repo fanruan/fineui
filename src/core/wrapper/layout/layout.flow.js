@@ -21,8 +21,23 @@ BI.FloatLeftLayout = BI.inherit(BI.Layout, {
     },
     render: function () {
         BI.FloatLeftLayout.superclass.render.apply(this, arguments);
-        var o = this.options;
-        this.populate(this.options.items);
+        var self = this, o = this.options;
+        if (o.innerHgap !== 0) {
+            this.element.css({
+                paddingLeft: this._optimiseGap(o.innerHgap),
+                paddingRight: this._optimiseGap(o.innerHgap)
+            })
+        }
+        if (o.innerVgap !== 0) {
+            this.element.css({
+                paddingTop: this._optimiseGap(o.innerVgap),
+                paddingBottom: this._optimiseGap(o.innerVgap)
+            })
+        }
+        var items = BI.isFunction(o.items) ? this.__watch(o.items, function (context, newValue) {
+            self.populate(newValue);
+        }) : o.items;
+        this.populate(items);
     },
 
     _addElement: function (i, item) {
@@ -30,35 +45,39 @@ BI.FloatLeftLayout = BI.inherit(BI.Layout, {
         var w = BI.FloatLeftLayout.superclass._addElement.apply(this, arguments);
         w.element.css({position: "relative", float: "left"});
         if (BI.isNotNull(item.left)) {
-            w.element.css({left: BI.isNumber(item.left) ? item.left / BI.pixRatio + BI.pixUnit : item.left});
+            w.element.css({left: BI.isNumber(item.left) ? this._optimiseGap(item.left) : item.left});
         }
         if (BI.isNotNull(item.right)) {
-            w.element.css({right: BI.isNumber(item.right) ? item.right / BI.pixRatio + BI.pixUnit : item.right});
+            w.element.css({right: BI.isNumber(item.right) ? this._optimiseGap(item.right) : item.right});
         }
         if (BI.isNotNull(item.top)) {
-            w.element.css({top: BI.isNumber(item.top) ? item.top / BI.pixRatio + BI.pixUnit : item.top});
+            w.element.css({top: BI.isNumber(item.top) ? this._optimiseGap(item.top) : item.top});
         }
         if (BI.isNotNull(item.bottom)) {
-            w.element.css({bottom: BI.isNumber(item.bottom) ? item.bottom / BI.pixRatio + BI.pixUnit : item.bottom});
+            w.element.css({bottom: BI.isNumber(item.bottom) ? this._optimiseGap(item.bottom) : item.bottom});
         }
         if (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
+            var top = o.vgap / 2 + o.tgap + (item.tgap || 0) + (item.vgap || 0);
             w.element.css({
-                "margin-top": (o.vgap / 2 + o.tgap + (item.tgap || 0) + (item.vgap || 0)) / BI.pixRatio + BI.pixUnit
+                "margin-top": this._optimiseGap(top)
             });
         }
         if (o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0) !== 0) {
+            var left = o.hgap / 2 + o.lgap + (item.lgap || 0) + (item.hgap || 0);
             w.element.css({
-                "margin-left": (o.hgap / 2 + o.lgap + (item.lgap || 0) + (item.hgap || 0)) / BI.pixRatio + BI.pixUnit
+                "margin-left": this._optimiseGap(left)
             });
         }
         if (o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0) !== 0) {
+            var right = o.hgap / 2 + o.rgap + (item.rgap || 0) + (item.hgap || 0);
             w.element.css({
-                "margin-right": (o.hgap / 2 + o.rgap + (item.rgap || 0) + (item.hgap || 0)) / BI.pixRatio + BI.pixUnit
+                "margin-right": this._optimiseGap(right)
             });
         }
         if (o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0) !== 0) {
+            var bottom = o.vgap / 2 + o.bgap + (item.bgap || 0) + (item.vgap || 0);
             w.element.css({
-                "margin-bottom": (o.vgap / 2 + o.bgap + (item.bgap || 0) + (item.vgap || 0)) / BI.pixRatio + BI.pixUnit
+                "margin-bottom": this._optimiseGap(bottom)
             });
         }
         return w;
@@ -94,8 +113,23 @@ BI.FloatRightLayout = BI.inherit(BI.Layout, {
     },
     render: function () {
         BI.FloatRightLayout.superclass.render.apply(this, arguments);
-        var o = this.options;
-        this.populate(this.options.items);
+        var self = this, o = this.options;
+        if (o.innerHgap !== 0) {
+            this.element.css({
+                paddingLeft: this._optimiseGap(o.innerHgap),
+                paddingRight: this._optimiseGap(o.innerHgap)
+            })
+        }
+        if (o.innerVgap !== 0) {
+            this.element.css({
+                paddingTop: this._optimiseGap(o.innerVgap),
+                paddingBottom: this._optimiseGap(o.innerVgap)
+            })
+        }
+        var items = BI.isFunction(o.items) ? this.__watch(o.items, function (context, newValue) {
+            self.populate(newValue);
+        }) : o.items;
+        this.populate(items);
     },
 
     _addElement: function (i, item) {

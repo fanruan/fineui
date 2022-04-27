@@ -55,6 +55,8 @@
         Fix.Model.target = target = targetStack.pop();
     }
 
+    BI.Model = Fix.Model;
+
     var oldWatch = Fix.watch;
     Fix.watch = function (model, expOrFn, cb, options) {
         if (BI.isPlainObject(cb)) {
@@ -97,23 +99,17 @@
         }
     }
 
-    // _.each(["populate", "addItems", "prependItems"], function (name) {
-    //     var old = BI.Loader.prototype[name];
-    //     BI.Loader.prototype[name] = function () {
-    //         BI.Widget.pushContext(this);
-    //         try {
-    //             var result = old.apply(this, arguments);
-    //         } catch (e) {
-    //             console.error(e);
-    //         }
-    //         BI.Widget.popContext();
-    //         return result;
-    //     };
-    // });
-
     function createStore () {
         var needPop = false;
-        if (_global.Fix && this._store) {
+        var workerMode = BI.Providers.getProvider("bi.provider.system").getWorkerMode();
+        if (workerMode && this._worker) {
+            return;
+        }
+        if (this.store) {
+            pushTarget(this.store);
+            return true;
+        }
+        if (this._store) {
             var store = findStore(this.options.context || this._parent || this.options.element || this._context);
             if (store) {
                 pushTarget(store);
@@ -146,22 +142,20 @@
         needPop && popTarget();
     };
 
-    var _render = BI.Widget.prototype._render;
-    BI.Widget.prototype._render = function () {
-        var needPop = false;
-        if (_global.Fix && this._store) {
-            needPop = true;
-            pushTarget(this.store);
+    var __initWatch = BI.Widget.prototype.__initWatch;
+    BI.Widget.prototype.__initWatch = function () {
+        __initWatch.apply(this, arguments);
+        var workerMode = BI.Providers.getProvider("bi.provider.system").getWorkerMode();
+        if (workerMode && this._worker) {
+            return;
         }
-        _render.apply(this, arguments);
-        if (_global.Fix && this._store) {
+        if (this._store) {
             initWatch(this, this.watch);
         }
-        needPop && popTarget();
     };
 
-    var unMount = BI.Widget.prototype.__d;
-    BI.Widget.prototype.__d = function () {
+    var unMount = BI.Widget.prototype.__destroy;
+    BI.Widget.prototype.__destroy = function () {
         try {
             unMount.apply(this, arguments);
         } catch (e) {
@@ -183,7 +177,7 @@
         delete this.__cacheStore;
     };
 
-    _.each(["__afterRender", "_mount", "__afterMount"], function (name) {
+    _.each(["_render", "__afterRender", "_mount", "__afterMount"], function (name) {
         var old = BI.Widget.prototype[name];
         old && (BI.Widget.prototype[name] = function () {
             this.store && pushTarget(this.store);

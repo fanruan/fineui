@@ -20,7 +20,11 @@ BI.HTapeLayout = BI.inherit(BI.Layout, {
     },
     render: function () {
         BI.HTapeLayout.superclass.render.apply(this, arguments);
-        this.populate(this.options.items);
+        var self = this, o = this.options;
+        var items = BI.isFunction(o.items) ? this.__watch(o.items, function (context, newValue) {
+            self.populate(newValue);
+        }) : o.items;
+        this.populate(items);
     },
 
     addItem: function (item) {
@@ -41,10 +45,17 @@ BI.HTapeLayout = BI.inherit(BI.Layout, {
             } else {
                 w = self.getWidgetByName(self._getChildName(i));
             }
+            var columnSize = o.columnSize.length > 0 ? o.columnSize[i] : item.width;
+            if (o.columnSize.length > 0) {
+                if (item.width >= 1 && o.columnSize[i] >= 1 && o.columnSize[i] !== item.width) {
+                    columnSize = item.width;
+                }
+            }
             w.element.css({
                 position: "absolute",
-                top: ((item.vgap || 0) + (item.tgap || 0) + o.vgap + o.tgap) / BI.pixRatio + BI.pixUnit,
-                bottom: ((item.bgap || 0) + (item.vgap || 0) + o.vgap + o.bgap) / BI.pixRatio + BI.pixUnit
+                top: self._optimiseGap((item.vgap || 0) + (item.tgap || 0) + o.innerVgap + o.vgap + o.tgap),
+                bottom: self._optimiseGap((item.bgap || 0) + (item.vgap || 0) + o.innerVgap + o.vgap + o.bgap),
+                width: BI.isNumber(columnSize) ? self._optimiseGap(columnSize) : ""
             });
             if (o.verticalAlign === BI.VerticalAlign.Middle) {
                 w.element.css({
@@ -59,8 +70,8 @@ BI.HTapeLayout = BI.inherit(BI.Layout, {
         });
 
         var left = {}, right = {};
-        left[0] = 0;
-        right[items.length - 1] = 0;
+        left[0] = o.innerHgap;
+        right[items.length - 1] = o.innerHgap;
 
         BI.any(items, function (i, item) {
             if (BI.isEmptyObject(item)) {
@@ -77,17 +88,10 @@ BI.HTapeLayout = BI.inherit(BI.Layout, {
                 var preColumnSize = o.columnSize.length > 0 ? o.columnSize[i - 1] : items[i - 1].width;
                 left[i] = left[i - 1] + preColumnSize + (items[i - 1].lgap || 0) + (items[i - 1].rgap || 0) + 2 * (items[i - 1].hgap || 0) + o.hgap + o.lgap + o.rgap;
             }
-            if (columnSize < 1 && columnSize > 0) {
-                w.element.css({
-                    left: (left[i] * 100).toFixed(1) + "%",
-                    width: (columnSize * 100).toFixed(1) + "%"
-                });
-            } else {
-                w.element.css({
-                    left: (left[i] + (item.lgap || 0) + (item.hgap || 0) + o.hgap + o.lgap) / BI.pixRatio + BI.pixUnit,
-                    width: BI.isNumber(columnSize) ? columnSize / BI.pixRatio + BI.pixUnit : ""
-                });
-            }
+            w.element.css({
+                left: self._optimiseGap(left[i] + (item.lgap || 0) + (item.hgap || 0) + o.hgap + o.lgap)
+            });
+
             if (columnSize === "" || columnSize === "fill") {
                 return true;
             }
@@ -102,17 +106,10 @@ BI.HTapeLayout = BI.inherit(BI.Layout, {
                 var nextColumnSize = o.columnSize.length > 0 ? o.columnSize[i + 1] : items[i + 1].width;
                 right[i] = right[i + 1] + nextColumnSize + (items[i + 1].lgap || 0) + (items[i + 1].rgap || 0) + 2 * (items[i + 1].hgap || 0) + o.hgap + o.lgap + o.rgap;
             }
-            if (columnSize < 1 && columnSize > 0) {
-                w.element.css({
-                    right: (right[i] * 100).toFixed(1) + "%",
-                    width: (columnSize * 100).toFixed(1) + "%"
-                });
-            } else {
-                w.element.css({
-                    right: (right[i] + (item.rgap || 0) + (item.hgap || 0) + o.hgap + o.rgap) / BI.pixRatio + BI.pixUnit,
-                    width: BI.isNumber(columnSize) ? columnSize / BI.pixRatio + BI.pixUnit : ""
-                });
-            }
+            w.element.css({
+                right: self._optimiseGap(right[i] + (item.rgap || 0) + (item.hgap || 0) + o.hgap + o.rgap)
+            });
+
             if (columnSize === "" || columnSize === "fill") {
                 return true;
             }
@@ -173,10 +170,17 @@ BI.VTapeLayout = BI.inherit(BI.Layout, {
             } else {
                 w = self.getWidgetByName(self._getChildName(i));
             }
+            var rowSize = o.rowSize.length > 0 ? o.rowSize[i] : item.height;
+            if (o.rowSize.length > 0) {
+                if (item.height >= 1 && o.rowSize[i] >= 1 && o.rowSize[i] !== item.height) {
+                    rowSize = item.height;
+                }
+            }
             w.element.css({
                 position: "absolute",
-                left: ((item.lgap || 0) + (item.hgap || 0) + o.hgap + o.lgap) / BI.pixRatio + BI.pixUnit,
-                right: ((item.hgap || 0) + (item.rgap || 0) + o.hgap + o.rgap) / BI.pixRatio + BI.pixUnit
+                left: self._optimiseGap((item.lgap || 0) + (item.hgap || 0) + o.innerHgap + o.hgap + o.lgap),
+                right: self._optimiseGap((item.hgap || 0) + (item.rgap || 0) + o.innerHgap + o.hgap + o.rgap),
+                height: BI.isNumber(rowSize) ? self._optimiseGap(rowSize) : ""
             });
             if (o.horizontalAlign === BI.HorizontalAlign.Center) {
                 w.element.css({
@@ -191,8 +195,8 @@ BI.VTapeLayout = BI.inherit(BI.Layout, {
         });
 
         var top = {}, bottom = {};
-        top[0] = 0;
-        bottom[items.length - 1] = 0;
+        top[0] = o.innerVgap;
+        bottom[items.length - 1] = o.innerVgap;
 
         BI.any(items, function (i, item) {
             if (BI.isEmptyObject(item)) {
@@ -209,17 +213,10 @@ BI.VTapeLayout = BI.inherit(BI.Layout, {
                 var preRowSize = o.rowSize.length > 0 ? o.rowSize[i - 1] : items[i - 1].height;
                 top[i] = top[i - 1] + preRowSize + (items[i - 1].tgap || 0) + (items[i - 1].bgap || 0) + 2 * (items[i - 1].vgap || 0) + o.vgap + o.tgap + o.bgap;
             }
-            if (rowSize < 1 && rowSize > 0) {
-                w.element.css({
-                    top: (top[i] * 100).toFixed(1) + "%",
-                    height: (rowSize * 100).toFixed(1) + "%"
-                });
-            } else {
-                w.element.css({
-                    top: (top[i] + (item.vgap || 0) + (item.tgap || 0) + o.vgap + o.tgap) / BI.pixRatio + BI.pixUnit,
-                    height: BI.isNumber(rowSize) ? rowSize / BI.pixRatio + BI.pixUnit : ""
-                });
-            }
+            w.element.css({
+                top: self._optimiseGap(top[i] + (item.vgap || 0) + (item.tgap || 0) + o.vgap + o.tgap)
+            });
+
             if (rowSize === "" || rowSize === "fill") {
                 return true;
             }
@@ -234,17 +231,10 @@ BI.VTapeLayout = BI.inherit(BI.Layout, {
                 var nextRowSize = o.rowSize.length > 0 ? o.rowSize[i + 1] : items[i + 1].height;
                 bottom[i] = bottom[i + 1] + nextRowSize + (items[i + 1].tgap || 0) + (items[i + 1].bgap || 0) + 2 * (items[i + 1].vgap || 0) + o.vgap + o.tgap + o.bgap;
             }
-            if (rowSize < 1 && rowSize > 0) {
-                w.element.css({
-                    bottom: (bottom[i] * 100).toFixed(1) + "%",
-                    height: (rowSize * 100).toFixed(1) + "%"
-                });
-            } else {
-                w.element.css({
-                    bottom: (bottom[i] + (item.vgap || 0) + (item.bgap || 0) + o.vgap + o.bgap) / BI.pixRatio + BI.pixUnit,
-                    height: BI.isNumber(rowSize) ? rowSize / BI.pixRatio + BI.pixUnit : ""
-                });
-            }
+            w.element.css({
+                bottom: self._optimiseGap(bottom[i] + (item.vgap || 0) + (item.bgap || 0) + o.vgap + o.bgap)
+            });
+
             if (rowSize === "" || rowSize === "fill") {
                 return true;
             }

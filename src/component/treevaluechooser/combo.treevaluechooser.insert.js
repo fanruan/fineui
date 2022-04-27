@@ -26,6 +26,7 @@ BI.TreeValueChooserInsertCombo = BI.inherit(BI.AbstractTreeValueChooser, {
         }
         this.combo = BI.createWidget({
             type: "bi.multi_tree_insert_combo",
+            simple: o.simple,
             isNeedAdjustWidth: o.isNeedAdjustWidth,
             allowEdit: o.allowEdit,
             text: o.text,
@@ -100,6 +101,18 @@ BI.TreeValueChooserInsertCombo = BI.inherit(BI.AbstractTreeValueChooser, {
             this._initData(items);
         }
         this.combo.populate();
+    },
+
+    focus: function () {
+        this.combo.focus();
+    },
+
+    blur: function () {
+        this.combo.blur();
+    },
+
+    setWaterMark: function (v) {
+        this.combo.setWaterMark(v);
     }
 });
 

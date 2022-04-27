@@ -19,7 +19,9 @@ BI.VerticalLayoutLogic = BI.inherit(BI.Logic, {
             lgap: 0,
             rgap: 0,
             tgap: 0,
-            bgap: 0
+            bgap: 0,
+            innerVgap: 0,
+            innerHgap: 0
         };
     },
 
@@ -41,6 +43,8 @@ BI.VerticalLayoutLogic = BI.inherit(BI.Logic, {
             rgap: o.rgap,
             tgap: o.tgap,
             bgap: o.bgap,
+            innerHgap: o.innerHgap,
+            innerVgap: o.innerVgap,
             items: o.items
         };
     }
@@ -68,7 +72,9 @@ BI.HorizontalLayoutLogic = BI.inherit(BI.Logic, {
             lgap: 0,
             rgap: 0,
             tgap: 0,
-            bgap: 0
+            bgap: 0,
+            innerVgap: 0,
+            innerHgap: 0
         };
     },
 
@@ -90,6 +96,8 @@ BI.HorizontalLayoutLogic = BI.inherit(BI.Logic, {
             rgap: o.rgap,
             tgap: o.tgap,
             bgap: o.bgap,
+            innerHgap: o.innerHgap,
+            innerVgap: o.innerVgap,
             items: o.items
         };
     }
@@ -163,7 +171,9 @@ BI.HorizontalFillLayoutLogic = BI.inherit(BI.Logic, {
             lgap: 0,
             rgap: 0,
             tgap: 0,
-            bgap: 0
+            bgap: 0,
+            innerVgap: 0,
+            innerHgap: 0
         };
     },
 
@@ -190,6 +200,8 @@ BI.HorizontalFillLayoutLogic = BI.inherit(BI.Logic, {
             rgap: o.rgap,
             tgap: o.tgap,
             bgap: o.bgap,
+            innerHgap: o.innerHgap,
+            innerVgap: o.innerVgap,
             items: o.items
         };
     }

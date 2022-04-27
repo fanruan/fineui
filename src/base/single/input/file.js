@@ -333,11 +333,10 @@
                 if (isFunction(handler.onloadstart)) {
                     handler.onloadstart(rpe, {});
                 }
-                with (document.body || document.documentElement) {
-                    appendChild(iframe);
-                    appendChild(form);
-                    form.submit();
-                }
+                var d = document.body || document.documentElement;
+                d.appendChild(iframe);
+                d.appendChild(form);
+                form.submit();
 
                 return handler;
             };
@@ -652,7 +651,7 @@
             });
         },
 
-        setMaxFileLength: function(v) {
+        setMaxFileLength: function (v) {
             this.options.maxLength = v;
             if (this.wrap) {
                 this.wrap.maxLength = v;
@@ -671,6 +670,10 @@
             return this.wrap ? this.wrap.attach_array : [];
         },
 
+        getQueue: function () {
+            return this.wrap.files;
+        },
+
         reset: function () {
             if (this.wrap) {
                 this.wrap.attach_array = [];
@@ -679,12 +682,22 @@
             }
         },
 
+        sendFiles: function (files) {
+            if (!this.wrap) return;
+
+            this.wrap.dom.input.files = files;
+
+            var event = new CustomEvent("change");
+
+            this.wrap.dom.input.dispatchEvent(event);
+        },
+
         _setEnable: function (enable) {
             BI.File.superclass._setEnable.apply(this, arguments);
             if (enable === true) {
-                this.element.attr("disabled", "disabled");
-            } else {
                 this.element.removeAttr("disabled");
+            } else {
+                this.element.attr("disabled", "disabled");
             }
         }
     });

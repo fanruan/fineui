@@ -22,7 +22,11 @@ BI.WindowLayout = BI.inherit(BI.Layout, {
     },
     render: function () {
         BI.WindowLayout.superclass.render.apply(this, arguments);
-        this.populate(this.options.items);
+        var self = this, o = this.options;
+        var items = BI.isFunction(o.items) ? this.__watch(o.items, function (context, newValue) {
+            self.populate(newValue);
+        }) : o.items;
+        this.populate(items);
     },
 
     addItem: function (item) {
@@ -100,9 +104,9 @@ BI.WindowLayout = BI.inherit(BI.Layout, {
                 if (BI.isNull(top[i])) {
                     top[i] = top[i - 1] + (o.rowSize[i - 1] < 1 ? o.rowSize[i - 1] : o.rowSize[i - 1] + o.vgap + o.bgap);
                 }
-                var t = top[i] <= 1 ? (top[i] * 100).toFixed(1) + "%" : (top[i] + o.vgap + o.tgap) / BI.pixRatio + BI.pixUnit, h = "";
+                var t = this._optimiseGap(top[i] + o.vgap + o.tgap), h = "";
                 if (BI.isNumber(o.rowSize[i])) {
-                    h = o.rowSize[i] <= 1 ? (o.rowSize[i] * 100).toFixed(1) + "%" : o.rowSize[i] / BI.pixRatio + BI.pixUnit;
+                    h = this._optimiseGap(o.rowSize[i]);
                 }
                 wi.element.css({top: t, height: h});
                 first(wi, i, j);
@@ -118,9 +122,9 @@ BI.WindowLayout = BI.inherit(BI.Layout, {
                 if (BI.isNull(bottom[i])) {
                     bottom[i] = bottom[i + 1] + (o.rowSize[i + 1] < 1 ? o.rowSize[i + 1] : o.rowSize[i + 1] + o.vgap + o.tgap);
                 }
-                var b = bottom[i] <= 1 ? (bottom[i] * 100).toFixed(1) + "%" : (bottom[i] + o.vgap + o.bgap) / BI.pixRatio + BI.pixUnit, h = "";
+                var b = this._optimiseGap(bottom[i] + o.vgap + o.bgap), h = "";
                 if (BI.isNumber(o.rowSize[i])) {
-                    h = o.rowSize[i] <= 1 ? (o.rowSize[i] * 100).toFixed(1) + "%" : o.rowSize[i] / BI.pixRatio + BI.pixUnit;
+                    h = this._optimiseGap(o.rowSize[i]);
                 }
                 wi.element.css({bottom: b, height: h});
                 first(wi, i, j);
@@ -136,9 +140,9 @@ BI.WindowLayout = BI.inherit(BI.Layout, {
                 if (BI.isNull(left[j])) {
                     left[j] = left[j - 1] + (o.columnSize[j - 1] < 1 ? o.columnSize[j - 1] : o.columnSize[j - 1] + o.hgap + o.rgap);
                 }
-                var l = left[j] <= 1 ? (left[j] * 100).toFixed(1) + "%" : (left[j] + o.hgap + o.lgap) / BI.pixRatio + BI.pixUnit, w = "";
+                var l = this._optimiseGap(left[j] + o.hgap + o.lgap), w = "";
                 if (BI.isNumber(o.columnSize[j])) {
-                    w = o.columnSize[j] <= 1 ? (o.columnSize[j] * 100).toFixed(1) + "%" : o.columnSize[j] / BI.pixRatio + BI.pixUnit;
+                    w = this._optimiseGap(o.columnSize[j]);
                 }
                 wi.element.css({left: l, width: w});
                 first(wi, i, j);
@@ -154,9 +158,9 @@ BI.WindowLayout = BI.inherit(BI.Layout, {
                 if (BI.isNull(right[j])) {
                     right[j] = right[j + 1] + (o.columnSize[j + 1] < 1 ? o.columnSize[j + 1] : o.columnSize[j + 1] + o.hgap + o.lgap);
                 }
-                var r = right[j] <= 1 ? (right[j] * 100).toFixed(1) + "%" : (right[j] + o.hgap + o.rgap) / BI.pixRatio + BI.pixUnit, w = "";
+                var r = this._optimiseGap(right[j] + o.hgap + o.rgap), w = "";
                 if (BI.isNumber(o.columnSize[j])) {
-                    w = o.columnSize[j] <= 1 ? (o.columnSize[j] * 100).toFixed(1) + "%" : o.columnSize[j] / BI.pixRatio + BI.pixUnit;
+                    w = this._optimiseGap(o.columnSize[j]);
                 }
                 wi.element.css({right: r, width: w});
                 first(wi, i, j);
