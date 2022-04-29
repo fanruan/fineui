@@ -80,7 +80,6 @@ BI.FlexVerticalLayout = BI.inherit(BI.Layout, {
         }
         if (rowSize === "fill") {
             w.element.addClass("f-f");
-            w.element.css({ minHeight: 0 });
         }
         w.element.addClass("c-e");
         if (i === 0) {
