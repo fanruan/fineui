@@ -94,7 +94,7 @@ BI.SelectList = BI.inherit(BI.Widget, {
         var hasNext = this.list.hasNext();
         var isAlreadyAllSelected = this.toolbar.isSelected();
         var isHalf = selectLength > 0 && notSelectLength > 0;
-        var allSelected = isAlreadyAllSelected;
+        var allSelected = selectLength > 0 && notSelectLength <= 0 && (!hasNext || isAlreadyAllSelected);
 
         if (this.isAllSelected() === false) {
             hasNext && (isHalf = selectLength > 0);
