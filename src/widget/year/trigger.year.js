@@ -35,7 +35,7 @@ BI.DynamicYearTrigger = BI.inherit(BI.Trigger, {
             },
             hgap: c.hgap,
             vgap: c.vgap,
-            watermark: BI.i18nText("BI-Basic_Unrestricted"),
+            watermark: BI.isKey(o.watermark) ? o.watermark : BI.i18nText("BI-Basic_Unrestricted"),
             allowBlank: true,
             errorText: function (v) {
                 if (BI.isPositiveInteger(v)) {
@@ -188,6 +188,10 @@ BI.DynamicYearTrigger = BI.inherit(BI.Trigger, {
 
     getKey: function () {
         return this.editor.getValue() | 0;
+    },
+
+    setWaterMark: function (v) {
+        this.editor.setWaterMark(v);
     }
 });
 BI.DynamicYearTrigger.EVENT_KEY_DOWN = "EVENT_KEY_DOWN";

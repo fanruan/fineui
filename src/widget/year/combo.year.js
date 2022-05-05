@@ -24,7 +24,8 @@ BI.DynamicYearCombo = BI.inherit(BI.Widget, {
             min: o.minDate,
             max: o.maxDate,
             height: o.height - border,
-            value: o.value || ""
+            value: o.value || "",
+            watermark: o.watermark
         });
         this.trigger.on(BI.DynamicYearTrigger.EVENT_KEY_DOWN, function () {
             if (self.combo.isViewVisible()) {
@@ -211,8 +212,11 @@ BI.DynamicYearCombo = BI.inherit(BI.Widget, {
 
     isStateValid: function () {
         return this.trigger.isValid();
-    }
+    },
 
+    setWaterMark: function (v) {
+        this.trigger.setWaterMark(v);
+    }
 });
 BI.DynamicYearCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
 BI.DynamicYearCombo.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
