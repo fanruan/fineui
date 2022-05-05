@@ -1,8 +1,9 @@
-@import "../../../index";
+@import "../../../index.less";
 
 .bi-half-button {
   .border-radius(2px);
   box-sizing: border-box;
+
   &:after {
     position: absolute;
     left: 2px;
@@ -11,5 +12,11 @@
     height: 8px;
     background-color: @color-bi-background-half-button-content;
     content: '';
+  }
+
+  &.disabled {
+    &:after {
+      background-color: @color-bi-background-disabled-half-button-content;
+    }
   }
 }

@@ -17,11 +17,9 @@ BI.VirtualGroup = BI.inherit(BI.Widget, {
             self.populate(newValue);
         }) : o.items;
         this.populate(items);
-        if (BI.isFunction(o.value)) {
-            this.__watch(o.value, function (context, newValue) {
-                self.setValue(newValue);
-            })
-        }
+        o.value = BI.isFunction(o.value) ? this.__watch(o.value, function (context, newValue) {
+            self.setValue(newValue);
+        }) : o.value;
         if (BI.isKey(o.value)) {
             this.setValue(o.value);
         }
@@ -66,11 +64,11 @@ BI.VirtualGroup = BI.inherit(BI.Widget, {
     },
 
     addItems: function (items) {
-        this.layouts.addItems(items);
+        this.layouts.addItems(items, this);
     },
 
     prependItems: function (items) {
-        this.layouts.prependItems(items);
+        this.layouts.prependItems(items, this);
     },
 
     setValue: function (v) {

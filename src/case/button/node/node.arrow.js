@@ -22,12 +22,6 @@ BI.ArrowNode = BI.inherit(BI.NodeButton, {
         this.checkbox = BI.createWidget({
             type: "bi.arrow_group_node_checkbox"
         });
-        this.checkbox.on(BI.Controller.EVENT_CHANGE, function (type) {
-            if (type === BI.Events.CLICK) {
-                self.setSelected(self.isSelected());
-            }
-            self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
-        });
         return {
             type: "bi.vertical_adapt",
             columnSize: [o.iconWrapperWidth || o.height, "fill"],

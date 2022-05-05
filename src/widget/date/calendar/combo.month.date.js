@@ -59,7 +59,7 @@ BI.MonthDateCombo = BI.inherit(BI.Trigger, {
     },
 
     populate: function () {
-        this.combo.populate.apply(this.combo, arguments);
+        this.popup.populate.apply(this.popup, arguments);
     },
 
     setValue: function (v) {

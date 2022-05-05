@@ -3,20 +3,6 @@
  * Create By GUY 2014\11\17
  *
  */
-_global = undefined;
-if (typeof window !== "undefined") {
-    _global = window;
-} else if (typeof global !== "undefined") {
-    _global = global;
-} else if (typeof self !== "undefined") {
-    _global = self;
-} else {
-    _global = this;
-}
-if (!_global.BI) {
-    _global.BI = {};
-}
-
 !(function (undefined) {
     var traverse = function (func, context) {
         return function (value, key, obj) {
@@ -295,13 +281,13 @@ if (!_global.BI) {
             var i;
             if (BI.isArray(obj)) {
                 for (i = 0; i < obj.length; i++) {
-                    if ((isFunction && target.apply(context, [i, obj[i]]) === true) || (!isFunction && BI.contains(target, obj[i]))) {
+                    if ((isFunction && (target === obj[i] || target.apply(context, [i, obj[i]]) === true)) || (!isFunction && BI.contains(target, obj[i]))) {
                         obj.splice(i--, 1);
                     }
                 }
             } else {
                 BI.each(obj, function (i, v) {
-                    if ((isFunction && target.apply(context, [i, obj[i]]) === true) || (!isFunction && BI.contains(target, obj[i]))) {
+                    if ((isFunction && (target === obj[i] || target.apply(context, [i, obj[i]]) === true)) || (!isFunction && BI.contains(target, obj[i]))) {
                         delete obj[i];
                     }
                 });
@@ -749,20 +735,6 @@ if (!_global.BI) {
         BI[name] = _apply(name);
     });
     _.extend(BI, {
-        getTime: function () {
-            if (_global.performance && _global.performance.now) {
-                return _global.performance.now();
-            }
-            if (_global.performance && _global.performance.webkitNow) {
-                return _global.performance.webkitNow();
-            }
-            if (Date.now) {
-                return Date.now();
-            }
-            return BI.getDate().getTime();
-
-
-        },
 
         parseInt: function (number) {
             var radix = 10;

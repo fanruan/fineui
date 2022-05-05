@@ -3126,7 +3126,9 @@
     BI.RouterWidget = BI.inherit(BI.Widget, {
       init: function () {
         this.$router = this._router = BI.Router.$router = $router = new VueRouter({
-          routes: this.options.routes
+          mode: this.options.mode,
+          routes: this.options.routes,
+          base: this.options.base,
         });
         this.$router.beforeEach(function (to, from, next) {
           if (to.matched.length === 0) {

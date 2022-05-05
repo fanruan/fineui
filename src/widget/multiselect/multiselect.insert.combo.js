@@ -21,10 +21,10 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
         BI.MultiSelectInsertCombo.superclass._init.apply(this, arguments);
         var assertShowValue = function () {
             if (BI.isKey(self._startValue)) {
-                if(self.storeValue.type === BI.Selection.All) {
+                if (self.storeValue.type === BI.Selection.All) {
                     BI.remove(self.storeValue.value, self._startValue);
                     self.storeValue.assist = self.storeValue.assist || [];
-                    self.storeValue.assist.pushDistinct(self._startValue);
+                    BI.pushDistinct(self.storeValue.assist, self._startValue);
                 } else {
                     BI.pushDistinct(self.storeValue.value, self._startValue);
                     BI.remove(self.storeValue.assist, self._startValue);
@@ -282,7 +282,7 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
         });
     },
 
-    _itemsCreator4Trigger: function(op, callback) {
+    _itemsCreator4Trigger: function (op, callback) {
         var self = this, o = this.options;
         o.itemsCreator(op, function (res) {
             if (op.times === 1 && BI.isNotNull(op.keywords)) {
@@ -313,7 +313,7 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
         });
     },
 
-    _stopEditing: function() {
+    _stopEditing: function () {
         this.trigger.stopEditing();
         this.numberCounter.hideView();
     },
@@ -340,7 +340,7 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
 
         digest();
 
-        function digest () {
+        function digest() {
             BI.each(keywords, function (i, val) {
                 self.storeValue.type === BI.Selection.Multi ? BI.pushDistinct(self.storeValue.value, val) : BI.remove(self.storeValue.value, val);
             });
@@ -403,7 +403,8 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
         var self = this, o = this.options;
         adjust();
         callback();
-        function adjust () {
+
+        function adjust() {
             if (self.wants2Quit === true) {
                 self._dataChange && self.fireEvent(BI.MultiSelectInsertCombo.EVENT_CONFIRM);
                 self.wants2Quit = false;
@@ -450,11 +451,11 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
         this.combo.populate.apply(this.combo, arguments);
     },
 
-    showView:function (){
+    showView: function () {
         this.combo.showView();
     },
 
-    hideView:function (){
+    hideView: function () {
         this.combo.hideView();
     },
 

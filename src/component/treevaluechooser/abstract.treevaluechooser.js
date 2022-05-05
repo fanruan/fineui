@@ -549,7 +549,9 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
                 checked: state[0],
                 halfCheck: state[1],
                 open: o.open,
-                disabled: nodes[i].disabled
+                disabled: nodes[i].disabled,
+                title: nodes[i].title || nodes[i].text,
+                warningTitle: nodes[i].warningTitle,
             });
         }
         // 如果指定节点全部打开
@@ -588,7 +590,9 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
                     checked: state[0],
                     halfCheck: state[1],
                     open: self.options.open,
-                    disabled: node.disabled
+                    disabled: node.disabled,
+                    title: node.title || node.text,
+                    warningTitle: node.warningTitle,
                 });
             });
         }

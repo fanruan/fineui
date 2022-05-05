@@ -36,11 +36,17 @@ module.exports = merge(common, {
     output: {
         path: dirs.DEST,
         filename: "[name].js",
+        publicPath: '/',
     },
     devServer: {
         contentBase: path.join(__dirname, ".."),
         port: 9001,
         liveReload: true,
+        historyApiFallback: {
+            rewrites: [
+                { from: /.*/, to: '/index.html' },
+            ],
+        },
     },
     plugins: [
         new MiniCssExtractPlugin({

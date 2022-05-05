@@ -347,33 +347,33 @@ BI.TreeView = BI.inherit(BI.Pane, {
     _dealWidthNodes: function (nodes) {
         var self = this, o = this.options;
         var ns = BI.Tree.arrayFormat(nodes);
-        BI.each(ns, function (i, n) {
-            n.isParent = n.isParent || n.parent;
+        return BI.map(ns, function (i, n) {
+            var newNode = BI.extend({}, n);
+            newNode.isParent = newNode.isParent || newNode.parent;
             // n.value = BI.isUndefined(n.value) ? n.text : n.value;
             // n.text = BI.isUndefined(n.text) ? n.value : n.text;
             // if (n.text === null) {
             //     n.text = "";
             // }
-            if (BI.isNull(n.title)) {
-                n.title = n.text;
+            if (BI.isNull(newNode.title)) {
+                newNode.title = newNode.text;
             }
-            if (n.disabled) {
-                n.title = n.warningTitle || n.title;
+            if (newNode.disabled) {
+                newNode.title = newNode.warningTitle || newNode.title;
             }
             var text = BI.createWidget(BI.extend({
                 cls: "tree-node-text",
-                css: {
-                    display: "inline"
-                },
+                tagName: "span",
                 whiteSpace: "nowrap",
                 root: true,
                 keyword: o.paras.keyword
-            }, n, {
-                type: "bi.text"
+            }, newNode, {
+                type: "bi.text",
+                text: BI.replaceAll(newNode.text, "\n", " ")
             }));
             var fragment = BI.Widget._renderEngine.createElement("<div>");
             fragment.append(text.element[0]);
-            n.text = fragment.html();
+            newNode.text = fragment.html();
             // // 处理标红
             // if (BI.isNotNull(n.text)) {
             //     if (BI.isKey(o.paras.keyword)) {
@@ -382,8 +382,8 @@ BI.TreeView = BI.inherit(BI.Pane, {
             //         n.text = BI.htmlEncode(BI.Text.formatText(n.text + ""));
             //     }
             // }
+            return newNode;
         });
-        return nodes;
     },
 
     _loadMore: function () {

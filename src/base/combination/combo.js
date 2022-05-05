@@ -7,7 +7,7 @@
      */
     BI.Combo = BI.inherit(BI.Bubble, {
         _const: {
-            TRIANGLE_LENGTH: 9
+            TRIANGLE_LENGTH: 12
         },
         _defaultConfig: function () {
             var conf = BI.Combo.superclass._defaultConfig.apply(this, arguments);
@@ -103,7 +103,7 @@
         _assertPopupView: function () {
             var self = this, o = this.options;
             if (this.popupView == null) {
-                this.popupView = BI.createWidget(this.options.popup, {
+                this.popupView = BI.createWidget(BI.isFunction(this.options.popup) ? this.options.popup() : this.options.popup, {
                     type: "bi.popup_view",
                     showArrow: o.showArrow,
                     value: o.value

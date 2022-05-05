@@ -228,7 +228,7 @@
         _assertPopupView: function () {
             var self = this, o = this.options;
             if (this.popupView == null) {
-                this.popupView = BI.createWidget(this.options.popup, {
+                this.popupView = BI.createWidget(BI.isFunction(this.options.popup) ? this.options.popup() : this.options.popup, {
                     type: "bi.bubble_popup_view",
                     showArrow: o.showArrow,
                     value: o.value
@@ -332,7 +332,7 @@
                 name: "offset",
                 options: {
                     offset: function () {
-                        return [o.adjustXOffset, (o.showArrow ? 9 : 0) + (o.adjustYOffset + o.adjustLength)];
+                        return [o.adjustXOffset, (o.showArrow ? 12 : 0) + (o.adjustYOffset + o.adjustLength)];
                     }
                 }
             }];
@@ -340,7 +340,7 @@
                 modifiers.push({
                     name: "arrow",
                     options: {
-                        padding: 5,
+                        padding: 4,
                         element: this.popupView.arrow.element[0]
                     }
                 });

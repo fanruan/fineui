@@ -40,10 +40,10 @@ BI.FlexHorizontalLayout = BI.inherit(BI.Layout, {
     _hasFill: function () {
         var o = this.options;
         if (o.columnSize.length > 0) {
-            return o.columnSize.indexOf("fill") >= 0;
+            return o.columnSize.indexOf("fill") >= 0 || o.columnSize.indexOf("auto") >= 0;
         }
         return BI.some(o.items, function (i, item) {
-            if (item.width === "fill") {
+            if (item.width === "fill" || item.width === "auto") {
                 return true;
             }
         });
@@ -52,7 +52,7 @@ BI.FlexHorizontalLayout = BI.inherit(BI.Layout, {
     _addElement: function (i, item) {
         var o = this.options;
         var w = BI.FlexHorizontalLayout.superclass._addElement.apply(this, arguments);
-        var columnSize = o.columnSize.length > 0 ? o.columnSize[i] : item.width >= 1 ? null : item.width;
+        var columnSize = o.columnSize.length > 0 ? o.columnSize[i] : item.width;
         if (o.columnSize.length > 0) {
             if (item.width >= 1 && o.columnSize[i] >= 1 && o.columnSize[i] !== item.width) {
                 columnSize = null;

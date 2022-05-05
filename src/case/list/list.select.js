@@ -93,10 +93,23 @@ BI.SelectList = BI.inherit(BI.Widget, {
         var notSelectLength = this.getAllLeaves().length - selectLength;
         var hasNext = this.list.hasNext();
         var isAlreadyAllSelected = this.toolbar.isSelected();
-        var isHalf = selectLength > 0 && (notSelectLength > 0 || (!isAlreadyAllSelected && hasNext));
-        isHalf = isHalf || (notSelectLength > 0 && hasNext && isAlreadyAllSelected);
+        var isHalf = selectLength > 0 && notSelectLength > 0;
+        var allSelected = isAlreadyAllSelected;
+
+        if (this.isAllSelected() === false) {
+            hasNext && (isHalf = selectLength > 0);
+            if (!isAlreadyAllSelected && notSelectLength === 0 && !hasNext) {
+                allSelected = true;
+            }
+        } else {
+            hasNext && (isHalf = notSelectLength > 0);
+            if (!isAlreadyAllSelected && notSelectLength === 0) {
+                allSelected = true;
+            }
+        }
+
         this.toolbar.setHalfSelected(isHalf);
-        !isHalf && this.toolbar.setSelected(selectLength > 0 && notSelectLength <= 0 && (!hasNext || isAlreadyAllSelected));
+        !isHalf && this.toolbar.setSelected(allSelected);
     },
 
     setAllSelected: function (v) {
