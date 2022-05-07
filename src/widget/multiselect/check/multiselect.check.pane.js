@@ -39,6 +39,7 @@ BI.MultiSelectCheckPane = BI.inherit(BI.Widget, {
                     callback({
                         items: BI.map(self.storeValue.value, function (i, v) {
                             var txt = opts.valueFormatter(v) || v;
+
                             return {
                                 text: txt,
                                 value: v,
@@ -46,6 +47,7 @@ BI.MultiSelectCheckPane = BI.inherit(BI.Widget, {
                             };
                         })
                     });
+
                     return;
                 }
                 opts.itemsCreator(op, callback);
@@ -54,6 +56,7 @@ BI.MultiSelectCheckPane = BI.inherit(BI.Widget, {
 
         this.continueSelect = BI.createWidget({
             type: "bi.text_button",
+            title: BI.i18nText("BI-Continue_Select"),
             text: BI.i18nText("BI-Continue_Select"),
             cls: "multi-select-check-selected bi-high-light"
         });
@@ -69,18 +72,20 @@ BI.MultiSelectCheckPane = BI.inherit(BI.Widget, {
                 height: this.constants.height,
                 el: {
                     type: "bi.vertical_adapt",
+                    columnSize: ["auto", "auto"],
                     cls: "multi-select-continue-select",
                     items: [
                         {
                             el: {
                                 type: "bi.label",
+                                title: BI.i18nText("BI-Selected_Data"),
                                 text: BI.i18nText("BI-Selected_Data")
                             },
                             lgap: this.constants.lgap
                         },
                         {
                             el: this.continueSelect,
-                            lgap: this.constants.lgap
+                            hgap: this.constants.lgap
                         }]
                 },
                 tgap: this.constants.tgap

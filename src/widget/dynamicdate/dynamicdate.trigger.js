@@ -5,7 +5,8 @@ BI.DynamicDateTrigger = BI.inherit(BI.Trigger, {
         yearLength: 4,
         yearMonthLength: 6,
         yearFullMonthLength: 7,
-        compareFormat: "%Y-%X-%d"
+        compareFormat: "%Y-%X-%d",
+        iconWidth: 24
     },
 
     props: {
@@ -13,6 +14,7 @@ BI.DynamicDateTrigger = BI.inherit(BI.Trigger, {
         min: "1900-01-01", // 最小日期
         max: "2099-12-31", // 最大日期
         height: 24,
+        iconWidth: 24,
         format: "", // 显示的日期格式化方式
         allowEdit: true, // 是否允许编辑
         watermark: ""
@@ -24,6 +26,7 @@ BI.DynamicDateTrigger = BI.inherit(BI.Trigger, {
         this.storeTriggerValue = "";
         this.editor = BI.createWidget({
             type: "bi.sign_editor",
+            simple: o.simple,
             height: o.height,
             validationChecker: function (v) {
                 var formatStr = self._getStandardDateStr(v);
@@ -42,11 +45,25 @@ BI.DynamicDateTrigger = BI.inherit(BI.Trigger, {
             vgap: c.vgap,
             allowBlank: true,
             watermark: BI.isKey(o.watermark) ? o.watermark : BI.i18nText("BI-Basic_Unrestricted"),
-            errorText: function () {
+            errorText: function (v) {
                 var str = "";
                 if (!BI.isKey(o.format)) {
-                    str = self.editor.isEditing() ? BI.i18nText("BI-Date_Trigger_Error_Text") : BI.i18nText("BI-Year_Trigger_Invalid_Text");
+                    if (!self._dateCheck(v)) {
+                        str = self.editor.isEditing() ? BI.i18nText("BI-Date_Trigger_Error_Text") : BI.i18nText("BI-Year_Trigger_Invalid_Text");
+                    } else {
+                        var start = BI.parseDateTime(o.min, "%Y-%X-%d");
+                        var end = BI.parseDateTime(o.max, "%Y-%X-%d");
+                        str = BI.i18nText("BI-Basic_Date_Range_Error",
+                            start.getFullYear(),
+                            start.getMonth() + 1,
+                            start.getDate(),
+                            end.getFullYear(),
+                            end.getMonth() + 1,
+                            end.getDate()
+                        );
+                    }
                 }
+
                 return str;
             },
             title: BI.bind(this._getTitle, this)
@@ -104,11 +121,16 @@ BI.DynamicDateTrigger = BI.inherit(BI.Trigger, {
         BI.createWidget({
             type: "bi.htape",
             element: this,
+            columnSize: ["", this._const.iconWidth],
             items: [{
                 el: this.editor
             }, {
-                el: BI.createWidget(),
-                width: 24
+                el: {
+                    type: "bi.icon_button",
+                    cls: "bi-trigger-icon-button date-font",
+                    width: this._const.iconWidth
+                },
+                width: this._const.iconWidth
             }]
         });
         !o.allowEdit && BI.createWidget({
@@ -120,7 +142,7 @@ BI.DynamicDateTrigger = BI.inherit(BI.Trigger, {
                     title: BI.bind(this._getTitle, this)
                 },
                 left: 0,
-                right: 24,
+                right: o.iconWidth,
                 top: 0,
                 bottom: 0
             }]
@@ -240,54 +262,7 @@ BI.DynamicDateTrigger = BI.inherit(BI.Trigger, {
     },
 
     _getText: function (obj) {
-        var value = "";
-        var endText = "";
-        if(BI.isNotNull(obj.year)) {
-            if(BI.parseInt(obj.year) !== 0) {
-                value += Math.abs(obj.year) + BI.i18nText("BI-Basic_Year") + (obj.year < 0 ? BI.i18nText("BI-Basic_Front") : BI.i18nText("BI-Basic_Behind"));
-            }
-            endText = getPositionText(BI.i18nText("BI-Basic_Year"), obj.position);
-        }
-        if(BI.isNotNull(obj.quarter)) {
-            if(BI.parseInt(obj.quarter) !== 0) {
-                value += Math.abs(obj.quarter) + BI.i18nText("BI-Basic_Single_Quarter") + (obj.quarter < 0 ? BI.i18nText("BI-Basic_Front") : BI.i18nText("BI-Basic_Behind"));
-            }
-            endText = getPositionText(BI.i18nText("BI-Basic_Single_Quarter"), obj.position);
-        }
-        if(BI.isNotNull(obj.month)) {
-            if(BI.parseInt(obj.month) !== 0) {
-                value += Math.abs(obj.month) + BI.i18nText("BI-Basic_Month") + (obj.month < 0 ? BI.i18nText("BI-Basic_Front") : BI.i18nText("BI-Basic_Behind"));
-            }
-            endText = getPositionText(BI.i18nText("BI-Basic_Month"), obj.position);
-        }
-        if(BI.isNotNull(obj.week)) {
-            if(BI.parseInt(obj.week) !== 0) {
-                value += Math.abs(obj.week) + BI.i18nText("BI-Basic_Week") + (obj.week < 0 ? BI.i18nText("BI-Basic_Front") : BI.i18nText("BI-Basic_Behind"));
-            }
-            endText = getPositionText(BI.i18nText("BI-Basic_Week"), obj.position);
-        }
-        if(BI.isNotNull(obj.day)) {
-            if(BI.parseInt(obj.day) !== 0) {
-                value += Math.abs(obj.day) + BI.i18nText("BI-Basic_Day") + (obj.day < 0 ? BI.i18nText("BI-Basic_Front") : BI.i18nText("BI-Basic_Behind"));
-            }
-            endText = BI.size(obj) === 1 ? getPositionText(BI.i18nText("BI-Basic_Month"), obj.position) : "";
-        }
-        if(BI.isNotNull(obj.workDay) && BI.parseInt(obj.workDay) !== 0) {
-            value += Math.abs(obj.workDay) + BI.i18nText("BI-Basic_Work_Day") + (obj.workDay < 0 ? BI.i18nText("BI-Basic_Front") : BI.i18nText("BI-Basic_Behind"));
-        }
-        return value +  endText;
-
-        function getPositionText (baseText, position) {
-            switch (position) {
-                case BI.DynamicDateCard.OFFSET.BEGIN:
-                    return baseText + BI.i18nText("BI-Basic_Begin_Start");
-                case BI.DynamicDateCard.OFFSET.END:
-                    return baseText + BI.i18nText("BI-Basic_End_Stop");
-                case BI.DynamicDateCard.OFFSET.CURRENT:
-                default:
-                    return BI.i18nText("BI-Basic_Current_Day");
-            }
-        }
+        return BI.DynamicDateHelper.getDescription(obj);
     },
 
     setValue: function (v) {
@@ -335,8 +310,19 @@ BI.DynamicDateTrigger = BI.inherit(BI.Trigger, {
     },
     getValue: function () {
         return this.storeValue;
-    }
+    },
 
+    focus: function () {
+        this.editor.focus();
+    },
+
+    blur: function () {
+        this.editor.blur();
+    },
+
+    setWaterMark: function (v) {
+        this.editor.setWaterMark(v);
+    }
 });
 
 BI.DynamicDateTrigger.EVENT_BLUR = "EVENT_BLUR";

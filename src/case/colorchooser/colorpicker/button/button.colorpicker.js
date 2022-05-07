@@ -17,8 +17,14 @@ BI.ColorPickerButton = BI.inherit(BI.BasicButton, {
     _init: function () {
         BI.ColorPickerButton.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
-        if (o.value) {
-            this.element.css("background-color", o.value);
+        if (BI.isNotNull(o.value)) {
+            if (o.value === '') {
+                this.element.addClass("auto-color-no-square-normal-background");
+            } else if (o.value === "transparent") {
+                this.element.addClass("trans-color-background");
+            } else {
+                this.element.css("background-color", o.value);
+            }
             var name = this.getName();
             this.element.hover(function () {
                 self._createMask();

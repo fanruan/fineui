@@ -11,10 +11,6 @@ BI.ButtonTree = BI.inherit(BI.ButtonGroup, {
         });
     },
 
-    _init: function () {
-        BI.ButtonTree.superclass._init.apply(this, arguments);
-    },
-
     setNotSelectedValue: function (v) {
         v = BI.isArray(v) ? v : [v];
         BI.each(this.buttons, function (i, item) {

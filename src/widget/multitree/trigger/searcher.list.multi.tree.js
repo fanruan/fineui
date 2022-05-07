@@ -31,7 +31,18 @@ BI.MultiListTreeSearcher = BI.inherit(BI.Widget, {
             el: {
                 type: "bi.simple_state_editor",
                 height: o.height
-            }
+            },
+            listeners: [{
+                eventName: BI.MultiSelectEditor.EVENT_FOCUS,
+                action: function () {
+                    self.fireEvent(BI.MultiSelectSearcher.EVENT_FOCUS);
+                }
+            }, {
+                eventName: BI.MultiSelectEditor.EVENT_BLUR,
+                action: function () {
+                    self.fireEvent(BI.MultiSelectSearcher.EVENT_BLUR);
+                }
+            }]
         });
 
         this.searcher = BI.createWidget({
@@ -122,7 +133,7 @@ BI.MultiListTreeSearcher = BI.inherit(BI.Widget, {
             var text = "";
             BI.each(ob.value, function (idx, path) {
                 var childValue = BI.last(path);
-                text += (o.valueFormatter(childValue + "") || childValue) + "; ";
+                text += (path === "null" ? "" : (o.valueFormatter(childValue + "") || childValue) + "; ");
                 count++;
             });
 
@@ -134,7 +145,7 @@ BI.MultiListTreeSearcher = BI.inherit(BI.Widget, {
         }
     },
 
-    getState: function() {
+    getState: function () {
         return this.editor.getState();
     },
 
@@ -153,6 +164,18 @@ BI.MultiListTreeSearcher = BI.inherit(BI.Widget, {
 
     populate: function (items) {
         this.searcher.populate.apply(this.searcher, arguments);
+    },
+
+    focus: function () {
+        this.editor.focus();
+    },
+
+    blur: function () {
+        this.editor.blur();
+    },
+
+    setWaterMark: function (v) {
+        this.editor.setWaterMark(v);
     }
 });
 

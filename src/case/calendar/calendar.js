@@ -23,8 +23,6 @@ BI.Calendar = BI.inherit(BI.Widget, {
         var self = this, o = this.options, log = {}, De = BI.getDate();
         var mins = o.min.match(/\d+/g);
         var maxs = o.max.match(/\d+/g);
-        Y < (mins[0] | 0) && (Y = (mins[0] | 0));
-        Y > (maxs[0] | 0) && (Y = (maxs[0] | 0));
 
         De.setFullYear(Y, M, D);
         log.ymd = [De.getFullYear(), De.getMonth(), De.getDate()];
@@ -80,7 +78,7 @@ BI.Calendar = BI.inherit(BI.Widget, {
         var items = BI.map(this._getWeekLabel(), function (i, value) {
             return {
                 type: "bi.label",
-                height: 24,
+                height: BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT,
                 text: value
             };
         });
@@ -98,12 +96,12 @@ BI.Calendar = BI.inherit(BI.Widget, {
         this.days = BI.createWidget({
             type: "bi.button_group",
             items: BI.createItems(this._getItems(), {}),
+            value: o.year + "-" + o.month + "-" + o.day,
             layouts: [BI.LogicFactory.createLogic("table", BI.extend({}, o.logic, {
                 columns: 7,
                 rows: 6,
                 columnSize: [1 / 7, 1 / 7, 1 / 7, 1 / 7, 1 / 7, 1 / 7, 1 / 7],
-                rowSize: 24,
-                vgap: 10
+                rowSize: BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT + 8
             }))]
         });
         this.days.on(BI.Controller.EVENT_CHANGE, function () {
@@ -113,7 +111,10 @@ BI.Calendar = BI.inherit(BI.Widget, {
             element: this
 
         }, BI.LogicFactory.createLogic("vertical", BI.extend({}, o.logic, {
-            items: BI.LogicFactory.createLogicItemsByDirection("top", title, this.days)
+            items: BI.LogicFactory.createLogicItemsByDirection("top", title, {
+                el: this.days,
+                tgap: -5
+            })
         }))));
     },
 
@@ -161,11 +162,12 @@ BI.Calendar = BI.inherit(BI.Widget, {
                     whiteSpace: "normal",
                     once: false,
                     forceSelected: true,
-                    height: 24,
                     value: o.year + "-" + month + "-" + td.text,
                     disabled: td.lastMonth || td.nextMonth || td.disabled,
-                    lgap: 5,
-                    rgap: 5
+                    lgap: 2,
+                    rgap: 2,
+                    tgap: 4,
+                    bgap: 4
                     // selected: td.currentDay
                 });
             });

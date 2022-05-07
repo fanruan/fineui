@@ -16,8 +16,7 @@ BI.ImageButton = BI.inherit(BI.BasicButton, {
         });
     },
 
-    _init: function () {
-        BI.ImageButton.superclass._init.apply(this, arguments);
+    render: function () {
         var o = this.options;
         this.image = BI.createWidget({
             type: "bi.img",

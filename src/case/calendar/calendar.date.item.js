@@ -2,6 +2,11 @@
  * 专门为calendar的视觉加的button，作为私有button,不能配置任何属性，也不要用这个玩意
  */
 BI.CalendarDateItem = BI.inherit(BI.BasicButton, {
+    props: function() {
+        return {
+            height: BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT + 8,
+        } 
+    },
 
     render: function () {
         var self = this, o = this.options;
@@ -10,7 +15,7 @@ BI.CalendarDateItem = BI.inherit(BI.BasicButton, {
             items: [{
                 el: {
                     type: "bi.text_item",
-                    cls: "bi-list-item-select",
+                    cls: "bi-border-radius bi-list-item-select",
                     textAlign: "center",
                     whiteSpace: "normal",
                     text: o.text,
@@ -21,8 +26,8 @@ BI.CalendarDateItem = BI.inherit(BI.BasicButton, {
                 },
                 left: o.lgap,
                 right: o.rgap,
-                top: 0,
-                bottom: 0
+                top: o.tgap,
+                bottom: o.bgap
             }]
         };
     },

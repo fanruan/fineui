@@ -6,7 +6,7 @@
 BI.VerticalCenterLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.VerticalCenterLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-vertical-center-layout",
+            baseCls: "bi-v-center",
             hgap: 0,
             vgap: 0,
             lgap: 0,
@@ -24,7 +24,7 @@ BI.VerticalCenterLayout = BI.inherit(BI.Layout, {
             list.push({
                 column: 0,
                 row: i,
-                el: BI.createWidget({
+                el: BI._lazyCreateWidget({
                     type: "bi.default",
                     cls: "center-element " + (i === 0 ? "first-element " : "") + (i === items.length - 1 ? "last-element" : "")
                 })
@@ -32,13 +32,13 @@ BI.VerticalCenterLayout = BI.inherit(BI.Layout, {
         });
         BI.each(items, function (i, item) {
             if (item) {
-                var w = BI.createWidget(item);
+                var w = BI._lazyCreateWidget(item);
                 w.element.css({
                     position: "absolute",
-                    left: o.hgap + o.lgap,
-                    right: o.hgap + o.rgap,
-                    top: o.vgap + o.tgap,
-                    bottom: o.vgap + o.bgap,
+                    left: self._optimiseGap(o.hgap + o.lgap),
+                    right: self._optimiseGap(o.hgap + o.rgap),
+                    top: self._optimiseGap(o.vgap + o.tgap),
+                    bottom: self._optimiseGap(o.vgap + o.bgap),
                     height: "auto"
                 });
                 list[i].el.addItem(w);
@@ -47,7 +47,7 @@ BI.VerticalCenterLayout = BI.inherit(BI.Layout, {
         return {
             type: "bi.grid",
             ref: function (_ref) {
-                self.wrapper = _ref;
+                self.layout = _ref;
             },
             columns: 1,
             rows: list.length,
@@ -61,15 +61,11 @@ BI.VerticalCenterLayout = BI.inherit(BI.Layout, {
 
     addItem: function (item) {
         // do nothing
-        throw new Error("cannot be added");
-    },
-
-    update: function (opt) {
-        return this.wrapper.update(opt);
+        throw new Error("不能添加子组件");
     },
 
     populate: function (items) {
-        this.wrapper.populate.apply(this.wrapper, arguments);
+        this.layout.populate.apply(this.layout, arguments);
     }
 });
 BI.shortcut("bi.vertical_center", BI.VerticalCenterLayout);

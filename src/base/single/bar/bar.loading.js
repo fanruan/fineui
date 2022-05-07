@@ -12,8 +12,8 @@ BI.LoadingBar = BI.inherit(BI.Single, {
             handler: BI.emptyFn
         });
     },
-    _init: function () {
-        BI.LoadingBar.superclass._init.apply(this, arguments);
+
+    render: function () {
         var self = this;
         this.loaded = BI.createWidget({
             type: "bi.text_button",

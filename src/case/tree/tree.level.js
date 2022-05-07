@@ -26,7 +26,7 @@ BI.LevelTree = BI.inherit(BI.Widget, {
     _formatItems: function (nodes, layer, pNode) {
         var self = this;
         BI.each(nodes, function (i, node) {
-            var extend = {layer: layer};
+            var extend = { layer: layer, height: BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT };
             if (!BI.isKey(node.id)) {
                 node.id = BI.UUID();
             }
@@ -38,7 +38,7 @@ BI.LevelTree = BI.inherit(BI.Widget, {
                     extend.isLastNode = true;
                 }
                 if (i === 0 && !pNode) {
-                    extend.type = "bi.first_plus_group_node"
+                    extend.type = "bi.first_plus_group_node";
                 }
                 if (i === 0 && i === nodes.length - 1) {  // 根
                     extend.type = "bi.plus_group_node";
@@ -48,7 +48,7 @@ BI.LevelTree = BI.inherit(BI.Widget, {
             } else {
                 extend.type = "bi.mid_tree_leaf_item";
                 if (i === 0 && !pNode) {
-                    extend.type = "bi.first_tree_leaf_item"
+                    extend.type = "bi.first_tree_leaf_item";
                 }
                 if (i === nodes.length - 1) {
                     extend.type = "bi.last_tree_leaf_item";

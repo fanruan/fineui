@@ -1,17 +1,19 @@
-@import "../../../index";
+@import "../../../index.less";
 
 .bi-tooltip{
   max-width: 250px;
+  max-height: 450px;
+  .overflow-hidden() !important;
   .border-radius(2px);
   font-size: 12px;
   color: @color-bi-text;
   &.tooltip-success{
-    background: @color-bi-tooltip-success-background;
-    border: 1px solid @color-bi-tooltip-success-background;
+    background: @color-bi-background-tooltip-success;
+    border: 1px solid @color-bi-border-tooltip-success;
 
   }
   &.tooltip-warning{
-    background: @color-bi-background-failure;
-    border: 1px solid @color-bi-tooltip-failure-border;
+    background: @color-bi-background-tooltip-failure;
+    border: 1px solid @color-bi-border-tooltip-failure;
   }
 }

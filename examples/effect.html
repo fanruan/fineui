@@ -1,0 +1,59 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <!-- <link rel="stylesheet" type="text/css" href="../dist/2.0/fineui.min.css"/>
+    <script src="../dist/2.0/fineui.js"></script> -->
+   <link rel="stylesheet" type="text/css" href="http://fanruan.design/fineui/2.0/fineui.min.css" />
+   <script src="http://fanruan.design/fineui/2.0/fineui.min.js"></script>
+</head>
+<body>
+<div id="wrapper"></div>
+<script>
+    var Model = BI.inherit(Fix.Model, {
+        state: function () {
+            return {
+                count: 0
+            };
+        }
+    });
+
+    BI.model("demo.model", Model);
+
+    var Widget = BI.inherit(BI.Widget, {
+        _store: function () {
+            return BI.Models.getModel("demo.model");
+        },
+        setup: function () {
+            var store = BI.useStore();
+            return function () {
+                return {
+                    type: "bi.vertical",
+                    items: [{
+                        type: "bi.button",
+                        effect: function () {
+                            this.setText(store.model.count)
+                        },
+                        handler: function () {
+                            store.model.count++;
+                        }
+                    }]
+                };
+            };
+        }
+    });
+    BI.shortcut("demo.hooks", Widget);
+    BI.createWidget({
+        type: "bi.absolute",
+        items: [{
+            el: {
+                type: "demo.hooks"
+            },
+            top: 100,
+            left: 100
+        }],
+        element: "#wrapper"
+    });
+</script>
+</body>
+</html>

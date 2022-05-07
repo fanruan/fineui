@@ -5,7 +5,7 @@
  * Created by GameJian on 2016/3/2.
  */
 BI.Iframe = BI.inherit(BI.Single, {
-    _defaultConfig: function () {
+    _defaultConfig: function (config) {
         var conf = BI.Iframe.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
             tagName: "iframe",
@@ -18,12 +18,21 @@ BI.Iframe = BI.inherit(BI.Single, {
         });
     },
 
-    _init: function () {
+    render: function () {
+        var self = this;
+        this.element.on("load", function () {
+            self.fireEvent("EVENT_LOADED");
+        });
+    },
+
+    _initProps: function () {
+        BI.Iframe.superclass._initProps.apply(this, arguments);
         var o = this.options;
-        o.attributes.frameborder = "0";
-        o.attributes.src = o.src;
-        o.attributes.name = o.name;
-        BI.Iframe.superclass._init.apply(this, arguments);
+        this.options.attributes = BI.extend({
+            frameborder: 0,
+            src: o.src,
+            name: o.name
+        }, this.options.attributes);
     },
 
     setSrc: function (src) {

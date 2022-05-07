@@ -1,0 +1,419 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,minimum-scale=1" />
+    <meta http-equiv="x-ua-compatible" content="IE=edge" />
+    <title>PullRequest | Code Review as a Service</title>
+    <meta
+      name="description"
+      content="PullRequest is a platform for code review, built for teams of all sizes. We have thousands of on-demand reviewers and they are backed by best-in-class automation tools. Because code quality is important."
+    />
+    <meta name="theme-color" content="#28557a" />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://fanruan.design/fineui/2.0/fineui_without_normalize.css"
+    />
+    <!--    <script src="../dist/2.0/fineui.js"></script>-->
+    <script src="https://fanruan.design/fineui/2.0/fineui.js"></script>
+
+    <style>
+      *,
+      :after,
+      :before {
+        box-sizing: border-box;
+      }
+      * {
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+      html {
+        font-family: sans-serif;
+        line-height: 1.15;
+        -webkit-text-size-adjust: 100%;
+        -webkit-tap-highlight-color: transparent;
+      }
+      body {
+        margin: 0;
+        font-family: -apple-system, BlinkMacSystemFont, segoe ui, Roboto,
+          helvetica neue, Arial, noto sans, liberation sans, sans-serif,
+          apple color emoji, segoe ui emoji, segoe ui symbol, noto color emoji;
+        font-size: 1rem;
+        font-weight: 400;
+        line-height: 1.5;
+        color: #212529;
+        text-align: left;
+        height: 100vh;
+        background-color: #fff;
+      }
+      #wrapper {
+        height: 100vh;
+      }
+      .nav {
+        box-shadow: 0 2px 5px rgb(0 0 0 / 16%), 0 2px 10px rgb(0 0 0 / 12%);
+      }
+      .nav-logo {
+        background-image: url(https://qn.wangchuan.cc/pullrequest-logo.svg);
+        background-repeat: no-repeat;
+        background-position: 50%;
+        background-size: contain;
+      }
+      .image {
+        background-image: url(https://qn.wangchuan.cc/hero-graphic.png);
+        background-repeat: no-repeat;
+        background-size: contain;
+      }
+      .demo {
+        cursor: pointer;
+        border-radius: 3px;
+        font-weight: 600;
+        color: #fff;
+        background: #4aa4e0 linear-gradient(180deg, #65b2e5, #4aa4e0) repeat-x;
+        border: 1px solid #4aa4e0;
+      }
+      .signup {
+        cursor: pointer;
+        border-radius: 3px;
+        font-weight: 600;
+        color: #4aa4e0;
+        border: 1px solid #4aa4e0;
+      }
+      .wave {
+        background-image: url(https://qn.wangchuan.cc/wave.png);
+        background-size: cover;
+        background-repeat: repeat-x;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="wrapper"></div>
+    <script>
+      BI.config("bi.provider.system", function (provider) {
+        provider.setResponsiveMode(true);
+      });
+      var Widget = BI.inherit(BI.Widget, {
+        props: {},
+        render: function () {
+          return [
+            {
+              type: "bi.vertical",
+              items: [
+                {
+                  el: {
+                    type: "bi.vertical_adapt",
+                    cls: "nav",
+                    css: {
+                      position: "fixed",
+                      left: 0,
+                      right: 0,
+                      zIndex: 1000,
+                    },
+                    height: 62,
+                    hgap: 16,
+                    items: [
+                      {
+                        type: "bi.layout",
+                        cls: "nav-logo",
+                        width: 185,
+                        height: 46,
+                      },
+                    ],
+                  },
+                },
+                {
+                  tgap: 112,
+                  el: {
+                    type: "bi.center_adapt",
+                    columnSize: ["fill", "fill"],
+                    vgap: 24,
+                    items: [
+                      {
+                        el: {
+                          type: "bi.vertical",
+                          hgap: 15,
+                          items: [
+                            {
+                              el: {
+                                type: "bi.text",
+                                css: {
+                                  fontSize: "24px",
+                                  fontWeight: "700",
+                                  color: "#092353",
+                                },
+                                text: "Code Review as a Service",
+                              },
+                            },
+                            {
+                              el: {
+                                type: "bi.text",
+                                css: {
+                                  fontSize: "16px",
+                                  lineHeight: "24px",
+                                  color: "#28557a",
+                                },
+                                text: "Increase velocity and reduce technical debt through quality code review by expert engineers backed by best-in-class automation.",
+                              },
+                              tgap: 24,
+                              bgap: 24,
+                            },
+                            {
+                              el: {
+                                type: "bi.vertical_adapt",
+                                vgap: 16,
+                                items: [
+                                  {
+                                    el: {
+                                      type: "bi.label",
+                                      hgap: 24,
+                                      height: 48,
+                                      cls: "demo",
+                                      text: "Schedule demo",
+                                    },
+                                  },
+                                  {
+                                    el: {
+                                      type: "bi.label",
+                                      hgap: 24,
+                                      height: 48,
+                                      cls: "signup",
+                                      text: "Sign up",
+                                    },
+                                    lgap: 30,
+                                    rgap: 15,
+                                  },
+                                ],
+                              },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        el: {
+                          type: "bi.vertical",
+                          hgap: 15,
+                          items: [
+                            {
+                              el: {
+                                type: "bi.vertical",
+                                items: [
+                                  {
+                                    type: "bi.img",
+                                    attributes: {
+                                      width: 595,
+                                    },
+                                    css: {
+                                      maxWidth: "100%",
+                                      maxHeight: "100%",
+                                    },
+                                    src: "https://qn.wangchuan.cc/hero-graphic.png",
+                                    width: "auto",
+                                    height: "auto",
+                                  },
+                                ],
+                              },
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+                {
+                  type: "bi.layout",
+                  cls: "wave",
+                  height: 112,
+                },
+                {
+                  el: {
+                    type: "bi.center_adapt",
+                    columnSize: ["fill"],
+                    css: {
+                      background: "#f5fbff",
+                    },
+                    hgap: 0.1,
+                    vgap: 64,
+                    items: [
+                      {
+                        el: {
+                          type: "bi.vertical",
+                          hgap: 15,
+                          items: [
+                            {
+                              type: "bi.text",
+                              lineHeight: 30,
+                              css: {
+                                fontSize: "22px",
+                                color: "#092353",
+                              },
+                              text: "Empower your development team with the help of world-class engineers. ",
+                            },
+                            {
+                              type: "bi.text",
+                              lineHeight: 24,
+                              css: {
+                                fontSize: "16px",
+                                color: "#28557a",
+                              },
+                              text: "PullRequest provides on-demand code review by world-class engineers, built for teams of any size. We review within your tools to catch security threats, stop crashes, and fix performance issues before they reach production.",
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+                {
+                  el: {
+                    type: "bi.center_adapt",
+                    columnSize: ["fill", "fill"],
+                    vgap: 48,
+                    items: [
+                      {
+                        el: {
+                          type: "bi.vertical",
+                          hgap: 15,
+                          items: [
+                            {
+                              el: {
+                                type: "bi.text",
+                                css: {
+                                  fontSize: "24px",
+                                  fontWeight: "700",
+                                  color: "#092353",
+                                },
+                                text: "Move fast and reduce cycle times.",
+                              },
+                            },
+                            {
+                              el: {
+                                type: "bi.text",
+                                css: {
+                                  fontSize: "16px",
+                                  lineHeight: "24px",
+                                  color: "#28557a",
+                                },
+                                text: "Save time reviewing code so you can focus on shipping new features.",
+                              },
+                              tgap: 24,
+                              bgap: 24,
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        el: {
+                          type: "bi.vertical",
+                          hgap: 15,
+                          items: [
+                            {
+                              el: {
+                                type: "bi.vertical",
+                                items: [
+                                  {
+                                    type: "bi.img",
+                                    attributes: {
+                                      width: 595,
+                                    },
+                                    css: {
+                                      maxWidth: "100%",
+                                      maxHeight: "100%",
+                                    },
+                                    src: "https://qn.wangchuan.cc/velocity.png",
+                                    width: "auto",
+                                    height: "auto",
+                                  },
+                                ],
+                              },
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+                {
+                  el: {
+                    type: "bi.center_adapt",
+                    css: {
+                      background: "#f5fbff",
+                    },
+                    columnSize: ["fill", "fill"],
+                    vgap: 48,
+                    items: [
+                      {
+                        el: {
+                          type: "bi.vertical",
+                          hgap: 15,
+                          items: [
+                            {
+                              el: {
+                                type: "bi.vertical",
+                                items: [
+                                  {
+                                    type: "bi.img",
+                                    attributes: {
+                                      width: 595,
+                                    },
+                                    css: {
+                                      maxWidth: "100%",
+                                      maxHeight: "100%",
+                                    },
+                                    src: "https://qn.wangchuan.cc/secure.png",
+                                    width: "auto",
+                                    height: "auto",
+                                  },
+                                ],
+                              },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        el: {
+                          type: "bi.vertical",
+                          rgap: 15,
+                          lgap: 0.1,
+                          items: [
+                            {
+                              el: {
+                                type: "bi.text",
+                                css: {
+                                  fontSize: "24px",
+                                  fontWeight: "700",
+                                  color: "#092353",
+                                },
+                                text: "Secure your codebase.",
+                              },
+                            },
+                            {
+                              el: {
+                                type: "bi.text",
+                                css: {
+                                  fontSize: "16px",
+                                  lineHeight: "24px",
+                                  color: "#28557a",
+                                },
+                                text: "Deliver high quality code with an extra line of defense to prevent security vulnerabilities and other fatal flaws.",
+                              },
+                              tgap: 24,
+                              bgap: 24,
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          ];
+        },
+      });
+      BI.shortcut("demo.responsive", Widget);
+      BI.createWidget({
+        type: "demo.responsive",
+        element: "#wrapper",
+      });
+    </script>
+  </body>
+</html>

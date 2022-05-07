@@ -1,5 +1,5 @@
-@import "../image";
-@import "../lib/icon";
+@import "../image.less";
+@import "../lib/icon.less";
 
 //Tree Widget
 .icon(tree-collapse-icon-type1, @icon-tree-collapse-type1);
@@ -13,50 +13,17 @@
 .icon(tree-vertical-line-type2, @icon-tree-vertical-line-2);
 .icon(tree-vertical-line-type3, @icon-tree-vertical-line-3);
 .icon(tree-vertical-line-type4, @icon-tree-vertical-line-4);
-
-.bi-theme-dark {
-  .icon(tree-collapse-icon-type1, @icon-tree-collapse-type1-theme-dark);
-}
-
-.bi-theme-dark {
-  .icon(tree-collapse-icon-type2, @icon-tree-collapse-type2-theme-dark);
-}
-
-.bi-theme-dark {
-  .icon(tree-collapse-icon-type3, @icon-tree-collapse-type3-theme-dark);
-}
-
-.bi-theme-dark {
-  .icon(tree-collapse-icon-type4, @icon-tree-collapse-type4-theme-dark);
-}
-
-.bi-theme-dark {
-  .icon(tree-expand-icon-type1, @icon-tree-expand-type1-theme-dark);
-}
-
-.bi-theme-dark {
-  .icon(tree-expand-icon-type2, @icon-tree-expand-type2-theme-dark);
-}
-
-.bi-theme-dark {
-  .icon(tree-expand-icon-type3, @icon-tree-expand-type3-theme-dark);
-}
-
-.bi-theme-dark {
-  .icon(tree-expand-icon-type4, @icon-tree-expand-type4-theme-dark);
-}
-
-.bi-theme-dark {
-  .icon(tree-vertical-line-type2, @icon-tree-vertical-line-2-theme-dark);
-}
-
-.bi-theme-dark {
-  .icon(tree-vertical-line-type3, @icon-tree-vertical-line-3-theme-dark);
-}
-
-.bi-theme-dark {
-  .icon(tree-vertical-line-type4, @icon-tree-vertical-line-4-theme-dark);
-}
+.icon(tree-solid-collapse-icon-type1, @icon-tree-solid-collapse-type1);
+.icon(tree-solid-collapse-icon-type2, @icon-tree-solid-collapse-type2);
+.icon(tree-solid-collapse-icon-type3, @icon-tree-solid-collapse-type3);
+.icon(tree-solid-collapse-icon-type4, @icon-tree-solid-collapse-type4);
+.icon(tree-solid-expand-icon-type1, @icon-tree-solid-expand-type1);
+.icon(tree-solid-expand-icon-type2, @icon-tree-solid-expand-type2);
+.icon(tree-solid-expand-icon-type3, @icon-tree-solid-expand-type3);
+.icon(tree-solid-expand-icon-type4, @icon-tree-solid-expand-type4);
+.icon(tree-solid-vertical-line-type2, @icon-tree-solid-vertical-line-2);
+.icon(tree-solid-vertical-line-type3, @icon-tree-solid-vertical-line-3);
+.icon(tree-solid-vertical-line-type4, @icon-tree-solid-vertical-line-4);
 
 //CheckBox
 .icon_custom(check-box-icon, @icon-checkbox-normal, @icon-checkbox-normal, @icon-checkbox-normal, @icon-checkbox-active, @icon-checkbox-disable, @icon-checkbox-active-disable);
@@ -70,5 +37,35 @@
 .icon_hover(slider-icon, @icon-slider-normal, @icon-slider-active);
 
 //颜色自动、透明
-.icon_select(auto-color-icon, @icon-auto-normal, @icon-auto-select, @icon-auto-disable);
-.icon_select(trans-color-icon, @icon-trans-normal, @icon-trans-select, @icon-trans-disable);
+.icon_select(auto-color-icon, @icon-auto-normal, @icon-auto-select);
+.icon_select(trans-color-icon, @icon-trans-normal, @icon-trans-select);
+// 方形的自动
+.icon(auto-square-color-icon, @icon-auto-square-normal);
+
+.bi-theme-dark {
+  .icon(tree-collapse-icon-type1, @icon-tree-collapse-type1-theme-dark);
+  .icon(tree-collapse-icon-type2, @icon-tree-collapse-type2-theme-dark);
+  .icon(tree-collapse-icon-type3, @icon-tree-collapse-type3-theme-dark);
+  .icon(tree-collapse-icon-type4, @icon-tree-collapse-type4-theme-dark);
+  .icon(tree-expand-icon-type1, @icon-tree-expand-type1-theme-dark);
+  .icon(tree-expand-icon-type2, @icon-tree-expand-type2-theme-dark);
+  .icon(tree-expand-icon-type3, @icon-tree-expand-type3-theme-dark);
+  .icon(tree-expand-icon-type4, @icon-tree-expand-type4-theme-dark);
+  .icon(tree-vertical-line-type2, @icon-tree-vertical-line-2-theme-dark);
+  .icon(tree-vertical-line-type3, @icon-tree-vertical-line-3-theme-dark);
+  .icon(tree-vertical-line-type4, @icon-tree-vertical-line-4-theme-dark);
+  .icon(tree-solid-collapse-icon-type1, @icon-tree-solid-collapse-type1-theme-dark);
+  .icon(tree-solid-collapse-icon-type2, @icon-tree-solid-collapse-type2-theme-dark);
+  .icon(tree-solid-collapse-icon-type3, @icon-tree-solid-collapse-type3-theme-dark);
+  .icon(tree-solid-collapse-icon-type4, @icon-tree-solid-collapse-type4-theme-dark);
+  .icon(tree-solid-expand-icon-type1, @icon-tree-solid-expand-type1-theme-dark);
+  .icon(tree-solid-expand-icon-type2, @icon-tree-solid-expand-type2-theme-dark);
+  .icon(tree-solid-expand-icon-type3, @icon-tree-solid-expand-type3-theme-dark);
+  .icon(tree-solid-expand-icon-type4, @icon-tree-solid-expand-type4-theme-dark);
+  .icon(tree-solid-vertical-line-type2, @icon-tree-solid-vertical-line-2-theme-dark);
+  .icon(tree-solid-vertical-line-type3, @icon-tree-solid-vertical-line-3-theme-dark);
+  .icon(tree-solid-vertical-line-type4, @icon-tree-solid-vertical-line-4-theme-dark);
+
+  .icon_select(trans-color-icon, @icon-trans-normal-dark, @icon-trans-select-dark, @icon-trans-disable-dark);
+  .icon(auto-square-color-icon, @icon-auto-square-normal-dark);
+}

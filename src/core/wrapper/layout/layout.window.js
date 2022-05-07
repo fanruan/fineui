@@ -6,7 +6,7 @@
 BI.WindowLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.WindowLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-window-layout",
+            baseCls: "bi-window",
             columns: 3,
             rows: 2,
             hgap: 0,
@@ -15,33 +15,23 @@ BI.WindowLayout = BI.inherit(BI.Layout, {
             rgap: 0,
             tgap: 0,
             bgap: 0,
-            columnSize: [100, "fill", 200],
-            rowSize: [100, "fill"],
-            items: [[
-                {
-                    el: {type: "bi.button", text: "button1"}
-                },
-                {
-                    el: {type: "bi.button", text: "button2"}
-                },
-                {
-                    el: {type: "bi.button", text: "button3"}
-                }
-            ]]
+            columnSize: [],
+            rowSize: [],
+            items: []
         });
     },
     render: function () {
         BI.WindowLayout.superclass.render.apply(this, arguments);
-        this.populate(this.options.items);
-    },
-
-    resize: function () {
-        this.stroke(this.options.items);
+        var self = this, o = this.options;
+        var items = BI.isFunction(o.items) ? this.__watch(o.items, function (context, newValue) {
+            self.populate(newValue);
+        }) : o.items;
+        this.populate(items);
     },
 
     addItem: function (item) {
         // do nothing
-        throw new Error("cannot be added");
+        throw new Error("不能添加子组件");
     },
 
     stroke: function (items) {
@@ -52,6 +42,7 @@ BI.WindowLayout = BI.inherit(BI.Layout, {
         if (BI.isNumber(o.columnSize)) {
             o.columnSize = BI.makeArray(o.items[0].length, 1 / o.items[0].length);
         }
+
         function firstElement (item, row, col) {
             if (row === 0) {
                 item.addClass("first-row");
@@ -92,12 +83,12 @@ BI.WindowLayout = BI.inherit(BI.Layout, {
         for (var i = 0; i < o.rows; i++) {
             for (var j = 0; j < o.columns; j++) {
                 if (!o.items[i][j]) {
-                    throw new Error("item be required");
+                    throw new Error("构造错误", o.items);
                 }
-                if (!this.hasWidget(this.getName() + i + "_" + j)) {
-                    var w = BI.createWidget(o.items[i][j]);
+                if (!this.hasWidget(this._getChildName(i + "_" + j))) {
+                    var w = BI._lazyCreateWidget(o.items[i][j]);
                     w.element.css({position: "absolute"});
-                    this.addWidget(this.getName() + i + "_" + j, w);
+                    this.addWidget(this._getChildName(i + "_" + j), w);
                 }
             }
         }
@@ -109,13 +100,13 @@ BI.WindowLayout = BI.inherit(BI.Layout, {
         // 从上到下
         for (var i = 0; i < o.rows; i++) {
             for (var j = 0; j < o.columns; j++) {
-                var wi = this.getWidgetByName(this.getName() + i + "_" + j);
+                var wi = this.getWidgetByName(this._getChildName(i + "_" + j));
                 if (BI.isNull(top[i])) {
                     top[i] = top[i - 1] + (o.rowSize[i - 1] < 1 ? o.rowSize[i - 1] : o.rowSize[i - 1] + o.vgap + o.bgap);
                 }
-                var t = top[i] <= 1 ? top[i] * 100 + "%" : top[i] + o.vgap + o.tgap + "px", h = "";
+                var t = this._optimiseGap(top[i] + o.vgap + o.tgap), h = "";
                 if (BI.isNumber(o.rowSize[i])) {
-                    h = o.rowSize[i] <= 1 ? o.rowSize[i] * 100 + "%" : o.rowSize[i] + "px";
+                    h = this._optimiseGap(o.rowSize[i]);
                 }
                 wi.element.css({top: t, height: h});
                 first(wi, i, j);
@@ -127,13 +118,13 @@ BI.WindowLayout = BI.inherit(BI.Layout, {
         // 从下到上
         for (var i = o.rows - 1; i >= 0; i--) {
             for (var j = 0; j < o.columns; j++) {
-                var wi = this.getWidgetByName(this.getName() + i + "_" + j);
+                var wi = this.getWidgetByName(this._getChildName(i + "_" + j));
                 if (BI.isNull(bottom[i])) {
                     bottom[i] = bottom[i + 1] + (o.rowSize[i + 1] < 1 ? o.rowSize[i + 1] : o.rowSize[i + 1] + o.vgap + o.tgap);
                 }
-                var b = bottom[i] <= 1 ? bottom[i] * 100 + "%" : bottom[i] + o.vgap + o.bgap + "px", h = "";
+                var b = this._optimiseGap(bottom[i] + o.vgap + o.bgap), h = "";
                 if (BI.isNumber(o.rowSize[i])) {
-                    h = o.rowSize[i] <= 1 ? o.rowSize[i] * 100 + "%" : o.rowSize[i] + "px";
+                    h = this._optimiseGap(o.rowSize[i]);
                 }
                 wi.element.css({bottom: b, height: h});
                 first(wi, i, j);
@@ -145,13 +136,13 @@ BI.WindowLayout = BI.inherit(BI.Layout, {
         // 从左到右
         for (var j = 0; j < o.columns; j++) {
             for (var i = 0; i < o.rows; i++) {
-                var wi = this.getWidgetByName(this.getName() + i + "_" + j);
+                var wi = this.getWidgetByName(this._getChildName(i + "_" + j));
                 if (BI.isNull(left[j])) {
                     left[j] = left[j - 1] + (o.columnSize[j - 1] < 1 ? o.columnSize[j - 1] : o.columnSize[j - 1] + o.hgap + o.rgap);
                 }
-                var l = left[j] <= 1 ? left[j] * 100 + "%" : left[j] + o.hgap + o.lgap + "px", w = "";
+                var l = this._optimiseGap(left[j] + o.hgap + o.lgap), w = "";
                 if (BI.isNumber(o.columnSize[j])) {
-                    w = o.columnSize[j] <= 1 ? o.columnSize[j] * 100 + "%" : o.columnSize[j] + "px";
+                    w = this._optimiseGap(o.columnSize[j]);
                 }
                 wi.element.css({left: l, width: w});
                 first(wi, i, j);
@@ -163,13 +154,13 @@ BI.WindowLayout = BI.inherit(BI.Layout, {
         // 从右到左
         for (var j = o.columns - 1; j >= 0; j--) {
             for (var i = 0; i < o.rows; i++) {
-                var wi = this.getWidgetByName(this.getName() + i + "_" + j);
+                var wi = this.getWidgetByName(this._getChildName(i + "_" + j));
                 if (BI.isNull(right[j])) {
                     right[j] = right[j + 1] + (o.columnSize[j + 1] < 1 ? o.columnSize[j + 1] : o.columnSize[j + 1] + o.hgap + o.lgap);
                 }
-                var r = right[j] <= 1 ? right[j] * 100 + "%" : right[j] + o.hgap + o.rgap + "px", w = "";
+                var r = this._optimiseGap(right[j] + o.hgap + o.rgap), w = "";
                 if (BI.isNumber(o.columnSize[j])) {
-                    w = o.columnSize[j] <= 1 ? o.columnSize[j] * 100 + "%" : o.columnSize[j] + "px";
+                    w = this._optimiseGap(o.columnSize[j]);
                 }
                 wi.element.css({right: r, width: w});
                 first(wi, i, j);
@@ -180,7 +171,12 @@ BI.WindowLayout = BI.inherit(BI.Layout, {
         }
     },
 
-    update: function () {
+    resize: function () {
+        // console.log("window布局不需要resize");
+    },
+
+    update: function (opt) {
+        return this.forceUpdate(opt);
     },
 
     populate: function (items) {

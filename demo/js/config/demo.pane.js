@@ -4,9 +4,13 @@
  * description:
  */
 !(function () {
-    var Pane = BI.inherit(BI.LoadingPane, {
+    var Pane = BI.inherit(BI.Pane, {
         props: {
 
+        },
+
+        mounted: function () {
+            console.log('loading pane mounted');
         },
 
         render: function () {
@@ -19,8 +23,11 @@
             };
         },
 
-        beforeInit: function (callback) {
+        beforeRender: function (callback) {
+            var self = this;
+            this.loading();
             setTimeout(function () {
+                self.loaded();
                 callback();
             }, 3000);
         }

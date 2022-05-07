@@ -16,6 +16,7 @@ BI.Farbtastic = BI.inherit(BI.BasicButton, {
 
     render: function () {
         var self = this;
+        this._defaultState();
         return {
             type: "bi.absolute",
             items: [{
@@ -80,11 +81,15 @@ BI.Farbtastic = BI.inherit(BI.BasicButton, {
         };
     },
 
-    mounted: function () {
+    created: function () {
         var o = this.options;
         if (BI.isKey(o.value)) {
             this.setValue(o.value);
         }
+    },
+
+    _defaultState: function () {
+        this.hsl = [0, 0, 0];
     },
 
     _unpack: function (color) {
@@ -127,42 +132,11 @@ BI.Farbtastic = BI.inherit(BI.BasicButton, {
     },
 
     _HSLToRGB: function (hsl) {
-        var m1, m2, r, g, b;
-        var h = hsl[0], s = hsl[1], l = hsl[2];
-        m2 = (l <= 0.5) ? l * (s + 1) : l + s - l * s;
-        m1 = l * 2 - m2;
-        return [this._hueToRGB(m1, m2, h + 0.33333),
-            this._hueToRGB(m1, m2, h),
-            this._hueToRGB(m1, m2, h - 0.33333)];
-    },
-
-    _hueToRGB: function (m1, m2, h) {
-        h = (h < 0) ? h + 1 : ((h > 1) ? h - 1 : h);
-        if (h * 6 < 1) return m1 + (m2 - m1) * h * 6;
-        if (h * 2 < 1) return m2;
-        if (h * 3 < 2) return m1 + (m2 - m1) * (0.66666 - h) * 6;
-        return m1;
+        return BI.DOM.hsl2rgb(hsl);
     },
 
     _RGBToHSL: function (rgb) {
-        var min, max, delta, h, s, l;
-        var r = rgb[0], g = rgb[1], b = rgb[2];
-        min = Math.min(r, Math.min(g, b));
-        max = Math.max(r, Math.max(g, b));
-        delta = max - min;
-        l = (min + max) / 2;
-        s = 0;
-        if (l > 0 && l < 1) {
-            s = delta / (l < 0.5 ? (2 * l) : (2 - 2 * l));
-        }
-        h = 0;
-        if (delta > 0) {
-            if (max == r && max != g) h += (g - b) / delta;
-            if (max == g && max != b) h += (2 + (b - r) / delta);
-            if (max == b && max != r) h += (4 + (r - g) / delta);
-            h /= 6;
-        }
-        return [h, s, l];
+        return BI.DOM.rgb2hsl(rgb);
     },
 
     _updateDisplay: function () {
@@ -179,8 +153,6 @@ BI.Farbtastic = BI.inherit(BI.BasicButton, {
 
         // Saturation/Luminance gradient
         this.colorWrapper.element.css("backgroundColor", this._pack(this._HSLToRGB([this.hsl[0], 1, 0.5])));
-
-        this.fireEvent(BI.Farbtastic.EVENT_CHANGE, this.getValue(), this);
     },
 
     _absolutePosition: function (el) {
@@ -257,6 +229,7 @@ BI.Farbtastic = BI.inherit(BI.BasicButton, {
             var lum = Math.max(0, Math.min(1, -(pos.y / this.constants.SQUARE) + .5));
             this._setHSL([this.hsl[0], sat, lum]);
         }
+        this.fireEvent(BI.Farbtastic.EVENT_CHANGE, this.getValue(), this);
     },
 
     doClick: function (event) {

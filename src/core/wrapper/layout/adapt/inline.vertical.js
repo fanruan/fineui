@@ -10,66 +10,48 @@
 BI.InlineVerticalAdaptLayout = BI.inherit(BI.Layout, {
 
     props: function () {
-        return BI.extend(BI.InlineLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-inline-vertical-adapt-layout",
+        return BI.extend(BI.InlineVerticalAdaptLayout.superclass.props.apply(this, arguments), {
+            baseCls: "bi-i-v-a",
+            horizontalAlign: BI.HorizontalAlign.Left,
+            verticalAlign: BI.VerticalAlign.Middle,
+            columnSize: [],
             hgap: 0,
             vgap: 0,
             lgap: 0,
             rgap: 0,
             tgap: 0,
-            bgap: 0,
-            textAlign: "left"
+            bgap: 0
         });
     },
 
     render: function () {
-        BI.InlineVerticalAdaptLayout.superclass.render.apply(this, arguments);
-        var o = this.options;
-        this.element.css({
-            whiteSpace: "nowrap",
-            textAlign: o.textAlign
-        });
-        this.populate(this.options.items);
-    },
-
-    _addElement: function (i, item) {
-        var o = this.options;
-        var w = BI.InlineVerticalAdaptLayout.superclass._addElement.apply(this, arguments);
-        w.element.css({
-            position: "relative",
-            "vertical-align": "middle"
-        });
-        w.element.addClass("inline-vertical-adapt-item");
-        if (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
-            w.element.css({
-                "margin-top": o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) + "px"
-            });
-        }
-        if (o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0) !== 0) {
-            w.element.css({
-                "margin-left": (i === 0 ? o.hgap : 0) + o.lgap + (item.lgap || 0) + (item.hgap || 0) +"px"
-            });
-        }
-        if (o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0) !== 0) {
-            w.element.css({
-                "margin-right": o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0) + "px"
-            });
-        }
-        if (o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0) !== 0) {
-            w.element.css({
-                "margin-bottom": o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0) + "px"
-            });
-        }
-        return w;
+        var self = this, o = this.options;
+        return {
+            type: "bi.inline",
+            ref: function (_ref) {
+                self.layout = _ref;
+            },
+            items: o.items,
+            horizontalAlign: o.horizontalAlign,
+            verticalAlign: o.verticalAlign,
+            columnSize: o.columnSize,
+            hgap: o.hgap,
+            vgap: o.vgap,
+            lgap: o.lgap,
+            rgap: o.rgap,
+            tgap: o.tgap,
+            bgap: o.bgap,
+            innerHgap: o.innerHgap,
+            innerVgap: o.innerVgap,
+        };
     },
 
     resize: function () {
-        this.stroke(this.options.items);
+        this.layout.resize();
     },
 
     populate: function (items) {
-        BI.InlineVerticalAdaptLayout.superclass.populate.apply(this, arguments);
-        this._mount();
+        this.layout.populate.apply(this.layout, arguments);
     }
 });
 BI.shortcut("bi.inline_vertical_adapt", BI.InlineVerticalAdaptLayout);

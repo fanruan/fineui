@@ -6,15 +6,11 @@
  * @abstract
  */
 BI.Action = BI.inherit(BI.OB, {
-    _defaultConfig: function () {
-        return BI.extend(BI.Action.superclass._defaultConfig.apply(this, arguments), {
+    props: function () {
+        return {
             src: null,
             tar: null
-        });
-    },
-
-    _init: function () {
-        BI.Action.superclass._init.apply(this, arguments);
+        };
     },
 
     actionPerformed: function (src, tar, callback) {

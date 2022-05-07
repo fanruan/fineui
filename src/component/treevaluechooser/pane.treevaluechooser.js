@@ -11,7 +11,8 @@ BI.TreeValueChooserPane = BI.inherit(BI.AbstractTreeValueChooser, {
         return BI.extend(BI.TreeValueChooserPane.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-tree-value-chooser-pane",
             items: null,
-            itemsCreator: BI.emptyFn
+            itemsCreator: BI.emptyFn,
+            showLine: true
         });
     },
 
@@ -19,8 +20,9 @@ BI.TreeValueChooserPane = BI.inherit(BI.AbstractTreeValueChooser, {
         BI.TreeValueChooserPane.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
         this.pane = BI.createWidget({
-            type: "bi.multi_select_tree",
+            type: o.hideSearch ? "bi.multi_select_tree_popup" : "bi.multi_select_tree",
             element: this,
+            showLine: o.showLine,
             itemsCreator: BI.bind(this._itemsCreator, this)
         });
 
@@ -29,7 +31,7 @@ BI.TreeValueChooserPane = BI.inherit(BI.AbstractTreeValueChooser, {
         });
         if (BI.isNotNull(o.items)) {
             this._initData(o.items);
-            this.populate();
+            this.pane.populate();
         }
     },
 
@@ -45,8 +47,15 @@ BI.TreeValueChooserPane = BI.inherit(BI.AbstractTreeValueChooser, {
         return this.pane.getValue();
     },
 
-    populate: function () {
-        this.pane.populate.apply(this.pane, arguments);
+    getAllValue: function() {
+        return this.buildCompleteTree(this.pane.getValue());
+    },
+
+    populate: function (items) {
+        if (BI.isNotNull(items)) {
+            this._initData(items);
+        }
+        this.pane.populate();
     }
 });
 BI.TreeValueChooserPane.EVENT_CHANGE = "EVENT_CHANGE";

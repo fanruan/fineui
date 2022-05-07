@@ -22,9 +22,10 @@ BI.Msg = function () {
             // BI.Msg.prompt(title, message, value, callback, min_width);
         },
         toast: function (message, options, context) {
+            BI.isString(options) && (options = { level: options })
             options = options || {};
             context = context || BI.Widget._renderEngine.createElement("body");
-            var level = options.level || "normal";
+            var level = options.level || "common";
             var autoClose = BI.isNull(options.autoClose) ? true : options.autoClose;
             var callback = BI.isFunction(options.callback) ? options.callback : BI.emptyFn;
             var toast = BI.createWidget({
@@ -32,12 +33,13 @@ BI.Msg = function () {
                 cls: "bi-message-animate bi-message-leave",
                 level: level,
                 autoClose: autoClose,
+                closable: options.closable,
                 text: message,
                 listeners: [{
                     eventName: BI.Toast.EVENT_DESTORY,
                     action: function () {
                         BI.remove(toastStack, toast.element);
-                        var _height = 10;
+                        var _height = BI.SIZE_CONSANTS.TOAST_TOP;
                         BI.each(toastStack, function (i, element) {
                             element.css({"top": _height});
                             _height += element.outerHeight() + 10;
@@ -46,7 +48,7 @@ BI.Msg = function () {
                     }
                 }]
             });
-            var height = 10;
+            var height = BI.SIZE_CONSANTS.TOAST_TOP;
             BI.each(toastStack, function (i, element) {
                 height += element.outerHeight() + 10;
             });
@@ -67,6 +69,10 @@ BI.Msg = function () {
                 toast.element.removeClass("bi-message-enter").addClass("bi-message-leave");
                 toast.destroy();
             }, 5000);
+            return function () {
+                toast.element.removeClass("bi-message-enter").addClass("bi-message-leave");
+                toast.destroy();
+            };
         },
         _show: function (hasCancel, title, message, callback) {
             BI.isNull($mask) && ($mask = BI.Widget._renderEngine.createElement("<div class=\"bi-z-index-mask\">").css({
@@ -128,6 +134,31 @@ BI.Msg = function () {
                 items: [
                     {
                         type: "bi.border",
+                        attributes: {
+                            tabIndex: 1
+                        },
+                        mounted: function () {
+                            this.element.keyup(function (e) {
+                                if (e.keyCode === BI.KeyCode.ENTER) {
+                                    close();
+                                    if (BI.isFunction(callback)) {
+                                        callback.apply(null, [true]);
+                                    }
+                                } else if (e.keyCode === BI.KeyCode.ESCAPE) {
+                                    close();
+                                    if (hasCancel === true) {
+                                        if (BI.isFunction(callback)) {
+                                            callback.apply(null, [false]);
+                                        }
+                                    }
+                                }
+                            });
+                            try {
+                                this.element.focus();
+                            } catch (e) {
+
+                            }
+                        },
                         cls: "bi-card",
                         items: {
                             north: {
@@ -157,14 +188,14 @@ BI.Msg = function () {
                                                     }
                                                 }
                                             },
-                                            width: 60
+                                            width: 56
                                         }
                                     }
                                 },
                                 height: 40
                             },
                             center: {
-                                el: {
+                                el: BI.isPlainObject(message) ? message : {
                                     type: "bi.label",
                                     vgap: 10,
                                     hgap: 20,

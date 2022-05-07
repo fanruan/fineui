@@ -15,9 +15,10 @@ BI.MultiSelectInsertTrigger = BI.inherit(BI.Trigger, {
 
     _defaultConfig: function () {
         return BI.extend(BI.MultiSelectInsertTrigger.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-multi-select-trigger bi-border bi-border-radius",
+            baseCls: "bi-multi-select-trigger",
             itemsCreator: BI.emptyFn,
             valueFormatter: BI.emptyFn,
+            itemHeight: 24,
             searcher: {},
             switcher: {},
 
@@ -31,9 +32,6 @@ BI.MultiSelectInsertTrigger = BI.inherit(BI.Trigger, {
         BI.MultiSelectInsertTrigger.superclass._init.apply(this, arguments);
 
         var self = this, o = this.options;
-        if (o.height) {
-            this.setHeight(o.height - 2);
-        }
 
         this.searcher = BI.createWidget(o.searcher, {
             type: "bi.multi_select_insert_searcher",
@@ -41,6 +39,7 @@ BI.MultiSelectInsertTrigger = BI.inherit(BI.Trigger, {
             text: o.text,
             itemsCreator: o.itemsCreator,
             valueFormatter: o.valueFormatter,
+            itemHeight: o.itemHeight,
             watermark: o.watermark,
             popup: {},
             adapter: o.adapter,
@@ -49,9 +48,6 @@ BI.MultiSelectInsertTrigger = BI.inherit(BI.Trigger, {
         });
         this.searcher.on(BI.MultiSelectInsertSearcher.EVENT_START, function () {
             self.fireEvent(BI.MultiSelectInsertTrigger.EVENT_START);
-        });
-        this.searcher.on(BI.MultiSelectInsertSearcher.EVENT_ADD_ITEM, function () {
-            self.fireEvent(BI.MultiSelectInsertTrigger.EVENT_ADD_ITEM);
         });
         this.searcher.on(BI.MultiSelectInsertSearcher.EVENT_PAUSE, function () {
             self.fireEvent(BI.MultiSelectInsertTrigger.EVENT_PAUSE);
@@ -151,7 +147,6 @@ BI.MultiSelectInsertTrigger.EVENT_STOP = "EVENT_STOP";
 BI.MultiSelectInsertTrigger.EVENT_PAUSE = "EVENT_PAUSE";
 BI.MultiSelectInsertTrigger.EVENT_SEARCHING = "EVENT_SEARCHING";
 BI.MultiSelectInsertTrigger.EVENT_BEFORE_COUNTER_POPUPVIEW = "EVENT_BEFORE_COUNTER_POPUPVIEW";
-BI.MultiSelectInsertTrigger.EVENT_ADD_ITEM = "EVENT_ADD_ITEM";
 BI.MultiSelectInsertTrigger.EVENT_FOCUS = "EVENT_FOCUS";
 BI.MultiSelectInsertTrigger.EVENT_BLUR = "EVENT_BLUR";
 

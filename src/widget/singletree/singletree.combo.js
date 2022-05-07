@@ -4,23 +4,22 @@
  */
 BI.SingleTreeCombo = BI.inherit(BI.Widget, {
 
-    _defaultConfig: function () {
+    _defaultConfig: function (config) {
         return BI.extend(BI.SingleTreeCombo.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-single-tree-combo",
+            baseCls: "bi-single-tree-combo bi-border-radius " + (config.simple ? "bi-border-bottom" : "bi-border"),
             trigger: {},
             height: 24,
             text: "",
             items: [],
             value: "",
-            attributes: {
-                tabIndex: 0
-            }
         });
     },
 
     _init: function () {
-        BI.SingleTreeCombo.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
+        o.height -= 2;
+        BI.isNumeric(o.width) && (o.width -= 2);
+        BI.SingleTreeCombo.superclass._init.apply(this, arguments);
 
         this.trigger = BI.createWidget(BI.extend({
             type: "bi.single_tree_trigger",

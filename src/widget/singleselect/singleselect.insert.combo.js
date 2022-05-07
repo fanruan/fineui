@@ -10,19 +10,17 @@ BI.SingleSelectInsertCombo = BI.inherit(BI.Single, {
             baseCls: "bi-single-select-combo",
             allowNoSelect: false,
             itemsCreator: BI.emptyFn,
+            itemWrapper: BI.emptyFn,
             valueFormatter: BI.emptyFn,
             height: 24,
-            attributes: {
-                tabIndex: 0
-            },
-            allowEdit: true
+            allowEdit: true,
+            watermark: BI.i18nText("BI-Basic_Search_And_Patch_Paste"),
         });
     },
 
     _init: function () {
-        BI.SingleSelectInsertCombo.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
-
+        BI.SingleSelectInsertCombo.superclass._init.apply(this, arguments);
         var assertShowValue = function () {
             BI.isKey(self._startValue) && (self.storeValue = self._startValue);
             self.trigger.getSearcher().setState(self.storeValue);
@@ -33,7 +31,8 @@ BI.SingleSelectInsertCombo = BI.inherit(BI.Single, {
 
         this.trigger = BI.createWidget({
             type: "bi.single_select_trigger",
-            height: o.height,
+            watermark: o.watermark,
+            height: o.height - (o.simple ? 1 : 2),
             allowNoSelect: o.allowNoSelect,
             allowEdit: o.allowEdit,
             // adapter: this.popup,
@@ -52,16 +51,6 @@ BI.SingleSelectInsertCombo = BI.inherit(BI.Single, {
             searcher: {
                 popup: {
                     type: "bi.single_select_search_insert_pane",
-                    listeners: [{
-                        eventName: BI.SingleSelectSearchInsertPane.EVENT_ADD_ITEM,
-                        action: function () {
-                            if (!self.trigger.getSearcher().hasMatched()) {
-                                self.storeValue = self.trigger.getSearcher().getKeyword();
-                                assertShowValue();
-                                self._defaultState();
-                            }
-                        }
-                    }]
                 }
             }
         });
@@ -82,32 +71,12 @@ BI.SingleSelectInsertCombo = BI.inherit(BI.Single, {
             self.fireEvent(BI.SingleSelectInsertCombo.EVENT_STOP);
         });
         this.trigger.on(BI.SingleSelectTrigger.EVENT_PAUSE, function () {
-            if (this.getSearcher().hasMatched()) {
-                var keyword = this.getSearcher().getKeyword();
-                self.storeValue = keyword;
-                self.combo.setValue(self.storeValue);
-                self._setStartValue(keyword);
-                assertShowValue();
-                self.populate();
-                self._setStartValue();
-            }
+            self.storeValue = self.trigger.getSearcher().getKeyword();
+            assertShowValue();
+            self._defaultState();
         });
-        this.trigger.on(BI.SingleSelectTrigger.EVENT_SEARCHING, function (keywords) {
-            var last = BI.last(keywords);
-            keywords = BI.initial(keywords || []);
-            if (keywords.length > 0) {
-                self._joinKeywords(keywords, function () {
-                    if (BI.isEndWithBlank(last)) {
-                        self.combo.setValue(self.storeValue);
-                        assertShowValue();
-                        self.combo.populate();
-                        self._setStartValue();
-                    } else {
-                        self.combo.setValue(self.storeValue);
-                        assertShowValue();
-                    }
-                });
-            }
+        this.trigger.on(BI.SingleSelectTrigger.EVENT_SEARCHING, function () {
+            self._dataChange = true;
             self.fireEvent(BI.SingleSelectInsertCombo.EVENT_SEARCHING);
         });
 
@@ -115,6 +84,7 @@ BI.SingleSelectInsertCombo = BI.inherit(BI.Single, {
             self.storeValue = this.getValue();
             assertShowValue();
             self._defaultState();
+            self._dataChange = true;
         });
         this.trigger.on(BI.SingleSelectTrigger.EVENT_COUNTER_CLICK, function () {
             if (!self.combo.isViewVisible()) {
@@ -124,6 +94,7 @@ BI.SingleSelectInsertCombo = BI.inherit(BI.Single, {
 
         this.combo = BI.createWidget({
             type: "bi.combo",
+            cls: (o.simple ? "bi-border-bottom" : "bi-border") + " bi-border-radius",
             container: o.container,
             toggle: false,
             el: this.trigger,
@@ -138,6 +109,7 @@ BI.SingleSelectInsertCombo = BI.inherit(BI.Single, {
                 listeners: [{
                     eventName: BI.SingleSelectPopupView.EVENT_CHANGE,
                     action: function () {
+                        self._dataChange = true;
                         self.storeValue = this.getValue();
                         self._adjust(function () {
                             assertShowValue();
@@ -147,6 +119,7 @@ BI.SingleSelectInsertCombo = BI.inherit(BI.Single, {
                     }
                 }],
                 itemsCreator: o.itemsCreator,
+                itemWrapper: o.itemWrapper,
                 valueFormatter: o.valueFormatter,
                 onLoaded: function () {
                     BI.nextTick(function () {
@@ -163,6 +136,9 @@ BI.SingleSelectInsertCombo = BI.inherit(BI.Single, {
         });
 
         this.combo.on(BI.Combo.EVENT_BEFORE_POPUPVIEW, function () {
+            if (!this.isViewVisible()) {
+                self._dataChange = false;// 标记数据是否发生变化
+            }
             this.setValue(self.storeValue);
             BI.nextTick(function () {
                 self.populate();
@@ -176,7 +152,7 @@ BI.SingleSelectInsertCombo = BI.inherit(BI.Single, {
             if (self.requesting === true) {
                 self.wants2Quit = true;
             } else {
-                self.fireEvent(BI.SingleSelectInsertCombo.EVENT_CONFIRM);
+                self._dataChange && self.fireEvent(BI.SingleSelectInsertCombo.EVENT_CONFIRM);
             }
         });
 
@@ -223,29 +199,6 @@ BI.SingleSelectInsertCombo = BI.inherit(BI.Single, {
         return BI.makeObject(values || []);
     },
 
-    _joinKeywords: function (keywords, callback) {
-        var self = this, o = this.options;
-        this._assertValue(this.storeValue);
-        this.requesting = true;
-        o.itemsCreator({
-            type: BI.SingleSelectInsertCombo.REQ_GET_ALL_DATA,
-            keywords: keywords
-        }, function (ob) {
-            var values = BI.map(ob.items, "value");
-            digest(values);
-        });
-
-        function digest (items) {
-            var selectedMap = self._makeMap(items);
-            BI.each(keywords, function (i, val) {
-                if (BI.isNotNull(selectedMap[val])) {
-                    BI.remove(self.storeValue.value, val);
-                }
-            });
-            self._adjust(callback);
-        }
-    },
-
     _adjust: function (callback) {
         var self = this, o = this.options;
         adjust();
@@ -253,7 +206,7 @@ BI.SingleSelectInsertCombo = BI.inherit(BI.Single, {
 
         function adjust () {
             if (self.wants2Quit === true) {
-                self.fireEvent(BI.SingleSelectInsertCombo.EVENT_CONFIRM);
+                self._dataChange && self.fireEvent(BI.SingleSelectInsertCombo.EVENT_CONFIRM);
                 self.wants2Quit = false;
             }
             self.requesting = false;

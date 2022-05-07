@@ -6,7 +6,7 @@
 BI.CenterAdaptLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.CenterAdaptLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-center-adapt-layout",
+            baseCls: "bi-c-a",
             horizontalAlign: BI.HorizontalAlign.Center,
             columnSize: [],
             scrollx: false,
@@ -27,6 +27,8 @@ BI.CenterAdaptLayout = BI.inherit(BI.Layout, {
             horizontalAlign: o.horizontalAlign,
             columnSize: o.columnSize,
             scrollx: o.scrollx,
+            scrolly: o.scrolly,
+            scrollable: o.scrollable,
             items: o.items,
             ref: function (_ref) {
                 self.layout = _ref;
@@ -36,12 +38,14 @@ BI.CenterAdaptLayout = BI.inherit(BI.Layout, {
             lgap: o.lgap,
             rgap: o.rgap,
             tgap: o.tgap,
-            bgap: o.bgap
+            bgap: o.bgap,
+            innerHgap: o.innerHgap,
+            innerVgap: o.innerVgap,
         };
     },
 
     resize: function () {
-        // console.log("center_adapt布局不需要resize");
+        this.layout.resize();
     },
 
     populate: function (items) {

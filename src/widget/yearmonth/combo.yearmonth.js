@@ -1,23 +1,28 @@
 BI.DynamicYearMonthCombo = BI.inherit(BI.Single, {
 
     props: {
-        baseCls: "bi-year-month-combo bi-border bi-focus-shadow",
+        baseCls: "bi-year-month-combo",
         behaviors: {},
         minDate: "1900-01-01", // 最小日期
         maxDate: "2099-12-31", // 最大日期
-        height: 22
+        height: 24,
+        supportDynamic: true,
+        isNeedAdjustHeight: false,
+        isNeedAdjustWidth: false
     },
 
     _init: function () {
-        BI.DynamicYearMonthCombo.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
+        BI.DynamicYearMonthCombo.superclass._init.apply(this, arguments);
         this.storeValue = o.value;
         this.storeTriggerValue = "";
+        var border = o.simple ? 1 : 2;
         this.trigger = BI.createWidget({
             type: "bi.dynamic_year_month_trigger",
+            simple: o.simple,
             min: o.minDate,
             max: o.maxDate,
-            height: o.height,
+            height: o.height - border,
             value: o.value || ""
         });
         this.trigger.on(BI.DynamicYearMonthTrigger.EVENT_KEY_DOWN, function () {
@@ -31,18 +36,19 @@ BI.DynamicYearMonthCombo = BI.inherit(BI.Single, {
         });
         this.trigger.on(BI.DynamicYearMonthTrigger.EVENT_ERROR, function () {
             self.combo.isViewVisible() && self.combo.hideView();
+            self.comboWrapper.element.addClass("error");
             self.fireEvent(BI.DynamicYearMonthCombo.EVENT_ERROR);
         });
         this.trigger.on(BI.DynamicYearMonthTrigger.EVENT_VALID, function () {
+            self.comboWrapper.element.removeClass("error");
             self.fireEvent(BI.DynamicYearMonthCombo.EVENT_VALID);
         });
         this.trigger.on(BI.DynamicYearMonthTrigger.EVENT_CONFIRM, function () {
-            // 没看出来干啥的，先去掉
-            // if (self.combo.isViewVisible()) {
-            //     return;
-            // }
             var dateStore = self.storeTriggerValue;
             var dateObj = self.trigger.getKey();
+            if (BI.isEqual(dateObj, dateStore)) {
+                return;
+            }
             if (BI.isNotEmptyString(dateObj) && !BI.isEqual(dateObj, dateStore)) {
                 self.storeValue = self.trigger.getValue();
                 self.setValue(self.trigger.getValue());
@@ -58,14 +64,18 @@ BI.DynamicYearMonthCombo = BI.inherit(BI.Single, {
         this.combo = BI.createWidget({
             type: "bi.combo",
             container: o.container,
-            isNeedAdjustHeight: false,
-            isNeedAdjustWidth: false,
+            isNeedAdjustHeight: o.isNeedAdjustHeight,
+            isNeedAdjustWidth: o.isNeedAdjustWidth,
             el: this.trigger,
+            destroyWhenHide: true,
+            adjustLength: 1,
             popup: {
                 minWidth: 100,
                 stopPropagation: false,
                 el: {
                     type: "bi.dynamic_year_month_popup",
+                    width: o.isNeedAdjustWidth ? o.width : undefined,
+                    supportDynamic: o.supportDynamic,
                     ref: function () {
                         self.popup = this;
                     },
@@ -87,14 +97,17 @@ BI.DynamicYearMonthCombo = BI.inherit(BI.Single, {
                         eventName: BI.DynamicYearMonthPopup.BUTTON_lABEL_EVENT_CHANGE,
                         action: function () {
                             var date = BI.getDate();
-                            self.setValue({type: BI.DynamicYearMonthCombo.Static, value: {year: date.getFullYear(), month: date.getMonth() + 1}});
+                            self.setValue({ type: BI.DynamicYearMonthCombo.Static, value: { year: date.getFullYear(), month: date.getMonth() + 1 } });
                             self.combo.hideView();
                             self.fireEvent(BI.DynamicDateCombo.EVENT_CONFIRM);
                         }
                     }, {
                         eventName: BI.DynamicYearMonthPopup.BUTTON_OK_EVENT_CHANGE,
                         action: function () {
-                            self.setValue(self.popup.getValue());
+                            var value = self.popup.getValue();
+                            if (self._checkValue(value)) {
+                                self.setValue(value);
+                            }
                             self.combo.hideView();
                             self.fireEvent(BI.DynamicDateCombo.EVENT_CONFIRM);
                         }
@@ -107,28 +120,40 @@ BI.DynamicYearMonthCombo = BI.inherit(BI.Single, {
             }
         });
         this.combo.on(BI.Combo.EVENT_BEFORE_POPUPVIEW, function () {
+            self.popup.setMinDate(o.minDate);
+            self.popup.setMaxDate(o.maxDate);
             self.popup.setValue(self.storeValue);
             self.fireEvent(BI.DynamicYearMonthCombo.EVENT_BEFORE_POPUPVIEW);
         });
 
         BI.createWidget({
-            type: "bi.htape",
+            type: "bi.absolute",
             element: this,
-            ref: function () {
-                self.comboWrapper = this;
-            },
             items: [{
                 el: {
-                    type: "bi.icon_button",
-                    cls: "bi-trigger-icon-button date-change-h-font",
-                    width: 24,
-                    height: 24,
+                    type: "bi.htape",
+                    cls: (o.simple ? "bi-border-bottom" : "bi-border") + " bi-border-radius bi-focus-shadow",
                     ref: function () {
-                        self.changeIcon = this;
-                    }
+                        self.comboWrapper = this;
+                    },
+                    items: [{
+                        el: {
+                            type: "bi.icon_button",
+                            cls: "bi-trigger-icon-button",
+                            width: o.height - border,
+                            height: o.height - border,
+                            ref: function () {
+                                self.changeIcon = this;
+                            }
+                        },
+                        width: o.height - border
+                    }, this.combo]
                 },
-                width: 24
-            }, this.combo]
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0
+            }]
         });
         this._checkDynamicValue(o.value);
     },
@@ -141,7 +166,7 @@ BI.DynamicYearMonthCombo = BI.inherit(BI.Single, {
         switch (type) {
             case BI.DynamicYearMonthCombo.Dynamic:
                 this.changeIcon.setVisible(true);
-                this.comboWrapper.attr("items")[0].width = 24;
+                this.comboWrapper.attr("items")[0].width = this.options.height - this.options.simple ? 1 : 2;
                 this.comboWrapper.resize();
                 break;
             default:
@@ -150,6 +175,34 @@ BI.DynamicYearMonthCombo = BI.inherit(BI.Single, {
                 this.changeIcon.setVisible(false);
                 break;
         }
+    },
+
+    _checkValue: function (v) {
+        var o = this.options;
+        switch (v.type) {
+            case BI.DynamicDateCombo.Dynamic:
+                return BI.isNotEmptyObject(v.value);
+            case BI.DynamicDateCombo.Static:
+                var value = v.value || {};
+
+                return !BI.checkDateVoid(value.year, value.month, 1, o.minDate, o.maxDate)[0];
+            default:
+                return true;
+        }
+    },
+
+    setMinDate: function (minDate) {
+        var o = this.options;
+        o.minDate = minDate;
+        this.trigger.setMinDate(minDate);
+        this.popup && this.popup.setMinDate(minDate);
+    },
+
+    setMaxDate: function (maxDate) {
+        var o = this.options;
+        o.maxDate = maxDate;
+        this.trigger.setMaxDate(maxDate);
+        this.popup && this.popup.setMaxDate(maxDate);
     },
 
     hideView: function () {
@@ -170,8 +223,8 @@ BI.DynamicYearMonthCombo = BI.inherit(BI.Single, {
         return this.trigger.getKey();
     },
 
-    isValid: function () {
-        return this.trigger.isValid();
+    isStateValid: function () {
+        return this.trigger.isStateValid();
     }
 
 });

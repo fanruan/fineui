@@ -2,14 +2,13 @@
  * Created by zcf_1 on 2017/5/2.
  */
 BI.MultiSelectList = BI.inherit(BI.Widget, {
-    _constant: {
-        EDITOR_HEIGHT: 24
-    },
     _defaultConfig: function () {
         return BI.extend(BI.MultiSelectList.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-multi-select-list",
             itemsCreator: BI.emptyFn,
-            valueFormatter: BI.emptyFn
+            valueFormatter: BI.emptyFn,
+            searcherHeight: 24,
+            itemHeight: BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT,
         });
     },
     _init: function () {
@@ -28,6 +27,7 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
             cls: "popup-multi-select-list bi-border-left bi-border-right bi-border-bottom",
             itemsCreator: o.itemsCreator,
             valueFormatter: o.valueFormatter,
+            itemHeight: o.itemHeight,
             logic: {
                 dynamic: false
             },
@@ -53,16 +53,25 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
                 var keyword = self.trigger.getKeyword();
                 if (BI.isNotEmptyString(keyword)) {
                     op.keywords = [keyword];
-                    this.setKeyword(op.keywords[0]);
                     o.itemsCreator(op, callback);
                 }
-            }
+            },
+            itemHeight: o.itemHeight
         });
         this.searcherPane.setVisible(false);
 
         this.trigger = BI.createWidget({
             type: "bi.searcher",
-            allowSearchBlank: false,
+            el: {
+                type: "bi.select_patch_editor",
+                el: {
+                    type: "bi.search_editor",
+                },
+                ref: function (ref) {
+                    self.editor = ref;
+                },
+                height: o.searcherHeight
+            },
             isAutoSearch: false,
             isAutoSync: false,
             onSearch: function (op, callback) {
@@ -91,22 +100,9 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
             }, {
                 eventName: BI.Searcher.EVENT_PAUSE,
                 action: function () {
-                    var keyword = this.getKeyword();
-                    if (this.hasMatched()) {
-                        self._join({
-                            type: BI.Selection.Multi,
-                            value: [keyword]
-                        }, function () {
-                            self._showAdapter();
-                            self.adapter.setValue(self.storeValue);
-                            self._setStartValue(keyword);
-                            assertShowValue();
-                            self.adapter.populate();
-                            self._setStartValue("");
-                            self.fireEvent(BI.MultiSelectList.EVENT_CHANGE);
-                        });
-                    }
-                }
+                    self._showAdapter();
+                    self.fireEvent(BI.MultiSelectList.EVENT_CHANGE);
+                },
             }, {
                 eventName: BI.Searcher.EVENT_SEARCHING,
                 action: function () {
@@ -115,7 +111,7 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
                     keywords = BI.initial(keywords || []);
                     if (keywords.length > 0) {
                         self._joinKeywords(keywords, function () {
-                            if (BI.isEndWithBlank(last)) {
+                            if (BI.endWith(last, BI.BlankSplitChar)) {
                                 self.adapter.setValue(self.storeValue);
                                 assertShowValue();
                                 self.adapter.populate();
@@ -151,7 +147,7 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
             element: this,
             items: [{
                 el: this.trigger,
-                height: this._constant.EDITOR_HEIGHT
+                height: o.searcherHeight
             }, {
                 el: this.adapter,
                 height: "fill"
@@ -162,12 +158,25 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
             element: this,
             items: [{
                 el: this.searcherPane,
-                top: this._constant.EDITOR_HEIGHT,
+                top: o.searcherHeight,
                 bottom: 0,
                 left: 0,
                 right: 0
             }]
         });
+    },
+
+    _getKeywords: function () {
+        var val = this.editor.getValue();
+        var keywords = val.split(/\u200b\s\u200b/);
+        if (BI.isEmptyString(keywords[keywords.length - 1])) {
+            keywords = keywords.slice(0, keywords.length - 1);
+        }
+        if (/\u200b\s\u200b$/.test(val)) {
+            return keywords.concat([BI.BlankSplitChar]);
+        }
+
+        return keywords;
     },
 
     _showAdapter: function () {
@@ -220,24 +229,34 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
     _joinAll: function (res, callback) {
         var self = this, o = this.options;
         this._assertValue(res);
+        if (this.storeValue.type === res.type) {
+            var result = BI.Func.getSearchResult(BI.map(this.storeValue.value, function (_i, v) {
+                return {
+                    text: o.valueFormatter(v) || v,
+                    value: v
+                };
+            }), this.trigger.getKey());
+            var change = false;
+            var map = this._makeMap(this.storeValue.value);
+            BI.each(BI.concat(result.match, result.find), function (i, obj) {
+                var v = obj.value;
+                if (BI.isNotNull(map[v])) {
+                    change = true;
+                    delete map[v];
+                }
+            });
+            change && (this.storeValue.value = BI.values(map));
+            this._adjust(callback);
+            return;
+        }
         o.itemsCreator({
             type: BI.MultiSelectList.REQ_GET_ALL_DATA,
-            keywords: [this.trigger.getKey()]
+            keywords: [this.trigger.getKey()],
+            selectedValues: BI.filter(this.storeValue.value, function (_i, v) {
+                return !BI.contains(res.value, v);
+            }),
         }, function (ob) {
             var items = BI.map(ob.items, "value");
-            if (self.storeValue.type === res.type) {
-                var change = false;
-                var map = self._makeMap(self.storeValue.value);
-                BI.each(items, function (i, v) {
-                    if (BI.isNotNull(map[v])) {
-                        change = true;
-                        delete map[v];
-                    }
-                });
-                change && (self.storeValue.value = BI.values(map));
-                self._adjust(callback);
-                return;
-            }
             var selectedMap = self._makeMap(self.storeValue.value);
             var notSelectedMap = self._makeMap(res.value);
             var newItems = [];
@@ -292,7 +311,7 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
             var map = this._makeMap(this.storeValue.value);
             BI.each(res.value, function (i, v) {
                 if (!map[v]) {
-                    self.storeValue.value.push(v);
+                    BI.pushDistinct(self.storeValue.value, v);
                     map[v] = v;
                 }
             });

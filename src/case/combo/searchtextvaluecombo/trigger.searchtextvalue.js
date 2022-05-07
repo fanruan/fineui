@@ -3,9 +3,12 @@
  */
 BI.SearchTextValueTrigger = BI.inherit(BI.Trigger, {
 
-    props: {
-        extraCls: "bi-search-text-value-trigger bi-border",
-        height: 24
+    props: function () {
+        return {
+            extraCls: "bi-search-text-value-trigger",
+            height: 24,
+            watermark: BI.i18nText("BI-Basic_Search")
+        };
     },
 
     render: function () {
@@ -25,7 +28,8 @@ BI.SearchTextValueTrigger = BI.inherit(BI.Trigger, {
                             ref: function () {
                                 self.editor = this;
                             },
-                            defaultText: o.text,
+                            watermark: o.watermark,
+                            defaultText: o.defaultText,
                             text: this._digest(o.value, o.items),
                             value: o.value,
                             height: o.height,
@@ -34,13 +38,14 @@ BI.SearchTextValueTrigger = BI.inherit(BI.Trigger, {
                         popup: {
                             type: "bi.search_text_value_combo_popup",
                             cls: "bi-card",
-                            chooseType: BI.ButtonGroup.CHOOSE_TYPE_SINGLE
+                            chooseType: BI.ButtonGroup.CHOOSE_TYPE_SINGLE,
+                            tipText: BI.i18nText("BI-No_Select"),
                         },
                         onSearch: function (obj, callback) {
                             var keyword = obj.keyword;
                             var finding = BI.Func.getSearchResult(o.items, keyword);
                             var matched = finding.match, find = finding.find;
-                            callback(find, matched);
+                            callback(matched, find);
                         },
                         listeners: [{
                             eventName: BI.Searcher.EVENT_CHANGE,
@@ -64,7 +69,7 @@ BI.SearchTextValueTrigger = BI.inherit(BI.Trigger, {
         this.editor.setState(v);
     },
 
-    _digest: function(vals, items){
+    _digest: function (vals, items) {
         var o = this.options;
         vals = BI.isArray(vals) ? vals : [vals];
         var result = [];

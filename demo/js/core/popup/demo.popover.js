@@ -8,6 +8,7 @@ Demo.Func = BI.inherit(BI.Widget, {
     render: function () {
         var id = BI.UUID();
         var body;
+
         return {
             type: "bi.vertical",
             vgap: 10,
@@ -165,7 +166,36 @@ Demo.Func = BI.inherit(BI.Widget, {
                         }
                     }).open(id);
                 }
-            }]
+            }, {
+                type: "bi.text_button",
+                height: 30,
+                text: "弹出一个高度动态的popover层, 此弹出层指定size为small, 但是高度随内容自适应，自适应支持的最大高度为默认为600px",
+                handler: function() {
+                    var id = "弹出层id1"
+                    BI.Popovers.create(id, {
+                        // String或者是json都行
+                        header: "弹出层标题",
+                        logic: {
+                            dynamic: true,
+                            maxHeight: 700,
+                        },
+                        size: "small",
+                        body: {
+                            type: "bi.vertical",
+                            items: BI.map(BI.range(0, 50), function(idx, v) {
+                                return {
+                                    type: "bi.label",
+                                    text: "弹出层内容",
+                                };
+                            }),
+                        },
+                        footer: {
+                            type: "bi.label",
+                            text: "这个是footer",
+                        },
+                    }).open(id);
+                },
+            }],
         };
     }
 });

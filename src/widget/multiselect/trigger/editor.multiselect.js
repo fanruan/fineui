@@ -18,7 +18,7 @@ BI.MultiSelectEditor = BI.inherit(BI.Widget, {
         BI.MultiSelectEditor.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
         this.editor = BI.createWidget(o.el, {
-            type: "bi.state_editor",
+            type: "bi.select_patch_editor",
             element: this,
             height: o.height,
             watermark: o.watermark,
@@ -32,10 +32,6 @@ BI.MultiSelectEditor = BI.inherit(BI.Widget, {
 
         this.editor.on(BI.Controller.EVENT_CHANGE, function () {
             self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
-        });
-
-        this.editor.on(BI.StateEditor.EVENT_PAUSE, function () {
-            self.fireEvent(BI.MultiSelectEditor.EVENT_PAUSE);
         });
         this.editor.on(BI.StateEditor.EVENT_FOCUS, function () {
             self.fireEvent(BI.MultiSelectEditor.EVENT_FOCUS);
@@ -66,12 +62,7 @@ BI.MultiSelectEditor = BI.inherit(BI.Widget, {
     },
 
     getValue: function () {
-        var v = this.editor.getState();
-        if (BI.isArray(v) && v.length > 0) {
-            return v[v.length - 1];
-        }
-        return "";
-
+        return this.editor.getValue();
     },
 
     getState: function () {
@@ -79,16 +70,33 @@ BI.MultiSelectEditor = BI.inherit(BI.Widget, {
     },
 
     getKeywords: function () {
-        var val = this.editor.getLastChangedValue();
-        var keywords = val.match(/[\S]+/g);
-        if (BI.isEndWithBlank(val)) {
-            return keywords.concat([" "]);
+        var val = this.editor.getValue();
+        var keywords = val.split(/\u200b\s\u200b/);
+        if (BI.isEmptyString(keywords[keywords.length - 1])) {
+            keywords = keywords.slice(0, keywords.length - 1);
         }
+        if (/\u200b\s\u200b$/.test(val)) {
+            return keywords.concat([BI.BlankSplitChar]);
+        }
+
         return keywords;
+    },
+
+    getKeyword: function () {
+        var val = this.editor.getValue();
+        var keywords = val.split(/\u200b\s\u200b/);
+        if (BI.isEmptyString(keywords[keywords.length - 1])) {
+            keywords = keywords.slice(0, keywords.length - 1);
+        }
+        return BI.isEmptyArray(keywords) ? "" : keywords[keywords.length - 1];
     },
 
     populate: function (items) {
 
+    },
+
+    setWaterMark: function (v) {
+        this.editor.setWaterMark(v);
     }
 });
 

@@ -81,7 +81,7 @@ _.extend(BI, {
      * @returns {String} 替换后的字符串
      */
     replaceAll: function (str, s1, s2) {
-        return str.replace(new RegExp(s1, "gm"), s2);
+        return BI.isString(str) ? str.replace(new RegExp(s1, "gm"), s2) : str;
     },
     /**
      * 总是让字符串以指定的字符开头

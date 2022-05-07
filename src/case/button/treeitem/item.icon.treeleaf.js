@@ -36,7 +36,8 @@ BI.IconTreeLeafItem = BI.inherit(BI.BasicButton, {
             hgap: o.hgap,
             text: o.text,
             value: o.value,
-            py: o.py
+            py: o.py,
+            keyword: o.keyword
         });
         var type = BI.LogicFactory.createLogicTypeByDirection(BI.Direction.Left);
         var items = BI.LogicFactory.createLogicItemsByDirection(BI.Direction.Left, {
@@ -75,14 +76,6 @@ BI.IconTreeLeafItem = BI.inherit(BI.BasicButton, {
 
     getPId: function () {
         return this.options.pId;
-    },
-
-    doClick: function () {
-        BI.IconTreeLeafItem.superclass.doClick.apply(this, arguments);
-    },
-
-    setSelected: function (v) {
-        BI.IconTreeLeafItem.superclass.setSelected.apply(this, arguments);
     }
 });
 

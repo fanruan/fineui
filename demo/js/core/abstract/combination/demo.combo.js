@@ -26,7 +26,8 @@ Demo.Func = BI.inherit(BI.Widget, {
             text: "2010年",
             value: 2010,
             height: 25,
-            iconCls: "close-ha-font"
+            iconCls1: "close-ha-font",
+            iconCls2: "close-ha-font"
         },
         children: [{
             type: "bi.single_select_item",
@@ -38,7 +39,9 @@ Demo.Func = BI.inherit(BI.Widget, {
             height: 25,
             text: "二月",
             value: 12,
-            children: [{type: "bi.single_select_item", text: "一号", value: 101, height: 25}]
+            iconCls1: "close-ha-font",
+            iconCls2: "close-ha-font",
+            children: [{ type: "bi.single_select_item", text: "一号", value: 101, height: 25 }]
         }]
     }, {
         text: "2011年", value: 2011
@@ -417,7 +420,7 @@ Demo.Func = BI.inherit(BI.Widget, {
                         }]
                     }, {
                         type: "bi.absolute",
-                        el: {left: 4, top: 2, right: 4, bottom: 2}
+                        el: { left: 4, top: 2, right: 4, bottom: 2 }
                     }]
                 }
             },

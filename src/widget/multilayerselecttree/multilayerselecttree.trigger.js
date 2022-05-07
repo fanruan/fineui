@@ -5,11 +5,8 @@ BI.MultiLayerSelectTreeTrigger = BI.inherit(BI.Trigger, {
 
     props: function() {
         return {
-            extraCls: "bi-multi-layer-select-tree-trigger bi-border bi-focus-shadow bi-border-radius",
+            extraCls: "bi-multi-layer-select-tree-trigger",
             height: 24,
-            valueFormatter: function (v) {
-                return v;
-            },
             itemsCreator: BI.emptyFn,
             watermark: BI.i18nText("BI-Basic_Search"),
             allowSearchValue: false,
@@ -202,13 +199,19 @@ BI.MultiLayerSelectTreeTrigger = BI.inherit(BI.Trigger, {
 
     _digest: function (v) {
         var o = this.options;
-        if(o.itemsCreator === BI.emptyFn) {
+        if (BI.isFunction(o.valueFormatter)) {
+            return o.valueFormatter(v);
+        }
+
+        if (o.itemsCreator === BI.emptyFn) {
             var result = BI.find(o.items, function (i, item) {
                 return item.value === v;
             });
+
             return BI.isNotNull(result) ? result.text : o.text;
         }
-        return o.valueFormatter(v);
+
+        return v;
     },
 
     _getShowText: function () {
@@ -234,6 +237,18 @@ BI.MultiLayerSelectTreeTrigger = BI.inherit(BI.Trigger, {
 
     getValue: function () {
         return this.searcher.getValue();
+    },
+
+    focus: function () {
+        this.searcher.focus();
+    },
+
+    blur: function () {
+        this.searcher.blur();
+    },
+
+    setWaterMark: function (v) {
+        this.searcher.setWaterMark(v);
     }
 });
 

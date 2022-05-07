@@ -3,58 +3,74 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
         popupHeight: 259,
         popupWidth: 270,
         comboAdjustHeight: 1,
-        border: 1
+        border: 1,
+        iconWidth: 24
     },
 
     props: {
-        baseCls: "bi-dynamic-date-combo bi-border bi-focus-shadow bi-border-radius",
-        height: 22,
+        baseCls: "bi-dynamic-date-combo",
+        height: 24,
         minDate: "1900-01-01",
         maxDate: "2099-12-31",
         format: "",
-        allowEdit: true
+        allowEdit: true,
+        supportDynamic: true,
+        attributes: {
+            tabIndex: -1
+        },
+        isNeedAdjustHeight: false,
+        isNeedAdjustWidth: false
     },
 
+    _init: function () {
+        BI.DynamicDateTimeCombo.superclass._init.apply(this, arguments);
+    },
 
     render: function () {
         var self = this, opts = this.options;
         this.storeTriggerValue = "";
         var date = BI.getDate();
         this.storeValue = opts.value;
+        var border = opts.simple ? 1 : 2;
+
         return {
-            type: "bi.htape",
+            type: "bi.absolute",
             items: [{
                 el: {
-                    type: "bi.icon_button",
-                    cls: "bi-trigger-icon-button date-change-h-font",
-                    width: opts.height,
-                    height: opts.height,
+                    type: "bi.combo",
+                    cls: (opts.simple ? "bi-border-bottom" : "bi-border") + " bi-border-radius bi-focus-shadow",
+                    destroyWhenHide: true,
+                    container: opts.container,
                     ref: function () {
-                        self.changeIcon = this;
-                    }
-                },
-                width: opts.height
-            }, {
-                type: "bi.absolute",
-                items: [{
+                        self.combo = this;
+                    },
+                    toggle: false,
+                    isNeedAdjustHeight: opts.isNeedAdjustHeight,
+                    isNeedAdjustWidth: opts.isNeedAdjustWidth,
                     el: {
-                        type: "bi.combo",
-                        destroyWhenHide: true,
-                        container: opts.container,
-                        ref: function () {
-                            self.combo = this;
-                        },
-                        toggle: false,
-                        isNeedAdjustHeight: false,
-                        isNeedAdjustWidth: false,
-                        el: {
+                        type: "bi.horizontal_fill",
+                        columnSize: [this.constants.iconWidth, "fill"],
+                        height: opts.height - border,
+                        items: [{
+                            el: {
+                                type: "bi.icon_button",
+                                cls: "bi-trigger-icon-button date-change-h-font",
+                                width: this.constants.iconWidth,
+                                height: opts.height - border,
+                                ref: function () {
+                                    self.changeIcon = this;
+                                }
+                            },
+                        }, {
                             type: "bi.dynamic_date_time_trigger",
+                            simple: opts.simple,
                             min: opts.minDate,
                             max: opts.maxDate,
                             allowEdit: opts.allowEdit,
                             watermark: opts.watermark,
                             format: opts.format,
-                            height: opts.height,
+                            iconWidth: this.constants.iconWidth,
+                            height: opts.height - border,
                             value: opts.value,
                             ref: function () {
                                 self.trigger = this;
@@ -103,11 +119,13 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
                                             month: date.getMonth() + 1
                                         }
                                     };
+                                    self.combo.element.addClass("error");
                                     self.fireEvent(BI.DynamicDateTimeCombo.EVENT_ERROR);
                                 }
                             }, {
                                 eventName: BI.DynamicDateTimeTrigger.EVENT_VALID,
                                 action: function () {
+                                    self.combo.element.removeClass("error");
                                     self.fireEvent(BI.DynamicDateTimeCombo.EVENT_VALID);
                                 }
                             }, {
@@ -118,11 +136,11 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
                             }, {
                                 eventName: BI.DynamicDateTimeTrigger.EVENT_CONFIRM,
                                 action: function () {
-                                    if (self.combo.isViewVisible()) {
-                                        return;
-                                    }
                                     var dateStore = self.storeTriggerValue;
                                     var dateObj = self.trigger.getKey();
+                                    if (self.combo.isViewVisible() || BI.isEqual(dateObj, dateStore)) {
+                                        return;
+                                    }
                                     if (BI.isNotEmptyString(dateObj) && !BI.isEqual(dateObj, dateStore)) {
                                         self.storeValue = self.trigger.getValue();
                                         self.setValue(self.trigger.getValue());
@@ -134,112 +152,93 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
                                     self.fireEvent(BI.DynamicDateTimeCombo.EVENT_CONFIRM);
                                 }
                             }]
-                        },
-                        adjustLength: this.constants.comboAdjustHeight,
-                        popup: {
-                            el: {
-                                type: "bi.dynamic_date_time_popup",
-                                behaviors: opts.behaviors,
-                                min: opts.minDate,
-                                max: opts.maxDate,
-                                ref: function () {
-                                    self.popup = this;
-                                },
-                                listeners: [{
-                                    eventName: BI.DynamicDateTimePopup.BUTTON_CLEAR_EVENT_CHANGE,
-                                    action: function () {
-                                        self.setValue();
-                                        self.combo.hideView();
-                                        self.fireEvent(BI.DynamicDateTimeCombo.EVENT_CONFIRM);
-                                    }
-                                }, {
-                                    eventName: BI.DynamicDateTimePopup.BUTTON_lABEL_EVENT_CHANGE,
-                                    action: function () {
-                                        var date = BI.getDate();
-                                        self.setValue({
-                                            type: BI.DynamicDateTimeCombo.Static,
-                                            value: {
-                                                year: date.getFullYear(),
-                                                month: date.getMonth() + 1,
-                                                day: date.getDate(),
-                                                hour: 0,
-                                                minute: 0,
-                                                second: 0
-                                            }
-                                        });
-                                        self.combo.hideView();
-                                        self.fireEvent(BI.DynamicDateTimeCombo.EVENT_CONFIRM);
-                                    }
-                                }, {
-                                    eventName: BI.DynamicDateTimePopup.BUTTON_OK_EVENT_CHANGE,
-                                    action: function () {
-                                        var value = self.popup.getValue();
-                                        if(self._checkValue(value)) {
-                                            self.setValue(value);
-                                        }
-                                        self.combo.hideView();
-                                        self.fireEvent(BI.DynamicDateTimeCombo.EVENT_CONFIRM);
-                                    }
-                                }, {
-                                    eventName: BI.DynamicDateTimePopup.EVENT_CHANGE,
-                                    action: function () {
-                                        self.setValue(self.popup.getValue());
-                                        self.combo.hideView();
-                                        self.fireEvent(BI.DynamicDateTimeCombo.EVENT_CONFIRM);
-                                    }
-                                }]
+                        }]
+                    },
+                    adjustLength: this.constants.comboAdjustHeight,
+                    popup: {
+                        el: {
+                            type: "bi.dynamic_date_time_popup",
+                            width: opts.isNeedAdjustWidth ? opts.width : undefined,
+                            supportDynamic: opts.supportDynamic,
+                            behaviors: opts.behaviors,
+                            min: opts.minDate,
+                            max: opts.maxDate,
+                            ref: function () {
+                                self.popup = this;
                             },
-                            stopPropagation: false
-                        },
-                        listeners: [{
-                            eventName: BI.Combo.EVENT_BEFORE_POPUPVIEW,
-                            action: function () {
-                                self.popup.setValue(self.storeValue);
-                                self.popup.setMinDate(opts.minDate);
-                                self.popup.setMaxDate(opts.maxDate);
-                                self.fireEvent(BI.DynamicDateTimeCombo.EVENT_BEFORE_POPUPVIEW);
-                            }
-                        }],
-                        // DEC-4250 和复选下拉一样，点击不收起
-                        hideChecker: function (e) {
-                            return self.triggerBtn.element.find(e.target).length === 0;
-                        }
-                    },
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    bottom: 0
-                }, {
-                    el: {
-                        type: "bi.icon_button",
-                        cls: "bi-trigger-icon-button date-font",
-                        width: opts.height,
-                        height: opts.height,
-                        listeners: [{
-                            eventName: BI.IconButton.EVENT_CHANGE,
-                            action: function () {
-                                if (self.combo.isViewVisible()) {
-                                    // self.combo.hideView();
-                                } else {
-                                    self.combo.showView();
+                            listeners: [{
+                                eventName: BI.DynamicDateTimePopup.BUTTON_CLEAR_EVENT_CHANGE,
+                                action: function () {
+                                    self.setValue();
+                                    self.combo.hideView();
+                                    self.fireEvent(BI.DynamicDateTimeCombo.EVENT_CONFIRM);
                                 }
-                            }
-                        }],
-                        ref: function () {
-                            self.triggerBtn = this;
-                        }
+                            }, {
+                                eventName: BI.DynamicDateTimePopup.BUTTON_lABEL_EVENT_CHANGE,
+                                action: function () {
+                                    var date = BI.getDate();
+                                    self.setValue({
+                                        type: BI.DynamicDateTimeCombo.Static,
+                                        value: {
+                                            year: date.getFullYear(),
+                                            month: date.getMonth() + 1,
+                                            day: date.getDate(),
+                                            hour: 0,
+                                            minute: 0,
+                                            second: 0
+                                        }
+                                    });
+                                    self.combo.hideView();
+                                    self.fireEvent(BI.DynamicDateTimeCombo.EVENT_CONFIRM);
+                                }
+                            }, {
+                                eventName: BI.DynamicDateTimePopup.BUTTON_OK_EVENT_CHANGE,
+                                action: function () {
+                                    var value = self.popup.getValue();
+                                    if (self._checkValue(value)) {
+                                        self.setValue(value);
+                                    }
+                                    self.combo.hideView();
+                                    self.fireEvent(BI.DynamicDateTimeCombo.EVENT_CONFIRM);
+                                }
+                            }, {
+                                eventName: BI.DynamicDateTimePopup.EVENT_CHANGE,
+                                action: function () {
+                                    self.setValue(self.popup.getValue());
+                                    self.combo.hideView();
+                                    self.fireEvent(BI.DynamicDateTimeCombo.EVENT_CONFIRM);
+                                }
+                            }, {
+                                eventName: BI.DynamicDateTimePopup.EVENT_BEFORE_YEAR_MONTH_POPUPVIEW,
+                                action: function () {
+                                    self.fireEvent(BI.DynamicDateTimeCombo.EVENT_BEFORE_YEAR_MONTH_POPUPVIEW);
+                                }
+                            }]
+                        },
                     },
-                    top: 0,
-                    right: 0
-                }]
-            }],
-            ref: function (_ref) {
-                self.comboWrapper = _ref;
-            }
+                    listeners: [{
+                        eventName: BI.Combo.EVENT_BEFORE_POPUPVIEW,
+                        action: function () {
+                            self.popup.setMinDate(opts.minDate);
+                            self.popup.setMaxDate(opts.maxDate);
+                            self.popup.setValue(self.storeValue);
+                            self.fireEvent(BI.DynamicDateTimeCombo.EVENT_BEFORE_POPUPVIEW);
+                        }
+                    }],
+                    // // DEC-4250 和复选下拉一样，点击不收起
+                    // hideChecker: function (e) {
+                    //     return self.triggerBtn.element.find(e.target).length === 0;
+                    // }
+                },
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0
+            }]
         };
     },
 
-    mounted: function () {
+    created: function () {
         this._checkDynamicValue(this.storeValue);
     },
 
@@ -252,22 +251,26 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
         switch (type) {
             case BI.DynamicDateTimeCombo.Dynamic:
                 this.changeIcon.setVisible(true);
-                this.comboWrapper.attr("items")[0].width = o.height;
-                this.comboWrapper.resize();
+                // this.comboWrapper.attr("items")[0].width = o.height - (this.options.simple ? 1 : 2);
+                // this.comboWrapper.resize();
                 break;
             default:
-                this.comboWrapper.attr("items")[0].width = 0;
-                this.comboWrapper.resize();
+                // this.comboWrapper.attr("items")[0].width = 0;
+                // this.comboWrapper.resize();
                 this.changeIcon.setVisible(false);
                 break;
         }
     },
 
     _checkValue: function (v) {
+        var o = this.options;
         switch (v.type) {
             case BI.DynamicDateCombo.Dynamic:
                 return BI.isNotEmptyObject(v.value);
             case BI.DynamicDateCombo.Static:
+                var value = v.value || {};
+
+                return !BI.checkDateVoid(value.year, value.month, value.day, o.minDate, o.maxDate)[0];
             default:
                 return true;
         }
@@ -304,6 +307,18 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
 
     isValid: function () {
         return this.trigger.isValid();
+    },
+
+    focus: function () {
+        this.trigger.focus();
+    },
+
+    blur: function () {
+        this.trigger.blur();
+    },
+
+    setWaterMark: function (v) {
+        this.trigger.setWaterMark(v);
     }
 });
 
@@ -315,6 +330,7 @@ BI.DynamicDateTimeCombo.EVENT_CHANGE = "EVENT_CHANGE";
 BI.DynamicDateTimeCombo.EVENT_VALID = "EVENT_VALID";
 BI.DynamicDateTimeCombo.EVENT_ERROR = "EVENT_ERROR";
 BI.DynamicDateTimeCombo.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
+BI.DynamicDateTimeCombo.EVENT_BEFORE_YEAR_MONTH_POPUPVIEW = "EVENT_BEFORE_YEAR_MONTH_POPUPVIEW";
 
 BI.shortcut("bi.dynamic_date_time_combo", BI.DynamicDateTimeCombo);
 

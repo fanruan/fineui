@@ -5,8 +5,9 @@
  */
 BI.VerticalAdaptLayout = BI.inherit(BI.Layout, {
     props: {
-        baseCls: "bi-vertical-adapt-layout",
+        baseCls: "bi-v-a",
         horizontalAlign: BI.HorizontalAlign.Left,
+        verticalAlign: BI.VerticalAlign.Middle,
         columnSize: [],
         scrollx: false,
         hgap: 0,
@@ -22,11 +23,13 @@ BI.VerticalAdaptLayout = BI.inherit(BI.Layout, {
         BI.VerticalAdaptLayout.superclass.render.apply(this, arguments);
         return {
             type: "bi.horizontal",
-            verticalAlign: BI.VerticalAlign.Middle,
             horizontalAlign: o.horizontalAlign,
+            verticalAlign: o.verticalAlign,
             columnSize: o.columnSize,
             items: o.items,
             scrollx: o.scrollx,
+            scrolly: o.scrolly,
+            scrollable: o.scrollable,
             ref: function (_ref) {
                 self.layout = _ref;
             },
@@ -35,12 +38,14 @@ BI.VerticalAdaptLayout = BI.inherit(BI.Layout, {
             lgap: o.lgap,
             rgap: o.rgap,
             tgap: o.tgap,
-            bgap: o.bgap
+            bgap: o.bgap,
+            innerHgap: o.innerHgap,
+            innerVgap: o.innerVgap,
         };
     },
 
     resize: function () {
-        // console.log("vertical_adapt布局不需要resize");
+        this.layout.resize();
     },
 
     populate: function (items) {

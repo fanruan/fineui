@@ -11,7 +11,10 @@ BI.AllCountPager = BI.inherit(BI.Widget, {
             height: 24,
             pages: 1, // 必选项
             curr: 1, // 初始化当前页， pages为数字时可用，
-            count: 1 // 总行数
+            count: 1, // 总行数
+            rowInfoObject: null,
+            showRowCount: true,
+            showRowInfo: true,
         });
     },
     _init: function () {
@@ -21,7 +24,7 @@ BI.AllCountPager = BI.inherit(BI.Widget, {
             type: "bi.small_text_editor",
             cls: "pager-editor bi-border-radius",
             validationChecker: function (v) {
-                return (self.rowCount.getValue() === 0 && v === "0") || BI.isPositiveInteger(v);
+                return (o.pages === 0 && v === "0") || BI.isPositiveInteger(v);
             },
             hgap: 4,
             vgap: 0,
@@ -87,48 +90,28 @@ BI.AllCountPager = BI.inherit(BI.Widget, {
         this.allPages = BI.createWidget({
             type: "bi.label",
             title: o.pages,
+            height: o.height,
             text: "/" + o.pages,
             lgap: 5,
             invisible: o.pages <= 1
         });
 
-        this.rowCount = BI.createWidget({
-            type: "bi.label",
-            cls: "row-count",
-            height: o.height,
-            hgap: 5,
-            text: o.count,
-            title: o.count
-        });
-
-        var count = BI.createWidget({
-            type: "bi.left",
-            height: o.height,
-            scrollable: false,
-            items: [{
-                type: "bi.label",
-                height: o.height,
-                text: BI.i18nText("BI-Basic_Total"),
-                width: 15
-            }, this.rowCount, {
-                type: "bi.label",
-                height: o.height,
-                text: BI.i18nText("BI-Tiao_Data"),
-                width: 50,
-                textAlign: "left"
-            }]
-        });
-        BI.createWidget({
-            type: "bi.left_right_vertical_adapt",
+        BI.createWidget(o.showRowCount ? {
+            type: "bi.vertical_adapt",
             element: this,
-            items: {
-                left: [count],
-                right: [this.editor, this.allPages, this.pager]
-            }
+            scrollx: false,
+            columnSize: ["fill", ""],
+            horizontalAlign: BI.HorizontalAlign.Right,
+            items: [
+                this._getRowCountObject(),
+                this.editor, this.allPages, this.pager
+            ],
+        } : {
+            type: "bi.vertical_adapt",
+            element: this,
+            items: [this.editor, this.allPages, this.pager]
         });
     },
-
-    alwaysShowPager: true,
 
     _getPagerIconCls: function () {
         var o = this.options;
@@ -147,6 +130,44 @@ BI.AllCountPager = BI.inherit(BI.Widget, {
         }
     },
 
+    _getRowCountObject: function() {
+        var self = this, o = this.options;
+
+        return {
+            type: "bi.left",
+            height: o.height,
+            scrollable: false,
+            ref: function (_ref) {
+                self.rowCountObject = _ref;
+            },
+            items: [{
+                type: "bi.label",
+                height: o.height,
+                text: BI.i18nText("BI-Basic_Total"),
+                ref: function (_ref) {
+                    self.prevText = _ref;
+                }
+            }, {
+                el: {
+                    type: "bi.label",
+                    ref: function (_ref) {
+                        self.rowCount = _ref;
+                    },
+                    cls: "row-count",
+                    height: o.height,
+                    text: o.count,
+                    title: o.count
+                },
+                hgap: 5,
+            }, {
+                type: "bi.label",
+                height: o.height,
+                text: BI.i18nText("BI-Tiao_Data"),
+                textAlign: "left"
+            }, BI.isNotEmptyObject(o.rowInfoObject) ? o.rowInfoObject : null]
+        };
+    },
+
     setAllPages: function (v) {
         this.allPages.setText("/" + v);
         this.allPages.setTitle(v);
@@ -154,6 +175,11 @@ BI.AllCountPager = BI.inherit(BI.Widget, {
         this.pager.setAllPages(v);
         this.editor.setEnable(v >= 1);
         this.setPagerVisible(v > 1);
+    },
+
+    setShowRowInfo: function (b) {
+        this.options.showRowInfo = b;
+        this.rowCountObject.setVisible(b);
     },
 
     setValue: function (v) {
@@ -165,8 +191,16 @@ BI.AllCountPager = BI.inherit(BI.Widget, {
     },
 
     setCount: function (count) {
-        this.rowCount.setText(count);
-        this.rowCount.setTitle(count);
+        if (this.options.showRowCount) {
+            this.rowCount.setText(count);
+            this.rowCount.setTitle(count);
+        }
+    },
+
+    setCountPrevText: function (text) {
+        if (this.options.showRowCount) {
+            this.prevText.setText(text);
+        }
     },
 
     getCurrentPage: function () {
@@ -179,6 +213,10 @@ BI.AllCountPager = BI.inherit(BI.Widget, {
 
     hasNext: function () {
         return this.pager.hasNext();
+    },
+
+    isShowPager: function () {
+        return this.options.showRowInfo || this.options.pages > 1;
     },
 
     setPagerVisible: function (b) {

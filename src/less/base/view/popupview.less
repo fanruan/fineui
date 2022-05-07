@@ -1,6 +1,5 @@
-@import "../../index";
+@import "../../index.less";
 
-/**********BI.BIListView*************/
 .bi-popup-view {
   position: fixed !important;
   overflow-y: visible !important;
@@ -15,12 +14,12 @@
     padding-bottom: 5px;
   }
   & .list-view-shadow {
-    .box-shadow(0 1px 5px 0, fade(@color-bi-background-black, 20));
+    .box-shadow(0 1px 5px 0, fade(@color-bi-background-list-view-shadow, 20));
   }
   & .list-view-toolbar {
     line-height: 24px;
     & > .center-element {
-      border-left: 1px solid @color-bi-border-line;
+      border-left: 1px solid @color-bi-border-list-view-toolbar;
     }
     & > .first-element {
       border-left: none;
@@ -28,7 +27,106 @@
   }
 }
 
+.bi-popup-view[data-popper-placement^='top'], .bi-popup-view.top {
+  > .bi-bubble-arrow-wrapper {
+    bottom: 0;
+    left: 0;
+    > .bi-bubble-arrow {
+      bottom: -12px;
+      width: 16px;
+      > .bubble-arrow {
+        bottom: 7px;
+        left: 1px;
+      }
+    }
+  }
+}
+.bi-popup-view[data-popper-placement^='bottom'], .bi-popup-view.bottom {
+  > .bi-bubble-arrow-wrapper {
+    top: 0;
+    left: 0;
+    > .bi-bubble-arrow {
+      top: -12px;
+      width: 16px;
+      > .bubble-arrow {
+        top: 7px;
+        left: 1px;
+      }
+    }
+  }
+}
+.bi-popup-view[data-popper-placement^='left'], .bi-popup-view.left {
+  > .bi-bubble-arrow-wrapper {
+    right: 0;
+    top: 0;
+    > .bi-bubble-arrow {
+      right: -12px;
+      height: 16px;
+      > .bubble-arrow {
+        right: 7px;
+        top: 1px;
+      }
+    }
+  }
+}
+.bi-popup-view[data-popper-placement^='right'], .bi-popup-view.right {
+  > .bi-bubble-arrow-wrapper {
+    left: 0;
+    top: 0;
+    > .bi-bubble-arrow {
+      left: -12px;
+      height: 16px;
+      > .bubble-arrow {
+        left: 7px;
+        top: 1px;
+      }
+    }
+  }
+}
+
+.bi-bubble-arrow {
+  width: 14px;
+  height: 14px;
+  // 消除祖先节点设置的line-height:normal对空白节点的行高影响
+  line-height: 0;
+  overflow: hidden;
+  .bubble-arrow {
+    width: 14px;
+    height: 14px;
+    position: absolute;
+    &:before {
+      width: 14px;
+      height: 14px;
+      position: absolute;
+      content: "";
+      background: @color-bi-background-default;
+      top: 0;
+      left: 0;
+      transition: transform 0.2s ease-out 0s, visibility 0.2s ease-out 0s;
+      visibility: visible;
+      transform: translateX(0px) rotate(-135deg);
+      transform-origin: center center;
+      .box-shadow(3px 3px 10px 0,rgba(0, 0, 0, 6%));
+      .border-radius(2px);
+    }
+  }
+}
+
+.bi-popup-view.bi-primary {
+  .bi-bubble-arrow {
+    .bubble-arrow {
+      &:before {
+        background-color: @background-color-card-primary;
+        color: @color-card-primary;
+      }
+    }
+  }
+}
+
 .bi-theme-dark {
+  .bubble-arrow:before {
+    background: @color-bi-background-default-theme-dark;
+  }
   .bi-popup-view {
     & .list-view-toolbar {
       & > .center-element {

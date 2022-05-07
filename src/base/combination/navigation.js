@@ -50,9 +50,15 @@ BI.Navigation = BI.inherit(BI.Widget, {
             afterCardCreated: BI.bind(this.afterCardCreated, this),
             afterCardShow: BI.bind(this.afterCardShow, this)
         });
+
+        if (BI.isFunction(o.showIndex)) {
+            this.__watch(o.showIndex, function (context, newValue) {
+                self.setSelect(newValue);
+            })
+        }
     },
 
-    mounted: function () {
+    created: function () {
         var o = this.options;
         if (o.showIndex !== false) {
             this.setSelect(o.showIndex);
@@ -122,6 +128,10 @@ BI.Navigation = BI.inherit(BI.Widget, {
         if (BI.isKey(this.showIndex)) {
             return this.cardMap[this.showIndex];
         }
+    },
+
+    getAllCard: function() {
+        return BI.values(this.cardMap);
     },
 
     /**

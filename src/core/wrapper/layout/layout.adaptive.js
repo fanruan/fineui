@@ -1,87 +1,58 @@
 BI.AdaptiveLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.AdaptiveLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-adaptive-layout",
-            hgap: null,
-            vgap: null,
-            lgap: null,
-            rgap: null,
-            tgap: null,
-            bgap: null
+            baseCls: "bi-adaptive",
+            hgap: 0,
+            vgap: 0,
+            lgap: 0,
+            rgap: 0,
+            tgap: 0,
+            bgap: 0
         });
     },
     render: function () {
         BI.AdaptiveLayout.superclass.render.apply(this, arguments);
-        this.populate(this.options.items);
+        var self = this, o = this.options;
+        var items = BI.isFunction(o.items) ? this.__watch(o.items, function (context, newValue) {
+            self.populate(newValue);
+        }) : o.items;
+        this.populate(items);
     },
 
     _addElement: function (i, item) {
         var o = this.options;
         var w = BI.AdaptiveLayout.superclass._addElement.apply(this, arguments);
         w.element.css({position: "relative"});
-        var left = 0, right = 0, top = 0, bottom = 0;
         if (BI.isNotNull(item.left)) {
             w.element.css({
-                left: item.left
+                left: BI.isNumber(item.left) ? this._optimiseGap(item.left) : item.left
             });
         }
         if (BI.isNotNull(item.right)) {
             w.element.css({
-                right: item.right
+                right: BI.isNumber(item.right) ? this._optimiseGap(item.right) : item.right
             });
         }
         if (BI.isNotNull(item.top)) {
             w.element.css({
-                top: item.top
+                top: BI.isNumber(item.top) ? this._optimiseGap(item.top) : item.top
             });
         }
         if (BI.isNotNull(item.bottom)) {
             w.element.css({
-                bottom: item.bottom
+                bottom: BI.isNumber(item.bottom) ? this._optimiseGap(item.bottom) : item.bottom
             });
         }
 
-        if (BI.isNotNull(o.hgap)) {
-            left += o.hgap;
-            w.element.css({"margin-left": left});
-            right += o.hgap;
-            w.element.css({"margin-right": right});
-        }
-        if (BI.isNotNull(o.vgap)) {
-            top += o.vgap;
-            w.element.css({"margin-top": top});
-            bottom += o.vgap;
-            w.element.css({"margin-bottom": bottom});
-        }
-
-        if (BI.isNotNull(o.lgap)) {
-            left += o.lgap;
-            w.element.css({"margin-left": left});
-        }
-        if (BI.isNotNull(o.rgap)) {
-            right += o.rgap;
-            w.element.css({"margin-right": right});
-        }
-        if (BI.isNotNull(o.tgap)) {
-            top += o.tgap;
-            w.element.css({"margin-top": top});
-        }
-        if (BI.isNotNull(o.bgap)) {
-            bottom += o.bgap;
-            w.element.css({"margin-bottom": bottom});
-        }
+        this._handleGap(w, item);
 
         if (BI.isNotNull(item.width)) {
-            w.element.css({width: item.width});
+            w.element.css({width: BI.isNumber(item.width) ? this._optimiseGap(item.width) : item.width});
         }
         if (BI.isNotNull(item.height)) {
-            w.element.css({height: item.height});
+            w.element.css({height: BI.isNumber(item.height) ? this._optimiseGap(item.height) : item.height});
         }
         return w;
-    },
-
-    resize: function () {
-        this.stroke(this.options.items);
     },
 
     populate: function (items) {

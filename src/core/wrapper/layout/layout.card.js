@@ -13,13 +13,14 @@ BI.CardLayout = BI.inherit(BI.Layout, {
             items: []
         });
     },
+
     render: function () {
         BI.CardLayout.superclass.render.apply(this, arguments);
-        this.populate(this.options.items);
-    },
-
-    resize: function () {
-        // console.log("default布局不需要resize");
+        var self = this, o = this.options;
+        var items = BI.isFunction(o.items) ? this.__watch(o.items, function (context, newValue) {
+            self.populate(newValue);
+        }) : o.items;
+        this.populate(items);
     },
 
     stroke: function (items) {
@@ -28,7 +29,7 @@ BI.CardLayout = BI.inherit(BI.Layout, {
         BI.each(items, function (i, item) {
             if (item) {
                 if (!self.hasWidget(item.cardName)) {
-                    var w = BI.createWidget(item);
+                    var w = BI._lazyCreateWidget(item);
                     w.on(BI.Events.DESTROY, function () {
                         var index = BI.findIndex(o.items, function (i, tItem) {
                             return tItem.cardName == item.cardName;
@@ -37,17 +38,28 @@ BI.CardLayout = BI.inherit(BI.Layout, {
                             o.items.splice(index, 1);
                         }
                     });
-                    self.addWidget(item.cardName, w);
+                    self.addWidget(self._getChildName(item.cardName), w);
                 } else {
-                    var w = self.getWidgetByName(item.cardName);
+                    var w = self.getWidgetByName(self._getChildName(item.cardName));
                 }
-                w.element.css({position: "absolute", top: "0", right: "0", bottom: "0", left: "0"});
+                w.element.css({
+                    position: "relative",
+                    top: "0",
+                    left: "0",
+                    width: "100%",
+                    height: "100%"
+                });
                 w.setVisible(false);
             }
         });
     },
 
-    update: function () {
+    resize: function () {
+        // console.log("Card布局不需要resize");
+    },
+
+    update: function (opt) {
+        return this.forceUpdate(opt);
     },
 
     empty: function () {
@@ -69,13 +81,13 @@ BI.CardLayout = BI.inherit(BI.Layout, {
 
     getCardByName: function (cardName) {
         if (!this.isCardExisted(cardName)) {
-            throw new Error("cardName is not exist");
+            throw new Error("cardName不存在", cardName);
         }
-        return this._children[cardName];
+        return this._children[this._getChildName(cardName)];
     },
 
     _deleteCardByName: function (cardName) {
-        delete this._children[cardName];
+        delete this._children[this._getChildName(cardName)];
         var index = BI.findIndex(this.options.items, function (i, item) {
             return item.cardName == cardName;
         });
@@ -86,19 +98,19 @@ BI.CardLayout = BI.inherit(BI.Layout, {
 
     deleteCardByName: function (cardName) {
         if (!this.isCardExisted(cardName)) {
-            throw new Error("cardName is not exist");
+            throw new Error("cardName不存在", cardName);
         }
 
-        var child = this._children[cardName];
+        var child = this._children[this._getChildName(cardName)];
         this._deleteCardByName(cardName);
         child && child._destroy();
     },
 
     addCardByName: function (cardName, cardItem) {
         if (this.isCardExisted(cardName)) {
-            throw new Error("cardName is already exist");
+            throw new Error("cardName 已存在", cardName);
         }
-        var widget = BI.createWidget(cardItem, this);
+        var widget = BI._lazyCreateWidget(cardItem, this);
         widget.element.css({
             position: "relative",
             top: "0",
@@ -107,7 +119,7 @@ BI.CardLayout = BI.inherit(BI.Layout, {
             height: "100%"
         }).appendTo(this.element);
         widget.invisible();
-        this.addWidget(cardName, widget);
+        this.addWidget(this._getChildName(cardName), widget);
         this.options.items.push({el: cardItem, cardName: cardName});
         return widget;
     },
@@ -122,7 +134,7 @@ BI.CardLayout = BI.inherit(BI.Layout, {
         this.showIndex = name;
         var flag = false;
         BI.each(this.options.items, function (i, item) {
-            var el = self._children[item.cardName];
+            var el = self._children[self._getChildName(item.cardName)];
             if (el) {
                 if (name != item.cardName) {
                     // 动画效果只有在全部都隐藏的时候才有意义,且只要执行一次动画操作就够了
@@ -138,7 +150,7 @@ BI.CardLayout = BI.inherit(BI.Layout, {
         var self = this;
         this.showIndex = this.lastShowIndex;
         BI.each(this.options.items, function (i, item) {
-            self._children[item.cardName].setVisible(self.showIndex == i);
+            self._children[self._getChildName(item.cardName)].setVisible(self.showIndex == i);
         });
     },
 
@@ -161,7 +173,7 @@ BI.CardLayout = BI.inherit(BI.Layout, {
         if (!BI.isKey(this.showIndex)) {
             return void 0;
         }
-        return this.getWidgetByName(this.showIndex);
+        return this.getWidgetByName(this._getChildName(this.showIndex));
     },
 
     deleteAllCard: function () {
@@ -174,7 +186,7 @@ BI.CardLayout = BI.inherit(BI.Layout, {
     hideAllCard: function () {
         var self = this;
         BI.each(this.options.items, function (i, item) {
-            self._children[item.cardName].invisible();
+            self._children[self._getChildName(item.cardName)].invisible();
         });
     },
 
@@ -182,7 +194,7 @@ BI.CardLayout = BI.inherit(BI.Layout, {
         var self = this;
         var flag = true;
         BI.some(this.options.items, function (i, item) {
-            if (self._children[item.cardName].isVisible()) {
+            if (self._children[self._getChildName(item.cardName)].isVisible()) {
                 flag = false;
                 return false;
             }
@@ -191,7 +203,7 @@ BI.CardLayout = BI.inherit(BI.Layout, {
     },
 
     removeWidget: function (nameOrWidget) {
-        var removeName;
+        var removeName, self = this;
         if (BI.isWidget(nameOrWidget)) {
             BI.each(this._children, function (name, child) {
                 if (child === nameOrWidget) {

@@ -28,8 +28,8 @@ BI.YearPicker = BI.inherit(BI.Widget, {
         this.left.on(BI.IconButton.EVENT_CHANGE, function () {
             self.setValue(self.year.getValue() - 1);
             self.fireEvent(BI.YearPicker.EVENT_CHANGE);
-            self._checkLeftValid();
-            self._checkRightValid();
+            // self._checkLeftValid();
+            // self._checkRightValid();
         });
 
         this.right = BI.createWidget({
@@ -42,19 +42,23 @@ BI.YearPicker = BI.inherit(BI.Widget, {
         this.right.on(BI.IconButton.EVENT_CHANGE, function () {
             self.setValue(self.year.getValue() + 1);
             self.fireEvent(BI.YearPicker.EVENT_CHANGE);
-            self._checkLeftValid();
-            self._checkRightValid();
+            // self._checkLeftValid();
+            // self._checkRightValid();
         });
 
         this.year = BI.createWidget({
             type: "bi.year_date_combo",
             min: o.min,
             behaviors: o.behaviors,
-            max: o.max
+            max: o.max,
+            width: 50
         });
         this.year.on(BI.YearDateCombo.EVENT_CHANGE, function () {
             self.setValue(self.year.getValue());
             self.fireEvent(BI.YearPicker.EVENT_CHANGE);
+        });
+        this.year.on(BI.YearDateCombo.EVENT_BEFORE_POPUPVIEW, function () {
+            self.fireEvent(BI.YearPicker.EVENT_BEFORE_POPUPVIEW);
         });
 
         BI.createWidget({
@@ -69,13 +73,7 @@ BI.YearPicker = BI.inherit(BI.Widget, {
             }, {
                 type: "bi.center_adapt",
                 items: [{
-                    el: {
-                        type: "bi.horizontal_float",
-                        width: 50,
-                        items: [{
-                            el: this.year
-                        }]
-                    }
+                    el: this.year
                 }]
             }, {
                 el: {
@@ -85,21 +83,19 @@ BI.YearPicker = BI.inherit(BI.Widget, {
                 width: 25
             }]
         });
-        this.setValue({
-            year: this._year
-        });
+        this.setValue(this._year);
     },
 
     _checkLeftValid: function () {
         var o = this.options;
-        var valid = !(this._year === BI.parseDateTime(o.min, "%Y-%X-%d").getFullYear());
+        var valid = this._year > BI.parseDateTime(o.min, "%Y-%X-%d").getFullYear();
         this.left.setEnable(valid);
         return valid;
     },
 
     _checkRightValid: function () {
         var o = this.options;
-        var valid = !(this._year === BI.parseDateTime(o.max, "%Y-%X-%d").getFullYear());
+        var valid = this._year < BI.parseDateTime(o.max, "%Y-%X-%d").getFullYear();
         this.right.setEnable(valid);
         return valid;
     },
@@ -107,23 +103,23 @@ BI.YearPicker = BI.inherit(BI.Widget, {
     setMinDate: function (minDate) {
         this.options.min = minDate;
         this.year.setMinDate(minDate);
-        this._checkLeftValid();
-        this._checkRightValid();
+        // this._checkLeftValid();
+        // this._checkRightValid();
     },
 
     setMaxDate: function (maxDate) {
         this.options.max = maxDate;
         this.year.setMaxDate(maxDate);
-        this._checkLeftValid();
-        this._checkRightValid();
+        // this._checkLeftValid();
+        // this._checkRightValid();
     },
 
 
     setValue: function (v) {
         this._year = v;
         this.year.setValue(v);
-        this._checkLeftValid();
-        this._checkRightValid();
+        // this._checkLeftValid();
+        // this._checkRightValid();
     },
 
     getValue: function () {
@@ -131,4 +127,5 @@ BI.YearPicker = BI.inherit(BI.Widget, {
     }
 });
 BI.YearPicker.EVENT_CHANGE = "EVENT_CHANGE";
+BI.YearPicker.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
 BI.shortcut("bi.year_picker", BI.YearPicker);

@@ -6,6 +6,10 @@
  */
 BI.SingleSelectLoader = BI.inherit(BI.Widget, {
 
+    _constants: {
+        itemVgap: 5
+    },
+
     _defaultConfig: function () {
         return BI.extend(BI.SingleSelectLoader.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-single-select-loader",
@@ -18,6 +22,7 @@ BI.SingleSelectLoader = BI.inherit(BI.Widget, {
             allowNoSelect: false,
             valueFormatter: BI.emptyFn,
             itemsCreator: BI.emptyFn,
+            itemWrapper: BI.emptyFn,
             onLoaded: BI.emptyFn
         });
     },
@@ -56,16 +61,21 @@ BI.SingleSelectLoader = BI.inherit(BI.Widget, {
             }, opts.el),
             itemsCreator: function (op, callback) {
                 var startValue = self._startValue;
-                BI.isNotNull(self.storeValue) && (op = BI.extend(op || {}, {
+                !BI.isUndefined(self.storeValue) && (op = BI.extend(op || {}, {
                     selectedValues: [self.storeValue]
                 }));
                 opts.itemsCreator(op, function (ob) {
                     hasNext = ob.hasNext;
                     var firstItems = [];
-                    if (op.times === 1 && BI.isNotNull(self.storeValue)) {
+                    if (op.times === 1 && !BI.isUndefined(self.storeValue)) {
                         var json = BI.map([self.storeValue], function (i, v) {
                             var txt = opts.valueFormatter(v) || v;
-                            return {
+                            return opts.itemWrapper({
+                                text: txt,
+                                value: v,
+                                title: txt,
+                                selected: true
+                            }) || {
                                 text: txt,
                                 value: v,
                                 title: txt,
@@ -92,7 +102,7 @@ BI.SingleSelectLoader = BI.inherit(BI.Widget, {
             type: "bi.vertical",
             element: this,
             items: [this.button_group],
-            vgap: 5
+            vgap: this._constants.itemVgap
         });
 
         this.button_group.on(BI.Controller.EVENT_CHANGE, function () {
@@ -104,12 +114,18 @@ BI.SingleSelectLoader = BI.inherit(BI.Widget, {
     },
 
     _createItems: function (items) {
-        return BI.createItems(items, {
-            type: this.options.allowNoSelect ? "bi.single_select_item" : "bi.single_select_combo_item",
-            logic: this.options.logic,
-            cls: "bi-list-item-active",
-            height: 24,
-            selected: false
+        var o = this.options;
+        return BI.map(items, function (i, item) {
+            return BI.extend({
+                type: o.allowNoSelect ? "bi.single_select_item" : "bi.single_select_radio_item",
+                logic: o.logic,
+                cls: "bi-list-item-active",
+                height: BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT,
+                selected: false,
+                iconWrapperWidth: 26,
+                textHgap: o.allowNoSelect ? 10 : 0,
+                title: item.title || item.text
+            }, item);
         });
     },
 
@@ -120,7 +136,8 @@ BI.SingleSelectLoader = BI.inherit(BI.Widget, {
         }, 30);
     },
 
-    _assertValue: function (val) {},
+    _assertValue: function (val) {
+    },
 
     setStartValue: function (v) {
         this._startValue = v;
@@ -149,7 +166,7 @@ BI.SingleSelectLoader = BI.inherit(BI.Widget, {
     },
 
     resetHeight: function (h) {
-        this.button_group.resetHeight(h);
+        this.button_group.resetHeight(h - this._constants.itemVgap * 2);
     },
 
     resetWidth: function (w) {

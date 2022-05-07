@@ -28,10 +28,6 @@ BI.Link = BI.inherit(BI.Label, {
             href: o.href,
             target: o.target
         };
-    },
-
-    _init: function () {
-        BI.Link.superclass._init.apply(this, arguments);
     }
 });
 

@@ -14,7 +14,9 @@ BI.TimeInterval = BI.inherit(BI.Single, {
         return BI.extend(conf, {
             extraCls: "bi-time-interval",
             minDate: "1900-01-01",
-            maxDate: "2099-12-31"
+            maxDate: "2099-12-31",
+            height: 24,
+            supportDynamic: true
         });
     },
     _init: function () {
@@ -26,14 +28,14 @@ BI.TimeInterval = BI.inherit(BI.Single, {
         this.right = this._createCombo(o.value.end);
         this.label = BI.createWidget({
             type: "bi.label",
-            height: this.constants.height,
+            height: o.height,
             width: this.constants.width,
             text: "-"
         });
         BI.createWidget({
             element: self,
             type: "bi.center",
-            height: this.constants.height,
+            height: o.height,
             items: [{
                 type: "bi.absolute",
                 items: [{
@@ -67,8 +69,13 @@ BI.TimeInterval = BI.inherit(BI.Single, {
         var self = this, o = this.options;
         var combo = BI.createWidget({
             type: "bi.dynamic_date_time_combo",
+            supportDynamic: o.supportDynamic,
+            minDate: o.minDate,
+            maxDate: o.maxDate,
             behaviors: o.behaviors,
-            value: v
+            watermark: o.watermark,
+            value: v,
+            height: o.height,
         });
         combo.on(BI.DynamicDateTimeCombo.EVENT_ERROR, function () {
             self._clearTitle();
@@ -167,6 +174,21 @@ BI.TimeInterval = BI.inherit(BI.Single, {
         this.right.setTitle("");
         this.label.setTitle("");
     },
+
+    setMinDate: function (minDate) {
+        var o = this.options;
+        o.minDate = minDate;
+        this.left.setMinDate(minDate);
+        this.right.setMinDate(minDate);
+    },
+
+    setMaxDate: function (maxDate) {
+        var o = this.options;
+        o.maxDate = maxDate;
+        this.left.setMaxDate(maxDate);
+        this.right.setMaxDate(maxDate);
+    },
+
     setValue: function (date) {
         date = date || {};
         this.left.setValue(date.start);

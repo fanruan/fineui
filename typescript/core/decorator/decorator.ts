@@ -10,6 +10,15 @@ export function shortcut() {
 }
 
 /**
+ * 注册provider
+ */
+export function provider() {
+    return function decorator<U>(Target: Constructor<U> & {xtype: string}): void {
+        BI.provider(Target.xtype, Target);
+    };
+}
+
+/**
  * 注册model
  */
 export function model() {
@@ -36,11 +45,52 @@ export function store<T>(Model: Constructor<T> & {xtype: string}, opts: { props?
 }
 
 /**
+ * 注册mixin
+ * ie8下不能使用
+ */
+export function mixin<T>() {
+    return function decorator(Target: Constructor<T> & { xtype: string }): void {
+        const mixin: {
+            [key: string]: Function;
+        } = {};
+
+        Object.getOwnPropertyNames(Target.prototype).forEach(name => {
+            if (name === 'constructor') {
+                return;
+            }
+
+            mixin[name] = Target.prototype[name];
+        });
+
+        Fix.mixin(Target.xtype, mixin);
+    };
+}
+
+/**
+ * 类注册mixins属性
+ * ie8下不能使用
+ * @param Mixins
+ */
+export function mixins(...Mixins: ({ new (...args: any[]): {} } & { xtype: string })[]) {
+    return function classDecorator<U extends { new (...args: any[]): {} }>(constructor: U) {
+        const mixins: string[] = [];
+
+        Mixins.forEach(mixin => {
+            mixin.xtype && mixins.push(mixin.xtype);
+        });
+
+        return class extends constructor {
+            mixins = mixins;
+        };
+    };
+}
+
+/**
  * Model基类
  */
 export class Model<U extends {types?: {[key: string]: unknown} | {}, context?: ReadonlyArray<string>} = {}> extends Fix.Model {
     // @ts-ignore this["computed"][key]为空
-    model: Pick<{[key in keyof U["types"]]: U["types"][key]}, U["context"][number]> & {[key in keyof ReturnType<this["state"]>]: ReturnType<this["state"]>[key]} & {[key in keyof this["computed"]]: ReturnType<this["computed"][key]>};
+    model: Pick<{[key in keyof U["types"]]: U["types"][key]}, U["context"][number]> & ReturnType<this["state"]> & {[key in keyof this["computed"]]: ReturnType<this["computed"][key]>};
 
     store: this["actions"];
 
@@ -50,7 +100,7 @@ export class Model<U extends {types?: {[key: string]: unknown} | {}, context?: R
 
     context: U["context"];
 
-    actions:{[key: string]: (...args: any[]) => any};
+    actions:{[key: string]: (...args: any[]) => any} | {};
 
     childContext: ReadonlyArray<keyof (this["computed"] & ReturnType<this["state"]>)>;
 

@@ -68,12 +68,8 @@ BI.YearPopup = BI.inherit(BI.Widget, {
                 items: [this.backBtn, this.preBtn]
             },
             cardCreator: BI.bind(this._createYearCalendar, this),
-
-            afterCardShow: function () {
+            afterCardCreated: function () {
                 this.setValue(self.selectedYear);
-                var calendar = this.getSelectedCard();
-                calendar && self.backBtn.setEnable(!calendar.isFrontYear());
-                calendar && self.preBtn.setEnable(!calendar.isFinalYear());
             }
         });
 
@@ -92,8 +88,6 @@ BI.YearPopup = BI.inherit(BI.Widget, {
         var calendar = this.navigation.getSelectedCard();
         if (BI.isNotNull(calendar)) {
             calendar.setMinDate(this.options.min);
-            this.backBtn.setEnable(!calendar.isFrontYear());
-            this.preBtn.setEnable(!calendar.isFinalYear());
         }
     },
 
@@ -101,8 +95,6 @@ BI.YearPopup = BI.inherit(BI.Widget, {
         var calendar = this.navigation.getSelectedCard();
         if (BI.isNotNull(calendar)) {
             calendar.setMaxDate(this.options.max);
-            this.backBtn.setEnable(!calendar.isFrontYear());
-            this.preBtn.setEnable(!calendar.isFinalYear());
         }
     },
 
@@ -127,19 +119,17 @@ BI.YearPopup = BI.inherit(BI.Widget, {
     setValue: function (v) {
         var o = this.options;
         v = BI.parseInt(v);
+        // 切换年不受范围限制
         // 对于年控件来说，只要传入的minDate和maxDate的year区间包含v就是合法的
-        var startDate = BI.parseDateTime(o.min, "%Y-%X-%d");
-        var endDate = BI.parseDateTime(o.max, "%Y-%X-%d");
-        if (BI.checkDateVoid(v, 1, 1, BI.print(BI.getDate(startDate.getFullYear(), 0, 1), "%Y-%X-%d"), BI.print(BI.getDate(endDate.getFullYear(), 0, 1), "%Y-%X-%d"))[0]) {
-            v = BI.getDate().getFullYear();
-            this.selectedYear = "";
-            this.navigation.setSelect(BI.YearCalendar.getPageByYear(v));
-            this.navigation.setValue("");
-        } else {
-            this.selectedYear = v;
-            this.navigation.setSelect(BI.YearCalendar.getPageByYear(v));
-            this.navigation.setValue(v);
-        }
+        // var startDate = BI.parseDateTime(o.min, "%Y-%X-%d");
+        // var endDate = BI.parseDateTime(o.max, "%Y-%X-%d");
+        // if (BI.checkDateVoid(v, 1, 1, BI.print(BI.getDate(startDate.getFullYear(), 0, 1), "%Y-%X-%d"), BI.print(BI.getDate(endDate.getFullYear(), 0, 1), "%Y-%X-%d"))[0]) {
+        //     v = BI.getDate().getFullYear();
+        // }
+
+        this.selectedYear = v;
+        this.navigation.setSelect(BI.YearCalendar.getPageByYear(v));
+        this.navigation.setValue(v);
     }
 });
 BI.YearPopup.EVENT_CHANGE = "EVENT_CHANGE";

@@ -17,7 +17,8 @@ BI.MultiSelectLoader = BI.inherit(BI.Widget, {
             },
             valueFormatter: BI.emptyFn,
             itemsCreator: BI.emptyFn,
-            onLoaded: BI.emptyFn
+            onLoaded: BI.emptyFn,
+            itemHeight: BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT,
         });
     },
 
@@ -36,6 +37,7 @@ BI.MultiSelectLoader = BI.inherit(BI.Widget, {
             toolbar: {
                 type: "bi.multi_select_bar",
                 cls: "bi-list-item-active",
+                height: this.options.itemHeight || BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT,
                 iconWrapperWidth: 36
             },
             el: BI.extend({
@@ -125,7 +127,7 @@ BI.MultiSelectLoader = BI.inherit(BI.Widget, {
             type: "bi.multi_select_item",
             logic: this.options.logic,
             cls: "bi-list-item-active",
-            height: 24,
+            height: this.options.itemHeight || BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT,
             selected: this.isAllSelected(),
             iconWrapperWidth: 36
         });
@@ -171,7 +173,10 @@ BI.MultiSelectLoader = BI.inherit(BI.Widget, {
     },
 
     populate: function (items) {
-        arguments[0] = this._createItems(items);
+        // arguments.length为0时对arguments[0]赋值后不同环境对其length的取值不同(nashorn)
+        if (BI.isNotNull(items)) {
+            arguments[0] = this._createItems(items);
+        }
         this.button_group.populate.apply(this.button_group, arguments);
     },
 

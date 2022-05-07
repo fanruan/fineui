@@ -5,12 +5,7 @@
  * @class
  */
 BI.ResizeController = BI.inherit(BI.Controller, {
-    _defaultConfig: function () {
-        return BI.extend(BI.ResizeController.superclass._defaultConfig.apply(this, arguments), {});
-    },
-
-    _init: function () {
-        BI.ResizeController.superclass._init.apply(this, arguments);
+    init: function () {
         var self = this;
         this.resizerManger = {};
         var fn = BI.debounce(function (ev) {
@@ -18,7 +13,11 @@ BI.ResizeController = BI.inherit(BI.Controller, {
             self._resize(ev);
             // }
         }, 30);
-        BI.Widget._renderEngine.createElement(_global).resize(fn);
+        if ("onorientationchange" in _global) {
+            _global.onorientationchange = fn;
+        } else {
+            BI.Widget._renderEngine.createElement(_global).resize(fn);
+        }
     },
 
     _resize: function (ev) {

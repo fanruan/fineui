@@ -7,41 +7,24 @@
 BI.GridLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.GridLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-grid-layout",
+            baseCls: "bi-grid",
             columns: null,
             rows: null,
             items: []
-            /* [
-             {
-             column: 0,
-             row: 0,
-             el: {type: 'bi.button', text: 'button1'}
-             },
-             {
-             column: 1,
-             row: 1,
-             el: {type: 'bi.button', text: 'button2'}
-             },
-             {
-             column: 3,
-             row: 2,
-             el: {type: 'bi.button', text: 'button3'}
-             }
-             ]*/
         });
     },
     render: function () {
         BI.GridLayout.superclass.render.apply(this, arguments);
-        this.populate(this.options.items);
-    },
-
-    resize: function () {
-        // console.log("grid布局不需要resize")
+        var self = this, o = this.options;
+        var items = BI.isFunction(o.items) ? this.__watch(o.items, function (context, newValue) {
+            self.populate(newValue);
+        }) : o.items;
+        this.populate(items);
     },
 
     addItem: function () {
         // do nothing
-        throw new Error("cannot be added");
+        throw new Error("不能添加子组件");
     },
 
     stroke: function (items) {
@@ -93,16 +76,16 @@ BI.GridLayout = BI.inherit(BI.Layout, {
         BI.each(items, function (i, item) {
             if (BI.isArray(item)) {
                 BI.each(item, function (j, el) {
-                    els[i][j] = BI.createWidget(el);
+                    els[i][j] = BI._lazyCreateWidget(el);
                 });
                 return;
             }
-            els[item.row][item.column] = BI.createWidget(item);
+            els[item.row][item.column] = BI._lazyCreateWidget(item);
         });
         for (var i = 0; i < rows; i++) {
             for (var j = 0; j < columns; j++) {
                 if (!els[i][j]) {
-                    els[i][j] = BI.createWidget({
+                    els[i][j] = BI._lazyCreateWidget({
                         type: "bi.layout"
                     });
                 }
@@ -114,12 +97,17 @@ BI.GridLayout = BI.inherit(BI.Layout, {
                     right: (100 - (width * (j + 1))) + "%",
                     bottom: (100 - (height * (i + 1))) + "%"
                 });
-                this.addWidget(els[i][j]);
+                this.addWidget(this._getChildName(i + "_" + j), els[i][j]);
             }
         }
     },
 
-    update: function () {
+    resize: function () {
+        // console.log("grid布局不需要resize")
+    },
+
+    update: function (opt) {
+        return this.forceUpdate(opt);
     },
 
     populate: function (items) {

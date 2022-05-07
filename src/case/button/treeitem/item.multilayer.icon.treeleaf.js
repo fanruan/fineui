@@ -28,6 +28,7 @@ BI.MultiLayerIconTreeLeafItem = BI.inherit(BI.BasicButton, {
             text: o.text,
             value: o.value,
             py: o.py,
+            keyword: o.keyword,
             iconWidth: o.iconWidth,
             iconHeight: o.iconHeight
         });
@@ -48,10 +49,10 @@ BI.MultiLayerIconTreeLeafItem = BI.inherit(BI.BasicButton, {
         });
         items.push(this.item);
         BI.createWidget({
-            type: "bi.td",
+            type: "bi.horizontal_adapt",
             element: this,
             columnSize: BI.makeArray(o.layer, 15),
-            items: [items]
+            items: items
         });
     },
 

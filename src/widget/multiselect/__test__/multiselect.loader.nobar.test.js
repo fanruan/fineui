@@ -6,67 +6,71 @@
 
 describe("multi_select_no_bar_series", function () {
 
-    var _getItemsByTimes = function (items, times) {
-        var res = [];
-        for (var i = (times - 1) * 100; items[i] && i < times * 100; i++) {
-            res.push(items[i]);
-        }
-        return res;
-    };
+    var _getItemsByTimes, _itemsCreator, itemSelectorGetter, searchItemSelectorGetter, _hasNextByTimes, items;
+    before(function () {
+        _getItemsByTimes = function (items, times) {
+            var res = [];
+            for (var i = (times - 1) * 100; items[i] && i < times * 100; i++) {
+                res.push(items[i]);
+            }
+            return res;
+        };
 
-    var _hasNextByTimes = function (items, times) {
-        return times * 100 < items.length;
-    };
+        _hasNextByTimes = function (items, times) {
+            return times * 100 < items.length;
+        };
 
-    var _itemsCreator = function (options, callback) {
-        var items = BI.map(BI.makeArray(100, null), function(idx, v) {
-            return {
-                text: idx,
-                value: idx,
-                title: idx
-            };
-        });
-        var keywords = (options.keywords || []).slice();
-        if (options.keyword) {
-            keywords.push(options.keyword);
-        }
-        BI.each(keywords, function (i, kw) {
-            var search = BI.Func.getSearchResult(items, kw);
-            items = search.match.concat(search.find);
-        });
-        if (options.selectedValues) {// 过滤
-            var filter = BI.makeObject(options.selectedValues, true);
-            items = BI.filter(items, function (i, ob) {
-                return !filter[ob.value];
+        _itemsCreator = function (options, callback) {
+            var items = BI.map(BI.makeArray(100, null), function(idx, v) {
+                return {
+                    text: idx,
+                    value: idx,
+                    title: idx
+                };
             });
-        }
-        if (options.type == BI.MultiSelectCombo.REQ_GET_ALL_DATA) {
+            var keywords = (options.keywords || []).slice();
+            if (options.keyword) {
+                keywords.push(options.keyword);
+            }
+            BI.each(keywords, function (i, kw) {
+                var search = BI.Func.getSearchResult(items, kw);
+                items = search.match.concat(search.find);
+            });
+            if (options.selectedValues) {// 过滤
+                var filter = BI.makeObject(options.selectedValues, true);
+                items = BI.filter(items, function (i, ob) {
+                    return !filter[ob.value];
+                });
+            }
+            if (options.type == BI.MultiSelectCombo.REQ_GET_ALL_DATA) {
+                callback({
+                    items: items
+                });
+                return;
+            }
+            if (options.type == BI.MultiSelectCombo.REQ_GET_DATA_LENGTH) {
+                callback({count: items.length});
+                return;
+            }
             callback({
-                items: items
+                items: _getItemsByTimes(items, options.times),
+                hasNext: _hasNextByTimes(items, options.times)
             });
-            return;
-        }
-        if (options.type == BI.MultiSelectCombo.REQ_GET_DATA_LENGTH) {
-            callback({count: items.length});
-            return;
-        }
-        callback({
-            items: _getItemsByTimes(items, options.times),
-            hasNext: _hasNextByTimes(items, options.times)
-        });
-    };
+        };
 
-    var itemSelectorGetter = function (array) {
-        return BI.map(array, function (idx, num) {
-            return ".bi-multi-select-popup-view .bi-loader .bi-button-group .bi-multi-select-item:nth-child(" + num + ")";
-        });
-    };
+        itemSelectorGetter = function (array) {
+            return BI.map(array, function (idx, num) {
+                return ".bi-multi-select-popup-view .bi-loader .bi-button-group .bi-multi-select-item:nth-child(" + num + ")";
+            });
+        };
 
-    var searchItemSelectorGetter = function (array) {
-        return BI.map(array, function (idx, num) {
-            return ".bi-multi-select-search-pane .bi-loader .bi-button-group .bi-multi-select-item:nth-child(" + num + ")";
-        });
-    };
+        searchItemSelectorGetter = function (array) {
+            return BI.map(array, function (idx, num) {
+                return ".bi-multi-select-search-pane .bi-loader .bi-button-group .bi-multi-select-item:nth-child(" + num + ")";
+            });
+        };
+
+    })
 
     /**
      *   test_author_windy
@@ -159,7 +163,10 @@ describe("multi_select_no_bar_series", function () {
             type: "bi.multi_select_no_bar_combo",
             width: 220,
             itemsCreator: function (op, callback) {
-                callback(items);
+                callback({
+                    items: items,
+                    hasNext: false
+                });
             },
             value: [1, 2]
         });

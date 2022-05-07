@@ -1,1 +1,1 @@
-npm publish
+npm run publishToPrivate

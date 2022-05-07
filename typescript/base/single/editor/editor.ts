@@ -1,6 +1,37 @@
-import { _Single } from "../single";
+import { Single } from "../single";
 
-export interface _Editor extends _Single {
+export declare class Editor extends Single {
+    static xtype: string;
+
+    props: {
+        inputType?: string;
+        validationChecker?: Function;
+        quitChecker?: Function
+        allowBlank?: boolean;
+        watermark?: string;
+        errorText?: string | ((v: string) => string);
+        autocomplete?: string;
+    } & Single['props']
+
+    static EVENT_CHANGE: string;
+    static EVENT_FOCUS: string;
+    static EVENT_BLUR: string;
+    static EVENT_CLICK: string;
+    static EVENT_KEY_DOWN: string;
+    static EVENT_SPACE: string;
+    static EVENT_BACKSPACE: string;
+    static EVENT_START: string;
+    static EVENT_PAUSE: string;
+    static EVENT_STOP: string;
+    static EVENT_CONFIRM: string;
+    static EVENT_CHANGE_CONFIRM: string;
+    static EVENT_VALID: string;
+    static EVENT_ERROR: string;
+    static EVENT_ENTER: string;
+    static EVENT_RESTRICT: string;
+    static EVENT_REMOVE: string;
+    static EVENT_EMPTY: string;
+
     setErrorText(v: string): void;
 
     getErrorText(): string;
@@ -23,8 +54,6 @@ export interface _Editor extends _Single {
 
     onKeyDown(keyCode: number): void;
 
-    getValue(): string;
-
     getLastValidValue(): string;
 
     getLastChangedValue(): string;
@@ -32,25 +61,4 @@ export interface _Editor extends _Single {
     isEditing(): boolean;
 
     isValid(): boolean;
-}
-
-export interface _EditorStatic {
-    EVENT_CHANGE: string;
-    EVENT_FOCUS: string;
-    EVENT_BLUR: string;
-    EVENT_CLICK: string;
-    EVENT_KEY_DOWN: string;
-    EVENT_SPACE: string;
-    EVENT_BACKSPACE: string;
-    EVENT_START: string;
-    EVENT_PAUSE: string;
-    EVENT_STOP: string;
-    EVENT_CONFIRM: string;
-    EVENT_CHANGE_CONFIRM: string;
-    EVENT_VALID: string;
-    EVENT_ERROR: string;
-    EVENT_ENTER: string;
-    EVENT_RESTRICT: string;
-    EVENT_REMOVE: string;
-    EVENT_EMPTY: string;
 }

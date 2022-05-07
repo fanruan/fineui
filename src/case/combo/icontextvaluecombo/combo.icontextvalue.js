@@ -3,22 +3,27 @@
  * combo : icon + text + icon, popup : icon + text
  */
 BI.IconTextValueCombo = BI.inherit(BI.Widget, {
-    _defaultConfig: function () {
+    _defaultConfig: function (config) {
         return BI.extend(BI.IconTextValueCombo.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-icon-text-value-combo",
+            baseCls: "bi-icon-text-value-combo bi-border-radius " + (config.simple ? "bi-border-bottom" : "bi-border"),
             height: 24,
             iconHeight: null,
             iconWidth: null,
             value: "",
-            attributes: {
-                tabIndex: 0
-            }
         });
     },
 
     _init: function () {
-        BI.IconTextValueCombo.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
+        BI.isNumeric(o.width) && (o.width -= 2);
+        BI.isNumeric(o.height) && (o.height -= 2);
+        o.value = BI.isFunction(o.value) ? this.__watch(o.value, function (context, newValue) {
+            self.setValue(newValue);
+        }) : o.value;
+        o.items = BI.isFunction(o.items) ? this.__watch(o.items, function (context, newValue) {
+            self.populate(newValue);
+        }) : o.items;
+        BI.IconTextValueCombo.superclass._init.apply(this, arguments);
         this.trigger = BI.createWidget({
             type: "bi.select_icon_text_trigger",
             cls: "icon-text-value-trigger",
@@ -53,6 +58,7 @@ BI.IconTextValueCombo = BI.inherit(BI.Widget, {
             type: "bi.combo",
             element: this,
             container: o.container,
+            direction: o.direction,
             adjustLength: 2,
             el: this.trigger,
             popup: {
@@ -67,7 +73,10 @@ BI.IconTextValueCombo = BI.inherit(BI.Widget, {
     },
 
     _checkError: function (v) {
-        if(BI.isNotNull(v)) {
+        if(BI.isNull(v) || BI.isEmptyArray(v) || BI.isEmptyString(v)) {
+            this.trigger.options.tipType = "success";
+            this.element.removeClass("combo-error");
+        } else {
             v = BI.isArray(v) ? v : [v];
             var result = BI.find(this.options.items, function (idx, item) {
                 return BI.contains(v, item.value);

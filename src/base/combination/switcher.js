@@ -22,11 +22,11 @@ BI.Switcher = BI.inherit(BI.Widget, {
         });
     },
 
-    _init: function () {
-        BI.Switcher.superclass._init.apply(this, arguments);
+    render: function () {
         var self = this, o = this.options;
         this._initSwitcher();
-        this._initPullDownAction();
+        // 延迟绑定事件，这样可以将自己绑定的事情优先执行
+        BI.nextTick(this._initPullDownAction.bind(this));
         this.switcher.on(BI.Controller.EVENT_CHANGE, function (type, value, obj) {
             if (self.isEnabled() && self.isValid()) {
                 if (type === BI.Events.EXPAND) {
@@ -191,10 +191,14 @@ BI.Switcher = BI.inherit(BI.Widget, {
         }, this.getName());
     },
 
-    populate: function (items) {
+    _populate: function () {
         this._assertPopupView();
         this.popupView.populate.apply(this.popupView, arguments);
-        this.switcher.populate.apply(this.switcher, arguments);
+    },
+
+    populate: function (items) {
+        this._populate.apply(this, arguments);
+        this.switcher.populate && this.switcher.populate.apply(this.switcher, arguments);
     },
 
     _setEnable: function (arg) {

@@ -41,8 +41,7 @@ BI.SearcherView = BI.inherit(BI.Pane, {
         });
     },
 
-    _init: function () {
-        BI.SearcherView.superclass._init.apply(this, arguments);
+    render: function () {
         var self = this, o = this.options;
 
         this.matcher = BI.createWidget(o.matcher, {

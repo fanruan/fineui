@@ -9,25 +9,53 @@ const dirs = require("./dirs");
 
 const common = require("./webpack.common.js");
 
+const ModuleDependencyWarning = require("webpack/lib/ModuleDependencyWarning");
+
+class IgnoreNotFoundExportPlugin {
+    apply(compiler) {
+        const messageRegExp = /export '.*'( \(reexported as '.*'\))? was not found in/;
+        function doneHook(stats) {
+            stats.compilation.warnings = stats.compilation.warnings.filter(warn => {
+                if (warn instanceof ModuleDependencyWarning && messageRegExp.test(warn.message)) {
+                    return false;
+                }
+
+                return true;
+            });
+        }
+        if (compiler.hooks) {
+            compiler.hooks.done.tap("IgnoreNotFoundExportPlugin", doneHook);
+        } else {
+            compiler.plugin("done", doneHook);
+        }
+    }
+}
+
 module.exports = merge(common, {
-    devtool: "eval-source-map",
+    devtool: "inline-source-map",
     output: {
         path: dirs.DEST,
-        filename: "[name].[contenthash].js",
+        filename: "[name].js",
+        publicPath: '/',
     },
     devServer: {
         contentBase: path.join(__dirname, ".."),
         port: 9001,
         liveReload: true,
+        historyApiFallback: {
+            rewrites: [
+                { from: /.*/, to: '/index.html' },
+            ],
+        },
     },
     plugins: [
         new MiniCssExtractPlugin({
             path: dirs.DEST,
-            filename: "fineui.[contenthash].css",
+            filename: "[name].css",
         }),
         new HtmlWebpackPlugin({
-            template: path.resolve(__dirname, "../index.html"),
-            chunks: ["polyfill", "fineui"],
+            template: path.resolve(__dirname, "../template/index.html"),
+            chunks: ["demo"],
             chunksSortMode: "manual",
         }),
         new ForkTsCheckerWebpackPlugin({
@@ -46,5 +74,6 @@ module.exports = merge(common, {
             },
             canPrint: true,
         }),
+        new IgnoreNotFoundExportPlugin(),
     ],
 });

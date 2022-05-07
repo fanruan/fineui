@@ -7,16 +7,7 @@
  * @extends BI.Controller
  */
 BI.TooltipsController = BI.inherit(BI.Controller, {
-    _defaultConfig: function () {
-        return BI.extend(BI.TooltipsController.superclass._defaultConfig.apply(this, arguments), {});
-    },
-
-    _const: {
-        height: 18
-    },
-
-    _init: function () {
-        BI.TooltipsController.superclass._init.apply(this, arguments);
+    init: function () {
         this.tooltipsManager = {};
         this.showingTips = {};// 存储正在显示的tooltip
     },
@@ -28,32 +19,6 @@ BI.TooltipsController = BI.inherit(BI.Controller, {
             level: level,
             stopEvent: true
         });
-    },
-
-    hide: function (name, callback) {
-        if (!this.has(name)) {
-            return this;
-        }
-        delete this.showingTips[name];
-        this.get(name).element.hide(0, callback);
-        this.get(name).invisible();
-        return this;
-    },
-
-    create: function (name, text, level, context) {
-        if (!this.has(name)) {
-            var tooltip = this._createTooltip(text, level);
-            this.add(name, tooltip);
-            BI.createWidget({
-                type: "bi.absolute",
-                element: context || "body",
-                items: [{
-                    el: tooltip
-                }]
-            });
-            tooltip.invisible();
-        }
-        return this.get(name);
     },
 
     // opt: {container: '', belowMouse: false}
@@ -99,14 +64,40 @@ BI.TooltipsController = BI.inherit(BI.Controller, {
             !opt.belowMouse && (y = Math.max(y, top));
         }
         tooltip.element.css({
-            left: x < 0 ? 0 : x + "px",
-            top: y < 0 ? 0 : y + "px"
+            left: x < 0 ? 0 : x / BI.pixRatio + BI.pixUnit,
+            top: y < 0 ? 0 : y / BI.pixRatio + BI.pixUnit
         });
         tooltip.element.hover(function () {
             self.remove(name);
             context.element.trigger("mouseleave.title" + context.getName());
         });
         return this;
+    },
+
+    hide: function (name, callback) {
+        if (!this.has(name)) {
+            return this;
+        }
+        delete this.showingTips[name];
+        this.get(name).element.hide(0, callback);
+        this.get(name).invisible();
+        return this;
+    },
+
+    create: function (name, text, level, context) {
+        if (!this.has(name)) {
+            var tooltip = this._createTooltip(text, level);
+            this.add(name, tooltip);
+            BI.createWidget({
+                type: "bi.absolute",
+                element: context || "body",
+                items: [{
+                    el: tooltip
+                }]
+            });
+            tooltip.invisible();
+        }
+        return this.get(name);
     },
 
     add: function (name, bubble) {
@@ -135,6 +126,15 @@ BI.TooltipsController = BI.inherit(BI.Controller, {
         }
         this.tooltipsManager[name].destroy();
         delete this.tooltipsManager[name];
+        return this;
+    },
+
+    removeAll: function () {
+        BI.each(this.tooltipsManager, function (name, tooltip) {
+            tooltip.destroy();
+        });
+        this.tooltipsManager = {};
+        this.showingTips = {};
         return this;
     }
 });

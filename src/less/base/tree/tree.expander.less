@@ -1,0 +1,28 @@
+@import "../../index.less";
+@import "../../image.less";
+@import "../../lib/icon.less";
+.bi-tree-expander-popup.line:before {
+  position: absolute;
+  content: "";
+  height: 100%;
+  width: 24px;
+  .imagePath(@icon-tree-vertical-line-1, 0, 0, repeat-y);
+}
+
+.bi-tree-expander-popup.line.solid:before {
+  .imagePath(@icon-tree-solid-vertical-line-1, 0, 0, repeat-y);
+  width: 24px;
+  left: 8px;
+}
+
+.bi-theme-dark {
+  .bi-tree-expander-popup.line:before {
+    width: 24px;
+    .imagePath(@icon-tree-vertical-line-1-theme-dark, 0, 0, repeat-y);
+  }
+  .bi-tree-expander-popup.line.solid:before {
+    .imagePath(@icon-tree-solid-vertical-line-1-theme-dark, 0, 0, repeat-y);
+    width: 24px;
+    left: 8px;
+  }
+}

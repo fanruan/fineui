@@ -1,14 +1,12 @@
-//常量库
-
-//classified
-
-//
+// 基础配色方案，业务无关
+//font size
 @font-size-12: 12px;
 @font-size-13: 13px;
 @font-size-14: 14px;
 @font-size-15: 15px;
 @font-size-16: 16px;
 @font-size-18: 18px;
+@font-size-20: 20px;
 @font-size-22: 22px;
 @font-size-24: 24px;
 @font-size-30: 30px;
@@ -22,93 +20,227 @@
 @opacity-15: 0.15;
 @opacity-20: 0.2;
 
+// 色板
+// 品牌
+@color-primary: #3685f2;
+@color-card-primary: @color-white;
+@background-color-card-primary: #1e4092;
+
+//green
+@color-green-100: #13cd66;
+@color-green-90: fade(@color-green-100, 90);
+@color-green-80: fade(@color-green-100, 80);
+@color-green-60: fade(@color-green-100, 60);
+@color-green-50: fade(@color-green-100, 50);
+@color-green-40: fade(@color-green-100, 40);
+@color-green-30: fade(@color-green-100, 30);
+@color-green-20: fade(@color-green-100, 20);
+@color-green-10: fade(@color-green-100, 10);
+@color-green-5: fade(@color-green-100, 5);
+
+//cyan
+@color-sea-green-100: #3FB4AB;
+@color-sea-green-90: fade(@color-sea-green-100, 90);
+@color-sea-green-80: fade(@color-sea-green-100, 80);
+@color-sea-green-60: fade(@color-sea-green-100, 60);
+@color-sea-green-50: fade(@color-sea-green-100, 50);
+@color-sea-green-40: fade(@color-sea-green-100, 40);
+@color-sea-green-30: fade(@color-sea-green-100, 30);
+@color-sea-green-20: fade(@color-sea-green-100, 20);
+@color-sea-green-10: fade(@color-sea-green-100, 10);
+@color-sea-green-5: fade(@color-sea-green-100, 5);
+
+//blue
+@color-blue-100: @color-primary;
+@color-blue-90: fade(@color-blue-100, 90);
+@color-blue-80: fade(@color-blue-100, 80);
+@color-blue-60: fade(@color-blue-100, 60);
+@color-blue-50: fade(@color-blue-100, 50);
+@color-blue-40: fade(@color-blue-100, 40);
+@color-blue-30: fade(@color-blue-100, 30);
+@color-blue-20: fade(@color-blue-100, 20);
+@color-blue-10: fade(@color-blue-100, 10);
+@color-blue-5: fade(@color-blue-100, 5);
+
+//light-blue
+@color-light-blue-100: #eaf2fd;
+@color-light-blue-90: fade(@color-light-blue-100, 90);
+@color-light-blue-80: fade(@color-light-blue-100, 80);
+@color-light-blue-60: fade(@color-light-blue-100, 60);
+@color-light-blue-50: fade(@color-light-blue-100, 50);
+@color-light-blue-40: fade(@color-light-blue-100, 40);
+@color-light-blue-30: fade(@color-light-blue-100, 30);
+@color-light-blue-20: fade(@color-light-blue-100, 20);
+@color-light-blue-10: fade(@color-light-blue-100, 10);
+@color-light-blue-5: fade(@color-light-blue-100, 5);
+
+// orange
+@color-orange-100: #faaa39;
+@color-orange-90: fade(@color-orange-100, 90);
+@color-orange-80: fade(@color-orange-100, 80);
+@color-orange-60: fade(@color-orange-100, 60);
+@color-orange-50: fade(@color-orange-100, 50);
+@color-orange-40: fade(@color-orange-100, 40);
+@color-orange-30: fade(@color-orange-100, 30);
+@color-orange-20: fade(@color-orange-100, 20);
+@color-orange-10: fade(@color-orange-100, 10);
+@color-orange-5: fade(@color-orange-100, 5);
+
+// red
+@color-red-100: #e65251;
+@color-red-90: fade(@color-red-100, 90);
+@color-red-80: fade(@color-red-100, 80);
+@color-red-60: fade(@color-red-100, 60);
+@color-red-50: fade(@color-red-100, 50);
+@color-red-40: fade(@color-red-100, 40);
+@color-red-30: fade(@color-red-100, 30);
+@color-red-20: fade(@color-red-100, 20);
+@color-red-10: fade(@color-red-100, 10);
+@color-red-5: fade(@color-red-100, 5);
+
+// yellow
+@color-yellow-100: #ffc101;
+@color-yellow-80: fade(@color-yellow-100, 90);
+@color-yellow-60: fade(@color-yellow-100, 60);
+@color-yellow-40: fade(@color-yellow-100, 40);
+@color-yellow-20: fade(@color-yellow-100, 20);
+@color-yellow-5: fade(@color-yellow-100, 5);
+
+// black
+@color-black-100: #232e40;
+@color-black-90: fade(@color-black-100, 90);
+@color-black-80: fade(@color-black-100, 80);
+@color-black-60: fade(@color-black-100, 60);
+@color-black-50: fade(@color-black-100, 50);
+@color-black-40: fade(@color-black-100, 40);
+@color-black-30: fade(@color-black-100, 30);
+@color-black-20: fade(@color-black-100, 20);
+@color-black-10: fade(@color-black-100, 10);
+@color-black-5: fade(@color-black-100, 5);
+
+// white
+@color-white-100: #FFFFFF;
+@color-white-90: fade(@color-white-100, 90);
+@color-white-80: fade(@color-white-100, 80);
+@color-white-60: fade(@color-white-100, 60);
+@color-white-50: fade(@color-white-100, 50);
+@color-white-40: fade(@color-white-100, 40);
+@color-white-30: fade(@color-white-100, 30);
+@color-white-20: fade(@color-white-100, 20);
+@color-white-10: fade(@color-white-100, 10);
+@color-white-5: fade(@color-white-100, 5);
+
+@color-black: @color-black-100;
+@color-black-theme-dark: #F7F9FC;
+@color-state-gray: #2E3A4D;
+@color-state-gray-theme-dark: #D6E0EC;
+@color-light-state-gray: #647185;
+@color-light-state-gray-theme-dark: #AFB7C6;
+@color-dim-gray: #9EA6B2;
+@color-dim-gray-theme-dark: #878d9f;
+@color-gray: #C4C9D1;
+@color-gray-theme-dark: #6B7084;
+@color-dark-gray: #D0D4DA;
+@color-dark-gray-theme-dark: #606479;
+@color-sliver: #E7E8EB;
+@color-sliver-theme-dark: #363E55;
+@color-light-gray: #647185;
+@color-light-gray-theme-dark: #afb7c6;
+@color-gainsboro: #F5F6F9;
+@color-gainsboro-theme-dark: #191F35;
+@color-white: @color-white-100;
+@color-white-theme-dark: #20263B;
+
+@color-transparent: transparent;
+
+
 //font color
-@font-color-black: #232e40;
+@font-color-black: @color-black;
 @font-color-normal: #3d4d66;
 @font-color-normal-theme-dark: #d6e0dc;
-@font-color-light-gray: #647185;
-@font-color-light-gray-theme-dark: #afb7c6;
-@font-color-disabled: #9ea6b2;
-@font-color-disabled-theme-dark: #878d9f;
-@font-color-tips: #9ea6b2;
-@font-color-tips-theme-dark: #6b7084;
-@font-color-light-disabled: #d0d4da;
-@font-color-light-disabled-theme-dark: #606479;
+@font-color-light-gray: @color-light-gray;
+@font-color-light-gray-theme-dark: @color-light-gray-theme-dark;
+@font-color-disabled: @color-dim-gray;
+@font-color-disabled-theme-dark: @color-dim-gray-theme-dark;
+@font-color-tips: @color-dim-gray;
+@font-color-tips-theme-dark: @color-gray-theme-dark;
+@font-color-light-disabled: @color-dark-gray;
+@font-color-light-disabled-theme-dark: @color-dark-gray-theme-dark;
 @font-color-gray: #999999;
-@font-color-white: #ffffff;
-@font-color-white-theme-dark: #20263b;
-@font-color-light-highlight: #eaf2fd;
+@font-color-white: @color-white;
+@font-color-white-theme-dark: @color-white-theme-dark;
+@font-color-light-highlight: @color-light-blue-100;
 @font-color-medium-highlight: #d7e7fc;
-@font-color-highlight: #3685f2;
+@font-color-highlight: @color-blue-100;
 @font-color-blue: #23beef;
 @font-color-light-blue: #e9f8fd;
-@font-color-success: #13cd66;
-@font-color-warning: #faaa39;
-@font-color-negative: #e65251;
-@font-color-yellow: #ffc101;
+@font-color-success: @color-green-100;
+@font-color-warning: @color-orange-100;
+@font-color-negative: @color-red-100;
+@font-color-yellow: @color-yellow-100;
 
 //background color
-@background-color-black: #232E40;
-@background-color-black-theme-dark: #606479;
+@background-color-black: @color-black;
+@background-color-black-theme-dark: @color-dark-gray-theme-dark;
 @background-color-light-black: #3d4d66;
 @background-color-light-black-theme-dark: #d6e0dc;
-@background-color-default: #ffffff;
-@background-color-default-theme-dark: #20263b;
+@background-color-default: @color-white;
+@background-color-default-theme-dark: @color-white-theme-dark;
 @background-color-normal: #f7f8fa;
 @background-color-normal-theme-dark: #191b2b;
-@background-color-light-highlight: #eaf2fd;
+@background-color-light-highlight: @color-light-blue-100;
 @background-color-medium-highlight: #d7e7fc;
-@background-color-highlight: #3685f2;
+@background-color-highlight: @color-blue-100;
 @background-color-blue: #23beef;
 @background-color-light-blue: #e9f8fd;
 @background-color-dark: #d4dadd;
 @background-color-light-gray: #f2f4f7;
 @background-color-light-gray-theme-dark: #292f45;
 @background-color-medium-gray: #e8eaed;
-@background-color-medium-gray-theme-dark: #363e55;
-@background-color-dark-gray: #d0d4da;
-@background-color-dark-gray-theme-dark: #606479;
+@background-color-medium-gray-theme-dark: @color-sliver-theme-dark;
+@background-color-dark-gray: @color-dark-gray;
+@background-color-dark-gray-theme-dark: @color-dark-gray-theme-dark;
 @background-color-disabled: #f2f4f7;
 @background-color-disabled-theme-dark: #292f45;
-@background-color-light-disabled: #9ea6b2;
-@background-color-light-disabled-theme-dark: #878d9f;
-@background-color-yellow: #ffc101;
+@background-color-light-disabled: @color-dim-gray;
+@background-color-light-disabled-theme-dark: @color-dim-gray-theme-dark;
+@background-color-yellow: @color-yellow-100;
 
-@background-color-negative: #e65251;
+@background-color-negative: @color-red-100;
 @background-color-light-negative: #ffecec;
 @background-color-dark-negative: #3A2940;
 @background-color-light-warning: #feeed7;
-@background-color-warning: #faaa39;
+@background-color-warning: @color-orange-100;
 
-@background-color-dark-success: #13cd66;
+@background-color-dark-success: @color-green-100;
 @background-color-light-success: #e1f4e7;
-@background-color-normal-success: #647185;
+@background-color-normal-success: @color-light-gray;
 
 //border color
-@border-color-default: #ffffff;
-@border-color-black: #232e40;
+@border-color-default: @color-white;
+@border-color-black: @color-black;
 @border-color-line: #e8eaed;
-@border-color-line-theme-dark: #363e55;
+@border-color-line-theme-dark: @color-sliver-theme-dark;
 @border-color-light-line: #f2f4f7;
 @border-color-light-line-theme-dark: #292f45;
-@border-color-dark-line: #9EA6B2;
-@border-color-dark-line-theme-dark: #878D9F;
-@border-color-highlight: #3685f2;
+@border-color-dark-gray-line: @color-dark-gray;
+@border-color-dark-gray-line-theme-dark: @color-dark-gray-theme-dark;
+@border-color-dark-line: @color-dim-gray;
+@border-color-dark-line-theme-dark: @color-dim-gray-theme-dark;
+@border-color-highlight: @color-blue-100;
 
+@border-color-success: @color-green-100;
 @border-color-warning: #fbb03b;
-@border-color-negative: #e65251;
-@border-color-success: #13cd66;
+@border-color-negative: @color-red-100;
 @border-color-light-negative: #f4cbcb;
-@border-color-normal-success: #eddea2;
+@border-color-normal-success: @color-light-gray;
 
 //split color
-@border-color-disabled: #d0d4da;
-@border-color-disabled-theme-dark: #606479;
+@border-color-disabled: #e8eaed;
+@border-color-disabled-theme-dark: @color-sliver-theme-dark;
 
 //scroll color
-@scroll-color: #232e40;
-@scroll-color-theme-dark: #ffffff;
-@scroll-thumb-color: #232e40;
-@scroll-thumb-color-theme-dark: #232e40;
-
-@water-mark-color-theme-dark: #878d9f;
+@scroll-color: @color-black;
+@scroll-color-theme-dark: @color-white;
+@scroll-thumb-color: @color-black;
+@scroll-thumb-color-theme-dark: @color-black;

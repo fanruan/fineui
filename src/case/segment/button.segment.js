@@ -10,7 +10,7 @@ BI.SegmentButton = BI.inherit(BI.BasicButton, {
     _defaultConfig: function () {
         var conf = BI.SegmentButton.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
-            baseCls: (conf.baseCls || "") + " bi-segment-button bi-list-item-select",
+            baseCls: (conf.baseCls || "") + " bi-segment-button bi-list-item-select bi-card",
             shadow: true,
             readonly: true,
             hgap: 5
@@ -41,10 +41,6 @@ BI.SegmentButton = BI.inherit(BI.BasicButton, {
     setText: function (text) {
         BI.SegmentButton.superclass.setText.apply(this, arguments);
         this.text.setText(text);
-    },
-
-    destroy: function () {
-        BI.SegmentButton.superclass.destroy.apply(this, arguments);
     }
 });
 BI.shortcut("bi.segment_button", BI.SegmentButton);

@@ -22,35 +22,46 @@ BI.IconTextNode = BI.inherit(BI.NodeButton, {
             textRgap: 0
         });
     },
-    _init: function () {
-        BI.IconTextNode.superclass._init.apply(this, arguments);
-        var o = this.options, c = this._const;
-        this.text = BI.createWidget({
-            type: "bi.label",
-            cls: "list-item-text",
-            textAlign: "left",
-            hgap: o.textHgap,
-            vgap: o.textVgap,
-            lgap: o.textLgap,
-            rgap: o.textRgap,
-            text: o.text,
-            value: o.value,
-            keyword: o.keyword,
-            height: o.height
-        });
-        this.icon = BI.createWidget({
-            type: "bi.icon_label",
-            width: o.height,
-            height: o.height,
-            iconWidth: o.iconWidth,
-            iconHeight: o.iconHeight
-        });
 
-        BI.createWidget(BI.extend({
-            element: this
-        }, BI.LogicFactory.createLogic("horizontal", BI.extend(o.logic, {
-            items: BI.LogicFactory.createLogicItemsByDirection("left", this.icon, this.text)
-        }))));
+    render: function () {
+        var self = this, o = this.options;
+
+        return {
+            type: "bi.vertical_adapt",
+            columnSize: [o.iconWrapperWidth || o.height, "fill"],
+            items: [{
+                type: "bi.icon_label",
+                cls: o.iconCls,
+                width: o.iconWrapperWidth || o.height,
+                height: o.height,
+                iconWidth: o.iconWidth,
+                iconHeight: o.iconHeight
+            }, {
+                el: {
+                    type: "bi.label",
+                    ref: function (_ref) {
+                        self.text = _ref;
+                    },
+                    cls: "list-item-text",
+                    textAlign: "left",
+                    hgap: o.textHgap,
+                    vgap: o.textVgap,
+                    lgap: o.textLgap,
+                    rgap: o.textRgap,
+                    text: o.text,
+                    value: o.value,
+                    keyword: o.keyword,
+                    height: o.height
+                }
+            }]
+        };
+    },
+
+    doClick: function () {
+        BI.IconTextNode.superclass.doClick.apply(this, arguments);
+        if (this.isValid()) {
+            this.fireEvent(BI.IconTextNode.EVENT_CHANGE, this.getValue(), this);
+        }
     },
 
     setValue: function () {
@@ -69,13 +80,6 @@ BI.IconTextNode = BI.inherit(BI.NodeButton, {
 
     getText: function () {
         return this.text.getText();
-    },
-
-    doClick: function () {
-        BI.IconTextNode.superclass.doClick.apply(this, arguments);
-        if (this.isValid()) {
-            this.fireEvent(BI.IconTextNode.EVENT_CHANGE, this.getValue(), this);
-        }
     },
 
     doRedMark: function () {

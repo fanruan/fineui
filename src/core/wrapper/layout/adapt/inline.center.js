@@ -10,8 +10,11 @@
 BI.InlineCenterAdaptLayout = BI.inherit(BI.Layout, {
 
     props: function () {
-        return BI.extend(BI.InlineLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-inline-center-adapt-layout",
+        return BI.extend(BI.InlineCenterAdaptLayout.superclass.props.apply(this, arguments), {
+            baseCls: "bi-i-c-a",
+            horizontalAlign: BI.HorizontalAlign.Center,
+            verticalAlign: BI.VerticalAlign.Middle,
+            columnSize: [],
             hgap: 0,
             vgap: 0,
             lgap: 0,
@@ -22,65 +25,33 @@ BI.InlineCenterAdaptLayout = BI.inherit(BI.Layout, {
     },
 
     render: function () {
-        BI.InlineCenterAdaptLayout.superclass.render.apply(this, arguments);
-        this.element.css({
-            whiteSpace: "nowrap",
-            textAlign: "center"
-        });
-        this.populate(this.options.items);
-    },
-
-    _addElement: function (i, item, length) {
-        var o = this.options;
-        var w = BI.InlineVerticalAdaptLayout.superclass._addElement.apply(this, arguments);
-        w.element.css({
-            position: "relative",
-            "vertical-align": "middle"
-        });
-        w.element.addClass("inline-center-adapt-item");
-        if (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
-            w.element.css({
-                "margin-top": o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) + "px"
-            });
-        }
-        if (o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0) !== 0) {
-            w.element.css({
-                "margin-left": (i === 0 ? o.hgap : 0) + o.lgap + (item.lgap || 0) + (item.hgap || 0) + "px"
-            });
-        }
-        if (o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0) !== 0) {
-            w.element.css({
-                "margin-right": o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0) + "px"
-            });
-        }
-        if (o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0) !== 0) {
-            w.element.css({
-                "margin-bottom": o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0) + "px"
-            });
-        }
-        return w;
+        var self = this, o = this.options;
+        return {
+            type: "bi.inline",
+            ref: function (_ref) {
+                self.layout = _ref;
+            },
+            items: o.items,
+            horizontalAlign: o.horizontalAlign,
+            verticalAlign: o.verticalAlign,
+            columnSize: o.columnSize,
+            hgap: o.hgap,
+            vgap: o.vgap,
+            lgap: o.lgap,
+            rgap: o.rgap,
+            tgap: o.tgap,
+            bgap: o.bgap,
+            innerHgap: o.innerHgap,
+            innerVgap: o.innerVgap,
+        };
     },
 
     resize: function () {
-        this.stroke(this.options.items);
-    },
-
-    addItem: function (item) {
-        throw new Error("不能添加元素");
-    },
-
-    stroke: function (items) {
-        var self = this;
-        BI.each(items, function (i, item) {
-            if (item) {
-                self._addElement(i, item, items.length);
-            }
-        });
+        this.layout.resize();
     },
 
     populate: function (items) {
-        BI.InlineCenterAdaptLayout.superclass.populate.apply(this, arguments);
-        this._mount();
+        this.layout.populate.apply(this.layout, arguments);
     }
 });
 BI.shortcut("bi.inline_center_adapt", BI.InlineCenterAdaptLayout);

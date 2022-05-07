@@ -26,8 +26,8 @@ BI.DownListPopup = BI.inherit(BI.Pane, {
         this.singleValues = [];
         this.childValueMap = {};
         this.fatherValueMap = {};
-        this.items = BI.deepClone(this.options.items);
-        var self = this, o = this.options, children = this._createChildren(this.items);
+        this.items = [];
+        var self = this, o = this.options, children = this._createPopupItems(o.items);
         this.popup = BI.createWidget({
             type: "bi.button_tree",
             items: BI.createItems(children,
@@ -75,7 +75,7 @@ BI.DownListPopup = BI.inherit(BI.Pane, {
         });
 
     },
-    _createChildren: function (items) {
+    _createPopupItems: function (items) {
         var self = this, result = [];
         // 不能修改populate进来的item的引用
         BI.each(items, function (i, it) {
@@ -84,8 +84,11 @@ BI.DownListPopup = BI.inherit(BI.Pane, {
                 items: []
             };
 
-            BI.each(it, function (i, item) {
-                if (BI.isNotEmptyArray(item.children) && !BI.isEmpty(item.el)) {
+            var storeItem = [];
+
+            BI.each(it, function (i, sourceItem) {
+                var item = BI.extend({}, sourceItem);
+                if (BI.isNotEmptyArray(sourceItem.children) && !BI.isEmpty(sourceItem.el)) {
                     item.type = "bi.combo_group";
                     // popup未初始化返回的是options中的value, 在经过buttontree的getValue concat之后，无法区分值来自options
                     // 还是item自身, 这边控制defaultInit为true来避免这个问题
@@ -93,12 +96,13 @@ BI.DownListPopup = BI.inherit(BI.Pane, {
                     item.cls = "down-list-group";
                     item.trigger = "hover";
                     item.isNeedAdjustWidth = false;
-                    item.el.title = item.el.title || item.el.text;
+                    item.el = sourceItem.el;
+                    item.el.title = sourceItem.el.title || sourceItem.el.text;
                     item.el.type = "bi.down_list_group_item";
                     item.el.logic = {
                         dynamic: true
                     };
-                    item.el.height = self.constants.height;
+                    item.el.height = sourceItem.el.height || BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT;
                     item.el.iconCls2 = self.constants.nextIcon;
                     item.popup = {
                         lgap: 1,
@@ -110,31 +114,13 @@ BI.DownListPopup = BI.inherit(BI.Pane, {
                             }]
 
                         },
-                        innerVGap: 5,
+                        innerVgap: 5,
                         maxHeight: 378
                     };
-                    item.el.childValues = [];
-                    BI.each(item.children, function (i, child) {
-                        var fatherValue = BI.deepClone(item.el.value);
-                        var childValue = BI.deepClone(child.value);
-                        self.singleValues.push(child.value);
-                        child.type = "bi.down_list_item";
-                        child.extraCls = " child-down-list-item";
-                        child.title = child.title || child.text;
-                        child.textRgap = 10;
-                        child.isNeedAdjustWidth = false;
-                        child.logic = {
-                            dynamic: true
-                        };
-                        child.father = fatherValue;
-                        self.fatherValueMap[self._createChildValue(fatherValue, childValue)] = fatherValue;
-                        self.childValueMap[self._createChildValue(fatherValue, childValue)] = childValue;
-                        child.value = self._createChildValue(fatherValue, childValue);
-                        item.el.childValues.push(child.value);
-                    });
+                    self._createChildren(item, sourceItem);
                 } else {
-                    item.type = "bi.down_list_item";
-                    item.title = item.title || item.text;
+                    item.type = sourceItem.type || "bi.down_list_item";
+                    item.title = sourceItem.title || sourceItem.text;
                     item.textRgap = 10;
                     item.isNeedAdjustWidth = false;
                     item.logic = {
@@ -144,6 +130,7 @@ BI.DownListPopup = BI.inherit(BI.Pane, {
                 var el_done = {};
                 el_done.el = item;
                 item_done.items.push(el_done);
+                storeItem.push(item);
             });
             if (self._isGroup(item_done.items)) {
                 BI.each(item_done.items, function (i, item) {
@@ -152,6 +139,7 @@ BI.DownListPopup = BI.inherit(BI.Pane, {
             }
 
             result.push(item_done);
+            self.items.push(storeItem);
             if (self._needSpliter(i, items.length)) {
                 var spliter_container = BI.createWidget({
                     type: "bi.vertical",
@@ -174,6 +162,33 @@ BI.DownListPopup = BI.inherit(BI.Pane, {
         return result;
     },
 
+    _createChildren: function (targetItem, sourceItem) {
+        var self = this;
+        targetItem.el.childValues = [];
+        targetItem.items = targetItem.children = [];
+        BI.each(sourceItem.children, function (i, child) {
+            var item = BI.extend({}, child);
+            var fatherValue = BI.deepClone(targetItem.el.value);
+            var childValue = BI.deepClone(item.value);
+            self.singleValues.push(item.value);
+            item.type = item.type || "bi.down_list_item";
+            item.extraCls = " child-down-list-item";
+            item.title = item.title || item.text;
+            item.textRgap = 10;
+            item.isNeedAdjustWidth = false;
+            item.logic = {
+                dynamic: true
+            };
+            item.father = fatherValue;
+            item.childValue = item.value;
+            self.fatherValueMap[self._createChildValue(fatherValue, childValue)] = fatherValue;
+            self.childValueMap[self._createChildValue(fatherValue, childValue)] = childValue;
+            item.value = self._createChildValue(fatherValue, childValue);
+            targetItem.el.childValues.push(item.value);
+            targetItem.items.push(item);
+        });
+    },
+
     _isGroup: function (i) {
         return i.length > 1;
     },
@@ -183,7 +198,7 @@ BI.DownListPopup = BI.inherit(BI.Pane, {
     },
 
     _createChildValue: function (fatherValue, childValue) {
-        return fatherValue + "_" + childValue;
+        return fatherValue + BI.BlankSplitChar + childValue;
     },
 
     _digest: function (valueItem) {
@@ -237,11 +252,11 @@ BI.DownListPopup = BI.inherit(BI.Pane, {
 
     populate: function (items) {
         BI.DownListPopup.superclass.populate.apply(this, arguments);
-        this.items = BI.deepClone(items);
+        this.items = [];
         this.childValueMap = {};
         this.fatherValueMap = {};
         this.singleValues = [];
-        var children = this._createChildren(this.items);
+        var children = this._createPopupItems(items);
         var popupItem = BI.createItems(children,
             {}, {
                 adjustLength: -2

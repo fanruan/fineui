@@ -49,10 +49,21 @@ BI.ValueChooserPane = BI.inherit(BI.AbstractValueChooser, {
         };
     },
 
+    getAllValue: function() {
+        var val = this.combo.getValue() || {};
+        if (val.type === BI.Selection.Multi) {
+            return val.value || [];
+        }
+
+        return BI.difference(BI.map(this.items, "value"), val.value || []);
+    },
+
     populate: function (items) {
         // 直接用combo的populate不会作用到AbstractValueChooser上
-        items && (this.items = items);
-        this.list.populate.apply(this.list, arguments);
+        if (BI.isNotNull(items)) {
+            this.items = items;
+        }
+        this.list.populate();
     }
 });
 BI.ValueChooserPane.EVENT_CHANGE = "EVENT_CHANGE";

@@ -1,33 +1,35 @@
-@import "constant";
+@import "constant.less";
 
-// 色彩库,从constant.less中获取相关颜色,不要出现#xxxxxx
+// 通用色彩库。从constant.less中获取相关颜色,不要出现#xxxxxx
 
 //默认字体颜色
 @color-bi-text-normal: @font-color-normal;
-//默认字体颜色深色系
+//深色主题默认字体颜色
+@color-bi-text-theme-dark: @font-color-normal-theme-dark;
 @color-bi-text-normal-theme-dark: @font-color-normal-theme-dark;
 //黑色字体颜色
 @color-bi-text-black: @font-color-black;
-//深色主题默认字体颜色
-@color-bi-text-theme-dark: @font-color-normal-theme-dark;
+//深色主题黑色字体颜色
+@color-bi-text-black-theme-dark: @font-color-normal-theme-dark;
 //灰色字体颜色
 @color-bi-text-gray: @font-color-gray;
 //浅灰色字体
 @color-bi-text-light-gray: @font-color-light-gray;
-//深色浅灰色字体
+//深色主题浅灰色字体
 @color-bi-text-light-gray-theme-dark: @font-color-light-gray-theme-dark;
 //白色字体颜色
 @color-bi-text: @font-color-white;
+@color-bi-text-white: @font-color-white;
+//深色主题白色字体颜色
+@color-bi-text-white-theme-dark: @font-color-white-theme-dark;
 //灰化字体颜色
 @color-bi-text-disabled: @font-color-disabled;
 //深色主题灰化字体颜色
 @color-bi-text-disabled-theme-dark: @font-color-disabled-theme-dark;
-//灰化图标色
-@color-bi-icon-disabled: @font-color-light-disabled;
-//深色主题灰化图标颜色
-@color-bi-icon-disabled-theme-dark: @font-color-light-disabled-theme-dark;
 //提示字体颜色
 @color-bi-text-tips: @font-color-tips;
+//深色主题提示字体颜色
+@color-bi-text-tips-theme-dark: @font-color-tips-theme-dark;
 //成功字体颜色
 @color-bi-text-success: @font-color-success;
 //失败字体颜色
@@ -37,8 +39,14 @@
 //标红色
 @color-bi-text-redmark: @font-color-warning;
 
+//灰化图标色
+@color-bi-icon-disabled: @font-color-light-disabled;
+//深色主题灰化图标颜色
+@color-bi-icon-disabled-theme-dark: @font-color-light-disabled-theme-dark;
+
 //普通背景
 @color-bi-background-normal: @background-color-normal;
+//深色主题普通背景
 @color-bi-background-normal-theme-dark: @background-color-normal-theme-dark;
 //默认背景
 @color-bi-background-default: @background-color-default;
@@ -46,19 +54,19 @@
 @color-bi-background-default-theme-dark: @background-color-default-theme-dark;
 //黑色背景
 @color-bi-background-black: @background-color-black;
-//深色系黑色背景
+//深色主题黑色背景
 @color-bi-background-black-theme-dark: @background-color-black-theme-dark;
 //浅黑色背景
 @color-bi-background-light-black: @background-color-light-black;
-//深色系浅黑色背景
+//深色主题浅黑色背景
 @color-bi-background-light-black-theme-dark: @background-color-light-black-theme-dark;
 //深灰色背景
 @color-bi-background-dark-gray: @background-color-dark-gray;
-//深色系深灰色背景
+//深色主题深灰色背景
 @color-bi-background-dark-gray-theme-dark: @background-color-dark-gray-theme-dark;
 //灰色背景(浅)
 @color-bi-background-light-gray: @background-color-light-gray;
-//深色主题灰色背景
+//深色主题灰色背景(浅)
 @color-bi-background-light-gray-theme-dark: @background-color-light-gray-theme-dark;
 //灰色背景(中)
 @color-bi-background-medium-gray: @background-color-medium-gray;
@@ -95,17 +103,21 @@
 @color-bi-border-black: @border-color-black;
 //默认边框色
 @color-bi-border-default: @border-color-default;
-//边框线颜色
+//边框线色
 @color-bi-border-line: @border-color-line;
-//深色系边框线色
+//深色主题边框线色
 @color-bi-border-line-theme-dark: @border-color-line-theme-dark;
+//深灰色边框线
+@color-bi-border-dark-gray-line: @border-color-dark-gray-line;
+//深灰色主题深色边框线
+@color-bi-border-dark-gray-line-theme-dark: @border-color-dark-gray-line-theme-dark;
 //深色边框线
 @color-bi-border-dark-line: @border-color-dark-line;
-//深色系深色边框线
+//深色主题深色边框线
 @color-bi-border-dark-line-theme-dark: @border-color-dark-line-theme-dark;
 //灰化边框
 @color-bi-border-disabled: @border-color-disabled;
-//深色系灰化边框
+//深色主题灰化边框
 @color-bi-border-disabled-theme-dark: @border-color-disabled-theme-dark;
 //成功边框色
 @color-bi-border-success: @border-color-success;
@@ -115,75 +127,3 @@
 @color-bi-border-warning: @border-color-warning;
 //边框提亮
 @color-bi-border-highlight: @border-color-highlight;
-
-//tooltip
-//成功背景
-@color-bi-tooltip-success-background: @background-color-normal-success;
-//成功边框
-@color-bi-tooltip-success-border: @border-color-normal-success;
-//失败边框
-@color-bi-tooltip-failure-border: @border-color-negative;
-
-//mask颜色
-@color-bi-button-mask: @color-bi-background-black;
-
-//颜色百分比
-//green
-@color-bi-green-80: fade(@font-color-success, 80);
-@color-bi-green-60: fade(@font-color-success, 60);
-@color-bi-green-40: fade(@font-color-success, 40);
-@color-bi-green-30: fade(@font-color-success, 30);
-@color-bi-green-20: fade(@font-color-success, 20);
-@color-bi-green-10: fade(@font-color-success, 10);
-@color-bi-green-5: fade(@font-color-success, 5);
-
-//blue
-@color-bi-blue-80: fade(@font-color-highlight, 80);
-@color-bi-blue-60: fade(@font-color-highlight, 60);
-@color-bi-blue-40: fade(@font-color-highlight, 40);
-@color-bi-blue-30: fade(@font-color-highlight, 30);
-@color-bi-blue-20: fade(@font-color-highlight, 20);
-@color-bi-blue-10: fade(@font-color-highlight, 10);
-@color-bi-blue-5: fade(@font-color-highlight, 5);
-
-//light-blue
-@color-bi-light-blue-80: fade(@font-color-light-highlight, 80);
-@color-bi-light-blue-60: fade(@font-color-light-highlight, 60);
-@color-bi-light-blue-40: fade(@font-color-light-highlight, 40);
-@color-bi-light-blue-30: fade(@font-color-light-highlight, 30);
-@color-bi-light-blue-20: fade(@font-color-light-highlight, 20);
-@color-bi-light-blue-10: fade(@font-color-light-highlight, 10);
-@color-bi-light-blue-5: fade(@font-color-light-highlight, 5);
-
-// orange
-@color-bi-orange-80: fade(@font-color-warning, 80);
-@color-bi-orange-60: fade(@font-color-warning, 60);
-@color-bi-orange-40: fade(@font-color-warning, 40);
-@color-bi-orange-30: fade(@font-color-warning, 30);
-@color-bi-orange-20: fade(@font-color-warning, 20);
-@color-bi-orange-10: fade(@font-color-warning, 10);
-@color-bi-orange-5: fade(@font-color-warning, 5);
-
-// red
-@color-bi-red-80: fade(@font-color-negative, 80);
-@color-bi-red-60: fade(@font-color-negative, 60);
-@color-bi-red-40: fade(@font-color-negative, 40);
-@color-bi-red-30: fade(@font-color-negative, 30);
-@color-bi-red-20: fade(@font-color-negative, 20);
-@color-bi-red-10: fade(@font-color-negative, 10);
-@color-bi-red-5: fade(@font-color-negative, 5);
-
-// yellow
-@color-bi-yellow-80: fade(@font-color-yellow, 90);
-@color-bi-yellow-60: fade(@font-color-yellow, 60);
-@color-bi-yellow-40: fade(@font-color-yellow, 40);
-@color-bi-yellow-20: fade(@font-color-yellow, 20);
-@color-bi-yellow-5: fade(@font-color-yellow, 5);
-
-
-
-
-
-
-
-

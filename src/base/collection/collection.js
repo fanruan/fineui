@@ -11,6 +11,9 @@ BI.CollectionView = BI.inherit(BI.Widget, {
             baseCls: "bi-collection",
             // width: 400, //必设
             // height: 300, //必设
+            scrollable: true,
+            scrollx: false,
+            scrolly: false,
             overflowX: true,
             overflowY: true,
             cellSizeAndPositionGetter: BI.emptyFn,
@@ -18,12 +21,14 @@ BI.CollectionView = BI.inherit(BI.Widget, {
             verticalOverscanSize: 0,
             scrollLeft: 0,
             scrollTop: 0,
-            items: []
+            items: [],
+            itemFormatter: function (item, index) {
+                return item;
+            }
         });
     },
 
-    _init: function () {
-        BI.CollectionView.superclass._init.apply(this, arguments);
+    render: function () {
         var self = this, o = this.options;
         this.renderedCells = [];
         this.renderedKeys = [];
@@ -32,7 +37,7 @@ BI.CollectionView = BI.inherit(BI.Widget, {
         this._debounceRelease = BI.debounce(function () {
             self._scrollLock = false;
         }, 1000 / 60);
-        this.container = BI.createWidget({
+        this.container = BI._lazyCreateWidget({
             type: "bi.absolute"
         });
         this.element.scroll(function () {
@@ -47,20 +52,37 @@ BI.CollectionView = BI.inherit(BI.Widget, {
                 scrollTop: o.scrollTop
             });
         });
-        BI.createWidget({
+        // 兼容一下
+        var scrollable = o.scrollable, scrollx = o.scrollx, scrolly = o.scrolly;
+        if (o.overflowX === false) {
+            if (o.overflowY === false) {
+                scrollable = false;
+            } else {
+                scrollable = "y"
+            }
+        } else {
+            if (o.overflowY === false) {
+                scrollable = "x";
+            }
+        }
+        BI._lazyCreateWidget({
             type: "bi.vertical",
             element: this,
-            scrollable: o.overflowX === true && o.overflowY === true,
-            scrolly: o.overflowX === false && o.overflowY === true,
-            scrollx: o.overflowX === true && o.overflowY === false,
+            scrollable: scrollable,
+            scrolly: scrolly,
+            scrollx: scrollx,
             items: [this.container]
         });
+        o.items = BI.isFunction(o.items) ? this.__watch(o.items, function (context, newValue) {
+            self.populate(newValue);
+        }) : o.items;
         if (o.items.length > 0) {
             this._calculateSizeAndPositionData();
             this._populate();
         }
     },
 
+    // mounted之后绑定事件
     mounted: function () {
         var  o = this.options;
         if (o.scrollLeft !== 0 || o.scrollTop !== 0) {
@@ -160,28 +182,29 @@ BI.CollectionView = BI.inherit(BI.Widget, {
                 var index = this.renderedKeys[datum.index] && this.renderedKeys[datum.index][1];
                 var child;
                 if (index >= 0) {
-                    if (datum.width !== this.renderedCells[index]._width) {
-                        this.renderedCells[index]._width = datum.width;
-                        this.renderedCells[index].el.setWidth(datum.width);
-                    }
-                    if (datum.height !== this.renderedCells[index]._height) {
-                        this.renderedCells[index]._height = datum.height;
-                        this.renderedCells[index].el.setHeight(datum.height);
-                    }
-                    if (this.renderedCells[index]._left !== datum.x) {
-                        this.renderedCells[index].el.element.css("left", datum.x + "px");
-                    }
-                    if (this.renderedCells[index]._top !== datum.y) {
-                        this.renderedCells[index].el.element.css("top", datum.y + "px");
-                    }
+                    // if (datum.width !== this.renderedCells[index]._width) {
+                    //     this.renderedCells[index]._width = datum.width;
+                    this.renderedCells[index].el.setWidth(datum.width);
+                    // }
+                    // if (datum.height !== this.renderedCells[index]._height) {
+                    //     this.renderedCells[index]._height = datum.height;
+                    this.renderedCells[index].el.setHeight(datum.height);
+                    // }
+                    // if (this.renderedCells[index]._left !== datum.x) {
+                    this.renderedCells[index].el.element.css("left", datum.x / BI.pixRatio + BI.pixUnit);
+                    // }
+                    // if (this.renderedCells[index]._top !== datum.y) {
+                    this.renderedCells[index].el.element.css("top", datum.y  / BI.pixRatio + BI.pixUnit);
+                    // }
                     renderedCells.push(child = this.renderedCells[index]);
                 } else {
-                    child = BI.createWidget(BI.extend({
+                    var item = o.itemFormatter(o.items[datum.index], datum.index);
+                    child = BI._lazyCreateWidget(BI.extend({
                         type: "bi.label",
                         width: datum.width,
                         height: datum.height
-                    }, o.items[datum.index], {
-                        cls: (o.items[datum.index].cls || "") + " container-cell" + (datum.y === 0 ? " first-row" : "") + (datum.x === 0 ? " first-col" : ""),
+                    }, item, {
+                        cls: (item.cls || "") + " collection-cell" + (datum.y === 0 ? " first-row" : "") + (datum.x === 0 ? " first-col" : ""),
                         _left: datum.x,
                         _top: datum.y
                     }));
@@ -191,8 +214,8 @@ BI.CollectionView = BI.inherit(BI.Widget, {
                         top: datum.y,
                         _left: datum.x,
                         _top: datum.y,
-                        _width: datum.width,
-                        _height: datum.height
+                        // _width: datum.width,
+                        // _height: datum.height
                     });
                 }
                 var startTopIndex = topMap[datum.y] | 0;
@@ -276,18 +299,17 @@ BI.CollectionView = BI.inherit(BI.Widget, {
             this.options.items = items;
             this._calculateSizeAndPositionData();
         }
-        if (o.items.length > 0) {
-            this.container.setWidth(this._width);
-            this.container.setHeight(this._height);
+        this.container.setWidth(this._width);
+        this.container.setHeight(this._height);
 
-            this._calculateChildrenToRender();
-            // 元素未挂载时不能设置scrollTop
-            try {
-                this.element.scrollTop(o.scrollTop);
-                this.element.scrollLeft(o.scrollLeft);
-            } catch (e) {
-            }
+        this._debounceRelease();
+        // 元素未挂载时不能设置scrollTop
+        try {
+            this.element.scrollTop(o.scrollTop);
+            this.element.scrollLeft(o.scrollLeft);
+        } catch (e) {
         }
+        this._calculateChildrenToRender();
     },
 
     setScrollLeft: function (scrollLeft) {
@@ -297,8 +319,8 @@ BI.CollectionView = BI.inherit(BI.Widget, {
         this._scrollLock = true;
         this.options.scrollLeft = BI.clamp(scrollLeft || 0, 0, this._getMaxScrollLeft());
         this._debounceRelease();
-        this._calculateChildrenToRender();
         this.element.scrollLeft(this.options.scrollLeft);
+        this._calculateChildrenToRender();
     },
 
     setScrollTop: function (scrollTop) {
@@ -308,8 +330,8 @@ BI.CollectionView = BI.inherit(BI.Widget, {
         this._scrollLock = true;
         this.options.scrollTop = BI.clamp(scrollTop || 0, 0, this._getMaxScrollTop());
         this._debounceRelease();
-        this._calculateChildrenToRender();
         this.element.scrollTop(this.options.scrollTop);
+        this._calculateChildrenToRender();
     },
 
     setOverflowX: function (b) {

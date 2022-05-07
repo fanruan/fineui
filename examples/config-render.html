@@ -1,0 +1,76 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <!-- <link rel="stylesheet" type="text/css" href="../dist/2.0/fineui.min.css"/>
+    <script src="../dist/2.0/fineui.js"></script> -->
+   <link rel="stylesheet" type="text/css" href="http://fanruan.design/fineui/2.0/fineui.min.css" />
+   <script src="http://fanruan.design/fineui/2.0/fineui.min.js"></script>
+</head>
+<body>
+<div id="wrapper"></div>
+<script>
+
+    BI.Plugin.configRender("demo.parent", function (rendered) {
+        console.log(rendered);
+        return rendered;
+    });
+
+    var Widget = BI.inherit(BI.Widget, {
+        setup: function () {
+            var wrapper, list;
+            return function () {
+                return {
+                    type: "bi.vertical",
+                    items: [{
+                        type: "bi.vertical",
+                        invisible: true,
+                        ref: function (_ref) {
+                            wrapper = _ref;
+                        },
+                        items: [{
+                            type: "bi.button_group",
+                            height: 100,
+                            ref: function (_ref) {
+                                list = _ref;
+                            },
+                            items: [],
+                            layouts: [{
+                                type: "bi.inline",
+                                tgap: 10,
+                                lgap: 10
+                            }]
+                        }]
+                    }, {
+                        type: "bi.button",
+                        text: "点击",
+                        handler: function () {
+                            list.populate(BI.range(10).map(function (i) {
+                                return {
+                                    type: "bi.label",
+                                    text: i,
+                                    cls: "bi-border"
+                                };
+                            }));
+                            wrapper.setVisible(true);
+                        }
+                    }]
+                };
+            };
+        }
+    });
+    BI.shortcut("demo.parent", Widget);
+    BI.createWidget({
+        type: "bi.absolute",
+        items: [{
+            el: {
+                type: "demo.parent"
+            },
+            top: 100,
+            left: 100
+        }],
+        element: "#wrapper"
+    });
+</script>
+</body>
+</html>

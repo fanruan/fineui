@@ -1,0 +1,215 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <!-- <link rel="stylesheet" type="text/css" href="../dist/2.0/fineui.min.css"/>
+    <script src="../dist/2.0/fineui.js"></script> -->
+   <link rel="stylesheet" type="text/css" href="http://fanruan.design/fineui/2.0/fineui.min.css" />
+   <script src="http://fanruan.design/fineui/2.0/fineui.min.js"></script>
+</head>
+<body>
+<div id="wrapper"></div>
+<script>
+    var Model = BI.inherit(Fix.Model, {
+        state: function () {
+            return {
+                expand: false,
+                showClearAll: false,
+                hasUndo: false,
+                hasRedo: false
+            };
+        },
+
+        computed: {
+            expandText: function () {
+                return this.model.expand ? "expand" : "not-expand";
+            },
+            clearAllText: function () {
+                return this.model.showClearAll ? "showClearAll" : "not-showClearAll";
+            },
+            undoText: function () {
+                return this.model.hasUndo ? "hasUndo" : "not-hasUndo";
+            },
+            redoText: function () {
+                return this.model.hasRedo ? "hasRedo" : "not-hasRedo";
+            }
+        },
+
+        actions: {
+            setExpand: function () {
+                this.model.expand = !this.model.expand;
+            },
+            setClearAll: function () {
+                this.model.showClearAll = !this.model.showClearAll;
+            },
+            setUndo: function () {
+                this.model.hasUndo = !this.model.hasUndo;
+            },
+            setRedo: function () {
+                this.model.hasRedo = !this.model.hasRedo;
+            }
+        }
+    });
+
+    BI.model("demo.model", Model);
+
+    function useExpand () {
+        var button;
+        var store = BI.useStore();
+        BI.onBeforeMount(function () {
+
+        });
+        BI.onMounted(function () {
+
+        });
+        BI.onBeforeUnmount(function () {
+
+        });
+        BI.onUnmounted(function () {
+
+        });
+        BI.watch("expandText", function (val) {
+            button.setText(val);
+        });
+        return function () {
+            return {
+                type: "bi.button",
+                ref: function (_ref) {
+                    button = _ref;
+                },
+                text: store.model.expandText,
+                handler: function () {
+                    store.setExpand();
+                }
+            };
+        };
+    }
+
+    function useClearAll () {
+        var button;
+        var store = BI.useStore();
+        BI.onBeforeMount(function () {
+
+        });
+        BI.onMounted(function () {
+
+        });
+        BI.onBeforeUnmount(function () {
+
+        });
+        BI.onUnmounted(function () {
+
+        });
+        BI.watch("clearAllText", function (val) {
+            button.setText(val);
+        });
+        return function () {
+            return {
+                type: "bi.button",
+                ref: function (_ref) {
+                    button = _ref;
+                },
+                text: store.model.clearAllText,
+                handler: function () {
+                    store.setClearAll();
+                }
+            };
+        };
+    }
+
+    function useUndo () {
+        var button;
+        var store = BI.useStore();
+        BI.onBeforeMount(function () {
+
+        });
+        BI.onMounted(function () {
+
+        });
+        BI.onBeforeUnmount(function () {
+
+        });
+        BI.onUnmounted(function () {
+
+        });
+        BI.watch("undoText", function (val) {
+            button.setText(val);
+        });
+        return function () {
+            return {
+                type: "bi.button",
+                ref: function (_ref) {
+                    button = _ref;
+                },
+                text: store.model.undoText,
+                handler: function () {
+                    store.setUndo();
+                }
+            };
+        };
+    }
+
+    function useRedo () {
+        var button;
+        var store = BI.useStore();
+        BI.onBeforeMount(function () {
+
+        });
+        BI.onMounted(function () {
+
+        });
+        BI.onBeforeUnmount(function () {
+
+        });
+        BI.onUnmounted(function () {
+
+        });
+        BI.watch("redoText", function (val) {
+            button.setText(val);
+        });
+        return function () {
+            return {
+                type: "bi.button",
+                ref: function (_ref) {
+                    button = _ref;
+                },
+                text: store.model.redoText,
+                handler: function () {
+                    store.setRedo();
+                }
+            };
+        };
+    }
+
+    var Widget = BI.inherit(BI.Widget, {
+        _store: function () {
+            return BI.Models.getModel("demo.model");
+        },
+        setup: function () {
+            var expandComponent = useExpand();
+            var clearAllComponent = useClearAll();
+            var undoComponent = useUndo();
+            var redoComponent = useRedo();
+            return function () {
+                return {
+                    type: "bi.vertical",
+                    items: [expandComponent(), clearAllComponent(), undoComponent(), redoComponent()]
+                };
+            };
+        }
+    });
+    BI.shortcut("demo.hooks", Widget);
+    BI.createWidget({
+        type: "bi.absolute",
+        items: [{
+            el: {
+                type: "demo.hooks"
+            },
+            top: 100,
+            left: 100
+        }],
+        element: "#wrapper"
+    });
+</script>
+</body>
+</html>

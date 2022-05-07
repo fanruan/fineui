@@ -1,0 +1,146 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <!-- <link rel="stylesheet" type="text/css" href="../dist/2.0/fineui.min.css"/>
+    <script src="../dist/2.0/fineui.js"></script> -->
+   <link rel="stylesheet" type="text/css" href="http://fanruan.design/fineui/2.0/fineui.min.css" />
+   <script src="http://fanruan.design/fineui/2.0/fineui.min.js"></script>
+</head>
+<body>
+<div id="wrapper"></div>
+<script>
+    BI.config("demo.parent", function (config) {
+        console.log("123");
+        return {
+            type: "bi.button",
+            text: "被替换的组件"
+        };
+    }, {
+        version: "1.0"
+    });
+
+    BI.module("my.module", {
+        // version不设置的话默认就用接口的version作为判断条件
+        version: "1.0",
+        components: {
+            "demo.parent": "1.0"
+        }
+    });
+
+    // 主线代码里加这个
+    BI.config("bi.provider.system", function (provider) {
+        provider.addDependencies({
+            "my.module": {
+                minVersion: "2.0",
+                maxVersion: "4.0"
+            }
+        });
+    });
+</script>
+<script>
+    var Model = BI.inherit(Fix.Model, {
+        state: function () {
+            return {
+                expand: false
+            };
+        },
+        childContext: ["text"],
+
+        computed: {
+            text: function () {
+                return this.model.expand ? "text-yes" : "text-not";
+            }
+        },
+
+        actions: {
+            toggle: function () {
+                this.model.expand = !this.model.expand;
+            }
+        }
+    });
+
+    BI.model("demo.model", Model);
+    var ChildModel = BI.inherit(Fix.Model, {
+        context: ["text"]
+    });
+
+    BI.model("demo.child_model", ChildModel);
+
+    var Child = BI.inherit(BI.Widget, {
+        setup: function () {
+            var store = BI.useStore(function () {
+                return BI.Models.getModel("demo.child_model");
+            });
+            return {
+                render: function () {
+                    return {
+                        type: "bi.vertical",
+                        items: [{
+                            type: "bi.button",
+                            text: store.model.text,
+                            handler: function () {
+                                console.log("click");
+                            }
+                        }, {
+                            type: "bi.label",
+                            text: store.model.text
+                        }]
+                    };
+                }
+            };
+        }
+    });
+    BI.shortcut("demo.child", Child);
+
+    var Widget = BI.inherit(BI.Widget, {
+        props: {
+            // vdom: true
+        },
+        watch: {
+            text: function () {
+                this.reset();
+            }
+        },
+        setup: function () {
+            var child;
+            var store = BI.useStore(function () {
+                return BI.Models.getModel("demo.model");
+            });
+            setInterval(function () {
+                store.toggle();
+            }, 1000);
+            // BI.watch("text", function () {
+            //     child.reset();
+            // });
+            return function () {
+                return {
+                    type: "bi.vertical",
+                    vgap: store.model.expand ? 20 : 30,
+                    items: [{
+                        type: "demo.child",
+                        ref: function (_ref) {
+                            child = _ref;
+                        }
+                    }, {
+                        type: "demo.child"
+                    }]
+                };
+            };
+        }
+    });
+    BI.shortcut("demo.parent", Widget);
+    BI.createWidget({
+        type: "bi.absolute",
+        items: [{
+            el: {
+                type: "demo.parent"
+            },
+            top: 100,
+            left: 100
+        }],
+        element: "#wrapper"
+    });
+</script>
+</body>
+</html>

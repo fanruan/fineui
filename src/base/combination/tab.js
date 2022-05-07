@@ -15,14 +15,15 @@ BI.Tab = BI.inherit(BI.Widget, {
             tab: false,
             cardCreator: function (v) {
                 return BI.createWidget();
-            }
+            },
+            keepAlives: []
         });
     },
 
     render: function () {
         var self = this, o = this.options;
         if (BI.isObject(o.tab)) {
-            this.tab = BI.createWidget(this.options.tab, {type: "bi.button_group"});
+            this.tab = BI.createWidget(this.options.tab, { type: "bi.button_group" });
             this.tab.on(BI.Controller.EVENT_CHANGE, function (type, value, obj) {
                 self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
             });
@@ -44,6 +45,7 @@ BI.Tab = BI.inherit(BI.Widget, {
             cardCreator: function (v) {
                 var card = o.cardCreator.apply(self, arguments);
                 self.cardMap[v] = card;
+
                 return card;
             },
             afterCardShow: function (v) {
@@ -60,7 +62,7 @@ BI.Tab = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
         if (o.single === true) {
             BI.each(this.cardMap, function (name, card) {
-                if (name !== (currCardName + "")) {
+                if (name !== (currCardName + "") && self._keepAlive(name) !== true) {
                     self.layout.deleteCardByName(name);
                     delete self.cardMap[name];
                 }
@@ -76,17 +78,30 @@ BI.Tab = BI.inherit(BI.Widget, {
         }
     },
 
-    mounted: function () {
+    _keepAlive: function (v) {
         var o = this.options;
+
+        return BI.isFunction(o.keepAlives) ? o.keepAlives(v) : BI.contains(o.keepAlives, v);
+    },
+
+    created: function () {
+        var self = this, o = this.options;
         if (o.showIndex !== false) {
-            this.setSelect(o.showIndex);
+            if (BI.isFunction(o.showIndex)) {
+                var v = this.__watch(o.showIndex, function (context, newValue) {
+                    self.setSelect(newValue);
+                });
+                this.setSelect(v);
+            } else {
+                this.setSelect(o.showIndex);
+            }
         }
     },
 
-    setSelect: function (v) {
+    setSelect: function (v, action, callback) {
         this.tab && this.tab.setValue(v);
         this._assertCard(v);
-        this.layout.showCardByName(v);
+        this.layout.showCardByName(v, action, callback);
         this._deleteOtherCards(v);
         if (this.curr !== v) {
             this.curr = v;
@@ -99,9 +114,14 @@ BI.Tab = BI.inherit(BI.Widget, {
             if (BI.isEqual(name, (cardname + ""))) {
                 self.layout.deleteCardByName(name);
                 delete self.cardMap[name];
+
                 return true;
             }
         });
+    },
+
+    isCardExisted: function (cardName) {
+        return this.layout.isCardExisted(cardName);
     },
 
     getSelect: function () {
@@ -114,7 +134,8 @@ BI.Tab = BI.inherit(BI.Widget, {
 
     getTab: function (v) {
         this._assertCard(v);
-        return this.layout.getCardByName(v);
+
+return this.layout.getCardByName(v);
     },
 
     setValue: function (v) {

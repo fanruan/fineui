@@ -43,30 +43,17 @@ BI.MultiLayerSelectTreePlusGroupNode = BI.inherit(BI.NodeButton, {
             self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
         });
 
-        var needBlankLayers = [];
-        var pNode = o.pNode;
-        while (pNode) {
-            if (pNode.isLastNode) {
-                needBlankLayers.push(pNode.layer)
-            }
-            pNode = pNode.pNode;
-        }
-
         var items = [];
-        BI.count(0, o.layer, function (index) {
-            items.push({
-                type: "bi.layout",
-                cls: BI.contains(needBlankLayers, index) ? "" : "base-line-conn-background",
-                width: 12,
-                height: o.height
-            });
+
+        items.push({
+            el: this.node,
+            lgap: o.layer * BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT / 2
         });
-        items.push(this.node);
         BI.createWidget({
-            type: "bi.td",
+            type: "bi.horizontal_adapt",
             element: this,
-            columnSize: BI.makeArray(o.layer, 12),
-            items: [items]
+            columnSize: BI.makeArray(o.layer, BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT / 2),
+            items: items
         });
     },
 

@@ -10,23 +10,20 @@ BI.MultiSelectInsertNoBarCombo = BI.inherit(BI.Single, {
             baseCls: "bi-multi-select-insert-combo-no-bar",
             itemsCreator: BI.emptyFn,
             valueFormatter: BI.emptyFn,
+            itemHeight: BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT,
             height: 24,
-            attributes: {
-                tabIndex: 0
-            }
         });
     },
 
     _init: function () {
-        BI.MultiSelectInsertNoBarCombo.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
-
+        BI.MultiSelectInsertNoBarCombo.superclass._init.apply(this, arguments);
         var assertShowValue = function () {
             if (BI.isKey(self._startValue)) {
                 if (self.storeValue.type === BI.Selection.All) {
                     BI.remove(self.storeValue.value, self._startValue);
                     self.storeValue.assist = self.storeValue.assist || [];
-                    self.storeValue.assist.pushDistinct(self._startValue);
+                    BI.pushDistinct(self.storeValue.assist, self._startValue);
                 } else {
                     BI.pushDistinct(self.storeValue.value, self._startValue);
                     BI.remove(self.storeValue.assist, self._startValue);
@@ -44,7 +41,7 @@ BI.MultiSelectInsertNoBarCombo = BI.inherit(BI.Single, {
 
         this.trigger = BI.createWidget({
             type: "bi.multi_select_insert_trigger",
-            height: o.height,
+            height: o.height - (o.simple ? 1 : 2),
             text: o.text,
             // adapter: this.popup,
             masker: {
@@ -52,11 +49,12 @@ BI.MultiSelectInsertNoBarCombo = BI.inherit(BI.Single, {
                     left: 0,
                     top: 0,
                     right: 0,
-                    bottom: 25
+                    bottom: BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT + 1
                 }
             },
             valueFormatter: o.valueFormatter,
             itemsCreator: BI.bind(this._itemsCreator4Trigger, this),
+            itemHeight: o.itemHeight,
             value: {
                 type: BI.Selection.Multi,
                 value: o.value
@@ -71,24 +69,15 @@ BI.MultiSelectInsertNoBarCombo = BI.inherit(BI.Single, {
             self._setStartValue("");
         });
         this.trigger.on(BI.MultiSelectInsertTrigger.EVENT_PAUSE, function () {
-            if (this.getSearcher().hasMatched()) {
-                self._addItem(assertShowValue);
-            }
-        });
-        this.trigger.on(BI.MultiSelectInsertTrigger.EVENT_ADD_ITEM, function () {
-            if (!this.getSearcher().hasMatched()) {
-                self._addItem(assertShowValue);
-                var addedValue = this.getSearcher().getKeyword();
-                self._stopEditing();
-                self.fireEvent(BI.MultiSelectInsertNoBarCombo.EVENT_ADD_ITEM, addedValue);
-            }
+            self._addItem(assertShowValue, true);
+            self.fireEvent(BI.MultiSelectInsertNoBarCombo.EVENT_ADD_ITEM, this.getSearcher().getKeyword());
         });
         this.trigger.on(BI.MultiSelectInsertTrigger.EVENT_SEARCHING, function (keywords) {
             var last = BI.last(keywords);
             keywords = BI.initial(keywords || []);
             if (keywords.length > 0) {
                 self._joinKeywords(keywords, function () {
-                    if (BI.isEndWithBlank(last)) {
+                    if (BI.endWith(last, BI.BlankSplitChar)) {
                         self.combo.setValue(self.storeValue);
                         assertShowValue();
                         self.combo.populate();
@@ -97,7 +86,9 @@ BI.MultiSelectInsertNoBarCombo = BI.inherit(BI.Single, {
                         self.combo.setValue(self.storeValue);
                         assertShowValue();
                     }
+                    self._dataChange = true;
                 });
+                this.getSearcher().getKeywordsLength() > 2000 && BI.Msg.alert(BI.i18nText("BI-Basic_Prompt"), BI.i18nText("BI-Basic_Too_Much_Value_Get_Two_Thousand"));
             }
         });
 
@@ -111,6 +102,7 @@ BI.MultiSelectInsertNoBarCombo = BI.inherit(BI.Single, {
                     assertShowValue();
                 });
             }
+            self._dataChange = true;
         });
         this.trigger.on(BI.MultiSelectInsertTrigger.EVENT_BEFORE_COUNTER_POPUPVIEW, function () {
             // counter的值随点击项的改变而改变, 点击counter的时候不需要setValue(counter会请求刷新计数)
@@ -125,6 +117,7 @@ BI.MultiSelectInsertNoBarCombo = BI.inherit(BI.Single, {
 
         this.combo = BI.createWidget({
             type: "bi.combo",
+            cls: (o.simple ? "bi-border-bottom" : "bi-border") + " bi-border-radius",
             toggle: false,
             container: o.container,
             el: this.trigger,
@@ -139,6 +132,7 @@ BI.MultiSelectInsertNoBarCombo = BI.inherit(BI.Single, {
                 listeners: [{
                     eventName: BI.MultiSelectPopupView.EVENT_CHANGE,
                     action: function () {
+                        self._dataChange = true;
                         self.storeValue = this.getValue();
                         self._adjust(function () {
                             assertShowValue();
@@ -152,11 +146,13 @@ BI.MultiSelectInsertNoBarCombo = BI.inherit(BI.Single, {
                 }, {
                     eventName: BI.MultiSelectPopupView.EVENT_CLICK_CLEAR,
                     action: function () {
+                        self._dataChange = true;
                         self.setValue();
                         self._defaultState();
                     }
                 }],
                 itemsCreator: o.itemsCreator,
+                itemHeight: o.itemHeight,
                 valueFormatter: o.valueFormatter,
                 onLoaded: function () {
                     BI.nextTick(function () {
@@ -178,9 +174,12 @@ BI.MultiSelectInsertNoBarCombo = BI.inherit(BI.Single, {
         });
 
         this.combo.on(BI.Combo.EVENT_BEFORE_POPUPVIEW, function () {
+            if (!this.isViewVisible()) {
+                self._dataChange = false;// 标记数据是否发生变化
+            }
             this.setValue(self.storeValue);
             BI.nextTick(function () {
-                self.populate();
+                self._populate();
             });
         });
         // 当退出的时候如果还在处理请求，则等请求结束后再对外发确定事件
@@ -191,7 +190,7 @@ BI.MultiSelectInsertNoBarCombo = BI.inherit(BI.Single, {
             if (self.requesting === true) {
                 self.wants2Quit = true;
             } else {
-                self.fireEvent(BI.MultiSelectInsertNoBarCombo.EVENT_CONFIRM);
+                self._dataChange && self.fireEvent(BI.MultiSelectInsertNoBarCombo.EVENT_CONFIRM);
             }
         });
 
@@ -217,7 +216,7 @@ BI.MultiSelectInsertNoBarCombo = BI.inherit(BI.Single, {
                     left: 0,
                     top: 0,
                     right: 0,
-                    bottom: 25
+                    bottom: BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT + 1
                 }
             },
             valueFormatter: o.valueFormatter,
@@ -239,6 +238,12 @@ BI.MultiSelectInsertNoBarCombo = BI.inherit(BI.Single, {
         this.numberCounter.on(BI.Events.VIEW, function (b) {
             BI.nextTick(function () {// 自动调整宽度
                 self.trigger.refreshPlaceHolderWidth((b === true ? self.numberCounter.element.outerWidth() + 8 : 0));
+            });
+        });
+
+        this.numberCounter.on(BI.MultiSelectCheckSelectedSwitcher.EVENT_AFTER_HIDEVIEW, function () {
+            BI.nextTick(function () {// 收起时自动调整宽度
+                self.trigger.refreshPlaceHolderWidth(0);
             });
         });
 
@@ -274,7 +279,7 @@ BI.MultiSelectInsertNoBarCombo = BI.inherit(BI.Single, {
         });
     },
 
-    _itemsCreator4Trigger: function(op, callback) {
+    _itemsCreator4Trigger: function (op, callback) {
         var self = this, o = this.options;
         o.itemsCreator(op, function (res) {
             if (op.times === 1 && BI.isNotNull(op.keywords)) {
@@ -301,10 +306,11 @@ BI.MultiSelectInsertNoBarCombo = BI.inherit(BI.Single, {
             assertShowValue();
             self.populate();
             self._setStartValue("");
+            self._dataChange = true;
         });
     },
 
-    _stopEditing: function() {
+    _stopEditing: function () {
         this.trigger.stopEditing();
         this.numberCounter.hideView();
     },
@@ -328,20 +334,12 @@ BI.MultiSelectInsertNoBarCombo = BI.inherit(BI.Single, {
         var self = this, o = this.options;
         this._assertValue(this.storeValue);
         this.requesting = true;
-        o.itemsCreator({
-            type: BI.MultiSelectInsertNoBarCombo.REQ_GET_ALL_DATA,
-            keywords: keywords
-        }, function (ob) {
-            var values = BI.map(ob.items, "value");
-            digest(values);
-        });
 
-        function digest (items) {
-            var selectedMap = self._makeMap(items);
+        digest();
+
+        function digest() {
             BI.each(keywords, function (i, val) {
-                if (BI.isNotNull(selectedMap[val])) {
-                    self.storeValue.type === BI.Selection.Multi ? BI.pushDistinct(self.storeValue.value, val) : BI.remove(self.storeValue.value, val);
-                }
+                self.storeValue.type === BI.Selection.Multi ? BI.pushDistinct(self.storeValue.value, val) : BI.remove(self.storeValue.value, val);
             });
             self._adjust(callback);
         }
@@ -351,25 +349,35 @@ BI.MultiSelectInsertNoBarCombo = BI.inherit(BI.Single, {
         var self = this, o = this.options;
         this._assertValue(res);
         this.requesting = true;
+        if (this.storeValue.type === res.type) {
+            var result = BI.Func.getSearchResult(BI.map(this.storeValue.value, function (_i, v) {
+                return {
+                    text: o.valueFormatter(v) || v,
+                    value: v
+                };
+            }), this.trigger.getKey());
+            var change = false;
+            var map = this._makeMap(this.storeValue.value);
+            BI.each(BI.concat(result.match, result.find), function (i, obj) {
+                var v = obj.value;
+                if (BI.isNotNull(map[v])) {
+                    change = true;
+                    self.storeValue.assist && self.storeValue.assist.push(map[v]);
+                    delete map[v];
+                }
+            });
+            change && (this.storeValue.value = BI.values(map));
+            this._adjust(callback);
+            return;
+        }
         o.itemsCreator({
             type: BI.MultiSelectInsertNoBarCombo.REQ_GET_ALL_DATA,
-            keywords: [this.trigger.getKey()]
+            keywords: [this.trigger.getKey()],
+            selectedValues: BI.filter(this.storeValue.value, function (_i, v) {
+                return !BI.contains(res.value, v);
+            }),
         }, function (ob) {
             var items = BI.map(ob.items, "value");
-            if (self.storeValue.type === res.type) {
-                var change = false;
-                var map = self._makeMap(self.storeValue.value);
-                BI.each(items, function (i, v) {
-                    if (BI.isNotNull(map[v])) {
-                        change = true;
-                        self.storeValue.assist && self.storeValue.assist.push(map[v]);
-                        delete map[v];
-                    }
-                });
-                change && (self.storeValue.value = BI.values(map));
-                self._adjust(callback);
-                return;
-            }
             var selectedMap = self._makeMap(self.storeValue.value);
             var notSelectedMap = self._makeMap(res.value);
             var newItems = [];
@@ -392,9 +400,10 @@ BI.MultiSelectInsertNoBarCombo = BI.inherit(BI.Single, {
         var self = this, o = this.options;
         adjust();
         callback();
-        function adjust () {
+
+        function adjust() {
             if (self.wants2Quit === true) {
-                self.fireEvent(BI.MultiSelectInsertNoBarCombo.EVENT_CONFIRM);
+                self._dataChange && self.fireEvent(BI.MultiSelectInsertNoBarCombo.EVENT_CONFIRM);
                 self.wants2Quit = false;
             }
             self.requesting = false;
@@ -434,6 +443,18 @@ BI.MultiSelectInsertNoBarCombo = BI.inherit(BI.Single, {
         this.popup.setStartValue(value);
     },
 
+    _populate: function () {
+        this.combo.populate.apply(this.combo, arguments);
+    },
+
+    showView: function () {
+        this.combo.showView();
+    },
+
+    hideView: function () {
+        this.combo.hideView();
+    },
+
     setValue: function (v) {
         this.storeValue = {
             type: BI.Selection.Multi,
@@ -448,7 +469,7 @@ BI.MultiSelectInsertNoBarCombo = BI.inherit(BI.Single, {
     },
 
     populate: function () {
-        this.combo.populate.apply(this.combo, arguments);
+        this._populate.apply(this, arguments);
         this.numberCounter.populateSwitcher.apply(this.numberCounter, arguments);
     }
 });

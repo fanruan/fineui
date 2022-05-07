@@ -1,4 +1,143 @@
 # 更新日志
+2.0(2022-01)
+- 提供自定义表单
+
+2.0(2021-12)
+- 新增Context组件
+- toast支持closable属性，可控制是否显示关闭按钮
+- 新增气泡弹框控件
+- BI.point支持widget添加埋点
+- childContext废弃，替换成provide
+- 支持BI.useContext获取上下文环境
+- BI.Msg.alert支持message传json格式
+- 支持BI.config(function(){})进行系统配置
+
+2.0(2021-11)
+- 限制了复选下拉框一次粘贴添加值个数最大2000
+
+2.0(2021-10)
+- combo增加window.blur事件触发隐藏
+
+2.0(2021-09)
+- 支持自动watch
+- 支持h函数传递left、right，优化left_right_vertical_adapt布局的jsx写法
+- 新增bi.virtual_group_list组件
+
+2.0(2021-07)
+- layout支持forceUpdate刷新方式
+- width属性支持calc()
+- 修改了颜色选择器交互
+- 新增bi.horizontal_fill、bi.vertical_fill布局
+- 增加module定义插件版本号
+- bubble使用popper.js实现
+- 优化了日期类型控件标红时的报错提示
+- 支持虚拟dom
+- 修复了树控件节点未初始化时调用树的getValue始终为空的问题
+
+2.0(2021-05)
+- 支持搜索的控件支持搜索包含空格的字符串
+- 解决了树列表populate调用两次itemsCreator的问题
+
+2.0(2021-03)
+- 优化left_right_vertical_adapt布局，去掉float属性只使用flex
+- inline布局支持用calc计算fill列宽度
+- 时间类型控件无翻页限制
+- 时间类型控件优化动态时间面板的交互
+
+2.0(2021-02)
+- 增加beforeRender生命周期函数
+
+2.0(2021-01)
+- 修改了日期下拉面板中的当前时间按钮的交互效果
+- 新增年区间和年季度区间控件
+- 日期类型控件不操作下拉面板收起不发Confirm事件
+- 日期类型控件全系列可设置是否显示动态日期
+- 日期类型控件全系列可设置最大最小日期
+- 调整了combo的popup显示位置计算逻辑
+
+2.0(2020-12)
+- multi_layer_down_list_combo支持无限层级
+- 新增不带全选的同步复选下拉框
+- 日期选择控件为年月选择器子组件新增POPUP弹出前事件
+- 文件上传控件新增API(setMaxFileLength)以动态设置最大上传文件数量
+- 复选下拉树显示查看已选效果改成和复选下拉列表一致
+- Pane系列提供small和big两种大小的加载动画
+- 同步树列表系列支持不显示节点连接线和展开收起图标
+- 规范了下拉树trigger中显示值的显示顺序
+- bi.editor支持传入autocomplete
+- [视觉]editor水印间距统一与文本域水印不可选中
+- 修复bi.file的url参数拼接问题
+- 修复了colorChooser选择透明后, 打开更多选色面板, 直接点保存会选中自动的问题
+- bi.file支持限制上传文件数
+
+2.0(2020-11)
+- bi.file上传文件errorMsg默认调用国际化
+- 修复了文本标签text传递空字符串后显示value值的问题
+- 限制了title的最大高度
+- bi.textarea_editor添加setWatermark方法
+- 生命周期可以通过属性传递来操作
+- 修复了颜色选择器hex框不能输入为空的问题
+- 增加纯文本组件bi.pure_text
+- store支持webworker,引入多线程机制
+- 修复了Popover小屏幕上看不完整的问题
+- 颜色选择器支持输入16进制颜色编号
+- bi.textarea_editor支持气泡提示报错
+
+2.0(2020-10)
+- 支持Composition API
+- pane和loadingPane支持加载时自定义提示文本
+
+2.0(2020-09)
+- combo增加click-blur(点击显示,blur消失)作为触发条件功能
+- allCountPager支持是否显示总行数
+- 修复区间滑块setEnable(false)滑块不灰化的问题
+- 修复同步复选下拉框系列setValue所有值后触发器不显示全选的问题
+- BI.Tree.traversal方法迭代函数增加父节点参数
+
+2.0(2020-08)
+- bi.sign_editor支持显示值居左/居中/居右显示
+- bi.iframe新增EVENT_LOADED事件
+- 修复了searcher在允许搜索的情况下输入空格直接退出搜索的问题
+- 修复了复选下拉系列'点按空格添加完全匹配项'添加的是显示值而非实际值的问题
+- search_text_value_combo支持水印
+- BI.makeObject 方法支持传入iteratee
+
+2.0(2020-07)
+- 修复了日期类型控件先展开切换日期月份面板，再设置区间使得该月份不合法，查看该月份面板灰化不对的问题
+- bi.file文件上传控件accept属性与 [input accept Attribute](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/file#accept) 统一
+- 修复了日期类型控件设置一个不在minDate和maxDate之间的日期值时，面板灰化与翻页按钮状态不对的问题
+- BI.OB的on方法返回一个解除监听的函数
+- 修复了grid_view执行_unMount时不调用子组件的_unMount的问题
+- combo新增belowMouse属性,允许popup在点击处弹出
+- combo新增hideWhenAnotherComboOpen属性,开启则其他combo下拉时当前combo收起
+- 修复了datePicker在setValue的时候没有动态刷新可用月份的问题
+- 同步复选下拉及其面板新增getAllValue获取所有已选值
+- 同步复选下拉树及其面板新增getAllValue获取完整的选中树节点
+- 修复date_picker最大值最小值与面板展示判断问题
+- 复选下拉树和下拉列表添加showView和hideVIew方法
+- number_editor支持自动检测数值与范围是否合法
+- 修复了颜色选择器设置值为null的时候,trigger和popup表现不一致的问题
+
+2.0(2020-06)
+- 修复了复选下拉树半选节点的子节点未加载的时候，点选该半选节点是取消选中的问题
+- 下拉树系列支持isNeedAdjustWidth以动态变化宽度
+- 修复了新增值的下拉控件传递valueFormatter搜索完全匹配项提示新增
+- 修复了选色控件历史记录没有选中的问题的问题
+- 修复了单选下拉框新增值的时候没有发事件的问题
+- 修复了单选标红combo类setValue为空字符串会标红的问题
+- BI.history提供与注册路由对应的卸载路由方法unRoute
+- 修复了单选标红combo类setValue为空和空数组行为不一致的问题
+- 单选列表支持新增选项
+- 增加组件shortcut未定义的错误提示
+
+2.0(2020-05)
+- 修复调用BI.history.navigate(XXX, {trigger: false})时, XXX包含中文空格等字符仍然触发回调的问题
+- 新增BI.after和BI.before方法
+- 修复bi.button设置宽度并配置iconCls后，文本很长的情况下显示截断的问题
+- 填加bi-user-select-enable和bi-user-select-disable通用类名
+- 修复树系列多层半选状态下,勾选祖先节点,后代节点不受影响的问题
+- 修复上传控件多个title问题
+
 2.0(2020-04)
 - 修复树列表通过空格回到初始面板没有刷新的问题
 - 下拉树系列添加下拉popup弹出前事件

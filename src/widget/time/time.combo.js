@@ -10,14 +10,21 @@
             popupHeight: 80,
             popupWidth: 240,
             comboAdjustHeight: 1,
-            border: 1
+            border: 1,
+            iconWidth: 24
         },
         props: {
-            baseCls: "bi-time-combo bi-border bi-border-radius bi-focus-shadow",
-            width: 78,
-            height: 22,
+            baseCls: "bi-time-combo",
+            height: 24,
             format: "",
-            allowEdit: false
+            allowEdit: false,
+            isNeedAdjustHeight: false,
+            isNeedAdjustWidth: false
+        },
+
+        _init: function () {
+            var o = this.options;
+            BI.TimeCombo.superclass._init.apply(this, arguments);
         },
 
         render: function () {
@@ -59,13 +66,14 @@
                     items: [{
                         el: {
                             type: "bi.combo",
+                            cls: "bi-border bi-border-radius",
                             container: opts.container,
                             toggle: false,
-                            isNeedAdjustHeight: false,
-                            isNeedAdjustWidth: false,
+                            isNeedAdjustHeight: opts.isNeedAdjustHeight,
+                            isNeedAdjustWidth: opts.isNeedAdjustWidth,
                             el: {
                                 type: "bi.time_trigger",
-                                height: opts.height,
+                                height: opts.height - 2,
                                 allowEdit: opts.allowEdit,
                                 watermark: opts.watermark,
                                 format: opts.format,
@@ -145,7 +153,7 @@
                             adjustLength: this.constants.comboAdjustHeight,
                             popup: {
                                 el: popup,
-                                width: this.constants.popupWidth,
+                                width: opts.isNeedAdjustWidth ? opts.width : this.constants.popupWidth,
                                 stopPropagation: false
                             },
                             hideChecker: function (e) {
@@ -164,14 +172,14 @@
                         },
                         top: 0,
                         left: 0,
-                        right: 22,
+                        right: 0,
                         bottom: 0
                     }, {
                         el: {
                             type: "bi.icon_button",
                             cls: "bi-trigger-icon-button time-font icon-size-16",
-                            width: 22,
-                            height: 22,
+                            width: this.constants.iconWidth,
+                            height: opts.height,
                             listeners: [{
                                 eventName: BI.IconButton.EVENT_CHANGE,
                                 action: function () {
@@ -215,6 +223,18 @@
             this.setValue(nowTome);
             this.hidePopupView();
             this.fireEvent(BI.TimeCombo.EVENT_CONFIRM);
+        },
+
+        focus: function () {
+            this.trigger.focus();
+        },
+    
+        blur: function () {
+            this.trigger.blur();
+        },
+
+        setWaterMark: function (v) {
+            this.trigger.setWaterMark(v);
         }
     });
 

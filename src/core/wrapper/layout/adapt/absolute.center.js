@@ -6,7 +6,7 @@
 BI.AbsoluteCenterLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.AbsoluteCenterLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-absolute-center-layout",
+            baseCls: "bi-abs-c-a",
             hgap: 0,
             lgap: 0,
             rgap: 0,
@@ -18,7 +18,11 @@ BI.AbsoluteCenterLayout = BI.inherit(BI.Layout, {
 
     render: function () {
         BI.AbsoluteCenterLayout.superclass.render.apply(this, arguments);
-        this.populate(this.options.items);
+        var self = this, o = this.options;
+        var items = BI.isFunction(o.items) ? this.__watch(o.items, function (context, newValue) {
+            self.populate(newValue);
+        }) : o.items;
+        this.populate(items);
     },
 
     _addElement: function (i, item) {
@@ -26,17 +30,13 @@ BI.AbsoluteCenterLayout = BI.inherit(BI.Layout, {
         var w = BI.AbsoluteCenterLayout.superclass._addElement.apply(this, arguments);
         w.element.css({
             position: "absolute",
-            left: o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0),
-            right: o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0),
-            top: o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0),
-            bottom: o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0),
+            left: this._optimiseGap(o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0)),
+            right: this._optimiseGap(o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0)),
+            top: this._optimiseGap(o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0)),
+            bottom: this._optimiseGap(o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0)),
             margin: "auto"
         });
         return w;
-    },
-
-    resize: function () {
-        // console.log("absolute_center_adapt布局不需要resize");
     },
 
     populate: function (items) {

@@ -18,9 +18,8 @@ BI.MultifileEditor = BI.inherit(BI.Widget, {
         });
     },
 
-    _init: function () {
+    render: function () {
         var self = this, o = this.options;
-        BI.MultifileEditor.superclass._init.apply(this, arguments);
         this.file = BI.createWidget({
             type: "bi.file",
             cls: "multifile-editor",
@@ -31,6 +30,7 @@ BI.MultifileEditor = BI.inherit(BI.Widget, {
             multiple: o.multiple,
             accept: o.accept,
             maxSize: o.maxSize,
+            maxLength: o.maxLength,
             title: o.title
         });
         this.file.on(BI.File.EVENT_CHANGE, function () {
@@ -66,8 +66,20 @@ BI.MultifileEditor = BI.inherit(BI.Widget, {
         });
     },
 
+    _reset: function () {
+        this.file.reset();
+    },
+
+    setMaxFileLength: function (v) {
+        this.file.setMaxFileLength(v);
+    },
+
     select: function () {
         this.file.select();
+    },
+
+    getQueue: function () {
+        return this.file.getQueue();
     },
 
     getValue: function () {
@@ -75,11 +87,18 @@ BI.MultifileEditor = BI.inherit(BI.Widget, {
     },
 
     upload: function () {
+        this._reset();
         this.file.upload();
     },
 
+    sendFiles: function (files) {
+        this._reset();
+
+        this.file.sendFiles(files);
+    },
+
     reset: function () {
-        this.file.reset();
+        this._reset();
     }
 });
 BI.MultifileEditor.EVENT_CHANGE = "EVENT_CHANGE";

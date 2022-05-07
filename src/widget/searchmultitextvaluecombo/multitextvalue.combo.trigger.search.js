@@ -8,7 +8,7 @@ BI.SearchMultiSelectTrigger = BI.inherit(BI.Trigger, {
 
     _defaultConfig: function () {
         return BI.extend(BI.SearchMultiSelectTrigger.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-multi-select-trigger bi-border",
+            baseCls: "bi-multi-select-trigger",
             itemsCreator: BI.emptyFn,
             valueFormatter: BI.emptyFn,
             searcher: {},
@@ -23,9 +23,6 @@ BI.SearchMultiSelectTrigger = BI.inherit(BI.Trigger, {
         BI.SearchMultiSelectTrigger.superclass._init.apply(this, arguments);
 
         var self = this, o = this.options;
-        if (o.height) {
-            this.setHeight(o.height - 2);
-        }
 
         this.searcher = BI.createWidget(o.searcher, {
             type: "bi.search_multi_select_searcher",

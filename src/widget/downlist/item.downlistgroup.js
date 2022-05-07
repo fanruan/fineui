@@ -28,6 +28,7 @@ BI.DownListGroupItem = BI.inherit(BI.BasicButton, {
             type: "bi.icon_button",
             cls: o.iconCls1,
             width: 36,
+            height: o.height,
             disableSelected: true,
             selected: this._digest(o.value)
         });
@@ -71,11 +72,17 @@ BI.DownListGroupItem = BI.inherit(BI.BasicButton, {
         });
     },
 
+    _getLevel: function () {
+        var child = BI.first(this.options.childValues);
+        return BI.isNotNull(child) ? (child + "").split(BI.BlankSplitChar).length : 0;
+    },
+
     _digest: function (v) {
         var self = this, o = this.options;
         v = BI.isArray(v) ? v : [v];
+        var level = this._getLevel();
         return BI.any(v, function (idx, value) {
-            return BI.contains(o.childValues, value);
+            return BI.contains(o.childValues, (value + "").split(BI.BlankSplitChar).slice(0, level).join(BI.BlankSplitChar));
         });
     },
 

@@ -7,8 +7,8 @@
  * @extends BI.Logic
  */
 BI.VerticalLayoutLogic = BI.inherit(BI.Logic, {
-    _defaultConfig: function () {
-        return BI.extend(BI.VerticalLayoutLogic.superclass._defaultConfig.apply(this, arguments), {
+    props: function () {
+        return {
             dynamic: false,
             scrollable: null,
             scrolly: false,
@@ -19,8 +19,10 @@ BI.VerticalLayoutLogic = BI.inherit(BI.Logic, {
             lgap: 0,
             rgap: 0,
             tgap: 0,
-            bgap: 0
-        });
+            bgap: 0,
+            innerVgap: 0,
+            innerHgap: 0
+        };
     },
 
     createLogic: function () {
@@ -41,12 +43,10 @@ BI.VerticalLayoutLogic = BI.inherit(BI.Logic, {
             rgap: o.rgap,
             tgap: o.tgap,
             bgap: o.bgap,
+            innerHgap: o.innerHgap,
+            innerVgap: o.innerVgap,
             items: o.items
         };
-    },
-
-    _init: function () {
-        BI.VerticalLayoutLogic.superclass._init.apply(this, arguments);
     }
 });
 
@@ -60,8 +60,8 @@ BI.VerticalLayoutLogic = BI.inherit(BI.Logic, {
  * @extends BI.Logic
  */
 BI.HorizontalLayoutLogic = BI.inherit(BI.Logic, {
-    _defaultConfig: function () {
-        return BI.extend(BI.HorizontalLayoutLogic.superclass._defaultConfig.apply(this, arguments), {
+    props: function () {
+        return {
             dynamic: false,
             scrollable: null,
             scrolly: false,
@@ -72,8 +72,10 @@ BI.HorizontalLayoutLogic = BI.inherit(BI.Logic, {
             lgap: 0,
             rgap: 0,
             tgap: 0,
-            bgap: 0
-        });
+            bgap: 0,
+            innerVgap: 0,
+            innerHgap: 0
+        };
     },
 
     createLogic: function () {
@@ -94,12 +96,10 @@ BI.HorizontalLayoutLogic = BI.inherit(BI.Logic, {
             rgap: o.rgap,
             tgap: o.tgap,
             bgap: o.bgap,
+            innerHgap: o.innerHgap,
+            innerVgap: o.innerVgap,
             items: o.items
         };
-    },
-
-    _init: function () {
-        BI.HorizontalLayoutLogic.superclass._init.apply(this, arguments);
     }
 });
 
@@ -112,8 +112,8 @@ BI.HorizontalLayoutLogic = BI.inherit(BI.Logic, {
  * @extends BI.OB
  */
 BI.TableLayoutLogic = BI.inherit(BI.Logic, {
-    _defaultConfig: function () {
-        return BI.extend(BI.TableLayoutLogic.superclass._defaultConfig.apply(this, arguments), {
+    props: function () {
+        return {
             dynamic: false,
             scrollable: null,
             scrolly: false,
@@ -125,7 +125,7 @@ BI.TableLayoutLogic = BI.inherit(BI.Logic, {
             hgap: 0,
             vgap: 0,
             items: []
-        });
+        };
     },
 
     createLogic: function () {
@@ -148,10 +148,6 @@ BI.TableLayoutLogic = BI.inherit(BI.Logic, {
             vgap: o.vgap,
             items: o.items
         };
-    },
-
-    _init: function () {
-        BI.TableLayoutLogic.superclass._init.apply(this, arguments);
     }
 });
 
@@ -163,8 +159,8 @@ BI.TableLayoutLogic = BI.inherit(BI.Logic, {
  * @extends BI.Logic
  */
 BI.HorizontalFillLayoutLogic = BI.inherit(BI.Logic, {
-    _defaultConfig: function () {
-        return BI.extend(BI.HorizontalFillLayoutLogic.superclass._defaultConfig.apply(this, arguments), {
+    props: function () {
+        return {
             dynamic: false,
             scrollable: null,
             scrolly: false,
@@ -175,8 +171,10 @@ BI.HorizontalFillLayoutLogic = BI.inherit(BI.Logic, {
             lgap: 0,
             rgap: 0,
             tgap: 0,
-            bgap: 0
-        });
+            bgap: 0,
+            innerVgap: 0,
+            innerHgap: 0
+        };
     },
 
     createLogic: function () {
@@ -186,7 +184,7 @@ BI.HorizontalFillLayoutLogic = BI.inherit(BI.Logic, {
             columnSize.push(item.width || 0);
         });
         if (o.dynamic) {
-            layout = "bi.horizontal_adapt";
+            layout = "bi.horizontal_fill";
         } else {
             layout = "bi.htape";
         }
@@ -202,11 +200,9 @@ BI.HorizontalFillLayoutLogic = BI.inherit(BI.Logic, {
             rgap: o.rgap,
             tgap: o.tgap,
             bgap: o.bgap,
+            innerHgap: o.innerHgap,
+            innerVgap: o.innerVgap,
             items: o.items
         };
-    },
-
-    _init: function () {
-        BI.HorizontalFillLayoutLogic.superclass._init.apply(this, arguments);
     }
 });

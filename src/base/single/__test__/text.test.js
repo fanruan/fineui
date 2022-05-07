@@ -154,4 +154,42 @@ describe("TextTest", function () {
             done();
         });
     });
+
+    /**
+     * test_author_windy
+     */
+    it("text的value属性", function () {
+        var text = BI.Test.createWidget({
+            type: "bi.text",
+            text: "",
+            value: "aaaa"
+        });
+        expect(text.element.text()).to.equal("");
+        text.destroy();
+    });
+
+    /**
+     * test_author_windy
+     */
+    it("text的value属性1", function () {
+        var text = BI.Test.createWidget({
+            type: "bi.text",
+            value: "aaaa"
+        });
+        expect(text.element.text()).to.equal("aaaa");
+        text.destroy();
+    });
+
+    /**
+     * test_author_windy
+     */
+    it("text的value属性2", function () {
+        var text = BI.Test.createWidget({
+            type: "bi.text",
+            text: null,
+            value: "aaaa"
+        });
+        expect(text.element.text()).to.equal("");
+        text.destroy();
+    });
 });

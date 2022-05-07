@@ -7,22 +7,28 @@
  */
 BI.Toast = BI.inherit(BI.Tip, {
     _const: {
-        minWidth: 200,
-        hgap: 10
+        closableMinWidth: 146,
+        minWidth: 124,
+        closableMaxWidth: 410,
+        maxWidth: 400,
+        hgap: 8
     },
 
     _defaultConfig: function () {
         return BI.extend(BI.Toast.superclass._defaultConfig.apply(this, arguments), {
             extraCls: "bi-toast",
             text: "",
-            level: "success" // success或warning
+            level: "success", // success或warning
+            autoClose: true,
+            closable: null
         });
     },
-    _init: function () {
-        BI.Toast.superclass._init.apply(this, arguments);
-        var self = this, o = this.options;
+
+    render: function () {
+        var self = this, o = this.options, c = this._const;
         this.element.css({
-            minWidth: this._const.minWidth + "px"
+            minWidth: (o.closable ? c.closableMinWidth : c.minWidth) / BI.pixRatio + BI.pixUnit,
+            maxWidth: (o.closable ? c.closableMaxWidth : c.maxWidth) / BI.pixRatio + BI.pixUnit
         });
         this.element.addClass("toast-" + o.level);
         var fn = function (e) {
@@ -30,9 +36,17 @@ BI.Toast = BI.inherit(BI.Tip, {
             e.stopEvent();
             return false;
         };
-        this.element.bind({click: fn, mousedown: fn, mouseup: fn, mouseover: fn, mouseenter: fn, mouseleave: fn, mousemove: fn});
+        this.element.bind({
+            click: fn,
+            mousedown: fn,
+            mouseup: fn,
+            mouseover: fn,
+            mouseenter: fn,
+            mouseleave: fn,
+            mousemove: fn
+        });
         var cls = "close-font";
-        switch(o.level) {
+        switch (o.level) {
             case "success":
                 cls = "toast-success-font";
                 break;
@@ -48,24 +62,27 @@ BI.Toast = BI.inherit(BI.Tip, {
                 break;
         }
 
+        var hasCloseIcon = function () {
+            return o.closable === true || (o.closable === null && o.autoClose === false);
+        };
         var items = [{
             type: "bi.icon_label",
             cls: cls + " toast-icon",
             width: 36
         }, {
-            el: {
+            el: BI.isPlainObject(o.text) ? o.text : {
                 type: "bi.label",
                 whiteSpace: "normal",
                 text: o.text,
                 textHeight: 16,
                 textAlign: "left"
             },
-            rgap: o.autoClose ? this._const.hgap : 0
+            rgap: hasCloseIcon() ? 0 : this._const.hgap
         }];
 
-        var columnSize = [36, ""];
+        var columnSize = [36, "fill"];
 
-        if(o.autoClose === false) {
+        if (hasCloseIcon()) {
             items.push({
                 type: "bi.icon_button",
                 cls: "close-font toast-icon",
@@ -78,10 +95,11 @@ BI.Toast = BI.inherit(BI.Tip, {
         }
 
         this.text = BI.createWidget({
-            type: "bi.horizontal_adapt",
+            type: "bi.horizontal",
+            horizontalAlign: BI.HorizontalAlign.Stretch,
             element: this,
             items: items,
-            vgap: 7,
+            vgap: 12,
             columnSize: columnSize
         });
     },

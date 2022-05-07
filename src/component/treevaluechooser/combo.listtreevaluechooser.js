@@ -13,7 +13,8 @@ BI.ListTreeValueChooserInsertCombo = BI.inherit(BI.AbstractListTreeValueChooser,
             width: 200,
             height: 24,
             items: null,
-            itemsCreator: BI.emptyFn
+            itemsCreator: BI.emptyFn,
+            isNeedAdjustWidth: true,
         });
     },
 
@@ -25,6 +26,8 @@ BI.ListTreeValueChooserInsertCombo = BI.inherit(BI.AbstractListTreeValueChooser,
         }
         this.combo = BI.createWidget({
             type: "bi.multi_tree_list_combo",
+            simple: o.simple,
+            isNeedAdjustWidth: o.isNeedAdjustWidth,
             element: this,
             text: o.text,
             value: o.value,
@@ -52,8 +55,8 @@ BI.ListTreeValueChooserInsertCombo = BI.inherit(BI.AbstractListTreeValueChooser,
                 }
             }, {
                 eventName: BI.MultiTreeListCombo.EVENT_CLICK_ITEM,
-                action: function () {
-                    self.fireEvent(BI.ListTreeValueChooserInsertCombo.EVENT_CLICK_ITEM);
+                action: function (v) {
+                    self.fireEvent(BI.ListTreeValueChooserInsertCombo.EVENT_CLICK_ITEM, v);
                 }
             }, {
                 eventName: BI.MultiTreeListCombo.EVENT_SEARCHING,
@@ -74,6 +77,18 @@ BI.ListTreeValueChooserInsertCombo = BI.inherit(BI.AbstractListTreeValueChooser,
         });
     },
 
+    showView: function () {
+        this.combo.showView();
+    },
+
+    hideView: function () {
+        this.combo.hideView();
+    },
+
+    getSearcher: function () {
+        return this.combo.getSearcher();
+    },
+
     setValue: function (v) {
         this.combo.setValue(v);
     },
@@ -83,8 +98,22 @@ BI.ListTreeValueChooserInsertCombo = BI.inherit(BI.AbstractListTreeValueChooser,
     },
 
     populate: function (items) {
-        this._initData(items);
-        this.combo.populate.apply(this.combo, arguments);
+        if (BI.isNotNull(items)) {
+            this._initData(items);
+        }
+        this.combo.populate();
+    },
+
+    focus: function () {
+        this.combo.focus();
+    },
+
+    blur: function () {
+        this.combo.blur();
+    },
+
+    setWaterMark: function (v) {
+        this.combo.setWaterMark(v);
     }
 });
 

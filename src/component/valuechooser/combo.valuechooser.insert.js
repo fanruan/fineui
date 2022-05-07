@@ -23,10 +23,11 @@ BI.ValueChooserInsertCombo = BI.inherit(BI.AbstractValueChooser, {
         }
         this.combo = BI.createWidget({
             type: "bi.multi_select_insert_combo",
+            simple: o.simple,
             element: this,
             allowEdit: o.allowEdit,
             text: o.text,
-            value: o.value,
+            value: this._assertValue(o.value),
             itemsCreator: BI.bind(this._itemsCreator, this),
             valueFormatter: BI.bind(this._valueFormatter, this),
             width: o.width,
@@ -66,7 +67,7 @@ BI.ValueChooserInsertCombo = BI.inherit(BI.AbstractValueChooser, {
     },
 
     setValue: function (v) {
-        this.combo.setValue(v);
+        this.combo.setValue(this._assertValue(v));
     },
 
     getValue: function () {
@@ -77,10 +78,21 @@ BI.ValueChooserInsertCombo = BI.inherit(BI.AbstractValueChooser, {
         };
     },
 
+    getAllValue: function() {
+        var val = this.combo.getValue() || {};
+        if (val.type === BI.Selection.Multi) {
+            return val.value || [];
+        }
+
+        return BI.difference(BI.map(this.items, "value"), val.value || []);
+    },
+
     populate: function (items) {
         // 直接用combo的populate不会作用到AbstractValueChooser上
-        this.items = items;
-        this.combo.populate.apply(this, arguments);
+        if (BI.isNotNull(items)) {
+            this.items = items;
+        }
+        this.combo.populate();
     }
 });
 

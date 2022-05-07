@@ -8,45 +8,48 @@
 BI.FlexWrapperCenterLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.FlexWrapperCenterLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-flex-scrollable-center-adapt-layout clearfix",
-            scrollable: true
+            baseCls: "bi-f-s-c",
+            horizontalAlign: BI.HorizontalAlign.Center,
+            verticalAlign: BI.VerticalAlign.Middle,
+            columnSize: [],
+            scrollx: false,
+            scrollable: true,
+            hgap: 0,
+            vgap: 0,
+            lgap: 0,
+            rgap: 0,
+            tgap: 0,
+            bgap: 0
         });
     },
     render: function () {
-        BI.FlexWrapperCenterLayout.superclass.render.apply(this, arguments);
-        this.$wrapper = BI.Widget._renderEngine.createElement("<div>").addClass("flex-scrollable-center-adapt-layout-wrapper");
-        this.populate(this.options.items);
-    },
-
-    _addElement: function (i, item) {
-        var o = this.options;
-        var w = BI.FlexWrapperCenterLayout.superclass._addElement.apply(this, arguments);
-        w.element.css({
-            position: "relative",
-            "margin-left": (i === 0 ? o.hgap : 0) + "px",
-            "margin-right": o.hgap + "px",
-            "margin-top": o.vgap + "px",
-            "margin-bottom": o.vgap + "px"
-        });
-        return w;
-    },
-
-    appendFragment: function (frag) {
-        this.$wrapper.append(frag);
-        this.element.append(this.$wrapper);
-    },
-
-    _getWrapper: function () {
-        return this.$wrapper;
+        var self = this, o = this.options;
+        return {
+            type: "bi.flex_scrollable_horizontal",
+            ref: function (_ref) {
+                self.layout = _ref;
+            },
+            horizontalAlign: o.horizontalAlign,
+            verticalAlign: o.verticalAlign,
+            columnSize: o.columnSize,
+            rowSize: o.rowSize,
+            scrollx: o.scrollx,
+            scrolly: o.scrolly,
+            scrollable: o.scrollable,
+            hgap: o.hgap,
+            vgap: o.vgap,
+            lgap: o.lgap,
+            rgap: o.rgap,
+            items: o.items
+        };
     },
 
     resize: function () {
-        // console.log("flex_center_adapt布局不需要resize");
+        this.layout.resize();
     },
 
     populate: function (items) {
-        BI.FlexWrapperCenterLayout.superclass.populate.apply(this, arguments);
-        this._mount();
+        this.layout.populate(items);
     }
 });
 BI.shortcut("bi.flex_scrollable_center_adapt", BI.FlexWrapperCenterLayout);

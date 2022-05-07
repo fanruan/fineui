@@ -25,7 +25,7 @@ BI.StaticYearMonthCard = BI.inherit(BI.Widget, {
                     whiteSpace: "nowrap",
                     once: false,
                     forceSelected: true,
-                    height: 23,
+                    height: BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT - 1,
                     width: 38,
                     value: td,
                     text: td,
@@ -44,6 +44,7 @@ BI.StaticYearMonthCard = BI.inherit(BI.Widget, {
             type: "bi.vertical",
             items: [{
                 type: "bi.year_picker",
+                cls: "bi-split-bottom",
                 min: o.min,
                 max: o.max,
                 ref: function () {
@@ -63,39 +64,41 @@ BI.StaticYearMonthCard = BI.inherit(BI.Widget, {
                     }
                 }]
             }, {
-                type: "bi.button_group",
-                cls: "bi-split-top",
-                behaviors: o.behaviors,
-                ref: function () {
-                    self.month = this;
+                el: {
+                    type: "bi.button_group",
+                    behaviors: o.behaviors,
+                    ref: function () {
+                        self.month = this;
+                    },
+                    items: this._createMonths(),
+                    layouts: [BI.LogicFactory.createLogic("table", BI.extend({
+                        dynamic: true
+                    }, {
+                        columns: 2,
+                        rows: 6,
+                        columnSize: [1 / 2, 1 / 2],
+                        rowSize: BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT + 1
+                    })), {
+                        type: "bi.center_adapt",
+                        vgap: 1,
+                        hgap: 2
+                    }],
+                    value: o.value,
+                    listeners: [{
+                        eventName: BI.ButtonGroup.EVENT_CHANGE,
+                        action: function () {
+                            self.selectedYear = self.yearPicker.getValue();
+                            self.selectedMonth = this.getValue()[0];
+                            self.fireEvent(BI.StaticYearMonthCard.EVENT_CHANGE);
+                        }
+                    }]
                 },
-                items: this._createMonths(),
-                layouts: [BI.LogicFactory.createLogic("table", BI.extend({
-                    dynamic: true
-                }, {
-                    columns: 2,
-                    rows: 6,
-                    columnSize: [1 / 2, 1 / 2],
-                    rowSize: 25
-                })), {
-                    type: "bi.center_adapt",
-                    vgap: 1,
-                    hgap: 2
-                }],
-                value: o.value,
-                listeners: [{
-                    eventName: BI.ButtonGroup.EVENT_CHANGE,
-                    action: function () {
-                        self.selectedYear = self.yearPicker.getValue();
-                        self.selectedMonth = this.getValue()[0];
-                        self.fireEvent(BI.StaticYearMonthCard.EVENT_CHANGE);
-                    }
-                }]
+                vgap: 5
             }]
         };
     },
 
-    mounted: function() {
+    created: function() {
         this._checkMonthStatus(this.selectedYear);
     },
 
@@ -153,6 +156,7 @@ BI.StaticYearMonthCard = BI.inherit(BI.Widget, {
             this.yearPicker.setValue(this.selectedYear);
             this.month.setValue(this.selectedMonth);
         }
+        this._checkMonthStatus(this.selectedYear);
     }
 });
 BI.StaticYearMonthCard.EVENT_CHANGE = "EVENT_CHANGE";

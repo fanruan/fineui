@@ -15,7 +15,7 @@ BI.SingleSelectTrigger = BI.inherit(BI.Trigger, {
 
     _defaultConfig: function () {
         return BI.extend(BI.SingleSelectTrigger.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-single-select-trigger bi-border bi-border-radius",
+            baseCls: "bi-single-select-trigger",
             allowNoSelect: false,
             itemsCreator: BI.emptyFn,
             valueFormatter: BI.emptyFn,
@@ -32,12 +32,10 @@ BI.SingleSelectTrigger = BI.inherit(BI.Trigger, {
         BI.SingleSelectTrigger.superclass._init.apply(this, arguments);
 
         var self = this, o = this.options;
-        if (o.height) {
-            this.setHeight(o.height - 2);
-        }
 
         this.searcher = BI.createWidget(o.searcher, {
             type: "bi.single_select_searcher",
+            watermark: o.watermark,
             allowNoSelect: o.allowNoSelect,
             text: o.text,
             height: o.height,

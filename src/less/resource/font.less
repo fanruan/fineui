@@ -1,34 +1,37 @@
-@import "../lib/font";
-@import "../lib/colors";
-@import "../image";
+@import "../lib/font.less";
+@import "../lib/colors.less";
+@import "../lib/theme.less";
+@import "../image.less";
 
 .addFontRes();
 .activateFont();
 
+//关闭
 .font(close-font, @font-cross);
 .font-hover(close-h-font, @font-cross);
 .font-hover-active(close-ha-font, @font-cross);
-
+//关闭-圆形
 .font(circle-close-font, @font-circle-close);
-
-//搜索框中的带有hover后颜色变红的图标
+//关闭-搜索用，搜索框中的带有hover后颜色变红的图标
 .font-hover(search-close-h-font, @font-cross, inherit, @color-bi-text-failure);
 
-.font-hover(pre-page-h-font, @font-arrow-left);
-
-.font-hover(next-page-h-font, @font-arrow-right);
-
+//搜索
 .font(search-font, @font-search);
 
+//日期时间
 .font(date-font, @font-date);
 .font(time-font, @font-time);
 .font-hover(date-change-h-font, @font-change);
 
-//子菜单选中
+//一个点，子菜单选中
 .font(dot-font, @font-dot, @color-bi-text-black);
 .font-hover(dot-h-font, @font-dot, @color-bi-text-black);
 .font-hover-active(dot-ha-font, @font-dot, @color-bi-text, @color-bi-text-gray, @color-bi-text-black);
 .font-effect(dot-e-font, @font-dot, transparent, transparent, transparent, @color-bi-text-highlight);
+
+// 加减号
+.font(plus-font, @font-plus);
+.font(minus-font, @font-minus);
 
 //向右展开子菜单
 .font(pull-right-font, @font-right-triangle);
@@ -42,30 +45,34 @@
 .font-hover-active(copy-ha-font, @font-copy);
 .font-effect(copy-e-font, @font-copy);
 
-//选中的字段
+//✔对号家族
 .font(check-mark-font, @font-check-mark);
 .font-hover(check-mark-h-font, @font-check-mark);
 .font-hover-active(check-mark-ha-font, @font-check-mark);
 .font-effect(check-mark-e-font, @font-check-mark);
-
-/** dashboard组件/控件 下拉列表图标字体 ~end~**/
-
+//✔两个特定场景下的对号
+.font(check-font, @font-check-mark, @color-bi-text-highlight);
+.font-hover-active(item-check-font, @font-check-mark, @color-bi-text, @color-bi-text-gray, @color-bi-font-active);
 
 //翻页按钮字体图标
 .font-hover(row-pre-page-h-font, @font-arrow-left);
 .font-hover(row-next-page-h-font, @font-arrow-right);
 .font-hover(column-pre-page-h-font, @font-up-triangle);
 .font-hover(column-next-page-h-font, @font-down-triangle);
+//用在日期控件内部的翻页
+.font-hover(pre-page-h-font, @font-arrow-left);
+.font-hover(next-page-h-font, @font-arrow-right);
 
+//实心下拉三角
+.font-hover(solid-triangle-left-font, @font-solid-left);
+.font-hover(solid-triangle-top-font, @font-solid-top);
+.font-hover(solid-triangle-bottom-font, @font-solid-bottom);
+//实心展开三角
 .font(expander-right-font, @font-solid-right);
 .font(expander-down-font, @font-solid-bottom);
 
-// 实心下拉三角
-.font-hover(solid-triangle-top-font, @font-solid-top);
-.font-hover(solid-triangle-bottom-font, @font-solid-bottom);
-
 //下拉框小小三角
-.font(trigger-triangle-font, @font-no-sort-no-filter);
+.font(trigger-triangle-font, @font-trigger-triangle);
 
 //单选下拉框
 //向下展开子菜单
@@ -74,17 +81,27 @@
 .font-hover(pull-down-h-font, @font-down-triangle, @color-bi-text-light-gray);
 .font-hover-active(pull-down-ha-font, @font-down-triangle, @color-bi-text-light-gray);
 
-.font(check-font, @font-check-mark, @color-bi-text-highlight);
-
-.font-hover-active(item-check-font, @font-check-mark, @color-bi-text, @color-bi-text-gray, @color-bi-font-active);
-
-.font-hover(primary-key-font, @font-key);
-
-.font(drag-tag-font, @font-cross, @color-bi-text-redmark);
+//toast
+.font(toast-error-font, @font-tip-error, @color-bi-color-toast-error);
+.font(toast-success-font, @font-tip-success, @color-bi-color-toast-success);
+.font(toast-warning-font, @font-tip-warning, @color-bi-color-toast-warning);
+.font(toast-message-font, @font-tip-message, @color-bi-color-toast-normal);
 
 //数值区间
 .font(less-font, @font-less);
 .font(less-equal-font, @font-less-equal);
+
+//数值微调器
+.font(add-up-font, @font-up-triangle);
+.font(minus-down-font, @font-down-triangle);
+
+//不在fineui中的字体
+//钥匙
+.font-hover(primary-key-font, @font-key);
+//一个绿色的➕加号
+.font(text-add-tip-font, @font-add, @color-bi-text-success);
+//一个红色的×叉号
+.font(drag-tag-font, @font-cross, @color-bi-text-redmark);
 
 //文本控件
 .font(text-bold-font, @font-bold);
@@ -96,14 +113,3 @@
 .font(text-align-left-font, @font-align-left);
 .font(text-align-center-font, @font-align-center);
 .font(text-align-right-font, @font-align-right);
-
-//toast
-.font(toast-error-font, @font-tip-error);
-.font(toast-success-font, @font-tip-success);
-.font(toast-warning-font, @font-tip-warning);
-.font(toast-message-font, @font-tip-message);
-
-.font(text-add-tip-font, @font-add, @color-bi-text-success);
-
-.font(add-up-font, @font-up-triangle);
-.font(minus-down-font, @font-down-triangle);

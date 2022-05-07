@@ -103,9 +103,9 @@ BI.StaticYearCard = BI.inherit(BI.Widget, {
 
             afterCardShow: function () {
                 this.setValue(self.selectedYear);
-                var calendar = this.getSelectedCard();
-                self.backBtn.setEnable(!calendar.isFrontYear());
-                self.preBtn.setEnable(!calendar.isFinalYear());
+                // var calendar = this.getSelectedCard();
+                // self.backBtn.setEnable(!calendar.isFrontYear());
+                // self.preBtn.setEnable(!calendar.isFinalYear());
             }
         });
 
@@ -132,6 +132,38 @@ BI.StaticYearCard = BI.inherit(BI.Widget, {
         var valid = true;
         this.preBtn.setEnable(valid);
         return valid;
+    },
+
+    _checkMin: function () {
+        var o = this.options;
+        BI.each(this.navigation.getAllCard(), function (idx, calendar) {
+            calendar.setMinDate(o.min);
+        });
+    },
+
+    _checkMax: function () {
+        var o = this.options;
+        BI.each(this.navigation.getAllCard(), function (idx, calendar) {
+            calendar.setMaxDate(o.max);
+        });
+    },
+
+    setMinDate: function (minDate) {
+        if (BI.isNotEmptyString(this.options.min)) {
+            this.options.min = minDate;
+            this._checkLeftValid();
+            this._checkRightValid();
+            this._checkMin();
+        }
+    },
+
+    setMaxDate: function (maxDate) {
+        if (BI.isNotEmptyString(this.options.max)) {
+            this.options.max = maxDate;
+            this._checkLeftValid();
+            this._checkRightValid();
+            this._checkMax();
+        }
     },
 
     getValue: function () {

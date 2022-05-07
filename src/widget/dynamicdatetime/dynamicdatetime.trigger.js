@@ -5,7 +5,8 @@ BI.DynamicDateTimeTrigger = BI.inherit(BI.Trigger, {
         yearLength: 4,
         yearMonthLength: 6,
         yearFullMonthLength: 7,
-        compareFormat: "%Y-%X-%d %H:%M:%S"
+        compareFormat: "%Y-%X-%d %H:%M:%S",
+        iconWidth: 24
     },
 
     props: {
@@ -13,6 +14,7 @@ BI.DynamicDateTimeTrigger = BI.inherit(BI.Trigger, {
         min: "1900-01-01", // 最小日期
         max: "2099-12-31", // 最大日期
         height: 24,
+        iconWidth: 24,
         format: "", // 显示的日期格式化方式
         allowEdit: true, // 是否允许编辑
         watermark: ""
@@ -24,6 +26,7 @@ BI.DynamicDateTimeTrigger = BI.inherit(BI.Trigger, {
         this.storeTriggerValue = "";
         this.editor = BI.createWidget({
             type: "bi.sign_editor",
+            simple: o.simple,
             height: o.height,
             validationChecker: function (v) {
                 var formatStr = self._getStandardDateStr(v);
@@ -42,11 +45,25 @@ BI.DynamicDateTimeTrigger = BI.inherit(BI.Trigger, {
             vgap: c.vgap,
             allowBlank: true,
             watermark: BI.isKey(o.watermark) ? o.watermark : BI.i18nText("BI-Basic_Unrestricted"),
-            errorText: function () {
+            errorText: function (v) {
                 var str = "";
                 if (!BI.isKey(o.format)) {
-                    str = self.editor.isEditing() ? BI.i18nText("BI-Basic_Date_Time_Error_Text") : BI.i18nText("BI-Year_Trigger_Invalid_Text");
+                    if (!self._dateCheck(v)) {
+                        str = self.editor.isEditing() ? BI.i18nText("BI-Date_Trigger_Error_Text") : BI.i18nText("BI-Year_Trigger_Invalid_Text");
+                    } else {
+                        var start = BI.parseDateTime(o.min, "%Y-%X-%d");
+                        var end = BI.parseDateTime(o.max, "%Y-%X-%d");
+                        str = BI.i18nText("BI-Basic_Date_Range_Error",
+                            start.getFullYear(),
+                            start.getMonth() + 1,
+                            start.getDate(),
+                            end.getFullYear(),
+                            end.getMonth() + 1,
+                            end.getDate()
+                        );
+                    }
                 }
+
                 return str;
             },
             title: BI.bind(this._getTitle, this)
@@ -102,11 +119,15 @@ BI.DynamicDateTimeTrigger = BI.inherit(BI.Trigger, {
         BI.createWidget({
             type: "bi.htape",
             element: this,
+            columnSize: ["", this._const.iconWidth],
             items: [{
                 el: this.editor
             }, {
-                el: BI.createWidget(),
-                width: 24
+                el: {
+                    type: "bi.icon_button",
+                    cls: "bi-trigger-icon-button date-font",
+                },
+                width: o.iconWidth
             }]
         });
 
@@ -119,7 +140,7 @@ BI.DynamicDateTimeTrigger = BI.inherit(BI.Trigger, {
                     title: BI.bind(this._getTitle, this)
                 },
                 left: 0,
-                right: 24,
+                right: o.iconWidth,
                 top: 0,
                 bottom: 0
             }]
@@ -360,8 +381,19 @@ BI.DynamicDateTimeTrigger = BI.inherit(BI.Trigger, {
 
     isValid: function () {
         return this.editor.isValid();
-    }
+    },
 
+    focus: function () {
+        this.editor.focus();
+    },
+
+    blur: function () {
+        this.editor.blur();
+    },
+
+    setWaterMark: function (v) {
+        this.editor.setWaterMark(v);
+    }
 });
 
 BI.DynamicDateTimeTrigger.EVENT_BLUR = "EVENT_BLUR";

@@ -10,13 +10,17 @@
 BI.LatticeLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.LatticeLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-lattice-layout clearfix"
+            baseCls: "bi-lattice clearfix"
             // columnSize: [0.2, 0.2, 0.6],
         });
     },
     render: function () {
         BI.LatticeLayout.superclass.render.apply(this, arguments);
-        this.populate(this.options.items);
+        var self = this, o = this.options;
+        var items = BI.isFunction(o.items) ? this.__watch(o.items, function (context, newValue) {
+            self.populate(newValue);
+        }) : o.items;
+        this.populate(items);
     },
 
     _addElement: function (i, item) {
@@ -29,22 +33,6 @@ BI.LatticeLayout = BI.inherit(BI.Layout, {
         }
         w.element.css({position: "relative", float: "left", width: width});
         return w;
-    },
-
-    addItem: function (item) {
-        var w = BI.LatticeLayout.superclass.addItem.apply(this, arguments);
-        this.resize();
-        return w;
-    },
-
-    addItemAt: function (item) {
-        var w = BI.LatticeLayout.superclass.addItemAt.apply(this, arguments);
-        this.resize();
-        return w;
-    },
-
-    resize: function () {
-        this.stroke(this.options.items);
     },
 
     populate: function (items) {

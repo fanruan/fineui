@@ -17,6 +17,7 @@ BI.MultiSelectNoBarLoader = BI.inherit(BI.Widget, {
             },
             valueFormatter: BI.emptyFn,
             itemsCreator: BI.emptyFn,
+            itemHeight: BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT,
             onLoaded: BI.emptyFn
         });
     },
@@ -116,7 +117,7 @@ BI.MultiSelectNoBarLoader = BI.inherit(BI.Widget, {
             type: "bi.multi_select_item",
             cls: "bi-list-item-active",
             logic: this.options.logic,
-            height: 24,
+            height: this.options.itemHeight || BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT,
             iconWrapperWidth: 36
         });
     },
@@ -160,12 +161,14 @@ BI.MultiSelectNoBarLoader = BI.inherit(BI.Widget, {
     },
 
     populate: function (items) {
-        arguments[0] = this._createItems(items);
+        if (BI.isNotNull(items)) {
+            arguments[0] = this._createItems(items);
+        }
         this.button_group.populate.apply(this.button_group, arguments);
     },
 
     resetHeight: function (h) {
-        this.button_group.element.css({"max-height": h + "px"});
+        this.button_group.element.css({"max-height": h / BI.pixRatio + BI.pixUnit});
     },
 
     resetWidth: function () {

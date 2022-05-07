@@ -1,4 +1,4 @@
-@import "../../index";
+@import "../../index.less";
 
 .bi-time-interval{
   & .bi-date-time-trigger{
@@ -7,10 +7,10 @@
   &.time-error {
     & .bi-date-time-trigger{
       & .bi-input{
-        color:@color-bi-text-failure
+        color: @color-bi-text-error-time-interval;
       }
       & .sign-editor-text{
-        color:@color-bi-text-failure
+        color: @color-bi-text-error-time-interval;
       }
     }
   }

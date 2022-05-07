@@ -13,7 +13,8 @@ BI.TreeValueChooserCombo = BI.inherit(BI.AbstractTreeValueChooser, {
             width: 200,
             height: 24,
             items: null,
-            itemsCreator: BI.emptyFn
+            itemsCreator: BI.emptyFn,
+            isNeedAdjustWidth: true
         });
     },
 
@@ -25,6 +26,7 @@ BI.TreeValueChooserCombo = BI.inherit(BI.AbstractTreeValueChooser, {
         }
         this.combo = BI.createWidget({
             type: "bi.multi_tree_combo",
+            simple: o.simple,
             text: o.text,
             allowEdit: o.allowEdit,
             value: o.value,
@@ -34,6 +36,7 @@ BI.TreeValueChooserCombo = BI.inherit(BI.AbstractTreeValueChooser, {
             valueFormatter: BI.bind(this._valueFormatter, this),
             width: o.width,
             height: o.height,
+            isNeedAdjustWidth: o.isNeedAdjustWidth,
             listeners: [{
                 eventName: BI.MultiTreeCombo.EVENT_FOCUS,
                 action: function () {
@@ -51,8 +54,8 @@ BI.TreeValueChooserCombo = BI.inherit(BI.AbstractTreeValueChooser, {
                 }
             }, {
                 eventName: BI.MultiTreeCombo.EVENT_CLICK_ITEM,
-                action: function () {
-                    self.fireEvent(BI.TreeValueChooserCombo.EVENT_CLICK_ITEM);
+                action: function (v) {
+                    self.fireEvent(BI.TreeValueChooserCombo.EVENT_CLICK_ITEM, v);
                 }
             }, {
                 eventName: BI.MultiTreeCombo.EVENT_SEARCHING,
@@ -73,6 +76,18 @@ BI.TreeValueChooserCombo = BI.inherit(BI.AbstractTreeValueChooser, {
         });
     },
 
+    showView: function () {
+        this.combo.showView();
+    },
+
+    hideView: function () {
+        this.combo.hideView();
+    },
+
+    getSearcher: function () {
+        return this.combo.getSearcher();
+    },
+
     setValue: function (v) {
         this.combo.setValue(v);
     },
@@ -81,9 +96,27 @@ BI.TreeValueChooserCombo = BI.inherit(BI.AbstractTreeValueChooser, {
         return this.combo.getValue();
     },
 
+    getAllValue: function() {
+        return this.buildCompleteTree(this.combo.getValue());
+    },
+
     populate: function (items) {
-        this._initData(items);
-        this.combo.populate.apply(this.combo, arguments);
+        if (BI.isNotNull(items)) {
+            this._initData(items);
+        }
+        this.combo.populate();
+    },
+
+    focus: function () {
+        this.combo.focus();
+    },
+
+    blur: function () {
+        this.combo.blur();
+    },
+
+    setWaterMark: function (v) {
+        this.combo.setWaterMark(v);
     }
 });
 

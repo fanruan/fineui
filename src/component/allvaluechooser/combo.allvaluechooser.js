@@ -27,16 +27,17 @@ BI.AllValueChooserCombo = BI.inherit(BI.AbstractAllValueChooser, {
         }
         this.combo = BI.createWidget({
             type: "bi.multi_select_combo",
+            simple: o.simple,
             text: o.text,
             element: this,
             itemsCreator: BI.bind(this._itemsCreator, this),
             valueFormatter: BI.bind(this._valueFormatter, this),
             width: o.width,
             height: o.height,
-            value: {
+            value: this._assertValue({
                 type: BI.Selection.Multi,
                 value: o.value || []
-            }
+            })
         });
 
         this.combo.on(BI.MultiSelectCombo.EVENT_CONFIRM, function () {
@@ -45,24 +46,31 @@ BI.AllValueChooserCombo = BI.inherit(BI.AbstractAllValueChooser, {
     },
 
     setValue: function (v) {
-        this.combo.setValue({
+        this.combo.setValue(this._assertValue({
             type: BI.Selection.Multi,
             value: v || []
-        });
+        }));
     },
 
     getValue: function () {
+        return this.getAllValue();
+    },
+
+    getAllValue: function () {
         var val = this.combo.getValue() || {};
-        if (val.type === BI.Selection.All) {
-            return val.assist;
+        if (val.type === BI.Selection.Multi) {
+            return val.value || [];
         }
-        return val.value || [];
+
+        return BI.difference(BI.map(this.items, "value"), val.value || []);
     },
 
     populate: function (items) {
         // 直接用combo的populate不会作用到AbstractValueChooser上
-        this.items = items;
-        this.combo.populate.apply(this, arguments);
+        if (BI.isNotNull(items)) {
+            this.items = items;
+        }
+        this.combo.populate();
     }
 });
 BI.AllValueChooserCombo.EVENT_CONFIRM = "EVENT_CONFIRM";

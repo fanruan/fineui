@@ -13,10 +13,7 @@ BI.FirstTreeLeafItem = BI.inherit(BI.BasicButton, {
     },
     _init: function () {
         BI.FirstTreeLeafItem.superclass._init.apply(this, arguments);
-        var self = this, o = this.options;
-        this.checkbox = BI.createWidget({
-            type: "bi.checkbox"
-        });
+        var o = this.options;
         this.text = BI.createWidget({
             type: "bi.label",
             textAlign: "left",
@@ -29,27 +26,21 @@ BI.FirstTreeLeafItem = BI.inherit(BI.BasicButton, {
             py: o.py,
             keyword: o.keyword
         });
-        this.checkbox.on(BI.Controller.EVENT_CHANGE, function (type) {
-            if (type === BI.Events.CLICK) {
-                self.setSelected(self.isSelected());
-            }
-            self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
-        });
         var type = BI.LogicFactory.createLogicTypeByDirection(BI.Direction.Left);
         var items = BI.LogicFactory.createLogicItemsByDirection(BI.Direction.Left, ((o.layer === 0) ? "" : {
-            width: 12,
+            width: BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT / 2,
             el: {
                 type: "bi.layout",
-                cls: (o.pNode && o.pNode.isLastNode) ? "" : "base-line-conn-background",
-                width: 12,
+                cls: (o.pNode && o.pNode.isLastNode) ? "" : this._getBaseLineCls(),
+                width: BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT / 2,
                 height: o.height
             }
         }), {
-            width: 24,
+            width: BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT,
             el: {
                 type: "bi.layout",
-                cls: "first-line-conn-background",
-                width: 24,
+                cls: this._getFirstLineCls(),
+                width: BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT,
                 height: o.height
             }
         }, {
@@ -60,6 +51,24 @@ BI.FirstTreeLeafItem = BI.inherit(BI.BasicButton, {
         }, BI.LogicFactory.createLogic(type, BI.extend(o.logic, {
             items: items
         }))));
+    },
+
+    _getBaseLineCls: function () {
+        switch (BI.STYLE_CONSTANTS.LINK_LINE_TYPE) {
+            case "solid":
+                return "base-solid-line-conn-background";
+            default:
+                return "base-line-conn-background";
+        }
+    },
+
+    _getFirstLineCls: function () {
+        switch (BI.STYLE_CONSTANTS.LINK_LINE_TYPE) {
+            case "solid":
+                return "first-solid-line-conn-background";
+            default:
+                return "first-line-conn-background";
+        }
     },
 
     doRedMark: function () {
@@ -84,16 +93,6 @@ BI.FirstTreeLeafItem = BI.inherit(BI.BasicButton, {
 
     getPId: function () {
         return this.options.pId;
-    },
-
-    doClick: function () {
-        BI.FirstTreeLeafItem.superclass.doClick.apply(this, arguments);
-        this.checkbox.setSelected(this.isSelected());
-    },
-
-    setSelected: function (v) {
-        BI.FirstTreeLeafItem.superclass.setSelected.apply(this, arguments);
-        this.checkbox.setSelected(v);
     }
 });
 

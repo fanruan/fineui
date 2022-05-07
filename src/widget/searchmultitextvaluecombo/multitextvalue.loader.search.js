@@ -17,6 +17,7 @@ BI.SearchMultiSelectLoader = BI.inherit(BI.Widget, {
             },
             valueFormatter: BI.emptyFn,
             itemsCreator: BI.emptyFn,
+            itemHeight: BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT,
             onLoaded: BI.emptyFn
         });
     },
@@ -34,6 +35,12 @@ BI.SearchMultiSelectLoader = BI.inherit(BI.Widget, {
             type: "bi.select_list",
             element: this,
             logic: opts.logic,
+            toolbar: {
+                type: "bi.multi_select_bar",
+                cls: "bi-list-item-active",
+                height: this.options.itemHeight,
+                iconWrapperWidth: 36
+            },
             el: BI.extend({
                 onLoaded: opts.onLoaded,
                 el: {
@@ -112,7 +119,7 @@ BI.SearchMultiSelectLoader = BI.inherit(BI.Widget, {
             type: "bi.multi_select_item",
             logic: this.options.logic,
             cls: "bi-list-item-active",
-            height: 24,
+            height: this.options.itemHeight,
             selected: this.isAllSelected(),
             iconWrapperWidth: 36
         });
@@ -158,7 +165,9 @@ BI.SearchMultiSelectLoader = BI.inherit(BI.Widget, {
     },
 
     populate: function (items) {
-        arguments[0] = this._createItems(items);
+        if (BI.isNotNull(items)) {
+            arguments[0] = this._createItems(items);
+        }
         this.button_group.populate.apply(this.button_group, arguments);
     },
 

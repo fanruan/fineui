@@ -41,7 +41,7 @@ BI.DynamicDateTimeSelect = BI.inherit(BI.Widget, {
                             }
                         }],
                         width: 60,
-                        height: 24
+                        height: BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT
                     }
                 }, {
                     type: "bi.label",
@@ -77,7 +77,7 @@ BI.DynamicDateTimeSelect = BI.inherit(BI.Widget, {
                         }
                     }],
                     width: 60,
-                    height: 24
+                    height: BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT
                 }, {
                     type: "bi.label",
                     text: ":",
@@ -106,7 +106,7 @@ BI.DynamicDateTimeSelect = BI.inherit(BI.Widget, {
                         }
                     }],
                     width: 60,
-                    height: 24
+                    height: BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT
                 }]
             }]
         };

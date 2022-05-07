@@ -1,22 +1,25 @@
 BI.DynamicYearQuarterTrigger = BI.inherit(BI.Trigger, {
     _const: {
         hgap: 4,
-        vgap: 2
+        vgap: 2,
+        iconWidth: 24
     },
 
     props: {
         extraCls: "bi-year-quarter-trigger",
         min: "1900-01-01", // 最小日期
         max: "2099-12-31", // 最大日期
-        height: 22
+        height: 24
     },
 
     _init: function () {
         BI.DynamicYearQuarterTrigger.superclass._init.apply(this, arguments);
         var o = this.options;
-
         this.yearEditor = this._createEditor(true);
         this.quarterEditor = this._createEditor(false);
+
+        // 暂时的解决方法
+        var height = o.height + 2;
 
         BI.createWidget({
             element: this,
@@ -24,31 +27,30 @@ BI.DynamicYearQuarterTrigger = BI.inherit(BI.Trigger, {
             items: [{
                 type: "bi.center",
                 items: [{
-                    type: "bi.htape",
+                    type: "bi.horizontal_fill",
+                    columnSize: ["fill", ""],
                     items: [this.yearEditor, {
                         el: {
                             type: "bi.text_button",
                             text: BI.i18nText("BI-Multi_Date_Year"),
-                            width: o.height
                         },
-                        width: o.height
                     }]
                 }, {
-                    type: "bi.htape",
+                    type: "bi.horizontal_fill",
+                    columnSize: ["fill", ""],
                     items: [this.quarterEditor, {
                         el: {
                             type: "bi.text_button",
                             text: BI.i18nText("BI-Multi_Date_Quarter"),
-                            width: 24
                         },
-                        width: 24}]
+                    }]
                 }]
             }, {
                 el: {
                     type: "bi.trigger_icon_button",
-                    width: o.height
+                    width: this._const.iconWidth,
                 },
-                width: o.height
+                width: this._const.iconWidth,
             }]
         });
         this.setValue(o.value);
@@ -58,23 +60,45 @@ BI.DynamicYearQuarterTrigger = BI.inherit(BI.Trigger, {
         var self = this, o = this.options, c = this._const;
         var editor = BI.createWidget({
             type: "bi.sign_editor",
+            simple: o.simple,
             height: o.height,
             validationChecker: function (v) {
                 if(isYear) {
-                    return v === "" || (BI.isPositiveInteger(v) && !BI.checkDateVoid(v, 1, 1, o.min, o.max)[0]);
+                    var month = self.quarterEditor.getValue();
+                    if(BI.isEmptyString(month)) {
+                        month = parseInt(v, 10) === BI.parseDateTime(o.min, "%Y-%X-%d").getFullYear() ? BI.parseDateTime(o.min, "%Y-%X-%d").getMonth() + 1 : 1;
+                    } else {
+                        month = (parseInt(month, 10) - 1) * 3 + 1;
+                    }
+                    return v === "" || (BI.isPositiveInteger(v) && !BI.checkDateVoid(v, month, 1, o.min, o.max)[0]);
                 }
-                return v === "" || ((BI.isPositiveInteger(v) && v >= 1 && v <= 4) && !BI.checkDateVoid(BI.getDate().getFullYear(), v, 1, o.min, o.max)[0]);
+                var year = self.yearEditor.getValue();
+
+                return v === "" || ((BI.isPositiveInteger(v) && v >= 1 && v <= 4) && (BI.isEmptyString(year) ? true : !BI.checkDateVoid(self.yearEditor.getValue(), (v - 1) * 3 + 1, 1, o.min, o.max)[0]));
             },
             quitChecker: function () {
                 return false;
             },
             errorText: function (v) {
-                return BI.i18nText("BI-Year_Trigger_Invalid_Text");
+                var year = isYear ? v : self.yearEditor.getValue();
+                var quarter = isYear ? self.quarterEditor.getValue() : v;
+                if (!BI.isPositiveInteger(year) || !BI.isPositiveInteger(quarter) || quarter > 4) {
+                    return BI.i18nText("BI-Year_Trigger_Invalid_Text");
+                }
+
+                var start = BI.parseDateTime(o.min, "%Y-%X-%d");
+                var end = BI.parseDateTime(o.max, "%Y-%X-%d");
+
+                return BI.i18nText("BI-Basic_Year_Quarter_Range_Error",
+                    start.getFullYear(),
+                    BI.getQuarter(start),
+                    end.getFullYear(),
+                    BI.getQuarter(end)
+                );
             },
             watermark: BI.i18nText("BI-Basic_Unrestricted"),
             hgap: c.hgap,
             vgap: c.vgap,
-            title: "",
             allowBlank: true
         });
         editor.on(BI.SignEditor.EVENT_KEY_DOWN, function () {
@@ -100,6 +124,15 @@ BI.DynamicYearQuarterTrigger = BI.inherit(BI.Trigger, {
         });
         editor.on(BI.SignEditor.EVENT_ERROR, function () {
             self.fireEvent(BI.DynamicYearQuarterTrigger.EVENT_ERROR);
+        });
+        editor.on(BI.SignEditor.EVENT_VALID, function () {
+            var year = self.yearEditor.getValue();
+            var quarter = self.quarterEditor.getValue();
+            if(BI.isNotEmptyString(year) && BI.isNotEmptyString(quarter)) {
+                if(BI.isPositiveInteger(year) && quarter >= 1 && quarter <= 4 && !BI.checkDateVoid(year, (quarter - 1) * 3 + 1, 1, o.min, o.max)[0]) {
+                    self.fireEvent(BI.DynamicYearMonthTrigger.EVENT_VALID);
+                }
+            }
         });
         editor.on(BI.SignEditor.EVENT_CHANGE, function () {
             if(isYear) {
@@ -181,6 +214,18 @@ BI.DynamicYearQuarterTrigger = BI.inherit(BI.Trigger, {
         this.setTitle(BI.isEmptyString(text) ? dateStr : (text + ":" + dateStr));
     },
 
+    setMinDate: function (minDate) {
+        if (BI.isNotEmptyString(this.options.min)) {
+            this.options.min = minDate;
+        }
+    },
+
+    setMaxDate: function (maxDate) {
+        if (BI.isNotEmptyString(this.options.max)) {
+            this.options.max = maxDate;
+        }
+    },
+
     setValue: function (v) {
         var type, value;
         var date = BI.getDate();
@@ -214,6 +259,10 @@ BI.DynamicYearQuarterTrigger = BI.inherit(BI.Trigger, {
 
     getKey: function () {
         return this.yearEditor.getValue() + "-" + this.quarterEditor.getValue();
+    },
+
+    isStateValid: function () {
+        return this.yearEditor.isValid() && this.quarterEditor.isValid();
     }
 });
 BI.DynamicYearQuarterTrigger.EVENT_FOCUS = "EVENT_FOCUS";
@@ -222,4 +271,5 @@ BI.DynamicYearQuarterTrigger.EVENT_START = "EVENT_START";
 BI.DynamicYearQuarterTrigger.EVENT_CONFIRM = "EVENT_CONFIRM";
 BI.DynamicYearQuarterTrigger.EVENT_STOP = "EVENT_STOP";
 BI.DynamicYearQuarterTrigger.EVENT_KEY_DOWN = "EVENT_KEY_DOWN";
+BI.DynamicYearQuarterTrigger.EVENT_VALID = "EVENT_VALID";
 BI.shortcut("bi.dynamic_year_quarter_trigger", BI.DynamicYearQuarterTrigger);

@@ -8,7 +8,11 @@ Demo.CodeEditor = BI.inherit(BI.Widget, {
             cls: "bi-border",
             width: 600,
             height: 400,
-            watermark: "请输入内容"
+            watermark: "请输入内容",
+            errorText: "检测内容有误",
+            validationChecker: function (v) {
+                return BI.isNotEmptyString(v);
+            },
         });
         editor.on(BI.TextAreaEditor.EVENT_FOCUS, function () {
             BI.Msg.toast("Focus");

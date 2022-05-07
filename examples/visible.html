@@ -1,0 +1,222 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <!-- <link rel="stylesheet" type="text/css" href="../dist/2.0/fineui.min.css"/>
+    <script src="../dist/2.0/fineui.js"></script> -->
+   <link rel="stylesheet" type="text/css" href="http://fanruan.design/fineui/2.0/fineui.min.css" />
+   <script src="http://fanruan.design/fineui/2.0/fineui.min.js"></script>
+</head>
+<body>
+<div id="wrapper"></div>
+<script>
+
+    var Item = BI.inherit(BI.BasicButton, {
+
+        props: {
+            baseCls: "bi-list-item-active"
+        },
+
+        render: function () {
+            var self = this;
+            return {
+                type: "bi.vertical_adapt",
+                items: [
+                    {
+                        el: {
+                            type: "bi.label",
+                            textAlign: "left",
+                            text: this.options.text
+                        },
+                        lgap: this.options.layer * 24 + 24
+                    }
+                ]
+            };
+        },
+
+        getValue: function () {
+            return this.options.id;
+        }
+    });
+
+    BI.shortcut("bi.example.single_custom_tree.item", Item);
+
+    var Node = BI.inherit(BI.NodeButton, {
+
+        props: {
+            baseCls: "bi-list-item"
+        },
+
+        render: function () {
+            var self = this;
+            return {
+                type: "bi.vertical_adapt",
+                items: [
+                    {
+                        el: {
+                            type: "bi.label",
+                            ref: function (_ref) {
+                                self.icon = _ref;
+                            },
+                            text: this.options.open ? "-" : "+",
+                            height: 24,
+                            width: 24
+                        },
+                        lgap: this.options.layer * 24
+                    }, {
+                        type: "bi.label",
+                        textAlign: "left",
+                        text: this.options.text
+                    }
+                ]
+            };
+        },
+
+        setOpened: function (b) {
+            Node.superclass.setOpened.apply(this, arguments);
+            this.icon.setText(b ? "-" : "+");
+        },
+
+        getValue: function () {
+            return this.options.id;
+        }
+    });
+
+    BI.shortcut("bi.example.single_custom_tree.node", Node);
+
+    var mockData = [
+        {
+            id: "无锡",
+            text: "无锡",
+            isParent: true
+        }, {
+            id: "锡山区",
+            text: "锡山区",
+            pId: "无锡",
+            isParent: true
+        }, {
+            id: "安镇街道",
+            text: "安镇街道",
+            pId: "锡山区"
+        }, {
+            id: "滨湖区",
+            text: "滨湖区",
+            pId: "无锡"
+        }, {
+            id: "南京",
+            text: "南京",
+            isParent: true
+        }, {
+            id: "建邺区",
+            text: "建邺区",
+            pId: "南京"
+        }
+    ];
+
+
+    var Tree = BI.inherit(BI.Widget, {
+
+        render: function () {
+            var self = this;
+            return {
+                type: "bi.custom_tree",
+                ref: function (_ref) {
+                    self.tree = _ref;
+                },
+                expander: {
+                    type: "bi.expander",
+                    isDefaultInit: false,
+                    el: {},
+                    popup: {
+                        type: "bi.custom_tree"
+                    }
+                },
+                el: {
+                    type: "bi.button_tree",
+                    chooseType: 0,
+                    layouts: [
+                        {
+                            type: "bi.vertical"
+                        }
+                    ]
+                },
+                items: []
+            };
+        },
+
+        _formatItems: function (items) {
+
+            var nodes = BI.map(items, function (index, item) {
+                return BI.extend({
+                    type: item.isParent ? "bi.example.single_custom_tree.node" : "bi.example.single_custom_tree.item"
+                }, item);
+            });
+
+            return this.traversalLayers(BI.Tree.transformToTreeFormat(nodes), 0);
+        },
+
+
+        traversalLayers: function (items, layer) {
+            var self = this;
+            BI.each(items, function (index, item) {
+                item.layer = layer;
+                if (item.children) {
+                    self.traversalLayers(item.children, layer + 1);
+                }
+            });
+            return items;
+        },
+
+        populate: function (items) {
+            this.tree.populate(this._formatItems(items));
+        }
+    });
+
+    BI.shortcut("bi.example.single_custom_tree", Tree);
+
+    var Widget = BI.inherit(BI.Widget, {
+        setup: function () {
+            var wrapper, tree;
+            return function () {
+                return {
+                    type: "bi.vertical",
+                    items: [{
+                        type: "bi.vertical",
+                        invisible: true,
+                        ref: function (_ref) {
+                            wrapper = _ref;
+                        },
+                        items: [{
+                            type: "bi.example.single_custom_tree",
+                            height: 100,
+                            ref: function (_ref) {
+                                tree = _ref;
+                            }
+                        }]
+                    }, {
+                        type: "bi.button",
+                        text: "点击",
+                        handler: function () {
+                            tree.populate(mockData);
+                            wrapper.setVisible(true);
+                        }
+                    }]
+                };
+            };
+        }
+    });
+    BI.shortcut("demo.parent", Widget);
+    BI.createWidget({
+        type: "bi.absolute",
+        items: [{
+            el: {
+                type: "demo.parent"
+            },
+            top: 100,
+            left: 100
+        }],
+        element: "#wrapper"
+    });
+</script>
+</body>
+</html>

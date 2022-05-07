@@ -7,10 +7,10 @@
  */
 BI.ColorChooserTrigger = BI.inherit(BI.Trigger, {
 
-    _defaultConfig: function () {
+    _defaultConfig: function (config) {
         var conf = BI.ColorChooserTrigger.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
-            baseCls: (conf.baseCls || "") + " bi-color-chooser-trigger bi-border",
+            baseCls: (conf.baseCls || "") + " bi-color-chooser-trigger bi-focus-shadow " + (config.simple ? "bi-border-bottom" : "bi-border"),
             height: 22
         });
     },
@@ -35,10 +35,10 @@ BI.ColorChooserTrigger = BI.inherit(BI.Trigger, {
             element: this,
             items: [{
                 el: this.colorContainer,
-                left: 3,
-                right: 3,
-                top: 3,
-                bottom: 3
+                left: 2,
+                right: 2,
+                top: 2,
+                bottom: 2
             }, {
                 el: down,
                 right: -1,

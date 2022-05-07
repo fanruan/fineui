@@ -1,4 +1,4 @@
-@import "../../index";
+@import "../../index.less";
 
 .ztree * {
   padding: 0;
@@ -25,22 +25,72 @@
   padding: 0 0 0 18px
 }
 
+.ztree.solid li ul {
+  margin: 0;
+  padding: 0 0 0 24px
+}
+
+// 此处不用2倍图，改用css画虚线
+// z-tree的line是一整块子节点区域，所以不能使用background-size: contain
+// 使用1倍图太模糊，这边就使用css自己画了，calc属性支持IE9, IE8反正会走hack, 不影响
+.ztree li ul.line {
+  position: relative;
+  &:before {
+    position: absolute;
+    content: '';
+    border-left: 1px dashed @border-color-dark-gray-line;
+    height: calc(~"100% - 3px");
+    left: 11px;
+    margin-top: 1px;
+  }
+}
+
+.ztree.solid li ul.line {
+  &:before {
+    border-left: 1px solid @border-color-dark-gray-line;
+    height: 100%;
+    left: 15px;
+    margin-top: 0;
+  }
+}
+
+.bi-theme-dark {
+  .ztree li ul.line {
+    &:before {
+      border-left: 1px dashed @border-color-dark-gray-line;
+    }
+  }
+  .ztree.solid li ul.line {
+    &:before {
+      border-left: 1px solid @border-color-dark-gray-line-theme-dark;
+    }
+  }
+}
+
 .ztree li a {
   padding: 1px 3px 0 0;
   margin: 0;
   cursor: pointer;
-  height: 24px;
+  height: 23px;
   background-color: transparent;
   text-decoration: none;
   vertical-align: top;
   display: inline-block;
-  &:hover {
-    .background-color(@color-bi-background-highlight, 6%);
+  .tree-node-text {
+    &:not(.disabled) {
+      &:hover {
+        .background-color(@color-bi-background-highlight, 10%);
+      }
+      &:active {
+        color: @color-bi-text-highlight;
+        .background-color(@color-bi-background-highlight, 15%);
+      }
+    }
   }
-  &:active {
-    color: @color-bi-text-highlight;
-    .background-color(@color-bi-background-highlight, 6%);
-  }
+}
+
+.ztree.solid li a {
+  height: 31px;
 }
 
 .ztree li a.curSelectedNode {
@@ -90,6 +140,10 @@
   }
 }
 
+.ztree.solid li span {
+  line-height: 32px;
+}
+
 .ztree li span.button {
   line-height: 0;
   margin: 0;
@@ -106,8 +160,32 @@
 }
 
 .ztree li span.button.chk {
-  width: 16px;
-  height: 16px;
+  &.bi-checkbox {
+    border: 1px solid @color-bi-border-dark-line;
+    box-sizing: border-box;
+    &.active {
+      background-color: @color-bi-background-highlight;
+      border-color: @color-bi-border-highlight;
+    }
+    &.disabled {
+      border: 1px solid @color-bi-border-disabled;
+      background-color: @color-bi-background-disabled;
+      &.active {
+        border-color: @color-bi-border-disabled;
+      }
+    }
+  }
+  &.bi-half-button {
+    border: 1px solid @color-bi-border-highlight;
+    box-sizing: border-box;
+  }
+}
+
+
+.ztree li span.button.chk {
+  position: relative;
+  width: 14px;
+  height: 14px;
   margin: 0 3px 0 0;
   cursor: auto
 }
@@ -185,8 +263,21 @@
 }
 
 .ztree li span.button.switch {
-  width: 25px;
-  height: 25px
+  width: 24px;
+  height: 24px
+}
+
+.ztree.solid li span.button.switch {
+  width: 32px;
+  height: 32px
+}
+
+.ztree li span.button.switch.noline_open {
+  width: 0;
+}
+
+.ztree li span.button.switch.noline_close {
+  width: 0;
 }
 
 .ztree li span.button.noline_open {
@@ -203,6 +294,7 @@
 
 .ztree li span.button.noline_docu {
   background: none;
+  width: 0;
 }
 
 .ztree li span.button.ico_open {

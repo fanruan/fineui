@@ -48,11 +48,13 @@ BI.SelectList = BI.inherit(BI.Widget, {
             items: o.items,
             itemsCreator: function (op, callback) {
                 op.times === 1 && self.toolbar.setVisible(false);
-                o.itemsCreator(op, function (items) {
+                o.itemsCreator(op, function (items, keywords, context) {
                     callback.apply(self, arguments);
                     if (op.times === 1) {
-                        self.toolbar.setVisible(items && items.length > 0);
-                        self.toolbar.setEnable(self.isEnabled() && items && items.length > 0);
+                        var tipText = BI.get(context, 'tipText', '');
+                        var visible = BI.isEmptyString(tipText) && items && items.length > 0;
+                        self.toolbar.setVisible(visible);
+                        self.toolbar.setEnable(self.isEnabled() && visible);
                     }
                     self._checkAllSelected();
                 });
@@ -91,10 +93,23 @@ BI.SelectList = BI.inherit(BI.Widget, {
         var notSelectLength = this.getAllLeaves().length - selectLength;
         var hasNext = this.list.hasNext();
         var isAlreadyAllSelected = this.toolbar.isSelected();
-        var isHalf = selectLength > 0 && (notSelectLength > 0 || (!isAlreadyAllSelected && hasNext));
-        isHalf = isHalf || (notSelectLength > 0 && hasNext && isAlreadyAllSelected);
+        var isHalf = selectLength > 0 && notSelectLength > 0;
+        var allSelected = selectLength > 0 && notSelectLength <= 0 && (!hasNext || isAlreadyAllSelected);
+
+        if (this.isAllSelected() === false) {
+            hasNext && (isHalf = selectLength > 0);
+            if (!isAlreadyAllSelected && notSelectLength === 0 && !hasNext) {
+                allSelected = true;
+            }
+        } else {
+            hasNext && (isHalf = notSelectLength > 0);
+            if (!isAlreadyAllSelected && notSelectLength === 0) {
+                allSelected = true;
+            }
+        }
+
         this.toolbar.setHalfSelected(isHalf);
-        !isHalf && this.toolbar.setSelected(selectLength > 0 && notSelectLength <= 0 && (!hasNext || isAlreadyAllSelected));
+        !isHalf && this.toolbar.setSelected(allSelected);
     },
 
     setAllSelected: function (v) {
@@ -173,7 +188,7 @@ BI.SelectList = BI.inherit(BI.Widget, {
     resetHeight: function (h) {
         var toolHeight = ( this.toolbar.element.outerHeight() || 25) * ( this.toolbar.isVisible() ? 1 : 0);
         this.list.resetHeight ? this.list.resetHeight(h - toolHeight) :
-            this.list.element.css({"max-height": h - toolHeight + "px"});
+            this.list.element.css({"max-height": (h - toolHeight) / BI.pixRatio + BI.pixUnit});
     },
 
     setNotSelectedValue: function () {

@@ -11,11 +11,7 @@ BI.TextValueComboPopup = BI.inherit(BI.Pane, {
         var o = this.options, self = this;
         this.popup = BI.createWidget({
             type: "bi.button_group",
-            items: BI.createItems(o.items, {
-                type: "bi.single_select_item",
-                textAlign: o.textAlign,
-                height: 24
-            }),
+            items: this._formatItems(o.items),
             chooseType: o.chooseType,
             layouts: [{
                 type: "bi.vertical"
@@ -39,13 +35,20 @@ BI.TextValueComboPopup = BI.inherit(BI.Pane, {
         });
     },
 
+    _formatItems: function (items) {
+        var o = this.options;
+        return BI.map(items, function (i, item) {
+            return BI.extend({
+                type: "bi.single_select_item",
+                textAlign: o.textAlign,
+                title: item.title || item.text
+            }, item);
+        });
+    },
+
     populate: function (items) {
         BI.TextValueComboPopup.superclass.populate.apply(this, arguments);
-        items = BI.createItems(items, {
-            type: "bi.single_select_item",
-            height: 24
-        });
-        this.popup.populate(items);
+        this.popup.populate(this._formatItems(items));
     },
 
     getValue: function () {

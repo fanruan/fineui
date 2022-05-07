@@ -24,6 +24,9 @@ BI.AbstractAllValueChooser = BI.inherit(BI.Widget, {
 
     _valueFormatter: function (v) {
         var text = v;
+        if (this.options.valueFormatter) {
+            return this.options.valueFormatter(v);
+        }
         if (BI.isNotNull(this.items)) {
             BI.some(this.items, function (i, item) {
                 // 把value都换成字符串
@@ -82,5 +85,20 @@ BI.AbstractAllValueChooser = BI.inherit(BI.Widget, {
                 hasNext: false
             });
         }
-    }
+    },
+
+    _assertValue: function (v) {
+        v = v || {};
+        var value = v;
+        if (BI.isNotNull(this.items)) {
+            var isAllSelect = BI.difference(BI.map(this.items, "value"), v.value).length === 0;
+            if (isAllSelect) {
+                value = {
+                    type: BI.Selection.All,
+                    value: [],
+                };
+            }
+        }
+        return value;
+    },
 });

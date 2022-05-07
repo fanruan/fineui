@@ -6,16 +6,18 @@
  * @extends BI.Trigger
  */
 BI.TextTrigger = BI.inherit(BI.Trigger, {
-    _const: {
-        hgap: 4
-    },
 
     _defaultConfig: function () {
+        var self = this;
         var conf = BI.TextTrigger.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
             baseCls: (conf.baseCls || "") + " bi-text-trigger",
             height: 24,
-            textCls: ""
+            textHgap: 6,
+            textCls: "",
+            title: function () {
+                return self.text.getText();
+            }
         });
     },
 
@@ -28,12 +30,14 @@ BI.TextTrigger = BI.inherit(BI.Trigger, {
             textAlign: "left",
             height: o.height,
             text: o.text,
-            title: function () {
-                return self.text.getText();
-            },
             tipType: o.tipType,
             warningTitle: o.warningTitle,
-            hgap: c.hgap,
+            hgap: o.textHgap,
+            vgap: o.textVgap,
+            lgap: o.textLgap,
+            rgap: o.textRgap,
+            tgap: o.textTgap,
+            bgap: o.textBgap,
             readonly: o.readonly
         });
         this.trigerButton = BI.createWidget({
@@ -43,16 +47,21 @@ BI.TextTrigger = BI.inherit(BI.Trigger, {
 
         BI.createWidget({
             element: this,
-            type: "bi.htape",
+            type: "bi.horizontal_fill",
             items: [
                 {
-                    el: this.text
+                    el: this.text,
+                    width: "fill"
                 }, {
                     el: this.trigerButton,
                     width: o.triggerWidth || o.height
                 }
             ]
         });
+    },
+
+    getTextor: function() {
+        return this.text;
     },
 
     setTextCls: function(cls) {
@@ -68,6 +77,7 @@ BI.TextTrigger = BI.inherit(BI.Trigger, {
 
     setTipType: function (v) {
         this.text.options.tipType = v;
+        this.options.tipType = v;
     }
 });
 BI.shortcut("bi.text_trigger", BI.TextTrigger);

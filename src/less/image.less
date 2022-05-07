@@ -1,4 +1,4 @@
-@import "var";
+@import "var.less";
 
 .imagePath(none) {
   background: none;
@@ -360,9 +360,6 @@
 .font(@class,@content, @color: @color-bi-font-native) {
   @fc: "\@{content}";
   .@{class} {
-    & .b-font {
-      *zoom: ~"expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#x@{content};')";
-    }
     & .b-font:before {
       content: @fc;
       color: @color;
@@ -378,9 +375,6 @@
 .font-hover(@class,@content,@color-native: @color-bi-font-native, @color-hover: @color-bi-font-hover) {
   @fc: "\@{content}";
   .@{class} {
-    & .b-font {
-      *zoom: ~"expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#x@{content};')";
-    }
     & .b-font:before {
       content: @fc;
       color: @color-native;
@@ -401,9 +395,6 @@
 .font-hover-active(@class,@content,@color-native: @color-bi-font-native, @color-hover: @color-bi-font-hover, @color-active: @color-bi-font-active) {
   @fc: "\@{content}";
   .@{class} {
-    & .b-font {
-      *zoom: ~"expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#x@{content};')";
-    }
     & .b-font:before {
       content: @fc;
       color: @color-native;
@@ -429,9 +420,6 @@
 .font-effect(@class,@content,@color-native: @color-bi-font-native, @color-hover: @color-bi-font-hover, @color-active: @color-bi-font-active, @color-selected: @color-bi-font-active) {
   @fc: "\@{content}";
   .@{class} {
-    & .b-font {
-      *zoom: ~"expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#x@{content};')";
-    }
     & .b-font:before {
       content: @fc;
       color: @color-native;

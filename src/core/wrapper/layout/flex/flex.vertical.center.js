@@ -8,8 +8,9 @@
 BI.FlexVerticalCenter = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.FlexVerticalCenter.superclass.props.apply(this, arguments), {
-            baseCls: "bi-flex-vertical-center-adapt-layout",
+            baseCls: "bi-f-v-c",
             horizontalAlign: BI.HorizontalAlign.Left,
+            verticalAlign: BI.VerticalAlign.Middle,
             columnSize: [],
             scrollx: false,
             hgap: 0,
@@ -25,11 +26,12 @@ BI.FlexVerticalCenter = BI.inherit(BI.Layout, {
         return {
             type: "bi.flex_horizontal",
             ref: function (_ref) {
-                self.wrapper = _ref;
+                self.layout = _ref;
             },
-            verticalAlign: BI.VerticalAlign.Middle,
+            verticalAlign: o.verticalAlign,
             horizontalAlign: o.horizontalAlign,
             columnSize: o.columnSize,
+            rowSize: o.rowSize,
             scrollx: o.scrollx,
             scrolly: o.scrolly,
             scrollable: o.scrollable,
@@ -37,20 +39,18 @@ BI.FlexVerticalCenter = BI.inherit(BI.Layout, {
             lgap: o.lgap,
             rgap: o.rgap,
             hgap: o.hgap,
+            innerHgap: o.innerHgap,
+            innerVgap: o.innerVgap,
             items: o.items
         };
     },
 
     resize: function () {
-        // console.log("flex_vertical_center_adapt布局不需要resize");
-    },
-
-    update: function (opt) {
-        return this.wrapper.update(opt);
+        this.layout.resize();
     },
 
     populate: function (items) {
-        this.wrapper.populate(items);
+        this.layout.populate(items);
     }
 });
 BI.shortcut("bi.flex_vertical_adapt", BI.FlexVerticalCenter);

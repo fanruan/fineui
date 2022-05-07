@@ -23,11 +23,14 @@ BI.MonthDateCombo = BI.inherit(BI.Trigger, {
 
         this.popup = BI.createWidget({
             type: "bi.month_popup",
+            allowMonths: o.allowMonths,
             behaviors: o.behaviors
         });
 
-        this.popup.on(BI.YearPopup.EVENT_CHANGE, function () {
+        this.popup.on(BI.MonthPopup.EVENT_CHANGE, function () {
             self.setValue(self.popup.getValue());
+            self.combo.hideView();
+            self.fireEvent(BI.MonthDateCombo.EVENT_CHANGE);
         });
 
 
@@ -40,19 +43,23 @@ BI.MonthDateCombo = BI.inherit(BI.Trigger, {
             isNeedAdjustWidth: false,
             el: this.trigger,
             popup: {
-                minWidth: 85,
+                minWidth: 100,
                 stopPropagation: false,
-                el: this.popup
+                el: {
+                    type: "bi.vertical",
+                    hgap: 6,
+                    items: [this.popup]
+                }
             }
-        });
-        this.combo.on(BI.Combo.EVENT_CHANGE, function () {
-            self.combo.hideView();
-            self.fireEvent(BI.MonthDateCombo.EVENT_CHANGE);
         });
 
         this.combo.on(BI.Combo.EVENT_BEFORE_POPUPVIEW, function () {
             self.doBehavior();
         });
+    },
+
+    populate: function () {
+        this.popup.populate.apply(this.popup, arguments);
     },
 
     setValue: function (v) {

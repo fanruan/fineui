@@ -14,6 +14,7 @@ BI.SingleSelectPopupView = BI.inherit(BI.Widget, {
             maxHeight: 400,
             valueFormatter: BI.emptyFn,
             itemsCreator: BI.emptyFn,
+            itemWrapper: BI.emptyFn,
             onLoaded: BI.emptyFn
         });
     },
@@ -26,6 +27,7 @@ BI.SingleSelectPopupView = BI.inherit(BI.Widget, {
             type: "bi.single_select_loader",
             allowNoSelect: opts.allowNoSelect,
             itemsCreator: opts.itemsCreator,
+            itemWrapper: opts.itemWrapper,
             valueFormatter: opts.valueFormatter,
             onLoaded: opts.onLoaded,
             value: opts.value
@@ -69,7 +71,11 @@ BI.SingleSelectPopupView = BI.inherit(BI.Widget, {
 
     resetWidth: function (w) {
         this.popupView.resetWidth(w);
-    }
+    },
+
+    setDirection: function (direction, position) {
+        this.popupView.setDirection(direction, position);
+    },
 });
 
 BI.SingleSelectPopupView.EVENT_CHANGE = "EVENT_CHANGE";

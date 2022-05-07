@@ -4,22 +4,27 @@
  * combo : text + icon, popup : check + text
  */
 BI.TextValueCheckCombo = BI.inherit(BI.Widget, {
-    _defaultConfig: function () {
+    _defaultConfig: function (config) {
         return BI.extend(BI.TextValueCheckCombo.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-text-value-check-combo",
+            baseCls: "bi-text-value-check-combo " + (config.simple ? "bi-border-bottom" : "bi-border"),
             width: 100,
             height: 24,
             chooseType: BI.ButtonGroup.CHOOSE_TYPE_SINGLE,
             value: "",
-            attributes: {
-                tabIndex: 0
-            }
         });
     },
 
     _init: function () {
-        BI.TextValueCheckCombo.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
+        BI.isNumeric(o.width) && (o.width -= 2);
+        BI.isNumeric(o.height) && (o.height -= 2);
+        o.value = BI.isFunction(o.value) ? this.__watch(o.value, function (context, newValue) {
+            self.setValue(newValue);
+        }) : o.value;
+        o.items = BI.isFunction(o.items) ? this.__watch(o.items, function (context, newValue) {
+            self.populate(newValue);
+        }) : o.items;
+        BI.TextValueCheckCombo.superclass._init.apply(this, arguments);
         this.trigger = BI.createWidget({
             type: "bi.select_text_trigger",
             cls: "text-value-trigger",
@@ -45,6 +50,7 @@ BI.TextValueCheckCombo = BI.inherit(BI.Widget, {
         this.textIconCheckCombo = BI.createWidget({
             type: "bi.combo",
             container: o.container,
+            direction: o.direction,
             element: this,
             adjustLength: 2,
             el: this.trigger,

@@ -1,13 +1,12 @@
 BI.DynamicDatePopup = BI.inherit(BI.Widget, {
     constants: {
-        tabHeight: 30,
-        buttonHeight: 24
+        tabHeight: 40,
     },
 
     props: {
         baseCls: "bi-dynamic-date-popup",
-        width: 248,
-        height: 344
+        width: 272,
+        supportDynamic: true,
     },
 
     _init: function () {
@@ -16,7 +15,7 @@ BI.DynamicDatePopup = BI.inherit(BI.Widget, {
         this.storeValue = {type: BI.DynamicDateCombo.Static};
         BI.createWidget({
             element: this,
-            type: "bi.vtape",
+            type: "bi.vertical",
             items: [{
                 el: this._getTabJson()
             }, {
@@ -27,7 +26,7 @@ BI.DynamicDatePopup = BI.inherit(BI.Widget, {
                         cls: "bi-high-light bi-split-top",
                         shadow: true,
                         text: BI.i18nText("BI-Basic_Clear"),
-                        textHeight: c.buttonHeight - 1,
+                        textHeight: BI.SIZE_CONSANTS.TOOL_BAR_HEIGHT - 1,
                         listeners: [{
                             eventName: BI.TextButton.EVENT_CHANGE,
                             action: function () {
@@ -38,10 +37,11 @@ BI.DynamicDatePopup = BI.inherit(BI.Widget, {
                         type: "bi.text_button",
                         cls: "bi-split-left bi-split-right bi-high-light bi-split-top",
                         shadow: true,
-                        textHeight: c.buttonHeight - 1,
+                        textHeight: BI.SIZE_CONSANTS.TOOL_BAR_HEIGHT - 1,
                         text: BI.i18nText("BI-Multi_Date_Today"),
+                        disabled: this._checkTodayValid(),
                         ref: function () {
-                            self.textButton = this;
+                            self.todayButton = this;
                         },
                         listeners: [{
                             eventName: BI.TextButton.EVENT_CHANGE,
@@ -52,18 +52,23 @@ BI.DynamicDatePopup = BI.inherit(BI.Widget, {
                     }, {
                         type: "bi.text_button",
                         cls: "bi-high-light bi-split-top",
-                        textHeight: c.buttonHeight - 1,
+                        textHeight: BI.SIZE_CONSANTS.TOOL_BAR_HEIGHT - 1,
                         shadow: true,
                         text: BI.i18nText("BI-Basic_OK"),
                         listeners: [{
                             eventName: BI.TextButton.EVENT_CHANGE,
                             action: function () {
-                                self.fireEvent(BI.DynamicDatePopup.BUTTON_OK_EVENT_CHANGE);
+                                var type = self.dateTab.getSelect();
+                                if (type === BI.DynamicDateCombo.Dynamic) {
+                                    self.dynamicPane.checkValidation(true) && self.fireEvent(BI.DynamicDatePopup.BUTTON_OK_EVENT_CHANGE);
+                                } else {
+                                    self.fireEvent(BI.DynamicDatePopup.BUTTON_OK_EVENT_CHANGE);
+                                }
                             }
                         }]
-                    }]]
+                    }]],
+                    height: BI.SIZE_CONSANTS.TOOL_BAR_HEIGHT
                 },
-                height: 24
             }]
         });
         this.setValue(opts.value);
@@ -73,11 +78,15 @@ BI.DynamicDatePopup = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
         return {
             type: "bi.tab",
+            logic: {
+                dynamic: true
+            },
             ref: function () {
                 self.dateTab = this;
             },
             tab: {
                 type: "bi.linear_segment",
+                invisible: !o.supportDynamic,
                 cls: "bi-split-bottom",
                 height: this.constants.tabHeight,
                 items: BI.createItems([{
@@ -95,12 +104,15 @@ BI.DynamicDatePopup = BI.inherit(BI.Widget, {
                     case BI.DynamicDateCombo.Dynamic:
                         return {
                             type: "bi.dynamic_date_card",
+                            cls: "dynamic-date-pane",
                             listeners: [{
                                 eventName: "EVENT_CHANGE",
                                 action: function () {
                                     self._setInnerValue(self.year, v);
                                 }
                             }],
+                            min: self.options.min,
+                            max: self.options.max,
                             ref: function () {
                                 self.dynamicPane = this;
                             }
@@ -116,6 +128,11 @@ BI.DynamicDatePopup = BI.inherit(BI.Widget, {
                                 eventName: BI.DateCalendarPopup.EVENT_CHANGE,
                                 action: function () {
                                     self.fireEvent(BI.DynamicDatePopup.EVENT_CHANGE);
+                                }
+                            }, {
+                                eventName: BI.DateCalendarPopup.EVENT_BEFORE_YEAR_MONTH_POPUPVIEW,
+                                action: function () {
+                                    self.fireEvent(BI.DynamicDatePopup.EVENT_BEFORE_YEAR_MONTH_POPUPVIEW);
                                 }
                             }],
                             ref: function () {
@@ -157,13 +174,13 @@ BI.DynamicDatePopup = BI.inherit(BI.Widget, {
 
     _setInnerValue: function () {
         if (this.dateTab.getSelect() === BI.DynamicDateCombo.Static) {
-            this.textButton.setValue(BI.i18nText("BI-Multi_Date_Today"));
-            this.textButton.setEnable(true);
+            this.todayButton.setValue(BI.i18nText("BI-Multi_Date_Today"));
+            this.todayButton.setEnable(!this._checkTodayValid());
         } else {
-            var date = BI.DynamicDateHelper.getCalculation(this.dynamicPane.getValue());
+            var date = BI.DynamicDateHelper.getCalculation(this.dynamicPane.getInputValue());
             date = BI.print(date, "%Y-%X-%d");
-            this.textButton.setValue(date);
-            this.textButton.setEnable(false);
+            this.todayButton.setValue(date);
+            this.todayButton.setEnable(false);
         }
     },
 
@@ -171,17 +188,25 @@ BI.DynamicDatePopup = BI.inherit(BI.Widget, {
         return BI.isNull(value) || BI.isEmptyObject(value) || BI.isEmptyString(value);
     },
 
+    _checkTodayValid: function () {
+        var o = this.options;
+        var today = BI.getDate();
+        return !!BI.checkDateVoid(today.getFullYear(), today.getMonth() + 1, today.getDate(), o.min, o.max)[0];
+    },
+
     setMinDate: function (minDate) {
         if (this.options.min !== minDate) {
             this.options.min = minDate;
-            this.ymd.setMinDate(minDate);
+            this.ymd && this.ymd.setMinDate(minDate);
+            this.dynamicPane && this.dynamicPane.setMinDate(minDate);
         }
     },
 
     setMaxDate: function (maxDate) {
         if (this.options.max !== maxDate) {
             this.options.max = maxDate;
-            this.ymd.setMaxDate(maxDate);
+            this.ymd && this.ymd.setMaxDate(maxDate);
+            this.dynamicPane && this.dynamicPane.setMaxDate(maxDate);
         }
     },
 
@@ -207,12 +232,12 @@ BI.DynamicDatePopup = BI.inherit(BI.Widget, {
                         month: date.getMonth() + 1,
                         day: date.getDate()
                     });
-                    this.textButton.setValue(BI.i18nText("BI-Multi_Date_Today"));
+                    this.todayButton.setValue(BI.i18nText("BI-Multi_Date_Today"));
                 } else {
                     this.ymd.setValue(value);
-                    this.textButton.setValue(BI.i18nText("BI-Multi_Date_Today"));
+                    this.todayButton.setValue(BI.i18nText("BI-Multi_Date_Today"));
                 }
-                this.textButton.setEnable(true);
+                this.todayButton.setEnable(!this._checkTodayValid());
                 break;
         }
     },
@@ -228,4 +253,5 @@ BI.DynamicDatePopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.DynamicDatePopup.BUTTON_OK_EVENT_CHANGE = "BUTTON_OK_EVENT_CHANGE";
 BI.DynamicDatePopup.BUTTON_lABEL_EVENT_CHANGE = "BUTTON_lABEL_EVENT_CHANGE";
 BI.DynamicDatePopup.BUTTON_CLEAR_EVENT_CHANGE = "BUTTON_CLEAR_EVENT_CHANGE";
+BI.DynamicDatePopup.EVENT_BEFORE_YEAR_MONTH_POPUPVIEW = "EVENT_BEFORE_YEAR_MONTH_POPUPVIEW";
 BI.shortcut("bi.dynamic_date_popup", BI.DynamicDatePopup);

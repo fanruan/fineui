@@ -1,0 +1,14 @@
+@import "../../index.less";
+
+.bi-form {
+  & .bi-form-field.error {
+    & .bi-border, & .bi-border-bottom {
+      border-color: @border-color-negative;
+    }
+  }
+  & .bi-form-field {
+    & .error-tip {
+      background-color: @color-bi-background-error-form;
+    }
+  }
+}

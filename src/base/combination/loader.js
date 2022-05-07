@@ -53,8 +53,7 @@ BI.Loader = BI.inherit(BI.Widget, {
         }]);
     },
 
-    _init: function () {
-        BI.Loader.superclass._init.apply(this, arguments);
+    render: function () {
         var self = this, o = this.options;
         if (o.itemsCreator === false) {
             o.prev = false;
@@ -110,8 +109,11 @@ BI.Loader = BI.inherit(BI.Widget, {
         o.isDefaultInit && BI.isEmpty(o.items) && BI.nextTick(BI.bind(function () {
             o.isDefaultInit && BI.isEmpty(o.items) && this._populate();
         }, this));
-        if (BI.isNotEmptyArray(o.items)) {
-            this._populate(o.items);
+        var items = BI.isFunction(o.items) ? this.__watch(o.items, function (context, newValue) {
+            self.populate(newValue);
+        }) : o.items;
+        if (BI.isNotEmptyArray(items)) {
+            this._populate(items);
         }
     },
 
@@ -163,13 +165,12 @@ BI.Loader = BI.inherit(BI.Widget, {
         this.button_group.addItems.apply(this.button_group, arguments);
     },
 
-
     _populate: function (items) {
         var self = this, o = this.options;
         if (arguments.length === 0 && (BI.isFunction(o.itemsCreator))) {
             o.itemsCreator.apply(this, [{times: 1}, function () {
                 if (arguments.length === 0) {
-                    throw new Error("arguments can not be null!!!");
+                    throw new Error("参数不能为空");
                 }
                 self.populate.apply(self, arguments);
                 o.onLoaded();

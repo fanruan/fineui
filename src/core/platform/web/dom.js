@@ -3,7 +3,7 @@
  * @type {{}}
  */
 !(function () {
-    BI.DOM = {};
+    BI.DOM = BI.DOM || {};
 
     BI.extend(BI.DOM, {
         ready: function (fn) {
@@ -127,11 +127,11 @@
             BI.Widget._renderEngine.createElement("body").append(canvas);
 
             var ctx = canvas.getContext("2d");
-            ctx.font = "12px Georgia";
+            ctx.font = "12px Helvetica Neue,Arial,PingFang SC,Hiragino Sans GB,Microsoft YaHei,微软雅黑,Heiti,黑体,sans-serif";
             var w = ctx.measureText(param).width + 4;
             canvas.width = w * ratio;
             canvas.height = 16 * ratio;
-            ctx.font = 12 * ratio + "px Georgia";
+            ctx.font = 12 * ratio + "px Helvetica Neue,Arial,PingFang SC,Hiragino Sans GB,Microsoft YaHei,微软雅黑,Heiti,黑体,sans-serif";
             ctx.fillStyle = fillStyle || "#3685f2";
             ctx.textBaseline = "middle";
             // ctx.fillStyle = "#EAF2FD";
@@ -146,157 +146,6 @@
                 style: "background-color: " + backColor + ";vertical-align: middle; margin: 0 1px; width:" + w + "px;height: 16px; max-width:" + w + "px;max-height: 16px; min-width:" + w + "px;min-height: 16px",
                 param: param
             };
-        }
-    });
-
-    BI.extend(BI.DOM, {
-        isColor: function (color) {
-            return color && (this.isRGBColor(color) || this.isHexColor(color));
-        },
-
-        isRGBColor: function (color) {
-            if (!color) {
-                return false;
-            }
-            return color.substr(0, 3) === "rgb";
-        },
-
-        isHexColor: function (color) {
-            if (!color) {
-                return false;
-            }
-            return color[0] === "#" && color.length === 7;
-        },
-
-        isDarkColor: function (hex) {
-            if (!hex || !this.isHexColor(hex)) {
-                return false;
-            }
-            var rgb = this.rgb2json(this.hex2rgb(hex));
-            var grayLevel = Math.round(rgb.r * 0.299 + rgb.g * 0.587 + rgb.b * 0.114);
-            if (grayLevel < 192/** 网上给的是140**/) {
-                return true;
-            }
-            return false;
-        },
-
-        // 获取对比颜色
-        getContrastColor: function (color) {
-            if (!color || !this.isColor(color)) {
-                return "";
-            }
-            if (this.isDarkColor(color)) {
-                return "#ffffff";
-            }
-            return "#1a1a1a";
-        },
-
-        rgb2hex: function (rgbColour) {
-            if (!rgbColour || rgbColour.substr(0, 3) != "rgb") {
-                return "";
-            }
-            var rgbValues = rgbColour.match(/\d+(\.\d+)?/g);
-            var red = BI.parseInt(rgbValues[0]);
-            var green = BI.parseInt(rgbValues[1]);
-            var blue = BI.parseInt(rgbValues[2]);
-
-            var hexColour = "#" + this.int2hex(red) + this.int2hex(green) + this.int2hex(blue);
-
-            return hexColour;
-        },
-
-        rgb2json: function (rgbColour) {
-            if (!rgbColour) {
-                return {};
-            }
-            if (!this.isRGBColor(rgbColour)) {
-                return {};
-            }
-            var rgbValues = rgbColour.match(/\d+(\.\d+)?/g);
-            return {
-                r: BI.parseInt(rgbValues[0]),
-                g: BI.parseInt(rgbValues[1]),
-                b: BI.parseInt(rgbValues[2])
-            };
-        },
-
-        rgba2json: function (rgbColour) {
-            if (!rgbColour) {
-                return {};
-            }
-            var rgbValues = rgbColour.match(/\d+(\.\d+)?/g);
-            return {
-                r: BI.parseInt(rgbValues[0]),
-                g: BI.parseInt(rgbValues[1]),
-                b: BI.parseInt(rgbValues[2]),
-                a: BI.parseFloat(rgbValues[3])
-            };
-        },
-
-        json2rgb: function (rgb) {
-            if (!BI.isKey(rgb.r) || !BI.isKey(rgb.g) || !BI.isKey(rgb.b)) {
-                return "";
-            }
-            return "rgb(" + rgb.r + "," + rgb.g + "," + rgb.b + ")";
-        },
-
-        json2rgba: function (rgba) {
-            if (!BI.isKey(rgba.r) || !BI.isKey(rgba.g) || !BI.isKey(rgba.b)) {
-                return "";
-            }
-            return "rgba(" + rgba.r + "," + rgba.g + "," + rgba.b + "," + rgba.a + ")";
-        },
-
-        int2hex: function (strNum) {
-            var hexdig = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "a", "b", "c", "d", "e", "f"];
-
-            return hexdig[strNum >>> 4] + "" + hexdig[strNum & 15];
-        },
-
-        hex2rgb: function (color) {
-            if (!color) {
-                return "";
-            }
-            if (!this.isHexColor(color)) {
-                return color;
-            }
-            var tempValue = "rgb(", colorArray;
-
-            if (color.length === 7) {
-                colorArray = [BI.parseInt("0x" + color.substring(1, 3)),
-                    BI.parseInt("0x" + color.substring(3, 5)),
-                    BI.parseInt("0x" + color.substring(5, 7))];
-            } else if (color.length === 4) {
-                colorArray = [BI.parseInt("0x" + color.substring(1, 2)),
-                    BI.parseInt("0x" + color.substring(2, 3)),
-                    BI.parseInt("0x" + color.substring(3, 4))];
-            }
-            tempValue += colorArray[0] + ",";
-            tempValue += colorArray[1] + ",";
-            tempValue += colorArray[2] + ")";
-
-            return tempValue;
-        },
-
-        rgba2rgb: function (rgbColor, bgColor) {
-            if (BI.isNull(bgColor)) {
-                bgColor = 1;
-            }
-            if (rgbColor.substr(0, 4) != "rgba") {
-                return "";
-            }
-            var rgbValues = rgbColor.match(/\d+(\.\d+)?/g);
-            if (rgbValues.length < 4) {
-                return "";
-            }
-            var R = BI.parseFloat(rgbValues[0]);
-            var G = BI.parseFloat(rgbValues[1]);
-            var B = BI.parseFloat(rgbValues[2]);
-            var A = BI.parseFloat(rgbValues[3]);
-
-            return "rgb(" + Math.floor(255 * (bgColor * (1 - A)) + R * A) + "," +
-                Math.floor(255 * (bgColor * (1 - A)) + G * A) + "," +
-                Math.floor(255 * (bgColor * (1 - A)) + B * A) + ")";
         }
     });
 
@@ -346,7 +195,8 @@
         },
 
         isInnerLeftSpaceEnough: function (combo, popup, extraWidth) {
-            var viewBounds = popup.element.bounds(),windowBounds = BI.Widget._renderEngine.createElement("body").bounds();
+            var viewBounds = popup.element.bounds(),
+                windowBounds = BI.Widget._renderEngine.createElement("body").bounds();
             return BI.DOM.getInnerLeftPosition(combo, popup, extraWidth).left + viewBounds.width <= windowBounds.width;
         },
 
@@ -380,18 +230,30 @@
             return windowBounds.height - combo.element.offset().top - combo.element.bounds().height >= combo.element.offset().top;
         },
 
-        getLeftAlignPosition: function (combo, popup, extraWidth) {
+        _getLeftAlignPosition: function (combo, popup, extraWidth) {
             var viewBounds = popup.element.bounds(),
                 windowBounds = BI.Widget._renderEngine.createElement("body").bounds();
             var left = combo.element.offset().left + extraWidth;
             if (left + viewBounds.width > windowBounds.width) {
                 left = windowBounds.width - viewBounds.width;
             }
+            return left;
+        },
+
+        getLeftAlignPosition: function (combo, popup, extraWidth) {
+            var left = this._getLeftAlignPosition(combo, popup, extraWidth);
+            var dir = "";
+            // 如果放不下，优先使用RightAlign, 如果RightAlign也放不下, 再使用left=0
+            if (left < 0) {
+                left = this._getRightAlignPosition(combo, popup, extraWidth);
+                dir = "left";
+            }
             if (left < 0) {
                 left = 0;
             }
             return {
-                left: left
+                left: left,
+                dir: dir || "right"
             };
         },
 
@@ -404,14 +266,25 @@
             };
         },
 
-        getRightAlignPosition: function (combo, popup, extraWidth) {
+        _getRightAlignPosition: function (combo, popup, extraWidth) {
             var comboBounds = combo.element.bounds(), viewBounds = popup.element.bounds();
-            var left = combo.element.offset().left + comboBounds.width - viewBounds.width - extraWidth;
+            return combo.element.offset().left + comboBounds.width - viewBounds.width - extraWidth;
+        },
+
+        getRightAlignPosition: function (combo, popup, extraWidth) {
+            var left = this._getRightAlignPosition(combo, popup, extraWidth);
+            var dir = "";
+            // 如果放不下，优先使用LeftAlign, 如果LeftAlign也放不下, 再使用left=0
+            if (left < 0) {
+                left = this._getLeftAlignPosition(combo, popup, extraWidth);
+                dir = "right";
+            }
             if (left < 0) {
                 left = 0;
             }
             return {
-                left: left
+                left: left,
+                dir: dir || "left"
             };
         },
 
@@ -428,12 +301,16 @@
             var comboOffset = combo.element.offset();
             var comboBounds = combo.element.bounds(), popupBounds = popup.element.bounds(),
                 windowBounds = BI.Widget._renderEngine.createElement("body").bounds();
-            var top, adaptHeight;
+            var top, adaptHeight, dir;
             if (BI.DOM.isBottomSpaceEnough(combo, popup, -1 * comboBounds.height + extraHeight)) {
                 top = comboOffset.top + extraHeight;
             } else if (needAdaptHeight) {
                 top = comboOffset.top + extraHeight;
                 adaptHeight = windowBounds.height - top;
+            } else if (BI.DOM.isTopSpaceEnough(combo, popup, -1 * comboBounds.height + extraHeight)) {
+                // 下方空间不足且不允许调整高度的情况下，优先使用上对齐
+                top = comboOffset.top + comboBounds.height - popupBounds.height - extraHeight;
+                dir = "top";
             } else {
                 top = windowBounds.height - popupBounds.height;
                 if (top < extraHeight) {
@@ -445,9 +322,11 @@
             }
             return adaptHeight ? {
                 top: top,
-                adaptHeight: adaptHeight
+                adaptHeight: adaptHeight,
+                dir: dir || "bottom"
             } : {
-                top: top
+                top: top,
+                dir: dir || "bottom"
             };
         },
 
@@ -478,12 +357,16 @@
             var comboOffset = combo.element.offset();
             var comboBounds = combo.element.bounds(), popupBounds = popup.element.bounds(),
                 windowBounds = BI.Widget._renderEngine.createElement("body").bounds();
-            var top, adaptHeight;
+            var top, adaptHeight, dir;
             if (BI.DOM.isTopSpaceEnough(combo, popup, -1 * comboBounds.height + extraHeight)) {
                 top = comboOffset.top + comboBounds.height - popupBounds.height - extraHeight;
             } else if (needAdaptHeight) {
                 top = 0;
                 adaptHeight = comboOffset.top + comboBounds.height - extraHeight;
+            } else if (BI.DOM.isBottomSpaceEnough(combo, popup, -1 * comboBounds.height + extraHeight)) {
+                // 上方空间不足且不允许调整高度的情况下，优先使用下对齐
+                top = comboOffset.top + extraHeight;
+                dir = "bottom";
             } else {
                 top = 0;
                 if (popupBounds.height + extraHeight > windowBounds.height) {
@@ -495,9 +378,11 @@
             }
             return adaptHeight ? {
                 top: top,
-                adaptHeight: adaptHeight
+                adaptHeight: adaptHeight,
+                dir: dir || "top"
             } : {
-                top: top
+                top: top,
+                dir: dir || "top"
             };
         },
 
@@ -601,11 +486,10 @@
                                 left = BI.DOM.getLeftPosition(combo, popup, tW).left;
                                 if (topBottom[0] === "bottom") {
                                     pos = BI.DOM.getTopAlignPosition(combo, popup, tH, needAdaptHeight);
-                                    pos.dir = "left,bottom";
                                 } else {
                                     pos = BI.DOM.getBottomAlignPosition(combo, popup, tH, needAdaptHeight);
-                                    pos.dir = "left,top";
                                 }
+                                pos.dir = "left," + pos.dir;
                                 if (tbFirst) {
                                     pos.change = "left";
                                 }
@@ -622,11 +506,10 @@
                                 left = BI.DOM.getRightPosition(combo, popup, tW).left;
                                 if (topBottom[0] === "bottom") {
                                     pos = BI.DOM.getTopAlignPosition(combo, popup, tH, needAdaptHeight);
-                                    pos.dir = "right,bottom";
                                 } else {
                                     pos = BI.DOM.getBottomAlignPosition(combo, popup, tH, needAdaptHeight);
-                                    pos.dir = "right,top";
                                 }
+                                pos.dir = "right," + pos.dir;
                                 if (tbFirst) {
                                     pos.change = "right";
                                 }
@@ -642,11 +525,10 @@
                             top = BI.DOM.getTopPosition(combo, popup, tH).top;
                             if (leftRight[0] === "right") {
                                 pos = BI.DOM.getLeftAlignPosition(combo, popup, tW, needAdaptHeight);
-                                pos.dir = "top,right";
                             } else {
                                 pos = BI.DOM.getRightAlignPosition(combo, popup, tW);
-                                pos.dir = "top,left";
                             }
+                            pos.dir = "top," + pos.dir;
                             if (lrFirst) {
                                 pos.change = "top";
                             }
@@ -664,11 +546,10 @@
                             top = BI.DOM.getBottomPosition(combo, popup, tH).top;
                             if (leftRight[0] === "right") {
                                 pos = BI.DOM.getLeftAlignPosition(combo, popup, tW, needAdaptHeight);
-                                pos.dir = "bottom,right";
                             } else {
                                 pos = BI.DOM.getRightAlignPosition(combo, popup, tW);
-                                pos.dir = "bottom,left";
                             }
+                            pos.dir = "bottom," + pos.dir;
                             if (lrFirst) {
                                 pos.change = "bottom";
                             }
@@ -687,11 +568,10 @@
                                 left = BI.DOM.getInnerLeftPosition(combo, popup, tW).left;
                                 if (topBottom[0] === "bottom") {
                                     pos = BI.DOM.getTopAlignPosition(combo, popup, tH, needAdaptHeight);
-                                    pos.dir = "innerLeft,bottom";
                                 } else {
                                     pos = BI.DOM.getBottomAlignPosition(combo, popup, tH, needAdaptHeight);
-                                    pos.dir = "innerLeft,top";
                                 }
+                                pos.dir = "innerLeft," + pos.dir;
                                 if (tbFirst) {
                                     pos.change = "innerLeft";
                                 }
@@ -708,11 +588,10 @@
                                 left = BI.DOM.getInnerRightPosition(combo, popup, tW).left;
                                 if (topBottom[0] === "bottom") {
                                     pos = BI.DOM.getTopAlignPosition(combo, popup, tH, needAdaptHeight);
-                                    pos.dir = "innerRight,bottom";
                                 } else {
                                     pos = BI.DOM.getBottomAlignPosition(combo, popup, tH, needAdaptHeight);
-                                    pos.dir = "innerRight,top";
                                 }
+                                pos.dir = "innerLeft," + pos.dir;
                                 if (tbFirst) {
                                     pos.change = "innerRight";
                                 }
@@ -740,30 +619,30 @@
                     if (topBottom[0] === "bottom") {
                         pos = BI.DOM.getTopAlignPosition(combo, popup, extraHeight, needAdaptHeight);
                         pos.left = left;
-                        pos.dir = firstDir + ",bottom";
+                        pos.dir = firstDir + "," + pos.dir;
                         return pos;
                     }
                     pos = BI.DOM.getBottomAlignPosition(combo, popup, extraHeight, needAdaptHeight);
                     pos.left = left;
-                    pos.dir = firstDir + ",top";
+                    pos.dir = firstDir + "," + pos.dir;
                     return pos;
                 default :
                     if (BI.DOM.isBottomSpaceLarger(combo)) {
-                        pos = BI.DOM.getBottomAdaptPosition(combo, popup, extraHeight, needAdaptHeight);
+                        top = BI.DOM.getBottomAdaptPosition(combo, popup, extraHeight, needAdaptHeight).top;
                         firstDir = "bottom";
                     } else {
-                        pos = BI.DOM.getTopAdaptPosition(combo, popup, extraHeight, needAdaptHeight);
+                        top = BI.DOM.getTopAdaptPosition(combo, popup, extraHeight, needAdaptHeight).top;
                         firstDir = "top";
                     }
                     if (leftRight[0] === "right") {
-                        left = BI.DOM.getLeftAlignPosition(combo, popup, extraWidth, needAdaptHeight).left;
-                        pos.left = left;
-                        pos.dir = firstDir + ",right";
+                        pos = BI.DOM.getLeftAlignPosition(combo, popup, extraWidth, needAdaptHeight);
+                        pos.top = top;
+                        pos.dir = firstDir + "," + pos.dir;
                         return pos;
                     }
-                    left = BI.DOM.getRightAlignPosition(combo, popup, extraWidth).left;
-                    pos.left = left;
-                    pos.dir = firstDir + ",left";
+                    pos = BI.DOM.getRightAlignPosition(combo, popup, extraWidth);
+                    pos.top = top;
+                    pos.dir = firstDir + "," + pos.dir;
                     return pos;
             }
         },

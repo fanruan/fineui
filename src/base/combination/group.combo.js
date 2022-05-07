@@ -16,7 +16,7 @@ BI.ComboGroup = BI.inherit(BI.Widget, {
             isNeedAdjustWidth: false,
 
             el: {type: "bi.text_button", text: "", value: ""},
-            children: [],
+            items: [],
 
             popup: {
                 el: {
@@ -30,14 +30,13 @@ BI.ComboGroup = BI.inherit(BI.Widget, {
         });
     },
 
-    _init: function () {
-        BI.ComboGroup.superclass._init.apply(this, arguments);
+    render: function () {
         this._populate(this.options.el);
     },
 
     _populate: function (item) {
         var self = this, o = this.options;
-        var children = o.children;
+        var children = o.items;
         if (BI.isEmpty(children)) {
             throw new Error("ComboGroup构造错误");
         }
@@ -46,7 +45,7 @@ BI.ComboGroup = BI.inherit(BI.Widget, {
             ch = BI.formatEL(ch).el;
             if (!BI.isEmpty(son)) {
                 ch.el = BI.clone(ch);
-                ch.children = son;
+                ch.items = son;
                 ch.type = "bi.combo_group";
                 ch.action = o.action;
                 ch.height = o.height;

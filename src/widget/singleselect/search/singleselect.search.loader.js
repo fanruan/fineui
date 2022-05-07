@@ -10,6 +10,9 @@ BI.SingleSelectSearchLoader = BI.inherit(BI.Widget, {
         return BI.extend(BI.SingleSelectSearchLoader.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-single-select-search-loader",
             allowNoSelect: false,
+            logic: {
+                dynamic: false
+            },
             itemsCreator: BI.emptyFn,
             keywordGetter: BI.emptyFn,
             valueFormatter: BI.emptyFn
@@ -60,11 +63,14 @@ BI.SingleSelectSearchLoader = BI.inherit(BI.Widget, {
                     var keyword = ob.keyword = opts.keywordGetter();
                     hasNext = ob.hasNext;
                     var firstItems = [];
-                    if (op.times === 1 && BI.isNotNull(self.storeValue)) {
+                    if (op.times === 1 && !BI.isUndefined(self.storeValue)) {
                         var json = self._filterValues(self.storeValue);
                         firstItems = self._createItems(json);
                     }
-                    callback(firstItems.concat(self._createItems(ob.items)), keyword || "");
+                    var context = {
+                        tipText: ob.tipText,
+                    };
+                    callback(firstItems.concat(self._createItems(ob.items)), keyword || "", context);
                     if (op.times === 1 && self.storeValue) {
                         self.setValue(self.storeValue);
                     }
@@ -83,14 +89,18 @@ BI.SingleSelectSearchLoader = BI.inherit(BI.Widget, {
     },
 
     _createItems: function (items) {
-        return BI.createItems(items, {
-            type: this.options.allowNoSelect ? "bi.single_select_item" : "bi.single_select_combo_item",
-            cls: "bi-list-item-active",
-            logic: {
-                dynamic: false
-            },
-            height: 25,
-            selected: false
+        var o = this.options;
+        return BI.map(items, function (i, item) {
+            return BI.extend({
+                type: o.allowNoSelect ? "bi.single_select_item" : "bi.single_select_radio_item",
+                logic: o.logic,
+                cls: "bi-list-item-active",
+                height: BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT,
+                selected: false,
+                iconWrapperWidth: 26,
+                hgap: o.allowNoSelect ? 10 : 0,
+                title: item.title || item.text
+            }, item);
         });
     },
 

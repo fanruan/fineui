@@ -26,6 +26,7 @@ BI.MultiLayerDownListPopup = BI.inherit(BI.Pane, {
         this.singleValues = [];
         this.childValueMap = {};
         this.fatherValueMap = {};
+        this.items = [];
         var self = this, o = this.options, children = this._createPopupItems(o.items);
         this.popup = BI.createWidget({
             type: "bi.button_tree",
@@ -48,7 +49,7 @@ BI.MultiLayerDownListPopup = BI.inherit(BI.Pane, {
             if (BI.isNotNull(self.childValueMap[value])) {
                 changedValue = self.childValueMap[value];
                 var fatherValue = self.fatherValueMap[value];
-                var fatherArrayValue = (fatherValue + "").split("_");
+                var fatherArrayValue = (fatherValue + "").split(BI.BlankSplitChar);
                 self.fireEvent(BI.MultiLayerDownListPopup.EVENT_SON_VALUE_CHANGE, changedValue, fatherArrayValue.length > 1 ? fatherArrayValue : fatherValue);
             } else {
                 self.fireEvent(BI.MultiLayerDownListPopup.EVENT_CHANGE, changedValue, object);
@@ -83,19 +84,22 @@ BI.MultiLayerDownListPopup = BI.inherit(BI.Pane, {
                 type: "bi.down_list_group",
                 items: []
             };
+            var storeItem = [];
 
-            BI.each(it, function (i, item) {
-                if (BI.isNotEmptyArray(item.children) && !BI.isEmpty(item.el)) {
+            BI.each(it, function (i, sourceItem) {
+                var item = BI.extend({}, sourceItem);
+                if (BI.isNotEmptyArray(sourceItem.children) && !BI.isEmpty(sourceItem.el)) {
                     item.type = "bi.combo_group";
                     item.cls = "down-list-group";
                     item.trigger = "hover";
                     item.isNeedAdjustWidth = false;
-                    item.el.title = item.el.title || item.el.text;
+                    item.el = sourceItem.el;
+                    item.el.title = sourceItem.el.title || sourceItem.el.text;
                     item.el.type = "bi.down_list_group_item";
                     item.el.logic = {
                         dynamic: true
                     };
-                    item.el.height = self.constants.height;
+                    item.el.height = sourceItem.el.height || self.constants.height;
                     item.el.iconCls2 = self.constants.nextIcon;
                     item.popup = {
                         lgap: 1,
@@ -107,38 +111,13 @@ BI.MultiLayerDownListPopup = BI.inherit(BI.Pane, {
                             }]
 
                         },
-                        innerVGap: 5
+                        innerVgap: 5,
+                        maxHeight: 378,
                     };
-                    item.el.childValues = [];
-                    BI.each(item.children, function (i, child) {
-                        child = child.el ? BI.extend(child.el, {children: child.children}) : child;
-                        var fatherValue = BI.deepClone(item.el.value);
-                        var childValue = BI.deepClone(child.value);
-                        self.singleValues.push(child.value);
-                        child.type = "bi.down_list_item";
-                        child.extraCls = " child-down-list-item";
-                        child.title = child.title || child.text;
-                        child.textRgap = 10;
-                        child.isNeedAdjustWidth = false;
-                        child.logic = {
-                            dynamic: true
-                        };
-                        child.father = fatherValue;
-                        self.fatherValueMap[self._createChildValue(fatherValue, childValue)] = fatherValue;
-                        self.childValueMap[self._createChildValue(fatherValue, childValue)] = childValue;
-                        child.value = self._createChildValue(fatherValue, childValue);
-                        item.el.childValues.push(child.value);
-                        if (BI.isNotEmptyArray(child.children)) {
-                            child.type = "bi.down_list_group_item";
-                            self._createChildren(child);
-                            child.height = self.constants.height;
-                            child.iconCls2 = self.constants.nextIcon;
-                            item.el.childValues = BI.concat(item.el.childValues, child.childValues);
-                        }
-                    });
+                    self._createChildren(item, sourceItem);
                 } else {
-                    item.type = "bi.down_list_item";
-                    item.title = item.title || item.text;
+                    item.type = sourceItem.type || "bi.down_list_item";
+                    item.title = sourceItem.title || sourceItem.text;
                     item.textRgap = 10;
                     item.isNeedAdjustWidth = false;
                     item.logic = {
@@ -148,6 +127,7 @@ BI.MultiLayerDownListPopup = BI.inherit(BI.Pane, {
                 var el_done = {};
                 el_done.el = item;
                 item_done.items.push(el_done);
+                storeItem.push(item);
             });
             if (self._isGroup(item_done.items)) {
                 BI.each(item_done.items, function (i, item) {
@@ -156,6 +136,7 @@ BI.MultiLayerDownListPopup = BI.inherit(BI.Pane, {
             }
 
             result.push(item_done);
+            self.items.push(storeItem);
             if (self._needSpliter(i, items.length)) {
                 var spliter_container = BI.createWidget({
                     type: "bi.vertical",
@@ -177,25 +158,46 @@ BI.MultiLayerDownListPopup = BI.inherit(BI.Pane, {
         return result;
     },
 
-    _createChildren: function (child) {
+    _createChildren: function (targetItem, sourceItem) {
         var self = this;
-        child.childValues = [];
-        BI.each(child.children, function (i, c) {
-            var fatherValue = BI.deepClone(child.value);
-            var childValue = BI.deepClone(c.value);
-            c.type = "bi.down_list_item";
-            c.title = c.title || c.text;
-            c.textRgap = 10;
-            c.isNeedAdjustWidth = false;
-            c.logic = {
+        this._formatEL(targetItem).el.childValues = [];
+        targetItem.items = targetItem.children = [];
+        BI.each(sourceItem.children, function (i, child) {
+            var item = child.el ? BI.extend({}, child.el, {children: child.children}) : BI.extend({}, child);
+            var fatherValue = BI.deepClone(self._formatEL(targetItem).el.value);
+            var childValue = BI.deepClone(item.value);
+            self.singleValues.push(item.value);
+            item.type = item.type || "bi.down_list_item";
+            item.extraCls = " child-down-list-item";
+            item.title = item.title || item.text;
+            item.textRgap = 10;
+            item.isNeedAdjustWidth = false;
+            item.logic = {
                 dynamic: true
             };
-            c.father = fatherValue;
+            item.father = fatherValue;
             self.fatherValueMap[self._createChildValue(fatherValue, childValue)] = fatherValue;
             self.childValueMap[self._createChildValue(fatherValue, childValue)] = childValue;
-            c.value = self._createChildValue(fatherValue, childValue);
-            child.childValues.push(c.value);
+            item.value = self._createChildValue(fatherValue, childValue);
+            self._formatEL(targetItem).el.childValues.push(item.value);
+            if (BI.isNotEmptyArray(child.children)) {
+                item.type = "bi.down_list_group_item";
+                item.iconCls2 = self.constants.nextIcon;
+                item.height = child.height || self.constants.height;
+                self._createChildren(item, child);
+            }
+            targetItem.items.push(item);
         });
+    },
+
+    _formatEL: function(obj) {
+        if (obj && obj.el) {
+            return obj;
+        }
+
+        return {
+            el: obj
+        };
     },
 
     _isGroup: function (i) {
@@ -209,9 +211,9 @@ BI.MultiLayerDownListPopup = BI.inherit(BI.Pane, {
     _createChildValue: function (fatherValue, childValue) {
         var fValue = fatherValue;
         if(BI.isArray(fatherValue)) {
-            fValue = fatherValue.join("_");
+            fValue = fatherValue.join(BI.BlankSplitChar);
         }
-        return fValue + "_" + childValue;
+        return fValue + BI.BlankSplitChar + childValue;
     },
 
     _digest: function (valueItem) {
@@ -233,7 +235,7 @@ BI.MultiLayerDownListPopup = BI.inherit(BI.Pane, {
     _checkValues: function (values) {
         var self = this, o = this.options;
         var value = [];
-        BI.each(o.items, function (idx, itemGroup) {
+        BI.each(this.items, function (idx, itemGroup) {
             BI.each(itemGroup, function (id, item) {
                 if(BI.isNotNull(item.children)) {
                     var childValues = getChildrenValue(item);
@@ -282,6 +284,7 @@ BI.MultiLayerDownListPopup = BI.inherit(BI.Pane, {
         self.childValueMap = {};
         self.fatherValueMap = {};
         self.singleValues = [];
+        this.items = [];
         var children = self._createPopupItems(items);
         var popupItem = BI.createItems(children,
             {}, {
@@ -311,7 +314,7 @@ BI.MultiLayerDownListPopup = BI.inherit(BI.Pane, {
             if (BI.isNotNull(self.childValueMap[value])) {
                 var fartherValue = self.fatherValueMap[value];
                 valueItem.childValue = self.childValueMap[value];
-                var fatherArrayValue = (fartherValue + "").split("_");
+                var fatherArrayValue = (fartherValue + "").split(BI.BlankSplitChar);
                 valueItem.value = fatherArrayValue.length > 1 ? fatherArrayValue : fartherValue;
             } else {
                 valueItem.value = value;

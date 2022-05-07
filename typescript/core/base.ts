@@ -46,17 +46,17 @@ export interface _base {
 
     reduceRight: <T, U>(collection: T[]|object|string, callback?: ((total: U extends T ? U : T, currentValue: T, currentIndex: number) => U extends T ? U : T)|object|string, initialValue?: U|T) => U extends T ? U : T;
 
-    find: <T>(collection: T[]|object|string, callback?: ((index: number, value: T) => boolean)|object|string, thisArg?: any) => any;
+    find: <T>(collection: T[]|object|string, callback?: ((index: number, value: T) => boolean)|object|string, thisArg?: any) => T | undefined;
 
-    filter: <T>(collection: T[]|object|string, callback?: ((index: number, value: T) => boolean)|object|string, thisArg?: any) => any[];
+    filter: <T>(collection: T[]|object|string, callback?: ((index: number, value: T) => boolean)|object|string, thisArg?: any) => T[];
 
-    reject: <T>(collection: any[]|object|string, callback?: ((index: number, value: T) => boolean)|object|string, thisArg?: any) => any[];
+    reject: <T>(collection: T[]|object|string, callback?: ((index: number, value: T) => boolean)|object|string, thisArg?: any) => T[];
 
-    every: <T>(collection: any[]|object|string, callback?: ((index: number, value: T) => boolean)|object|string, thisArg?: any) => boolean;
+    every: <T>(collection: T[]|object|string, callback?: ((index: number, value: T) => boolean)|object|string, thisArg?: any) => boolean;
 
-    all: <T>(collection: any[]|object|string, callback?: ((index: number, value: T) => boolean)|object|string, thisArg?: any) => boolean;
+    all: <T>(collection: T[]|object|string, callback?: ((index: number, value: T) => boolean)|object|string, thisArg?: any) => boolean;
 
-    some: <T>(collection: any[]|object|string, callback?: ((index: number, value: T) => boolean)|object|string, thisArg?: any) => boolean;
+    some: <T>(collection: T[]|object|string, callback?: ((index: number, value: T) => boolean)|object|string, thisArg?: any) => boolean;
 
     any: <T>(collection: T[]|object|string, callback?: ((index: number, value: T) => boolean)|object|string, thisArg?: any) => boolean;
 
@@ -85,7 +85,7 @@ export interface _base {
 
     lastObject: (obj: object) => any;
 
-    concat: (obj1: any, obj2: any) => any;
+    concat: (obj1: any, obj2: any, ...args: any[]) => any;
 
     backEach: (obj: any, predicate: Function, context?: any) => boolean;
 
@@ -223,7 +223,7 @@ export interface _base {
 
     zipObject: (props: any[], values?: any[]) => object;
 
-    cloneDeep: (value: any, customizer?: Function, thisArg?: any) => any;
+    cloneDeep: <T>(value: T) => T;
 
     findKey: (object: object, predicate?: Function|object|string, thisArg?: any) => any;
 
@@ -261,11 +261,15 @@ export interface _base {
 
     isWindow: (obj: any) => obj is Window;
 
+    deepClone: <T>(obj: T) => T;
+
+    deepExtend: merge['deepExtend'];
+
     isDeepMatch: (object: any, attrs: any) => boolean;
 
-    contains: (obj: any[], target: any, fromIndex?: number) => number;
+    contains: (obj: any[], target: any, fromIndex?: number) => boolean;
 
-    deepContains: (obj: any[], copy: any) => number;
+    deepContains: (obj: any[], copy: any) => boolean;
 
     deepIndexOf: (obj: any[], target: any) => number;
 
@@ -287,15 +291,15 @@ export interface _base {
 
     unescape: (str?: string) => string;
 
-    bind: (func: Function, thisArg: any, ...partials: any) => Function;
+    bind: <T extends Function>(func: T, thisArg: any, ...partials: any) => T;
 
     once: (func: Function) => Function;
 
     partial: (func: Function, ...partials: any) => Function;
 
-    debounce: (func: Function, wait?: number, options?: any) => Function;
+    debounce: <T extends Function>(func: T, wait?: number, options?: any) => T;
 
-    throttle: (func: Function, wait?: number, options?: any) => Function;
+    throttle: <T extends Function>(func: T, wait?: number, options?: any) => T;
 
     delay: (func: Function, wait: number, ...args: any[]) => number;
 
@@ -329,9 +333,9 @@ export interface _base {
 
     isEven: (value: string|number) => boolean;
 
-    sum: (array: any[], iteratee: Function, context: any) => number;
+    sum: (array: any[], iteratee?: Function, context?: any) => number;
 
-    average: (array: any[], iteratee: Function, context: any) => number;
+    average: (array: any[], iteratee?: Function, context?: any) => number;
 
     trim: (string?: string, chars?: string) => string;
 
@@ -372,4 +376,18 @@ export interface _base {
     getDate: (...args: (number | string)[]) => Date;
 
     getTime: (...args: any[]) => number;
+}
+
+type merge = {
+    deepExtend<TObject, TSource>(object: TObject, source: TSource): TObject & TSource;
+
+    deepExtend<TObject, TSource1, TSource2>(object: TObject, source1: TSource1, source2: TSource2): TObject & TSource1 & TSource2;
+
+    deepExtend<TObject, TSource1, TSource2>(object: TObject, source1: TSource1, source2: TSource2): TObject & TSource1 & TSource2;
+
+    deepExtend<TObject, TSource1, TSource2, TSource3>(object: TObject, source1: TSource1, source2: TSource2, source3: TSource3): TObject & TSource1 & TSource2 & TSource3;
+
+    deepExtend<TObject, TSource1, TSource2, TSource3, TSource4>(object: TObject, source1: TSource1, source2: TSource2, source3: TSource3, source4: TSource4): TObject & TSource1 & TSource2 & TSource3 & TSource4;
+
+    deepExtend(object: any, ...otherArgs: any[]): any;
 }

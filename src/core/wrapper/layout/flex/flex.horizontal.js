@@ -8,9 +8,9 @@
 BI.FlexHorizontalLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.FlexHorizontalLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-flex-horizontal-layout",
+            baseCls: "bi-f-h",
             verticalAlign: BI.VerticalAlign.Top,
-            horizontalAlign: BI.HorizontalAlign.Left,// 如果只有一个子元素且想让该子元素横向撑满，设置成Stretch
+            horizontalAlign: BI.HorizontalAlign.Left, // 如果只有一个子元素且想让该子元素横向撑满，设置成Stretch
             columnSize: [],
             scrollx: true,
             hgap: 0,
@@ -23,49 +23,74 @@ BI.FlexHorizontalLayout = BI.inherit(BI.Layout, {
     },
     render: function () {
         BI.FlexHorizontalLayout.superclass.render.apply(this, arguments);
-        var o = this.options;
+        var self = this, o = this.options;
         this.element.addClass("v-" + o.verticalAlign).addClass("h-" + o.horizontalAlign);
-        this.populate(this.options.items);
+        if (o.scrollable === true || o.scrollx === true) {
+            this.element.addClass("f-scroll-x");
+        }
+        if (o.scrollable === true || o.scrolly === true) {
+            this.element.addClass("f-scroll-y");
+        }
+        var items = BI.isFunction(o.items) ? this.__watch(o.items, function (context, newValue) {
+            self.populate(newValue);
+        }) : o.items;
+        this.populate(items);
+    },
+
+    _hasFill: function () {
+        var o = this.options;
+        if (o.columnSize.length > 0) {
+            return o.columnSize.indexOf("fill") >= 0 || o.columnSize.indexOf("auto") >= 0;
+        }
+        return BI.some(o.items, function (i, item) {
+            if (item.width === "fill" || item.width === "auto") {
+                return true;
+            }
+        });
     },
 
     _addElement: function (i, item) {
         var o = this.options;
         var w = BI.FlexHorizontalLayout.superclass._addElement.apply(this, arguments);
+        var columnSize = o.columnSize.length > 0 ? o.columnSize[i] : item.width;
+        if (o.columnSize.length > 0) {
+            if (item.width >= 1 && o.columnSize[i] >= 1 && o.columnSize[i] !== item.width) {
+                columnSize = null;
+            }
+        }
         w.element.css({
-            position: "relative",
-            "flex-shrink": "0"
+            position: "relative"
         });
-        if (o.columnSize[i] > 0) {
-            w.element.width(o.columnSize[i]);
+        if (columnSize !== "auto") {
+            if (columnSize === "fill" || columnSize === "") {
+                if (o.horizontalAlign !== BI.HorizontalAlign.Stretch) {
+                    if (o.scrollable === true || o.scrollx === true) {
+                        w.element.addClass("f-s-n");
+                    }
+                }
+                // 当既有动态宽度和自适应宽度的时候只压缩自适应
+                if (columnSize === "" && this._hasFill()) {
+                    w.element.addClass("f-s-n");
+                }
+            } else {
+                w.element.addClass("f-s-n");
+            }
         }
-        if (o.columnSize[i] === "fill") {
-            w.element.css("flex", "1");
+        if (columnSize > 0) {
+            w.element.width(this._optimiseGap(columnSize));
         }
-        if (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
-            w.element.css({
-                "margin-top": o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) + "px"
-            });
+        if (columnSize === "fill") {
+            w.element.addClass("f-f");
         }
-        if (o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0) !== 0) {
-            w.element.css({
-                "margin-left": (i === 0 ? o.hgap : 0) + o.lgap + (item.lgap || 0) + (item.hgap || 0) + "px"
-            });
+        w.element.addClass("c-e");
+        if (i === 0) {
+            w.element.addClass("f-c");
         }
-        if (o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0) !== 0) {
-            w.element.css({
-                "margin-right": o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0) + "px"
-            });
+        if (i === o.items.length - 1) {
+            w.element.addClass("l-c");
         }
-        if (o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0) !== 0) {
-            w.element.css({
-                "margin-bottom": o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0) + "px"
-            });
-        }
+        this._handleGap(w, item, i);
         return w;
-    },
-
-    resize: function () {
-        // console.log("flex_horizontal布局不需要resize");
     },
 
     populate: function (items) {

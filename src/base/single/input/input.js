@@ -16,8 +16,7 @@ BI.Input = BI.inherit(BI.Single, {
         });
     },
 
-    _init: function () {
-        BI.Input.superclass._init.apply(this, arguments);
+    render: function () {
         var self = this;
         var ctrlKey = false;
         var keyCode = null;
@@ -25,7 +24,7 @@ BI.Input = BI.inherit(BI.Single, {
         var _keydown = BI.debounce(function (keyCode) {
             self.onKeyDown(keyCode, ctrlKey);
             self._keydown_ = false;
-        }, 300);
+        }, BI.EVENT_RESPONSE_TIME);
         var _clk = BI.debounce(BI.bind(this._click, this), BI.EVENT_RESPONSE_TIME, {
             "leading": true,
             "trailing": false
@@ -74,7 +73,8 @@ BI.Input = BI.inherit(BI.Single, {
             .focus(function (e) { // 可以不用冒泡
                 self._focusDebounce();
             })
-            .focusout(function (e) {
+            .blur(function (e) {
+                //  DEC-14919  IE11在浏览器重新获得焦点之后会先触发focusout再触发focus,要保持先获得焦点再失去焦点的顺序不变,因此采用blur
                 self._blurDebounce();
             });
         if (BI.isKey(this.options.value) || BI.isEmptyString(this.options.value)) {
@@ -96,7 +96,7 @@ BI.Input = BI.inherit(BI.Single, {
     _blur: function () {
         var self = this;
         if (self._keydown_ === true) {
-            BI.delay(blur, 300);
+            BI.delay(blur, BI.EVENT_RESPONSE_TIME);
         } else {
             blur();
         }

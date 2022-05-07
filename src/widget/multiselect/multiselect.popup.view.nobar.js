@@ -13,6 +13,7 @@ BI.MultiSelectNoBarPopupView = BI.inherit(BI.Widget, {
             maxHeight: 400,
             valueFormatter: BI.emptyFn,
             itemsCreator: BI.emptyFn,
+            itemHeight: BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT,
             onLoaded: BI.emptyFn
         });
     },
@@ -24,6 +25,7 @@ BI.MultiSelectNoBarPopupView = BI.inherit(BI.Widget, {
         this.loader = BI.createWidget({
             type: "bi.multi_select_no_bar_loader",
             itemsCreator: opts.itemsCreator,
+            itemHeight: opts.itemHeight,
             valueFormatter: opts.valueFormatter,
             onLoaded: opts.onLoaded,
             value: opts.value
@@ -36,7 +38,7 @@ BI.MultiSelectNoBarPopupView = BI.inherit(BI.Widget, {
             minWidth: opts.minWidth,
             maxHeight: opts.maxHeight,
             element: this,
-            buttons: [BI.i18nText("BI-Basic_Clears"), BI.i18nText("BI-Basic_Sure")],
+            buttons: [BI.i18nText("BI-Basic_Clears"), BI.i18nText("BI-Basic_OK")],
             el: this.loader,
             value: opts.value
         });
@@ -78,7 +80,11 @@ BI.MultiSelectNoBarPopupView = BI.inherit(BI.Widget, {
 
     resetWidth: function (w) {
         this.popupView.resetWidth(w);
-    }
+    },
+
+    setDirection: function (direction, position) {
+        this.popupView.setDirection(direction, position);
+    },
 });
 
 BI.MultiSelectNoBarPopupView.EVENT_CHANGE = "EVENT_CHANGE";

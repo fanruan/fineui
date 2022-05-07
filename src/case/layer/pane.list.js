@@ -104,7 +104,7 @@ BI.ListPane = BI.inherit(BI.Pane, {
     },
 
     removeItemAt: function (indexes) {
-        indexes = indexes || [];
+        indexes = BI.isNull(indexes) ? [] : indexes;
         BI.removeAt(this.options.items, indexes);
         this.button_group.removeItemAt.apply(this.button_group, arguments);
         this.check();
@@ -121,8 +121,17 @@ BI.ListPane = BI.inherit(BI.Pane, {
             }]);
             return;
         }
-        BI.ListPane.superclass.populate.apply(this, arguments);
-        this.button_group.populate.apply(this.button_group, arguments);
+
+        var context = BI.get(arguments, [2], {});
+        var tipText = context.tipText || '';
+        if (BI.isNotEmptyString(tipText)) {
+            BI.ListPane.superclass.populate.apply(this, []);
+            this.setTipText(tipText);
+        } else {
+            BI.ListPane.superclass.populate.apply(this, arguments);
+            this.button_group.populate.apply(this.button_group, arguments);
+            BI.isEmptyArray(BI.get(arguments, [0], [])) && this.setTipText(o.tipText);
+        }
     },
 
     empty: function () {

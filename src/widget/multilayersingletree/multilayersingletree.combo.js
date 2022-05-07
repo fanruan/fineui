@@ -16,13 +16,20 @@ BI.MultiLayerSingleTreeCombo = BI.inherit(BI.Widget, {
             itemsCreator: BI.emptyFn,
             items: [],
             value: "",
-            attributes: {
-                tabIndex: 0
-            },
             allowEdit: false,
             allowSearchValue: false,
-            allowInsertValue: false
+            allowInsertValue: false,
+            isNeedAdjustWidth: true
         });
+    },
+
+    _init: function () {
+        var o = this.options;
+        if (this._shouldWrapper()) {
+            o.height -= 2;
+            BI.isNumeric(o.width) && (o.width -= 2);
+        }
+        BI.MultiLayerSingleTreeCombo.superclass._init.apply(this, arguments);
     },
 
     render: function () {
@@ -30,8 +37,9 @@ BI.MultiLayerSingleTreeCombo = BI.inherit(BI.Widget, {
 
         var combo = (o.itemsCreator === BI.emptyFn) ? this._getSyncConfig() : this._getAsyncConfig();
 
-        return (!o.allowEdit && o.itemsCreator === BI.emptyFn) ? combo : {
+        return this._shouldWrapper() ? combo : {
             type: "bi.absolute",
+            height: o.height,
             items: [{
                 el: combo,
                 left: 0,
@@ -62,10 +70,16 @@ BI.MultiLayerSingleTreeCombo = BI.inherit(BI.Widget, {
         };
     },
 
+    _shouldWrapper: function () {
+        var o = this.options;
+        return !o.allowEdit && o.itemsCreator === BI.emptyFn;
+    },
+
     _getBaseConfig: function () {
         var self = this, o = this.options;
         return {
             type: "bi.combo",
+            cls: (o.simple ? "bi-border-bottom" : "bi-border") + " bi-border-radius",
             container: o.container,
             destroyWhenHide: o.destroyWhenHide,
             adjustLength: 2,
@@ -98,8 +112,10 @@ BI.MultiLayerSingleTreeCombo = BI.inherit(BI.Widget, {
                 },
                 value: o.value,
                 maxHeight: 400,
+                maxWidth: o.isNeedAdjustWidth ? "auto" : 500,
                 minHeight: 240
             },
+            isNeedAdjustWidth: o.isNeedAdjustWidth,
             listeners: [{
                 eventName: BI.Combo.EVENT_BEFORE_POPUPVIEW,
                 action: function () {
@@ -126,7 +142,7 @@ BI.MultiLayerSingleTreeCombo = BI.inherit(BI.Widget, {
                 items: o.items,
                 itemsCreator: o.itemsCreator,
                 valueFormatter: o.valueFormatter,
-                height: o.height - 2,
+                height: o.height - (o.simple ? 1 : 2),
                 text: o.text,
                 value: o.value,
                 tipType: o.tipType,
@@ -160,6 +176,7 @@ BI.MultiLayerSingleTreeCombo = BI.inherit(BI.Widget, {
                         var value = self.trigger.getSearcher().getKeyword();
                         self.combo.setValue([value]);
                         self.combo.hideView();
+                        self.fireEvent(BI.MultiLayerSingleTreeCombo.EVENT_CHANGE);
                     }
                 }]
             },
@@ -176,16 +193,24 @@ BI.MultiLayerSingleTreeCombo = BI.inherit(BI.Widget, {
                 action: function () {
                     self.trigger.stopEditing();
                 }
+            }, {
+                eventName: BI.Combo.EVENT_BEFORE_POPUPVIEW,
+                action: function () {
+                    self.fireEvent(BI.MultiLayerSingleTreeCombo.EVENT_BEFORE_POPUPVIEW);
+                }
             }]
         }
     },
 
     _getSyncConfig: function () {
-        var o = this.options;
+        var o = this.options, self = this;
         var baseConfig = this._getBaseConfig();
         return BI.extend(baseConfig, o.allowEdit ? this._getSearchConfig() : {
             el: {
                 type: "bi.single_tree_trigger",
+                ref: function(_ref) {
+                    self.textTrigger = _ref;
+                },
                 text: o.text,
                 height: o.height,
                 items: o.items,
@@ -199,6 +224,10 @@ BI.MultiLayerSingleTreeCombo = BI.inherit(BI.Widget, {
         return BI.extend(config, this._getSearchConfig());
     },
 
+    getSearcher: function () {
+        return this.trigger ? this.trigger.getSearcher() : this.textTrigger.getTextor();
+    },
+
     setValue: function (v) {
         v = BI.isArray(v) ? v : [v];
         this.combo.setValue(v);
@@ -210,6 +239,22 @@ BI.MultiLayerSingleTreeCombo = BI.inherit(BI.Widget, {
 
     populate: function (items) {
         this.combo.populate(items);
+    },
+
+    focus: function () {
+        this.trigger.focus();
+    },
+
+    blur: function () {
+        this.trigger.blur();
+    },
+
+    showView: function () {
+        this.combo.showView();
+    },
+
+    setWaterMark: function (v) {
+        this.trigger.setWaterMark(v);
     }
 });
 

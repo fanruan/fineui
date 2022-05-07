@@ -28,7 +28,8 @@ BI.YearDateCombo = BI.inherit(BI.Trigger, {
             type: "bi.year_popup",
             behaviors: o.behaviors,
             min: o.min,
-            max: o.max
+            max: o.max,
+            width: 122
         });
 
         this.popup.on(BI.YearPopup.EVENT_CHANGE, function () {
@@ -58,6 +59,7 @@ BI.YearDateCombo = BI.inherit(BI.Trigger, {
         // BI-22551 popup未初始化传入的behavior无效
         this.combo.on(BI.Combo.EVENT_BEFORE_POPUPVIEW, function () {
             self.doBehavior();
+            self.fireEvent(BI.YearDateCombo.EVENT_BEFORE_POPUPVIEW);
         });
     },
 
@@ -79,4 +81,5 @@ BI.YearDateCombo = BI.inherit(BI.Trigger, {
     }
 });
 BI.YearDateCombo.EVENT_CHANGE = "EVENT_CHANGE";
+BI.YearDateCombo.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
 BI.shortcut("bi.year_date_combo", BI.YearDateCombo);

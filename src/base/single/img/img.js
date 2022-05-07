@@ -7,22 +7,24 @@
  * @abstract
  */
 BI.Img = BI.inherit(BI.Single, {
-    _defaultConfig: function () {
+    _defaultConfig: function (config) {
         var conf = BI.Img.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
             tagName: "img",
             baseCls: (conf.baseCls || "") + " bi-img display-block",
             src: "",
-            attributes: {},
+            attributes: config.src ? { src: config.src } : {},
             width: "100%",
             height: "100%"
         });
     },
 
-    _init: function () {
+    _initProps: function () {
+        BI.Img.superclass._initProps.apply(this, arguments);
         var o = this.options;
-        o.attributes.src = o.src;
-        BI.Img.superclass._init.apply(this, arguments);
+        this.options.attributes = BI.extend({
+            src: o.src
+        }, this.options.attributes);
     },
 
     setSrc: function (src) {

@@ -15,7 +15,8 @@ BI.MultiLayerSelectTreePopup = BI.inherit(BI.Widget, {
             itemsCreator: BI.emptyFn,
             items: [],
             value: "",
-            onLoaded: BI.emptyFn
+            onLoaded: BI.emptyFn,
+            minHeight: 240
         });
     },
 
@@ -54,6 +55,8 @@ BI.MultiLayerSelectTreePopup = BI.inherit(BI.Widget, {
         this.tree.on(BI.MultiLayerSelectLevelTree.EVENT_CHANGE, function () {
             self.fireEvent(BI.MultiLayerSelectTreePopup.EVENT_CHANGE);
         });
+
+        this.tree.css("min-height", o.minHeight - 10);
     },
 
     getValue: function () {

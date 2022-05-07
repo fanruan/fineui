@@ -17,11 +17,7 @@ BI.SearchTextValueComboPopup = BI.inherit(BI.Pane, {
                 ref: function () {
                     self.popup = this;
                 },
-                items: BI.createItems(o.items, {
-                    type: "bi.single_select_item",
-                    textAlign: o.textAlign,
-                    height: 24
-                }),
+                items: this._formatItems(o.items),
                 chooseType: BI.ButtonGroup.CHOOSE_TYPE_SINGLE,
                 layouts: [{
                     type: "bi.vertical"
@@ -45,6 +41,18 @@ BI.SearchTextValueComboPopup = BI.inherit(BI.Pane, {
         };
     },
 
+    _formatItems: function (items) {
+        var o = this.options;
+        return BI.map(items, function (i, item) {
+            return BI.extend({
+                type: "bi.single_select_item",
+                textAlign: o.textAlign,
+                title: item.title || item.text
+            }, item);
+        });
+    },
+
+    // mounted之后做check
     mounted: function() {
         this.check();
     },
@@ -52,11 +60,7 @@ BI.SearchTextValueComboPopup = BI.inherit(BI.Pane, {
     populate: function (find, match, keyword) {
         var items = BI.concat(find, match);
         BI.SearchTextValueComboPopup.superclass.populate.apply(this, items);
-        items = BI.createItems(items, {
-            type: "bi.single_select_item",
-            height: 24
-        });
-        this.popup.populate(items, keyword);
+        this.popup.populate(this._formatItems(items), keyword);
     },
 
     getValue: function () {

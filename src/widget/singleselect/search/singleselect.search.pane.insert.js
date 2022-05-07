@@ -27,24 +27,12 @@ BI.SingleSelectSearchInsertPane = BI.inherit(BI.Widget, {
         BI.SingleSelectSearchInsertPane.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
 
-        this.tooltipClick = BI.createWidget({
-            type: "bi.label",
-            invisible: true,
-            text: BI.i18nText("BI-Click_Blank_To_Select"),
-            cls: "single-select-toolbar",
-            height: this.constants.height
-        });
-
         this.addNotMatchTip = BI.createWidget({
-            type: "bi.text_button",
-            invisible: true,
-            text: BI.i18nText("BI-Basic_Click_To_Add_Text", ""),
+            type: "bi.label",
+            text: BI.i18nText("BI-Basic_Press_Enter_To_Add_Text", ""),
             height: this.constants.height,
-            cls: "bi-high-light",
+            cls: "bi-keyword-red-mark",
             hgap: 5,
-            handler: function () {
-                self.fireEvent(BI.SingleSelectSearchInsertPane.EVENT_ADD_ITEM, o.keywordGetter());
-            }
         });
 
         this.loader = BI.createWidget({
@@ -69,7 +57,7 @@ BI.SingleSelectSearchInsertPane = BI.inherit(BI.Widget, {
             element: this,
             items: [{
                 type: "bi.vertical",
-                items: [this.tooltipClick, this.addNotMatchTip],
+                items: [this.addNotMatchTip],
                 height: this.constants.height
             }, {
                 el: this.loader
@@ -78,17 +66,11 @@ BI.SingleSelectSearchInsertPane = BI.inherit(BI.Widget, {
     },
 
     setKeyword: function (keyword) {
-        var hasSameValue = BI.some(this.loader.getAllButtons(), function (idx, btn) {
-            return keyword === btn.getValue();
-        });
-        var isMatchTipVisible = this.loader.getAllButtons().length > 0 && hasSameValue;
-        this.tooltipClick.setVisible(isMatchTipVisible);
-        this.addNotMatchTip.setVisible(!isMatchTipVisible);
-        !isMatchTipVisible && this.addNotMatchTip.setText(BI.i18nText("BI-Basic_Click_To_Add_Text", keyword));
+        this.addNotMatchTip.setText(BI.i18nText("BI-Basic_Press_Enter_To_Add_Text", keyword));
     },
 
     hasMatched: function () {
-        return this.tooltipClick.isVisible();
+        return false;
     },
 
     setValue: function (v) {
@@ -109,6 +91,5 @@ BI.SingleSelectSearchInsertPane = BI.inherit(BI.Widget, {
 });
 
 BI.SingleSelectSearchInsertPane.EVENT_CHANGE = "EVENT_CHANGE";
-BI.SingleSelectSearchInsertPane.EVENT_ADD_ITEM = "EVENT_ADD_ITEM";
 
 BI.shortcut("bi.single_select_search_insert_pane", BI.SingleSelectSearchInsertPane);

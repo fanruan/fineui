@@ -13,15 +13,11 @@ BI.Trigger = BI.inherit(BI.Single, {
         });
     },
 
-    _init: function () {
-        BI.Trigger.superclass._init.apply(this, arguments);
-    },
-
     setKey: function () {
 
     },
 
     getKey: function () {
 
-    }
+    },
 });

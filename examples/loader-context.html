@@ -1,0 +1,126 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <!-- <link rel="stylesheet" type="text/css" href="../dist/2.0/fineui.min.css"/>
+    <script src="../dist/2.0/fineui.js"></script> -->
+   <link rel="stylesheet" type="text/css" href="http://fanruan.design/fineui/2.0/fineui.min.css" />
+   <script src="http://fanruan.design/fineui/2.0/fineui.min.js"></script>
+</head>
+<body>
+<div id="wrapper"></div>
+<script>
+    // tab上下文环境测试
+    var Model = BI.inherit(Fix.Model, {
+        state: function () {
+            return {
+                expand: false
+            };
+        },
+        childContext: ["text"],
+
+        computed: {
+            text: function () {
+                return this.model.expand ? "text-yes" : "text-not";
+            }
+        },
+
+        actions: {
+            toggle: function () {
+                this.model.expand = !this.model.expand;
+            }
+        }
+    });
+
+    BI.model("demo.model", Model);
+    var ChildModel = BI.inherit(Fix.Model, {
+        context: ["text"]
+    });
+
+    BI.model("demo.child_model", ChildModel);
+
+    var Child = BI.inherit(BI.Widget, {
+        setup: function () {
+            var label
+            var store = BI.useStore(function () {
+                return BI.Models.getModel("demo.child_model");
+            });
+            BI.watch("text", function (text) {
+                label.setText(text)
+            });
+            return {
+                render: function () {
+                    return {
+                        type: "bi.label",
+                        ref: function (_ref) {
+                            label = _ref;
+                        },
+                        text: store.model.text
+                    };
+                }
+            };
+        }
+    });
+    BI.shortcut("demo.child", Child);
+
+    var Widget = BI.inherit(BI.Widget, {
+        props: {
+            updateMode: "auto"
+        },
+        setup: function () {
+            var child, loader;
+            var store = BI.useStore(function () {
+                return BI.Models.getModel("demo.model");
+            });
+            setInterval(function () {
+                store.toggle();
+            }, 1000);
+            BI.watch("text", function () {
+                // child.reset();
+            });
+            return function () {
+                return {
+                    type: "bi.vertical",
+                    vgap: 20,
+                    items: [{
+                        type: "demo.child",
+                        ref: function (_ref) {
+                            child = _ref;
+                        }
+                    }, {
+                        type: "bi.button",
+                        text: "点击加载",
+                        handler: function () {
+                            loader.populate();
+                        }
+                    }, {
+                        type: "bi.loader",
+                        isDefaultInit: false,
+                        itemsCreator: function (op, callback) {
+                            callback([{
+                                    type: "demo.child"
+                                }]);
+                        },
+                        ref: function (_ref) {
+                            loader = _ref
+                        }
+                    }]
+                };
+            };
+        }
+    });
+    BI.shortcut("demo.parent", Widget);
+    BI.createWidget({
+        type: "bi.absolute",
+        items: [{
+            el: {
+                type: "demo.parent"
+            },
+            top: 100,
+            left: 100
+        }],
+        element: "#wrapper"
+    });
+</script>
+</body>
+</html>

@@ -31,6 +31,7 @@ BI.SimpleStateEditor = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
         this.editor = BI.createWidget({
             type: "bi.editor",
+            simple: o.simple,
             height: o.height,
             hgap: o.hgap,
             vgap: o.vgap,
@@ -51,7 +52,7 @@ BI.SimpleStateEditor = BI.inherit(BI.Widget, {
             textAlign: "left",
             text: o.text,
             height: o.height,
-            hgap: o.hgap,
+            hgap: o.hgap + 2,
             handler: function () {
                 self._showInput();
                 self.editor.focus();

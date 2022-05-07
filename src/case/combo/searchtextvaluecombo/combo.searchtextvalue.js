@@ -7,21 +7,26 @@ BI.SearchTextValueCombo = BI.inherit(BI.Widget, {
         baseCls: "bi-search-text-value-combo",
         height: 24,
         text: "",
+        defaultText: "",
         items: [],
         tipType: "",
         warningTitle: "",
-        attributes: {
-            tabIndex: 0
-        }
     },
 
     render: function () {
         var self = this, o = this.options;
+        o.value = BI.isFunction(o.value) ? this.__watch(o.value, function (context, newValue) {
+            self.setValue(newValue);
+        }) : o.value;
+        o.items = BI.isFunction(o.items) ? this.__watch(o.items, function (context, newValue) {
+            self.populate(newValue);
+        }) : o.items;
         return {
             type: "bi.absolute",
             items: [{
                 el: {
                     type: "bi.combo",
+                    cls: (o.simple ? "bi-border-bottom" : "bi-border") + " bi-focus-shadow",
                     container: o.container,
                     adjustLength: 2,
                     toggle: false,
@@ -31,12 +36,14 @@ BI.SearchTextValueCombo = BI.inherit(BI.Widget, {
                     el: {
                         type: "bi.search_text_value_trigger",
                         cls: "search-text-value-trigger",
+                        watermark: o.watermark,
                         ref: function () {
                             self.trigger = this;
                         },
                         items: o.items,
-                        height: o.height - 2,
+                        height: o.height - (o.simple ? 1 : 2),
                         text: o.text,
+                        defaultText: o.defaultText,
                         value: o.value,
                         tipType: o.tipType,
                         warningTitle: o.warningTitle,
@@ -116,15 +123,18 @@ BI.SearchTextValueCombo = BI.inherit(BI.Widget, {
         };
     },
 
-    mounted: function () {
+    created: function () {
         var o = this.options;
-        if(BI.isKey(o.value)) {
+        if (BI.isKey(o.value)) {
             this._checkError(o.value);
         }
     },
 
     _checkError: function (v) {
-        if(BI.isNotNull(v)) {
+        if (BI.isNull(v) || BI.isEmptyArray(v) || BI.isEmptyString(v)) {
+            this.trigger.options.tipType = "success";
+            this.element.removeClass("combo-error");
+        } else {
             v = BI.isArray(v) ? v : [v];
             var result = BI.find(this.options.items, function (idx, item) {
                 return BI.contains(v, item.value);

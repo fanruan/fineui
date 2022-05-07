@@ -10,8 +10,8 @@ BI.BasicButton = BI.inherit(BI.Single, {
         var conf = BI.BasicButton.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
             _baseCls: (conf._baseCls || "") + " bi-basic-button" + (conf.invalid ? "" : " cursor-pointer") + ((BI.isIE() && BI.getIEVersion() < 10) ? " hack" : ""),
+            // el: {} // 可以通过el来创建button元素
             value: "",
-            text: "",
             stopEvent: false,
             stopPropagation: false,
             selected: false,
@@ -27,15 +27,14 @@ BI.BasicButton = BI.inherit(BI.Single, {
             bubble: null
         });
     },
+
     _init: function () {
-        BI.BasicButton.superclass._init.apply(this, arguments);
+        var self = this;
         var opts = this.options;
-        if (opts.selected === true) {
-            BI.nextTick(BI.bind(function () {
-                this.setSelected(opts.selected);
-            }, this));
-        }
-        BI.nextTick(BI.bind(this.bindEvent, this));
+        opts.selected = BI.isFunction(opts.selected) ? this.__watch(opts.selected, function (context, newValue) {
+            self.setSelected(newValue);
+        }) : opts.selected;
+        BI.BasicButton.superclass._init.apply(this, arguments);
 
         if (opts.shadow) {
             this._createShadow();
@@ -43,6 +42,20 @@ BI.BasicButton = BI.inherit(BI.Single, {
         if (opts.level) {
             this.element.addClass("button-" + opts.level);
         }
+    },
+
+    _initRef: function () {
+        if (this.options.selected === true) {
+            this.setSelected(true);
+        }
+        // 延迟绑定事件，这样可以将自己绑定的事情优先执行
+        BI.nextTick(this.bindEvent.bind(this));
+        BI.BasicButton.superclass._initRef.apply(this, arguments);
+    },
+
+    // 默认render方法
+    render: function () {
+        return this.options.el;
     },
 
     _createShadow: function () {
@@ -195,6 +208,12 @@ BI.BasicButton = BI.inherit(BI.Single, {
                         });
                     }
                     hand.click(clk);
+                    // enter键等同于点击
+                    o.attributes && o.attributes.zIndex >= 0 && hand.keyup(function (e) {
+                        if (e.keyCode === BI.KeyCode.ENTER) {
+                           clk(e);
+                        }
+                    });
                     break;
             }
         });
@@ -298,8 +317,8 @@ BI.BasicButton = BI.inherit(BI.Single, {
                     this.setSelected(!this.isSelected()));
         }
         if (this.isValid()) {
-            o.handler.call(this, this.getValue(), this, e);
             var v = this.getValue();
+            o.handler.call(this, v, this, e);
             this.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.CLICK, v, this, e);
             this.fireEvent(BI.BasicButton.EVENT_CHANGE, v, this);
             if (o.action) {
@@ -358,6 +377,7 @@ BI.BasicButton = BI.inherit(BI.Single, {
         if (o.shadow && !o.isShadowShowingOnSelected) {
             this.$mask && this.$mask.setVisible(false);
         }
+        this.options.setSelected && this.options.setSelected.call(this, b);
     },
 
     isSelected: function () {
@@ -382,6 +402,7 @@ BI.BasicButton = BI.inherit(BI.Single, {
 
     setText: function (text) {
         this.options.text = text;
+        this.options.setText && this.options.setText.call(this, text);
     },
 
     getText: function () {
@@ -405,10 +426,7 @@ BI.BasicButton = BI.inherit(BI.Single, {
     empty: function () {
         BI.Widget._renderEngine.createElement(document).unbind("mouseup." + this.getName());
         BI.BasicButton.superclass.empty.apply(this, arguments);
-    },
-
-    destroy: function () {
-        BI.BasicButton.superclass.destroy.apply(this, arguments);
     }
 });
 BI.BasicButton.EVENT_CHANGE = "BasicButton.EVENT_CHANGE";
+BI.shortcut("bi.basic_button", BI.BasicButton);

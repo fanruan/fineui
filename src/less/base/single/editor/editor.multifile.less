@@ -1,4 +1,4 @@
-@import "../../../index";
+@import "../../../index.less";
 
 .bi-multifile-editor {
   .multifile-editor {
@@ -8,5 +8,13 @@
     z-index: 2;
     // BI-52961 IE11出现光标的兼容: 通过布局的overflow: hidden创建BFC, 此时设置负margin隐藏光标不会影响其他元素
     margin-left: -5px;
+  }
+
+  // 解决chrome下input type:file cursor设置为pointer无效的问题
+  // https://stackoverflow.com/questions/1537223/change-cursor-type-on-input-type-file
+  input[type=file], /* FF, IE7+, chrome (except button) */
+  input[type=file]::-webkit-file-upload-button {
+    /* chromes and blink button */
+    cursor: pointer;
   }
 }

@@ -8,12 +8,15 @@ BI.SingleSelectIconTextItem = BI.inherit(BI.Single, {
     _defaultConfig: function () {
         return BI.extend(BI.SingleSelectIconTextItem.superclass._defaultConfig.apply(this, arguments), {
             extraCls: "bi-single-select-icon-text-item bi-list-item-active",
+            attributes: {
+                tabIndex: 1
+            },
             iconCls: "",
-            height: 24
+            height: BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT
         });
     },
-    _init: function () {
-        BI.SingleSelectIconTextItem.superclass._init.apply(this, arguments);
+
+    render: function () {
         var self = this, o = this.options;
         this.text = BI.createWidget({
             type: "bi.icon_text_item",
@@ -25,6 +28,10 @@ BI.SingleSelectIconTextItem = BI.inherit(BI.Single, {
             height: o.height,
             iconHeight: o.iconHeight,
             iconWidth: o.iconWidth,
+            textHgap: o.textHgap,
+            textVgap: o.textVgap,
+            textLgap: o.textLgap,
+            textRgap: o.textRgap,
             text: o.text,
             keyword: o.keyword,
             value: o.value,
@@ -33,6 +40,15 @@ BI.SingleSelectIconTextItem = BI.inherit(BI.Single, {
         this.text.on(BI.Controller.EVENT_CHANGE, function () {
             self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
         });
+    },
+
+    _setEnable: function (enable) {
+        BI.SingleSelectIconTextItem.superclass._setEnable.apply(this, arguments);
+        if (enable === true) {
+            this.element.attr("tabIndex", 1);
+        } else if (enable === false) {
+            this.element.removeAttr("tabIndex");
+        }
     },
 
     isSelected: function () {
@@ -49,10 +65,6 @@ BI.SingleSelectIconTextItem = BI.inherit(BI.Single, {
 
     unRedMark: function () {
         this.text.unRedMark.apply(this.text, arguments);
-    },
-
-    doClick: function () {
-        BI.SingleSelectIconTextItem.superclass.doClick.apply(this, arguments);
     }
 });
 

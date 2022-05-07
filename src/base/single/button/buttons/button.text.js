@@ -18,13 +18,11 @@ BI.TextButton = BI.inherit(BI.BasicButton, {
             lgap: 0,
             rgap: 0,
             vgap: 0,
-            text: "",
             py: ""
         });
     },
 
-    _init: function () {
-        BI.TextButton.superclass._init.apply(this, arguments);
+    render: function () {
         var o = this.options;
         this.text = BI.createWidget({
             type: "bi.label",

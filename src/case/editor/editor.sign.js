@@ -20,6 +20,7 @@ BI.SignEditor = BI.inherit(BI.Widget, {
             allowBlank: true,
             watermark: "",
             errorText: "",
+            textAlign: "left",
             height: 24
         });
     },
@@ -29,6 +30,7 @@ BI.SignEditor = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
         this.editor = BI.createWidget({
             type: "bi.editor",
+            simple: o.simple,
             height: o.height,
             hgap: o.hgap,
             vgap: o.vgap,
@@ -49,9 +51,9 @@ BI.SignEditor = BI.inherit(BI.Widget, {
             title: o.title,
             warningTitle: o.warningTitle,
             tipType: o.tipType,
-            textAlign: "left",
+            textAlign: o.textAlign,
             height: o.height,
-            hgap: o.hgap,
+            hgap: o.hgap + 2,
             handler: function () {
                 self._showInput();
                 self.editor.focus();
@@ -175,6 +177,7 @@ BI.SignEditor = BI.inherit(BI.Widget, {
 
     setWaterMark: function (v) {
         this.options.watermark = v;
+        this._checkText();
         this.editor.setWaterMark(v);
     },
 

@@ -10,12 +10,14 @@ BI.MultiSelectInsertSearcher = BI.inherit(BI.Widget, {
         return BI.extend(BI.MultiSelectInsertSearcher.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-multi-select-searcher",
             itemsCreator: BI.emptyFn,
+            itemHeight: 24,
             el: {},
             popup: {},
             valueFormatter: BI.emptyFn,
             adapter: null,
             masker: {},
-            text: BI.i18nText("BI-Basic_Please_Select")
+            text: BI.i18nText("BI-Basic_Please_Select"),
+            watermark: BI.i18nText("BI-Basic_Search_And_Patch_Paste"),
         });
     },
 
@@ -42,7 +44,6 @@ BI.MultiSelectInsertSearcher = BI.inherit(BI.Widget, {
 
         this.searcher = BI.createWidget({
             type: "bi.searcher",
-            allowSearchBlank: false,
             element: this,
             height: o.height,
             isAutoSearch: false,
@@ -56,21 +57,16 @@ BI.MultiSelectInsertSearcher = BI.inherit(BI.Widget, {
                 type: "bi.multi_select_search_insert_pane",
                 valueFormatter: o.valueFormatter,
                 keywordGetter: function () {
-                    return self.editor.getValue();
+                    return self.editor.getKeyword();
                 },
                 itemsCreator: function (op, callback) {
-                    var keyword = self.editor.getValue();
+                    var keyword = self.editor.getKeyword();
                     op.keywords = [keyword];
                     this.setKeyword(keyword);
                     o.itemsCreator(op, callback);
                 },
+                itemHeight: o.itemHeight,
                 value: o.value,
-                listeners: [{
-                    eventName: BI.MultiSelectSearchInsertPane.EVENT_ADD_ITEM,
-                    action: function () {
-                        self.fireEvent(BI.MultiSelectInsertSearcher.EVENT_ADD_ITEM);
-                    }
-                }]
             }, o.popup),
 
             adapter: o.adapter,
@@ -93,7 +89,7 @@ BI.MultiSelectInsertSearcher = BI.inherit(BI.Widget, {
         });
         this.searcher.on(BI.Searcher.EVENT_SEARCHING, function () {
             var keywords = this.getKeywords();
-            self.fireEvent(BI.MultiSelectInsertSearcher.EVENT_SEARCHING, keywords);
+            self.fireEvent(BI.MultiSelectInsertSearcher.EVENT_SEARCHING, keywords.length > 2000 ? keywords.slice(0, 2000).concat([BI.BlankSplitChar]) : keywords.slice(0, 2000));
         });
         if (BI.isNotNull(o.value)) {
             this.setState(o.value);
@@ -112,8 +108,19 @@ BI.MultiSelectInsertSearcher = BI.inherit(BI.Widget, {
         this.searcher.stopSearch();
     },
 
+    getKeywordsLength: function () {
+        var keywords = this.editor.getKeywords();
+
+        return keywords[keywords.length - 1] === BI.BlankSplitChar ? keywords.length - 1 : keywords.length;
+    },
+
     getKeyword: function () {
-        return this.editor.getValue();
+        var keywords = this.editor.getKeywords().slice(0, 2000);
+        if (keywords[keywords.length - 1] === BI.BlankSplitChar) {
+            keywords = keywords.slice(0, keywords.length - 1);
+        }
+
+        return BI.isEmptyArray(keywords) ? "" : keywords[keywords.length - 1];
     },
 
     hasMatched: function () {
@@ -139,9 +146,9 @@ BI.MultiSelectInsertSearcher = BI.inherit(BI.Widget, {
                 var state = "";
                 BI.each(ob.assist, function (i, v) {
                     if (i === 0) {
-                        state += "" + (o.valueFormatter(v + "") || v);
+                        state += "" + (v === null ? "" : (o.valueFormatter(v + "") || v));
                     } else {
-                        state += "," + (o.valueFormatter(v + "") || v);
+                        state += "," + (v === null ? "" : (o.valueFormatter(v + "") || v));
                     }
                 });
                 this.editor.setState(state);
@@ -155,9 +162,9 @@ BI.MultiSelectInsertSearcher = BI.inherit(BI.Widget, {
                 var state = "";
                 BI.each(ob.value, function (i, v) {
                     if (i === 0) {
-                        state += "" + (o.valueFormatter(v + "") || v);
+                        state += "" + (v === null ? "" : (o.valueFormatter(v + "") || v));
                     } else {
-                        state += "," + (o.valueFormatter(v + "") || v);
+                        state += "," + (v === null ? "" : (o.valueFormatter(v + "") || v));
                     }
                 });
                 this.editor.setState(state);
@@ -195,7 +202,6 @@ BI.MultiSelectInsertSearcher.EVENT_START = "EVENT_START";
 BI.MultiSelectInsertSearcher.EVENT_STOP = "EVENT_STOP";
 BI.MultiSelectInsertSearcher.EVENT_PAUSE = "EVENT_PAUSE";
 BI.MultiSelectInsertSearcher.EVENT_SEARCHING = "EVENT_SEARCHING";
-BI.MultiSelectInsertSearcher.EVENT_ADD_ITEM = "EVENT_ADD_ITEM";
 BI.MultiSelectInsertSearcher.EVENT_FOCUS = "EVENT_FOCUS";
 BI.MultiSelectInsertSearcher.EVENT_BLUR = "EVENT_BLUR";
 BI.shortcut("bi.multi_select_insert_searcher", BI.MultiSelectInsertSearcher);

@@ -3,13 +3,19 @@ BI.Plugin = BI.Plugin || {};
     var _WidgetsPlugin = {};
     var _ObjectPlugin = {};
     var _ConfigPlugin = {};
-    var _GlobalWidgetConfigFn, _GlobalObjectConfigFn;
-    BI.extend(BI.Plugin, {
+    var _ConfigRenderPlugin = {};
+    var _GlobalWidgetConfigFns = [];
+    var __GlobalObjectConfigFns = [];
+    BI.defaults(BI.Plugin, {
 
         getWidget: function (type, options) {
-            if (_GlobalWidgetConfigFn) {
-                _GlobalWidgetConfigFn(type, options);
+            if (_GlobalWidgetConfigFns.length > 0) {
+                var fns = _GlobalWidgetConfigFns.slice(0);
+                for (var i = fns.length - 1; i >= 0; i--) {
+                    fns[i](type, options);
+                }
             }
+
             var res;
             if (_ConfigPlugin[type]) {
                 for (var i = _ConfigPlugin[type].length - 1; i >= 0; i--) {
@@ -30,17 +36,38 @@ BI.Plugin = BI.Plugin || {};
         },
 
         config: function (widgetConfigFn, objectConfigFn) {
-            _GlobalWidgetConfigFn = widgetConfigFn;
-            _GlobalObjectConfigFn = objectConfigFn;
+            _GlobalWidgetConfigFns = _GlobalWidgetConfigFns.concat(_.isArray(widgetConfigFn) ? widgetConfigFn : [widgetConfigFn]);
+            __GlobalObjectConfigFns = __GlobalObjectConfigFns.concat(_.isArray(objectConfigFn) ? objectConfigFn : [objectConfigFn]);
         },
 
-        configWidget: function (type, fn) {
-            if (!_ConfigPlugin[type]) {
+        configWidget: function (type, fn, opt) {
+            // opt.single: true 最后一次注册有效
+            if (!_ConfigPlugin[type] || (opt && opt.single)) {
                 _ConfigPlugin[type] = [];
             }
             _ConfigPlugin[type].push(fn);
         },
 
+        getRender: function (type, rendered) {
+            var res;
+            if (_ConfigRenderPlugin[type]) {
+                for (var i = _ConfigRenderPlugin[type].length - 1; i >= 0; i--) {
+                    if (res = _ConfigRenderPlugin[type][i](rendered)) {
+                        rendered = res;
+                    }
+                }
+            }
+            return rendered;
+        },
+
+        configRender: function (type, fn) {
+            if (!_ConfigRenderPlugin[type]) {
+                _ConfigRenderPlugin[type] = [];
+            }
+            _ConfigRenderPlugin[type].push(fn);
+        },
+
+        // Deprecated
         registerWidget: function (type, fn) {
             if (!_WidgetsPlugin[type]) {
                 _WidgetsPlugin[type] = [];
@@ -51,23 +78,32 @@ BI.Plugin = BI.Plugin || {};
             _WidgetsPlugin[type].push(fn);
         },
 
+        // Deprecated
         relieveWidget: function (type) {
             delete _WidgetsPlugin[type];
         },
 
         getObject: function (type, object) {
-            if (_GlobalObjectConfigFn) {
-                _GlobalObjectConfigFn(type, object);
+            if (__GlobalObjectConfigFns.length > 0) {
+                var fns = __GlobalObjectConfigFns.slice(0);
+                for (var i = fns.length - 1; i >= 0; i--) {
+                    fns[i](type, object);
+                }
             }
+
             if (_ObjectPlugin[type]) {
                 var res;
                 for (var i = 0, len = _ObjectPlugin[type].length; i < len; i++) {
                     if (res = _ObjectPlugin[type][i](object)) {
                         object = res;
-                    };
+                    }
                 }
             }
             return res || object;
+        },
+
+        hasObject: function (type) {
+            return __GlobalObjectConfigFns.length > 0 || !!_ObjectPlugin[type];
         },
 
         registerObject: function (type, fn) {

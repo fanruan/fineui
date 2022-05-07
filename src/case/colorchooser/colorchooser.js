@@ -11,19 +11,21 @@ BI.ColorChooser = BI.inherit(BI.Widget, {
         return BI.extend(BI.ColorChooser.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-color-chooser",
             value: "",
-            height: 24
+            height: 24,
+            el: {},
         });
     },
 
     _init: function () {
-        BI.ColorChooser.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
-
+        BI.ColorChooser.superclass._init.apply(this, arguments);
+        o.value = (o.value || "").toLowerCase();
         this.combo = BI.createWidget({
             type: "bi.combo",
             element: this,
             container: o.container,
             adjustLength: 1,
+            destroyWhenHide: o.destroyWhenHide,
             isNeedAdjustWidth: false,
             isNeedAdjustHeight: false,
             el: BI.extend({
@@ -31,12 +33,14 @@ BI.ColorChooser = BI.inherit(BI.Widget, {
                 ref: function (_ref) {
                     self.trigger = _ref;
                 },
-                width: o.width - 2,
-                height: o.height - 2
+                value: o.value,
+                width: o.el.type ? o.width : o.width - 2,
+                height: o.el.type ? o.height : o.height - 2
             }, o.el),
             popup: {
                 el: BI.extend({
-                    type: "bi.color_chooser_popup",
+                    type: "bi.hex_color_chooser_popup",
+                    recommendColorsGetter: o.recommendColorsGetter,
                     ref: function (_ref) {
                         self.colorPicker = _ref;
                     },
@@ -57,7 +61,7 @@ BI.ColorChooser = BI.inherit(BI.Widget, {
                     }]
                 }, o.popup),
                 value: o.value,
-                width: 230
+                width: 300
             },
             value: o.value
         });
@@ -67,8 +71,11 @@ BI.ColorChooser = BI.inherit(BI.Widget, {
             self.trigger.setValue(color);
         };
 
-        this.combo.on(BI.Combo.EVENT_AFTER_HIDEVIEW, function () {
+        this.combo.on(BI.Combo.EVENT_BEFORE_HIDEVIEW, function () {
             self.fireEvent(BI.ColorChooser.EVENT_CHANGE, arguments);
+        });
+        this.combo.on(BI.Combo.EVENT_AFTER_POPUPVIEW, function () {
+            self.fireEvent(BI.ColorChooser.EVENT_AFTER_POPUPVIEW, arguments);
         });
     },
 
@@ -89,7 +96,7 @@ BI.ColorChooser = BI.inherit(BI.Widget, {
     },
 
     setValue: function (color) {
-        this.combo.setValue(color);
+        this.combo.setValue((color || "").toLowerCase());
     },
 
     getValue: function () {
@@ -97,4 +104,5 @@ BI.ColorChooser = BI.inherit(BI.Widget, {
     }
 });
 BI.ColorChooser.EVENT_CHANGE = "EVENT_CHANGE";
+BI.ColorChooser.EVENT_AFTER_POPUPVIEW = "EVENT_AFTER_POPUPVIEW";
 BI.shortcut("bi.color_chooser", BI.ColorChooser);

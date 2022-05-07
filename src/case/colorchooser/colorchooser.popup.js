@@ -161,6 +161,7 @@ BI.ColorChooserPopup = BI.inherit(BI.Widget, {
         };
     },
 
+    // 这里就实现的不好了，setValue里面有个editor，editor的setValue会检测错误然后出bubble提示
     mounted: function () {
         var self = this;
         var o = this.options;
@@ -216,6 +217,8 @@ BI.ColorChooserPopup = BI.inherit(BI.Widget, {
     setStoreColors: function (colors) {
         if (BI.isArray(colors)) {
             this.storeColors.populate([this._digestStoreColors(colors)]);
+            // BI-66973 选中颜色的同时选中历史
+            this.storeColors.setValue(this.getValue());
         }
     },
 

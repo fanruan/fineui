@@ -14,7 +14,6 @@ BI.DynamicDateCard = BI.inherit(BI.Widget, {
                     type: "bi.label",
                     text: BI.i18nText("BI-Multi_Date_Relative_Current_Time"),
                     textAlign: "left",
-                    height: 12,
                     lgap: 10
                 },
                 tgap: 10,
@@ -46,7 +45,8 @@ BI.DynamicDateCard = BI.inherit(BI.Widget, {
                     type: "bi.multi_select_item",
                     logic: {
                         dynamic: true
-                    }
+                    },
+                    iconWrapperWidth: 26,
                 }),
                 layouts: [{
                     type: "bi.left",
@@ -90,6 +90,7 @@ BI.DynamicDateCard = BI.inherit(BI.Widget, {
                 items: [{
                     el: {
                         type: "bi.multi_select_item",
+                        iconWrapperWidth: 26,
                         ref: function () {
                             self.workDayBox = this;
                         },
@@ -134,11 +135,12 @@ BI.DynamicDateCard = BI.inherit(BI.Widget, {
     },
 
     _getParamJson: function (values, positionValue) {
-        var self = this;
+        var self = this, o = this.options;
         var items = BI.map(values, function (idx, value) {
             return {
                 el: {
                     type: "bi.dynamic_date_param_item",
+                    validationChecker: BI.bind(self._checkDate, self),
                     dateType: value.dateType,
                     value: value.value,
                     offset: value.offset,
@@ -146,6 +148,11 @@ BI.DynamicDateCard = BI.inherit(BI.Widget, {
                         eventName: "EVENT_CHANGE",
                         action: function () {
                             self.fireEvent("EVENT_CHANGE");
+                        }
+                    }, {
+                        eventName: "EVENT_INPUT_CHANGE",
+                        action: function () {
+                            BI.Bubbles.hide("dynamic-date-error");
                         }
                     }]
                 },
@@ -158,7 +165,7 @@ BI.DynamicDateCard = BI.inherit(BI.Widget, {
             comboItems[0].text = BI.i18nText("BI-Basic_Empty");
             items.push({
                 type: "bi.text_value_combo",
-                height: 24,
+                height: BI.SIZE_CONSANTS.TOOL_BAR_HEIGHT,
                 items: comboItems,
                 container: null,
                 value: positionValue || BI.DynamicDateCard.OFFSET.CURRENT,
@@ -166,6 +173,7 @@ BI.DynamicDateCard = BI.inherit(BI.Widget, {
                     eventName: "EVENT_CHANGE",
                     action: function () {
                         self.position = this.getValue()[0];
+                        this.setValue(self.position);
                         self.fireEvent("EVENT_CHANGE");
                     }
                 }]
@@ -174,7 +182,7 @@ BI.DynamicDateCard = BI.inherit(BI.Widget, {
             if(values.length !== 0 && BI.last(values).dateType !== BI.DynamicDateCard.TYPE.DAY && BI.last(values).dateType !== BI.DynamicDateCard.TYPE.WORK_DAY) {
                 items.push({
                     type: "bi.text_value_combo",
-                    height: 24,
+                    height: BI.SIZE_CONSANTS.TOOL_BAR_HEIGHT,
                     container: null,
                     items: this._getText(BI.last(values).dateType),
                     value: positionValue || BI.DynamicDateCard.OFFSET.CURRENT,
@@ -182,6 +190,7 @@ BI.DynamicDateCard = BI.inherit(BI.Widget, {
                         eventName: "EVENT_CHANGE",
                         action: function () {
                             self.position = this.getValue()[0];
+                            this.setValue(self.position);
                             self.fireEvent("EVENT_CHANGE");
                         }
                     }]
@@ -191,6 +200,13 @@ BI.DynamicDateCard = BI.inherit(BI.Widget, {
         }
 
         return items;
+    },
+
+    _checkDate: function (obj) {
+        var o = this.options;
+        var date = BI.DynamicDateHelper.getCalculation(BI.extend(this._getValue(), this._digestDateTypeValue(obj)));
+
+        return !BI.checkDateVoid(date.getFullYear(), date.getMonth() + 1, date.getDate(), o.min, o.max)[0];
     },
 
     _getText: function (lastValue) {
@@ -251,6 +267,48 @@ BI.DynamicDateCard = BI.inherit(BI.Widget, {
         };
     },
 
+    _digestDateTypeValue: function (value) {
+        var valueMap = {};
+        switch (value.dateType) {
+            case BI.DynamicDateCard.TYPE.YEAR:
+                valueMap.year = (value.offset === 0 ? -value.value : +value.value);
+                break;
+            case BI.DynamicDateCard.TYPE.QUARTER:
+                valueMap.quarter = (value.offset === 0 ? -value.value : +value.value);
+                break;
+            case BI.DynamicDateCard.TYPE.MONTH:
+                valueMap.month = (value.offset === 0 ? -value.value : +value.value);
+                break;
+            case BI.DynamicDateCard.TYPE.WEEK:
+                valueMap.week = (value.offset === 0 ? -value.value : +value.value);
+                break;
+            case BI.DynamicDateCard.TYPE.DAY:
+                valueMap.day = (value.offset === 0 ? -value.value : +value.value);
+                break;
+            case BI.DynamicDateCard.TYPE.WORK_DAY:
+                valueMap.workDay = (value.offset === 0 ? -value.value : +value.value);
+                break;
+            default:
+                break;
+        }
+        if (BI.isNull(value.dateType)) {
+            valueMap.position = this.position || BI.DynamicDateCard.OFFSET.CURRENT;
+        }
+        return valueMap;
+    },
+
+    setMinDate: function(minDate) {
+        if (BI.isNotEmptyString(this.options.min)) {
+            this.options.min = minDate;
+        }
+    },
+
+    setMaxDate: function (maxDate) {
+        if (BI.isNotEmptyString(this.options.max)) {
+            this.options.max = maxDate;
+        }
+    },
+
     setValue: function (v) {
         v = v || {};
         this.position = v.position || BI.DynamicDateCard.OFFSET.CURRENT;
@@ -285,7 +343,7 @@ BI.DynamicDateCard = BI.inherit(BI.Widget, {
         this.resultPane.populate(this._getParamJson(valuesItems, v.position));
     },
 
-    getValue: function () {
+    _getValue: function () {
         var self = this;
         var valueMap = {};
         var selectValues = this.checkgroup.getValue();
@@ -293,36 +351,56 @@ BI.DynamicDateCard = BI.inherit(BI.Widget, {
         if(selectValues.length !== 0) {
             BI.each(buttons, function (idx, button) {
                 var value = button.getValue();
-                switch (value.dateType) {
-                    case BI.DynamicDateCard.TYPE.YEAR:
-                        valueMap.year = (value.offset === 0 ? -value.value : value.value);
-                        break;
-                    case BI.DynamicDateCard.TYPE.QUARTER:
-                        valueMap.quarter = (value.offset === 0 ? -value.value : value.value);
-                        break;
-                    case BI.DynamicDateCard.TYPE.MONTH:
-                        valueMap.month = (value.offset === 0 ? -value.value : value.value);
-                        break;
-                    case BI.DynamicDateCard.TYPE.WEEK:
-                        valueMap.week = (value.offset === 0 ? -value.value : value.value);
-                        break;
-                    case BI.DynamicDateCard.TYPE.DAY:
-                        valueMap.day = (value.offset === 0 ? -value.value : value.value);
-                        break;
-                    default:
-                        break;
-                }
-                if(BI.isNull(value.dateType)) {
-                    valueMap.position = self.position || BI.DynamicDateCard.OFFSET.CURRENT;
-                }
+                BI.extend(valueMap, self._digestDateTypeValue(value));
             });
         }
         if(this.workDayBox.isSelected()) {
             var value = buttons[0].getValue();
-            valueMap.workDay = (value.offset === 0 ? -value.value : value.value);
+            valueMap.workDay = (value.offset === 0 ? -value.value : +value.value);
         }
+
         return valueMap;
-    }
+    },
+
+    _getErrorText: function () {
+        var o = this.options;
+        var start = BI.parseDateTime(o.min, "%Y-%X-%d");
+        var end = BI.parseDateTime(o.max, "%Y-%X-%d");
+
+        return BI.i18nText("BI-Basic_Date_Range_Error",
+            start.getFullYear(),
+            start.getMonth() + 1,
+            start.getDate(),
+            end.getFullYear(),
+            end.getMonth() + 1,
+            end.getDate()
+        );
+    },
+
+    getValue: function () {
+        return this.checkValidation() ? this._getValue() : {};
+    },
+
+    getInputValue: function () {
+        return this._getValue();
+    },
+
+    checkValidation: function (show) {
+        var buttons = this.resultPane.getAllButtons();
+        var errorText;
+        var invalid = BI.any(buttons, function (idx, button) {
+            return button.checkValidation && !button.checkValidation();
+        });
+        if (invalid) {
+            errorText = BI.i18nText("BI-Please_Input_Natural_Number");
+        } else {
+            invalid = !this._checkDate(this._getValue());
+            errorText = this._getErrorText();
+        }
+        invalid && show && BI.Bubbles.show("dynamic-date-error", errorText, this.resultPane);
+
+        return !invalid;
+    },
 
 });
 BI.shortcut("bi.dynamic_date_card", BI.DynamicDateCard);

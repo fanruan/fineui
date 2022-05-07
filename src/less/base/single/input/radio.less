@@ -1,19 +1,22 @@
-@import "../../../index";
+@import "../../../index.less";
 
 .bi-radio {
-  & .radio-content {
+  & .radio-content, &.radio-content {
     .border-radius(8px);
-    border: 1px solid @color-bi-border-dark-line;
+    border: 1px solid @color-bi-border-radio;
+    .box-sizing(border-box);
+    .transition(all .1s);
     &:after {
       content: "";
     }
     &.hover, &:hover {
-      border-color: @color-bi-border-highlight;
+      border-color: @color-bi-border-hover-active-radio;
     }
   }
-  &:active, &.active {
-    & .radio-content {
-      border-color:  @color-bi-border-highlight;
+  &.active {
+    & .radio-content, &.radio-content {
+      border-color:  @color-bi-border-hover-active-radio;
+      background-color: @color-bi-background-active-radio;
       &:after {
         width: 6px;
         height: 6px;
@@ -22,24 +25,26 @@
         top: 50%;
         left: 50%;
         .border-radius(3px);
-        background-color: @color-bi-background-default;
+        background-color: @color-bi-background-active-radio-content;
         .transform(translate(-50%, -50%));
+        @transition: all .1s cubic-bezier(.71,-.46,.88,.6),opacity .1s;
+        .transition(@transition);
       }
     }
   }
   &.disabled {
-    & .radio-content {
-      background-color: @color-bi-background-disabled;
-      border-color: @color-bi-border-disabled;
+    & .radio-content, &.radio-content {
+      background-color: @color-bi-background-disabled-radio;
+      border-color: @color-bi-border-disabled-radio;
     }
-    & .radio-content:after {
+    & .radio-content:after, &.radio-content:after {
       background-color: transparent;
     }
     &.active {
-      & .radio-content {
-        background-color: @color-bi-background-dark-gray;
+      & .radio-content, &.radio-content {
+        background-color: @color-bi-background-disabled-active-radio;
         &:after {
-          background-color: @color-bi-background-default;
+          background-color: @color-bi-background-disabled-active-radio-content;
         }
       }
     }
@@ -48,28 +53,34 @@
 
 .bi-theme-dark {
   .bi-radio {
-    & .radio-content {
-      border-color: @color-bi-border-dark-line-theme-dark;
+    & .radio-content, &.radio-content {
+      border-color: @color-bi-border-radio-theme-dark;
       &.hover, &:hover {
-        border-color: @color-bi-border-highlight;
+        border-color: @color-bi-border-hover-active-radio-theme-dark;
       }
     }
-    &.active, &:active {
-      & .radio-content {
-        border-color: @color-bi-border-highlight;
+    &.active {
+      & .radio-content, &.radio-content {
+        border-color:@color-bi-border-hover-active-radio-theme-dark;
+        &:after {
+          background-color: @color-bi-background-active-radio-content-theme-dark;
+        }
       }
     }
     &.disabled {
-      & .radio-content {
-        background-color: @color-bi-background-disabled-theme-dark;
+      & .radio-content, &.radio-content {
+        background-color: @color-bi-background-disabled-radio-theme-dark;
         &.hover, &:hover {
-          border-color: @color-bi-border-dark-line-theme-dark;
+          border-color: @color-bi-border-radio-theme-dark;
         }
       }
       &.active {
-        & .radio-content {
-          background-color: @color-bi-background-dark-gray-theme-dark;
-          border-color: @color-bi-border-disabled-theme-dark;
+        & .radio-content, &.radio-content {
+          background-color: @color-bi-background-disabled-active-radio-theme-dark;
+          border-color: @color-bi-border-disabled-radio-theme-dark;
+          &:after {
+            background-color: @color-bi-background-disabled-active-radio-content-theme-dark;
+          }
         }
       }
     }

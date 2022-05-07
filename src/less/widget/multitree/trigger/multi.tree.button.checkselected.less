@@ -1,8 +1,15 @@
-@import "../../../index";
+@import "../../../index.less";
 
 .bi-multi-tree-check-selected-button {
   & .trigger-check-selected{
-    color: @color-bi-text-highlight;
+    color: @color-bi-text-multi-tree-check-pane-check-button;
     z-index: 1;
+  }
+  .trigger-check-text {
+    .border-radius(8px);
+    z-index: 1;
+    &:active {
+      background-color: @color-bi-background-multi-select-trigger-check-selected;
+    }
   }
 }

@@ -1,76 +1,112 @@
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const autoprefixer = require("autoprefixer");
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const autoprefixer = require('autoprefixer');
+const path = require('path');
+const fs = require('fs');
 
-const dirs = require("./dirs");
+const dirs = require('./dirs');
 
-const isBuilt4IE8 = process.env.BROWSER_VERSION === "ie8";
+const attachments = require('./attachments');
+
+let lessVariables = {};
+
+if (process.env.LESS_CONFIG_PATH) {
+    const lessConfigPath = path.isAbsolute(process.env.LESS_CONFIG_PATH)
+        ? process.env.LESS_CONFIG_PATH
+        : path.resolve(__dirname, '../', process.env.LESS_CONFIG_PATH);
+
+    lessVariables = fs.existsSync(lessConfigPath)
+        ? require(lessConfigPath) || {}
+        : {};
+}
 
 module.exports = {
     entry: {
-        polyfill: isBuilt4IE8
-            ? [
-                "core-js/features/object/define-property",
-                "core-js/features/object/create",
-                "core-js/features/object/assign",
-                "core-js/features/object/get-own-property-symbols",
-                "core-js/features/object/get-prototype-of",
-                "core-js/features/array/for-each",
-                "core-js/features/array/index-of",
-                "core-js/features/function/bind",
-                "core-js/features/promise",
-                "core-js/features/string/replace",
-                // "core-js",
-            ]
-            : [
-                "@babel/polyfill",
-                "es6-promise/auto",
-            ],
-        fineui: [
-            "./typescript/bundle.ts",
-        ],
+        demo: attachments.demo,
+        // 用于启动dev模式时，工程引用调试
+        fineui: attachments.fineui,
+        "fineui.proxy": attachments.fineuiProxy,
+    },
+    externals: {
+        lodash: '_',
+        underscore: '_',
     },
     resolve: {
-        mainFields: ["module", "main"],
-        extensions: [".js", ".ts"],
+        mainFields: ['module', 'main'],
+        extensions: ['.js', '.ts'],
     },
     module: {
         rules: [
             {
-                test: /\.(js|ts)$/,
-                include: [dirs.NODE_MODULES, dirs.PRIVATE, dirs.TYPESCRIPT],
+                test: /\.(jsx?|tsx?)$/i,
+                include: [
+                    dirs.NODE_MODULES,
+                    dirs.PRIVATE,
+                    dirs.PUBLIC,
+                    dirs.MOBILE,
+                    dirs.DEMO,
+                    dirs.I18N,
+                    dirs.UI,
+                    dirs.FIX,
+                    dirs.TYPESCRIPT,
+                    dirs.SRC,
+                ],
                 exclude: /node_modules(\/|\\)core-js/,
-                use: [{
-                    loader: "babel-loader",
-                    options: {
-                        configFile: isBuilt4IE8 ? dirs.IE8_BABEL_CONFIG : dirs.BABEL_CONFIG,
+                use: [
+                    {
+                        loader: 'babel-loader',
+                        options: {
+                            configFile: dirs.BABEL_CONFIG,
+                        },
                     },
-                }, {
-                    loader: "source-map-loader",
-                    options: {
-                        enforce: "pre",
+                ],
+            },
+            {
+                test: /\.js$/,
+                include: [path.resolve(__dirname, '../', attachments.lodash)],
+                use: [
+                    {
+                        loader: 'script-loader',
                     },
-                }],
+                ],
+            },
+            {
+                test: path.resolve(__dirname, '../', attachments.fix),
+                use: [
+                    {
+                        loader: 'expose-loader',
+                        options: 'Fix',
+                    },
+                ],
+            }, {
+                test: path.resolve(__dirname, '../', attachments.fixProxy),
+                use: [
+                    {
+                        loader: 'expose-loader',
+                        options: 'Fix',
+                    },
+                ],
             },
             {
                 test: /\.(css|less)$/,
                 use: [
                     MiniCssExtractPlugin.loader,
                     {
-                        loader: "css-loader",
+                        loader: 'css-loader',
                         options: {
                             url: false,
                         },
                     },
                     {
-                        loader: "postcss-loader",
+                        loader: 'postcss-loader',
                         options: {
                             plugins: [autoprefixer],
                         },
                     },
                     {
-                        loader: "less-loader",
+                        loader: 'less-loader',
                         options: {
                             relativeUrls: false,
+                            modifyVars: lessVariables,
                         },
                     },
                 ],

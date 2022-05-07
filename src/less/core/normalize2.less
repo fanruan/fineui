@@ -1,72 +1,4 @@
-@import "../index";
-
-html,
-body,
-div,
-ul,
-ol,
-li,
-img,
-a,
-span,
-p,
-* {
-  margin: 0;
-  padding: 0;
-}
-
-html {
-  height: 100%;
-  overflow: hidden;
-}
-
-body {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  margin: 0;
-  padding: 0;
-  top: 0;
-  left: 0;
-  background-repeat: repeat;
-  .user-select-disable();
-  color: @color-bi-text-normal;
-  font: normal 12px "Helvetica Neue", Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Heiti, "黑体", sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-decoration: none;
-  -kthml-user-focus: normal;
-  -moz-user-focus: normal;
-  -moz-outline: 0 none;
-  outline: 0 none;
-}
-
-div, textarea {
-  &::-webkit-scrollbar {
-    -webkit-appearance: none;
-    width: 10px;
-    height: 10px;
-  }
-  &::-webkit-scrollbar-track {
-    .border-radius(5px);
-    .background-color(@scroll-color, 5%);
-    &:hover {
-      .background-color(@scroll-color, 5%);
-    }
-  }
-  &::-webkit-scrollbar-thumb {
-    border: 2px solid transparent;
-    background-clip: padding-box;
-    .border-radius(10px);
-    .background-color(@scroll-color, 10%);
-    &:hover {
-      .background-color(@scroll-color, 30%);
-    }
-  }
-  &::-webkit-scrollbar-corner {
-    background-color: transparent;
-  }
-}
+@import "../index.less";
 
 a {
   outline: none;
@@ -99,14 +31,6 @@ textarea {
   margin: 0;
   padding: 0;
   outline: none;
-}
-
-ul {
-  list-style: disc;
-}
-
-li {
-  list-style-type: none;
 }
 
 i {

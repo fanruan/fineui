@@ -1,9 +1,9 @@
-import { _Widget } from "../../core/widget";
+import { Widget } from "../../core/widget";
 
-export interface _TextValueCombo extends _Widget {
-    populate(items: any): void;
-}
+export declare class TextValueCombo extends Widget {
+    static xtype: string;
 
-export interface _TextValueComboStatic {
-    EVENT_CHANGE: string;
+    static EVENT_CHANGE: string;
+    
+    populate(items: any): void; 
 }

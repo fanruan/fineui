@@ -1,11 +1,23 @@
-.bi-flex-horizontal-layout {
-  display: box; /* OLD - Android 4.4- */
+.flex() {
   display: -webkit-box; /* OLD - iOS 6-, Safari 3.1-6 */
   display: -moz-box; /* OLD - Firefox 19- (buggy but mostly works) */
   display: -ms-flexbox; /* TWEENER - IE 10 */
   display: -webkit-flex; /* NEW - Chrome */
   display: flex; /* NEW, Spec - Opera 12.1, Firefox 20+ */
+}
 
+.vertical() {
+  /* 09版 */
+  -webkit-box-orient: vertical;
+  /* 12版 */
+  -webkit-flex-direction: column;
+  -moz-flex-direction: column;
+  -ms-flex-direction: column;
+  -o-flex-direction: column;
+  flex-direction: column;
+}
+
+.horizontal() {
   /* 09版 */
   -webkit-box-orient: horizontal;
   /* 12版 */
@@ -14,6 +26,12 @@
   -ms-flex-direction: row;
   -o-flex-direction: row;
   flex-direction: row;
+}
+
+.bi-f-h, .bi-flex-horizontal-layout {
+  .flex();
+
+  .horizontal();
 
   /* 09版 */
   -webkit-box-pack: flex-start;
@@ -21,12 +39,12 @@
   -webkit-justify-content: flex-start;
   -moz-justify-content: flex-start;
   -ms-justify-content: flex-start;
-  -o-justify-content: flex-start;
   -ms-flex-pack: start;
+  -o-justify-content: flex-start;
   justify-content: flex-start;
 
   /* 09版 */
-  -webkit-box-align: start;
+  -webkit-box-align: flex-start;
   /* 12版 */
   -webkit-align-items: flex-start;
   -moz-align-items: flex-start;
@@ -54,7 +72,25 @@
     -ms-flex-align: center;
     -o-align-items: center;
     align-items: center;
+
+    &.f-scroll-y {
+      /* 09版 */
+      -webkit-box-align: flex-start;
+      /* 12版 */
+      -webkit-align-items: flex-start;
+      -moz-align-items: flex-start;
+      -ms-align-items: flex-start;
+      -ms-flex-align: start;
+      -o-align-items: flex-start;
+      align-items: flex-start;
+
+      > .c-e {
+        margin-top: auto !important;
+        margin-bottom: auto !important;
+      }
+    }
   }
+
   &.v-bottom {
     /* 09版 */
     -webkit-box-align: flex-end;
@@ -66,6 +102,7 @@
     -o-align-items: flex-end;
     align-items: flex-end;
   }
+
   &.v-stretch {
     /* 09版 */
     -webkit-box-align: stretch;
@@ -78,16 +115,7 @@
     align-items: stretch;
   }
 
-  &.h-stretch {
-    /* 09版 */
-    -webkit-box-orient: vertical;
-    /* 12版 */
-    -webkit-flex-direction: column;
-    -moz-flex-direction: column;
-    -ms-flex-direction: column;
-    -o-flex-direction: column;
-    flex-direction: column;
-
+  &.h-center {
     /* 09版 */
     -webkit-box-pack: center;
     /* 12版 */
@@ -97,14 +125,61 @@
     -ms-flex-pack: center;
     -o-justify-content: center;
     justify-content: center;
+
+    &.f-scroll-x {
+      /* 09版 */
+      -webkit-box-pack: flex-start;
+      /* 12版 */
+      -webkit-justify-content: flex-start;
+      -moz-justify-content: flex-start;
+      -ms-justify-content: flex-start;
+      -ms-flex-pack: start;
+      -o-justify-content: flex-start;
+      justify-content: flex-start;
+
+      > .f-c {
+        margin-left: auto !important;
+      }
+
+      > .l-c {
+        margin-right: auto !important;
+      }
+    }
+  }
+
+  &.h-right {
     /* 09版 */
-    -webkit-box-align: stretch;
+    -webkit-box-pack: flex-end;
     /* 12版 */
-    -webkit-align-items: stretch;
-    -moz-align-items: stretch;
-    -ms-align-items: stretch;
-    -ms-flex-align: stretch;
-    -o-align-items: stretch;
-    align-items: stretch;
+    -webkit-justify-content: flex-end;
+    -moz-justify-content: flex-end;
+    -ms-justify-content: flex-end;
+    -ms-flex-pack: end;
+    -o-justify-content: flex-end;
+    justify-content: flex-end;
+  }
+
+  > .f-s-n {
+    &, &.f-f {
+      -webkit-flex-shrink: 0;
+      -moz-flex-shrink: 0;
+      -ms-flex-shrink: 0;
+      flex-shrink: 0;
+    }
+  }
+
+  > .f-f {
+    &:not(.f-s-n) {
+      min-width: 0;
+    }
+    -webkit-flex-grow: 1;
+    -moz-flex-grow: 1;
+    -ms-flex-grow: 1;
+    flex-grow: 1;
+    // IE10下默认shrink为0
+    -webkit-flex-shrink: 1;
+    -moz-flex-shrink: 1;
+    -ms-flex-shrink: 1;
+    flex-shrink: 1;
   }
 }

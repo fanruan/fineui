@@ -9,7 +9,9 @@ BI.SingleSelectInsertList = BI.inherit(BI.Single, {
             baseCls: "bi-multi-select-insert-list",
             allowNoSelect: false,
             itemsCreator: BI.emptyFn,
-            valueFormatter: BI.emptyFn
+            itemWrapper: BI.emptyFn,
+            valueFormatter: BI.emptyFn,
+            searcherHeight: 24,
         });
     },
     _init: function () {
@@ -29,6 +31,7 @@ BI.SingleSelectInsertList = BI.inherit(BI.Single, {
             cls: "popup-single-select-list bi-border-left bi-border-right bi-border-bottom",
             itemsCreator: o.itemsCreator,
             valueFormatter: o.valueFormatter,
+            itemWrapper: o.itemWrapper,
             logic: {
                 dynamic: true
             },
@@ -43,7 +46,7 @@ BI.SingleSelectInsertList = BI.inherit(BI.Single, {
         });
 
         this.searcherPane = BI.createWidget({
-            type: "bi.single_select_search_pane",
+            type: "bi.single_select_search_insert_pane",
             allowNoSelect: o.allowNoSelect,
             cls: "bi-border-left bi-border-right bi-border-bottom",
             valueFormatter: o.valueFormatter,
@@ -54,13 +57,23 @@ BI.SingleSelectInsertList = BI.inherit(BI.Single, {
                 op.keywords = [self.trigger.getKeyword()];
                 this.setKeyword(op.keywords[0]);
                 o.itemsCreator(op, callback);
-            }
+            },
         });
         this.searcherPane.setVisible(false);
 
         this.trigger = BI.createWidget({
             type: "bi.searcher",
-            allowSearchBlank: false,
+            el: {
+                type: "bi.select_patch_editor",
+                el: {
+                    type: "bi.search_editor",
+                    watermark: BI.i18nText("BI-Basic_Search_And_Patch_Paste"),
+                },
+                ref: function (ref) {
+                    self.editor = ref;
+                },
+                height: o.searcherHeight,
+            },
             isAutoSearch: false,
             isAutoSync: false,
             onSearch: function (op, callback) {
@@ -99,26 +112,7 @@ BI.SingleSelectInsertList = BI.inherit(BI.Single, {
                     self.adapter.populate();
                     self._setStartValue();
                     self.fireEvent(BI.SingleSelectInsertList.EVENT_CHANGE);
-                }
-            }, {
-                eventName: BI.Searcher.EVENT_SEARCHING,
-                action: function () {
-                    var keywords = this.getKeyword();
-                    var last = BI.last(keywords);
-                    keywords = BI.initial(keywords || []);
-                    if (keywords.length > 0) {
-                        self._joinKeywords(keywords, function () {
-                            if (BI.isEndWithBlank(last)) {
-                                self.adapter.setValue(self.storeValue);
-                                assertShowValue();
-                                self.adapter.populate();
-                                self._setStartValue();
-                            } else {
-                                self.adapter.setValue(self.storeValue);
-                                assertShowValue();
-                            }
-                        });
-                    }
+
                 }
             }, {
                 eventName: BI.Searcher.EVENT_CHANGE,
@@ -171,31 +165,6 @@ BI.SingleSelectInsertList = BI.inherit(BI.Single, {
 
     _makeMap: function (values) {
         return BI.makeObject(values || []);
-    },
-
-    _joinKeywords: function (keywords, callback) {
-        var self = this, o = this.options;
-        this._assertValue(this.storeValue);
-        if (!this._allData) {
-            o.itemsCreator({
-                type: BI.SingleSelectInsertList.REQ_GET_ALL_DATA
-            }, function (ob) {
-                self._allData = BI.map(ob.items, "value");
-                digest(self._allData);
-            });
-        } else {
-            digest(this._allData);
-        }
-
-        function digest (items) {
-            var selectedMap = self._makeMap(items);
-            BI.each(keywords, function (i, val) {
-                if (BI.isNotNull(selectedMap[val])) {
-                    self.storeValue.type === BI.Selection.Single ? BI.pushDistinct(self.storeValue.value, val) : BI.remove(self.storeValue.value, val);
-                }
-            });
-            callback();
-        }
     },
 
     _setStartValue: function (value) {

@@ -14,8 +14,8 @@ BI.SearchMultiTextValueCombo = BI.inherit(BI.Single, {
     },
 
     _init: function () {
-        BI.SearchMultiTextValueCombo.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
+        BI.SearchMultiTextValueCombo.superclass._init.apply(this, arguments);
         var assertShowValue = function () {
             BI.isKey(self._startValue) && (self.storeValue.type === BI.Selection.All ? BI.remove(self.storeValue.value, self._startValue) : BI.pushDistinct(self.storeValue.value, self._startValue));
             self._updateAllValue();
@@ -35,15 +35,15 @@ BI.SearchMultiTextValueCombo = BI.inherit(BI.Single, {
         this.trigger = BI.createWidget({
             type: "bi.search_multi_select_trigger",
             text: o.text,
-            height: o.height,
+            height: o.height - 2,
             // adapter: this.popup,
             masker: {
                 offset: {
                     left: 0,
                     top: 0,
                     right: 0,
-                    bottom: 25
-                }
+                    bottom: BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT + 1,
+                },
             },
             allValueGetter: function () {
                 return self.allValue;
@@ -69,27 +69,12 @@ BI.SearchMultiTextValueCombo = BI.inherit(BI.Single, {
         this.trigger.on(BI.MultiSelectTrigger.EVENT_STOP, function () {
             self._setStartValue("");
         });
-        this.trigger.on(BI.MultiSelectTrigger.EVENT_PAUSE, function () {
-            if (this.getSearcher().hasMatched()) {
-                var keyword = this.getSearcher().getKeyword();
-                self._join({
-                    type: BI.Selection.Multi,
-                    value: [keyword]
-                }, function () {
-                    self.combo.setValue(self.storeValue);
-                    self._setStartValue(keyword);
-                    assertShowValue();
-                    self._populate();
-                    self._setStartValue("");
-                });
-            }
-        });
         this.trigger.on(BI.MultiSelectTrigger.EVENT_SEARCHING, function (keywords) {
             var last = BI.last(keywords);
             keywords = BI.initial(keywords || []);
             if (keywords.length > 0) {
                 self._joinKeywords(keywords, function () {
-                    if (BI.isEndWithBlank(last)) {
+                    if (BI.endWith(last, BI.BlankSplitChar)) {
                         self.combo.setValue(self.storeValue);
                         assertShowValue();
                         self.combo.populate();
@@ -98,6 +83,7 @@ BI.SearchMultiTextValueCombo = BI.inherit(BI.Single, {
                         self.combo.setValue(self.storeValue);
                         assertShowValue();
                     }
+                    self._dataChange = true;
                 });
             }
         });
@@ -112,6 +98,7 @@ BI.SearchMultiTextValueCombo = BI.inherit(BI.Single, {
                     assertShowValue();
                 });
             }
+            self._dataChange = true;
         });
         this.trigger.on(BI.MultiSelectTrigger.EVENT_BEFORE_COUNTER_POPUPVIEW, function () {
             this.getCounter().setValue(self.storeValue);
@@ -124,6 +111,7 @@ BI.SearchMultiTextValueCombo = BI.inherit(BI.Single, {
 
         this.combo = BI.createWidget({
             type: "bi.combo",
+            cls: "bi-border bi-border-radius",
             toggle: false,
             container: o.container,
             el: this.trigger,
@@ -137,6 +125,7 @@ BI.SearchMultiTextValueCombo = BI.inherit(BI.Single, {
                 listeners: [{
                     eventName: BI.MultiSelectPopupView.EVENT_CHANGE,
                     action: function () {
+                        self._dataChange = true;
                         self.storeValue = this.getValue();
                         self._adjust(function () {
                             assertShowValue();
@@ -150,6 +139,7 @@ BI.SearchMultiTextValueCombo = BI.inherit(BI.Single, {
                 }, {
                     eventName: BI.MultiSelectPopupView.EVENT_CLICK_CLEAR,
                     action: function () {
+                        self._dataChange = true;
                         self.setValue();
                         self._defaultState();
                     }
@@ -172,6 +162,9 @@ BI.SearchMultiTextValueCombo = BI.inherit(BI.Single, {
         });
 
         this.combo.on(BI.Combo.EVENT_BEFORE_POPUPVIEW, function () {
+            if (!this.isViewVisible()) {
+                self._dataChange = false;// 标记数据是否发生变化
+            }
             this.setValue(self.storeValue);
             BI.nextTick(function () {
                 self._populate();
@@ -189,7 +182,7 @@ BI.SearchMultiTextValueCombo = BI.inherit(BI.Single, {
                  * 在存在标红的情况，如果popover没有发生改变就确认需要同步trigger的值，否则对外value值和trigger样式不统一
                  */
                 assertShowValue();
-                self.fireEvent(BI.SearchMultiTextValueCombo.EVENT_CONFIRM);
+                self._dataChange && self.fireEvent(BI.SearchMultiTextValueCombo.EVENT_CONFIRM);
             }
         });
 
@@ -340,7 +333,7 @@ BI.SearchMultiTextValueCombo = BI.inherit(BI.Single, {
             self._updateAllValue();
             self._checkError();
             if (self.wants2Quit === true) {
-                self.fireEvent(BI.SearchMultiTextValueCombo.EVENT_CONFIRM);
+                self._dataChange && self.fireEvent(BI.SearchMultiTextValueCombo.EVENT_CONFIRM);
                 self.wants2Quit = false;
             }
             self.requesting = false;

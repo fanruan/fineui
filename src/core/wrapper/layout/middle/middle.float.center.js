@@ -6,7 +6,7 @@
 BI.FloatCenterLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.FloatCenterLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-float-center-layout",
+            baseCls: "bi-float-center",
             hgap: 0,
             vgap: 0,
             lgap: 0,
@@ -20,7 +20,7 @@ BI.FloatCenterLayout = BI.inherit(BI.Layout, {
         var self = this, o = this.options, items = o.items;
         var list = [], width = 100 / items.length;
         BI.each(items, function (i) {
-            var widget = BI.createWidget({
+            var widget = BI._lazyCreateWidget({
                 type: "bi.default"
             });
             widget.element.addClass("center-element " + (i === 0 ? "first-element " : "") + (i === items.length - 1 ? "last-element" : "")).css({
@@ -33,13 +33,13 @@ BI.FloatCenterLayout = BI.inherit(BI.Layout, {
         });
         BI.each(items, function (i, item) {
             if (item) {
-                var w = BI.createWidget(item);
+                var w = BI._lazyCreateWidget(item);
                 w.element.css({
                     position: "absolute",
-                    left: o.hgap + o.lgap,
-                    right: o.hgap + o.rgap,
-                    top: o.vgap + o.tgap,
-                    bottom: o.vgap + o.bgap,
+                    left: self._optimiseGap(o.hgap + o.lgap),
+                    right: self._optimiseGap(o.hgap + o.rgap),
+                    top: self._optimiseGap(o.vgap + o.tgap),
+                    bottom: self._optimiseGap(o.vgap + o.bgap),
                     width: "auto",
                     height: "auto"
                 });
@@ -49,7 +49,7 @@ BI.FloatCenterLayout = BI.inherit(BI.Layout, {
         return {
             type: "bi.left",
             ref: function (_ref) {
-                self.wrapper = _ref;
+                self.layout = _ref;
             },
             items: list
         };
@@ -61,15 +61,11 @@ BI.FloatCenterLayout = BI.inherit(BI.Layout, {
 
     addItem: function (item) {
         // do nothing
-        throw new Error("cannot be added");
-    },
-
-    update: function (opt) {
-        return this.wrapper.update(opt);
+        throw new Error("不能添加子组件");
     },
 
     populate: function (items) {
-        this.wrapper.populate.apply(this.wrapper, arguments);
+        this.layout.populate.apply(this.layout, arguments);
     }
 });
 BI.shortcut("bi.float_center", BI.FloatCenterLayout);

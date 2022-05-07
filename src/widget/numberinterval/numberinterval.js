@@ -66,7 +66,7 @@ BI.NumberInterval = BI.inherit(BI.Single, {
         });
         BI.createWidget({
             type: "bi.absolute",
-            element: this.smallEditor.element,
+            element: this.smallEditor,
             items: [{
                 el: this.smallTip,
                 top: 0,
@@ -104,7 +104,7 @@ BI.NumberInterval = BI.inherit(BI.Single, {
         });
         BI.createWidget({
             type: "bi.absolute",
-            element: this.bigEditor.element,
+            element: this.bigEditor,
             items: [{
                 el: this.bigTip,
                 top: 0,
@@ -527,6 +527,14 @@ BI.NumberInterval = BI.inherit(BI.Single, {
             value.closeMax = true;
         }
         return value;
+    },
+
+    focusMinEditor: function () {
+        this.smallEditor.focus();
+    },
+
+    focusMaxEditor: function () {
+        this.bigEditor.focus();
     },
 
     destroyed: function () {

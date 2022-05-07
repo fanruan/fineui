@@ -1,0 +1,91 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <!-- <link rel="stylesheet" type="text/css" href="../dist/2.0/fineui.min.css"/>
+    <script src="../dist/2.0/fineui.js"></script> -->
+   <link rel="stylesheet" type="text/css" href="http://fanruan.design/fineui/2.0/fineui.min.css" />
+   <script src="http://fanruan.design/fineui/2.0/fineui.min.js"></script>
+</head>
+<body>
+<div id="wrapper"></div>
+<script>
+
+    var Widget = BI.inherit(BI.Widget, {
+        props: {
+            // vdom: true
+        },
+        watch: {
+            text: function () {
+                this.reset();
+            }
+        },
+        setup: function () {
+            var list, count = 0;
+            return function () {
+                return {
+                    type: "bi.vertical",
+                    items: [{
+                        type: "bi.virtual_group",
+                        height: 100,
+                        ref: function (_ref) {
+                            list = _ref;
+                        },
+                        items: BI.range(10).map(function (item, i) {
+                            var r = {
+                                type: "bi.label",
+                                text: item,
+                                // 指定key后，会根据key值进行前后两次数据对比，否则会根据数组索引进行数据对比
+                                key: item,
+                                cls: "bi-border"
+                            };
+                            if (i === 9) {
+                                r.width = "fill";
+                                r.key = "唯一的标识";
+                            }
+                            return r;
+                        }),
+                        layouts: [{
+                            type: "bi.inline",
+                            tgap: 10,
+                            lgap: 10
+                        }]
+                    }, {
+                        type: "bi.button",
+                        text: "点击删除第一个元素",
+                        handler: function () {
+                            count++;
+                            list.populate(BI.range(10 - count).map(function (i) {
+                                var r = {
+                                    type: "bi.label",
+                                    text: i + count,
+                                    key: i + count,
+                                    cls: "bi-border"
+                                };
+                                if (i + count === 9) {
+                                    r.width = "fill";
+                                    r.key = "唯一的标识";
+                                }
+                                return r;
+                            }));
+                        }
+                    }]
+                };
+            };
+        }
+    });
+    BI.shortcut("demo.parent", Widget);
+    BI.createWidget({
+        type: "bi.absolute",
+        items: [{
+            el: {
+                type: "demo.parent"
+            },
+            top: 100,
+            left: 100
+        }],
+        element: "#wrapper"
+    });
+</script>
+</body>
+</html>

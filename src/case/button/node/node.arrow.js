@@ -16,42 +16,36 @@ BI.ArrowNode = BI.inherit(BI.NodeButton, {
             iconWrapperWidth: 16
         });
     },
-    _init: function () {
+
+    render: function () {
         var self = this, o = this.options;
-        BI.ArrowNode.superclass._init.apply(this, arguments);
         this.checkbox = BI.createWidget({
             type: "bi.arrow_group_node_checkbox"
         });
-
-        this.text = BI.createWidget({
-            type: "bi.label",
-            textAlign: "left",
-            whiteSpace: "nowrap",
-            textHeight: o.height,
-            height: o.height,
-            hgap: o.hgap,
-            text: o.text,
-            value: o.value,
-            py: o.py
-        });
-
-        this.checkbox.on(BI.Controller.EVENT_CHANGE, function (type) {
-            if (type === BI.Events.CLICK) {
-                self.setSelected(self.isSelected());
-            }
-            self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
-        });
-
-        var type = BI.LogicFactory.createLogicTypeByDirection(BI.Direction.Left);
-        var items = BI.LogicFactory.createLogicItemsByDirection(BI.Direction.Left, {
-            width: o.iconWrapperWidth,
-            el: this.checkbox
-        }, this.text);
-        BI.createWidget(BI.extend({
-            element: this
-        }, BI.LogicFactory.createLogic(type, BI.extend(o.logic, {
-            items: items
-        }))));
+        return {
+            type: "bi.vertical_adapt",
+            columnSize: [o.iconWrapperWidth || o.height, "fill"],
+            items: [this.checkbox, {
+                el: {
+                    type: "bi.label",
+                    ref: function (_ref) {
+                        self.text = _ref;
+                    },
+                    textAlign: "left",
+                    whiteSpace: "nowrap",
+                    textHeight: o.height,
+                    height: o.height,
+                    hgap: o.hgap || o.textHgap,
+                    vgap: o.textVgap,
+                    lgap: o.textLgap,
+                    rgap: o.textRgap,
+                    text: o.text,
+                    value: o.value,
+                    py: o.py,
+                    keyword: o.keyword
+                }
+            }]
+        };
     },
 
     doRedMark: function () {
@@ -66,7 +60,7 @@ BI.ArrowNode = BI.inherit(BI.NodeButton, {
         BI.ArrowNode.superclass.doClick.apply(this, arguments);
         this.checkbox.setSelected(this.isOpened());
     },
-    
+
     setText: function (text) {
         BI.ArrowNode.superclass.setText.apply(this, arguments);
         this.text.setText(text);

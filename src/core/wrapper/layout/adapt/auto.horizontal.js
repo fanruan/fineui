@@ -6,7 +6,7 @@
 BI.HorizontalAutoLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.HorizontalAutoLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-horizon-auto-layout",
+            baseCls: "bi-h-o",
             hgap: 0,
             lgap: 0,
             rgap: 0,
@@ -18,7 +18,11 @@ BI.HorizontalAutoLayout = BI.inherit(BI.Layout, {
 
     render: function () {
         BI.HorizontalAutoLayout.superclass.render.apply(this, arguments);
-        this.populate(this.options.items);
+        var self = this, o = this.options;
+        var items = BI.isFunction(o.items) ? this.__watch(o.items, function (context, newValue) {
+            self.populate(newValue);
+        }) : o.items;
+        this.populate(items);
     },
 
     _addElement: function (i, item) {
@@ -28,31 +32,8 @@ BI.HorizontalAutoLayout = BI.inherit(BI.Layout, {
             position: "relative",
             margin: "0px auto"
         });
-        if (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
-            w.element.css({
-                "margin-top": (i === 0 ? o.vgap : 0) + o.tgap + (item.tgap || 0) + (item.vgap || 0) + "px"
-            });
-        }
-        if (o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0) !== 0) {
-            w.element.css({
-                "margin-left": o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0) +"px"
-            });
-        }
-        if (o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0) !== 0) {
-            w.element.css({
-                "margin-right": o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0) + "px"
-            });
-        }
-        if (o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0) !== 0) {
-            w.element.css({
-                "margin-bottom": o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0) + "px"
-            });
-        }
+        this._handleGap(w, item, null, i);
         return w;
-    },
-
-    resize: function () {
-        // console.log("horizontal_adapt布局不需要resize");
     },
 
     populate: function (items) {

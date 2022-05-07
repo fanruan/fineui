@@ -1,11 +1,16 @@
 BI.DynamicDateParamItem = BI.inherit(BI.Widget, {
 
-    props: {
-        baseCls: "bi-dynamic-date-param-item",
-        dateType: BI.DynamicDateCard.TYPE.YEAR,
-        value: 0,
-        offset: 0,
-        height: 24
+    props: function() {
+        return {
+            baseCls: "bi-dynamic-date-param-item",
+            dateType: BI.DynamicDateCard.TYPE.YEAR,
+            validationChecker: function() {
+                return true;
+            },
+            value: 0,
+            offset: 0,
+            height: BI.SIZE_CONSANTS.TOOL_BAR_HEIGHT,
+        }
     },
 
     render: function () {
@@ -16,7 +21,7 @@ BI.DynamicDateParamItem = BI.inherit(BI.Widget, {
                 el: {
                     type: "bi.sign_editor",
                     cls: "bi-border",
-                    height: 22,
+                    height: BI.SIZE_CONSANTS.TOOL_BAR_HEIGHT - 2,
                     validationChecker: function (v) {
                         return BI.isNaturalNumber(v);
                     },
@@ -24,10 +29,7 @@ BI.DynamicDateParamItem = BI.inherit(BI.Widget, {
                     ref: function () {
                         self.editor = this;
                     },
-                    errorText: function (v) {
-                        if(BI.isEmptyString(v)) {
-                            return BI.i18nText("BI-Basic_Please_Input_Content");
-                        }
+                    errorText: function () {
                         return BI.i18nText("BI-Please_Input_Natural_Number");
                     },
                     allowBlank: false,
@@ -36,19 +38,24 @@ BI.DynamicDateParamItem = BI.inherit(BI.Widget, {
                         action: function () {
                             self.fireEvent(BI.DynamicDateParamItem.EVENT_CHANGE);
                         }
+                    }, {
+                        eventName: BI.SignEditor.EVENT_CHANGE,
+                        action: function () {
+                            self.fireEvent(BI.DynamicDateParamItem.EVENT_INPUT_CHANGE);
+                        }
                     }]
                 },
                 width: 60
             }, {
                 el: {
                     type: "bi.label",
-                    height: 24,
+                    height: BI.SIZE_CONSANTS.TOOL_BAR_HEIGHT,
                     text: this._getText()
                 },
                 width: o.dateType === BI.DynamicDateCard.TYPE.WORK_DAY ? 60 : 20
             }, {
                 type: "bi.text_value_combo",
-                height: 24,
+                height: BI.SIZE_CONSANTS.TOOL_BAR_HEIGHT,
                 items: [{
                     text: BI.i18nText("BI-Basic_Front"),
                     value: 0
@@ -97,6 +104,10 @@ BI.DynamicDateParamItem = BI.inherit(BI.Widget, {
         return text;
     },
 
+    checkValidation: function () {
+        return BI.isNaturalNumber(this.editor.getValue());
+    },
+
     setValue: function (v) {
         v = v || {};
         v.value = v.value || 0;
@@ -115,4 +126,5 @@ BI.DynamicDateParamItem = BI.inherit(BI.Widget, {
 
 });
 BI.DynamicDateParamItem.EVENT_CHANGE = "EVENT_CHANGE";
+BI.DynamicDateParamItem.EVENT_INPUT_CHANGE = "EVENT_INPUT_CHANGE";
 BI.shortcut("bi.dynamic_date_param_item", BI.DynamicDateParamItem);

@@ -6,7 +6,9 @@
 BI.AbsoluteVerticalLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.AbsoluteVerticalLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-absolute-vertical-layout",
+            baseCls: "bi-abs-v-a",
+            verticalAlign: BI.VerticalAlign.Middle,
+            columnSize: [],
             hgap: 0,
             lgap: 0,
             rgap: 0,
@@ -17,37 +19,36 @@ BI.AbsoluteVerticalLayout = BI.inherit(BI.Layout, {
     },
 
     render: function () {
+        var self = this, o = this.options;
         BI.AbsoluteVerticalLayout.superclass.render.apply(this, arguments);
-        this.populate(this.options.items);
-    },
-
-    _addElement: function (i, item) {
-        var o = this.options;
-        var w = BI.AbsoluteVerticalLayout.superclass._addElement.apply(this, arguments);
-        w.element.css({
-            position: "absolute",
-            left: item.lgap,
-            right: item.rgap,
-            top: o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0),
-            bottom: o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0),
-            margin: "auto"
-        });
-        if (o.hgap + o.lgap + (item.hgap || 0) + (item.lgap || 0) !== 0) {
-            w.element.css("left", o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0));
-        }
-        if (o.hgap + o.rgap + (item.hgap || 0) + (item.rgap || 0) !== 0) {
-            w.element.css("right", o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0));
-        }
-        return w;
+        return {
+            type: "bi.htape",
+            verticalAlign: o.verticalAlign,
+            columnSize: o.columnSize,
+            items: o.items,
+            scrollx: o.scrollx,
+            scrolly: o.scrolly,
+            scrollable: o.scrollable,
+            ref: function (_ref) {
+                self.layout = _ref;
+            },
+            hgap: o.hgap,
+            vgap: o.vgap,
+            lgap: o.lgap,
+            rgap: o.rgap,
+            tgap: o.tgap,
+            bgap: o.bgap,
+            innerHgap: o.innerHgap,
+            innerVgap: o.innerVgap,
+        };
     },
 
     resize: function () {
-        // console.log("absolute_vertical_adapt布局不需要resize");
+        this.layout.resize();
     },
 
     populate: function (items) {
-        BI.AbsoluteVerticalLayout.superclass.populate.apply(this, arguments);
-        this._mount();
+        this.layout.populate.apply(this, arguments);
     }
 });
 BI.shortcut("bi.absolute_vertical_adapt", BI.AbsoluteVerticalLayout);

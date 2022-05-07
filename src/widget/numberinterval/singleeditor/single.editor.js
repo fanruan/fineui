@@ -12,10 +12,11 @@ BI.NumberIntervalSingleEidtor = BI.inherit(BI.Single, {
             type: "bi.vertical",
             items: [{
                 type: "bi.editor",
+                simple: o.simple,
                 ref: function (_ref) {
                     self.editor = _ref;
                 },
-                height: o.height - 2,
+                height: o.height,
                 watermark: o.watermark,
                 allowBlank: o.allowBlank,
                 value: o.value,
@@ -71,6 +72,10 @@ BI.NumberIntervalSingleEidtor = BI.inherit(BI.Single, {
 
     setValue: function (v) {
         return this.editor.setValue(v);
+    },
+
+    focus: function () {
+        this.editor.focus();
     }
 });
 

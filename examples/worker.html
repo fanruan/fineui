@@ -1,0 +1,57 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <!-- <link rel="stylesheet" type="text/css" href="../dist/2.0/fineui.min.css"/>
+    <script src="../dist/2.0/fineui.js"></script> -->
+   <link rel="stylesheet" type="text/css" href="http://fanruan.design/fineui/2.0/fineui.min.css" />
+   <script src="http://fanruan.design/fineui/2.0/fineui.min.js"></script>
+    <script src="demo.worker.js"></script>
+</head>
+<body>
+<div id="wrapper"></div>
+<script>
+    if (window.Worker) {
+        var worker = new Worker("./demo.worker.js");
+    }
+    BI.useWorker(worker);
+
+    var Widget = BI.inherit(BI.Widget, {
+        _worker: function () {
+            return "demo.model";
+        },
+        watch: {
+            name: function (val) {
+                this.button.setText(val);
+            }
+        },
+        render: function () {
+            var self = this;
+            console.log(this.model);
+            return {
+                type: "bi.button",
+                ref: function (_ref) {
+                    self.button = _ref;
+                },
+                text: this.model.name,
+                handler: function () {
+                    self.store.addCount();
+                }
+            };
+        }
+    });
+    BI.shortcut("demo.worker", Widget);
+    BI.createWidget({
+        type: "bi.absolute",
+        items: [{
+            el: {
+                type: "demo.worker"
+            },
+            top: 100,
+            left: 100
+        }],
+        element: "#wrapper"
+    });
+</script>
+</body>
+</html>

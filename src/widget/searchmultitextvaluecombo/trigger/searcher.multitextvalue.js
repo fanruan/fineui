@@ -25,7 +25,6 @@ BI.SearchMultiSelectSearcher = BI.inherit(BI.Widget, {
 
         this.searcher = BI.createWidget({
             type: "bi.searcher",
-            allowSearchBlank: false,
             element: this,
             height: o.height,
             isAutoSearch: false,
@@ -44,7 +43,6 @@ BI.SearchMultiSelectSearcher = BI.inherit(BI.Widget, {
                 itemsCreator: function (op, callback) {
                     var keyword = self.editor.getValue();
                     op.keywords = [keyword];
-                    this.setKeyword(keyword);
                     o.itemsCreator(op, callback);
                 },
                 value: o.value

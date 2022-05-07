@@ -6,6 +6,7 @@
 BI.Editor = BI.inherit(BI.Single, {
     _defaultConfig: function () {
         var conf = BI.Editor.superclass._defaultConfig.apply(this, arguments);
+
         return BI.extend(conf, {
             baseCls: "bi-editor bi-focus-shadow",
             hgap: 4,
@@ -21,16 +22,17 @@ BI.Editor = BI.inherit(BI.Single, {
             quitChecker: BI.emptyFn,
             allowBlank: false,
             watermark: "",
-            errorText: ""
+            errorText: "",
         });
     },
 
-    _init: function () {
-        BI.Editor.superclass._init.apply(this, arguments);
+    render: function () {
         var self = this, o = this.options;
+        // 密码输入框设置autocomplete="new-password"的情况下Firefox和chrome不会自动填充密码
+        var autocomplete = o.autocomplete ? " autocomplete=" + o.autocomplete : "";
         this.editor = this.addWidget(BI.createWidget({
             type: "bi.input",
-            element: "<input type='" + o.inputType + "'/>",
+            element: "<input type='" + o.inputType + "'" + autocomplete + " />",
             root: true,
             value: o.value,
             watermark: o.watermark,
@@ -46,35 +48,20 @@ BI.Editor = BI.inherit(BI.Single, {
             padding: "0",
             margin: "0"
         });
-        if (BI.isKey(this.options.watermark)) {
-            this._assertWaterMark();
-        }
-
-        var _items = [];
-        if (this.watermark) {
-            _items.push({
-                el: this.watermark,
-                left: 3,
-                right: 3,
-                top: 0,
-                bottom: 0
-            });
-        }
-        _items.push({
-            el: this.editor,
-            left: 0,
-            right: 0,
-            top: 0,
-            bottom: 0
-        });
 
         var items = [{
             el: {
                 type: "bi.absolute",
-                ref: function(_ref) {
+                ref: function (_ref) {
                     self.contentWrapper = _ref;
                 },
-                items: _items
+                items: [{
+                    el: this.editor,
+                    left: 0,
+                    right: 0,
+                    top: 0,
+                    bottom: 0
+                }]
             },
             left: o.hgap + o.lgap,
             right: o.hgap + o.rgap,
@@ -87,6 +74,9 @@ BI.Editor = BI.inherit(BI.Single, {
             element: this,
             items: items
         });
+
+        this.setWaterMark(this.options.watermark);
+
         this.editor.on(BI.Controller.EVENT_CHANGE, function () {
             self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
         });
@@ -119,12 +109,14 @@ BI.Editor = BI.inherit(BI.Single, {
         this.editor.on(BI.Input.EVENT_VALID, function () {
             self._checkWaterMark();
             self._setErrorVisible(false);
+            self.element.removeClass("error");
             self.fireEvent(BI.Editor.EVENT_VALID, arguments);
         });
         this.editor.on(BI.Input.EVENT_ERROR, function () {
             self._checkWaterMark();
             self.fireEvent(BI.Editor.EVENT_ERROR, arguments);
             self._setErrorVisible(self.isEditing());
+            self.element.addClass("error");
         });
         this.editor.on(BI.Input.EVENT_RESTRICT, function () {
             self._checkWaterMark();
@@ -184,7 +176,7 @@ BI.Editor = BI.inherit(BI.Single, {
             errorText = errorText(this.editor.getValue());
         }
         if (BI.isKey(errorText)) {
-            if (!this.isEnabled() || this.isValid() || (BI.Bubbles.has(this.getName()) && BI.Bubbles.get(this.getName()).isVisible())) {
+            if (!this.isEnabled() || this.isValid() || BI.Bubbles.has(this.getName())) {
                 this.setTitle("");
             } else {
                 this.setTitle(errorText);
@@ -192,14 +184,15 @@ BI.Editor = BI.inherit(BI.Single, {
         }
     },
 
-    _assertWaterMark: function() {
+    _assertWaterMark: function () {
         var self = this, o = this.options;
-        if(BI.isNull(this.watermark)) {
+        if (BI.isNull(this.watermark)) {
             this.watermark = BI.createWidget({
                 type: "bi.label",
                 cls: "bi-water-mark",
                 text: this.options.watermark,
-                height: o.height - 2 * (o.vgap + o.tgap),
+                height: o.height - 2 * o.vgap - o.tgap,
+                hgap: 2,
                 whiteSpace: "nowrap",
                 textAlign: "left"
             });
@@ -246,23 +239,28 @@ BI.Editor = BI.inherit(BI.Single, {
         return this.options.errorText;
     },
 
-    setWaterMark: function(v) {
+    setWaterMark: function (v) {
+        if (!BI.isKey(v)) {
+            return;
+        }
+
         this.options.watermark = v;
-        if(BI.isNull(this.watermark)) {
+
+        if (BI.isNull(this.watermark)) {
             this._assertWaterMark();
             BI.createWidget({
                 type: "bi.absolute",
                 element: this.contentWrapper,
                 items: [{
                     el: this.watermark,
-                    left: 3,
-                    right: 3,
+                    left: 0,
+                    right: 0,
                     top: 0,
-                    bottom: 0
-                }]
-            })
+                    bottom: 0,
+                }],
+            });
         }
-        BI.isKey(v) && this.watermark.setText(v);
+        this.watermark.setText(v);
     },
 
     _setErrorVisible: function (b) {
@@ -273,10 +271,9 @@ BI.Editor = BI.inherit(BI.Single, {
         }
         if (!this.disabledError && BI.isKey(errorText)) {
             BI.Bubbles[b ? "show" : "hide"](this.getName(), errorText, this, {
-                adjustYOffset: 2
+                adjustYOffset: o.simple ? 1 : 2
             });
             this._checkToolTip();
-            return BI.Bubbles.get(this.getName());
         }
     },
 

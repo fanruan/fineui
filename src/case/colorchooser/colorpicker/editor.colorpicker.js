@@ -8,7 +8,7 @@
 BI.ColorPickerEditor = BI.inherit(BI.Widget, {
 
     constants: {
-        REB_WIDTH: 32
+        RGB_WIDTH: 32
     },
 
     _defaultConfig: function () {
@@ -46,7 +46,7 @@ BI.ColorPickerEditor = BI.inherit(BI.Widget, {
             errorText: BI.i18nText("BI-Color_Picker_Error_Text"),
             allowBlank: true,
             value: 255,
-            width: c.REB_WIDTH,
+            width: c.RGB_WIDTH,
             height: 20
         });
         BI.each(Ws, function (i, w) {
@@ -72,16 +72,9 @@ BI.ColorPickerEditor = BI.inherit(BI.Widget, {
             title: BI.i18nText("BI-Basic_Auto")
         });
         this.none.on(BI.IconButton.EVENT_CHANGE, function () {
-            if (this.isSelected()) {
-                self.lastColor = self.getValue();
-                self.setValue("");
-            } else {
-                self.setValue(self.lastColor || "#ffffff");
-            }
-            if ((self.R.isValid() && self.G.isValid() && self.B.isValid()) || self._isEmptyRGB()) {
-                self.colorShow.element.css("background-color", self.getValue());
-                self.fireEvent(BI.ColorPickerEditor.EVENT_CHANGE);
-            }
+            var value = self.getValue();
+            self.setValue("");
+            (value !== "") && self.fireEvent(BI.ColorPickerEditor.EVENT_CHANGE);
         });
 
         this.transparent = BI.createWidget({
@@ -94,20 +87,9 @@ BI.ColorPickerEditor = BI.inherit(BI.Widget, {
             title: BI.i18nText("BI-Transparent_Color")
         });
         this.transparent.on(BI.IconButton.EVENT_CHANGE, function () {
-            if (this.isSelected()) {
-                self.lastColor = self.getValue();
-                self.setValue("transparent");
-            } else {
-                if (self.lastColor === "transparent") {
-                    self.lastColor = "";
-                }
-                self.setValue(self.lastColor || "#ffffff");
-            }
-            if ((self.R.isValid() && self.G.isValid() && self.B.isValid()) ||
-                self._isEmptyRGB()) {
-                self.colorShow.element.css("background-color", self.getValue());
-                self.fireEvent(BI.ColorPickerEditor.EVENT_CHANGE);
-            }
+            var value = self.getValue();
+            self.setValue("transparent");
+            (value !== "transparent") && self.fireEvent(BI.ColorPickerEditor.EVENT_CHANGE);
         });
 
         BI.createWidget({
@@ -124,19 +106,19 @@ BI.ColorPickerEditor = BI.inherit(BI.Widget, {
                         width: 20
                     }, {
                         el: this.R,
-                        width: c.REB_WIDTH
+                        width: c.RGB_WIDTH
                     }, {
                         el: RGB[1],
                         width: 20
                     }, {
                         el: this.G,
-                        width: c.REB_WIDTH
+                        width: c.RGB_WIDTH
                     }, {
                         el: RGB[2],
                         width: 20
                     }, {
                         el: this.B,
-                        width: c.REB_WIDTH
+                        width: c.RGB_WIDTH
                     }, {
                         el: this.transparent,
                         width: 16,
@@ -221,8 +203,8 @@ BI.ColorPickerEditor = BI.inherit(BI.Widget, {
         var json = BI.DOM.rgb2json(BI.DOM.hex2rgb(color));
         this.storeValue = {
             r: BI.isNull(json.r) ? "" : json.r,
-            g: BI.isNull(json.r) ? "" : json.g,
-            b: BI.isNull(json.r) ? "" : json.b
+            g: BI.isNull(json.g) ? "" : json.g,
+            b: BI.isNull(json.b) ? "" : json.b
         };
         this.R.setValue(this.storeValue.r);
         this.G.setValue(this.storeValue.g);

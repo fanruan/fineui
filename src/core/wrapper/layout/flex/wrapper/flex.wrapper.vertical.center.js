@@ -8,8 +8,9 @@
 BI.FlexWrapperVerticalCenter = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.FlexWrapperVerticalCenter.superclass.props.apply(this, arguments), {
-            baseCls: "bi-flex-scrollable-vertical-center-adapt-layout clearfix",
+            baseCls: "bi-f-s-v-c",
             horizontalAlign: BI.HorizontalAlign.Left,
+            verticalAlign: BI.VerticalAlign.Middle,
             columnSize: [],
             scrollx: false,
             scrollable: true,
@@ -26,11 +27,12 @@ BI.FlexWrapperVerticalCenter = BI.inherit(BI.Layout, {
         return {
             type: "bi.flex_scrollable_horizontal",
             ref: function (_ref) {
-                self.wrapper = _ref;
+                self.layout = _ref;
             },
-            verticalAlign: BI.VerticalAlign.Middle,
+            verticalAlign: o.verticalAlign,
             horizontalAlign: o.horizontalAlign,
             columnSize: o.columnSize,
+            rowSize: o.rowSize,
             scrollx: o.scrollx,
             scrolly: o.scrolly,
             scrollable: o.scrollable,
@@ -42,12 +44,12 @@ BI.FlexWrapperVerticalCenter = BI.inherit(BI.Layout, {
         };
     },
 
-    update: function (opt) {
-        return this.wrapper.update(opt);
+    resize: function () {
+        this.layout.resize();
     },
 
     populate: function (items) {
-        this.wrapper.populate(items);
+        this.layout.populate(items);
     }
 });
 BI.shortcut("bi.flex_scrollable_vertical_adapt", BI.FlexWrapperVerticalCenter);

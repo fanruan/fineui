@@ -285,7 +285,7 @@ describe("baseFunctionTest", function () {
     it("number", function () {
         expect(BI.parseSafeInt(9007199254740992)).to.equal(9007199254740991);
         expect(BI.isNegativeInteger(-3)).to.equal(true);
-        expect(BI.isFloat(1.2)).to.equal(false);
+        expect(BI.isFloat(1.2)).to.equal(true);
         expect(BI.isOdd(1)).to.equal(true);
         expect(BI.isOdd("a")).to.equal(false);
         expect(BI.isEven("a")).to.equal(false);
@@ -304,7 +304,141 @@ describe("baseFunctionTest", function () {
         expect(BI.camelize("background-color")).to.equal("backgroundColor");
         expect(BI.escape("'\\")).to.equal("\\'\\\\");
         expect(BI.leftPad("123", 5, "0")).to.equal("00123");
-        var cls = 'my-class', text = 'Some text';
-        expect(BI.format('<div class="{0}">{1}</div>', cls, text)).to.equal('<div class="my-class">Some text</div>');
+        const cls = "my-class", text = "Some text";
+        expect(BI.format("<div class=\"{0}\">{1}</div>", cls, text)).to.equal("<div class=\"my-class\">Some text</div>");
+    });
+
+    /**
+     *   test_author_kobi
+     **/
+    it("checkDateVoid", function () {
+        const minDate = "1900-02-02";
+        const maxDate = "2099-11-29";
+        expect(BI.checkDateVoid(1899, 2, 2, minDate, maxDate)).to.eql(["y"]);
+        expect(BI.checkDateVoid(2100, 2, 2, minDate, maxDate)).to.eql(["y", 1]);
+        expect(BI.checkDateVoid(1900, 1, 2, minDate, maxDate)).to.eql(["m"]);
+        expect(BI.checkDateVoid(2099, 12, 2, minDate, maxDate)).to.eql(["m", 1]);
+        expect(BI.checkDateVoid(1900, 2, 1, minDate, maxDate)).to.eql(["d"]);
+        expect(BI.checkDateVoid(2099, 11, 30, minDate, maxDate)).to.eql(["d", 1]);
+    });
+
+    /**
+     *   test_author_kobi
+     **/
+    it("parseDateTime", function () {
+        expect(BI.parseDateTime("19971109", "%y%x%d")).to.eql(BI.getDate(1997, 10, 9));
+        expect(BI.parseDateTime("12:34:56", "%H:%M:%S")).to.eql(BI.getDate(1935, 0, 25, 12, 34, 56));
+        expect(BI.parseDateTime("1997-11-09 3:23:23 pm", "%y-%x-%d %H:%M:%S %P")).to.eql(BI.getDate(1997, 10, 9, 15, 23, 23));
+        expect(BI.parseDateTime("1997-11-09 15:23:23 am", "%y-%x-%d %H:%M:%S %P")).to.eql(BI.getDate(1997, 10, 9, 3, 23, 23));
+        expect(BI.parseDateTime("a-b-c d:e:f", "%y-%x-%d %H:%M:%S").toString()).to.eql(BI.getDate().toString());
+    });
+
+    /**
+     *   test_author_kobi
+     **/
+    it("getDate 和 getTime", function () {
+        expect(BI.getDate().toString()).to.eql(new Date().toString());
+        expect(BI.getDate(1997)).to.eql(new Date(1997));
+        expect(BI.getDate(1997, 10)).to.eql(new Date(1997, 10));
+        expect(BI.getDate(1997, 10, 9)).to.eql(new Date(1997, 10, 9));
+        expect(BI.getDate(1997, 10, 9, 12)).to.eql(new Date(1997, 10, 9, 12));
+        expect(BI.getDate(1997, 10, 9, 12, 34)).to.eql(new Date(1997, 10, 9, 12, 34));
+        expect(BI.getDate(1997, 10, 9, 12, 34, 56)).to.eql(new Date(1997, 10, 9, 12, 34, 56));
+        expect(BI.getDate(1997, 10, 9, 12, 34, 56, 78)).to.eql(new Date(1997, 10, 9, 12, 34, 56, 78));
+        expect(BI.getTime()).to.eql(new Date().getTime());
+        expect(BI.getTime(1997)).to.eql(new Date(1997).getTime());
+        expect(BI.getTime(1997, 10)).to.eql(new Date(1997, 10).getTime());
+        expect(BI.getTime(1997, 10, 9)).to.eql(new Date(1997, 10, 9).getTime());
+        expect(BI.getTime(1997, 10, 9, 12)).to.eql(new Date(1997, 10, 9, 12).getTime());
+        expect(BI.getTime(1997, 10, 9, 12, 34)).to.eql(new Date(1997, 10, 9, 12, 34).getTime());
+        expect(BI.getTime(1997, 10, 9, 12, 34, 56)).to.eql(new Date(1997, 10, 9, 12, 34, 56).getTime());
+        expect(BI.getTime(1997, 10, 9, 12, 34, 56, 78)).to.eql(new Date(1997, 10, 9, 12, 34, 56, 78).getTime());
+    });
+
+    /**
+     *   test_author_kobi
+     **/
+    it("数字相关方法补充", function () {
+        const iteratee = function (a, b) {
+            return a > b ? a : b;
+        };
+        expect(BI.isNaturalNumber(1.25)).to.eql(false);
+        expect(BI.isPositiveInteger(-15)).to.eql(false);
+        expect(BI.isNegativeInteger(+15)).to.eql(false);
+        expect(BI.isFloat(15)).to.eql(false);
+        expect(BI.sum([4, 3, 2, 1], iteratee)).to.eql(12);
+    });
+
+    /**
+     *   test_author_kobi
+     **/
+    it("集合相关方法补充", function () {
+        const array = [{
+            user: "barney",
+            active: true,
+        }, {
+            user: "fred",
+            active: false,
+        }, {
+            user: "pebbles",
+            active: false,
+        }];
+        expect(BI.backEvery(array, (index, value) => value.user === "kobi")).to.eql(false);
+        expect(BI.backFind(array, ["active", false])).to.eql(array[2]);
+        expect(BI.abc2Int("ABCD999")).to.eql(0);
+        expect(BI.int2Abc(0)).to.eql("");
+        expect(BI.int2Abc(26)).to.eql("Z");
+    });
+
+    /**
+     *   test_author_kobi
+     **/
+    it("数组相关方法补充", function () {
+        expect(BI.makeArrayByArray([], 5)).to.eql([]);
+        expect(BI.uniq(null, true, (a, b) => a > b)).to.eql([]);
+    });
+
+    /**
+     *   test_author_kobi
+     **/
+    it("对象相关方法补充", function () {
+        var obj = {
+            a: 1,
+            b: 2,
+            c: 3,
+        };
+        expect(BI.has(obj, [])).to.eql(false);
+        expect(BI.has(obj, ["a", "b"])).to.eql(true);
+        expect(BI.freeze("1")).to.eql("1");
+    });
+
+    /**
+     *   test_author_kobi
+     **/
+    it("deep方法补充", function () {
+        var obj = {
+            a: 1,
+            b: 2,
+            c: {
+                d: 3,
+                e: {
+                    f: 4,
+                },
+            },
+        };
+        expect(BI.isDeepMatch(null, { d: 3, e: { f: 4 } })).to.eql(false);
+        expect(BI.isDeepMatch(obj, { d: 3, e: { f: 5 } })).to.eql(false);
+        expect(BI.deepIndexOf(obj, { d: 3, e: { f: 5 } })).to.eql(-1);
+        expect(BI.deepRemove(obj, { d: 3, e: { f: 4 } })).to.eql(true);
+        expect(BI.deepWithout(obj, { d: 3, e: { f: 4 } })).to.eql({ a: 1, b: 2 });
+    });
+
+    /**
+     * test_author_teller
+     * 只传一个时分秒format的时间进去后,在某些情况下,返回的是当前时间,然而想要的是返回正确的时分秒
+    */
+    it("parseDateTime2", function () {
+        var date = BI.getDate();
+        expect(BI.parseDateTime("14:13:16", "%H:%M:%S").getTime()).to.eql(BI.getDate(date.getFullYear(), date.getMonth(), 14, 14, 13, 16).getTime());
     });
 });

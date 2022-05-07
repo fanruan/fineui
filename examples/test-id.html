@@ -1,0 +1,127 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <!-- <link rel="stylesheet" type="text/css" href="../dist/2.0/fineui.min.css"/>
+    <script src="../dist/2.0/fineui.js"></script> -->
+   <link rel="stylesheet" type="text/css" href="http://fanruan.design/fineui/2.0/fineui.min.css" />
+   <script src="http://fanruan.design/fineui/2.0/fineui.min.js"></script>
+</head>
+<body>
+<div id="wrapper"></div>
+<script>
+    !(function () {
+
+        var element2InstanceMap = new WeakMap();
+
+        BI.getInstanceByElement = function (element) {
+            return element2InstanceMap.get(element);
+        };
+
+        BI.Plugin.config(function (options) {
+
+        }, function (shortcut, instance) {
+            instance.element.attr("shortcut", shortcut);
+            if (instance.options.$testId) {
+                setIDAttribute(instance.element[0], instance.options.$testId);
+            }
+            element2InstanceMap.set(instance.element[0], instance);
+        });
+
+        function setIDAttribute (element, id) {
+            if (element.id !== "") {
+                throw new Error("不能修改有默认id的元素");
+            }
+            element.setAttribute("id", id);
+        }
+
+        function registerWidgetIdGenerator () {
+
+            const idSet = new Set();
+
+            return function (shortcut, id) {
+                if (idSet.has(id)) {
+                    throw new Error("id重复了");
+                }
+                idSet.add(id);
+                BI.Plugin.registerObject(shortcut, function (widget) {
+                    setIDAttribute(widget.element[0], id);
+                });
+            };
+        }
+
+        BI.registerWidgetId = registerWidgetIdGenerator();
+    }());
+</script>
+<script>
+
+    function setTestId (parentShortcut, childShortcut, testId) {
+        BI.Plugin.configRender(parentShortcut, function (rendered) {
+            var queue = BI.isArray(rendered) ? rendered : [rendered];// 广度遍历
+            while (queue.length > 0) {
+                var element = queue.shift();
+                BI.each(element, function (key, value) {
+                    if (BI.isArray(value)) {
+                        queue = queue.concat(value);
+                    } else if (BI.isPlainObject(value)) {
+                        queue.push(value);
+                    } else if ("type" === key && value === childShortcut) {
+                        element.$testId = testId;
+                    }
+                });
+            }
+            return rendered;
+        });
+    }
+
+    setTestId("demo.parent", "bi.button_group", "测试testId");
+
+    var Widget = BI.inherit(BI.Widget, {
+        setup: function () {
+            var list;
+            return function () {
+                return {
+                    type: "bi.vertical",
+                    items: [{
+                        type: "bi.button_group",
+                        height: 100,
+                        ref: function (_ref) {
+                            list = _ref;
+                        },
+                        items: BI.range(10).map(function (i) {
+                            return {
+                                type: "bi.label",
+                                text: i,
+                                cls: "bi-border"
+                            };
+                        }),
+                        layouts: [{
+                            type: "bi.inline",
+                            tgap: 10,
+                            lgap: 10
+                        }]
+                    }, {
+                        type: "bi.button",
+                        text: "点击",
+                        handler: function () {
+                        }
+                    }]
+                };
+            };
+        }
+    });
+    BI.shortcut("demo.parent", Widget);
+    BI.createWidget({
+        type: "bi.absolute",
+        items: [{
+            el: {
+                type: "demo.parent"
+            },
+            top: 100,
+            left: 100
+        }],
+        element: "#wrapper"
+    });
+</script>
+</body>
+</html>

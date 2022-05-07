@@ -11,7 +11,8 @@ BI.MultiSelectSearchLoader = BI.inherit(BI.Widget, {
             baseCls: "bi-multi-select-search-loader",
             itemsCreator: BI.emptyFn,
             keywordGetter: BI.emptyFn,
-            valueFormatter: BI.emptyFn
+            valueFormatter: BI.emptyFn,
+            itemHeight: 24
         });
     },
 
@@ -67,7 +68,10 @@ BI.MultiSelectSearchLoader = BI.inherit(BI.Widget, {
                         var json = self._filterValues(self.storeValue);
                         firstItems = self._createItems(json);
                     }
-                    callback(firstItems.concat(self._createItems(ob.items)), keyword);
+                    var context = {
+                        tipText: ob.tipText,
+                    };
+                    callback(firstItems.concat(self._createItems(ob.items)), keyword, context);
                     if (op.times === 1 && self.storeValue) {
                         self.setValue(self.storeValue);
                     }
@@ -91,7 +95,7 @@ BI.MultiSelectSearchLoader = BI.inherit(BI.Widget, {
             logic: {
                 dynamic: false
             },
-            height: 24,
+            height: this.options.itemHeight || BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT,
             selected: this.isAllSelected(),
             cls: "bi-list-item-active",
             iconWrapperWidth: 36

@@ -14,10 +14,6 @@ BI.PopupPanel = BI.inherit(BI.MultiPopupView, {
         });
     },
 
-    _init: function () {
-        BI.PopupPanel.superclass._init.apply(this, arguments);
-    },
-
     _createTool: function () {
         var self = this, o = this.options;
         var close = BI.createWidget({

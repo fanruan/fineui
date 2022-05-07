@@ -16,7 +16,7 @@ BI.MultiTreeSearcher = BI.inherit(BI.Widget, {
             popup: {},
 
             adapter: null,
-            masker: {},
+            masker: {}
         });
     },
 
@@ -132,9 +132,11 @@ BI.MultiTreeSearcher = BI.inherit(BI.Widget, {
             this.editor.setState(BI.Selection.None);
         } else {
             var text = "";
-            BI.each(ob.value, function (name, children) {
-                var childNodes = getChildrenNode(children);
-                text += (o.valueFormatter(name + "") || name) + (childNodes === "" ? "" : (":" + childNodes)) + "; ";
+            var value = ob.value;
+            var names = BI.Func.getSortedResult(BI.keys(value));
+            BI.each(names, function (idx, name) {
+                var childNodes = getChildrenNode(value[name]);
+                text += (name === "null" ? "" : (o.valueFormatter(name + "") || name)) + (childNodes === "" ? (BI.isEmptyObject(value[name]) ? "" : ":") : (":" + childNodes)) + "; ";
                 if (childNodes === "") {
                     count++;
                 }
@@ -150,10 +152,11 @@ BI.MultiTreeSearcher = BI.inherit(BI.Widget, {
         function getChildrenNode (ob) {
             var text = "";
             var index = 0, size = BI.size(ob);
-            BI.each(ob, function (name, children) {
+            var names = BI.Func.getSortedResult(BI.keys(ob));
+            BI.each(names, function (idx, name) {
                 index++;
-                var childNodes = getChildrenNode(children);
-                text += (o.valueFormatter(name + "") || name) + (childNodes === "" ? "" : (":" + childNodes)) + (index === size ? "" : ",");
+                var childNodes = getChildrenNode(ob[name]);
+                text += (name === "null" ? "" : (o.valueFormatter(name + "") || name)) + (childNodes === "" ? "" : (":" + childNodes)) + (index === size ? "" : ",");
                 if (childNodes === "") {
                     count++;
                 }
@@ -162,7 +165,7 @@ BI.MultiTreeSearcher = BI.inherit(BI.Widget, {
         }
     },
 
-    getState: function() {
+    getState: function () {
         return this.editor.getState();
     },
 
@@ -181,6 +184,18 @@ BI.MultiTreeSearcher = BI.inherit(BI.Widget, {
 
     populate: function (items) {
         this.searcher.populate.apply(this.searcher, arguments);
+    },
+
+    focus: function () {
+        this.editor.focus();
+    },
+
+    blur: function () {
+        this.editor.blur();
+    },
+
+    setWaterMark: function (v) {
+        this.editor.setWaterMark(v);
     }
 });
 

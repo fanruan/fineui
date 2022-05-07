@@ -1,13 +1,13 @@
 BI.DynamicDateTimePopup = BI.inherit(BI.Widget, {
     constants: {
-        tabHeight: 30,
+        tabHeight: 40,
         buttonHeight: 24
     },
 
     props: {
         baseCls: "bi-dynamic-date-time-popup",
-        width: 248,
-        height: 385
+        width: 272,
+        supportDynamic: true,
     },
 
     _init: function () {
@@ -16,7 +16,7 @@ BI.DynamicDateTimePopup = BI.inherit(BI.Widget, {
         this.storeValue = {type: BI.DynamicDateCombo.Static};
         BI.createWidget({
             element: this,
-            type: "bi.vtape",
+            type: "bi.vertical",
             items: [{
                 el: this._getTabJson()
             }, {
@@ -25,7 +25,7 @@ BI.DynamicDateTimePopup = BI.inherit(BI.Widget, {
                     items: [[{
                         type: "bi.text_button",
                         cls: "bi-high-light bi-split-top",
-                        textHeight: c.buttonHeight - 1,
+                        textHeight: BI.SIZE_CONSANTS.TOOL_BAR_HEIGHT - 1,
                         shadow: true,
                         text: BI.i18nText("BI-Basic_Clear"),
                         listeners: [{
@@ -37,11 +37,12 @@ BI.DynamicDateTimePopup = BI.inherit(BI.Widget, {
                     }, {
                         type: "bi.text_button",
                         cls: "bi-split-left bi-split-right bi-high-light bi-split-top",
-                        textHeight: c.buttonHeight - 1,
+                        textHeight: BI.SIZE_CONSANTS.TOOL_BAR_HEIGHT - 1,
                         shadow: true,
                         text: BI.i18nText("BI-Multi_Date_Today"),
+                        disabled: this._checkTodayValid(),
                         ref: function () {
-                            self.textButton = this;
+                            self.todayButton = this;
                         },
                         listeners: [{
                             eventName: BI.TextButton.EVENT_CHANGE,
@@ -52,18 +53,23 @@ BI.DynamicDateTimePopup = BI.inherit(BI.Widget, {
                     }, {
                         type: "bi.text_button",
                         cls: "bi-high-light bi-split-top",
-                        textHeight: c.buttonHeight - 1,
+                        textHeight: BI.SIZE_CONSANTS.TOOL_BAR_HEIGHT - 1,
                         shadow: true,
                         text: BI.i18nText("BI-Basic_OK"),
                         listeners: [{
                             eventName: BI.TextButton.EVENT_CHANGE,
                             action: function () {
-                                self.fireEvent(BI.DynamicDateTimePopup.BUTTON_OK_EVENT_CHANGE);
+                                var type = self.dateTab.getSelect();
+                                if (type === BI.DynamicDateCombo.Dynamic) {
+                                    self.dynamicPane.checkValidation(true) && self.fireEvent(BI.DynamicDateTimePopup.BUTTON_OK_EVENT_CHANGE);
+                                } else {
+                                    self.fireEvent(BI.DynamicDateTimePopup.BUTTON_OK_EVENT_CHANGE)
+                                }
                             }
                         }]
-                    }]]
-                },
-                height: 24
+                    }]],
+                    height: BI.SIZE_CONSANTS.TOOL_BAR_HEIGHT
+                }
             }]
         });
         this.setValue(opts.value);
@@ -73,11 +79,15 @@ BI.DynamicDateTimePopup = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
         return {
             type: "bi.tab",
+            logic: {
+                dynamic: true
+            },
             ref: function () {
                 self.dateTab = this;
             },
             tab: {
                 type: "bi.linear_segment",
+                invisible: !o.supportDynamic,
                 cls: "bi-split-bottom",
                 height: this.constants.tabHeight,
                 items: BI.createItems([{
@@ -95,6 +105,7 @@ BI.DynamicDateTimePopup = BI.inherit(BI.Widget, {
                     case BI.DynamicDateCombo.Dynamic:
                         return {
                             type: "bi.dynamic_date_card",
+                            cls: "dynamic-date-pane",
                             listeners: [{
                                 eventName: "EVENT_CHANGE",
                                 action: function () {
@@ -103,12 +114,14 @@ BI.DynamicDateTimePopup = BI.inherit(BI.Widget, {
                             }],
                             ref: function () {
                                 self.dynamicPane = this;
-                            }
+                            },
+                            min: self.options.min,
+                            max: self.options.max,
                         };
                     case BI.DynamicDateCombo.Static:
                     default:
                         return {
-                            type: "bi.vtape",
+                            type: "bi.vertical",
                             items: [{
                                 type: "bi.date_calendar_popup",
                                 behaviors: o.behaviors,
@@ -116,16 +129,22 @@ BI.DynamicDateTimePopup = BI.inherit(BI.Widget, {
                                 max: self.options.max,
                                 ref: function () {
                                     self.ymd = this;
-                                }
+                                },
+                                listeners: [{
+                                    eventName: BI.DateCalendarPopup.EVENT_BEFORE_YEAR_MONTH_POPUPVIEW,
+                                    action: function () {
+                                        self.fireEvent(BI.DynamicDateTimePopup.EVENT_BEFORE_YEAR_MONTH_POPUPVIEW);
+                                    }
+                                }],
                             }, {
                                 el: {
                                     type: "bi.dynamic_date_time_select",
                                     cls: "bi-split-top",
                                     ref: function () {
                                         self.timeSelect = this;
-                                    }
-                                },
-                                height: 40
+                                    },
+                                    height: 40
+                                }
                             }]
                         };
                 }
@@ -164,18 +183,24 @@ BI.DynamicDateTimePopup = BI.inherit(BI.Widget, {
 
     _setInnerValue: function () {
         if (this.dateTab.getSelect() === BI.DynamicDateCombo.Static) {
-            this.textButton.setValue(BI.i18nText("BI-Multi_Date_Today"));
-            this.textButton.setEnable(true);
+            this.todayButton.setValue(BI.i18nText("BI-Multi_Date_Today"));
+            this.todayButton.setEnable(!this._checkTodayValid());
         } else {
-            var date = BI.DynamicDateHelper.getCalculation(this.dynamicPane.getValue());
+            var date = BI.DynamicDateHelper.getCalculation(this.dynamicPane.getInputValue());
             date = BI.print(date, "%Y-%X-%d");
-            this.textButton.setValue(date);
-            this.textButton.setEnable(false);
+            this.todayButton.setValue(date);
+            this.todayButton.setEnable(false);
         }
     },
 
     _checkValueValid: function (value) {
         return BI.isNull(value) || BI.isEmptyObject(value) || BI.isEmptyString(value);
+    },
+
+    _checkTodayValid: function () {
+        var o = this.options;
+        var today = BI.getDate();
+        return !!BI.checkDateVoid(today.getFullYear(), today.getMonth() + 1, today.getDate(), o.min, o.max)[0];
     },
 
     setMinDate: function (minDate) {
@@ -215,7 +240,7 @@ BI.DynamicDateTimePopup = BI.inherit(BI.Widget, {
                         day: date.getDate()
                     });
                     this.timeSelect.setValue();
-                    this.textButton.setValue(BI.i18nText("BI-Multi_Date_Today"));
+                    this.todayButton.setValue(BI.i18nText("BI-Multi_Date_Today"));
                 } else {
                     this.ymd.setValue(value);
                     this.timeSelect.setValue({
@@ -223,9 +248,9 @@ BI.DynamicDateTimePopup = BI.inherit(BI.Widget, {
                         minute: value.minute,
                         second: value.second
                     });
-                    this.textButton.setValue(BI.i18nText("BI-Multi_Date_Today"));
+                    this.todayButton.setValue(BI.i18nText("BI-Multi_Date_Today"));
                 }
-                this.textButton.setEnable(true);
+                this.todayButton.setEnable(!this._checkTodayValid());
                 break;
         }
     },
@@ -242,4 +267,5 @@ BI.DynamicDateTimePopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.DynamicDateTimePopup.BUTTON_OK_EVENT_CHANGE = "BUTTON_OK_EVENT_CHANGE";
 BI.DynamicDateTimePopup.BUTTON_lABEL_EVENT_CHANGE = "BUTTON_lABEL_EVENT_CHANGE";
 BI.DynamicDateTimePopup.BUTTON_CLEAR_EVENT_CHANGE = "BUTTON_CLEAR_EVENT_CHANGE";
+BI.DynamicDateTimePopup.EVENT_BEFORE_YEAR_MONTH_POPUPVIEW = "EVENT_BEFORE_YEAR_MONTH_POPUPVIEW";
 BI.shortcut("bi.dynamic_date_time_popup", BI.DynamicDateTimePopup);

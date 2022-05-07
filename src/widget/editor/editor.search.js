@@ -2,23 +2,25 @@
  * Created by roy on 15/9/14.
  */
 BI.SearchEditor = BI.inherit(BI.Widget, {
-    _defaultConfig: function () {
+    _defaultConfig: function (config) {
         var conf = BI.SearchEditor.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
-            baseCls: "bi-search-editor bi-border bi-focus-shadow",
+            baseCls: "bi-search-editor bi-focus-shadow " + (config.simple ? "bi-border-bottom" : "bi-border"),
             height: 24,
             errorText: "",
             watermark: BI.i18nText("BI-Basic_Search"),
             validationChecker: BI.emptyFn,
-            quitChecker: BI.emptyFn
+            quitChecker: BI.emptyFn,
+            value: ""
         });
     },
     _init: function () {
-        this.options.height -= 2;
+        this.options.height -= this.options.simple ? 1 : 2;
         BI.SearchEditor.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
-        this.editor = BI.createWidget({
+        this.editor = BI.createWidget(o.el, {
             type: "bi.editor",
+            simple: o.simple,
             height: o.height,
             watermark: o.watermark,
             allowBlank: true,
@@ -31,11 +33,12 @@ BI.SearchEditor = BI.inherit(BI.Widget, {
         this.clear = BI.createWidget({
             type: "bi.icon_button",
             stopEvent: true,
-            cls: "close-font"
+            cls: "close-font",
+            invisible: BI.isKey(o.value)
         });
         this.clear.on(BI.IconButton.EVENT_CHANGE, function () {
             self.setValue("");
-            self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.STOPEDIT);
+            self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.STOPEDIT, self.getValue());
             // 从有内容到无内容的清空也是一次change
             self.fireEvent(BI.SearchEditor.EVENT_CHANGE);
             self.fireEvent(BI.SearchEditor.EVENT_CLEAR);
@@ -122,8 +125,6 @@ BI.SearchEditor = BI.inherit(BI.Widget, {
         this.editor.on(BI.Editor.EVENT_STOP, function () {
             self.fireEvent(BI.SearchEditor.EVENT_STOP);
         });
-
-        this.clear.invisible();
     },
 
     _checkClear: function () {
@@ -183,6 +184,14 @@ BI.SearchEditor = BI.inherit(BI.Widget, {
 
     isValid: function () {
         return this.editor.isValid();
+    },
+
+    showClearIcon: function () {
+        this.clear.visible();
+    },
+
+    hideClearIcon: function () {
+        this.clear.invisible();
     }
 });
 BI.SearchEditor.EVENT_CHANGE = "EVENT_CHANGE";

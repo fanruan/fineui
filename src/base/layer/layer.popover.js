@@ -10,31 +10,37 @@ BI.Popover = BI.inherit(BI.Widget, {
             NORMAL: "normal",
             BIG: "big"
         },
-        HEADER_HEIGHT: 40
+        MAX_HEIGHT: 600
     },
 
-    _defaultConfig: function () {
-        return BI.extend(BI.Popover.superclass._defaultConfig.apply(this, arguments), {
+    props: function () {
+        return {
             baseCls: "bi-popover bi-card bi-border-radius",
-            // width: 600,
-            // height: 500,
             size: "normal", // small, normal, big
             logic: {
                 dynamic: false
             },
             header: null,
+            headerHeight: 40,
             body: null,
             footer: null,
-            closable: true // BI-40839 是否显示右上角的关闭按钮
-        });
+            footerHeight: 44,
+            closable: true, // BI-40839 是否显示右上角的关闭按钮
+            bodyHgap: BI.SIZE_CONSANTS.H_GAP_SIZE,
+            bodyTgap: BI.SIZE_CONSANTS.V_GAP_SIZE
+        };
     },
+
     render: function () {
-        var self = this, o = this.options;
+        var self = this;
+        var o = this.options;
+        var c = this._constant;
         this.startX = 0;
         this.startY = 0;
+        var size = this._calculateSize();
         this.tracker = new BI.MouseMoveTracker(function (deltaX, deltaY) {
-            var size = self._calculateSize();
-            var W = BI.Widget._renderEngine.createElement("body").width(), H = BI.Widget._renderEngine.createElement("body").height();
+            var W = BI.Widget._renderEngine.createElement("body").width();
+            var H = BI.Widget._renderEngine.createElement("body").height();
             self.startX += deltaX;
             self.startY += deltaY;
             self.element.css({
@@ -42,7 +48,9 @@ BI.Popover = BI.inherit(BI.Widget, {
                 top: BI.clamp(self.startY, 0, H - self.element.height()) + "px"
             });
             // BI-12134 没有什么特别好的方法
-            BI.Resizers._resize();
+            BI.Resizers._resize({
+                target: self.element[0]
+            });
         }, function () {
             self.tracker.releaseMouseMoves();
         }, _global);
@@ -50,63 +58,69 @@ BI.Popover = BI.inherit(BI.Widget, {
             el: {
                 type: "bi.htape",
                 cls: "bi-message-title bi-header-background",
-                ref: function (_ref) {
-                    self.dragger = _ref;
-                },
                 items: [{
-                    type: "bi.absolute",
-                    items: [{
-                        el: BI.isPlainObject(o.header) ? BI.createWidget(o.header, {
-                            extraCls: "bi-font-bold"
-                        }) : {
-                            type: "bi.label",
-                            cls: "bi-font-bold",
-                            height: this._constant.HEADER_HEIGHT,
-                            text: o.header,
-                            title: o.header,
-                            textAlign: "left"
+                    el: {
+                        type: "bi.absolute",
+                        ref: function (_ref) {
+                            self.dragger = _ref;
                         },
-                        left: 20,
-                        top: 0,
-                        right: 0,
-                        bottom: 0
-                    }]
-                }, {
-                    el: o.closable ? {
+                        items: [{
+                            el: BI.isPlainObject(o.header) ? BI.extend({}, o.header, {
+                                extraCls: "bi-font-bold"
+                            }) : {
+                                type: "bi.label",
+                                cls: "bi-font-bold",
+                                height: o.headerHeight,
+                                text: o.header,
+                                title: o.header,
+                                textAlign: "left"
+                            },
+                            top: 0,
+                            bottom: 0,
+                            left: BI.SIZE_CONSANTS.H_GAP_SIZE,
+                            right: o.closable ? 0 : BI.SIZE_CONSANTS.H_GAP_SIZE
+                        }]
+                    }
+                }, o.closable ? {
+                    el: {
                         type: "bi.icon_button",
                         cls: "bi-message-close close-font",
-                        height: this._constant.HEADER_HEIGHT,
+                        height: o.headerHeight,
                         handler: function () {
                             self.close();
                         }
-                    } : {
-                        type: "bi.layout"
                     },
                     width: 56
-                }],
-                height: this._constant.HEADER_HEIGHT
+                } : null],
+                height: o.headerHeight
             },
-            height: this._constant.HEADER_HEIGHT
-        }, {
-            el: o.logic.dynamic ? {
+            height: o.headerHeight
+        }, o.logic.dynamic ? {
+            el: {
                 type: "bi.vertical",
-                scrolly: false,
+                scrolly: true,
                 cls: "popover-body",
                 ref: function () {
                     self.body = this;
                 },
-                hgap: 20,
-                tgap: 10,
+                css: {
+                    "max-height": this._getSuitableBodyHeight(c.MAX_HEIGHT - o.headerHeight - (o.footer ? o.footerHeight : 0) - o.bodyTgap),
+                    "min-height": this._getSuitableBodyHeight(size.height - o.headerHeight - (o.footer ? o.footerHeight : 0) - o.bodyTgap)
+                },
                 items: [{
-                    el: BI.createWidget(o.body)
-                }]
-            } : {
+                    el: o.body
+                }],
+                hgap: o.bodyHgap,
+                tgap: o.bodyTgap
+            }
+        } : {
+            el: {
                 type: "bi.absolute",
                 items: [{
-                    el: BI.createWidget(o.body),
-                    left: 20,
-                    top: 10,
-                    right: 20,
+                    el: o.body,
+                    left: o.bodyHgap,
+                    top: o.bodyTgap,
+                    right: o.bodyHgap,
                     bottom: 0
                 }]
             }
@@ -116,47 +130,54 @@ BI.Popover = BI.inherit(BI.Widget, {
                 el: {
                     type: "bi.absolute",
                     items: [{
-                        el: BI.createWidget(o.footer),
-                        left: 20,
+                        el: o.footer,
+                        left: BI.SIZE_CONSANTS.H_GAP_SIZE,
                         top: 0,
-                        right: 20,
+                        right: BI.SIZE_CONSANTS.H_GAP_SIZE,
                         bottom: 0
                     }],
-                    height: 44
+                    height: o.footerHeight
                 },
-                height: 44
+                height: o.footerHeight
             });
         }
 
-        var size = this._calculateSize();
-
         return BI.extend({
-            type: o.logic.dynamic ? "bi.vertical" : "bi.vtape",
             items: items,
-            width: size.width
+            width: this._getSuitableWidth(size.width)
         }, o.logic.dynamic ? {
             type: "bi.vertical",
             scrolly: false
         } : {
             type: "bi.vtape",
-            height: size.height
+            height: this._getSuitableHeight(size.height)
         });
     },
 
+    // mounted之后绑定事件
     mounted: function () {
-        var self = this, o = this.options;
+        var self = this;
+        var o = this.options;
         this.dragger.element.mousedown(function (e) {
             var pos = self.element.offset();
             self.startX = pos.left;
             self.startY = pos.top;
             self.tracker.captureMouseMoves(e);
         });
-        if (o.logic.dynamic) {
-            var size = this._calculateSize();
-            var height = this.element.height();
-            var compareHeight = BI.clamp(height, size.height, 600) - (o.footer ? 84 : 44);
-            this.body.element.height(compareHeight);
-        }
+    },
+
+    _getSuitableBodyHeight: function (height) {
+        var o = this.options;
+        var c = this._constant;
+        return BI.clamp(height, 0, BI.Widget._renderEngine.createElement("body")[0].clientHeight - o.headerHeight - (o.footer ? o.footerHeight : 0) - o.bodyTgap);
+    },
+
+    _getSuitableHeight: function (height) {
+        return BI.clamp(height, 0, BI.Widget._renderEngine.createElement("body")[0].clientHeight);
+    },
+
+    _getSuitableWidth: function (width) {
+        return BI.clamp(width, 0, BI.Widget._renderEngine.createElement("body").width());
     },
 
     _calculateSize: function () {
@@ -167,19 +188,24 @@ BI.Popover = BI.inherit(BI.Widget, {
                 case this._constant.SIZE.SMALL:
                     size.width = 450;
                     size.height = 200;
+                    size.type = "small";
                     break;
                 case this._constant.SIZE.BIG:
                     size.width = 900;
                     size.height = 500;
+                    size.type = "big";
                     break;
                 default:
                     size.width = 550;
                     size.height = 500;
+                    size.type = "default";
             }
         }
+
         return {
             width: o.width || size.width,
-            height: o.height || size.height
+            height: o.height || size.height,
+            type: size.type || "default"
         };
     },
 
@@ -210,12 +236,13 @@ BI.shortcut("bi.popover", BI.Popover);
 BI.BarPopover = BI.inherit(BI.Popover, {
     _defaultConfig: function () {
         return BI.extend(BI.BarPopover.superclass._defaultConfig.apply(this, arguments), {
-            btns: [BI.i18nText("BI-Basic_Sure"), BI.i18nText("BI-Basic_Cancel")]
+            btns: [BI.i18nText("BI-Basic_OK"), BI.i18nText("BI-Basic_Cancel")]
         });
     },
 
     beforeCreate: function () {
-        var self = this, o = this.options;
+        var self = this;
+        var o = this.options;
         o.footer || (o.footer = {
             type: "bi.right_vertical_adapt",
             lgap: 10,

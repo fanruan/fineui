@@ -10,12 +10,8 @@ BI.MultiPopupView = BI.inherit(BI.PopupView, {
         var conf = BI.MultiPopupView.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
             _baseCls: (conf._baseCls || "") + " bi-multi-list-view",
-            buttons: [BI.i18nText("BI-Basic_Sure")]
+            buttons: [BI.i18nText("BI-Basic_OK")]
         });
-    },
-
-    _init: function () {
-        BI.MultiPopupView.superclass._init.apply(this, arguments);
     },
 
     _createToolBar: function () {
@@ -35,7 +31,7 @@ BI.MultiPopupView = BI.inherit(BI.PopupView, {
         this.buttongroup = BI.createWidget({
             type: "bi.button_group",
             cls: "list-view-toolbar bi-high-light bi-split-top",
-            height: 24,
+            height: BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT,
             items: BI.createItems(text, {
                 type: "bi.text_button",
                 once: false,

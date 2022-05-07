@@ -5,31 +5,20 @@
  */
 
 BI.MultiTreeCombo = BI.inherit(BI.Single, {
-
-    constants: {
-        offset: {
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 25
-        }
-    },
-
     _defaultConfig: function () {
         return BI.extend(BI.MultiTreeCombo.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-multi-tree-combo",
             itemsCreator: BI.emptyFn,
             valueFormatter: BI.emptyFn,
             height: 24,
-            allowEdit: true
+            allowEdit: true,
+            isNeedAdjustWidth: true,
         });
     },
 
     _init: function () {
-        BI.MultiTreeCombo.superclass._init.apply(this, arguments);
-
         var self = this, o = this.options;
-
+        BI.MultiTreeCombo.superclass._init.apply(this, arguments);
         var isInit = false;
         var want2showCounter = false;
 
@@ -38,13 +27,18 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
         this.trigger = BI.createWidget({
             type: "bi.multi_select_trigger",
             allowEdit: o.allowEdit,
-            height: o.height,
+            height: o.height - (o.simple ? 1 : 2),
             valueFormatter: o.valueFormatter,
             text: o.text,
             watermark: o.watermark,
             // adapter: this.popup,
             masker: {
-                offset: this.constants.offset
+                offset: {
+                    left: 0,
+                    top: 0,
+                    right: 0,
+                    bottom: BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT + 1,
+                },
             },
             searcher: {
                 type: "bi.multi_tree_searcher",
@@ -55,6 +49,7 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
 
         this.combo = BI.createWidget({
             type: "bi.combo",
+            cls: (o.simple ? "bi-border-bottom" : "bi-border") + " bi-border-radius",
             toggle: !o.allowEdit,
             container: o.container,
             el: this.trigger,
@@ -106,8 +101,10 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
                         self.numberCounter.adjustView();
                         self.trigger.getSearcher().adjustView();
                     });
-                }
+                },
+                maxWidth: o.isNeedAdjustWidth ? "auto" : 500,
             },
+            isNeedAdjustWidth: o.isNeedAdjustWidth,
             value: {value: o.value || {}},
             hideChecker: function (e) {
                 return triggerBtn.element.find(e.target).length === 0 &&
@@ -181,7 +178,7 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
             };
             this.getSearcher().setState(checked ? BI.Selection.Multi : BI.Selection.None);
             self.numberCounter.setButtonChecked(val);
-            self.fireEvent(BI.MultiTreeCombo.EVENT_CLICK_ITEM);
+            self.fireEvent(BI.MultiTreeCombo.EVENT_CLICK_ITEM, self.combo.getValue());
         });
 
         this.combo.on(BI.Combo.EVENT_BEFORE_POPUPVIEW, function () {
@@ -239,7 +236,12 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
                 type: "bi.multi_tree_check_pane"
             },
             masker: {
-                offset: this.constants.offset
+                offset: {
+                    left: 0,
+                    top: 0,
+                    right: 0,
+                    bottom: BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT + 1,
+                },
             },
             itemsCreator: o.itemsCreator,
             valueFormatter: o.valueFormatter,
@@ -263,6 +265,12 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
         this.numberCounter.on(BI.Events.VIEW, function (b) {
             BI.nextTick(function () {// 自动调整宽度
                 self.trigger.refreshPlaceHolderWidth((b === true ? self.numberCounter.element.outerWidth() + 8 : 0));
+            });
+        });
+
+        this.numberCounter.on(BI.MultiSelectCheckSelectedSwitcher.EVENT_AFTER_HIDEVIEW, function () {
+            BI.nextTick(function () {// 收起时自动调整宽度
+                self.trigger.refreshPlaceHolderWidth(0);
             });
         });
 
@@ -293,7 +301,7 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
                 },
                 right: o.height,
                 top: 0,
-                height: o.height,
+                bottom: 0
             }]
         });
     },
@@ -308,6 +316,14 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
         this.combo.hideView();
     },
 
+    showView: function () {
+        this.combo.showView();
+    },
+
+    hideView: function () {
+        this.combo.hideView();
+    },
+
     setValue: function (v) {
         this.storeValue.value = v || {};
         this.combo.setValue({
@@ -318,12 +334,28 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
         });
     },
 
+    getSearcher: function () {
+        return this.trigger.getSearcher();
+    },
+
     getValue: function () {
         return BI.deepClone(this.storeValue.value);
     },
 
     populate: function () {
-        this.combo.populate.apply(this.combo, arguments);
+        this.combo.populate();
+    },
+
+    focus: function () {
+        this.trigger.focus();
+    },
+
+    blur: function () {
+        this.trigger.blur();
+    },
+
+    setWaterMark: function (v) {
+        this.trigger.setWaterMark(v);
     }
 });
 

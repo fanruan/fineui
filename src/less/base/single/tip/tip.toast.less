@@ -1,23 +1,22 @@
-@import "../../../index";
+@import "../../../index.less";
 
 .bi-toast{
-  color: @color-bi-text;
-  max-width: 400px;
-  min-width: 150px;
+  color: @color-bi-color-toast-text;
+  line-height: @font-size-16;
   .border-radius(2px);
   &.toast-success{
-    background: @color-bi-background-success;
+    background: @color-bi-background-toast-success;
   }
   &.toast-warning{
-    background: @color-bi-background-warning;
+    background: @color-bi-background-toast-warning;
   }
   &.toast-error{
-    background: @color-bi-background-failure;
+    background: @color-bi-background-toast-error;
   }
-  &.toast-normal{
-    background: @color-bi-background-highlight;
+  &.toast-normal, &.toast-common{
+    background: @color-bi-background-toast-normal;
   }
   & .toast-icon{
-    font-size: 16px;
+    font-size: @font-size-16;
   }
 }

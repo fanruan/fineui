@@ -1,4 +1,4 @@
-@import "../../index";
+@import "../../index.less";
 @val: transform .3s ease;
 .bi-combo {
   & > .bi-trigger {
@@ -22,14 +22,14 @@
     }
   }
   &.bi-combo-popup, &.bi-combo-hover, &:hover {
-    & > .bi-border {
-      border-color: @color-bi-border-highlight;
+    &.bi-border, &.bi-border-bottom {
+      border-color: @color-bi-border-hover-combo;
     }
   }
   &.disabled {
     &.bi-combo-hover, &:hover {
-      & > .bi-border {
-        border-color: @border-color-line;
+      &.bi-border, &.bi-border-bottom {
+        border-color: @color-bi-border-hover-disabled-combo;
       }
     }
   }
@@ -39,8 +39,8 @@
   .bi-combo {
     &.disabled {
       &.bi-combo-hover, &:hover {
-        & > .bi-border {
-          border-color: @border-color-line-theme-dark;
+        &.bi-border, &.bi-border-bottom {
+          border-color: @color-bi-border-hover-disabled-combo-theme-dark;
         }
       }
     }

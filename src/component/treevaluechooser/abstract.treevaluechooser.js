@@ -14,6 +14,9 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
 
     _valueFormatter: function (v) {
         var text = v;
+        if (this.options.valueFormatter) {
+            return this.options.valueFormatter(v);
+        }
         if (BI.isNotNull(this.items)) {
             BI.some(this.items, function (i, item) {
                 if (item.value === v || item.value + "" === v) {
@@ -126,7 +129,8 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
                 pId: pId,
                 text: node.text + (llen > 0 ? ("(" + BI.i18nText("BI-Basic_Altogether") + llen + BI.i18nText("BI-Basic_Count") + ")") : ""),
                 value: node.value,
-                open: true
+                open: true,
+                disabled: node.disabled
             });
         }
     },
@@ -151,23 +155,25 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
             var p = parentValues.concat(notSelectedValue);
             // 存储的值中存在这个值就把它删掉
             // 例如选中了中国-江苏-南京， 取消中国或江苏或南京
+            // p长度不大于selectedValues的情况才可能找到，这样可以直接删除selectedValues的节点
             if (canFindKey(selectedValues, p)) {
                 // 如果搜索的值在父亲链中
                 if (isSearchValueInParent(p)) {
-                    // 例如选中了 中国-江苏， 搜索江苏， 取消江苏
-                    // 例如选中了 中国-江苏， 搜索江苏， 取消中国
+                    // 例如选中了 中国-江苏， 搜索江苏， 取消江苏(干掉了江苏)
                     self._deleteNode(selectedValues, p);
                 } else {
                     var searched = [];
+                    // 要找到所有以notSelectedValue为叶子节点的链路
                     var find = search(parentValues, notSelectedValue, [], searched);
                     if (find && BI.isNotEmptyArray(searched)) {
                         BI.each(searched, function (i, arr) {
                             var node = self._getNode(selectedValues, arr);
                             if (node) {
-                                // 例如选中了 中国-江苏-南京，搜索南京，取消中国
+                                // 例如选中了 中国-江苏， 搜索江苏， 取消中国（实际上只想删除中国-江苏，因为搜的是江苏）
+                                // 例如选中了 中国-江苏-南京，搜索南京，取消中国（实际上只想删除中国-江苏-南京，因为搜的是南京）
                                 self._deleteNode(selectedValues, arr);
                             } else {
-                                // 例如选中了 中国-江苏，搜索南京，取消中国
+                                // 例如选中了 中国-江苏，搜索南京，取消中国（实际上只想删除中国-江苏-南京，因为搜的是南京）
                                 expandSelectedValue(selectedValues, arr, BI.last(arr));
                             }
                         });
@@ -429,13 +435,16 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
             var isCurAllSelected = isAllSelect || isAllSelected(parentValues, current);
             BI.each(children, function (i, child) {
                 var state = nodeSearch(deep + 1, newParents, child.value, isCurAllSelected, result);
+                // 当前节点的子节点是否选中，并不确定全选还是半选
                 if (state[1] === true) {
                     checked = true;
                 }
+                // 当前节点的子节点要不要加入到结果集中
                 if (state[0] === true) {
                     can = true;
                 }
             });
+            // 子节点匹配, 补充父节点
             if (can === true) {
                 checked = isCurAllSelected || (isSelected(parentValues, current) && checked);
                 createOneJson(parentValues, current, true, checked, false, false, result);
@@ -455,7 +464,8 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
                 open: isOpen,
                 checked: checked,
                 halfCheck: half,
-                flag: flag
+                flag: flag,
+                disabled: node.disabled
             });
         }
 
@@ -538,7 +548,10 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
                 isParent: nodes[i].getChildrenLength() > 0,
                 checked: state[0],
                 halfCheck: state[1],
-                open: o.open
+                open: o.open,
+                disabled: nodes[i].disabled,
+                title: nodes[i].title || nodes[i].text,
+                warningTitle: nodes[i].warningTitle,
             });
         }
         // 如果指定节点全部打开
@@ -548,6 +561,7 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
             BI.each(nodes, function (idx, node) {
                 allNodes = BI.concat(allNodes, self._getAllChildren(parentValues.concat([node.value])));
             });
+            var lastFind;
             BI.each(allNodes, function (idx, node) {
                 var valueMap = dealWithSelectedValue(node.parentValues, selectedValues);
                 // REPORT-24409 fix: 设置节点全部展开，添加的节点没有给状态
@@ -558,7 +572,13 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
                 if (find) {
                     parentCheckState.checked = find.halfCheck ? false : find.checked;
                     parentCheckState.half = find.halfCheck;
+                    // 默认展开也需要重置父节点的halfCheck
+                    if (BI.isNotNull(lastFind) && (lastFind !== find || allNodes.length - 1 === idx)) {
+                        lastFind.half = lastFind.halfCheck;
+                        lastFind.halfCheck = false;
+                    }
                 }
+                lastFind = find;
                 var state = getCheckState(node.value, node.parentValues, valueMap, parentCheckState);
                 result.push({
                     id: node.id,
@@ -569,7 +589,10 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
                     isParent: node.getChildrenLength() > 0,
                     checked: state[0],
                     halfCheck: state[1],
-                    open: self.options.open
+                    open: self.options.open,
+                    disabled: node.disabled,
+                    title: node.title || node.text,
+                    warningTitle: node.warningTitle,
                 });
             });
         }
@@ -593,11 +616,15 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
         }
 
         function dealWithSelectedValue(parentValues, selectedValues) {
-            var valueMap = {};
+            var valueMap = {}, parents = (parentValues || []).slice(0);
             BI.each(parentValues, function (i, v) {
+                parents.push(v);
+
                 selectedValues = selectedValues[v] || {};
             });
             BI.each(selectedValues, function (value, obj) {
+                var currentParents = BI.concat(parents, value);
+
                 if (BI.isNull(obj)) {
                     valueMap[value] = [0, 0];
                     return;
@@ -610,12 +637,28 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
                 BI.each(obj, function (t, o) {
                     if (BI.isNull(o) || BI.isEmpty(o)) {
                         nextNames[t] = true;
+                    } else {
+                        isAllSelected(o, BI.concat(currentParents, [t])) && (nextNames[t] = true);
                     }
                 });
                 // valueMap的数组第一个参数为不选: 0, 半选: 1, 全选：2， 第二个参数为改节点下选中的子节点个数(子节点全选或者不存在)
                 valueMap[value] = [1, BI.size(nextNames)];
             });
             return valueMap;
+        }
+
+        function isAllSelected(selected, parents) {
+            if (BI.isEmpty(selected)) {
+                return true;
+            }
+
+            if (self._getChildCount(parents) !== BI.size(selected)) {
+                return false;
+            }
+
+            return BI.every(selected, function (value) {
+               return isAllSelected(selected[value], BI.concat(parents, value));
+            });
         }
 
         function getCheckState(current, parentValues, valueMap, checkState) {
@@ -636,8 +679,8 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
                 }
             }
             var check;
+            // 展开的节点checked为false 且没有明确得出当前子节点是半选或者全选, 则check状态取决于valueMap
             if (!checked && !halfCheck && !tempCheck) {
-                // 当节点自身是不选的，且通过selectedValues没有得到全选, 则check状态取决于valueMap
                 check = BI.has(valueMap, current);
             } else {
                 // 不是上面那种情况就先看在节点没有带有明确半选的时候，通过节点自身的checked和valueMap的状态能都得到选中信息
@@ -721,6 +764,7 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
         var self = this;
         var findParentNode;
         var index = 0;
+        var currentParent = this.tree.getRoot();
         this.tree.traverse(function (node) {
             if (self.tree.isRoot(node)) {
                 return;
@@ -728,16 +772,31 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
             if (index > parentValues.length) {
                 return false;
             }
+
+            /**
+             * 一个树结构。要找root_1_3的子节点
+             * {root: { 1: {1: {}, 2: {}, 3: {}}, 3: {1: {}, 2: {}} } }
+             * 当遍历到root_1节点时，index++，而下一个节点root_3时，符合下面的if逻辑，这样找到的节点就是root_3节点了，需要加步判断是否是root_1的子节点
+             */
             if (index === parentValues.length && node.value === v) {
+                if (node.getParent() !== currentParent) {
+                    return;
+                }
+
                 findParentNode = node;
+
                 return false;
             }
-            if (node.value === parentValues[index]) {
+            if (node.value === parentValues[index] && node.getParent() === currentParent) {
                 index++;
+                currentParent = node;
+
                 return;
             }
+
             return true;
         });
+
         return findParentNode;
     },
 
@@ -748,7 +807,8 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
         } else {
             var parent = this.tree.getRoot();
         }
-        return parent.getChildren();
+
+        return parent ? parent.getChildren() : [];
     },
 
     _getAllChildren: function(parentValues) {
@@ -778,5 +838,35 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
 
     _getChildCount: function (parentValues) {
         return this._getChildren(parentValues).length;
-    }
+    },
+
+    buildCompleteTree: function (selectedValues) {
+        var self = this;
+        var result = {};
+
+        if (selectedValues !== null && !BI.isEmpty(selectedValues)) {
+            fill([], this.tree.getRoot(), selectedValues, result);
+        }
+
+        return result;
+
+        function fill(parentValues, node, selected, r) {
+            if (selected === null || BI.isEmpty(selected)) {
+                BI.each(node.getChildren(), function (i, child) {
+                    var newParents = BI.clone(parentValues);
+                    newParents.push(child.value);
+                    r[child.value] = {};
+                    fill(newParents, child, null, r[child.value]);
+                });
+                return;
+            }
+            BI.each(selected, function (k) {
+                var node = self._getTreeNode(parentValues, k);
+                var newParents = BI.clone(parentValues);
+                newParents.push(node.value);
+                r[k] = {};
+                fill(newParents, node, selected[k], r[k]);
+            });
+        }
+    },
 });

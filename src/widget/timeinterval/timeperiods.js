@@ -9,8 +9,8 @@
         constants: {
             height: 24,
             width: 24,
-            lgap: 15,
-            offset: 0
+            hgap: 15,
+            offset: -15
         },
         props: {
             extraCls: "bi-time-interval",
@@ -21,13 +21,13 @@
 
             return {
                 type: "bi.absolute",
-                height: this.constants.height,
+                height: o.height,
                 items: [{
                     el: {
                         type: "bi.horizontal_auto",
                         items: [{
                             type: "bi.label",
-                            height: this.constants.height,
+                            height: o.height,
                             width: this.constants.width,
                             text: "-",
                             ref: function (_ref) {
@@ -42,7 +42,8 @@
                 }, {
                     el: {
                         type: "bi.center",
-                        height: this.constants.height,
+                        height: o.height,
+                        hgap: this.constants.hgap,
                         items: [{
                             type: "bi.absolute",
                             items: [{
@@ -52,9 +53,9 @@
                                     }
                                 }, this._createCombo(o.value.start)),
                                 left: this.constants.offset,
-                                right: this.constants.width / 2,
+                                right: 0,
                                 top: 0,
-                                bottom: 0
+                                bottom: 0,
                             }]
                         }, {
                             type: "bi.absolute",
@@ -64,10 +65,10 @@
                                         self.right = _ref;
                                     }
                                 }, this._createCombo(o.value.end)),
-                                left: this.constants.width / 2,
+                                left: 0,
                                 right: this.constants.offset,
                                 top: 0,
-                                bottom: 0
+                                bottom: 0,
                             }]
                         }]
                     },
@@ -81,9 +82,11 @@
 
         _createCombo: function (v) {
             var self = this;
+            var o = this.options;
             return {
                 type: "bi.time_combo",
                 value: v,
+                height: o.height,
                 listeners: [{
                     eventName: BI.TimeCombo.EVENT_BEFORE_POPUPVIEW,
                     action: function () {

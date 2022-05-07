@@ -19,61 +19,34 @@ module.exports = function (config) {
 
         // list of files / patterns to load in the browser
         files: [
-            "src/css/core/**/*.css",
-            "src/css/theme/**/*.css",
-            "src/css/base/**/*.css",
-            "src/css/widget/**/*.css",
-            "public/css/app.css",
-            "src/core/foundation.js",
-            "src/core/lodash.js",
-            "src/core/base.js",
-            "i18n/i18n.cn.js",
-            "src/core/ob.js",
-            "src/core/widget.js",
-            "src/core/shortcut.js",
-            "src/core/utils/**/*.js",
-            "src/core/behavior/behavior.js",
-            "src/core/wrapper/layout.js",
-            "src/core/plugin.js",
+            "dist/fineui.min.css",
             "src/core/**/*.js",
             "src/data/**/*.js",
-            "src/data/**/*.js",
-            "src/data/**/*.js",
             "src/third/**/*.js",
-            "src/base/pane.js",
-            "src/base/single/single.js",
-            "src/base/single/text.js",
-            "src/base/single/button/button.basic.js",
-            "src/base/single/button/button.node.js",
-            "src/base/single/tip/tip.js",
-            "src/base/combination/group.button.js",
-            "src/base/combination/tree.button.js",
-            "src/base/tree/ztree/treeview.js",
-            "src/base/tree/ztree/asynctree.js",
-            "src/base/tree/ztree/parttree.js",
-            "src/base/tree/ztree/list/listtreeview.js",
-            "src/base/tree/ztree/list/listasynctree.js",
-            "src/base/tree/ztree/list/listparttree.js",
             "src/base/**/*.js",
             "src/case/**/*.js",
             "src/widget/**/*.js",
             "src/component/**/*.js",
+            "dist/fix/fix.js",
+            "dist/fix/fix.compact.js",
             "src/**/*.test.js",
             "test/**/*.js"
         ],
 
         exclude: [
-            "src/base/tree/ztree/jquery.ztree.core-3.5.js",
-            "src/base/tree/ztree/jquery.ztree.excheck-3.5.js"
+            "src/base/single/input/file.js",
+            "src/case/ztree/**/*.js",
+            "src/widget/multitree/**/*.js",
+            "src/widget/multiselecttree/**/*.js",
+            "src/component/treevaluechooser/*.js"
         ],
 
 
         // preprocess matching files before serving them to the browser
         // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
         preprocessors: {
-            "src/core/alias.js": "coverage",
-            "src/core/base.js": "coverage",
-            "src/core/func/date.js": "coverage",
+            "src/core/1.base.js": "coverage",
+            "src/core/func/**/*.js": "coverage",
             "src/base/**/!(*.test).js": "coverage",
             "src/case/**/!(*.test).js": "coverage",
             "src/widget/**/!(*.test).js": "coverage",

@@ -1,4 +1,3 @@
-
 /**
  * 文字类型的按钮
  * @class BI.Button
@@ -9,10 +8,17 @@
  */
 BI.Button = BI.inherit(BI.BasicButton, {
 
+    _const: {
+        iconWidth: 18
+    },
+
     _defaultConfig: function (props) {
         var conf = BI.Button.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
             baseCls: (conf.baseCls || "") + " bi-button" + ((BI.isIE() && BI.isIE9Below()) ? " hack" : ""),
+            attributes: {
+                tabIndex: 1
+            },
             minWidth: (props.block === true || props.clear === true) ? 0 : 80,
             height: 24,
             shadow: props.clear !== true,
@@ -36,30 +42,40 @@ BI.Button = BI.inherit(BI.BasicButton, {
         });
     },
 
-    _init: function () {
-        BI.Button.superclass._init.apply(this, arguments);
+    render: function () {
         var o = this.options, self = this;
-        if (BI.isNumber(o.height) && !o.clear && !o.block) {
-            this.element.css({height: o.height + "px", lineHeight: (o.height - 2) + "px"});
-        } else if (o.clear || o.block) {
-            this.element.css({lineHeight: o.height + "px"});
-        } else {
-            this.element.css({lineHeight: (o.height - 2) + "px"});
+
+        // 由于button默认情况下有个边框，所以要主动算行高
+        var lineHeight, textHeight = o.textHeight;
+        if (BI.isNumber(o.height)) {
+            if (o.clear || o.block) {
+                lineHeight = o.height;
+            } else {
+                lineHeight = o.height - 2;
+            }
+        }
+        if (!textHeight) {
+            if (o.whiteSpace === "nowrap") {
+                textHeight = lineHeight;
+            }
         }
         if (BI.isKey(o.iconCls)) {
             this.icon = BI.createWidget({
                 type: "bi.icon_label",
                 cls: o.iconCls,
-                width: 18,
-                height: o.height - 2,
+                width: this._const.iconWidth,
+                height: lineHeight,
+                lineHeight: lineHeight,
                 iconWidth: o.iconWidth,
                 iconHeight: o.iconHeight
             });
             this.text = BI.createWidget({
                 type: "bi.label",
                 text: o.text,
-                value: o.value,
-                height: o.height - 2
+                textWidth: BI.isNotNull(o.textWidth) ? o.textWidth - this._const.iconWidth : null,
+                textHeight: textHeight,
+                height: lineHeight,
+                value: o.value
             });
             BI.createWidget({
                 type: "bi.center_adapt",
@@ -68,16 +84,18 @@ BI.Button = BI.inherit(BI.BasicButton, {
                 vgap: o.vgap,
                 items: [{
                     type: "bi.horizontal",
+                    columnSize: ["", "fill"],
                     items: [this.icon, this.text]
                 }]
             });
         } else {
             this.text = BI.createWidget({
                 type: "bi.label",
+                height: o.height,
                 textAlign: o.textAlign,
                 whiteSpace: o.whiteSpace,
                 textWidth: o.textWidth,
-                textHeight: o.textHeight,
+                textHeight: textHeight,
                 hgap: o.hgap,
                 vgap: o.vgap,
                 tgap: o.tgap,
@@ -99,7 +117,7 @@ BI.Button = BI.inherit(BI.BasicButton, {
             this.element.addClass("ghost");
         }
         if (o.minWidth > 0) {
-            this.element.css({"min-width": o.minWidth + "px"});
+            this.element.css({"min-width": o.minWidth / BI.pixRatio + BI.pixUnit});
         }
     },
 
@@ -107,6 +125,15 @@ BI.Button = BI.inherit(BI.BasicButton, {
         BI.Button.superclass.doClick.apply(this, arguments);
         if (this.isValid()) {
             this.fireEvent(BI.Button.EVENT_CHANGE, this);
+        }
+    },
+
+    _setEnable: function (enable) {
+        BI.Button.superclass._setEnable.apply(this, arguments);
+        if (enable === true) {
+            this.element.attr("tabIndex", 1);
+        } else if (enable === false) {
+            this.element.removeAttr("tabIndex");
         }
     },
 
@@ -136,10 +163,6 @@ BI.Button = BI.inherit(BI.BasicButton, {
 
     unHighLight: function () {
         this.text.unHighLight.apply(this.text, arguments);
-    },
-
-    destroy: function () {
-        BI.Button.superclass.destroy.apply(this, arguments);
     }
 });
 BI.shortcut("bi.button", BI.Button);

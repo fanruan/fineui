@@ -9,8 +9,8 @@ BI.Radio = BI.inherit(BI.BasicButton, {
         baseCls: "bi-radio",
         selected: false,
         handler: BI.emptyFn,
-        width: 16,
-        height: 16,
+        width: 14,
+        height: 14,
         iconWidth: 14,
         iconHeight: 14
     },
@@ -19,7 +19,6 @@ BI.Radio = BI.inherit(BI.BasicButton, {
         var self = this, o = this.options;
         return {
             type: "bi.center_adapt",
-            element: this.element,
             items: [{
                 type: "bi.layout",
                 cls: "radio-content",

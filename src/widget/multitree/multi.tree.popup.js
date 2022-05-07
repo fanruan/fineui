@@ -27,6 +27,7 @@ BI.MultiTreePopup = BI.inherit(BI.Pane, {
 
         this.tree = BI.createWidget(opts.el, {
             type: "bi.async_tree",
+            showLine: opts.showLine,
             height: 400,
             cls: "popup-view-tree",
             itemsCreator: opts.itemsCreator,
@@ -41,7 +42,7 @@ BI.MultiTreePopup = BI.inherit(BI.Pane, {
             maxWidth: opts.maxWidth,
             minWidth: opts.minWidth,
             maxHeight: opts.maxHeight,
-            buttons: [BI.i18nText("BI-Basic_Clears"), BI.i18nText("BI-Basic_Sure")],
+            buttons: [BI.i18nText("BI-Basic_Clears"), BI.i18nText("BI-Basic_OK")],
             el: this.tree
         });
 
@@ -81,6 +82,10 @@ BI.MultiTreePopup = BI.inherit(BI.Pane, {
 
     hasChecked: function () {
         return this.tree.hasChecked();
+    },
+
+    setDirection: function (direction, position) {
+        this.popupView.setDirection(direction, position);
     },
 
     resetHeight: function (h) {

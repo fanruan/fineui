@@ -5,7 +5,7 @@ BI.IntervalSlider = BI.inherit(BI.Single, {
     _constant: {
         EDITOR_WIDTH: 58,
         EDITOR_R_GAP: 60,
-        EDITOR_HEIGHT: 30,
+        EDITOR_HEIGHT: 20,
         SLIDER_WIDTH_HALF: 15,
         SLIDER_WIDTH: 30,
         SLIDER_HEIGHT: 30,
@@ -49,7 +49,8 @@ BI.IntervalSlider = BI.inherit(BI.Single, {
             cls: "slider-editor-button",
             text: this.options.unit,
             allowBlank: false,
-            width: c.EDITOR_WIDTH,
+            width: c.EDITOR_WIDTH - 2,
+            height: c.EDITOR_HEIGHT - 2,
             validationChecker: function (v) {
                 return self._checkValidation(v);
             }
@@ -76,7 +77,8 @@ BI.IntervalSlider = BI.inherit(BI.Single, {
             cls: "slider-editor-button",
             text: this.options.unit,
             allowBlank: false,
-            width: c.EDITOR_WIDTH,
+            width: c.EDITOR_WIDTH - 2,
+            height: c.EDITOR_HEIGHT - 2,
             validationChecker: function (v) {
                 return self._checkValidation(v);
             }
@@ -335,7 +337,7 @@ BI.IntervalSlider = BI.inherit(BI.Single, {
         valueOne = BI.parseFloat(valueOne);
         valueTwo = BI.parseFloat(valueTwo);
         if((oldValueOne <= oldValueTwo && valueOne > valueTwo) || (oldValueOne >= oldValueTwo && valueOne < valueTwo)) {
-            var isSliderOneLeft = BI.parseFloat(this.sliderOne.element[0].style.left) < BI.parseFloat(this.sliderTwo.element[0].style.left);
+            var isSliderOneLeft = BI.parseFloat(this.labelOne.getValue()) < BI.parseFloat(this.labelTwo.getValue());
             this._resetLabelPosition(!isSliderOneLeft);
         }
     },
@@ -397,7 +399,14 @@ BI.IntervalSlider = BI.inherit(BI.Single, {
     },
 
     // 其中取max-min后保留4为有效数字后的值的小数位数为最终value的精度
+    // 端点处的值有可能因为min,max相差量级很大(precision很大)而丢失精度，此时直接返回端点值即可
     _getValueByPercent: function (percent) {// return (((max-min)*percent)/100+min)
+        if (percent === 0) {
+            return this.min;
+        }
+        if (percent === 100) {
+            return this.max;
+        }
         var sub = this.calculation.accurateSubtraction(this.max, this.min);
         var mul = this.calculation.accurateMultiplication(sub, percent);
         var div = this.calculation.accurateDivisionTenExponent(mul, 2);
@@ -412,11 +421,6 @@ BI.IntervalSlider = BI.inherit(BI.Single, {
 
     _getPercentByValue: function (v) {
         return (v - this.min) * 100 / (this.max - this.min);
-    },
-
-    _setDraggableEnable: function (enable) {
-        this.sliderOne.setEnable(enable);
-        this.sliderTwo.setEnable(enable);
     },
 
     _getPrecision: function () {
@@ -476,10 +480,10 @@ BI.IntervalSlider = BI.inherit(BI.Single, {
             this.valueOne = minNumber;
             this.valueTwo = maxNumber;
             this.precision = this._getPrecision();
-            this._setDraggableEnable(true);
+            this.setEnable(true);
         }
         if (maxNumber === minNumber) {
-            this._setDraggableEnable(false);
+            this.setEnable(false);
         }
     },
 

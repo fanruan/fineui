@@ -1,13 +1,13 @@
-@import "../index";
-@import "../image";
-@import "../lib/icon";
+@import "../index.less";
+@import "../image.less";
+@import "../lib/icon.less";
 .bi-pane {
     min-height: 25px;
     &.loading-status{
         min-height: 55px;
     }
     & .loading-container {
-        .background-color(@color-bi-background-normal, 0);
+        .background-color(@color-bi-background-pane-loading, 0);
     }
 }
 
@@ -15,7 +15,7 @@
     font-size: 0;
     // 直接控制div标签将会导致使用div的table布局样式问题
     & .animate-rect {
-        .background-color(@background-color-highlight, 90%);
+        .background-color(@color-bi-background-pane-animate-rect, 90%);
         .border-radius(1.5px);
         .animation(loading-widget 0.8s infinite linear);
     }

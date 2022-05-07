@@ -5,7 +5,7 @@ BI.SelectIconTextTrigger = BI.inherit(BI.Trigger, {
 
     _defaultConfig: function () {
         return BI.extend(BI.SelectIconTextTrigger.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-select-text-trigger bi-border",
+            baseCls: "bi-select-text-trigger",
             height: 24,
             iconHeight: null,
             iconWidth: null,
@@ -14,7 +14,6 @@ BI.SelectIconTextTrigger = BI.inherit(BI.Trigger, {
     },
 
     _init: function () {
-        this.options.height -= 2;
         BI.SelectIconTextTrigger.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
         var obj = this._digist(o.value, o.items);
@@ -24,6 +23,12 @@ BI.SelectIconTextTrigger = BI.inherit(BI.Trigger, {
             text: obj.text,
             textCls: obj.textCls,
             iconCls: obj.iconCls,
+            textHgap: o.textHgap,
+            textVgap: o.textVgap,
+            textLgap: o.textLgap,
+            textRgap: o.textRgap,
+            textTgap: o.textTgap,
+            textBgap: o.textBgap,
             height: o.height,
             iconHeight: o.iconHeight,
             iconWidth: o.iconWidth,

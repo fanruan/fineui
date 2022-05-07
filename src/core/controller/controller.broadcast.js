@@ -5,12 +5,7 @@
  * @class
  */
 BI.BroadcastController = BI.inherit(BI.Controller, {
-    _defaultConfig: function () {
-        return BI.extend(BI.BroadcastController.superclass._defaultConfig.apply(this, arguments), {});
-    },
-
-    _init: function () {
-        BI.BroadcastController.superclass._init.apply(this, arguments);
+    init: function () {
         this._broadcasts = {};
     },
 
@@ -35,10 +30,9 @@ BI.BroadcastController = BI.inherit(BI.Controller, {
     remove: function (name, fn) {
         var self = this;
         if (fn) {
-            BI.remove(this._broadcasts[name], function (idx) {
-                return self._broadcasts[name].indexOf(fn) === idx;
+            BI.remove(this._broadcasts[name], function (index, cb) {
+                return fn === cb;
             });
-            this._broadcasts[name].remove(fn);
             if (this._broadcasts[name].length === 0) {
                 delete this._broadcasts[name];
             }

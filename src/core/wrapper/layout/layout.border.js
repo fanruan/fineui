@@ -13,16 +13,16 @@ BI.BorderLayout = BI.inherit(BI.Layout, {
     },
     render: function () {
         BI.BorderLayout.superclass.render.apply(this, arguments);
-        this.populate(this.options.items);
-    },
-
-    resize: function () {
-        this.stroke(this.options.items);
+        var self = this, o = this.options;
+        var items = BI.isFunction(o.items) ? this.__watch(o.items, function (context, newValue) {
+            self.populate(newValue);
+        }) : o.items;
+        this.populate(items);
     },
 
     addItem: function (item) {
         // do nothing
-        throw new Error("cannot be added");
+        throw new Error("不能添加子组件");
     },
 
     stroke: function (regions) {
@@ -35,16 +35,16 @@ BI.BorderLayout = BI.inherit(BI.Layout, {
             item = regions["north"];
             if (item != null) {
                 if (item.el) {
-                    if (!this.hasWidget(this.getName() + "north")) {
-                        var w = BI.createWidget(item);
-                        this.addWidget(this.getName() + "north", w);
+                    if (!this.hasWidget(this._getChildName("north"))) {
+                        var w = BI._lazyCreateWidget(item);
+                        this.addWidget(this._getChildName("north"), w);
                     }
-                    this.getWidgetByName(this.getName() + "north").element.height(item.height)
+                    this.getWidgetByName(this._getChildName("north")).element.height(this._optimiseGap(item.height))
                         .css({
                             position: "absolute",
-                            top: (item.top || 0),
-                            left: (item.left || 0),
-                            right: (item.right || 0),
+                            top: this._optimiseGap(item.top || 0),
+                            left: this._optimiseGap(item.left || 0),
+                            right: this._optimiseGap(item.right || 0),
                             bottom: "initial"
                         });
                 }
@@ -55,16 +55,16 @@ BI.BorderLayout = BI.inherit(BI.Layout, {
             item = regions["south"];
             if (item != null) {
                 if (item.el) {
-                    if (!this.hasWidget(this.getName() + "south")) {
-                        var w = BI.createWidget(item);
-                        this.addWidget(this.getName() + "south", w);
+                    if (!this.hasWidget(this._getChildName("south"))) {
+                        var w = BI._lazyCreateWidget(item);
+                        this.addWidget(this._getChildName("south"), w);
                     }
-                    this.getWidgetByName(this.getName() + "south").element.height(item.height)
+                    this.getWidgetByName(this._getChildName("south")).element.height(this._optimiseGap(item.height))
                         .css({
                             position: "absolute",
-                            bottom: (item.bottom || 0),
-                            left: (item.left || 0),
-                            right: (item.right || 0),
+                            bottom: this._optimiseGap(item.bottom || 0),
+                            left: this._optimiseGap(item.left || 0),
+                            right: this._optimiseGap(item.right || 0),
                             top: "initial"
                         });
                 }
@@ -75,16 +75,16 @@ BI.BorderLayout = BI.inherit(BI.Layout, {
             item = regions["west"];
             if (item != null) {
                 if (item.el) {
-                    if (!this.hasWidget(this.getName() + "west")) {
-                        var w = BI.createWidget(item);
-                        this.addWidget(this.getName() + "west", w);
+                    if (!this.hasWidget(this._getChildName("west"))) {
+                        var w = BI._lazyCreateWidget(item);
+                        this.addWidget(this._getChildName("west"), w);
                     }
-                    this.getWidgetByName(this.getName() + "west").element.width(item.width)
+                    this.getWidgetByName(this._getChildName("west")).element.width(this._optimiseGap(item.width))
                         .css({
                             position: "absolute",
-                            left: (item.left || 0),
-                            top: top,
-                            bottom: bottom,
+                            left: this._optimiseGap(item.left || 0),
+                            top: this._optimiseGap(top),
+                            bottom: this._optimiseGap(bottom),
                             right: "initial"
                         });
                 }
@@ -95,16 +95,16 @@ BI.BorderLayout = BI.inherit(BI.Layout, {
             item = regions["east"];
             if (item != null) {
                 if (item.el) {
-                    if (!this.hasWidget(this.getName() + "east")) {
-                        var w = BI.createWidget(item);
-                        this.addWidget(this.getName() + "east", w);
+                    if (!this.hasWidget(this._getChildName("east"))) {
+                        var w = BI._lazyCreateWidget(item);
+                        this.addWidget(this._getChildName("east"), w);
                     }
-                    this.getWidgetByName(this.getName() + "east").element.width(item.width)
+                    this.getWidgetByName(this._getChildName("east")).element.width(this._optimiseGap(item.width))
                         .css({
                             position: "absolute",
-                            right: (item.right || 0),
-                            top: top,
-                            bottom: bottom,
+                            right: this._optimiseGap(item.right || 0),
+                            top: this._optimiseGap(top),
+                            bottom: this._optimiseGap(bottom),
                             left: "initial"
                         });
                 }
@@ -114,17 +114,24 @@ BI.BorderLayout = BI.inherit(BI.Layout, {
         if ("center" in regions) {
             item = regions["center"];
             if (item != null) {
-                if (!this.hasWidget(this.getName() + "center")) {
-                    var w = BI.createWidget(item);
-                    this.addWidget(this.getName() + "center", w);
+                if (!this.hasWidget(this._getChildName("center"))) {
+                    var w = BI._lazyCreateWidget(item);
+                    this.addWidget(this._getChildName("center"), w);
                 }
-                this.getWidgetByName(this.getName() + "center").element
-                    .css({position: "absolute", top: top, bottom: bottom, left: left, right: right});
+                this.getWidgetByName(this._getChildName("center")).element
+                    .css({
+                        position: "absolute",
+                        top: this._optimiseGap(top),
+                        bottom: this._optimiseGap(bottom),
+                        left: this._optimiseGap(left),
+                        right: this._optimiseGap(right)
+                    });
             }
         }
     },
 
     update: function (opt) {
+        return this.forceUpdate(opt);
     },
 
     populate: function (items) {

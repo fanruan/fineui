@@ -2,7 +2,7 @@
  * 基本的函数
  * Created by GUY on 2015/6/24.
  */
-BI.Func = {};
+BI.Func = BI.Func || {};
 _.extend(BI.Func, {
     /**
      * 创建唯一的名字
@@ -15,8 +15,8 @@ _.extend(BI.Func, {
         name = name || "";
         while (true) {
             if (BI.every(array, function (i, item) {
-                    return BI.isKey(item) ? item !== name : item.name !== name;
-                })) {
+                return BI.isKey(item) ? item !== name : item.name !== name;
+            })) {
                 break;
             }
             name = src + (idx++);
@@ -47,7 +47,7 @@ _.extend(BI.Func, {
         param || (param = "text");
         if (!BI.isKey(keyword)) {
             return {
-                find: BI.deepClone(items),
+                find: items,
                 match: isArray ? [] : {}
             };
         }
@@ -59,7 +59,6 @@ _.extend(BI.Func, {
             if (BI.isNull(item)) {
                 return;
             }
-            item = BI.deepClone(item);
             t = BI.stripEL(item);
             text = BI.find([t[param], t.text, t.value, t.name, t], function (index, val) {
                 return BI.isNotNull(val);
@@ -92,6 +91,55 @@ _.extend(BI.Func, {
             match: matched,
             find: find
         };
+    },
+
+    /**
+     * 获取按GB2312排序的结果
+     * @param items
+     * @param key
+     * @return {any[]}
+     */
+    getSortedResult: function (items, key) {
+        var getTextOfItem = BI.isFunction(key) ? key :
+            function (item, key) {
+                if (BI.isNotNull(key)) {
+                    return item[key];
+                }
+                if (BI.isNotNull(item.text)) {
+                    return item.text;
+                }
+                if (BI.isNotNull(item.value)) {
+                    return item.value;
+                }
+                return item;
+            };
+
+        return items.sort(function (item1, item2) {
+            var str1 = getTextOfItem(item1, key);
+            var str2 = getTextOfItem(item2, key);
+            if (BI.isNull(str1) && BI.isNull(str2)) {
+                return 0;
+            }
+            if (BI.isNull(str1)) {
+                return -1;
+            }
+            if (BI.isNull(str2)) {
+                return 1;
+            }
+            if (str1 === str2) {
+                return 0;
+            }
+            var len1 = str1.length, len2 = str2.length;
+            for (var i = 0; i < len1 && i < len2; i++) {
+                var char1 = str1[i];
+                var char2 = str2[i];
+                if (char1 !== char2) {
+                    // 找不到的字符都往后面放
+                    return (BI.isNull(BI.CODE_INDEX[char1]) ? BI.MAX : BI.CODE_INDEX[char1]) - (BI.isNull(BI.CODE_INDEX[char2]) ? BI.MAX : BI.CODE_INDEX[char2]);
+                }
+            }
+            return len1 - len2;
+        });
     }
 });
 

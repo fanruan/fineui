@@ -17,10 +17,6 @@ BI.ImageRadio = BI.inherit(BI.IconButton, {
         });
     },
 
-    _init: function () {
-        BI.ImageRadio.superclass._init.apply(this, arguments);
-    },
-
     doClick: function () {
         BI.ImageRadio.superclass.doClick.apply(this, arguments);
         if(this.isValid()) {

@@ -15,8 +15,8 @@ BI.BlankIconTextIconItem = BI.inherit(BI.BasicButton, {
             logic: {
                 dynamic: false
             },
-            iconCls1: "close-ha-font",
-            iconCls2: "close-ha-font",
+            iconCls1: "",
+            iconCls2: "",
             blankWidth: 0,
             iconHeight: null,
             iconWidth: null,
@@ -26,59 +26,48 @@ BI.BlankIconTextIconItem = BI.inherit(BI.BasicButton, {
             textRgap: 0
         });
     },
-    _init: function () {
-        BI.BlankIconTextIconItem.superclass._init.apply(this, arguments);
-        var o = this.options, c = this._const;
-        this.text = BI.createWidget({
-            type: "bi.label",
-            textAlign: "left",
-            hgap: o.textHgap,
-            vgap: o.textVgap,
-            lgap: o.textLgap,
-            rgap: o.textRgap,
-            text: o.text,
-            value: o.value,
-            keyword: o.keyword,
-            height: o.height
-        });
 
-        var icon1 = BI.createWidget({
-            type: "bi.icon_label",
-            cls: o.iconCls1,
-            width: o.height,
-            height: o.height,
-            iconWidth: o.iconWidth,
-            iconHeight: o.iconHeight
-        });
-        BI.createWidget({
-            type: "bi.absolute",
-            element: this,
+    render: function () {
+        var self = this, o = this.options;
+
+        return {
+            type: "bi.vertical_adapt",
+            columnSize: [o.blankWidth, o.leftIconWrapperWidth || o.height, "fill", o.rightIconWrapperWidth || o.height],
             items: [{
-                el: {
-                    type: "bi.icon_label",
-                    cls: o.iconCls2,
-                    width: o.height,
-                    height: o.height,
-                    iconWidth: o.iconWidth,
-                    iconHeight: o.iconHeight
-                },
-                top: 0,
-                bottom: 0,
-                right: 0
-            }]
-        });
-
-        BI.createWidget(BI.extend({
-            element: this
-        }, BI.LogicFactory.createLogic("horizontal", BI.extend(o.logic, {
-            items: BI.LogicFactory.createLogicItemsByDirection("left", {
                 type: "bi.layout",
                 width: o.blankWidth
-            }, icon1, this.text, {
-                type: "bi.layout",
-                width: o.height
-            })
-        }))));
+            }, {
+                type: "bi.icon_label",
+                cls: o.iconCls1,
+                width: o.leftIconWrapperWidth || o.height,
+                height: o.height,
+                iconWidth: o.iconWidth,
+                iconHeight: o.iconHeight
+            }, {
+                el: {
+                    type: "bi.label",
+                    ref: function (_ref) {
+                        self.text = _ref;
+                    },
+                    textAlign: "left",
+                    hgap: o.textHgap,
+                    vgap: o.textVgap,
+                    lgap: o.textLgap,
+                    rgap: o.textRgap,
+                    text: o.text,
+                    value: o.value,
+                    keyword: o.keyword,
+                    height: o.height
+                }
+            }, {
+                type: "bi.icon_label",
+                cls: o.iconCls2,
+                width: o.rightIconWrapperWidth || o.height,
+                height: o.height,
+                iconWidth: o.iconWidth,
+                iconHeight: o.iconHeight
+            }]
+        };
     },
 
     doClick: function () {

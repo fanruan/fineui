@@ -18,41 +18,53 @@ BI.IconTextItem = BI.inherit(BI.BasicButton, {
             iconWrapperWidth: null,
             iconHeight: null,
             iconWidth: null,
+            iconCls: "",
             textHgap: 0,
             textVgap: 0,
             textLgap: 0,
             textRgap: 0
         });
     },
-    _init: function () {
-        BI.IconTextItem.superclass._init.apply(this, arguments);
-        var o = this.options, c = this._const;
-        this.text = BI.createWidget({
-            type: "bi.label",
-            cls: "list-item-text",
-            textAlign: "left",
-            hgap: o.textHgap,
-            vgap: o.textVgap,
-            lgap: o.textLgap,
-            rgap: o.textRgap,
-            text: o.text,
-            value: o.value,
-            keyword: o.keyword,
-            height: o.height
-        });
-        this.icon = BI.createWidget({
-            type: "bi.icon_label",
-            width: o.iconWrapperWidth || o.height,
-            height: o.height,
-            iconWidth: o.iconWidth,
-            iconHeight: o.iconHeight
-        });
 
-        BI.createWidget(BI.extend({
-            element: this
-        }, BI.LogicFactory.createLogic(BI.LogicFactory.createLogicTypeByDirection(o.direction), BI.extend(o.logic, {
-            items: BI.LogicFactory.createLogicItemsByDirection(o.direction, this.icon, this.text)
-        }))));
+    render: function () {
+        var self = this, o = this.options;
+
+        return {
+            type: "bi.vertical_adapt",
+            columnSize: [o.iconWrapperWidth || o.height, "fill"],
+            items: [{
+                type: "bi.icon_label",
+                cls: o.iconCls,
+                width: o.iconWrapperWidth || o.height,
+                height: o.height,
+                iconWidth: o.iconWidth,
+                iconHeight: o.iconHeight
+            }, {
+                el: {
+                    type: "bi.label",
+                    ref: function (_ref) {
+                        self.text = _ref;
+                    },
+                    cls: "list-item-text",
+                    textAlign: "left",
+                    hgap: o.textHgap,
+                    vgap: o.textVgap,
+                    lgap: o.textLgap,
+                    rgap: o.textRgap,
+                    text: o.text,
+                    value: o.value,
+                    keyword: o.keyword,
+                    height: o.height
+                }
+            }]
+        };
+    },
+
+    doClick: function () {
+        BI.IconTextItem.superclass.doClick.apply(this, arguments);
+        if (this.isValid()) {
+            this.fireEvent(BI.IconTextItem.EVENT_CHANGE, this.getValue(), this);
+        }
     },
 
     setValue: function () {
@@ -71,13 +83,6 @@ BI.IconTextItem = BI.inherit(BI.BasicButton, {
 
     getText: function () {
         return this.text.getText();
-    },
-
-    doClick: function () {
-        BI.IconTextItem.superclass.doClick.apply(this, arguments);
-        if (this.isValid()) {
-            this.fireEvent(BI.IconTextItem.EVENT_CHANGE, this.getValue(), this);
-        }
     },
 
     doRedMark: function () {

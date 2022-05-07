@@ -5,14 +5,13 @@
  * @class
  */
 BI.LayerController = BI.inherit(BI.Controller, {
-    _defaultConfig: function () {
-        return BI.extend(BI.LayerController.superclass._defaultConfig.apply(this, arguments), {
+    props: function () {
+        return {
             render: "body"
-        });
+        };
     },
 
-    _init: function () {
-        BI.LayerController.superclass._init.apply(this, arguments);
+    init: function () {
         this.layerManager = {};
         this.layouts = {};
         this.zindex = BI.zIndex_layer;
@@ -101,15 +100,6 @@ BI.LayerController = BI.inherit(BI.Controller, {
         return widget;
     },
 
-    hide: function (name, callback) {
-        if (!this.has(name)) {
-            return this;
-        }
-        this._getLayout(name).invisible();
-        this._getLayout(name).element.hide(0, callback);
-        return this;
-    },
-
     show: function (name, callback) {
         if (!this.has(name)) {
             return this;
@@ -119,13 +109,22 @@ BI.LayerController = BI.inherit(BI.Controller, {
         return this;
     },
 
+    hide: function (name, callback) {
+        if (!this.has(name)) {
+            return this;
+        }
+        this._getLayout(name).invisible();
+        this._getLayout(name).element.hide(0, callback);
+        return this;
+    },
+
     isVisible: function (name) {
         return this.has(name) && this._getLayout(name).isVisible();
     },
 
     add: function (name, layer, layout) {
         if (this.has(name)) {
-            throw new Error("name is already exist");
+            throw new Error("不能创建同名的Layer");
         }
         layout.setVisible(false);
         this.layerManager[name] = layer;

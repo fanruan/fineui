@@ -7,47 +7,24 @@
 BI.DivisionLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.DivisionLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-division-layout",
+            baseCls: "bi-division",
             columns: null,
             rows: null,
             items: []
-            //    [
-            //    {
-            //        column: 0,
-            //        row: 0,
-            //        width: 0.25,
-            //        height: 0.33,
-            //        el: {type: 'bi.button', text: 'button1'}
-            //    },
-            //    {
-            //        column: 1,
-            //        row: 1,
-            //        width: 0.25,
-            //        height: 0.33,
-            //        el: {type: 'bi.button', text: 'button2'}
-            //    },
-            //    {
-            //        column: 3,
-            //        row: 2,
-            //        width: 0.25,
-            //        height: 0.33,
-            //        el: {type: 'bi.button', text: 'button3'}
-            //    }
-            // ]
         });
     },
     render: function () {
         BI.DivisionLayout.superclass.render.apply(this, arguments);
-        this.populate(this.options.items);
-    },
-
-    resize: function () {
-        this.stroke(this.opitons.items);
+        var self = this, o = this.options;
+        var items = BI.isFunction(o.items) ? this.__watch(o.items, function (context, newValue) {
+            self.populate(newValue);
+        }) : o.items;
+        this.populate(items);
     },
 
     addItem: function (item) {
         // do nothing
-        throw new Error("cannot be added");
+        throw new Error("不能添加子组件");
     },
 
     stroke: function (items) {
@@ -112,18 +89,18 @@ BI.DivisionLayout = BI.inherit(BI.Layout, {
             var totalW = 0;
             for (var j = 0; j < columns; j++) {
                 if (!map[i][j]) {
-                    throw new Error("item be required");
+                    throw new Error("item(" + i + "" + j + ") 必须", map);
                 }
-                if (!this.hasWidget(this.getName() + i + "_" + j)) {
-                    var w = BI.createWidget(map[i][j]);
-                    this.addWidget(this.getName() + i + "_" + j, w);
+                if (!this.hasWidget(this._getChildName(i + "_" + j))) {
+                    var w = BI._lazyCreateWidget(map[i][j]);
+                    this.addWidget(this._getChildName(i + "_" + j), w);
                 } else {
-                    w = this.getWidgetByName(this.getName() + i + "_" + j);
+                    w = this.getWidgetByName(this._getChildName(i + "_" + j));
                 }
                 var left = totalW * 100 / widths[i];
                 w.element.css({position: "absolute", left: left + "%"});
                 if (j > 0) {
-                    var lastW = this.getWidgetByName(this.getName() + i + "_" + (j - 1));
+                    var lastW = this.getWidgetByName(this._getChildName(i + "_" + (j - 1)));
                     lastW.element.css({right: (100 - left) + "%"});
                 }
                 if (j == o.columns - 1) {
@@ -136,11 +113,11 @@ BI.DivisionLayout = BI.inherit(BI.Layout, {
         for (var j = 0; j < o.columns; j++) {
             var totalH = 0;
             for (var i = 0; i < o.rows; i++) {
-                var w = this.getWidgetByName(this.getName() + i + "_" + j);
+                var w = this.getWidgetByName(this._getChildName(i + "_" + j));
                 var top = totalH * 100 / heights[j];
                 w.element.css({top: top + "%"});
                 if (i > 0) {
-                    var lastW = this.getWidgetByName(this.getName() + (i - 1) + "_" + j);
+                    var lastW = this.getWidgetByName(this._getChildName((i - 1) + "_" + j));
                     lastW.element.css({bottom: (100 - top) + "%"});
                 }
                 if (i == o.rows - 1) {
@@ -151,7 +128,8 @@ BI.DivisionLayout = BI.inherit(BI.Layout, {
         }
     },
 
-    update: function () {
+    update: function (opt) {
+        return this.forceUpdate(opt);
     },
 
     populate: function (items) {

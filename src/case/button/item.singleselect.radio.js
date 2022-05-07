@@ -7,43 +7,62 @@ BI.SingleSelectRadioItem = BI.inherit(BI.BasicButton, {
     _defaultConfig: function () {
         return BI.extend(BI.SingleSelectRadioItem.superclass._defaultConfig.apply(this, arguments), {
             extraCls: "bi-single-select-radio-item",
+            attributes: {
+                tabIndex: 1
+            },
             logic: {
                 dynamic: false
             },
-            hgap: 10,
-            height: 24
+            height: BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT,
+            iconWrapperWidth: 16,
+            textHgap: 10,
         });
     },
-    _init: function () {
-        BI.SingleSelectRadioItem.superclass._init.apply(this, arguments);
-        var self = this, o = this.options;
-        this.radio = BI.createWidget({
-            type: "bi.radio",
-            once: o.once
-        });
-        this.text = BI.createWidget({
-            type: "bi.label",
-            cls: "list-item-text",
-            textAlign: "left",
-            whiteSpace: "nowrap",
-            textHeight: o.height,
-            height: o.height,
-            hgap: o.hgap,
-            text: o.text,
-            keyword: o.keyword,
-            value: o.value,
-            py: o.py
-        });
 
-        BI.createWidget(BI.extend({
-            element: this
-        }, BI.LogicFactory.createLogic("horizontal", BI.extend(o.logic, {
-            items: BI.LogicFactory.createLogicItemsByDirection("left", {
+    render: function () {
+        var self = this, o = this.options;
+        return {
+            type: "bi.vertical_adapt",
+            columnSize: [o.iconWrapperWidth || o.height, "fill"],
+            items: [{
                 type: "bi.center_adapt",
-                items: [this.radio],
-                width: 16
-            }, this.text)
-        }))));
+                items: [{
+                    type: "bi.radio",
+                    ref: function (_ref) {
+                        self.radio = _ref;
+                    },
+                }]
+            }, {
+                el: {
+                    type: "bi.label",
+                    ref: function (_ref) {
+                        self.text = _ref;
+                    },
+                    cls: "list-item-text",
+                    textAlign: "left",
+                    whiteSpace: "nowrap",
+                    textHeight: o.height,
+                    height: o.height,
+                    hgap: o.hgap || o.textHgap,
+                    vgap: o.textVgap,
+                    lgap: o.textLgap,
+                    rgap: o.textRgap,
+                    text: o.text,
+                    keyword: o.keyword,
+                    value: o.value,
+                    py: o.py
+                }
+            }]
+        };
+    },
+
+    _setEnable: function (enable) {
+        BI.SingleSelectRadioItem.superclass._setEnable.apply(this, arguments);
+        if (enable === true) {
+            this.element.attr("tabIndex", 1);
+        } else if (enable === false) {
+            this.element.removeAttr("tabIndex");
+        }
     },
 
     doRedMark: function () {

@@ -90,12 +90,13 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         }
     }
 
-    var bailRE = /[^\w.$]/;
+    // const bailRE = /[^\w.$]/
 
     function parsePath(path) {
-        if (bailRE.test(path)) {
-            return;
-        }
+        // 正常表达式比较慢，能不要的就不要了
+        // if (bailRE.test(path)) {
+        //     return
+        // }
         var segments = path.split('.');
         return function (obj) {
             for (var i = 0; i < segments.length; i++) {
@@ -248,42 +249,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         Dep.target = targetStack.pop();
     }
 
-    var arrayProto = Array.prototype;
-    var arrayMethods = [];
-    _.each(['push', 'pop', 'shift', 'unshift', 'splice', 'sort', 'reverse'], function (method) {
-        var original = arrayProto[method];
-        arrayMethods[method] = function mutator() {
-            for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-                args[_key] = arguments[_key];
-            }
-
-            var ob = this.__ob__;
-            var inserted = void 0;
-            switch (method) {
-                case 'push':
-                case 'unshift':
-                    inserted = args;
-                    break;
-                case 'splice':
-                    inserted = args.slice(2);
-                    break;
-            }
-            if (inserted) inserted = ob.observeArray(inserted);
-            switch (method) {
-                case 'push':
-                case 'unshift':
-                    args = inserted;
-                    break;
-                case 'splice':
-                    args = [args[0], args[1]].concat(inserted ? inserted : []);
-                    break;
-            }
-            var result = original.apply(this, args);
-            notify(ob.parent, ob.parentKey, ob.dep, true);
-            return result;
-        };
-    });
-
     //如果浏览器不支持ecma262v5的Object.defineProperties或者存在BUG，比如IE8
     //标准浏览器使用__defineGetter__, __defineSetter__实现
     var canHideProperty = true;
@@ -399,280 +364,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     }
 
     var createViewModel$1 = createViewModel;
-
-    var arrayKeys = _.keys(arrayMethods);
-
-    var observerState = {
-        shouldConvert: true
-    };
-
-    function def(obj, key, val, enumerable) {
-        Object.defineProperty(obj, key, {
-            value: val,
-            enumerable: !!enumerable,
-            writable: true,
-            configurable: true
-        });
-    }
-
-    /**
-     * Observer class that are attached to each observed
-     * object. Once attached, the observer converts target
-     * object's property keys into getter/setters that
-     * collect dependencies and dispatches updates.
-     */
-
-    var Observer = function () {
-        function Observer(value) {
-            _classCallCheck(this, Observer);
-
-            this.value = value;
-            this.dep = new Dep();
-            this.vmCount = 0;
-            if (_.isArray(value)) {
-                var augment = hasProto ? protoAugment : copyAugment;
-                augment(value, arrayMethods, arrayKeys);
-                this.model = this.observeArray(value);
-            } else {
-                this.model = this.walk(value);
-            }
-            if (isIE9Below) {
-                this.model['__ob__'] = this;
-            } else {
-                def(this.model, "__ob__", this);
-            }
-        }
-
-        Observer.prototype.walk = function walk(obj) {
-            return defineReactive(obj, this);
-        };
-
-        Observer.prototype.observeArray = function observeArray(items) {
-            for (var i = 0, l = items.length; i < l; i++) {
-                var ob = observe(items[i], this, i);
-                items[i] = ob ? ob.model : items[i];
-            }
-            return items;
-        };
-
-        return Observer;
-    }();
-
-    function protoAugment(target, src, keys) {
-        /* eslint-disable no-proto */
-        target.__proto__ = src;
-        /* eslint-enable no-proto */
-    }
-
-    /* istanbul ignore next */
-    function copyAugment(target, src, keys) {
-        for (var i = 0, l = keys.length; i < l; i++) {
-            var key = keys[i];
-            target[key] = src[key];
-        }
-    }
-
-    function observe(value, parentObserver, parentKey) {
-        if (!_.isObject(value)) {
-            return;
-        }
-        var ob = void 0;
-        if (value.__ob__ instanceof Observer) {
-            ob = value.__ob__;
-        } else if (observerState.shouldConvert && isExtensible(value) && (_.isArray(value) || isPlainObject(value))) {
-            ob = new Observer(value);
-        }
-        if (ob) {
-            ob.parent = parentObserver || ob.parent;
-            ob.parentKey = parentKey;
-        }
-        return ob;
-    }
-
-    function notify(observer, key, dep, refresh) {
-        dep.notify({ observer: observer, key: key, refresh: refresh });
-        if (observer) {
-            //触发a.*绑定的依赖
-            _.each(observer._deps, function (dep) {
-                dep.notify({ observer: observer, key: key });
-            });
-            //触发a.**绑定的依赖
-            var parent = observer,
-                root = observer,
-                route = key || "";
-            while (parent) {
-                _.each(parent._scopeDeps, function (dep) {
-                    dep.notify({ observer: observer, key: key });
-                });
-                if (parent.parentKey != null) {
-                    route = parent.parentKey + '.' + route;
-                }
-                root = parent;
-                parent = parent.parent;
-            }
-            for (var _key2 in root._globalDeps) {
-                var reg = new RegExp(_key2);
-                if (reg.test(route)) {
-                    root._globalDeps[_key2].notify({ observer: observer, key: _key2 });
-                }
-            }
-        }
-    }
-
-    function defineReactive(obj, observer, shallow) {
-        var props = {};
-        var model = void 0;
-        // if (typeof Proxy === 'function') {
-        //     const deps = {}, childObs = {}, cache = {}
-        //     _.each(obj, function (val, key) {
-        //         if (key in $$skipArray) {
-        //             return
-        //         }
-        //         cache[key] = val
-        //         const dep = deps[key] = (observer && observer['__dep' + key]) || new Dep()
-        //         observer && (observer['__dep' + key] = dep)
-        //         childObs[key] = !shallow && observe(val, observer, key)
-        //     })
-        //     return model = new Proxy(props, {
-        //         has: function (target, key) {
-        //             return key in obj;
-        //         },
-        //         get: function (target, key) {
-        //             if (key in $$skipArray) {
-        //                 return target[key]
-        //             }
-        //             const value = cache[key]
-        //             if (Dep.target) {
-        //                 deps[key].depend()
-        //                 if (childObs[key]) {
-        //                     childObs[key].dep.depend()
-        //                     if (_.isArray(value)) {
-        //                         dependArray(value)
-        //                     }
-        //                 }
-        //             }
-        //             return value
-        //         },
-        //         set: function (target, key, newVal) {
-        //             if (key in $$skipArray) {
-        //                 return target[key] = newVal
-        //             }
-        //             const value = cache[key], dep = deps[key]
-        //             if (newVal === value || (newVal !== newVal && value !== value)) {
-        //                 return newVal
-        //             }
-        //             cache[key] = newVal
-        //             childObs[key] = !shallow && observe(newVal, observer, key)
-        //             obj[key] = childObs[key] ? childObs[key].model : newVal
-        //             notify(model, key, dep)
-        //             return obj[key]
-        //         }
-        //     })
-        // }
-        _.each(obj, function (val, key) {
-            if (key in $$skipArray) {
-                return;
-            }
-            var configurable = isConfigurable(obj, key);
-            var dep = observer && observer['__dep' + key] || new Dep();
-            observer && (observer['__dep' + key] = dep);
-            var childOb = configurable && !shallow && observe(val, observer, key);
-            props[key] = {
-                enumerable: true,
-                configurable: true,
-                get: function reactiveGetter() {
-                    var value = childOb ? childOb.model : val;
-                    if (Dep.target) {
-                        dep.depend();
-                        if (childOb) {
-                            childOb.dep.depend();
-                            if (_.isArray(value)) {
-                                dependArray(value);
-                            }
-                        }
-                    }
-                    return value;
-                },
-                set: function reactiveSetter(newVal) {
-                    var value = childOb ? childOb.model : val;
-                    if (newVal === value || newVal !== newVal && value !== value) {
-                        return;
-                    }
-                    val = newVal;
-                    childOb = configurable && !shallow && observe(newVal, observer, key);
-                    if (childOb && value && value.__ob__) {
-                        childOb._scopeDeps = value.__ob__._scopeDeps;
-                        childOb._deps = value.__ob__._deps;
-                    }
-                    obj[key] = childOb ? childOb.model : newVal;
-                    notify(model.__ob__, key, dep);
-                }
-            };
-        });
-        return model = createViewModel$1(obj, props);
-    }
-
-    /**
-     * Set a property on an object. Adds the new property and
-     * triggers change notification if the property doesn't
-     * already exist.
-     */
-    function set(target, key, val) {
-        if (_.isArray(target)) {
-            target.length = Math.max(target.length, key);
-            target.splice(key, 1, val);
-            return val;
-        }
-        if (_.has(target, key)) {
-            target[key] = val;
-            return val;
-        }
-        var ob = target.__ob__;
-        if (!ob) {
-            target[key] = val;
-            return val;
-        }
-        ob.value[key] = val;
-        target = defineReactive(ob.value, ob);
-        notify(ob, key, ob.dep);
-        return target;
-    }
-
-    /**
-     * Delete a property and trigger change if necessary.
-     */
-    function del(target, key) {
-        if (_.isArray(target)) {
-            target.splice(key, 1);
-            return;
-        }
-        var ob = target.__ob__;
-        if (!_.has(target, key)) {
-            return;
-        }
-        if (!ob) {
-            delete target[key];
-            return target;
-        }
-        delete ob.value[key];
-        target = defineReactive(ob.value, ob);
-        notify(ob, key, ob.dep);
-        return target;
-    }
-
-    /**
-     * Collect dependencies on array elements when the array is touched, since
-     * we cannot intercept array element access like property getters.
-     */
-    function dependArray(value) {
-        for (var e, i = 0, l = value.length; i < l; i++) {
-            e = value[i];
-            e && e.__ob__ && e.__ob__.dep.depend();
-            if (_.isArray(e)) {
-                dependArray(e);
-            }
-        }
-    }
 
     var queue = [];
     var activatedChildren = [];
@@ -850,7 +541,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 // Deep watchers and watchers on Object/Arrays should fire even
                 // when the value is the same, because the value may
                 // have mutated.
-                options && options.refresh || this.deep) {
+                _.isObject(value) && options && options.refresh || this.deep) {
                     // set new value
                     var oldValue = this.value;
                     this.value = value;
@@ -888,7 +579,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 // remove self from vm's watcher list
                 // this is a somewhat expensive operation so we skip it
                 // if the vm is being destroyed.
-                remove(this.vm._watchers, this);
+                remove(this.vm && this.vm._watchers, this);
                 var i = this.deps.length;
                 while (i--) {
                     this.deps[i].removeSub(this);
@@ -935,6 +626,324 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         }
     }
 
+    var arrayProto = Array.prototype;
+    var arrayMethods = [];
+    _.each(['push', 'pop', 'shift', 'unshift', 'splice', 'sort', 'reverse'], function (method) {
+        var original = arrayProto[method];
+        arrayMethods[method] = function mutator() {
+            for (var _len = arguments.length, args = Array(_len), _key2 = 0; _key2 < _len; _key2++) {
+                args[_key2] = arguments[_key2];
+            }
+
+            var ob = this.__ob__;
+            var inserted = void 0;
+            switch (method) {
+                case 'push':
+                case 'unshift':
+                    inserted = args;
+                    break;
+                case 'splice':
+                    inserted = args.slice(2);
+                    break;
+            }
+            if (inserted) inserted = ob.observeArray(inserted);
+            switch (method) {
+                case 'push':
+                case 'unshift':
+                    args = inserted;
+                    break;
+                case 'splice':
+                    if (args.length > 2) {
+                        args = [args[0], args[1]].concat(inserted ? inserted : []);
+                    }
+                    break;
+            }
+            var result = original.apply(this, args);
+            notify(ob.parent, ob.parentKey, ob.dep, true);
+            return result;
+        };
+    });
+
+    var arrayKeys = _.keys(arrayMethods);
+
+    var observerState = {
+        shouldConvert: true
+    };
+
+    function def(obj, key, val, enumerable) {
+        Object.defineProperty(obj, key, {
+            value: val,
+            enumerable: !!enumerable,
+            writable: true,
+            configurable: true
+        });
+    }
+
+    /**
+     * Observer class that are attached to each observed
+     * object. Once attached, the observer converts target
+     * object's property keys into getter/setters that
+     * collect dependencies and dispatches updates.
+     */
+
+    var Observer = function () {
+        function Observer(value) {
+            _classCallCheck(this, Observer);
+
+            this.value = value;
+            this.dep = new Dep();
+            this.vmCount = 0;
+            if (_.isArray(value)) {
+                var augment = hasProto ? protoAugment : copyAugment;
+                augment(value, arrayMethods, arrayKeys);
+                this.model = this.observeArray(value);
+            } else {
+                this.model = this.walk(value);
+            }
+            if (isIE9Below) {
+                this.model['__ob__'] = this;
+            } else {
+                def(this.model, "__ob__", this);
+            }
+        }
+
+        Observer.prototype.walk = function walk(obj) {
+            return defineReactive(obj, this);
+        };
+
+        Observer.prototype.observeArray = function observeArray(items) {
+            for (var i = 0, l = items.length; i < l; i++) {
+                var ob = observe(items[i], this, i);
+                items[i] = ob ? ob.model : items[i];
+            }
+            return items;
+        };
+
+        return Observer;
+    }();
+
+    function protoAugment(target, src, keys) {
+        /* eslint-disable no-proto */
+        target.__proto__ = src;
+        /* eslint-enable no-proto */
+    }
+
+    /* istanbul ignore next */
+    function copyAugment(target, src, keys) {
+        for (var i = 0, l = keys.length; i < l; i++) {
+            var key = keys[i];
+            target[key] = src[key];
+        }
+    }
+
+    function observe(value, parentObserver, parentKey) {
+        if (!_.isObject(value)) {
+            return;
+        }
+        var ob = void 0;
+        if (value.__ob__ instanceof Observer) {
+            ob = value.__ob__;
+        } else if (observerState.shouldConvert && isExtensible(value) && (_.isArray(value) || isPlainObject(value))) {
+            ob = new Observer(value);
+        }
+        if (ob) {
+            ob.parent = parentObserver || ob.parent;
+            ob.parentKey = parentKey;
+        }
+        return ob;
+    }
+
+    function notify(observer, key, dep, refresh) {
+        dep.notify({ observer: observer, key: key, refresh: refresh });
+        if (observer) {
+            //触发a.*绑定的依赖
+            _.each(observer._deps, function (dep) {
+                dep.notify({ observer: observer, key: key });
+            });
+            //触发a.**绑定的依赖
+            var parent = observer,
+                root = observer,
+                route = key || "";
+            while (parent) {
+                _.each(parent._scopeDeps, function (dep) {
+                    dep.notify({ observer: observer, key: key });
+                });
+                if (parent.parentKey != null) {
+                    route = parent.parentKey + '.' + route;
+                }
+                root = parent;
+                parent = parent.parent;
+            }
+            for (var _key in root._globalDeps) {
+                var reg = new RegExp(_key);
+                if (reg.test(route)) {
+                    for (var i = 0; i < root._globalDeps[_key].length; i++) {
+                        root._globalDeps[_key][i].notify({ observer: observer, key: _key });
+                    }
+                }
+            }
+        }
+    }
+
+    function defineReactive(obj, observer, shallow) {
+        var props = {};
+        var model = void 0;
+        // if (typeof Proxy === 'function') {
+        //     const deps = {}, childObs = {}, cache = {}
+        //     _.each(obj, function (val, key) {
+        //         if (key in $$skipArray) {
+        //             return
+        //         }
+        //         cache[key] = val
+        //         const dep = deps[key] = (observer && observer['__dep' + key]) || new Dep()
+        //         observer && (observer['__dep' + key] = dep)
+        //         childObs[key] = !shallow && observe(val, observer, key)
+        //     })
+        //     return model = new Proxy(props, {
+        //         has: function (target, key) {
+        //             return key in obj;
+        //         },
+        //         get: function (target, key) {
+        //             if (key in $$skipArray) {
+        //                 return target[key]
+        //             }
+        //             const value = cache[key]
+        //             if (Dep.target) {
+        //                 deps[key].depend()
+        //                 if (childObs[key]) {
+        //                     childObs[key].dep.depend()
+        //                     if (_.isArray(value)) {
+        //                         dependArray(value)
+        //                     }
+        //                 }
+        //             }
+        //             return value
+        //         },
+        //         set: function (target, key, newVal) {
+        //             if (key in $$skipArray) {
+        //                 return target[key] = newVal
+        //             }
+        //             const value = cache[key], dep = deps[key]
+        //             if (newVal === value || (newVal !== newVal && value !== value)) {
+        //                 return newVal
+        //             }
+        //             cache[key] = newVal
+        //             childObs[key] = !shallow && observe(newVal, observer, key)
+        //             obj[key] = childObs[key] ? childObs[key].model : newVal
+        //             notify(model, key, dep)
+        //             return obj[key]
+        //         }
+        //     })
+        // }
+        _.each(obj, function (val, key) {
+            if (key in $$skipArray) {
+                return;
+            }
+            var configurable = isConfigurable(obj, key);
+            var dep = observer && observer['__dep' + key] || new Dep();
+            observer && (observer['__dep' + key] = dep);
+            var childOb = configurable && !shallow && observe(val, observer, key);
+            props[key] = {
+                enumerable: true,
+                configurable: true,
+                get: function reactiveGetter() {
+                    var value = childOb ? childOb.model : val;
+                    if (Dep.target) {
+                        dep.depend();
+                        if (childOb) {
+                            childOb.dep.depend();
+                            if (_.isArray(value)) {
+                                dependArray(value);
+                            }
+                        }
+                    }
+                    return value;
+                },
+                set: function reactiveSetter(newVal) {
+                    var value = childOb ? childOb.model : val;
+                    if (newVal === value || newVal !== newVal && value !== value) {
+                        return;
+                    }
+                    val = newVal;
+                    childOb = configurable && !shallow && observe(newVal, observer, key);
+                    if (childOb && value && value.__ob__) {
+                        childOb._scopeDeps = value.__ob__._scopeDeps;
+                        childOb._deps = value.__ob__._deps;
+                    }
+                    obj[key] = childOb ? childOb.model : newVal;
+                    notify(model.__ob__, key, dep);
+                }
+            };
+        });
+        return model = createViewModel$1(obj, props);
+    }
+
+    /**
+     * Set a property on an object. Adds the new property and
+     * triggers change notification if the property doesn't
+     * already exist.
+     */
+    function set(target, key, val) {
+        if (_.isArray(target)) {
+            target.length = Math.max(target.length, key);
+            target.splice(key, 1, val);
+            return val;
+        }
+        if (_.has(target, key)) {
+            target[key] = val;
+            return val;
+        }
+        var ob = target.__ob__;
+        if (!ob) {
+            target[key] = val;
+            return val;
+        }
+        ob.value[key] = val;
+        target = defineReactive(ob.value, ob);
+        notify(ob, key, ob.dep);
+        return target;
+    }
+
+    function freeze() {
+        return Object.freeze.apply(null, arguments);
+    }
+
+    /**
+     * Delete a property and trigger change if necessary.
+     */
+    function del(target, key) {
+        if (_.isArray(target)) {
+            target.splice(key, 1);
+            return;
+        }
+        var ob = target.__ob__;
+        if (!_.has(target, key)) {
+            return;
+        }
+        if (!ob) {
+            delete target[key];
+            return target;
+        }
+        delete ob.value[key];
+        target = defineReactive(ob.value, ob);
+        notify(ob, key, ob.dep);
+        return target;
+    }
+
+    /**
+     * Collect dependencies on array elements when the array is touched, since
+     * we cannot intercept array element access like property getters.
+     */
+    function dependArray(value) {
+        for (var e, i = 0, l = value.length; i < l; i++) {
+            e = value[i];
+            e && e.__ob__ && e.__ob__.dep.depend();
+            if (_.isArray(e)) {
+                dependArray(e);
+            }
+        }
+    }
+
     var falsy$1;
     var operators = {
         '||': falsy$1,
@@ -956,7 +965,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     }
 
     function routeToRegExp(route) {
-        route = route.replace(/\*./g, '[a-zA-Z0-9_]+.');
+        route = route.replace(/\*\*/g, '[a-zA-Z0-9_]+').replace(/\*./g, '[a-zA-Z0-9_]+.');
         return '^' + route + '$';
     }
 
@@ -971,7 +980,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         options = options || {};
         options.user = true;
         var exps = void 0;
-        if (_.isFunction(expOrFn) || !(exps = expOrFn.match(/[a-zA-Z0-9_.*]+|[|][|]|[&][&]|[(]|[)]/g)) || exps.length === 1 && !/\*/.test(expOrFn)) {
+        if (_.isFunction(expOrFn) || !(exps = expOrFn.match(/[a-zA-Z0-9_.*]+|[|][|]|[&][&]|[(]|[)]/g)) || exps.length === 1 && expOrFn.indexOf("*") < 0) {
             var watcher = new Watcher(model, expOrFn, cb, options);
             if (options.immediate) {
                 cb(watcher.value);
@@ -1012,44 +1021,86 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             if (_.has(operators, exp)) {
                 return;
             }
-            //a.**或a.*形式
-            if (/^[1-9a-zA-Z.]+(\*\*$|\*$)/.test(exp) || exp === "**") {
-                var isGlobal = /\*\*$/.test(exp);
-                if (isGlobal) {
-                    //a.**的形式
-                    exp = exp.replace(".**", "");
-                } else {
-                    //a.*的形式
-                    exp = exp.replace(".*", "");
+            if (exp.indexOf("*") >= 0) {
+                //a.**或a.*形式
+                if (/^[1-9a-zA-Z.]+(\*\*$|\*$)/.test(exp) || exp === "**" || exp === "*") {
+                    var isGlobal = exp.indexOf("**") >= 0;
+                    if (isGlobal) {
+                        //a.**的形式
+                        exp = exp.replace(".**", "");
+                    } else {
+                        //a.*的形式
+                        exp = exp.replace(".*", "");
+                    }
+                    var getter = exp === "**" || exp === "*" ? function (m) {
+                        return m;
+                    } : parsePath(exp);
+                    var v = getter.call(model, model);
+                    var _dep = new Dep();
+                    if (isGlobal) {
+                        (v.__ob__._scopeDeps || (v.__ob__._scopeDeps = [])).push(_dep);
+                    } else {
+                        (v.__ob__._deps || (v.__ob__._deps = [])).push(_dep);
+                    }
+                    var _w = new Watcher(model, function () {
+                        _dep.depend();
+                        return NaN;
+                    }, function (newValue, oldValue, attrs) {
+                        callback(i, newValue, oldValue, _.extend({ index: i }, attrs));
+                    }, options);
+                    watchers.push(function unwatchFn() {
+                        _w.teardown();
+                        v.__ob__._scopeDeps && remove(v.__ob__._scopeDeps, _dep);
+                        v.__ob__._deps && remove(v.__ob__._deps, _dep);
+                    });
+                    return;
                 }
-                var getter = exp === "**" ? function (m) {
-                    return m;
-                } : parsePath(exp);
-                var v = getter.call(model, model);
-                var dep = new Dep();
-                if (isGlobal) {
-                    (v.__ob__._scopeDeps || (v.__ob__._scopeDeps = [])).push(dep);
-                } else {
-                    (v.__ob__._deps || (v.__ob__._deps = [])).push(dep);
+                // **.a.**的情况，场景：a.b.c, 如果用b.**监听, a被重新赋值b上的_scopeDes就不存在了
+                if (/^(\*\*\.)+[1-9a-zA-Z]+(\.\*\*$)/.test(exp)) {
+                    //先获取到能获取到的对象
+                    var _paths = exp.split(".");
+                    var _currentModel = model[_paths[1]];
+                    exp = _paths[1] + ".**";
+                    //补全路径
+                    var _parent = _currentModel.__ob__.parent,
+                        _root = _currentModel.__ob__;
+                    while (_parent) {
+                        exp = '*.' + exp;
+                        _root = _parent;
+                        _parent = _parent.parent;
+                    }
+                    var _regStr = routeToRegExp(exp);
+                    var _dep2 = new Dep();
+                    _root._globalDeps || (_root._globalDeps = {});
+                    if (_.isArray(_root._globalDeps[_regStr])) {
+                        _root._globalDeps[_regStr].push(_dep2);
+                    } else {
+                        _root._globalDeps[_regStr] = [_dep2];
+                    }
+
+                    var _w2 = new Watcher(_currentModel, function () {
+                        _dep2.depend();
+                        return NaN;
+                    }, function (newValue, oldValue, attrs) {
+                        callback(i, newValue, oldValue, _.extend({ index: i }, attrs));
+                    }, options);
+                    watchers.push(function unwatchFn() {
+                        if (_root._globalDeps) {
+                            remove(_root._globalDeps[_regStr], _dep2);
+
+                            if (_root._globalDeps[_regStr].length === 0) {
+                                delete _root._globalDeps[_regStr];
+                                _w2.teardown();
+                            }
+                        }
+                    });
+                    return;
                 }
-                var w = new Watcher(model, function () {
-                    dep.depend();
-                    return NaN;
-                }, function (newValue, oldValue, attrs) {
-                    callback(i, newValue, oldValue, _.extend({ index: i }, attrs));
-                }, options);
-                watchers.push(function unwatchFn() {
-                    w.teardown();
-                    v.__ob__._scopeDeps && remove(v.__ob__._scopeDeps, dep);
-                    v.__ob__._deps && remove(v.__ob__._deps, dep);
-                });
-                return;
-            }
-            if (/\*\*$|\*$/.test(exp)) {
-                throw new Error('not support');
-            }
-            //其他含有*的情况，如*.a,*.*.a,a.*.a
-            if (/\*/.test(exp)) {
+                // 再有结尾有*的就不支持了
+                if (exp[exp.length - 1] === "*") {
+                    throw new Error('not support');
+                }
+                //其他含有*的情况，如*.a,*.*.a,a.*.a
                 var currentModel = model;
                 //先获取到能获取到的对象
                 var paths = exp.split(".");
@@ -1069,19 +1120,28 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                     parent = parent.parent;
                 }
                 var regStr = routeToRegExp(exp);
-                var _dep = new Dep();
+                var dep = new Dep();
                 root._globalDeps || (root._globalDeps = {});
-                root._globalDeps[regStr] = _dep;
+                if (_.isArray(root._globalDeps[regStr])) {
+                    root._globalDeps[regStr].push(dep);
+                } else {
+                    root._globalDeps[regStr] = [dep];
+                }
 
-                var _w = new Watcher(currentModel, function () {
-                    _dep.depend();
+                var w = new Watcher(currentModel, function () {
+                    dep.depend();
                     return NaN;
                 }, function (newValue, oldValue, attrs) {
                     callback(i, newValue, oldValue, _.extend({ index: i }, attrs));
                 }, options);
                 watchers.push(function unwatchFn() {
-                    _w.teardown();
-                    root._globalDeps && delete root._globalDeps[regStr];
+                    if (root._globalDeps) {
+                        remove(root._globalDeps[regStr], dep);
+                        if (root._globalDeps[regStr].length === 0) {
+                            delete root._globalDeps[regStr];
+                            w.teardown();
+                        }
+                    }
                 });
                 return;
             }
@@ -1106,58 +1166,52 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     }
 
     var computedWatcherOptions = { lazy: true };
+    var REACTIVE = true;
 
     function initState(vm, state) {
         if (state) {
-            vm.$$state = observe(state).model;
+            vm.$$state = REACTIVE ? observe(state).model : state;
         }
     }
 
     function initComputed(vm, computed) {
         var watchers = vm._computedWatchers = {};
-
         defineComputed(vm, computed);
-
         for (var key in computed) {
-            var userDef = computed[key],
-                context = vm.$$model ? vm.model : vm;
-            var getter = typeof userDef === "function" ? _.bind(userDef, context) : _.bind(userDef.get, context);
-
-            watchers[key] = new Watcher(vm.$$computed, getter || noop, noop, computedWatcherOptions);
+            watchers[key] = defineComputedWatcher(vm, computed[key]);
         }
+    }
+
+    function defineComputedWatcher(vm, userDef) {
+        var context = vm.$$model ? vm.model : vm;
+        var getter = typeof userDef === "function" ? userDef : userDef.get;
+
+        return new Watcher(context, getter || noop, noop, computedWatcherOptions);
+    }
+
+    function defineOneComputedGetter(vm, key, userDef) {
+        var shouldCache = true;
+        var sharedPropertyDefinition = {
+            enumerable: true,
+            configurable: true,
+            get: noop,
+            set: noop
+        };
+        if (typeof userDef === "function") {
+            sharedPropertyDefinition.get = createComputedGetter(vm, key);
+            sharedPropertyDefinition.set = noop;
+        } else {
+            sharedPropertyDefinition.get = userDef.get ? shouldCache && userDef.cache !== false ? createComputedGetter(vm, key) : userDef.get : noop;
+            sharedPropertyDefinition.set = userDef.set ? userDef.set : noop;
+        }
+        return sharedPropertyDefinition;
     }
 
     function defineComputed(vm, computed) {
         var props = {};
-        // if (typeof Proxy === 'function') {
-        //     return vm.$$computed = new Proxy(props, {
-        //         has: function (target, key) {
-        //             return computed && key in computed
-        //         },
-        //         get: function (target, key) {
-        //             return createComputedGetter(vm, key)()
-        //         }
-        //     })
-        // }
-        var shouldCache = true;
         for (var key in computed) {
             if (!(key in vm)) {
-                var sharedPropertyDefinition = {
-                    enumerable: true,
-                    configurable: true,
-                    get: noop,
-                    set: noop
-                };
-                var userDef = computed[key];
-                if (typeof userDef === "function") {
-                    sharedPropertyDefinition.get = createComputedGetter(vm, key);
-                    sharedPropertyDefinition.set = noop;
-                } else {
-                    sharedPropertyDefinition.get = userDef.get ? shouldCache && userDef.cache !== false ? createComputedGetter(key) : userDef.get : noop;
-                    sharedPropertyDefinition.set = userDef.set ? userDef.set : noop;
-                }
-
-                props[key] = sharedPropertyDefinition;
+                props[key] = defineOneComputedGetter(vm, key, computed[key]);
             }
         }
         vm.$$computed = createViewModel$1({}, props);
@@ -1170,7 +1224,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 if (watcher.dirty) {
                     watcher.evaluate();
                 }
-                if (Dep.target) {
+                if (REACTIVE && Dep.target) {
                     watcher.depend();
                 }
                 return watcher.value;
@@ -1210,7 +1264,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     }
 
     function initMixins(vm, mixins) {
-        mixins = mixins || [];
+        mixins = (mixins || []).slice(0);
 
         _.each(mixins.reverse(), function (mixinType) {
             var mixin$$1 = getMixins(mixinType);
@@ -1332,12 +1386,31 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         vm.$$context = createViewModel$1({}, props);
     }
 
+    function getInjectValue(vm, key) {
+        var p = vm._parent;
+        while (p) {
+            if (p.$$context && key in p.$$context) {
+                return p.$$context[key];
+            }
+            p = p._parent;
+        }
+    }
+
+    function getInjectValues(vm) {
+        var inject = vm.inject || [];
+        var result = {};
+        _.each(inject, function (key) {
+            result[key] = getInjectValue(vm, key);
+        });
+        return result;
+    }
+
     var Model = function () {
         function Model() {
             _classCallCheck(this, Model);
         }
 
-        Model.prototype._constructor = function _constructor(model) {
+        Model.prototype._constructor = function _constructor(model, destroyHandler) {
             if (model instanceof Observer || model instanceof Model) {
                 model = model.model;
             }
@@ -1350,21 +1423,26 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             var state = _.isFunction(this.state) ? this.state() : this.state;
             var computed = this.computed;
             var context = this.context;
+            var inject = this.inject;
             var childContext = this.childContext;
+            var provide = this.provide;
             var watch$$1 = this.watch;
             var actions = this.actions;
-            var keys = _.keys(this.$$model).concat(_.keys(state)).concat(_.keys(computed)).concat(context || []);
+            var keys = _.keys(this.$$model).concat(_.keys(state)).concat(_.keys(computed)).concat(inject || []).concat(context || []);
             var mixins = this.mixins;
             defineProps(this, keys);
+            // deprecated
             childContext && defineContext(this, childContext);
+            provide && defineContext(this, provide);
             this.$$model && (this.model.__ob__ = this.$$model.__ob__);
             initMixins(this, mixins);
             this.init();
-            initState(this, state);
+            initState(this, _.extend(getInjectValues(this), state));
             initComputed(this, computed);
-            initWatch(this, watch$$1);
+            REACTIVE && initWatch(this, watch$$1);
             initMethods(this, actions);
             this.created && this.created();
+            this._destroyHandler = destroyHandler;
             if (this.$$model) {
                 return this.model;
             }
@@ -1391,10 +1469,24 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             this.$$model = null;
             this.$$computed = null;
             this.$$state = null;
+            this._destroyHandler && this._destroyHandler();
         };
 
         return Model;
     }();
+
+    function define(model) {
+        return REACTIVE ? new Observer(model).model : model;
+    }
+
+    var reactive = define;
+
+    function config(options) {
+        options || (options = {});
+        if ("reactive" in options) {
+            REACTIVE = options.reactive;
+        }
+    }
 
     function toJSON(model) {
         var result = void 0;
@@ -1416,22 +1508,22 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         return result;
     }
 
-    function define(model) {
-        return new Observer(model).model;
-    }
     var version = '2.0';
 
-    exports.define = define;
     exports.version = version;
     exports.$$skipArray = $$skipArray;
     exports.mixin = mixin;
     exports.Model = Model;
+    exports.define = define;
+    exports.reactive = reactive;
+    exports.config = config;
     exports.observerState = observerState;
     exports.Observer = Observer;
     exports.observe = observe;
     exports.notify = notify;
     exports.defineReactive = defineReactive;
     exports.set = set;
+    exports.freeze = freeze;
     exports.del = del;
     exports.Watcher = Watcher;
     exports.pushTarget = pushTarget;

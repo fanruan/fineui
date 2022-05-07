@@ -26,7 +26,6 @@ BI.Pager = BI.inherit(BI.Widget, {
             }, // 初始化当前页
             groups: 0, // 连续显示分页数
             jump: BI.emptyFn, // 分页的回调函数
-
             first: false, // 是否显示首页
             last: false, // 是否显示尾页
             prev: "上一页",
@@ -37,11 +36,11 @@ BI.Pager = BI.inherit(BI.Widget, {
                 return 1;
             },
             hasPrev: BI.emptyFn, // pages不可用时有效
-            hasNext: BI.emptyFn  // pages不可用时有效
+            hasNext: BI.emptyFn // pages不可用时有效
         });
     },
-    _init: function () {
-        BI.Pager.superclass._init.apply(this, arguments);
+
+    render: function () {
         var self = this;
         this.currPage = BI.result(this.options, "curr");
         // 翻页太灵敏
@@ -83,9 +82,11 @@ BI.Pager = BI.inherit(BI.Widget, {
                     disabled: pages === false ? o.hasPrev(curr) === false : !(curr > 1 && prev !== false)
                 });
             } else {
-                view.push(BI.extend({
-                    disabled: pages === false ? o.hasPrev(curr) === false : !(curr > 1 && prev !== false)
-                }, prev));
+                view.push({
+                    el: BI.extend({
+                        disabled: pages === false ? o.hasPrev(curr) === false : !(curr > 1 && prev !== false)
+                    }, prev)
+                });
             }
         }
 
@@ -96,7 +97,7 @@ BI.Pager = BI.inherit(BI.Widget, {
                 value: "first",
                 disabled: !(dict.index > 1 && groups !== 0)
             });
-            if (dict.index > 1 && groups !== 0) {
+            if (dict.index > 1 && groups !== 0 && groups !== pages - 1) {
                 view.push({
                     type: "bi.label",
                     cls: "page-ellipsis",
@@ -110,6 +111,7 @@ BI.Pager = BI.inherit(BI.Widget, {
         dict.start = dict.index > 1 ? curr - dict.poor : 1;
         dict.end = dict.index > 1 ? (function () {
             var max = curr + (groups - dict.poor - 1);
+
             return max > pages ? pages : max;
         }()) : groups;
         if (dict.end - dict.start < groups - 1) { // 最后一组状态
@@ -137,7 +139,7 @@ BI.Pager = BI.inherit(BI.Widget, {
 
         // 总页数大于连续分页数，且当前组最大页小于总页，输出尾页
         if (((!o.dynamicShow && !o.dynamicShowFirstLast) || (pages > groups && dict.end < pages && groups !== 0)) && last) {
-            if (pages > groups && dict.end < pages && groups !== 0) {
+            if (pages > groups && dict.end < pages && groups !== 0 && groups !== pages - 1) {
                 view.push({
                     type: "bi.label",
                     cls: "page-ellipsis",
@@ -157,28 +159,36 @@ BI.Pager = BI.inherit(BI.Widget, {
             view.push((function () {
                 if (BI.isKey(next)) {
                     if (pages === false) {
-                        return {text: next, value: "next", disabled: o.hasNext(curr) === false};
+                        return { text: next, value: "next", disabled: o.hasNext(curr) === false };
                     }
+
                     return (dict.flow && curr === pages)
                         ?
-                        {text: next, value: "next", disabled: true}
+                        { text: next, value: "next", disabled: true }
                         :
-                        {text: next, value: "next", disabled: !(curr !== pages && next || dict.flow)};
+                        { text: next, value: "next", disabled: !(curr !== pages && next || dict.flow) };
                 }
-                return BI.extend({
-                    disabled: pages === false ? o.hasNext(curr) === false : !(curr !== pages && next || dict.flow)
-                }, next);
 
+                return {
+                    el: BI.extend({
+                        disabled: pages === false ? o.hasNext(curr) === false : !(curr !== pages && next || dict.flow)
+                    }, next)
+                };
             }()));
         }
 
         this.button_group = BI.createWidget({
             type: "bi.button_group",
             element: this,
-            items: BI.createItems(view, {
-                cls: "bi-list-item-select bi-border-radius",
-                height: 23,
-                hgap: 10
+            items: BI.map(view, function (idx, v) {
+                v = BI.extend({
+                    cls: "bi-list-item-select bi-border-radius",
+                    height: 23,
+                    hgap: v.el ? 0 : 10,
+                    stopPropagation: true
+                }, BI.stripEL(v));
+
+                return BI.formatEL(v);
             }),
             behaviors: o.behaviors,
             layouts: o.layouts
@@ -232,6 +242,7 @@ BI.Pager = BI.inherit(BI.Widget, {
         v || (v = 1);
         var o = this.options;
         var pages = this.options.pages;
+
         return pages === false ? o.hasPrev(v) : v > 1;
     },
 
@@ -239,6 +250,7 @@ BI.Pager = BI.inherit(BI.Widget, {
         v || (v = 1);
         var o = this.options;
         var pages = this.options.pages;
+
         return pages === false ? o.hasNext(v) : v < pages;
     },
 
@@ -267,7 +279,7 @@ BI.Pager = BI.inherit(BI.Widget, {
                 return BI.MIN;
             case "last":
                 return BI.MAX;
-            default :
+            default:
                 return val;
         }
     },

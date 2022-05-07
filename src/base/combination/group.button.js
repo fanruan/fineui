@@ -20,9 +20,8 @@ BI.ButtonGroup = BI.inherit(BI.Widget, {
         });
     },
 
-    _init: function () {
-        BI.ButtonGroup.superclass._init.apply(this, arguments);
-        var o = this.options;
+    render: function () {
+        var self = this, o = this.options;
         var behaviors = {};
         BI.each(o.behaviors, function (key, rule) {
             behaviors[key] = BI.BehaviorFactory.createBehavior(key, {
@@ -30,8 +29,14 @@ BI.ButtonGroup = BI.inherit(BI.Widget, {
             });
         });
         this.behaviors = behaviors;
-        this.populate(o.items);
-        if(BI.isKey(o.value) || BI.isNotEmptyArray(o.value)){
+        var items = BI.isFunction(o.items) ? this.__watch(o.items, function (context, newValue) {
+            self.populate(newValue);
+        }) : o.items;
+        this.populate(items);
+        o.value = BI.isFunction(o.value) ? this.__watch(o.value, function (context, newValue) {
+            self.setValue(newValue);
+        }) : o.value;
+        if (BI.isKey(o.value) || BI.isNotEmptyArray(o.value)) {
             this.setValue(o.value);
         }
     },
@@ -40,7 +45,7 @@ BI.ButtonGroup = BI.inherit(BI.Widget, {
         var o = this.options;
         return BI.createWidgets(BI.createItems(items, {
             type: "bi.text_button"
-        }));
+        }), this);
     },
 
     _btnsCreator: function (items) {
@@ -78,11 +83,12 @@ BI.ButtonGroup = BI.inherit(BI.Widget, {
 
     _packageBtns: function (btns) {
         var o = this.options;
-        for (var i = o.layouts.length - 1; i > 0; i--) {
+        var layouts = BI.isArray(o.layouts) ? o.layouts : [o.layouts];
+        for (var i = layouts.length - 1; i > 0; i--) {
             btns = BI.map(btns, function (k, it) {
-                return BI.extend({}, o.layouts[i], {
+                return BI.extend({}, layouts[i], {
                     items: [
-                        BI.extend({}, o.layouts[i].el, {
+                        BI.extend({}, layouts[i].el, {
                             el: it
                         })
                     ]
@@ -109,7 +115,7 @@ BI.ButtonGroup = BI.inherit(BI.Widget, {
     },
 
     _packageLayout: function (items) {
-        var o = this.options, layout = BI.deepClone(o.layouts[0]);
+        var o = this.options, layout = BI.deepClone(BI.isArray(o.layouts) ? o.layouts[0] : o.layouts);
 
         var lay = BI.formatEL(layout).el;
         while (lay && lay.items && !BI.isEmpty(lay.items)) {
@@ -122,7 +128,7 @@ BI.ButtonGroup = BI.inherit(BI.Widget, {
     // 如果是一个简单的layout
     _isSimpleLayout: function () {
         var o = this.options;
-        return o.layouts.length === 1 && !BI.isArray(o.items[0]);
+        return BI.isArray(o.layouts) ? (o.layouts.length === 1 && !BI.isArray(o.items[0])) : true;
     },
 
     doBehavior: function () {

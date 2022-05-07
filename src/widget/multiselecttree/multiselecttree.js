@@ -20,7 +20,8 @@ BI.MultiSelectTree = BI.inherit(BI.Single, {
 
         this.adapter = BI.createWidget({
             type: "bi.multi_select_tree_popup",
-            itemsCreator: o.itemsCreator
+            itemsCreator: o.itemsCreator,
+            showLine: o.showLine
         });
         this.adapter.on(BI.MultiSelectTreePopup.EVENT_CHANGE, function () {
             if (self.searcher.isSearching()) {
@@ -163,8 +164,7 @@ BI.MultiSelectTree = BI.inherit(BI.Single, {
     },
 
     populate: function () {
-        this.searcher.populate.apply(this.searcher, arguments);
-        this.adapter.populate.apply(this.adapter, arguments);
+        this.adapter.populate();
     }
 });
 BI.MultiSelectTree.EVENT_CHANGE = "EVENT_CHANGE";

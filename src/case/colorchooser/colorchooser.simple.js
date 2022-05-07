@@ -25,12 +25,17 @@ BI.SimpleColorChooser = BI.inherit(BI.Widget, {
             value: o.value,
             width: o.width,
             height: o.height,
+            destroyWhenHide: o.destroyWhenHide,
             popup: {
-                type: "bi.simple_color_chooser_popup"
+                type: "bi.simple_hex_color_chooser_popup",
+                recommendColorsGetter: o.recommendColorsGetter,
             }
         });
         this.combo.on(BI.ColorChooser.EVENT_CHANGE, function () {
             self.fireEvent(BI.SimpleColorChooser.EVENT_CHANGE, arguments);
+        });
+        this.combo.on(BI.ColorChooser.EVENT_AFTER_POPUPVIEW, function () {
+            self.fireEvent(BI.SimpleColorChooser.EVENT_AFTER_POPUPVIEW, arguments);
         });
     },
 
@@ -55,4 +60,5 @@ BI.SimpleColorChooser = BI.inherit(BI.Widget, {
     }
 });
 BI.SimpleColorChooser.EVENT_CHANGE = "EVENT_CHANGE";
+BI.SimpleColorChooser.EVENT_AFTER_POPUPVIEW = "EVENT_AFTER_POPUPVIEW";
 BI.shortcut("bi.simple_color_chooser", BI.SimpleColorChooser);

@@ -13,95 +13,81 @@ export type _Date = {
     _MD: number[];
     _OFFSET: number[];
 }
-/**
- * 获取时区
- */
-export type _getTimezone = (date: Date) => string;
-
-/**
- * 获取指定月共有多少天
- */
-export type _getMonthDays = (date: Date, month: number) => string;
-
-/**
- * 获取指定月的最后一天
- */
-export type _getLastDateOfMonth = (data: Date) => Date;
-
-/**
- * 获取指定时间距离当年已经过了多少天
- */
-export type _getDayOfYear = (data: Date) => number;
-
-/**
- * 获取指定时间距离当年已经过了多少周
- */
-export type _getWeekNumber = (data: Date) => number;
-
-/**
- * 获取指定时间的所处季度
- */
-export type _getQuarter = (date: Date) => number;
-
-/**
- * 离当前时间多少天的时间
- */
-export type _getOffsetDate = (date: Date, offset: number) => Date;
-
-/**
- * 离当前时间多少天季度的时间
- */
-export type _getOffsetQuarter = (date: Date, n: number) => Date;
-
-/**
- * 得到本季度的起始月份
- */
-export type _getQuarterStartMonth = (date: Date) => number;
-
-/**
- * 获得本季度的起始日期
- */
-export type _getQuarterStartDate = (date: Date) => number;
-
-/**
- * 获取本季度的其实日期
- */
-export type _getQuarterEndDate = (date: Date) => number;
-
-/**
- * 指定日期n个月之前或之后的日期
- */
-export type _getOffsetMonth = (date: Date, n: number) => Date;
-
-/**
- * 获取本周的起始日期
- */
-export type _getWeekStartDate = (date: Date) => Date;
-
-/**
- * 获取本周的结束日期
- */
-export type _getWeekEndDate = (date: Date) => Date;
-
-/**
- * 格式化打印日期
- */
-export type _print = (date: Date, str: string) => string;
 
 export type _date = {
-    getTimezone: _getTimezone;
-    getMonthDays: _getMonthDays;
-    getLastDateOfMonth: _getLastDateOfMonth;
-    getDayOfYear: _getDayOfYear;
-    getWeekNumber: _getWeekNumber;
-    getQuarter: _getQuarter;
-    getOffsetDate: _getOffsetDate;
-    getOffsetQuarter: _getOffsetQuarter;
-    getQuarterStartMonth: _getQuarterStartMonth;
-    getQuarterStartDate: _getQuarterStartDate;
-    getQuarterEndDate: _getQuarterEndDate;
-    getOffsetMonth: _getOffsetMonth;
-    getWeekStartDate: _getWeekStartDate;
-    getWeekEndDate: _getWeekEndDate;
-    print: _print;
+
+    /**
+     * 获取时区
+     */
+    getTimezone: (date: Date) => string;
+
+    /**
+     * 获取指定月共有多少天
+     */
+    getMonthDays: (date: Date, month: number) => number;
+
+    /**
+     * 获取指定月的最后一天
+     */
+    getLastDateOfMonth: (data: Date) => Date;
+
+    /**
+     * 获取指定时间距离当年已经过了多少天
+     */
+    getDayOfYear: (data: Date) => number;
+
+    /**
+     * 获取指定时间距离当年已经过了多少周
+     */
+    getWeekNumber: (data: Date) => number;
+
+    /**
+     * 获取指定时间的所处季度
+     */
+    getQuarter: (date: Date) => number;
+
+    /**
+     * 离当前时间多少天的时间
+     */
+    getOffsetDate: (date: Date, offset: number) => Date;
+
+    /**
+     * 离当前时间多少天季度的时间
+     */
+    getOffsetQuarter: (date: Date, n: number) => Date;
+
+    /**
+     * 得到本季度的起始月份
+     */
+    getQuarterStartMonth: (date: Date) => number;
+
+    /**
+     * 获得本季度的起始日期
+     */
+    getQuarterStartDate: (date: Date) => number;
+
+    /**
+     * 获取本季度的其实日期
+     */
+    getQuarterEndDate: (date: Date) => number;
+
+    /**
+     * 指定日期n个月之前或之后的日期
+     */
+    getOffsetMonth: (date: Date, n: number) => Date;
+
+    /**
+     * 获取本周的起始日期
+     */
+    getWeekStartDate: (date: Date) => Date;
+
+    /**
+     * 获取本周的结束日期
+     */
+    getWeekEndDate: (date: Date) => Date;
+    
+    /**
+     * 格式化打印日期
+     */
+    print: (date: Date, str: string) => string;
 }

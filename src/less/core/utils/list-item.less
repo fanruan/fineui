@@ -1,0 +1,752 @@
+@import "../../index.less";
+
+// hover的时候背景变化,文字变黑
+.bi-list-item {
+  &:hover, &.hover {
+    color: @color-bi-text-black;
+    & .bi-input {
+      color: @color-bi-text-black;
+    }
+    & .bi-textarea {
+      color: @color-bi-text-black;
+    }
+    .background-color(@color-bi-background-highlight, 10%);
+  }
+  &.disabled {
+    &, &:hover, &:active {
+      background-color: transparent !important;
+      color: @color-bi-text-disabled !important;
+      & .bi-input {
+        color: @color-bi-text-disabled !important;
+      }
+      & .bi-textarea {
+        color: @color-bi-text-disabled !important;
+      }
+      & .bi-high-light {
+        color: @color-bi-text-disabled !important;
+      }
+    }
+  }
+}
+
+.bi-theme-dark {
+  .bi-list-item {
+    &:hover, &.hover {
+      color: @color-bi-text;
+      & .bi-input {
+        color: @color-bi-text;
+      }
+      & .bi-textarea {
+        color: @color-bi-text;
+      }
+      .background-color(@color-bi-background-highlight, 10%);
+    }
+    &.disabled {
+      &, &:hover, &:active {
+        background-color: transparent !important;
+        color: @color-bi-text-disabled-theme-dark !important;
+        & .bi-input {
+          color: @color-bi-text-disabled-theme-dark !important;
+        }
+        & .bi-textarea {
+          color: @color-bi-text-disabled-theme-dark !important;
+        }
+        & .bi-high-light {
+          color: @color-bi-text-disabled-theme-dark !important;
+        }
+      }
+    }
+  }
+}
+
+// active的时候边框高亮
+.bi-list-item-border {
+  &:active, &.active {
+    border: 1px solid @color-bi-border-highlight;
+  }
+}
+
+// 极简,hover的时候文字高亮
+.bi-list-item-simple {
+  &:hover, &.hover {
+    color: @color-bi-text-highlight;
+    & .bi-input {
+      color: @color-bi-text-highlight;
+    }
+    & .bi-textarea {
+      color: @color-bi-text-highlight;
+    }
+  }
+  &.disabled {
+    &, &:hover, &:active {
+      color: @color-bi-text-disabled !important;
+      & .bi-input {
+        color: @color-bi-text-disabled !important;
+      }
+      & .bi-textarea {
+        color: @color-bi-text-disabled !important;
+      }
+      & .bi-high-light {
+        color: @color-bi-text-disabled !important;
+      }
+    }
+  }
+}
+
+// hover的时候文字变黑
+// active的时候文字高亮
+.bi-list-item-effect {
+  &:hover {
+    color: @color-bi-text-black;
+    & .bi-input {
+      color: @color-bi-text-black;
+    }
+    & .bi-textarea {
+      color: @color-bi-text-black;
+    }
+  }
+  &.active, &:active {
+    color: @color-bi-text-highlight;
+    & .bi-input {
+      color: @color-bi-text-highlight;
+    }
+    & .bi-textarea {
+      color: @color-bi-text-highlight;
+    }
+  }
+  &.disabled {
+    &, &:hover, &:active {
+      color: @color-bi-text-disabled !important;
+      & .bi-input {
+        color: @color-bi-text-disabled !important;
+      }
+      & .bi-textarea {
+        color: @color-bi-text-disabled !important;
+      }
+      & .bi-high-light {
+        color: @color-bi-text-disabled !important;
+      }
+    }
+  }
+}
+
+.bi-theme-dark {
+  .bi-list-item-effect {
+    &:hover {
+      color: @color-bi-text;
+      & .bi-input {
+        color: @color-bi-text;
+      }
+      & .bi-textarea {
+        color: @color-bi-text;
+      }
+    }
+    &.active, &:active {
+      color: @color-bi-text-highlight;
+      & .bi-input {
+        color: @color-bi-text-highlight;
+      }
+      & .bi-textarea {
+        color: @color-bi-text-highlight;
+      }
+    }
+    &.disabled {
+      &, &:hover, &:active {
+        background-color: transparent !important;
+        color: @color-bi-text-disabled-theme-dark !important;
+        & .bi-input {
+          color: @color-bi-text-disabled-theme-dark !important;
+        }
+        & .bi-textarea {
+          color: @color-bi-text-disabled-theme-dark !important;
+        }
+        & .bi-high-light {
+          color: @color-bi-text-disabled-theme-dark !important;
+        }
+      }
+    }
+  }
+}
+
+// hover的时候背景变化,文字变黑
+// :active的时候文字高亮,背景变化
+.bi-list-item-active {
+  &:hover, &.hover {
+    color: @color-bi-text-black;
+    & .bi-input {
+      color: @color-bi-text-black;
+    }
+    & .bi-textarea {
+      color: @color-bi-text-black;
+    }
+    .background-color(@color-bi-background-highlight, 10%);
+  }
+  &:active {
+    color: @color-bi-text-highlight;
+    & .bi-input {
+      color: @color-bi-text-highlight;
+    }
+    & .bi-textarea {
+      color: @color-bi-text-highlight;
+    }
+    .background-color(@color-bi-background-highlight, 15%);
+  }
+  &.active {
+    color: @color-bi-text-highlight;
+    & .bi-input {
+      color: @color-bi-text-highlight;
+    }
+    & .bi-textarea {
+      color: @color-bi-text-highlight;
+    }
+  }
+  &.disabled {
+    &, &:hover, &:active {
+      background-color: transparent !important;
+      color: @color-bi-text-disabled !important;
+      & .bi-input {
+        color: @color-bi-text-disabled !important;
+      }
+      & .bi-textarea {
+        color: @color-bi-text-disabled !important;
+      }
+      & .bi-high-light {
+        color: @color-bi-text-disabled !important;
+      }
+    }
+  }
+}
+
+.bi-theme-dark {
+  .bi-list-item-active {
+    &:hover, &.hover {
+      color: @color-bi-text;
+      & .bi-input {
+        color: @color-bi-text;
+      }
+      & .bi-textarea {
+        color: @color-bi-text;
+      }
+      .background-color(@color-bi-background-default, 5%);
+    }
+    &.active, &:active {
+      color: @color-bi-text-highlight;
+      & .bi-input {
+        color: @color-bi-text-highlight;
+      }
+      & .bi-textarea {
+        color: @color-bi-text-highlight;
+      }
+      .background-color(@color-bi-background-default, 5%);
+    }
+    &.disabled {
+      &, &:hover, &:active {
+        background-color: transparent !important;
+        color: @color-bi-text-disabled-theme-dark !important;
+        & .bi-input {
+          color: @color-bi-text-disabled-theme-dark !important;
+        }
+        & .bi-textarea {
+          color: @color-bi-text-disabled-theme-dark !important;
+        }
+        & .bi-high-light {
+          color: @color-bi-text-disabled-theme-dark !important;
+        }
+      }
+    }
+  }
+}
+
+// hover的时候背景变化,文字变黑
+// active的时候文字高亮,背景变化
+.bi-list-item-active2 {
+  &:hover, &.hover {
+    color: @color-bi-text-black;
+    & .bi-input {
+      color: @color-bi-text-black;
+    }
+    & .bi-textarea {
+      color: @color-bi-text-black;
+    }
+    .background-color(@color-bi-background-highlight, 10%);
+  }
+  &:active, &.active {
+    color: @color-bi-text-highlight;
+    & .bi-input {
+      color: @color-bi-text-highlight;
+    }
+    & .bi-textarea {
+      color: @color-bi-text-highlight;
+    }
+    .background-color(@color-bi-background-highlight, 15%);
+  }
+  &.disabled {
+    &, &:hover, &:active {
+      background-color: transparent !important;
+      color: @color-bi-text-disabled !important;
+      & .bi-input {
+        color: @color-bi-text-disabled !important;
+      }
+      & .bi-textarea {
+        color: @color-bi-text-disabled !important;
+      }
+      & .bi-high-light {
+        color: @color-bi-text-disabled !important;
+      }
+    }
+  }
+}
+
+.bi-theme-dark {
+  .bi-list-item-active2 {
+    &:hover, &.hover {
+      color: @color-bi-text;
+      & .bi-input {
+        color: @color-bi-text;
+      }
+      & .bi-textarea {
+        color: @color-bi-text;
+      }
+      .background-color(@color-bi-background-highlight, 10%);
+    }
+    &:active, &.active {
+      color: @color-bi-text-highlight;
+      & .bi-input {
+        color: @color-bi-text-highlight;
+      }
+      & .bi-textarea {
+        color: @color-bi-text-highlight;
+      }
+      .background-color(@color-bi-background-highlight, 15%);
+    }
+    &.disabled {
+      &, &:hover, &:active {
+        background-color: transparent !important;
+        color: @color-bi-text-disabled-theme-dark !important;
+        & .bi-input {
+          color: @color-bi-text-disabled-theme-dark !important;
+        }
+        & .bi-textarea {
+          color: @color-bi-text-disabled-theme-dark !important;
+        }
+        & .bi-high-light {
+          color: @color-bi-text-disabled-theme-dark !important;
+        }
+      }
+    }
+  }
+}
+
+// hover的时候背景变化 -- 变灰
+// active的时候文字高亮背景变化 -- 变灰
+.bi-list-item-active3, .bi-list-item-select3 {
+  &:hover, &.hover {
+    background-color: @color-bi-background-normal;
+  }
+  &:active, &.active {
+    color: @color-bi-text-highlight;
+    & .bi-input {
+      color: @color-bi-text-highlight;
+    }
+    & .bi-textarea {
+      color: @color-bi-text-highlight;
+    }
+    background-color: @color-bi-background-normal;
+  }
+  &.disabled {
+    &:hover, &.hover, &:active, &.active {
+      background-color: @color-bi-background-default !important;
+    }
+  }
+}
+
+.bi-theme-dark {
+  .bi-list-item-active3, .bi-list-item-select3 {
+    &:hover, &.hover {
+      background-color: @color-bi-background-normal-theme-dark;
+    }
+    &:active, &.active {
+      color: @color-bi-text-highlight;
+      & .bi-input {
+        color: @color-bi-text-highlight;
+      }
+      & .bi-textarea {
+        color: @color-bi-text-highlight;
+      }
+      background-color: @color-bi-background-normal-theme-dark;
+    }
+    &.disabled {
+      &:hover, &.hover, &:active, &.active {
+        background-color: @color-bi-background-default-theme-dark !important;
+      }
+    }
+  }
+}
+
+// hover的时候背景变化
+// active的时候背景高亮
+.bi-list-item-select {
+  &:hover, &.hover {
+    .background-color(@color-bi-background-highlight, 10%);
+  }
+  &:active {
+    color: @color-bi-text-highlight;
+    & .bi-input {
+      color: @color-bi-text-highlight;
+    }
+    & .bi-textarea {
+      color: @color-bi-text-highlight;
+    }
+    .background-color(@color-bi-background-highlight, 15%);
+  }
+  &.active {
+    color: @color-bi-text;
+    & .bi-input {
+      color: @color-bi-text;
+    }
+    & .bi-textarea {
+      color: @color-bi-text;
+    }
+    background-color: @color-bi-background-highlight;
+    & .bi-high-light {
+      color: @color-bi-text;
+    }
+  }
+  &.button-success {
+    &:active, &.active {
+      color: @color-bi-text;
+      background-color: @color-bi-background-success;
+      & .bi-input {
+        color: @color-bi-text;
+      }
+      & .bi-textarea {
+        color: @color-bi-text;
+      }
+      & .bi-high-light {
+        color: @color-bi-text;
+      }
+      &.bi-high-light-border {
+        border-color: @color-bi-border-success;
+      }
+    }
+  }
+  &.button-warning {
+    & {
+      color: @color-bi-text-failure;
+      & .bi-input {
+        color: @color-bi-text-failure;
+      }
+      & .bi-textarea {
+        color: @color-bi-text-failure;
+      }
+      & .bi-high-light {
+        color: @color-bi-text-failure;
+      }
+      &.bi-high-light-border {
+        border-color: @color-bi-border-failure;
+      }
+    }
+    &:hover, &.hover {
+      color: @color-bi-text-failure;
+      & .bi-input {
+        color: @color-bi-text-failure;
+      }
+      & .bi-textarea {
+        color: @color-bi-text-failure;
+      }
+      background-color: @color-bi-background-light-failure;
+      & .bi-high-light {
+        color: @color-bi-text-failure;
+      }
+      &.bi-high-light-border {
+        border-color: @color-bi-border-failure;
+      }
+    }
+    &:active, &.active {
+      color: @color-bi-text;
+      & .bi-input {
+        color: @color-bi-text;
+      }
+      & .bi-textarea {
+        color: @color-bi-text;
+      }
+      background-color: @color-bi-background-failure;
+      & .bi-high-light {
+        color: @color-bi-text;
+      }
+      &.bi-high-light-border {
+        border-color: @color-bi-border-failure;
+      }
+    }
+  }
+  &.disabled {
+    &, &:hover, &:active {
+      color: @color-bi-text-disabled !important;
+      & .bi-input {
+        color: @color-bi-text-disabled !important;
+      }
+      & .bi-textarea {
+        color: @color-bi-text-disabled !important;
+      }
+      background-color: transparent !important;
+      & .bi-high-light {
+        color: @color-bi-text-disabled !important;
+      }
+      &.bi-high-light-border {
+        border-color: @color-bi-border-disabled;
+      }
+      &.hover, &.active {
+        color: @color-bi-text !important;
+        & .bi-input {
+          color: @color-bi-text !important;
+        }
+        & .bi-textarea {
+          color: @color-bi-text !important;
+        }
+        background-color: @color-bi-background-dark-gray !important;
+        & .bi-high-light {
+          color: @color-bi-text-disabled !important;
+        }
+        &.bi-high-light-border {
+          border-color: @color-bi-border-disabled;
+        }
+      }
+    }
+  }
+}
+
+.bi-theme-dark {
+  .bi-list-item-select {
+    &:hover, &.hover {
+      color: @color-bi-text;
+      & .bi-input {
+        color: @color-bi-text;
+      }
+      & .bi-textarea {
+        color: @color-bi-text;
+      }
+      .background-color(@color-bi-background-default, 5%);
+    }
+    &:active {
+      color: @color-bi-text;
+      & .bi-input {
+        color: @color-bi-text;
+      }
+      & .bi-textarea {
+        color: @color-bi-text;
+      }
+      .background-color(@color-bi-background-default, 5%);
+    }
+    &.active {
+      color: @color-bi-text;
+      & .bi-input {
+        color: @color-bi-text;
+      }
+      & .bi-textarea {
+        color: @color-bi-text;
+      }
+      background-color: @color-bi-background-highlight;
+      & .bi-high-light {
+        color: @color-bi-text;
+      }
+    }
+    &.disabled {
+      &, &:hover, &:active {
+        background-color: transparent !important;
+        color: @color-bi-text-disabled-theme-dark !important;
+        & .bi-input {
+          color: @color-bi-text-disabled-theme-dark !important;
+        }
+        & .bi-textarea {
+          color: @color-bi-text-disabled-theme-dark !important;
+        }
+        & .bi-high-light {
+          color: @color-bi-text-disabled-theme-dark !important;
+        }
+      }
+      &.hover, &.active {
+        background-color: @background-color-black-theme-dark !important;
+      }
+    }
+  }
+}
+
+// hover的时候边框高亮,文字变黑
+// :active的时候文字高亮，边框高亮
+// .active的时候背景高亮，边框高亮
+.bi-list-item-select2 {
+  &:hover, &.hover {
+    color: @color-bi-text-black;
+    & .bi-input {
+      color: @color-bi-text-black;
+    }
+    & .bi-textarea {
+      color: @color-bi-text-black;
+    }
+    &.bi-border {
+      border-color: @color-bi-border-highlight;
+    }
+  }
+  &:active {
+    color: @color-bi-text-highlight;
+    & .bi-input {
+      color: @color-bi-text-highlight;
+    }
+    & .bi-textarea {
+      color: @color-bi-text-highlight;
+    }
+    &.bi-border {
+      border-color: @color-bi-border-highlight;
+    }
+  }
+  &.active {
+    color: @color-bi-text;
+    & .bi-input {
+      color: @color-bi-text;
+    }
+    & .bi-textarea {
+      color: @color-bi-text;
+    }
+    &.bi-border {
+      border-color: @color-bi-border-highlight;
+    }
+    background-color: @color-bi-background-highlight;
+  }
+  &.disabled {
+    &, &:hover, &:active {
+      background-color: transparent !important;
+      color: @color-bi-text-disabled !important;
+      & .bi-input {
+        color: @color-bi-text-disabled !important;
+      }
+      & .bi-textarea {
+        color: @color-bi-text-disabled !important;
+      }
+      & .bi-high-light {
+        color: @color-bi-text-disabled !important;
+      }
+    }
+  }
+}
+
+.bi-theme-dark {
+  .bi-list-item-select2 {
+    &:hover, &.hover {
+      color: @color-bi-text;
+      & .bi-input {
+        color: @color-bi-text;
+      }
+      & .bi-textarea {
+        color: @color-bi-text;
+      }
+    }
+
+    &.active {
+      background-color: @color-bi-background-default-theme-dark;
+    }
+
+    &.disabled {
+      &, &:hover, &:active {
+        background-color: transparent !important;
+        color: @color-bi-text-disabled-theme-dark !important;
+        & .bi-input {
+          color: @color-bi-text-disabled-theme-dark !important;
+        }
+        & .bi-textarea {
+          color: @color-bi-text-disabled-theme-dark !important;
+        }
+        & .bi-high-light {
+          color: @color-bi-text-disabled-theme-dark !important;
+        }
+      }
+      &.active {
+        background-color: @background-color-black-theme-dark !important;
+      }
+    }
+  }
+}
+
+// 去掉list-item效果
+.bi-list-item-none {
+  &:hover, &.hover {
+    color: inherit;
+    & .bi-input {
+      color: inherit;
+    }
+    & .bi-textarea {
+      color: inherit;
+    }
+    background-color: transparent;
+  }
+  &:active, &.active {
+    color: inherit;
+    & .bi-input {
+      color: inherit;
+    }
+    & .bi-textarea {
+      color: inherit;
+    }
+    background-color: transparent;
+    & .bi-high-light {
+      color: inherit;
+    }
+  }
+  &.disabled {
+    &, &:hover, &:active {
+      color: @color-bi-text-disabled !important;
+      & .bi-input {
+        color: @color-bi-text-disabled !important;
+      }
+      & .bi-textarea {
+        color: @color-bi-text-disabled !important;
+      }
+      background-color: transparent !important;
+      & .bi-high-light {
+        color: @color-bi-text-disabled !important;
+      }
+    }
+  }
+}
+
+.bi-theme-dark {
+  .bi-list-item-none {
+    &:hover, &.hover {
+      color: inherit;
+      & .bi-input {
+        color: inherit;
+      }
+      & .bi-textarea {
+        color: inherit;
+      }
+      background-color: transparent;
+    }
+    &:active, &.active {
+      color: inherit;
+      & .bi-input {
+        color: inherit;
+      }
+      & .bi-textarea {
+        color: inherit;
+      }
+      background-color: transparent;
+      & .bi-high-light {
+        color: inherit;
+      }
+    }
+    &.disabled {
+      &, &:hover, &:active {
+        background-color: transparent !important;
+        color: @color-bi-text-disabled-theme-dark !important;
+        & .bi-input {
+          color: @color-bi-text-disabled-theme-dark !important;
+        }
+        & .bi-textarea {
+          color: @color-bi-text-disabled-theme-dark !important;
+        }
+        & .bi-high-light {
+          color: @color-bi-text-disabled-theme-dark !important;
+        }
+      }
+    }
+  }
+}

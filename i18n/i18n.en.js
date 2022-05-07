@@ -117,5 +117,6 @@ BI.i18n = {
     "BI-Basic_Simple_Thursday": "Thu",
     "BI-Multi_Date_Year_Prev": "",
     "BI-Tiao_Data": "",
-    "BI-Basic_Italic": "Italic"
+    "BI-Basic_Italic": "Italic",
+    "BI-Color_Picker_Error_Text_Hex": "Please Input Correct Hex Value"
 };

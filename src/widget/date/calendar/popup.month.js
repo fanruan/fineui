@@ -18,6 +18,37 @@ BI.MonthPopup = BI.inherit(BI.Widget, {
         BI.MonthPopup.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
 
+        this.selectedMonth = BI.getDate().getMonth() + 1;
+
+        this.month = BI.createWidget({
+            type: "bi.button_group",
+            element: this,
+            behaviors: o.behaviors,
+            items: BI.createItems(this._getItems(o.allowMonths), {}),
+            layouts: [BI.LogicFactory.createLogic("table", BI.extend({
+                dynamic: true
+            }, {
+                columns: 2,
+                rows: 6,
+                columnSize: [1 / 2, 1 / 2],
+                rowSize: BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT + 1
+            })), {
+                type: "bi.center_adapt",
+                vgap: 2,
+            }],
+            value: o.value
+        });
+
+        this.month.on(BI.Controller.EVENT_CHANGE, function (type, value) {
+            self.selectedMonth = value;
+            self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
+            if (type === BI.Events.CLICK) {
+                self.fireEvent(BI.MonthPopup.EVENT_CHANGE);
+            }
+        });
+    },
+
+    _getItems: function(m) {
         // 纵向排列月
         var month = [1, 7, 2, 8, 3, 9, 4, 10, 5, 11, 6, 12];
         var items = [];
@@ -31,53 +62,34 @@ BI.MonthPopup = BI.inherit(BI.Widget, {
             return BI.map(item, function (j, td) {
                 return {
                     type: "bi.text_item",
-                    cls: "bi-list-item-select",
+                    cls: "bi-border-radius bi-list-item-select",
                     textAlign: "center",
                     whiteSpace: "nowrap",
                     once: false,
                     forceSelected: true,
-                    height: 23,
-                    width: 38,
+                    height: BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT - 1,
+                    width: 30,
                     value: td,
-                    text: td
+                    text: td,
+                    disabled: !BI.contains(m, td)
                 };
             });
         });
 
-        this.month = BI.createWidget({
-            type: "bi.button_group",
-            element: this,
-            behaviors: o.behaviors,
-            items: BI.createItems(items, {}),
-            layouts: [BI.LogicFactory.createLogic("table", BI.extend({
-                dynamic: true
-            }, {
-                columns: 2,
-                rows: 6,
-                columnSize: [1 / 2, 1 / 2],
-                rowSize: 25
-            })), {
-                type: "bi.center_adapt",
-                vgap: 1,
-                hgap: 2
-            }],
-            value: o.value
-        });
+        return items;
+    },
 
-        this.month.on(BI.Controller.EVENT_CHANGE, function (type) {
-            self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
-            if (type === BI.Events.CLICK) {
-                self.fireEvent(BI.MonthPopup.EVENT_CHANGE);
-            }
-        });
+    populate: function(months) {
+        this.month.populate(this._getItems(months));
     },
 
     getValue: function () {
-        return this.month.getValue()[0];
+        return this.selectedMonth;
     },
 
     setValue: function (v) {
         v = BI.parseInt(v);
+        this.selectedMonth = v;
         this.month.setValue([v]);
     }
 });

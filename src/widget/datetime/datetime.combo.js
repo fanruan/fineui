@@ -6,7 +6,8 @@ BI.DateTimeCombo = BI.inherit(BI.Single, {
         popupHeight: 290,
         popupWidth: 270,
         comboAdjustHeight: 1,
-        border: 1
+        border: 1,
+        iconWidth: 24
     },
     _defaultConfig: function () {
         return BI.extend(BI.DateTimeCombo.superclass._defaultConfig.apply(this, arguments), {
@@ -31,6 +32,7 @@ BI.DateTimeCombo = BI.inherit(BI.Single, {
         };
         this.trigger = BI.createWidget({
             type: "bi.date_time_trigger",
+            height: opts.height,
             min: opts.minDate,
             max: opts.maxDate,
             value: opts.value
@@ -82,8 +84,8 @@ BI.DateTimeCombo = BI.inherit(BI.Single, {
         var triggerBtn = BI.createWidget({
             type: "bi.icon_button",
             cls: "bi-trigger-icon-button date-font",
-            width: 24,
-            height: 24
+            width: this.constants.iconWidth,
+            height: opts.height,
         });
         triggerBtn.on(BI.IconButton.EVENT_CHANGE, function () {
             if (self.combo.isViewVisible()) {
@@ -95,21 +97,9 @@ BI.DateTimeCombo = BI.inherit(BI.Single, {
 
         BI.createWidget({
             type: "bi.htape",
+            columnSize: ["", this.constants.iconWidth],
             element: this,
-            items: [{
-                type: "bi.absolute",
-                items: [{
-                    el: this.combo,
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    bottom: 0
-                }, {
-                    el: triggerBtn,
-                    top: 0,
-                    right: 0
-                }]
-            }]
+            items: [this.combo, triggerBtn]
         });
     },
 
