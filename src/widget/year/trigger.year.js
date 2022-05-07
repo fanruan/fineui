@@ -10,7 +10,8 @@ BI.DynamicYearTrigger = BI.inherit(BI.Trigger, {
             extraCls: "bi-year-trigger",
             min: "1900-01-01", // 最小日期
             max: "2099-12-31", // 最大日期
-            height: 24
+            height: 24,
+            watermark: BI.i18nText("BI-Basic_Unrestricted")
         });
     },
 
@@ -35,7 +36,7 @@ BI.DynamicYearTrigger = BI.inherit(BI.Trigger, {
             },
             hgap: c.hgap,
             vgap: c.vgap,
-            watermark: BI.i18nText("BI-Basic_Unrestricted"),
+            watermark: o.watermark,
             allowBlank: true,
             errorText: function (v) {
                 if (BI.isPositiveInteger(v)) {
@@ -188,6 +189,10 @@ BI.DynamicYearTrigger = BI.inherit(BI.Trigger, {
 
     getKey: function () {
         return this.editor.getValue() | 0;
+    },
+
+    setWaterMark: function (v) {
+        this.editor.setWaterMark(v);
     }
 });
 BI.DynamicYearTrigger.EVENT_KEY_DOWN = "EVENT_KEY_DOWN";
