@@ -7,8 +7,8 @@ BI.TreeNodeCheckbox = BI.inherit(BI.IconButton, {
     _defaultConfig: function () {
         return BI.extend( BI.TreeNodeCheckbox.superclass._defaultConfig.apply(this, arguments), {
             extraCls: BI.STYLE_CONSTANTS.LINK_LINE_TYPE === "solid" ? "tree-solid-collapse-icon-type1" : "tree-collapse-icon-type1",
-            iconWidth: 24,
-            iconHeight: 24
+            iconWidth: BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT,
+            iconHeight: BI.SIZE_CONSANTS.LIST_ITEM_HEIGHT
         });
     },
 
